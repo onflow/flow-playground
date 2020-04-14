@@ -28,16 +28,11 @@ export const Outline: React.FC = ({ children }) => {
 };
 
 const AccountSigners: React.FC<{
-  multi?: boolean;
   selectedAccounts: number[];
   onChange: (selected: number) => void;
   project: Project;
   accounts: Account[];
-}> = ({ multi, selectedAccounts, accounts, project, onChange }) => {
-  if (!multi) {
-    throw new Error("Must include multi prop.");
-  }
-
+}> = ({ selectedAccounts, accounts, project, onChange }) => {
   const { theme } = useThemeUI();
   const renderOutlines = () => {
     const outlines = [];

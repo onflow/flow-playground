@@ -51,7 +51,6 @@ const AccountPicker: React.FC<AccountPickerProps> = ({
         }}
       >
         <AccountAvatars
-          multi={true}
           project={project}
           accounts={accounts}
           selectedAccounts={selected}
@@ -68,7 +67,6 @@ const AccountPicker: React.FC<AccountPickerProps> = ({
         }}
       >
         <AccountSigners 
-          multi={true}
           project={project}
           accounts={accounts}
           selectedAccounts={selected}
