@@ -1,0 +1,43 @@
+scalar ExecutionResultValue
+scalar RawExecutionResult
+
+enum ResultType {
+  TRANSACTION
+  SCRIPT
+  CONTRACT
+}
+
+type ExecutionResult {
+  timestamp: String
+  tag: String
+  value: ExecutionResultValue
+  label: String
+}
+
+type ExecutionResults {
+  TRANSACTION: [ExecutionResult]
+  SCRIPT: [ExecutionResult]
+  CONTRACT: [ExecutionResult]
+}
+
+input ExecutionResultInput {
+  data: RawExecutionResult
+}
+
+type Query {
+  localProject: Project
+  activeProject: Boolean!
+  account(accountId: String): Account
+  activeProjectId: Int
+  getResults(resultType: ResultType!): [ExecutionResults]!
+}
+
+type Mutation {
+  setActiveProjectId(id: Int): Boolean
+  updateResults(
+    resultType: ResultType!
+    rawResult: RawExecutionResult!
+    label: String
+  ): Boolean
+  clearResults(resultType: ResultType!): Boolean
+}
