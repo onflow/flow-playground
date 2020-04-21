@@ -4,6 +4,30 @@ The Flow Playground is the best way to learn and try Cadence, for newcomers to F
 ## Philosophy
 
 ### How It's Built
+We built the Flow Playground as a static website or typical "JAM stack" website because of these properties:
+
+- Portability. It is easy to move a static website GUI between platforms if desired
+- We want to have the ability to deploy the Playground on peer-tp-peer networks like IPFS or DAT
+- Fast build and deploy cycles
+- We want to maximize the amount of potential contributions
+
+### What Is the Playground?
+
+We want the Playground to have features that help you build on Flow. We also want to balance functionality with learning.
+The Playground is a learning tool first and an awesome development tool second, although the two go hand-in-hand.
+
+## Contributing
+### Read the [Contribution Guidelines](https://github.com/onflow/flow-playground/blob/master/CONTRIBUTING.md)
+
+### Git workflow: 
+- Use merge squashing, not commit merging [eg. here](https://blog.dnsimple.com/2019/01/two-years-of-squash-merge/). Squash merge is your friend.
+- The master branch is the base branch, there is no dedicated development branch
+
+# Developing
+
+### Pre-requisites
+
+=======
 We built the Flow Playground as a static website or typical "JAM stack" website because of these properties: 
 
 - Portability. It is weasy to move a static website GUI between platforms if desired
@@ -25,12 +49,13 @@ You'll need to have Docker installed to develop.
 
 ## Installation
 
-Clone the repo 
+Clone the repo
 ```shell script
 git clone git@github.com:onflow/flow-playground.git
 ```
 
-Install dependencies and generate TypeScript types for the GraphQL schema
+Install dependencies and generate TypeScript types for the GraphQL schema.
+This project uses: [https://graphql-code-generator.com/](https://graphql-code-generator.com/) to manage TypeScript types
 ```
 yarn && yarn graphql:codegen
 ```
@@ -41,13 +66,15 @@ docker run -e FLOW_DEBUG=true -e FLOW_SESSIONCOOKIESSECURE=false -p 8080:8080 gc
 ```
 
 Start the React app
+
 ```
 yarn start
 ```
 
-**Visit localhost:3000**
+** ✨ The Playground is running on localhost:3000 ✨**
 
-If you are using VSCode, you can add this debugging config
+If you are using VSCode, you can use this debugging config (works with workspaces)
+
 ```
 {
   "version": "0.2.0",
@@ -70,10 +97,3 @@ If you are using VSCode, you can add this debugging config
     }
   ]
 }
-```
-
-
-
-
-
-
