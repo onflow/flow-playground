@@ -15,12 +15,12 @@ We built the Flow Playground as a static website or typical "JAM stack" website 
 We want the Playground to have features that help you build on Flow. We also want to balance functionality with learning. 
 The Playground is a learning tool first and an awesome development tool second, although the two go hand-in-hand.
 
-##Contributing
+## Contributing
 Help us build. If you are interested in contributing, it's easy. Read this first.
 
-#Developing
+# Developing
 
-###Pre-requisites
+### Pre-requisites
 You'll need to have Docker installed to develop.
 
 ## Installation
