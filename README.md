@@ -26,25 +26,6 @@ The Playground is a learning tool first and an awesome development tool second, 
 # Developing
 
 ### Pre-requisites
-
-=======
-We built the Flow Playground as a static website or typical "JAM stack" website because of these properties: 
-
-- Portability. It is weasy to move a static website GUI between platforms if desired
-- We want to have the ability to deploy the Playground on peer-tp-peer networks like IPFS or DAT
-- Fast build and deploy cycles 
-- We want to maximize the amount of potential contributions
-
-### What Is the Playground?
-We want the Playground to have features that help you build on Flow. We also want to balance functionality with learning. 
-The Playground is a learning tool first and an awesome development tool second, although the two go hand-in-hand.
-
-## Contributing
-Help us build. If you are interested in contributing, it's easy. Read this first.
-
-# Developing
-
-### Pre-requisites
 You'll need to have Docker installed to develop.
 
 ## Installation
