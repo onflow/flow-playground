@@ -52,7 +52,7 @@ Start the React app
 yarn start
 ```
 
-** ✨ The Playground is running on localhost:3000 ✨**
+✨ The Playground is running on localhost:3000 ✨
 
 If you are using VSCode, you can use this debugging config (works with workspaces)
 
