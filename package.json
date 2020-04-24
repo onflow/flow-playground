@@ -10,7 +10,8 @@
     "export": "react-static export",
     "serve": "serve dist -p 3000 -s",
     "deploy": "yarn build && cp now.json dist/now.json && now --prod",
-    "graphql:codegen": "graphql-codegen --config codegen.yml"
+    "graphql:codegen": "graphql-codegen --config codegen.yml",
+    "test": "echo Tests command not implemented."
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",
