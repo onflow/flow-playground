@@ -11,6 +11,7 @@ tmp
 
 # misc
 .DS_Store
+.env
 .env.production
 .env.test
 
