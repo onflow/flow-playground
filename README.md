@@ -1,6 +1,6 @@
 # Welcome
-The Flow Playground is the best way to learn and try Cadence, for newcomers to Flow
-The [Flow Deveroper Documentation](https://docs.onflow.org) has a guide on how to use the Playground
+The Flow Playground is the best way to learn and try Cadence. For newcomers to Flow
+The [Flow Deveroper Documentation](https://docs.onflow.org) has a guide on how to use the Playground.
 
 ## Philosophy
 
