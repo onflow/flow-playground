@@ -7,13 +7,4 @@
   "trailingComma": "all",
   "bracketSpacing": true,
   "jsxBracketSameLine": false,
-  "arrowParens": "always",
-  "overrides": [
-    {
-      "files": "src/**/*.scss",
-      "options": {
-        "singleQuote": false
-      }
-    }
-  ]
 }
