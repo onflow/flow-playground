@@ -8,7 +8,7 @@ the [Flow Deveroper Documentation](https://docs.onflow.org) has a guide on how t
 We built the Flow Playground as a static website or typical "JAM stack" website because of these properties:
 
 - Portability. It is easy to move a static website GUI between platforms if desired
-- We want to have the ability to deploy the Playground on peer-tp-peer networks like IPFS or DAT
+- We want to have the ability to deploy the Playground on peer-to-peer networks like IPFS or DAT
 - Fast build and deploy cycles
 - We want to maximize the amount of potential contributions
 
