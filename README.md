@@ -36,15 +36,20 @@ Clone the repo
 git clone git@github.com:onflow/flow-playground.git
 ```
 
-Install dependencies and generate TypeScript types for the GraphQL schema.
-This project uses: [https://graphql-code-generator.com/](https://graphql-code-generator.com/) to manage TypeScript types
+Install dependencies
 ```
-yarn && yarn graphql:codegen
+yarn
 ```
 
 Start the API (Flow Emulator and services)
 ```
 docker run -e FLOW_DEBUG=true -e FLOW_SESSIONCOOKIESSECURE=false -p 8080:8080 gcr.io/dl-flow/playground-api:latest
+```
+
+Generate TypeScript types for the GraphQL schema. (The API must be running or this will fail)
+This project uses: [https://graphql-code-generator.com/](https://graphql-code-generator.com/) to manage TypeScript types
+```
+yarn graphql:codegen
 ```
 
 Start the React app
