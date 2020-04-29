@@ -1,13 +1,16 @@
 # Welcome
-The Flow Playground is the best way to learn and try Cadence, for newcomers to Flow
+
+The Flow Playground is the best way to learn and try Cadence. For newcomers to Flow
+the [Flow Deveroper Documentation](https://docs.onflow.org) has a guide on how to use the Playground.
 
 ## Philosophy
 
 ### How It's Built
+
 We built the Flow Playground as a static website or typical "JAM stack" website because of these properties:
 
 - Portability. It is easy to move a static website GUI between platforms if desired
-- We want to have the ability to deploy the Playground on peer-tp-peer networks like IPFS or DAT
+- We want to have the ability to deploy the Playground on peer-to-peer networks like IPFS or DAT
 - Fast build and deploy cycles
 - We want to maximize the amount of potential contributions
 
@@ -17,31 +20,38 @@ We want the Playground to have features that help you build on Flow. We also wan
 The Playground is a learning tool first and an awesome development tool second, although the two go hand-in-hand.
 
 ## Contributing
+
 ### Read the [Contribution Guidelines](https://github.com/onflow/flow-playground/blob/master/CONTRIBUTING.md)
 
-### Git workflow: 
+### Git workflow:
+
 - Use merge squashing, not commit merging [eg. here](https://blog.dnsimple.com/2019/01/two-years-of-squash-merge/). Squash merge is your friend.
 - The master branch is the base branch, there is no dedicated development branch
 
 # Developing
 
 ### Pre-requisites
+
 You'll need to have Docker installed to develop.
 
 ## Installation
 
 Clone the repo
+
 ```shell script
 git clone git@github.com:onflow/flow-playground.git
 ```
 
-Install dependencies and generate TypeScript types for the GraphQL schema.
-This project uses: [https://graphql-code-generator.com/](https://graphql-code-generator.com/) to manage TypeScript types
+Install dependencies
+
 ```
-yarn && yarn graphql:codegen
+yarn
 ```
 
+Rename `.env.local` to `.env`
+
 Start the API (Flow Emulator and services)
+
 ```
 docker run -e FLOW_DEBUG=true -e FLOW_SESSIONCOOKIESSECURE=false -p 8080:8080 gcr.io/dl-flow/playground-api:latest
 ```
@@ -78,3 +88,4 @@ If you are using VSCode, you can use this debugging config (works with workspace
     }
   ]
 }
+```

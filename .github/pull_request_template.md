@@ -10,7 +10,7 @@ ______
 
 For contributor use:
 
-- [ ] Targeted PR against correct branch (see [CONTRIBUTING.md](https://github.com/cosmos/cosmos-sdk/blob/master/CONTRIBUTING.md#pr-targeting))
+- [ ] Targeted PR against correct branch (see [CONTRIBUTING.md](https://github.com/onflow/flow-playground/blob/master/CONTRIBUTING.md))
 - [ ] Linked to Github issue with discussion and accepted design OR link to spec that describes this work.
 - [ ] Code follows the [standards mentioned here](https://github.com/onflow/flow-playground/blob/master/CONTRIBUTING.md).
 - [ ] Updated relevant documentation 
