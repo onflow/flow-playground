@@ -19,7 +19,7 @@ import { Heading } from "layout/Heading";
 import { RenderResponse } from "components/RenderResponse";
 import { ClearResults } from "./TransactionBottomBar";
 
-const RESOURCE_PANEL_MIN_HEIGHT = 180;
+const STORAGE_PANEL_MIN_HEIGHT = 180;
 const PLAYGROUND_HEADER_HEIGHT = 75;
 
 const TypeListItem = styled.li<{ active: boolean }>`
@@ -45,10 +45,10 @@ const AccountStateContainer = styled.div<{ height: number }>`
   width: 100%;
   background: white;
   border-top: var(--gap) solid var(--key);
-  min-height: ${p => p.height || RESOURCE_PANEL_MIN_HEIGHT}px;
+  min-height: ${p => p.height || STORAGE_PANEL_MIN_HEIGHT}px;
 `;
 
-const ResourceListContainer = styled.div`
+const StorageListContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -64,21 +64,21 @@ const DeploymentResultContainer = styled.div`
 `;
 
 interface TypeListProps {
-  typeIds: string[];
+  identifiers: string[];
   selected: string;
   onSelect: (type: string) => void;
   toggleResizing: (toggle: boolean) => void;
 }
 // @ts-ignore
-const TypeList: React.FC<TypeListProps> = ({
-  typeIds,
+const IdentifierList: React.FC<TypeListProps> = ({
+  identifiers,
   selected,
   onSelect,
   toggleResizing
 }) => (
-  <ResourceListContainer>
+  <StorageListContainer>
     <Heading>
-      Resources{" "}
+      Storage{" "}
       <SidebarItemInsert grab={true}>
         <GoGrabber size="16px" onMouseDown={() => toggleResizing(true)} />
       </SidebarItemInsert>
@@ -91,7 +91,7 @@ const TypeList: React.FC<TypeListProps> = ({
       }}
     >
       <ul>
-        {typeIds.map((type: string) => (
+        {identifiers.map((type: string) => (
           <TypeListItem
             key={type}
             active={type == selected}
@@ -102,23 +102,23 @@ const TypeList: React.FC<TypeListProps> = ({
         ))}
       </ul>
     </div>
-  </ResourceListContainer>
+  </StorageListContainer>
 );
 
-const StateContainer: React.FC<{ resource: any }> = ({ resource }) => (
+const StateContainer: React.FC<{ value: any }> = ({ value }) => (
   <div
     style={{
       width: "100%",
       backgroundColor: "#f3f3f3",
       paddingTop: "2em",
-      paddingBottom: RESOURCE_PANEL_MIN_HEIGHT - 40,
+      paddingBottom: STORAGE_PANEL_MIN_HEIGHT - 40,
       paddingLeft: "1.5em",
       fontFamily: theme.fonts.monospace,
       fontSize: theme.fontSizes[4],
       overflow: "scroll"
     }}
   >
-    <pre>{JSON.stringify(resource, null, 2)}</pre>
+    <pre>{JSON.stringify(value, null, 2)}</pre>
   </div>
 );
 
@@ -130,33 +130,31 @@ const AccountState: React.FC<{
     state = "{}";
   }
 
-  const resources: { [typeId: string]: string } = {};
+  const storage: { [identifier: string]: string } = {};
 
   const parsed = JSON.parse(state);
 
   for (let key in parsed) {
-    if (!parsed.hasOwnProperty(key)) continue;
+    if (!parsed.hasOwnProperty(key)) {
+      continue;
+    }
 
-    const [namespace, typeId] = key.split("\u001f");
+    const [domain, identifier] = key.split("\u001f");
 
-    if (namespace === "private") {
-      const ty = typeId
-        .split(".")
-        .slice(2)
-        .join(".");
-      resources[ty] = parsed[key];
+    if (domain === "storage") {
+      storage[identifier] = parsed[key];
     }
   }
 
-  const typeIds = Object.keys(resources);
+  const identifiers = Object.keys(storage);
 
   // @ts-ignore
   const [selected, setSelected] = useState(
-    typeIds.length > 0 ? typeIds[0] : null
+    identifiers.length > 0 ? identifiers[0] : null
   );
 
   const { x, y } = useMousePosition();
-  const [panelHeight, setPanelHeight] = useState(RESOURCE_PANEL_MIN_HEIGHT);
+  const [panelHeight, setPanelHeight] = useState(STORAGE_PANEL_MIN_HEIGHT);
   const [isResizing, setIsResizing] = useState(false);
 
   const toggleResizing = (toggle: boolean) => {
@@ -171,7 +169,7 @@ const AccountState: React.FC<{
     if (typeof document !== "undefined") {
       if (
         isResizing &&
-        y > RESOURCE_PANEL_MIN_HEIGHT &&
+        y > STORAGE_PANEL_MIN_HEIGHT &&
         y < window.innerHeight - PLAYGROUND_HEADER_HEIGHT
       ) {
         setPanelHeight(y);
@@ -194,13 +192,13 @@ const AccountState: React.FC<{
     <div>
       <AccountStateContainer height={panelHeight}>
         {renderDeployButton()}
-        <TypeList
-          typeIds={typeIds}
+        <IdentifierList
+          identifiers={identifiers}
           selected={selected}
           onSelect={setSelected}
           toggleResizing={toggleResizing}
         />
-        <StateContainer resource={resources[selected]} />
+        <StateContainer value={storage[selected]} />
       </AccountStateContainer>
       <DeploymentResultContainer>
         <Heading>
