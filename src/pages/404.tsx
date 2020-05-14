@@ -1,37 +1,49 @@
-import React from "react";
-import { Box, Text, Button } from "theme-ui";
-import { RouteComponentProps, navigate } from "@reach/router";
+import React from 'react';
+import { Box, Text, Button } from 'theme-ui';
+import { RouteComponentProps, navigate } from '@reach/router';
 
 interface ProjectProps extends RouteComponentProps {
-  "*"?: string;
+  '*'?: string;
 }
 
 const FourOhFour: React.FC<ProjectProps> = () => {
   return (
     <Box
       sx={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "background"
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'background',
       }}
     >
       <Text
         sx={{
-          fontSize: "3rem",
-          fontWeight: "heading",
-          textAlign: "center"
+          fontSize: '3rem',
+          fontWeight: 'heading',
+          textAlign: 'center',
         }}
       >
         Floh No! We couldn't find that project.
       </Text>
+      <Text
+        sx={{
+          fontSize: '1rem',
+          textAlign: 'center',
+          padding: 1,
+          width: '50%',
+        }}
+      >
+        (If you were expecting a project at this url, you may be experienceing a
+        🐛. Please clear your browser's cookies and browser cache. This is a
+        known issue. Thanks for your patience!🙏)
+      </Text>
       <Button
         sx={{
-          marginTop: "2rem"
+          marginTop: '2rem',
         }}
-        onClick={() => navigate("/")}
+        onClick={() => navigate('/')}
       >
         Go back to the Playground
       </Button>
