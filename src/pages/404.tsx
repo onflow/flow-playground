@@ -38,7 +38,8 @@ const FourOhFour: React.FC<ProjectProps> = () => {
         (If you were expecting a project here, you may be experiencing a
 
         🐛. Please clear your browser's cookies and browser cache. This is a
-        known issue. Thanks for your patience!🙏)
+        known issue. Thanks for your patience! 🙏)
+
       </Text>
       <Button
         sx={{
