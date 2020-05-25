@@ -22,13 +22,15 @@ The following is a set of guidelines for contributing to the Flow Playground Pro
 
 [Additional Notes](#additional-notes)
 
-## Project Overview
+## **Project Overview**
 
-<!-- TODO -->
+- The Playground Front-End is built as a static website using React. Specifically using [https://github.com/react-static/react-static](https://github.com/react-static/react-static)
+- CSS is done using a combination of `@emotion` and `theme-ui` (For legacy reasons)
+- The Playground communicates with the Flow blockchain emulator via a GraphQL API. GraphQL types (Typescript) are managed (and generated) using: [https://graphql-code-generator.com/docs/plugins/typescript](https://graphql-code-generator.com/docs/plugins/typescript)
 
-#### Local development
+### **Local development**
 
-<!-- TODO -->
+Instructions for local development can be found in the `README.md`
 
 ## How Can I Contribute?
 
