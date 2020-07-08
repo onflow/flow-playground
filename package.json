@@ -50,8 +50,7 @@
     "reset-css": "^5.0.1",
     "styled-components": "^5.0.1",
     "styled-reset": "^4.1.0",
-    "yup": "^0.28.1",
-    "snyk": "^1.316.1"
+    "yup": "^0.28.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.12.1",
@@ -86,6 +85,7 @@
     "react-hot-loader": "^4.12.11",
     "replace-in-file": "^5.0.2",
     "serve": "^11.1.0",
+    "snyk": "^1.316.1",
     "styled-loader": "^0.0.0",
     "theme-ui": "^0.3.1",
     "typescript": "^3.7.5",
