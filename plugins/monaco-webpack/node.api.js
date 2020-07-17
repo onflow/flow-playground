@@ -1,16 +1,19 @@
-const merge = require("webpack-merge");
+const { merge } = require("webpack-merge");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const Dotenv = require("dotenv-webpack");
+import path from "path";
 
 export default pluginOptions => ({
   webpack: previousConfig => {
-    return merge.strategy({
-      entry: "append", // or 'replace', defaults to 'append'
-      "module.rules": "append",
-      devServer: "append",
-      plugins: "append"
-    })(
+    return merge(
+      previousConfig,
       {
+        entry: [ path.resolve("./src/wasm_exec.js") ],
+        resolve: {
+          alias: {
+            vscode: require.resolve("monaco-languageclient/lib/vscode-compatibility")
+          }
+        },
         module: {
           rules: [
             {
@@ -27,9 +30,18 @@ export default pluginOptions => ({
           disableHostCheck: true,
           https: true
         },
-        plugins: [new MonacoWebpackPlugin(), new Dotenv()]
+        plugins: [
+          new MonacoWebpackPlugin({
+            languages: []
+          }),
+          new Dotenv()
+        ],
+        node: {
+          net: 'empty',
+          fs: 'empty',
+          util: 'empty'
+        },
       },
-      previousConfig
     );
   }
 });
