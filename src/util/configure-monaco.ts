@@ -1,15 +1,20 @@
-export default function configuireMonaco(monaco: any) {
-  monaco.languages.register({
-    id: "Cadence",
+import {languages} from "monaco-editor";
+
+export const CADENCE_LANGUAGE_ID = "cadence"
+
+interface CadenceMonarchLanguage extends languages.IMonarchLanguage {
+}
+
+export default function configureCadence() {
+
+  languages.register({
+    id: CADENCE_LANGUAGE_ID,
     extensions: [".cdc"],
     aliases: ["CDC", "cdc"]
   });
-  monaco.languages.register({
-    id: "Cadence",
-    extensions: [".cdc"],
-    aliases: ["CDC", "cdc"]
-  });
-  monaco.languages.setMonarchTokensProvider("Cadence", {
+
+  languages.setMonarchTokensProvider(CADENCE_LANGUAGE_ID, {
+
     keywords: [
       "if",
       "else",
@@ -42,7 +47,8 @@ export default function configuireMonaco(monaco: any) {
       "access",
       "all",
       "contract",
-      "self"
+      "self",
+      "transaction"
     ],
 
     typeKeywords: [
@@ -73,6 +79,7 @@ export default function configuireMonaco(monaco: any) {
       "Word128",
       "Word256",
       "Fix64",
+      "UFix64"
     ],
 
     operators: [
@@ -99,13 +106,13 @@ export default function configuireMonaco(monaco: any) {
 
     // we include these common regular expressions
     symbols: /[=><!~?:&|+\-*\/\^%]+/,
-    escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
+    escapes: /\\(?:[abfnrtv\\"]|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
     digits: /\d+(_+\d+)*/,
     octaldigits: /[0-7]+(_+[0-7]+)*/,
     binarydigits: /[0-1]+(_+[0-1]+)*/,
     hexdigits: /[[0-9a-fA-F]+(_+[0-9a-fA-F]+)*/,
     tokenizer: {
-      root: [[/[{}]/, "delimiter.bracket"], { include: "common" }],
+      root: [[/[{}]/, "delimiter.bracket"], {include: "common"}],
 
       common: [
         // identifiers and keywords
@@ -119,11 +126,10 @@ export default function configuireMonaco(monaco: any) {
             }
           }
         ],
-        [/[A-Z][\w\$]*/, "type.identifier"], // to show class names nicely
-        // [/[A-Z][\w\$]*/, 'identifier'],
+        [/[A-Z][\w]*/, "type.identifier"], // to show class names nicely
 
         // whitespace
-        { include: "@whitespace" },
+        {include: "@whitespace"},
 
         // delimiters and operators
         [/[()\[\]]/, "@brackets"],
@@ -151,9 +157,7 @@ export default function configuireMonaco(monaco: any) {
 
         // strings
         [/"([^"\\]|\\.)*$/, "string.invalid"], // non-teminated string
-        [/'([^'\\]|\\.)*$/, "string.invalid"], // non-teminated string
         [/"/, "string", "@string_double"],
-        [/'/, "string", "@string_single"]
       ],
 
       whitespace: [
@@ -167,18 +171,14 @@ export default function configuireMonaco(monaco: any) {
         [/\*\//, "comment", "@pop"],
         [/[\/*]/, "comment"]
       ],
+
       string_double: [
         [/[^\\"]+/, "string"],
         [/@escapes/, "string.escape"],
         [/\\./, "string.escape.invalid"],
         [/"/, "string", "@pop"]
       ],
-      string_single: [
-        [/[^\\']+/, "string"],
-        [/@escapes/, "string.escape"],
-        [/\\./, "string.escape.invalid"],
-        [/'/, "string", "@pop"]
-      ]
+
     }
-  });
+  } as CadenceMonarchLanguage);
 }

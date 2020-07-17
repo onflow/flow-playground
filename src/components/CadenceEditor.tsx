@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
-import configureMonaco from "../util/configure-monaco";
+import configureMonaco, {CADENCE_LANGUAGE_ID} from "../util/configure-monaco";
+import * as monaco from "monaco-editor"
 
 type EditorState = {
   model: any;
@@ -18,10 +19,9 @@ class CadenceEditor extends React.Component<{
   onChange: any;
   activeId: string;
 }> {
-  editor: any;
+  editor: monaco.editor.ICodeEditor;
   _subscription: any;
   editorStates: { [key: string]: EditorState };
-  monaco: any;
 
   constructor(props: {
     code: string;
@@ -36,11 +36,7 @@ class CadenceEditor extends React.Component<{
     if (typeof document !== "undefined") {
       this.handleResize = this.handleResize.bind(this);
       window.addEventListener("resize", this.handleResize);
-      // NOTE: monaco is browser-only, pre-render of the app is done via node;
-      // Check if document exists to be sure we're in browser land
-      // before loading monaco.
-      this.monaco = require("monaco-editor");
-      configureMonaco(this.monaco);
+      configureMonaco();
     }
   }
 
@@ -50,16 +46,15 @@ class CadenceEditor extends React.Component<{
 
   componentDidMount() {
     if (typeof document !== "undefined") {
-      this.monaco = require("monaco-editor");
-      configureMonaco(this.monaco);
+      configureMonaco();
       const monacoOptions = {
-        language: "Cadence",
+        language: CADENCE_LANGUAGE_ID,
         minimap: {
           enabled: false
         }
       };
 
-      this.editor = this.monaco.editor.create(
+      this.editor = monaco.editor.create(
         document.getElementById(this.props.mount),
         monacoOptions
       );
@@ -84,7 +79,7 @@ class CadenceEditor extends React.Component<{
       return existingState;
     }
 
-    const model = this.monaco.editor.createModel(code, "Cadence");
+    const model = monaco.editor.createModel(code, CADENCE_LANGUAGE_ID);
 
     const state: EditorState = {
       model,
