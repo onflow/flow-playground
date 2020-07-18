@@ -174,6 +174,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
           code={code}
           mount="cadenceEditor"
           onChange={(code: string, _: any) => onCodeChange(code)}
+          getCode={(index) => project.accounts[index].draftCode}
         />
       </EditorRoot>
       <BottomBarContainer active={active} />

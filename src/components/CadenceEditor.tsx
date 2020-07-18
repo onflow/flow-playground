@@ -18,11 +18,14 @@ const EditorContainer = styled.div`
 
 let monacoServicesInstalled = false;
 
+type CodeGetter = (index: number) => string | undefined
+
 class CadenceEditor extends React.Component<{
   code: string;
   mount: string;
   onChange: any;
   activeId: string;
+  getCode: CodeGetter;
 }> {
   editor: monaco.editor.ICodeEditor;
   _subscription: any;
@@ -34,6 +37,7 @@ class CadenceEditor extends React.Component<{
     mount: string;
     onChange: any;
     activeId: string;
+    getCode: CodeGetter;
   }) {
     super(props);
 
@@ -77,52 +81,51 @@ class CadenceEditor extends React.Component<{
       this.editor.focus();
 
       if (this.props.activeId && !this.callbacks) {
-        await this.loadLanguageServer(editor)
+        await this.loadLanguageServer(editor, (index) => this.props.getCode(index))
       }
     }
   }
 
-  private async loadLanguageServer(editor: monaco.editor.ICodeEditor) {
+  private async loadLanguageServer(editor: monaco.editor.ICodeEditor, getCode: CodeGetter) {
 
-      this.callbacks = {
-        // The actual callback will be set as soon as the language server is initialized
-        toServer: null,
+    this.callbacks = {
+      // The actual callback will be set as soon as the language server is initialized
+      toServer: null,
 
-        // The actual callback will be set as soon as the language server is initialized
-        onClientClose: null,
+      // The actual callback will be set as soon as the language server is initialized
+      onClientClose: null,
 
-        // The actual callback will be set as soon as the language client is initialized
-        onServerClose: null,
+      // The actual callback will be set as soon as the language client is initialized
+      onServerClose: null,
 
-        // The actual callback will be set as soon as the language client is initialized
-        toClient: null,
+      // The actual callback will be set as soon as the language client is initialized
+      toClient: null,
 
-        getAddressCode(address: string): string | undefined {
-          // TODO:
-          console.log("???", address)
-          return undefined
-        },
-      }
-
-      // The Monaco Language Client services have to be installed globally, once.
-      // An editor must be passed, which is only used for commands.
-      // As the Cadence language server is not providing any commands this is OK
-
-      if (!monacoServicesInstalled) {
-        monacoServicesInstalled = true
-        MonacoServices.install(editor);
-      }
-
-      // Start one language server per editor.
-      // Even though one language server can handle multiple documents,
-      // this demonstrates this is possible and is more resilient:
-      // if the server for one editor crashes, it does not break the other editors
-
-      await CadenceLanguageServer.create(this.callbacks);
-
-      const languageClient = createCadenceLanguageClient(this.callbacks);
-      languageClient.start()
+      getAddressCode(address: string): string | undefined {
+        const index = parseInt(address, 16) - 1;
+        return getCode(index)
+      },
     }
+
+    // The Monaco Language Client services have to be installed globally, once.
+    // An editor must be passed, which is only used for commands.
+    // As the Cadence language server is not providing any commands this is OK
+
+    if (!monacoServicesInstalled) {
+      monacoServicesInstalled = true
+      MonacoServices.install(editor);
+    }
+
+    // Start one language server per editor.
+    // Even though one language server can handle multiple documents,
+    // this demonstrates this is possible and is more resilient:
+    // if the server for one editor crashes, it does not break the other editors
+
+    await CadenceLanguageServer.create(this.callbacks);
+
+    const languageClient = createCadenceLanguageClient(this.callbacks);
+    languageClient.start()
+  }
 
   getOrCreateEditorState(id: string, code: string): EditorState {
     const existingState = this.editorStates[id];
