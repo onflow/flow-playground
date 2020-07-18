@@ -1,19 +1,19 @@
-import {languages} from "monaco-editor";
+import * as monaco from "monaco-editor";
 
 export const CADENCE_LANGUAGE_ID = "cadence"
 
-interface CadenceMonarchLanguage extends languages.IMonarchLanguage {
+interface CadenceMonarchLanguage extends monaco.languages.IMonarchLanguage {
 }
 
 export default function configureCadence() {
 
-  languages.register({
+  monaco.languages.register({
     id: CADENCE_LANGUAGE_ID,
     extensions: [".cdc"],
     aliases: ["CDC", "cdc"]
   });
 
-  languages.setMonarchTokensProvider(CADENCE_LANGUAGE_ID, {
+  monaco.languages.setMonarchTokensProvider(CADENCE_LANGUAGE_ID, {
 
     keywords: [
       "if",

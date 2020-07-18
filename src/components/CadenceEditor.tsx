@@ -1,7 +1,10 @@
 import React from "react";
 import styled from "@emotion/styled";
-import configureMonaco, {CADENCE_LANGUAGE_ID} from "../util/configure-monaco";
+import configureCadence, {CADENCE_LANGUAGE_ID} from "../util/cadence";
 import * as monaco from "monaco-editor"
+import {MonacoServices} from "monaco-languageclient/lib/monaco-services";
+import {CadenceLanguageServer, Callbacks} from "../util/language-server";
+import {createCadenceLanguageClient} from "../util/language-client";
 
 type EditorState = {
   model: any;
@@ -13,6 +16,8 @@ const EditorContainer = styled.div`
   height: 100%;
 `;
 
+let monacoServicesInstalled = false;
+
 class CadenceEditor extends React.Component<{
   code: string;
   mount: string;
@@ -22,6 +27,7 @@ class CadenceEditor extends React.Component<{
   editor: monaco.editor.ICodeEditor;
   _subscription: any;
   editorStates: { [key: string]: EditorState };
+  private callbacks: Callbacks;
 
   constructor(props: {
     code: string;
@@ -36,7 +42,7 @@ class CadenceEditor extends React.Component<{
     if (typeof document !== "undefined") {
       this.handleResize = this.handleResize.bind(this);
       window.addEventListener("resize", this.handleResize);
-      configureMonaco();
+      configureCadence();
     }
   }
 
@@ -44,20 +50,20 @@ class CadenceEditor extends React.Component<{
     this.editor && this.editor.layout();
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if (typeof document !== "undefined") {
-      configureMonaco();
-      const monacoOptions = {
-        language: CADENCE_LANGUAGE_ID,
-        minimap: {
-          enabled: false
-        }
-      };
-
-      this.editor = monaco.editor.create(
+      configureCadence();
+      const editor = monaco.editor.create(
         document.getElementById(this.props.mount),
-        monacoOptions
+        {
+          theme: 'vs-light',
+          language: CADENCE_LANGUAGE_ID,
+          minimap: {
+            enabled: false
+          }
+        }
       );
+      this.editor = editor
 
       this._subscription = this.editor.onDidChangeModelContent((event: any) => {
         this.props.onChange(this.editor.getValue(), event);
@@ -69,8 +75,54 @@ class CadenceEditor extends React.Component<{
       );
       this.editor.setModel(state.model);
       this.editor.focus();
+
+      if (this.props.activeId && !this.callbacks) {
+        await this.loadLanguageServer(editor)
+      }
     }
   }
+
+  private async loadLanguageServer(editor: monaco.editor.ICodeEditor) {
+
+      this.callbacks = {
+        // The actual callback will be set as soon as the language server is initialized
+        toServer: null,
+
+        // The actual callback will be set as soon as the language server is initialized
+        onClientClose: null,
+
+        // The actual callback will be set as soon as the language client is initialized
+        onServerClose: null,
+
+        // The actual callback will be set as soon as the language client is initialized
+        toClient: null,
+
+        getAddressCode(address: string): string | undefined {
+          // TODO:
+          console.log("???", address)
+          return undefined
+        },
+      }
+
+      // The Monaco Language Client services have to be installed globally, once.
+      // An editor must be passed, which is only used for commands.
+      // As the Cadence language server is not providing any commands this is OK
+
+      if (!monacoServicesInstalled) {
+        monacoServicesInstalled = true
+        MonacoServices.install(editor);
+      }
+
+      // Start one language server per editor.
+      // Even though one language server can handle multiple documents,
+      // this demonstrates this is possible and is more resilient:
+      // if the server for one editor crashes, it does not break the other editors
+
+      await CadenceLanguageServer.create(this.callbacks);
+
+      const languageClient = createCadenceLanguageClient(this.callbacks);
+      languageClient.start()
+    }
 
   getOrCreateEditorState(id: string, code: string): EditorState {
     const existingState = this.editorStates[id];
@@ -111,14 +163,17 @@ class CadenceEditor extends React.Component<{
     if (typeof document !== "undefined") {
       this.destroyMonaco();
       window.removeEventListener("resize", this.handleResize);
+      if (this.callbacks && this.callbacks.onClientClose) {
+        this.callbacks.onClientClose()
+      }
     }
   }
 
-  componentDidUpdate(prevProps: any) {
+  async componentDidUpdate(prevProps: any) {
     if (this.props.activeId !== prevProps.activeId) {
       this.switchEditor(prevProps.activeId, this.props.activeId);
       this.destroyMonaco();
-      this.componentDidMount();
+      await this.componentDidMount();
     }
   }
 

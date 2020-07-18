@@ -151,12 +151,12 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   active
 }) => {
   const [code, setCode] = useState("");
-  const [activeId, setActiveId] = useState("loading");
+  const [activeId, setActiveId] = useState(null);
 
   useEffect(() => {
     if (isLoading) {
       setCode("");
-      setActiveId("loading");
+      setActiveId(null);
     } else {
       setCode(getActiveCode(project, active));
       setActiveId(getActiveId(project, active));
