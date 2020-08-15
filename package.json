@@ -50,7 +50,7 @@
     "reset-css": "^5.0.1",
     "styled-components": "^5.0.1",
     "styled-reset": "^4.1.0",
-    "yup": "^0.28.1"
+    "yup": "^0.29.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.12.1",
