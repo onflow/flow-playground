@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
 import configureCadence, {CADENCE_LANGUAGE_ID} from "../util/cadence";
-import {MonacoServices} from "monaco-languageclient/lib/monaco-services";
 import {CadenceLanguageServer, Callbacks} from "../util/language-server";
 import {createCadenceLanguageClient} from "../util/language-client";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
@@ -114,6 +113,7 @@ class CadenceEditor extends React.Component<{
 
     if (!monacoServicesInstalled) {
       monacoServicesInstalled = true
+      const {MonacoServices} = require("monaco-languageclient/lib/monaco-services");
       MonacoServices.install(editor);
     }
 

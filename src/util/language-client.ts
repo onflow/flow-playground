@@ -11,7 +11,6 @@ import {
   MessageWriter,
   PartialMessageInfo
 } from "vscode-jsonrpc";
-import {CloseAction, createConnection, ErrorAction, MonacoLanguageClient} from "monaco-languageclient";
 
 export function createCadenceLanguageClient(callbacks: Callbacks) {
   const logger: Logger = {
@@ -68,6 +67,8 @@ export function createCadenceLanguageClient(callbacks: Callbacks) {
   }
 
   const messageConnection = createMessageConnection(reader, writer, logger)
+
+  const {CloseAction, createConnection, ErrorAction, MonacoLanguageClient} = require("monaco-languageclient");
 
   return new MonacoLanguageClient({
     name: "Cadence Language Client",
