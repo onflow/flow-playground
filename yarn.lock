@@ -9649,9 +9649,10 @@ react-side-effect@^1.1.0:
   dependencies:
     shallowequal "^1.0.1"
 
-react-static-plugin-reach-router@^7.2.0:
-  version "7.2.3"
-  resolved "https://registry.yarnpkg.com/react-static-plugin-reach-router/-/react-static-plugin-reach-router-7.2.3.tgz#0b991e347a64ee462cfa7b2b08d34bec56620a5b"
+react-static-plugin-reach-router@^7.4.2:
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/react-static-plugin-reach-router/-/react-static-plugin-reach-router-7.4.2.tgz#65dcfb2a5c6f2a9ce80e9e18141ad2398aabd6b3"
+  integrity sha512-vqIXgZ1zyzsvjOahn1NydQUPRhPhEHmL9x7C4OUhwy2T+lZ8EQM90rLCo5z6sGjj48kJ/RnhDxA/uR+uBQTAPQ==
 
 react-static-plugin-sitemap@^7.2.0:
   version "7.2.3"
