@@ -1,11 +1,9 @@
-import * as monaco from "monaco-editor";
 
 export const CADENCE_LANGUAGE_ID = "cadence"
 
-interface CadenceMonarchLanguage extends monaco.languages.IMonarchLanguage {
-}
-
 export default function configureCadence() {
+
+  const monaco = require("monaco-editor");
 
   monaco.languages.register({
     id: CADENCE_LANGUAGE_ID,
@@ -180,5 +178,5 @@ export default function configureCadence() {
       ],
 
     }
-  } as CadenceMonarchLanguage);
+  });
 }
