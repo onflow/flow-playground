@@ -25,22 +25,19 @@ clean:
 .PHONY: install
 install:
 	$(info Task: install)
-	$(info run "yarn install")
-	$(EXEC) sh -c 'yarn || exit 255'
+	$(EXEC) sh -c 'npm install || exit 255'
 
 .PHONY: build
 build:
 	$(info Task: build production)
-	$(EXEC) sh -c 'yarn build-production || exit 255'
+	$(EXEC) sh -c 'npm run build-production || exit 255'
 
 .PHONY: test
 test:
 	$(info Task: test)
-	$(info run "yarn test" in packages/*)
-	$(EXEC) sh -c 'yarn test || exit 255'
+	$(EXEC) sh -c 'npm test || exit 255'
 
 .PHONY: ci
 ci: clean install build
 	$(info Task: ci)
-	$(info run tests)
-	$(EXEC) sh -c 'yarn test || exit 255'
+	$(EXEC) sh -c 'npm test || exit 255'
