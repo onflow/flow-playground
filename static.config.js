@@ -18,6 +18,7 @@ export default {
   plugins: [
     "monaco-webpack",
     "remove-paths",
+    "copy-languageserver",
     "react-static-plugin-typescript",
     [
       require.resolve("react-static-plugin-source-filesystem"),
