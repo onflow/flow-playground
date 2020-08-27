@@ -65,7 +65,8 @@ class CadenceEditor extends React.Component<{
       );
 
       this._subscription = this.editor.onDidChangeModelContent((event: any) => {
-        this.props.onChange(this.editor.getValue(), event);
+        const code = this.editor.getValue().replace(/\r\n/g, '\n')
+        this.props.onChange(code, event);
       });
 
       const state = this.getOrCreateEditorState(
