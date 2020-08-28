@@ -1010,7 +1010,6 @@
     "@babel/parser" "^7.10.4"
     "@babel/types" "^7.10.4"
 
-
 "@babel/template@^7.8.3", "@babel/template@^7.8.6":
   version "7.8.6"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.8.6.tgz#86b22af15f828dfb086474f964dcc3e39c43ce2b"
