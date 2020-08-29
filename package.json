@@ -38,7 +38,7 @@
     "react-avataaars": "^0.2.3",
     "react-dom": "^16.9.0",
     "react-ga": "^2.7.0",
-    "react-hook-form": "^4.9.7",
+    "react-hook-form": "^4.10.2",
     "react-icons": "^3.9.0",
     "react-is": "^16.13.0",
     "react-proximity-feedback": "^2.0.0",
