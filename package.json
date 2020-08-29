@@ -45,7 +45,7 @@
     "react-static": "^7.2.0",
     "react-static-plugin-reach-router": "^7.4.2",
     "react-static-plugin-sitemap": "^7.2.0",
-    "react-static-plugin-source-filesystem": "^7.2.0",
+    "react-static-plugin-source-filesystem": "^7.4.2",
     "react-static-plugin-typescript": "^7.2.0",
     "react-use-clipboard": "1.0.0",
     "reset-css": "^5.0.1",
