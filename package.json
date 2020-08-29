@@ -31,7 +31,7 @@
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.1",
     "isomorphic-fetch": "^2.2.1",
-    "mixpanel-browser": "^2.34.0",
+    "mixpanel-browser": "^2.38.0",
     "monaco-editor": "^0.20.0",
     "property-expr": "2.0.3",
     "react": "^16.9.0",
