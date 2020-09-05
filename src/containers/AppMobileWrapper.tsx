@@ -53,7 +53,9 @@ const AppMobileWrapper: React.FC<AppMobileWrapperProps>  = ({children}) => {
                     The Flow Playground is best used on larger screens.
                 </Text>
                 <Box>
-                    <Button onClick={() => {if (typeof document !== "undefined") {window.location.href = "https://www.onflow.org"}}}>Visit Flow's Website</Button>
+                    <Button onClick={() => { window.location.href = "https://www.onflow.org"}}>
+                      Visit Flow's Website
+                    </Button>
                 </Box>
             </AppMobileWrapperMessageDiv>
         </>
