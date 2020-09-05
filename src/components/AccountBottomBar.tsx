@@ -241,6 +241,7 @@ const AccountBottomBar: React.FC = () => {
       try {
         rawResult = await updateAccountDeployedCode();
       } catch (e) {
+        console.error(e)
         rawResult = e.toString();
       }
 
