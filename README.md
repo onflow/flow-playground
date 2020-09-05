@@ -45,7 +45,7 @@ git clone git@github.com:onflow/flow-playground.git
 Install dependencies
 
 ```
-yarn
+npm install
 ```
 
 Rename `.env.local` to `.env`
@@ -59,7 +59,7 @@ docker run -e FLOW_DEBUG=true -e FLOW_SESSIONCOOKIESSECURE=false -p 8080:8080 gc
 Start the React app
 
 ```
-yarn start
+npm start
 ```
 
 ✨ The Playground is running on localhost:3000 ✨
