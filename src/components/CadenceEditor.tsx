@@ -33,15 +33,13 @@ class CadenceEditor extends React.Component<{
 
     this.editorStates = {};
 
-    if (typeof document !== "undefined") {
-      this.handleResize = this.handleResize.bind(this);
-      window.addEventListener("resize", this.handleResize);
-      // NOTE: monaco is browser-only, pre-render of the app is done via node;
-      // Check if document exists to be sure we're in browser land
-      // before loading monaco.
-      this.monaco = require("monaco-editor");
-      configureMonaco(this.monaco);
-    }
+    this.handleResize = this.handleResize.bind(this);
+    window.addEventListener("resize", this.handleResize);
+    // NOTE: monaco is browser-only, pre-render of the app is done via node;
+    // Check if document exists to be sure we're in browser land
+    // before loading monaco.
+    this.monaco = require("monaco-editor");
+    configureMonaco(this.monaco);
   }
 
   handleResize() {
@@ -49,33 +47,31 @@ class CadenceEditor extends React.Component<{
   }
 
   componentDidMount() {
-    if (typeof document !== "undefined") {
-      this.monaco = require("monaco-editor");
-      configureMonaco(this.monaco);
-      const monacoOptions = {
-        language: "Cadence",
-        minimap: {
-          enabled: false
-        }
-      };
+    this.monaco = require("monaco-editor");
+    configureMonaco(this.monaco);
+    const monacoOptions = {
+      language: "Cadence",
+      minimap: {
+        enabled: false
+      }
+    };
 
-      this.editor = this.monaco.editor.create(
-        document.getElementById(this.props.mount),
-        monacoOptions
-      );
+    this.editor = this.monaco.editor.create(
+      document.getElementById(this.props.mount),
+      monacoOptions
+    );
 
-      this._subscription = this.editor.onDidChangeModelContent((event: any) => {
-        const code = this.editor.getValue().replace(/\r\n/g, '\n')
-        this.props.onChange(code, event);
-      });
+    this._subscription = this.editor.onDidChangeModelContent((event: any) => {
+      const code = this.editor.getValue().replace(/\r\n/g, '\n')
+      this.props.onChange(code, event);
+    });
 
-      const state = this.getOrCreateEditorState(
-        this.props.activeId,
-        this.props.code
-      );
-      this.editor.setModel(state.model);
-      this.editor.focus();
-    }
+    const state = this.getOrCreateEditorState(
+      this.props.activeId,
+      this.props.code
+    );
+    this.editor.setModel(state.model);
+    this.editor.focus();
   }
 
   getOrCreateEditorState(id: string, code: string): EditorState {
@@ -114,10 +110,8 @@ class CadenceEditor extends React.Component<{
   }
 
   componentWillUnmount() {
-    if (typeof document !== "undefined") {
-      this.destroyMonaco();
-      window.removeEventListener("resize", this.handleResize);
-    }
+    this.destroyMonaco();
+    window.removeEventListener("resize", this.handleResize);
   }
 
   componentDidUpdate(prevProps: any) {

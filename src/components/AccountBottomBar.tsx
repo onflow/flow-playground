@@ -166,24 +166,18 @@ const AccountState: React.FC<{
   };
 
   useEffect(() => {
-    if (typeof document !== "undefined") {
-      if (
-        isResizing &&
-        y > STORAGE_PANEL_MIN_HEIGHT &&
-        y < window.innerHeight - PLAYGROUND_HEADER_HEIGHT
-      ) {
-        setPanelHeight(y);
-      }
+    if (
+      isResizing &&
+      y > STORAGE_PANEL_MIN_HEIGHT &&
+      y < window.innerHeight - PLAYGROUND_HEADER_HEIGHT
+    ) {
+      setPanelHeight(y);
     }
   }, [x, y]);
 
   useEffect(() => {
-    if (typeof document !== "undefined") {
-      //@ts-ignore
-      window.addEventListener("mouseup", toggleResizeListener, false);
-    }
+    window.addEventListener("mouseup", toggleResizeListener, false);
     return () => {
-      //@ts-ignore
       window.removeEventListener("mouseup", toggleResizeListener, false);
     };
   }, []);
