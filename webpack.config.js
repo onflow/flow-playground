@@ -44,7 +44,6 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     disableHostCheck: true,
-    https: true,
     port: 3000,
   },
   plugins: [
