@@ -21,19 +21,20 @@ const UnsupportedMessage = styled.div`
 `;
 
 const BrowserDetector: React.FC = () => {
-    switch (browser && browser.name) {   
-        case 'safari':
-          return (
-            <UnsupportedMessage>
-                You're currently using an unsupported browser to access the Flow Playground. We hope
-                to support your browser in the future, but for now some features may not function as intended. In order to have the best experience,
-                we reccomend you use either Chrome or Firefox to access the Flow Playground.
-            </UnsupportedMessage>
-          )
-          break;
-       
-        default:
-          return null
+    switch (browser && browser.name) {
+      case 'safari':
+        return (
+          <UnsupportedMessage>
+              You're currently using an unsupported browser to access the Flow Playground.
+
+              We hope to support your browser in the future, but for now some features may not function as intended.
+
+              In order to have the best experience, we recommend you use either Chrome or Firefox to access the Flow Playground.
+          </UnsupportedMessage>
+        )
+
+      default:
+        return null
     }
 }
 
