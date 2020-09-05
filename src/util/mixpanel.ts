@@ -1,27 +1,30 @@
-//@ts-ignore
 import mixpanel from "mixpanel-browser";
+import {Dict} from "mixpanel-browser"
 mixpanel.init(process.env.MIXPANEL_TOKEN);
 
-let env_check = typeof document !== "undefined";
 let is_dev = process.env.NODE_ENV === "development";
 
 let actions = {
-  //@ts-ignore
-  identify: id => {
-    if (env_check) mixpanel.identify(id);
+  identify(id: string) {
+    if (is_dev)
+      return
+    mixpanel.identify(id);
   },
-  //@ts-ignore
-  alias: id => {
-    if (env_check) mixpanel.alias(id);
+  alias(id: string) {
+    if (is_dev)
+      return
+    mixpanel.alias(id);
   },
-  //@ts-ignore
-  track: (name, props) => {
-    if (env_check) mixpanel.track(name, { ...props, is_dev });
+  track(name: string, props: Dict) {
+    if (is_dev)
+      return
+    mixpanel.track(name, { ...props, is_dev });
   },
   people: {
-    //@ts-ignore
-    set: props => {
-      if (env_check) mixpanel.people.set(props);
+    set: (props: Dict) => {
+      if (is_dev)
+        return
+      mixpanel.people?.set(props);
     }
   }
 };
