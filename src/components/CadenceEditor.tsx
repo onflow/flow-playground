@@ -4,6 +4,7 @@ import configureCadence, {CADENCE_LANGUAGE_ID} from "../util/cadence";
 import {CadenceLanguageServer, Callbacks} from "../util/language-server";
 import {createCadenceLanguageClient} from "../util/language-client";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+const {MonacoServices} = require("monaco-languageclient/lib/monaco-services");
 
 type EditorState = {
   model: any;
@@ -42,11 +43,10 @@ class CadenceEditor extends React.Component<{
 
     this.editorStates = {};
 
-    if (typeof document !== "undefined") {
-      this.handleResize = this.handleResize.bind(this);
-      window.addEventListener("resize", this.handleResize);
-      configureCadence();
-    }
+    this.handleResize = this.handleResize.bind(this);
+    window.addEventListener("resize", this.handleResize);
+
+    configureCadence();
   }
 
   handleResize() {
@@ -54,35 +54,32 @@ class CadenceEditor extends React.Component<{
   }
 
   async componentDidMount() {
-    if (typeof document !== "undefined") {
-      const monaco = require("monaco-editor");
-      configureCadence();
-      const editor = monaco.editor.create(
-        document.getElementById(this.props.mount),
-        {
-          theme: 'vs-light',
-          language: CADENCE_LANGUAGE_ID,
-          minimap: {
-            enabled: false
-          }
+    configureCadence();
+    const editor = monaco.editor.create(
+      document.getElementById(this.props.mount),
+      {
+        theme: 'vs-light',
+        language: CADENCE_LANGUAGE_ID,
+        minimap: {
+          enabled: false
         }
-      );
-      this.editor = editor
-
-      this._subscription = this.editor.onDidChangeModelContent((event: any) => {
-        this.props.onChange(this.editor.getValue(), event);
-      });
-
-      const state = this.getOrCreateEditorState(
-        this.props.activeId,
-        this.props.code
-      );
-      this.editor.setModel(state.model);
-      this.editor.focus();
-
-      if (this.props.activeId && !this.callbacks) {
-        await this.loadLanguageServer(editor, (index) => this.props.getCode(index))
       }
+    );
+    this.editor = editor
+
+    this._subscription = this.editor.onDidChangeModelContent((event: any) => {
+      this.props.onChange(this.editor.getValue(), event);
+    });
+
+    const state = this.getOrCreateEditorState(
+      this.props.activeId,
+      this.props.code
+    );
+    this.editor.setModel(state.model);
+    this.editor.focus();
+
+    if (this.props.activeId && !this.callbacks) {
+      await this.loadLanguageServer(editor, (index) => this.props.getCode(index))
     }
   }
 
@@ -113,7 +110,6 @@ class CadenceEditor extends React.Component<{
 
     if (!monacoServicesInstalled) {
       monacoServicesInstalled = true
-      const {MonacoServices} = require("monaco-languageclient/lib/monaco-services");
       MonacoServices.install(editor);
     }
 
@@ -165,12 +161,10 @@ class CadenceEditor extends React.Component<{
   }
 
   componentWillUnmount() {
-    if (typeof document !== "undefined") {
-      this.destroyMonaco();
-      window.removeEventListener("resize", this.handleResize);
-      if (this.callbacks && this.callbacks.onClientClose) {
-        this.callbacks.onClientClose()
-      }
+    this.destroyMonaco();
+    window.removeEventListener("resize", this.handleResize);
+    if (this.callbacks && this.callbacks.onClientClose) {
+      this.callbacks.onClientClose()
     }
   }
 

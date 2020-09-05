@@ -127,9 +127,7 @@ const EditorLayout: React.FC = () => {
             </Text>
             {project && (
               <ShareSaveButton
-                url={
-                  typeof document !== "undefined" ? window.location.href : ""
-                }
+                url={window.location.href}
                 saveText={project.parentId ? "Fork" : "Save"}
                 showShare={project.persist}
                 onSave={() => mutator.saveProject(!!project.parentId)}

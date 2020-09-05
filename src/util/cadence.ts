@@ -1,9 +1,10 @@
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import {languages} from "monaco-editor/esm/vs/editor/editor.api"
+import IMonarchLanguage = languages.IMonarchLanguage
 
 export const CADENCE_LANGUAGE_ID = "cadence"
 
 export default function configureCadence() {
-
-  const monaco = require("monaco-editor");
 
   monaco.languages.register({
     id: CADENCE_LANGUAGE_ID,
@@ -11,8 +12,17 @@ export default function configureCadence() {
     aliases: ["CDC", "cdc"]
   });
 
-  monaco.languages.setMonarchTokensProvider(CADENCE_LANGUAGE_ID, {
-
+  const languageDef: IMonarchLanguage & {
+    keywords: string[],
+    typeKeywords: string[],
+    operators: string[],
+    symbols: RegExp,
+    escapes: RegExp,
+    digits: RegExp,
+    octaldigits: RegExp,
+    binarydigits: RegExp,
+    hexdigits: RegExp,
+  } = {
     keywords: [
       "if",
       "else",
@@ -109,6 +119,7 @@ export default function configureCadence() {
     octaldigits: /[0-7]+(_+[0-7]+)*/,
     binarydigits: /[0-1]+(_+[0-1]+)*/,
     hexdigits: /[[0-9a-fA-F]+(_+[0-9a-fA-F]+)*/,
+
     tokenizer: {
       root: [[/[{}]/, "delimiter.bracket"], {include: "common"}],
 
@@ -178,5 +189,7 @@ export default function configureCadence() {
       ],
 
     }
-  });
+  }
+
+  monaco.languages.setMonarchTokensProvider(CADENCE_LANGUAGE_ID, languageDef);
 }

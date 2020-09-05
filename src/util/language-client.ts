@@ -11,6 +11,8 @@ import {
   MessageWriter,
   PartialMessageInfo
 } from "vscode-jsonrpc";
+import {ConnectionErrorHandler} from "monaco-languageclient/src/connection"
+import {ConnectionCloseHandler} from "monaco-languageclient"
 
 export function createCadenceLanguageClient(callbacks: Callbacks) {
   const logger: Logger = {
@@ -81,7 +83,7 @@ export function createCadenceLanguageClient(callbacks: Callbacks) {
     },
     // Create a language client connection from the JSON-RPC connection on demand
     connectionProvider: {
-      get: (errorHandler, closeHandler) => {
+      get: (errorHandler: ConnectionErrorHandler, closeHandler: ConnectionCloseHandler) => {
         return Promise.resolve(createConnection(messageConnection, errorHandler, closeHandler))
       }
     }

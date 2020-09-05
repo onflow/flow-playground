@@ -31,6 +31,7 @@ const ScriptBottomBar: React.FC = () => {
               try {
                 rawResult = await createScriptExecution();
               } catch (e) {
+                console.error(e)
                 rawResult = e.toString();
               }
 

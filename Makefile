@@ -19,8 +19,6 @@ clean:
 	$(EXEC) sh -c 'rm -rf node_modules'
 	$(info delete dist)
 	$(EXEC) sh -c 'rm -rf dist'
-	$(info delete artifacts)
-	$(EXEC) sh -c 'rm -rf artifacts'
 
 .PHONY: install
 install:
@@ -30,14 +28,12 @@ install:
 .PHONY: build
 build:
 	$(info Task: build production)
-	$(EXEC) sh -c 'npm run build-production || exit 255'
+	$(EXEC) sh -c 'npm run build || exit 255'
 
 .PHONY: test
 test:
 	$(info Task: test)
-	$(EXEC) sh -c 'npm test || exit 255'
+	$(EXEC) sh -c 'npm run test || exit 255'
 
 .PHONY: ci
-ci: clean install build
-	$(info Task: ci)
-	$(EXEC) sh -c 'npm test || exit 255'
+ci: clean install build test
