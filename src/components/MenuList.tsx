@@ -32,7 +32,7 @@ const MenuList: React.FC<MenuListProps> = ({
   onInsert,
   onDelete
 }) => {
-  const isEditing = useRef();
+  const isEditing = useRef<HTMLInputElement>();
   const [editing, setEditing] = useState([]);
   const enterPressed = useKeyPress("Enter");
   const escapePressed = useKeyPress("Escape");
@@ -55,20 +55,14 @@ const MenuList: React.FC<MenuListProps> = ({
   useEffect(() => {
     if (enterPressed || escapePressed) {
       setEditing([]);
-      //@ts-ignore
       isEditing.current?.blur();
     }
   }, [enterPressed, escapePressed]);
 
-  const setEditingRef = (element: any) => {
+  const setEditingRef = (element: HTMLInputElement | undefined) => {
     isEditing.current = element;
-
-    if (!!isEditing.current) {
-      // @ts-ignore  
-      isEditing.current.focus();
-      // @ts-ignore  
-      isEditing.current.select()
-    }
+    element?.focus();
+    element?.select()
   };
 
   return (
@@ -97,7 +91,6 @@ const MenuList: React.FC<MenuListProps> = ({
                 type="text"
                 onBlur={(e: any) => {
                   if (e.target.value.length === 0) {
-                    //@ts-ignore
                     isEditing.current.value = value.title;
                   } else {
                     toggleEditing(i, e.target.value);
@@ -107,7 +100,6 @@ const MenuList: React.FC<MenuListProps> = ({
                 readonly={!editing.includes(i)}
                 onChange={e => {
                   if (e.target.value.length > NAME_MAX_CHARS) {
-                    //@ts-ignore
                     isEditing.current.value = e.target.value.substr(
                       0,
                       NAME_MAX_CHARS - 1
