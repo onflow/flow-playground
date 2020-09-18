@@ -1,9 +1,10 @@
-import React from "react";
-import styled from "@emotion/styled";
-import configureCadence, {CADENCE_LANGUAGE_ID} from "../util/cadence";
-import {CadenceLanguageServer, Callbacks} from "../util/language-server";
-import {createCadenceLanguageClient} from "../util/language-client";
-import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import React from "react"
+import styled from "@emotion/styled"
+import configureCadence, {CADENCE_LANGUAGE_ID} from "../util/cadence"
+import {CadenceLanguageServer, Callbacks} from "../util/language-server"
+import {createCadenceLanguageClient} from "../util/language-client"
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api"
+
 const {MonacoServices} = require("monaco-languageclient/lib/monaco-services");
 
 type EditorState = {
@@ -54,7 +55,6 @@ class CadenceEditor extends React.Component<{
   }
 
   async componentDidMount() {
-    configureCadence();
     const editor = monaco.editor.create(
       document.getElementById(this.props.mount),
       {

@@ -23,7 +23,6 @@ module.exports = {
       "containers": path.resolve(__dirname, "src/containers"),
       "api": path.resolve(__dirname, "src/api"),
       "layout": path.resolve(__dirname, "src/layout"),
-      "types": path.resolve(__dirname, "type"),
       vscode: require.resolve("monaco-languageclient/lib/vscode-compatibility")
     }
   },
@@ -71,5 +70,5 @@ module.exports = {
     net: 'empty',
     fs: 'empty',
     util: 'empty'
-  },
+  }
 }
