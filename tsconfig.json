@@ -21,7 +21,6 @@
       "components/*": ["src/components/*"],
       "containers/*": ["src/containers/*"],
       "api/*": ["src/api/*"],
-      "util/*": ["src/util/*"],
       "layout/*": ["src/layout/*"],
       "types/*": ["types/*"]
     },

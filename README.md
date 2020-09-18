@@ -59,7 +59,7 @@ docker run -e FLOW_DEBUG=true -e FLOW_SESSIONCOOKIESSECURE=false -p 8080:8080 gc
 Start the React app
 
 ```
-npm start
+npm run start
 ```
 
 ✨ The Playground is running on localhost:3000 ✨

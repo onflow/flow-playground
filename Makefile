@@ -23,7 +23,6 @@ clean:
 .PHONY: install
 install:
 	$(info Task: install)
-	$(info run "npm install")
 	$(EXEC) sh -c 'npm install || exit 255'
 
 .PHONY: build

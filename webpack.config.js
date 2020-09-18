@@ -6,7 +6,10 @@ const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-  entry: './src/index.tsx',
+  entry: [
+    "./src/index.tsx",
+    "./src/wasm_exec.js"
+  ],
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
@@ -19,9 +22,8 @@ module.exports = {
       "components": path.resolve(__dirname, "src/components"),
       "containers": path.resolve(__dirname, "src/containers"),
       "api": path.resolve(__dirname, "src/api"),
-      "util": path.resolve(__dirname, "src/util"),
       "layout": path.resolve(__dirname, "src/layout"),
-      "types": path.resolve(__dirname, "type")
+      vscode: require.resolve("monaco-languageclient/lib/vscode-compatibility")
     }
   },
   module: {
@@ -48,7 +50,9 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new MonacoWebpackPlugin(),
+    new MonacoWebpackPlugin({
+      languages: []
+    }),
     new Dotenv(),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
@@ -61,5 +65,10 @@ module.exports = {
         concurrency: 100,
       },
     })
-  ]
+  ],
+  node: {
+    net: 'empty',
+    fs: 'empty',
+    util: 'empty'
+  }
 }

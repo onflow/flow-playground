@@ -1,6 +1,11 @@
-import React from "react";
-import styled from "@emotion/styled";
-import configureMonaco from "../util/configure-monaco";
+import React from "react"
+import styled from "@emotion/styled"
+import configureCadence, {CADENCE_LANGUAGE_ID} from "../util/cadence"
+import {CadenceLanguageServer, Callbacks} from "../util/language-server"
+import {createCadenceLanguageClient} from "../util/language-client"
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api"
+
+const {MonacoServices} = require("monaco-languageclient/lib/monaco-services");
 
 type EditorState = {
   model: any;
@@ -12,22 +17,28 @@ const EditorContainer = styled.div`
   height: 100%;
 `;
 
+let monacoServicesInstalled = false;
+
+type CodeGetter = (index: number) => string | undefined
+
 class CadenceEditor extends React.Component<{
   code: string;
   mount: string;
   onChange: any;
   activeId: string;
+  getCode: CodeGetter;
 }> {
-  editor: any;
+  editor: monaco.editor.ICodeEditor;
   _subscription: any;
   editorStates: { [key: string]: EditorState };
-  monaco: any;
+  private callbacks: Callbacks;
 
   constructor(props: {
     code: string;
     mount: string;
     onChange: any;
     activeId: string;
+    getCode: CodeGetter;
   }) {
     super(props);
 
@@ -35,35 +46,29 @@ class CadenceEditor extends React.Component<{
 
     this.handleResize = this.handleResize.bind(this);
     window.addEventListener("resize", this.handleResize);
-    // NOTE: monaco is browser-only, pre-render of the app is done via node;
-    // Check if document exists to be sure we're in browser land
-    // before loading monaco.
-    this.monaco = require("monaco-editor");
-    configureMonaco(this.monaco);
+
+    configureCadence();
   }
 
   handleResize() {
     this.editor && this.editor.layout();
   }
 
-  componentDidMount() {
-    this.monaco = require("monaco-editor");
-    configureMonaco(this.monaco);
-    const monacoOptions = {
-      language: "Cadence",
-      minimap: {
-        enabled: false
-      }
-    };
-
-    this.editor = this.monaco.editor.create(
+  async componentDidMount() {
+    const editor = monaco.editor.create(
       document.getElementById(this.props.mount),
-      monacoOptions
+      {
+        theme: 'vs-light',
+        language: CADENCE_LANGUAGE_ID,
+        minimap: {
+          enabled: false
+        }
+      }
     );
+    this.editor = editor
 
     this._subscription = this.editor.onDidChangeModelContent((event: any) => {
-      const code = this.editor.getValue().replace(/\r\n/g, '\n')
-      this.props.onChange(code, event);
+      this.props.onChange(this.editor.getValue(), event);
     });
 
     const state = this.getOrCreateEditorState(
@@ -72,6 +77,51 @@ class CadenceEditor extends React.Component<{
     );
     this.editor.setModel(state.model);
     this.editor.focus();
+
+    if (this.props.activeId && !this.callbacks) {
+      await this.loadLanguageServer(editor, (index) => this.props.getCode(index))
+    }
+  }
+
+  private async loadLanguageServer(editor: monaco.editor.ICodeEditor, getCode: CodeGetter) {
+
+    this.callbacks = {
+      // The actual callback will be set as soon as the language server is initialized
+      toServer: null,
+
+      // The actual callback will be set as soon as the language server is initialized
+      onClientClose: null,
+
+      // The actual callback will be set as soon as the language client is initialized
+      onServerClose: null,
+
+      // The actual callback will be set as soon as the language client is initialized
+      toClient: null,
+
+      getAddressCode(address: string): string | undefined {
+        const index = parseInt(address, 16) - 1;
+        return getCode(index)
+      },
+    }
+
+    // The Monaco Language Client services have to be installed globally, once.
+    // An editor must be passed, which is only used for commands.
+    // As the Cadence language server is not providing any commands this is OK
+
+    if (!monacoServicesInstalled) {
+      monacoServicesInstalled = true
+      MonacoServices.install(editor);
+    }
+
+    // Start one language server per editor.
+    // Even though one language server can handle multiple documents,
+    // this demonstrates this is possible and is more resilient:
+    // if the server for one editor crashes, it does not break the other editors
+
+    await CadenceLanguageServer.create(this.callbacks);
+
+    const languageClient = createCadenceLanguageClient(this.callbacks);
+    languageClient.start()
   }
 
   getOrCreateEditorState(id: string, code: string): EditorState {
@@ -81,7 +131,8 @@ class CadenceEditor extends React.Component<{
       return existingState;
     }
 
-    const model = this.monaco.editor.createModel(code, "Cadence");
+    const monaco = require("monaco-editor");
+    const model = monaco.editor.createModel(code, CADENCE_LANGUAGE_ID);
 
     const state: EditorState = {
       model,
@@ -112,13 +163,16 @@ class CadenceEditor extends React.Component<{
   componentWillUnmount() {
     this.destroyMonaco();
     window.removeEventListener("resize", this.handleResize);
+    if (this.callbacks && this.callbacks.onClientClose) {
+      this.callbacks.onClientClose()
+    }
   }
 
-  componentDidUpdate(prevProps: any) {
+  async componentDidUpdate(prevProps: any) {
     if (this.props.activeId !== prevProps.activeId) {
       this.switchEditor(prevProps.activeId, this.props.activeId);
       this.destroyMonaco();
-      this.componentDidMount();
+      await this.componentDidMount();
     }
   }
 
