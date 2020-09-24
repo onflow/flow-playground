@@ -27,7 +27,7 @@ ENV GA_TRACKING_CODE=$GA_TRACKING_CODE
 
 # Copy over application source to build:
 COPY . .
-RUN NODE_OPTIONS=--max-old-space-size=8192 npm run build-${TARGET}
+RUN NODE_OPTIONS=--max-old-space-size=8192 npm run build
 
 # Should generate a /out folder that we'll use in the next step:
 FROM nginx:alpine
