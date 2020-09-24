@@ -6,8 +6,8 @@ WORKDIR  /app
 
 # install dependencies
 COPY package.json .
-COPY yarn.lock .
-RUN yarn install --frozen-lockfile
+COPY package-lock.json .
+RUN npm ci
 
 ARG TARGET
 ARG FIREBASE_API_KEY
@@ -27,7 +27,7 @@ ENV GA_TRACKING_CODE=$GA_TRACKING_CODE
 
 # Copy over application source to build:
 COPY . .
-RUN NODE_OPTIONS=--max-old-space-size=8192 yarn run build-${TARGET}
+RUN NODE_OPTIONS=--max-old-space-size=8192 npm run build-${TARGET}
 
 # Should generate a /out folder that we'll use in the next step:
 FROM nginx:alpine
