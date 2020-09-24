@@ -21,7 +21,7 @@
     "framer-motion": "^2.6.6",
     "graphql": "^15.3.0",
     "graphql-tag": "^2.11.0",
-    "isomorphic-fetch": "^2.2.1",
+    "isomorphic-fetch": "^3.0.0",
     "mixpanel-browser": "^2.39.0",
     "monaco-editor": "^0.20.0",
     "monaco-languageclient": "^0.13.0",
