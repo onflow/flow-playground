@@ -55,7 +55,7 @@ const version = <Text
     right: "1rem"
   }}
 >
-  v0.3.2
+  v0.3.4
 </Text>
 
 const App: React.FC = () => {
