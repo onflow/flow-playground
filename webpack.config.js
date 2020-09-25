@@ -3,6 +3,7 @@ const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin")
 const Dotenv = require("dotenv-webpack")
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require('copy-webpack-plugin');
+const webpack = require("webpack")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
@@ -64,8 +65,15 @@ module.exports = {
       options: {
         concurrency: 100,
       },
-    })
-  ],
+    }),
+    new webpack.EnvironmentPlugin([
+      'GRAPHQL_API',
+      'GA_TRACKING_CODE',
+      'MIXPANEL_TOKEN',
+      'DEFAULT_SEO_IMAGE',
+      'AVATAAR_URL',
+    ])
+],
   node: {
     net: 'empty',
     fs: 'empty',
