@@ -99,8 +99,11 @@ class CadenceEditor extends React.Component<{
       toClient: null,
 
       getAddressCode(address: string): string | undefined {
-        const index = parseInt(address, 16) - 1;
-        return getCode(index)
+        const number = parseInt(address, 16)
+        if (!number) {
+          return
+        }
+        return getCode(number - 1)
       },
     }
 
