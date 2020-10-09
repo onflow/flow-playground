@@ -4,6 +4,9 @@ import configureCadence, {CADENCE_LANGUAGE_ID} from "../util/cadence"
 import {CadenceLanguageServer, Callbacks} from "../util/language-server"
 import {createCadenceLanguageClient} from "../util/language-client"
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api"
+import {EntityType} from "providers/Project";
+import Arguments from "components/Arguments";
+import { Argument } from "components/Arguments/types";
 
 const {MonacoServices} = require("monaco-languageclient/lib/monaco-services");
 
@@ -15,6 +18,7 @@ type EditorState = {
 const EditorContainer = styled.div`
   width: 100%;
   height: 100%;
+  position: relative;
 `;
 
 let monacoServicesInstalled = false;
@@ -26,6 +30,7 @@ class CadenceEditor extends React.Component<{
   mount: string;
   onChange: any;
   activeId: string;
+  type: EntityType;
   getCode: CodeGetter;
 }> {
   editor: monaco.editor.ICodeEditor;
@@ -38,6 +43,7 @@ class CadenceEditor extends React.Component<{
     mount: string;
     onChange: any;
     activeId: string;
+    type: EntityType;
     getCode: CodeGetter;
   }) {
     super(props);
@@ -192,8 +198,41 @@ class CadenceEditor extends React.Component<{
     }
   }
 
+  extractArguments(code: string):Argument[]{
+    // TODO: add different processors for contract, scripts and transactions
+
+    const target = code
+      .split(/\r\n|\n|\r/)
+      .find(line => line.includes("transaction"))
+
+    if (target){
+      const match = target.match(/(?:\()(.*)(?:\))/)
+      if (match){
+        return match[1]
+          .split(",")
+          .map(item => item.replace(/\s*/g,'')
+          .split(":"))
+          .map(item =>{
+            const [name, type] = item
+            return {
+              name,
+              type
+            }
+          })
+      }
+    }
+    return []
+  }
+
   render() {
-    return <EditorContainer id={this.props.mount} />;
+    const { type, code } = this.props;
+    const list = this.extractArguments(code);
+    console.log({list})
+    return (
+      <EditorContainer id={this.props.mount}>
+        <Arguments type={type} list={list}/>
+      </EditorContainer>
+    );
   }
 }
 
