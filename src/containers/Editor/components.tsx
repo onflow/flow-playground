@@ -177,6 +177,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
       <EditorTitle type={active.type} />
       <EditorRoot>
         <CadenceEditor
+          type={active.type}
           activeId={activeId}
           code={code}
           mount="cadenceEditor"
