@@ -33,15 +33,18 @@ const AccountSigners: React.FC<{
   onChange: (selected: number) => void;
   project: Project;
   accounts: Account[];
-}> = ({ multi, selectedAccounts, accounts, project, onChange }) => {
+  maxSelection?: number
+}> = (props) => {
+  const { multi, selectedAccounts, accounts, project, onChange, maxSelection} = props;
   if (!multi) {
     throw new Error("Must include multi prop.");
   }
 
   const { theme } = useThemeUI();
+  const amount = maxSelection || project.accounts.length
   const renderOutlines = () => {
     const outlines = [];
-    for (let i = selectedAccounts.length; i < project.accounts.length; i++) {
+    for (let i = selectedAccounts.length; i < amount; i++) {
       outlines.push(
         <Outline key={i + 1}>
           <Text
