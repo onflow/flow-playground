@@ -1,25 +1,37 @@
-import React from "react";
-import { Hover } from "./styles";
-import { Argument } from "./types";
-import {ArgumentsTitle, ArgumentsList, ActionButton} from "components/Arguments/components";
-import { EntityType } from "providers/Project";
+import React, {useState} from "react";
+import {HoverPanel} from "./styles";
+import {Argument} from "./types";
+import {ActionButton, ArgumentsList, ArgumentsTitle, Signers} from "components/Arguments/components";
+import {EntityType} from "providers/Project";
 
 type ArgumentsProps = {
   type: EntityType,
-  list: Argument[]
+  list: Argument[],
+  signers: number
 }
 
-const Arguments: React.FC<ArgumentsProps> = ({type, list}) => {
+const Arguments: React.FC<ArgumentsProps> = (props) => {
+  const { type, list, signers } = props;
+  const needSigners = type == EntityType.TransactionTemplate && signers > 0
+  const [ selected, updateSelectedAccounts ] = useState([])
+  const [ expanded, setExpanded ] = useState(true)
   return(
-    <Hover>
-      <ArgumentsTitle
-        type={type}
-        errors={3}
-        toggleExpand={()=>{console.log("expand")}}
-        expanded={false}/>
-      {list.length > 0 && <ArgumentsList list={list}/>}
+    <HoverPanel>
+      {list.length > 0 &&
+        <>
+          <ArgumentsTitle
+            type={type}
+            errors={3}
+            toggleExpand={()=>{console.log("expand")}}
+            expanded={expanded}
+            setExpanded={setExpanded}
+          />
+          {expanded && <ArgumentsList list={list}/>}
+        </>
+        }
+      {needSigners && <Signers maxSelection={signers} selected={selected} updateSelectedAccounts={updateSelectedAccounts}/>}
       <ActionButton type={type} onClick={()=>{console.log("GO!")}}/>
-    </Hover>
+    </HoverPanel>
   )
 }
 

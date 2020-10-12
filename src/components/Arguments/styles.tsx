@@ -1,11 +1,12 @@
 import styled from 'styled-components'
+import { FaCaretSquareDown } from 'react-icons/fa'
 import theme from "../../theme";
 
-interface HoverProps {
+interface HoverPanelProps {
   width?: string
 }
 
-export const Hover = styled.div<HoverProps>`
+export const HoverPanel = styled.div<HoverPanelProps>`
   width: ${({width = "300px"}) => width};
   padding: 20px;
   border-radius: 4px;
@@ -76,4 +77,21 @@ export const List = styled.div`
   grid-gap: 12px;
   grid-template-columns: 100%;
   margin-bottom: 20px;
+`;
+
+export const SignersContainer = styled.div`
+  margin-bottom: 20px;
+`;
+
+
+interface ToggleProps {
+  active: boolean
+}
+export const ToggleExpand = styled(FaCaretSquareDown).attrs({
+  size: 18
+})<ToggleProps>`
+  cursor: pointer;
+  opacity: 0.2;
+  transform: ${({active}) => active ? 'rotate(180deg)' : 'rotate(0deg)'};
+  margin-left: 5px;
 `;
