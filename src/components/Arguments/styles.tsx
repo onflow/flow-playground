@@ -12,10 +12,6 @@ export const HoverPanel = styled.div<HoverPanelProps>`
   border-radius: 4px;
   background-color: #fff;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.35), 0 6px 10px rgba(0, 0, 0, 0.05);
-  position: absolute;
-  right: 30px;
-  top: -20px;
-  z-index: 10;
 `;
 
 export const Heading = styled.div`

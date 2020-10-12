@@ -19,6 +19,24 @@ const EditorContainer = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
+  
+  .drag-box{
+    width: fit-content;
+    height: fit-content;
+    position: absolute;
+    right: 30px;
+    top: 0;
+    z-index: 12;
+  }
+  
+  .constraints{
+    width: 90vw;
+    height: 90vh;
+    position: fixed;
+    left: 2vw;
+    top: 2vw;
+    pointer-events: none;
+  }
 `;
 
 let monacoServicesInstalled = false;
