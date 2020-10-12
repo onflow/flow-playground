@@ -198,39 +198,66 @@ class CadenceEditor extends React.Component<{
     }
   }
 
-  extractArguments(code: string):Argument[]{
+  extract(code: string, keyWord: string):string[]{
     // TODO: add different processors for contract, scripts and transactions
 
     const target = code
       .split(/\r\n|\n|\r/)
-      .find(line => line.includes("transaction"))
+      .find(line => line.includes(keyWord))
 
     if (target){
       const match = target.match(/(?:\()(.*)(?:\))/)
       if (match){
         return match[1]
           .split(",")
-          .map(item => item.replace(/\s*/g,'')
-          .split(":"))
-          .map(item =>{
-            const [name, type] = item
-            return {
-              name,
-              type
-            }
-          })
+          .map(item => item.replace(/\s*/g,''))
       }
     }
     return []
   }
 
+  extractTransactionArguments(code: string):Argument[]{
+    return this
+      .extract(code, "transaction")
+      .map(item => item.split(":"))
+      .map(item =>{
+      const [name, type] = item
+      return {
+        name,
+        type
+      }
+    });
+  }
+
+  extractScriptArguments(code:string):Argument[]{
+    return this
+      .extract(code, "fun main")
+      .map(item =>{
+        const [name, type] = item
+        return {
+          name,
+          type
+        }
+      });
+  }
+
+  extractSigners(code: string):number{
+    return this
+      .extract(code, "prepare")
+      .filter(item => !!item)
+      .length
+  }
+
   render() {
     const { type, code } = this.props;
-    const list = this.extractArguments(code);
-    console.log({list})
+    const list = type === EntityType.TransactionTemplate
+        ? this.extractTransactionArguments(code)
+        : this.extractScriptArguments(code)
+    const signers = this.extractSigners(code);
+
     return (
       <EditorContainer id={this.props.mount}>
-        <Arguments type={type} list={list}/>
+        <Arguments type={type} list={list} signers={signers}/>
       </EditorContainer>
     );
   }
