@@ -4,6 +4,7 @@ import configureCadence, {CADENCE_LANGUAGE_ID} from "../util/cadence"
 import {CadenceLanguageServer, Callbacks} from "../util/language-server"
 import {createCadenceLanguageClient} from "../util/language-client"
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api"
+import {ExecuteCommandRequest, MonacoLanguageClient} from "monaco-languageclient"
 
 const {MonacoServices} = require("monaco-languageclient/lib/monaco-services");
 
@@ -32,6 +33,7 @@ class CadenceEditor extends React.Component<{
   _subscription: any;
   editorStates: { [key: string]: EditorState };
   private callbacks: Callbacks;
+  private languageClient: MonacoLanguageClient
 
   constructor(props: {
     code: string;
@@ -68,6 +70,7 @@ class CadenceEditor extends React.Component<{
     this.editor = editor
 
     this._subscription = this.editor.onDidChangeModelContent((event: any) => {
+      this.getParameters()
       this.props.onChange(this.editor.getValue(), event);
     });
 
@@ -123,8 +126,8 @@ class CadenceEditor extends React.Component<{
 
     await CadenceLanguageServer.create(this.callbacks);
 
-    const languageClient = createCadenceLanguageClient(this.callbacks);
-    languageClient.start()
+    this.languageClient = createCadenceLanguageClient(this.callbacks);
+    this.languageClient.start()
   }
 
   getOrCreateEditorState(id: string, code: string): EditorState {
@@ -194,6 +197,20 @@ class CadenceEditor extends React.Component<{
 
   render() {
     return <EditorContainer id={this.props.mount} />;
+  }
+
+  private async getParameters() {
+    await this.languageClient.onReady()
+
+    try {
+      const args = await this.languageClient.sendRequest(ExecuteCommandRequest.type, {
+        command: "cadence.server.getEntryPointParameters",
+        arguments: [this.editor.getModel().uri.toString()]
+      })
+      console.log("ARGS:", args)
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
 
