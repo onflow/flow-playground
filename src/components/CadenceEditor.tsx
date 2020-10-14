@@ -1,10 +1,13 @@
 import React from "react"
 import styled from "@emotion/styled"
 import configureCadence, {CADENCE_LANGUAGE_ID} from "../util/cadence"
-import {CadenceLanguageServer, Callbacks} from "../util/language-server"
+import {CadenceCheckCompleted, CadenceLanguageServer, Callbacks} from "../util/language-server"
 import {createCadenceLanguageClient} from "../util/language-client"
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api"
-import {ExecuteCommandRequest, MonacoLanguageClient} from "monaco-languageclient"
+import {
+  MonacoLanguageClient,
+  ExecuteCommandRequest,
+} from "monaco-languageclient"
 
 const {MonacoServices} = require("monaco-languageclient/lib/monaco-services");
 
@@ -70,7 +73,6 @@ class CadenceEditor extends React.Component<{
     this.editor = editor
 
     this._subscription = this.editor.onDidChangeModelContent((event: any) => {
-      this.getParameters()
       this.props.onChange(this.editor.getValue(), event);
     });
 
@@ -128,6 +130,14 @@ class CadenceEditor extends React.Component<{
 
     this.languageClient = createCadenceLanguageClient(this.callbacks);
     this.languageClient.start()
+    this.languageClient.onReady().then(() => {
+      this.languageClient.onNotification(CadenceCheckCompleted.methodName, (result: CadenceCheckCompleted.Params) => {
+        if (!result.valid) {
+          return
+        }
+        this.getParameters()
+      })
+    })
   }
 
   getOrCreateEditorState(id: string, code: string): EditorState {
