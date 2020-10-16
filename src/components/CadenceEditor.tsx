@@ -14,11 +14,6 @@ import {
 
 const {MonacoServices} = require("monaco-languageclient/lib/monaco-services");
 
-type EditorState = {
-  model: any;
-  viewState: any;
-};
-
 const EditorContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -43,19 +38,31 @@ const EditorContainer = styled.div`
   }
 `;
 
+type EditorState = {
+  model: any;
+  viewState: any;
+};
+
 let monacoServicesInstalled = false;
 
 type CodeGetter = (index: number) => string | undefined
 
-class CadenceEditor extends React.Component<{
+type CadenceEditorProps = {
   code: string;
   mount: string;
   onChange: any;
   activeId: string;
   type: EntityType;
   getCode: CodeGetter;
-}> {
+}
+
+type CadenceEditorState = {
+  arguments: {[key: string]: Argument[]}
+}
+
+class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorState> {
   editor: monaco.editor.ICodeEditor;
+  languageClient?: MonacoLanguageClient;
   _subscription: any;
   editorStates: { [key: string]: EditorState };
   private callbacks: Callbacks;
@@ -71,11 +78,13 @@ class CadenceEditor extends React.Component<{
     super(props);
 
     this.editorStates = {};
-
     this.handleResize = this.handleResize.bind(this);
     window.addEventListener("resize", this.handleResize);
-
     configureCadence();
+
+    this.state = {
+      arguments:{}
+    }
   }
 
   handleResize() {
@@ -154,12 +163,36 @@ class CadenceEditor extends React.Component<{
     this.languageClient = createCadenceLanguageClient(this.callbacks);
     this.languageClient.start()
     this.languageClient.onReady().then(() => {
-      this.languageClient.onNotification(CadenceCheckCompleted.methodName, (result: CadenceCheckCompleted.Params) => {
+      this.languageClient.onNotification(CadenceCheckCompleted.methodName, async (result: CadenceCheckCompleted.Params) => {
         if (!result.valid) {
           return
         }
-        this.getParameters()
+        const params = await this.getParameters()
+        this.setExecutionArguments(params)
       })
+    })
+  }
+
+  private async getParameters() {
+    await this.languageClient.onReady()
+
+    try {
+      const args = await this.languageClient.sendRequest(ExecuteCommandRequest.type, {
+        command: "cadence.server.getEntryPointParameters",
+        arguments: [this.editor.getModel().uri.toString()]
+      })
+      return args || []
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  setExecutionArguments(args: Argument[]){
+    const {activeId} = this.props;
+    this.setState({
+      arguments: {
+        [activeId]: args
+      }
     })
   }
 
@@ -246,31 +279,6 @@ class CadenceEditor extends React.Component<{
     return []
   }
 
-  extractTransactionArguments(code: string):Argument[]{
-    return this
-      .extract(code, "transaction")
-      .map(item => item.split(":"))
-      .map(item =>{
-      const [name, type] = item
-      return {
-        name,
-        type
-      }
-    });
-  }
-
-  extractScriptArguments(code:string):Argument[]{
-    return this
-      .extract(code, "fun main")
-      .map(item =>{
-        const [name, type] = item
-        return {
-          name,
-          type
-        }
-      });
-  }
-
   extractSigners(code: string):number{
     return this
       .extract(code, "prepare")
@@ -280,9 +288,12 @@ class CadenceEditor extends React.Component<{
 
   render() {
     const { type, code } = this.props;
-    const list = type === EntityType.TransactionTemplate
-        ? this.extractTransactionArguments(code)
-        : this.extractScriptArguments(code)
+
+    /// Get a list of arguments from language server
+    const { activeId } = this.props;
+    const list = this.state.arguments[activeId] || []
+
+    /// Extract number of signers from code
     const signers = this.extractSigners(code);
 
     return (
