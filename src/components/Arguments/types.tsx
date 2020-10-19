@@ -7,6 +7,7 @@ export type Argument = {
 
 export type InteractionButtonProps = {
   onClick: () => void,
+  active?: boolean,
   type: EntityType
 }
 
@@ -19,6 +20,8 @@ export type ArgumentsTitleProps = {
 }
 
 export type ArgumentsListProps = {
-  list: Argument[]
+  list: Argument[],
+  onChange: (name: String, value: any) => void,
+  errors: any
 }
 

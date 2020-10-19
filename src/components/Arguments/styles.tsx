@@ -81,13 +81,13 @@ export const SignersContainer = styled.div`
 
 
 interface ToggleProps {
-  active: boolean
+  expanded: boolean
 }
 export const ToggleExpand = styled(FaCaretSquareDown).attrs({
   size: 18
 })<ToggleProps>`
   cursor: pointer;
   opacity: 0.2;
-  transform: ${({active}) => active ? 'rotate(180deg)' : 'rotate(0deg)'};
+  transform: ${({expanded}) => expanded ? 'rotate(180deg)' : 'rotate(0deg)'};
   margin-left: 5px;
 `;

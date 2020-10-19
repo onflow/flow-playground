@@ -10,7 +10,6 @@ import SingleArgument from "./SingleArgument";
 
 export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
   const { type, errors, expanded, setExpanded } = props
-  console.log({expanded})
   return (
     <Heading>
       <Title>
@@ -20,18 +19,20 @@ export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
       </Title>
       <Controls>
         {errors > 0 && <Badge><span>{errors}</span></Badge>}
-        <ToggleExpand className="icon" active={expanded} onClick={()=>setExpanded(!expanded)} />
+        <ToggleExpand className="icon" expanded={expanded} onClick={()=>setExpanded(!expanded)} />
       </Controls>
     </Heading>
   );
 };
 
-export const ArgumentsList: React.FC<ArgumentsListProps> = ({list}) =>{
+export const ArgumentsList: React.FC<ArgumentsListProps> = ({list, errors, onChange}) =>{
   return(
     <List>
-      {list.map(({name, type})=>{
+      {list.map((argument)=>{
+        const {name, type} = argument
+        const error = errors[name]
         return (name && type)
-          ? <SingleArgument key={name} name={name} type={type}/>
+          ? <SingleArgument key={name} argument={argument} onChange={onChange} error={error}/>
           : null
       })}
     </List>
@@ -54,7 +55,7 @@ const getLabel = (type: EntityType) => {
   }
 }
 
-export const ActionButton: React.FC<InteractionButtonProps> = ({type, onClick}) => {
+export const ActionButton: React.FC<InteractionButtonProps> = ({type, active = true, onClick}) => {
 
   const label = getLabel(type);
   const { isSavingCode } = useProject();
@@ -66,7 +67,7 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({type, onClick}) 
       <Button
         onClick={onClick}
         Icon={FaArrowCircleRight}
-        disabled={isSavingCode}
+        disabled={isSavingCode || !active}
         isLoading={sendingTransaction}>
           {label}
       </Button>

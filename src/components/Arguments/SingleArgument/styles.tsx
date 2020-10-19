@@ -33,4 +33,13 @@ export const Input = styled.input`
   padding: 8px;
   width: 100%;
   font-weight: bold;
+  margin-bottom: 5px;
+  &:last-child{
+    margin-bottom: 0;
+  }
+`;
+
+export const Error = styled.p`
+  font-size: 12px;
+  color: red;
 `;
