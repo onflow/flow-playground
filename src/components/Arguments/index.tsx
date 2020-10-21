@@ -1,9 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, {useRef, useState} from "react";
 import {HoverPanel} from "./styles";
 import {Argument} from "./types";
 import {ActionButton, ArgumentsList, ArgumentsTitle, Signers} from "./components";
 import {EntityType} from "providers/Project";
-import { motion } from "framer-motion";
+import {motion} from "framer-motion";
+import {useProject} from "providers/Project/projectHooks";
+import {Account, ResultType, useSetExecutionResultsMutation} from "api/apollo/generated/graphql";
 
 type ArgumentsProps = {
   type: EntityType,
@@ -68,13 +70,11 @@ const validateByType = (value: any, type: string) => {
 }
 
 const validate = (list:any, values:any) => {
-  console.log({list, values})
 
   const result = list.reduce(( acc: any, item: any )=>{
     const { name, type } = item
     const value = values[name]
     if (value){
-      console.log(`${name} : ${value} should be of type ${type}`)
       const error = validateByType(value, type)
       if (error){
         acc[name] = error
@@ -83,8 +83,31 @@ const validate = (list:any, values:any) => {
     return acc;
   },{})
 
-  console.log(result);
   return result
+}
+
+type ScriptExecution = (args?: string[]) => Promise<any>;
+type TransactionExecution = (signingAccounts: Account[], args?: string[]) => Promise<any>;
+
+type ProcessingArgs = {
+  disabled: boolean,
+  scriptFactory?: ScriptExecution,
+  transactionFactory?: TransactionExecution
+}
+
+const useTemplateType = (): ProcessingArgs => {
+  const { isSavingCode } = useProject();
+  const { createScriptExecution, createTransactionExecution } = useProject();
+
+  return {
+    disabled: isSavingCode,
+    scriptFactory: createScriptExecution,
+    transactionFactory: createTransactionExecution
+  }
+}
+
+interface IValue {
+  [key: string]: string
 }
 
 const Arguments: React.FC<ArgumentsProps> = (props) => {
@@ -93,10 +116,65 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const [ selected, updateSelectedAccounts ] = useState([])
   const [ expanded, setExpanded ] = useState(true)
   const constraintsRef = useRef(null)
-  const [values, setValue] = useState({})
+  const [ values, setValue ] = useState<IValue>({})
   const errors = validate(list, values)
   const numberOfErrors = Object.keys(errors).length;
   const haveErrors = numberOfErrors > 0
+
+  const [ processingStatus, setProcessingStatus ] = useState(false);
+
+  const [ setResult ] = useSetExecutionResultsMutation();
+  const { scriptFactory, transactionFactory } =  useTemplateType();
+  const { project, active } = useProject();
+  const { accounts } = project;
+
+  const signersAccounts = selected.map(i => accounts[i]);
+
+  const send = async ()=>{
+    if (!processingStatus){
+      setProcessingStatus(true);
+    }
+
+    // Map values to strings that will be passed to backend
+    const args = list.map(arg => {
+      const { name, type } = arg
+      return JSON.stringify({ value : values[name], type })
+    })
+
+    let rawResult;
+    try {
+      // Process script
+      if (type === EntityType.ScriptTemplate) {
+        rawResult = await scriptFactory(args);
+      }
+
+      // Process transaction
+      if (type === EntityType.TransactionTemplate){
+        rawResult = await transactionFactory(signersAccounts, args);
+      }
+
+      // TODO: Process contract
+
+    } catch (e) {
+      console.error(e)
+      rawResult = e.toString();
+    }
+
+    setProcessingStatus(false);
+    const resultType = type === EntityType.ScriptTemplate
+      ? ResultType.Script
+      : ResultType.Transaction
+
+    // Display result in the bottom area
+    setResult({
+      variables: {
+        label: project.scriptTemplates[active.index].title,
+        resultType,
+        rawResult
+      }
+    });
+  }
+
   return(
     <>
       <div ref={constraintsRef} className="constraints"></div>
@@ -107,7 +185,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
               <ArgumentsTitle
                 type={type}
                 errors={numberOfErrors}
-                toggleExpand={()=>{console.log("expand")}}
                 expanded={expanded}
                 setExpanded={setExpanded}
               />
@@ -119,7 +196,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
             </>
             }
           {needSigners && <Signers maxSelection={signers} selected={selected} updateSelectedAccounts={updateSelectedAccounts}/>}
-          <ActionButton active={!haveErrors} type={type} onClick={()=>{console.log("GO!")}}/>
+          <ActionButton active={!haveErrors} type={type} onClick={send}/>
         </HoverPanel>
       </motion.div>
     </>
