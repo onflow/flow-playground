@@ -133,9 +133,10 @@ export const CREATE_TRANSACTION_EXECUTION = gql`
     $projectId: UUID!
     $script: String!
     $signers: [Address!]
+    $arguments: [String!]
   ) {
     createTransactionExecution(
-      input: { projectId: $projectId, script: $script, signers: $signers }
+      input: { projectId: $projectId, script: $script, signers: $signers, arguments: $arguments }
     ) {
       id
       script
@@ -195,8 +196,8 @@ export const DELETE_SCRIPT_TEMPLATE = gql`
 `;
 
 export const CREATE_SCRIPT_EXECUTION = gql`
-  mutation CreateScriptExecution($projectId: UUID!, $script: String!) {
-    createScriptExecution(input: { projectId: $projectId, script: $script }) {
+  mutation CreateScriptExecution($projectId: UUID!, $script: String!, $arguments: [String!]) {
+    createScriptExecution(input: { projectId: $projectId, script: $script, arguments: $arguments }) {
       id
       script
       error
