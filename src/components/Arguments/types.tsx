@@ -15,7 +15,6 @@ export type ArgumentsTitleProps = {
   type: EntityType,
   expanded: boolean,
   setExpanded: (value: boolean) => void,
-  toggleExpand: () => void,
   errors?: number
 }
 
