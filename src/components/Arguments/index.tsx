@@ -1,11 +1,12 @@
 import React, {useRef, useState} from "react";
-import {HoverPanel} from "./styles";
-import {Argument} from "./types";
-import {ActionButton, ArgumentsList, ArgumentsTitle, Signers} from "./components";
-import {EntityType} from "providers/Project";
+import {FaRegCheckCircle, FaRegTimesCircle, FaSpinner} from "react-icons/fa";
 import {motion} from "framer-motion";
+import {EntityType} from "providers/Project";
 import {useProject} from "providers/Project/projectHooks";
 import {Account, ResultType, useSetExecutionResultsMutation} from "api/apollo/generated/graphql";
+import {ControlContainer, HoverPanel, StatusMessage} from "./styles";
+import {Argument} from "./types";
+import {ActionButton, ArgumentsList, ArgumentsTitle, Signers} from "./components";
 
 type ArgumentsProps = {
   type: EntityType,
@@ -89,21 +90,24 @@ const validate = (list:any, values:any) => {
 
 type ScriptExecution = (args?: string[]) => Promise<any>;
 type TransactionExecution = (signingAccounts: Account[], args?: string[]) => Promise<any>;
+type DeployExecution = () => Promise<any>;
 
 type ProcessingArgs = {
   disabled: boolean,
   scriptFactory?: ScriptExecution,
-  transactionFactory?: TransactionExecution
+  transactionFactory?: TransactionExecution,
+  contractDeployment?: DeployExecution
 }
 
 const useTemplateType = (): ProcessingArgs => {
   const { isSavingCode } = useProject();
-  const { createScriptExecution, createTransactionExecution } = useProject();
+  const { createScriptExecution, createTransactionExecution, updateAccountDeployedCode } = useProject();
 
   return {
     disabled: isSavingCode,
     scriptFactory: createScriptExecution,
-    transactionFactory: createTransactionExecution
+    transactionFactory: createTransactionExecution,
+    contractDeployment: updateAccountDeployedCode
   }
 }
 
@@ -120,13 +124,14 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const [ values, setValue ] = useState<IValue>({})
   const errors = validate(list, values)
   const numberOfErrors = Object.keys(errors).length;
-  const haveErrors = numberOfErrors > 0
-
+  const notEnoughSigners = needSigners && selected.length < signers;
+  console.log({needSigners, signers, selected, notEnoughSigners});
+  const haveErrors = numberOfErrors > 0 || notEnoughSigners;
   const [ processingStatus, setProcessingStatus ] = useState(false);
 
   const [ setResult ] = useSetExecutionResultsMutation();
-  const { scriptFactory, transactionFactory } =  useTemplateType();
-  const { project, active } = useProject();
+  const { scriptFactory, transactionFactory, contractDeployment } =  useTemplateType();
+  const { project, active, isSavingCode } = useProject();
   const { accounts } = project;
 
   const signersAccounts = selected.map(i => accounts[i]);
@@ -154,7 +159,20 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
         rawResult = await transactionFactory(signersAccounts, args);
       }
 
-      // TODO: Process contract
+      if (type === EntityType.Account){
+        if (
+            accounts[active.index] &&
+            accounts[active.index].deployedCode
+        ) {
+          if (
+              !confirm("Redeploying will clear the state of all accounts. Proceed?")
+          )
+            console.log('here!');
+            setProcessingStatus(false);
+            return;
+        }
+        rawResult = await contractDeployment()
+      }
 
     } catch (e) {
       console.error(e)
@@ -162,9 +180,18 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     }
 
     setProcessingStatus(false);
-    const resultType = type === EntityType.ScriptTemplate
-      ? ResultType.Script
-      : ResultType.Transaction
+    let resultType;
+    switch (type) {
+      case (EntityType.ScriptTemplate):
+        resultType = ResultType.Script
+        break;
+      case (EntityType.TransactionTemplate):
+        resultType = ResultType.Transaction
+        break;
+      default:
+        resultType = ResultType.Contract
+        break;
+    }
 
     // Display result in the bottom area
     setResult({
@@ -176,10 +203,24 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     });
   }
 
+  const isOk = !haveErrors && (validCode !== undefined && !!validCode)
+  let statusIcon = isOk ? <FaRegCheckCircle />: <FaRegTimesCircle/>;
+  let statusMessage = isOk ? "Ready" : "Fix errors";
+
+  const progress = isSavingCode || processingStatus;
+
+  if (progress){
+    statusIcon = <FaSpinner className="spin"/>
+    statusMessage = "Please, wait..."
+  }
+
   return(
     <>
       <div ref={constraintsRef} className="constraints"></div>
-      <motion.div drag={true} className="drag-box" dragConstraints={constraintsRef} dragMomentum={false}>
+      <motion.div className="drag-box"
+          drag={true}
+          dragConstraints={constraintsRef}
+          dragElastic={1}>
         <HoverPanel>
           {list.length > 0 &&
             <>
@@ -197,8 +238,13 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
             </>
             }
           {needSigners && <Signers maxSelection={signers} selected={selected} updateSelectedAccounts={updateSelectedAccounts}/>}
-          <ActionButton active={!haveErrors && validCode} type={type} onClick={send}/>
-          {validCode && <p>All is ready to Go!</p>}
+          <ControlContainer isOk={isOk} progress={progress}>
+            <StatusMessage>
+                {statusIcon}
+                <p>{statusMessage}</p>
+            </StatusMessage>
+            <ActionButton active={isOk} type={type} onClick={send}/>
+          </ControlContainer>
         </HoverPanel>
       </motion.div>
     </>
