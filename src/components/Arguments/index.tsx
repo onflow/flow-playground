@@ -10,7 +10,8 @@ import {Account, ResultType, useSetExecutionResultsMutation} from "api/apollo/ge
 type ArgumentsProps = {
   type: EntityType,
   list: Argument[],
-  signers: number
+  signers: number,
+  validCode: boolean
 }
 
 const validateByType = (value: any, type: string) => {
@@ -111,7 +112,7 @@ interface IValue {
 }
 
 const Arguments: React.FC<ArgumentsProps> = (props) => {
-  const { type, list, signers } = props;
+  const { type, list, signers, validCode } = props;
   const needSigners = type == EntityType.TransactionTemplate && signers > 0
   const [ selected, updateSelectedAccounts ] = useState([])
   const [ expanded, setExpanded ] = useState(true)
@@ -196,7 +197,8 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
             </>
             }
           {needSigners && <Signers maxSelection={signers} selected={selected} updateSelectedAccounts={updateSelectedAccounts}/>}
-          <ActionButton active={!haveErrors} type={type} onClick={send}/>
+          <ActionButton active={!haveErrors && validCode} type={type} onClick={send}/>
+          {validCode && <p>All is ready to Go!</p>}
         </HoverPanel>
       </motion.div>
     </>

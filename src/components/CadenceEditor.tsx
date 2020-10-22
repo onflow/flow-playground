@@ -57,7 +57,8 @@ type CadenceEditorProps = {
 }
 
 type CadenceEditorState = {
-  arguments: {[key: string]: Argument[]}
+  args: {[key: string]: Argument[]}
+  valid: {[key: string]: boolean}
 }
 
 class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorState> {
@@ -83,7 +84,8 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
     configureCadence();
 
     this.state = {
-      arguments:{}
+      args:{},
+      valid: {}
     }
   }
 
@@ -164,11 +166,11 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
     this.languageClient.start()
     this.languageClient.onReady().then(() => {
       this.languageClient.onNotification(CadenceCheckCompleted.methodName, async (result: CadenceCheckCompleted.Params) => {
-        if (!result.valid) {
-          return
+        if (result.valid) {
+          const params = await this.getParameters()
+          this.setExecutionArguments(params)
         }
-        const params = await this.getParameters()
-        this.setExecutionArguments(params)
+        this.setValidState(result.valid)
       })
     })
   }
@@ -190,8 +192,17 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
   setExecutionArguments(args: Argument[]){
     const {activeId} = this.props;
     this.setState({
-      arguments: {
+      args: {
         [activeId]: args
+      }
+    })
+  }
+
+  setValidState(valid: boolean){
+    const { activeId } = this.props;
+    this.setState({
+      valid: {
+        [activeId]: valid
       }
     })
   }
@@ -289,16 +300,17 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
   render() {
     const { type, code } = this.props;
 
-    /// Get a list of arguments from language server
+    /// Get a list of args from language server
     const { activeId } = this.props;
-    const list = this.state.arguments[activeId] || []
-
+    const { args, valid } = this.state;
+    const list = args[activeId] || []
+    const validCode = valid[activeId] || false
     /// Extract number of signers from code
     const signers = this.extractSigners(code);
 
     return (
       <EditorContainer id={this.props.mount}>
-        <Arguments type={type} list={list} signers={signers}/>
+        <Arguments type={type} list={list} signers={signers} validCode={validCode}/>
       </EditorContainer>
     );
   }

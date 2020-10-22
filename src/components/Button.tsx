@@ -32,6 +32,8 @@ const StyledButton: React.FC<StyledButtonProps> = styled(ThemedButton)`
 
   display: flex;
   align-items: center;
+  
+  cursor: ${({variant}) => variant === "buttons.disabled" ? "not-allowed !important" : "pointer"};
 `;
 
 interface ButtonProps {
