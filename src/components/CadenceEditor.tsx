@@ -306,7 +306,7 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
     const { activeId } = this.props;
     const { args, valid } = this.state;
     const list = args[activeId] || []
-    const validCode = valid[activeId] || false
+    const validCode = valid[activeId]
     /// Extract number of signers from code
     const signers = this.extractSigners(code);
 
