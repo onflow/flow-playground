@@ -29,11 +29,13 @@ const EditorContainer = styled.div`
   }
   
   .constraints{
-    width: 90vw;
+    width: 96vw;
     height: 90vh;
     position: fixed;
     left: 2vw;
+    right: 2vw;
     top: 2vw;
+    bottom: 2vw;
     pointer-events: none;
   }
 `;
