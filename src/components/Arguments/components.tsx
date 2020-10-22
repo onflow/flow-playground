@@ -40,16 +40,18 @@ export const ArgumentsList: React.FC<ArgumentsListProps> = ({list, errors, onCha
 }
 
 const getLabel = (type: EntityType) => {
+  const { project, active } = useProject();
+  const { accounts } = project;
+
   switch (true){
     case type === EntityType.Account:
-      return "Deploy"
-      break;
+      return accounts[active.index].deployedCode
+          ? "Redeploy"
+          : "Deploy"
     case type === EntityType.TransactionTemplate:
       return "Send"
-      break;
     case type === EntityType.ScriptTemplate:
       return "Execute"
-      break;
     default:
       return "Send"
   }
