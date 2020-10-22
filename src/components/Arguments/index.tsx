@@ -122,11 +122,12 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const [ expanded, setExpanded ] = useState(true)
   const constraintsRef = useRef(null)
   const [ values, setValue ] = useState<IValue>({})
+
   const errors = validate(list, values)
   const numberOfErrors = Object.keys(errors).length;
   const notEnoughSigners = needSigners && selected.length < signers;
-  console.log({needSigners, signers, selected, notEnoughSigners});
   const haveErrors = numberOfErrors > 0 || notEnoughSigners;
+
   const [ processingStatus, setProcessingStatus ] = useState(false);
 
   const [ setResult ] = useSetExecutionResultsMutation();
@@ -167,7 +168,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           if (
               !confirm("Redeploying will clear the state of all accounts. Proceed?")
           )
-            console.log('here!');
             setProcessingStatus(false);
             return;
         }
