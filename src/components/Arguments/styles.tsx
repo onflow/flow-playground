@@ -91,3 +91,46 @@ export const ToggleExpand = styled(FaCaretSquareDown).attrs({
   transform: ${({expanded}) => expanded ? 'rotate(180deg)' : 'rotate(0deg)'};
   margin-left: 5px;
 `;
+
+interface ControlContainerProps {
+  isOk: boolean,
+  progress: boolean
+}
+export const ControlContainer = styled.div<ControlContainerProps>`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: ${({ isOk, progress }) => {
+    switch (true) {
+      case (progress):
+        return "#a2a2a2"
+      case (isOk):
+        return "#2bb169"
+      default:
+        return "#EE431E"
+    }
+  }};
+`;
+
+
+export const StatusMessage = styled.div`
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  display: flex;
+  justify-content: flex-start;
+  font-size: 16px;
+  svg{
+    margin-right: 5px;
+  }
+  
+  svg.spin {
+    animation: spin 0.5s linear infinite;
+  }
+`;
