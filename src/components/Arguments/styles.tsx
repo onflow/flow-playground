@@ -68,8 +68,11 @@ export const Badge = styled.div`
   }
 `;
 
-export const List = styled.div`
-  display: grid;
+interface ListProps {
+  hidden: boolean
+}
+export const List = styled.div<ListProps>`
+  display: ${({ hidden }) => hidden ? 'none' : 'grid'};
   grid-gap: 12px;
   grid-template-columns: 100%;
   margin-bottom: 20px;

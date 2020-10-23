@@ -20,7 +20,8 @@ export type ArgumentsTitleProps = {
 
 export type ArgumentsListProps = {
   list: Argument[],
+  hidden: boolean,
   onChange: (name: String, value: any) => void,
-  errors: any
+  errors: any,
 }
 

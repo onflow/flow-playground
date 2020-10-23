@@ -25,9 +25,9 @@ export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
   );
 };
 
-export const ArgumentsList: React.FC<ArgumentsListProps> = ({list, errors, onChange}) =>{
+export const ArgumentsList: React.FC<ArgumentsListProps> = ({list, errors, onChange, hidden}) =>{
   return(
-    <List>
+    <List hidden={hidden}>
       {list.map((argument)=>{
         const {name, type} = argument
         const error = errors[name]
@@ -61,7 +61,6 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({type, active = t
 
   const label = getLabel(type);
   const { isSavingCode } = useProject();
-  // const [sendingTransaction, setSendingTransaction] = useState(false);
   const sendingTransaction = false;
 
   return (

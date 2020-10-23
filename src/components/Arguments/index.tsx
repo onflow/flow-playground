@@ -120,8 +120,8 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const needSigners = type == EntityType.TransactionTemplate && signers > 0
   const [ selected, updateSelectedAccounts ] = useState([])
   const [ expanded, setExpanded ] = useState(true)
-  const constraintsRef = useRef(null)
   const [ values, setValue ] = useState<IValue>({})
+  const constraintsRef = useRef()
 
   const errors = validate(list, values)
   const numberOfErrors = Object.keys(errors).length;
@@ -148,30 +148,37 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
       return JSON.stringify({ value : values[name], type })
     })
 
-    let rawResult;
+    let rawResult, resultType;
     try {
-      // Process script
-      if (type === EntityType.ScriptTemplate) {
-        rawResult = await scriptFactory(args);
-      }
+      switch (type){
 
-      // Process transaction
-      if (type === EntityType.TransactionTemplate){
-        rawResult = await transactionFactory(signersAccounts, args);
-      }
-
-      if (type === EntityType.Account){
-        if (
-            accounts[active.index] &&
-            accounts[active.index].deployedCode
-        ) {
-          if (
-              !confirm("Redeploying will clear the state of all accounts. Proceed?")
-          )
-            setProcessingStatus(false);
-            return;
+        case EntityType.ScriptTemplate: {
+          resultType = ResultType.Script
+          rawResult = await scriptFactory(args);
+          break;
         }
-        rawResult = await contractDeployment()
+
+        case EntityType.TransactionTemplate: {
+          resultType = ResultType.Transaction
+          rawResult = await transactionFactory(signersAccounts, args);
+          break;
+        }
+
+        case EntityType.Account: {
+          // Ask if user wants to redeploy the contract
+          if ( accounts[active.index] && accounts[active.index].deployedCode ) {
+            const choiceMessage = "Redeploying will clear the state of all accounts. Proceed?"
+            if (!confirm(choiceMessage)){
+              setProcessingStatus(false);
+              return
+            }
+          }
+          resultType = ResultType.Contract;
+          rawResult = await contractDeployment();
+          break;
+        }
+        default:
+          break;
       }
 
     } catch (e) {
@@ -180,18 +187,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     }
 
     setProcessingStatus(false);
-    let resultType;
-    switch (type) {
-      case (EntityType.ScriptTemplate):
-        resultType = ResultType.Script
-        break;
-      case (EntityType.TransactionTemplate):
-        resultType = ResultType.Transaction
-        break;
-      default:
-        resultType = ResultType.Contract
-        break;
-    }
 
     // Display result in the bottom area
     setResult({
@@ -216,7 +211,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
   return(
     <>
-      <div ref={constraintsRef} className="constraints"></div>
+      <div ref={constraintsRef} className="constraints"/>
       <motion.div className="drag-box"
           drag={true}
           dragConstraints={constraintsRef}
@@ -230,13 +225,15 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                 expanded={expanded}
                 setExpanded={setExpanded}
               />
-              {expanded && <ArgumentsList list={list} errors={errors} onChange={(name, value)=>{
+
+              {<ArgumentsList list={list} errors={errors} hidden={!expanded} onChange={(name, value)=>{
                 let key = name.toString();
                 let newValue = {...values, [key]: value};
                 setValue(newValue);
               }}/>}
+
             </>
-            }
+          }
           {needSigners && <Signers maxSelection={signers} selected={selected} updateSelectedAccounts={updateSelectedAccounts}/>}
           <ControlContainer isOk={isOk} progress={progress}>
             <StatusMessage>
