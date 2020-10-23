@@ -50,17 +50,21 @@ const AccountAvatars: React.FC<{
   onChange: (selected: number) => void;
   project: Project;
   accounts: Account[];
-}> = ({ multi, selectedAccounts, accounts, project, onChange }) => {
+  maxSelection?: number;
+}> = (props) => {
+  const { multi, selectedAccounts, accounts, project, onChange, maxSelection = 4 } = props;
   if (!multi) {
     throw new Error("Must include multi prop.");
   }
 
   const { theme } = useThemeUI();
-  
+
+  const selectionLimitReached = selectedAccounts.length >= maxSelection;
   return (
     <AvatarList>
       {accounts.map((account: Account, i: number) => {
-        const isSelected = selectedAccounts.includes(i);
+        const isSelected =
+          selectedAccounts.includes(i) || selectionLimitReached
         return (
           <motion.div key={account.address}>
             <AccountAvatar

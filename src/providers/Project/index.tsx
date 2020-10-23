@@ -44,8 +44,8 @@ export interface ProjectContextValue {
   ) => Promise<any>;
   deleteScriptTemplate: (templateId: string) => void;
   deleteTransactionTemplate: (templateId: string) => void;
-  createTransactionExecution: (signingAccounts: Account[]) => Promise<any>;
-  createScriptExecution: () => Promise<any>;
+  createTransactionExecution: (signingAccounts: Account[], args?: string[]) => Promise<any>;
+  createScriptExecution: (args?: string[]) => Promise<any>;
   active: ActiveEditor;
 
   setActive: (type: EntityType, index: number) => void;
@@ -192,12 +192,13 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
-  const createTransactionExecution = async (signingAccounts: Account[]) => {
+  const createTransactionExecution = async (signingAccounts: Account[], args?: [string]) => {
     clearTimeout(timeout);
     setIsSaving(true);
     const res = await mutator.createTransactionExecution(
       project.transactionTemplates[active.index].script,
-      signingAccounts
+      signingAccounts,
+      args
     );
     timeout = setTimeout(() => {
       setIsSaving(false);
@@ -205,11 +206,12 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
-  const createScriptExecution = async () => {
+  const createScriptExecution = async (args?: string[]) => {
     clearTimeout(timeout);
     setIsSaving(true);
     const res = await mutator.createScriptExecution(
-      project.scriptTemplates[active.index].script
+      project.scriptTemplates[active.index].script,
+      args
     );
     timeout = setTimeout(() => {
       setIsSaving(false);

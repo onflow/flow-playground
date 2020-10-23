@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  useSetExecutionResultsMutation,
-  ResultType
-} from "../api/apollo/generated/graphql";
+import { ResultType } from "api/apollo/generated/graphql";
 
-import { FaArrowCircleRight } from "react-icons/fa";
 import { GoGrabber } from "react-icons/go";
-import Button from "./Button";
 import { useProject } from "providers/Project/projectHooks";
 import useMousePosition from "../hooks/useMousePosition";
 import { Feedback as FeedbackRoot } from "layout/Feedback";
@@ -210,45 +205,7 @@ const AccountBottomBar: React.FC = () => {
     project,
     active,
     isLoading,
-    updateAccountDeployedCode,
-    isSavingCode
   } = useProject();
-
-  const [setResult] = useSetExecutionResultsMutation();
-  const [deployingContract, setDeployingContract] = useState(false);
-
-  const deploy = async () => {
-    if (
-      project.accounts[active.index] &&
-      project.accounts[active.index].deployedCode
-    ) {
-      if (
-        !confirm("Redeploying will clear the state of all accounts. Proceed?")
-      )
-        return;
-    }
-
-    if (!deployingContract) {
-      setDeployingContract(true);
-
-      let rawResult;
-      try {
-        rawResult = await updateAccountDeployedCode();
-      } catch (e) {
-        console.error(e)
-        rawResult = e.toString();
-      }
-
-      setDeployingContract(false);
-      setResult({
-        variables: {
-          resultType: ResultType.Contract,
-          rawResult,
-          label: project.accounts[active.index].address
-        }
-      });
-    }
-  };
 
   return (
     <FeedbackRoot>
@@ -260,18 +217,7 @@ const AccountBottomBar: React.FC = () => {
             state={project.accounts[active.index].state}
             renderDeployButton={() => {
               return (
-                <FeedbackActions>
-                  <Button
-                    onClick={deploy}
-                    disabled={isSavingCode || deployingContract}
-                    isLoading={deployingContract}
-                    Icon={FaArrowCircleRight}
-                  >
-                    {project.accounts[active.index].deployedCode
-                      ? "Redeploy"
-                      : "Deploy"}
-                  </Button>
-                </FeedbackActions>
+                <FeedbackActions/>
               );
             }}
           />

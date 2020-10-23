@@ -191,7 +191,7 @@ export default class ProjectMutator {
     });
   }
 
-  async createTransactionExecution(script: string, signers: Account[]) {
+  async createTransactionExecution(script: string, signers: Account[], args: string[]) {
     if (this.isLocal) {
       await this.createProject();
     }
@@ -204,8 +204,9 @@ export default class ProjectMutator {
       mutation: CREATE_TRANSACTION_EXECUTION,
       variables: {
         projectId: this.projectId,
-        script,
-        signers: signerAddresses
+        signers: signerAddresses,
+        arguments: args,
+        script
       },
       refetchQueries: [
         { query: GET_PROJECT, variables: { projectId: this.projectId } }
@@ -310,7 +311,8 @@ export default class ProjectMutator {
     return res;
   }
 
-  async createScriptExecution(script: string) {
+  async createScriptExecution(script: string, args: string[]) {
+
     if (this.isLocal) {
       await this.createProject();
     }
@@ -319,7 +321,8 @@ export default class ProjectMutator {
       mutation: CREATE_SCRIPT_EXECUTION,
       variables: {
         projectId: this.projectId,
-        script
+        script,
+        arguments: args
       }
     });
     Mixpanel.track("Script template executed", {

@@ -1,34 +1,71 @@
 import React from "react"
 import styled from "@emotion/styled"
 import configureCadence, {CADENCE_LANGUAGE_ID} from "../util/cadence"
-import {CadenceLanguageServer, Callbacks} from "../util/language-server"
+import {CadenceCheckCompleted, CadenceLanguageServer, Callbacks} from "../util/language-server"
 import {createCadenceLanguageClient} from "../util/language-client"
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api"
+import {EntityType} from "providers/Project";
+import Arguments from "components/Arguments";
+import { Argument } from "components/Arguments/types";
+import {
+  MonacoLanguageClient,
+  ExecuteCommandRequest,
+} from "monaco-languageclient"
 
 const {MonacoServices} = require("monaco-languageclient/lib/monaco-services");
+
+const EditorContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  
+  .drag-box{
+    width: fit-content;
+    height: fit-content;
+    position: absolute;
+    right: 30px;
+    top: 0;
+    z-index: 12;
+  }
+  
+  .constraints{
+    width: 96vw;
+    height: 90vh;
+    position: fixed;
+    left: 2vw;
+    right: 2vw;
+    top: 2vw;
+    bottom: 2vw;
+    pointer-events: none;
+  }
+`;
 
 type EditorState = {
   model: any;
   viewState: any;
 };
 
-const EditorContainer = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-
 let monacoServicesInstalled = false;
 
 type CodeGetter = (index: number) => string | undefined
 
-class CadenceEditor extends React.Component<{
+type CadenceEditorProps = {
   code: string;
   mount: string;
   onChange: any;
   activeId: string;
+  type: EntityType;
   getCode: CodeGetter;
-}> {
+}
+
+type CadenceEditorState = {
+  args: {[key: string]: Argument[]}
+  valid: {[key: string]: boolean}
+}
+
+class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorState> {
   editor: monaco.editor.ICodeEditor;
+  languageClient?: MonacoLanguageClient;
   _subscription: any;
   editorStates: { [key: string]: EditorState };
   private callbacks: Callbacks;
@@ -38,16 +75,20 @@ class CadenceEditor extends React.Component<{
     mount: string;
     onChange: any;
     activeId: string;
+    type: EntityType;
     getCode: CodeGetter;
   }) {
     super(props);
 
     this.editorStates = {};
-
     this.handleResize = this.handleResize.bind(this);
     window.addEventListener("resize", this.handleResize);
-
     configureCadence();
+
+    this.state = {
+      args:{},
+      valid: {}
+    }
   }
 
   handleResize() {
@@ -123,8 +164,49 @@ class CadenceEditor extends React.Component<{
 
     await CadenceLanguageServer.create(this.callbacks);
 
-    const languageClient = createCadenceLanguageClient(this.callbacks);
-    languageClient.start()
+    this.languageClient = createCadenceLanguageClient(this.callbacks);
+    this.languageClient.start()
+    this.languageClient.onReady().then(() => {
+      this.languageClient.onNotification(CadenceCheckCompleted.methodName, async (result: CadenceCheckCompleted.Params) => {
+        if (result.valid) {
+          const params = await this.getParameters()
+          this.setExecutionArguments(params)
+        }
+        this.setValidState(result.valid)
+      })
+    })
+  }
+
+  private async getParameters() {
+    await this.languageClient.onReady()
+
+    try {
+      const args = await this.languageClient.sendRequest(ExecuteCommandRequest.type, {
+        command: "cadence.server.getEntryPointParameters",
+        arguments: [this.editor.getModel().uri.toString()]
+      })
+      return args || []
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  setExecutionArguments(args: Argument[]){
+    const {activeId} = this.props;
+    this.setState({
+      args: {
+        [activeId]: args
+      }
+    })
+  }
+
+  setValidState(valid: boolean){
+    const { activeId } = this.props;
+    this.setState({
+      valid: {
+        [activeId]: valid
+      }
+    })
   }
 
   getOrCreateEditorState(id: string, code: string): EditorState {
@@ -192,8 +274,53 @@ class CadenceEditor extends React.Component<{
     }
   }
 
+  extract(code: string, keyWord: string):string[]{
+    // TODO: add different processors for contract, scripts and transactions
+
+    const target = code
+      .split(/\r\n|\n|\r/)
+      .find(line => line.includes(keyWord))
+
+    if (target){
+      const match = target.match(/(?:\()(.*)(?:\))/)
+      if (match){
+        return match[1]
+          .split(",")
+          .map(item => item.replace(/\s*/g,''))
+      }
+    }
+    return []
+  }
+
+  extractSigners(code: string):number{
+    return this
+      .extract(code, "prepare")
+      .filter(item => !!item)
+      .length
+  }
+
   render() {
-    return <EditorContainer id={this.props.mount} />;
+    const { type, code } = this.props;
+
+    /// Get a list of args from language server
+    const { activeId } = this.props;
+    const { args, valid } = this.state;
+    const list = args[activeId] || []
+    const validCode = valid[activeId]
+
+    /// Extract number of signers from code
+    const signers = this.extractSigners(code);
+
+    return (
+      <EditorContainer id={this.props.mount}>
+        <Arguments
+          type={type}
+          list={list}
+          signers={signers}
+          validCode={validCode}
+        />
+      </EditorContainer>
+    );
   }
 }
 

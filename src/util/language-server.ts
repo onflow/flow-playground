@@ -1,4 +1,4 @@
-
+import { DocumentUri } from "monaco-languageclient";
 import {Message} from "vscode-jsonrpc/lib/messages";
 
 // The global `Go` is declared by `wasm_exec.js`.
@@ -40,9 +40,18 @@ declare global {
   }
 }
 
+export namespace CadenceCheckCompleted {
+  export const methodName = "cadence/checkCompleted"
+  export interface Params {
+    uri: DocumentUri
+    valid: boolean
+  }
+}
+
 export class CadenceLanguageServer {
 
   static isLoaded = false
+
 
   private static async load() {
     if (this.isLoaded) {

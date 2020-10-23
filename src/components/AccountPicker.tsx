@@ -9,6 +9,7 @@ type AccountPickerProps = {
   accounts: Account[];
   selected: number[];
   onChange: (selected: number[]) => void;
+  maxSelection?: number;
 };
 
 const AccountPicker: React.FC<AccountPickerProps> = ({
@@ -16,6 +17,7 @@ const AccountPicker: React.FC<AccountPickerProps> = ({
   accounts,
   selected,
   onChange,
+  maxSelection = 4,
   children
 }) => {
   const { theme } = useThemeUI();
@@ -31,7 +33,10 @@ const AccountPicker: React.FC<AccountPickerProps> = ({
     if (!selected.length) {
       onChange([0]);
     }
-  }, []);
+    if (selected.length > maxSelection){
+      onChange(selected.slice(0,maxSelection))
+    }
+  }, [maxSelection]);
 
   return (
     <Flex
@@ -56,6 +61,7 @@ const AccountPicker: React.FC<AccountPickerProps> = ({
           accounts={accounts}
           selectedAccounts={selected}
           onChange={handleOnChange}
+          maxSelection={maxSelection}
         />
       </Flex>
       <Flex
@@ -71,8 +77,9 @@ const AccountPicker: React.FC<AccountPickerProps> = ({
           multi={true}
           project={project}
           accounts={accounts}
-          selectedAccounts={selected}
+          selectedAccounts={selected.slice(0, maxSelection)}
           onChange={handleOnChange}
+          maxSelection={maxSelection}
         />
         <Flex
           px={"0.5rem"}
