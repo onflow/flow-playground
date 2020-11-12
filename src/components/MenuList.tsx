@@ -1,6 +1,6 @@
 import React, { SyntheticEvent, useState, useEffect, useRef } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import { FaPen, FaTimes } from "react-icons/fa";
+import { FaPen, FaTimes, FaClipboard } from "react-icons/fa";
 import { SidebarSection } from "layout/SidebarSection";
 import { SidebarHeader } from "layout/SidebarHeader";
 import { SidebarItems } from "layout/SidebarItems";
@@ -10,6 +10,7 @@ import { SidebarItemInput } from "layout/SidebarItemInput";
 import { SidebarItemEdit } from "layout/SidebarItemEdit";
 import { SidebarItemDelete } from "layout/SidebarItemDelete";
 import useKeyPress from "../hooks/useKeyPress";
+import {SidebarItemExport} from "layout/SidebarItemExport";
 
 type MenuListProps = {
   active: number | null;
@@ -47,6 +48,22 @@ const MenuList: React.FC<MenuListProps> = ({
     }
     return setEditing([...editing, i]);
   };
+
+  const copyScript = async (menuItem:any) => {
+    const API = "http://localhost:8080"
+    const projectid = "6e11c248-95e8-426c-b37e-9e5e38d8b764"
+    const scriptType = menuItem.__typename.toLowerCase().replace('template','')
+    const src = `${API}/embed/${projectid}/${scriptType}/${menuItem.id}`
+    const snippetCode = `<script src="${src}"></script>`
+
+    try {
+      await navigator.clipboard.writeText(snippetCode);
+      // TODO: show "good" toast
+    }
+    catch (err) {
+      // TODO: show "bad" toast
+    }
+  }
 
   useEffect(() => {
     setEditing([]);
@@ -108,10 +125,17 @@ const MenuList: React.FC<MenuListProps> = ({
                 }}
               />
               {active === i && (
-                <SidebarItemEdit onClick={() => toggleEditing(i, value.title)}>
-                  <FaPen />
-                </SidebarItemEdit>
+                <>
+                  <SidebarItemEdit onClick={() => toggleEditing(i, value.title)}>
+                    <FaPen />
+                  </SidebarItemEdit>
+
+                  <SidebarItemExport onClick={()=> copyScript(value)} title={"Copy snippet to clipboard"}>
+                    <FaClipboard/>
+                  </SidebarItemExport>
+                </>
               )}
+
               {!editing.includes(i) && active === i && values.length > 1 && (
                 <SidebarItemDelete
                   onClick={(e: any) => {
