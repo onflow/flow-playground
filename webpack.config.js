@@ -14,6 +14,7 @@ module.exports = {
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: "/"
   },
   resolve: {
     extensions: [ '.tsx', '.ts', '.js' ],
@@ -47,6 +48,7 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     disableHostCheck: true,
+    historyApiFallback: true,
     port: 3000,
   },
   plugins: [
