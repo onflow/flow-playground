@@ -12,7 +12,7 @@ export const SidebarItemDelete = styled.div<SidebarItemDeleteProps>`
     -webkit-appearance: none;
     display: block;
     justify-self: flex-end;
-    transition: color: 0.2s;
+    transition: color 0.2s;
     color: #c1c1c1;
     margin-left: 0.5rem;
     font-size: 14px;
