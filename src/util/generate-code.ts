@@ -1,9 +1,6 @@
-import {useProject} from "providers/Project/projectHooks";
-
-export const generateCode = (id: string, typeName: string) => {
-  const { project } = useProject()
-  const API = "http://localhost:8080"
+export const generateCode = (projectId: string, modelId: string, typeName: string) => {
+  const API = process.env.PLAYGROUND_API
   const scriptType = typeName.toLowerCase().replace('template','')
-  const src = `${API}/embed/${project.id}/${scriptType}/${id}`
+  const src = `${API}/embed/${projectId}/${scriptType}/${modelId}`
   return `<script src="${src}"></script>`
 }
