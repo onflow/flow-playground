@@ -40,10 +40,12 @@ const AccountList: React.FC = () => {
       <Items>
         {project.accounts.map((account: Account, i: number) => {
           const isActive = active == i
-          const contractName = getDeployedContracts(account) || "--"
-          const title = contractName !== "--"
+          const accountAddress = `0x${account.address.slice(-2)}`
+          const contractName = getDeployedContracts(account)
+          const title = contractName
             ? `${contractName} is deployed to this account`
             : `This account don't have any contracts`
+          const typeName = account.__typename
           return (
             <Item
               key={i}
@@ -54,11 +56,11 @@ const AccountList: React.FC = () => {
               <AccountCard>
                 <Avatar seed={project.seed} index={i} />
                 <Stack>
-                  <strong>0x{account.address.slice(-2)}</strong>
-                  <small>{contractName}</small>
+                  <strong>{accountAddress}</strong>
+                  <small>{contractName || '--'}</small>
                 </Stack>
 
-                {isActive && <ExportButton id={account.id} typeName={account.__typename}/>}
+                {isActive && <ExportButton id={account.id} typeName={typeName}/>}
               </AccountCard>
             </Item>
           );
