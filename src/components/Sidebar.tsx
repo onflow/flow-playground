@@ -37,15 +37,13 @@ const Sidebar: React.FC = () => {
           updateTransactionTemplate(templateId, script, title);
         }}
         onDelete={(templateId: string) => {
-          setActive(EntityType.Account, 0);
           deleteTransactionTemplate(templateId);
+          setActive(EntityType.TransactionTemplate, 0 );
         }}
-        onInsert={() =>
-          mutator.createTransactionTemplate(
-            "",
-            `New Transaction`
-          )
-        }
+        onInsert={async () => {
+          await mutator.createTransactionTemplate("", `New Transaction`)
+          setActive(EntityType.TransactionTemplate, project.transactionTemplates.length);
+        }}
       />
       <MenuList
         title="Script Templates"
@@ -56,14 +54,12 @@ const Sidebar: React.FC = () => {
           updateScriptTemplate(templateId, script, title);
         }}
         onDelete={(templateId: string) => {
-          setActive(EntityType.Account, 0);
           deleteScriptTemplate(templateId);
+          setActive(EntityType.ScriptTemplate, 0);
         }}
-        onInsert={() => {
-          mutator.createScriptTemplate(
-            "",
-            `New Script`
-          );
+        onInsert={async () => {
+          await mutator.createScriptTemplate("", `New Script`);
+          setActive(EntityType.ScriptTemplate, project.scriptTemplates.length);
         }}
       />
     </SidebarRoot>
