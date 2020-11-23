@@ -119,17 +119,22 @@ export function createDefaultProject(): Project {
     null,
     strToSeed(uuid()),
     DEFAULT_ACCOUNTS,
-    [DEFAULT_TRANSACTION],
-    [DEFAULT_SCRIPT]
+    [{ title: "Transaction", code: DEFAULT_TRANSACTION }],
+    [{ title: "Script" , code :DEFAULT_SCRIPT }]
   );
+}
+
+type ScriptDetails = {
+  code: string,
+  title: string
 }
 
 export function createLocalProject(
   parentId: string | null,
   seed: number,
   accounts: Array<string>,
-  transactionTemplates: Array<string>,
-  scriptTemplates: Array<string>
+  transactionTemplates: Array<ScriptDetails>,
+  scriptTemplates: Array<ScriptDetails>
 ): Project {
   const accountEntities: Account[] = accounts.map((script, i) => {
     return {
@@ -146,24 +151,26 @@ export function createLocalProject(
 
   const transactionTemplatesEntities: TransactionTemplate[] = transactionTemplates.map(
     (script, i) => {
+      const { title, code } = script
       return {
         __typename: "TransactionTemplate",
         id: `LOCAL-tx-temp-${i}`,
-        title: `Transaction ${i + 1}`,
+        title: title || `Transaction ${i + 1}`,
+        script: code,
         index: i,
-        script: script
       };
     }
   );
 
   const scriptsTemplatesEntities: ScriptTemplate[] = scriptTemplates.map(
     (script, i) => {
+      const { title, code } = script
       return {
         __typename: "ScriptTemplate",
         id: `LOCAL-script-temp-${i}`,
-        title: `Script ${i + 1}`,
+        title: title || `Script ${i + 1}`,
+        script: code,
         index: i,
-        script: script
       };
     }
   );
