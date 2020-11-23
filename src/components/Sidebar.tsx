@@ -43,7 +43,7 @@ const Sidebar: React.FC = () => {
         onInsert={() =>
           mutator.createTransactionTemplate(
             "",
-            `Transaction ${project.transactionTemplates.length + 1}`
+            `New Transaction`
           )
         }
       />
@@ -62,7 +62,7 @@ const Sidebar: React.FC = () => {
         onInsert={() => {
           mutator.createScriptTemplate(
             "",
-            `Script ${project.scriptTemplates.length + 1}`
+            `New Script`
           );
         }}
       />
