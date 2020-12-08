@@ -1,24 +1,39 @@
 import React from "react";
-import { RouteComponentProps } from "@reach/router";
+import { Redirect } from "@reach/router";
 import { ProjectProvider } from "providers/Project";
 import { Base } from "layout/Base"
 
 import EditorLayout from "./layout";
+import { isUUUID, getParams } from "../../util/uuid";
 
-interface ProjectProps extends RouteComponentProps {
-  "*"?: string;
-}
+const scriptTypes = ["account", "transaction", "script"]
 
-function parseProjectId(props: ProjectProps): string | null {
-  return props["*"] || null;
-}
+// const Project: React.FC<ProjectProps> = props => {
+const Project: any = (props: any) => {
+  const params = getParams(props.location.search)
+  // const root = props.location.origin;
+  const { projectId } = props;
 
-const Project: React.FC<ProjectProps> = props => {
-  const projectId = parseProjectId(props);
+  const isLocalProject = projectId === "local";
+  const correctUUID = isUUUID(projectId);
+
+  const wrongProjectUUID = !correctUUID && !isLocalProject
+  const correctProject = !isLocalProject && correctUUID;
+
+  const correctScriptType = scriptTypes.includes(params.type)
+
+  if (wrongProjectUUID){
+    return <Redirect noThrow={true} to={"/"}/>
+  }
+
+  if (correctProject && !correctScriptType){
+    const to = `/${projectId}?type=account&id=0`
+    return <Redirect noThrow={true} to={to}/>
+  }
 
   return (
     <Base>
-      <ProjectProvider urlProjectId={projectId}>
+      <ProjectProvider urlProjectId={isLocalProject ? null : projectId}>
         <EditorLayout />
       </ProjectProvider>
     </Base>
