@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import {Helmet} from "react-helmet";
 import { Global } from "@emotion/core";
 import { ThemeProvider, Text } from "theme-ui"
-import { Router, globalHistory } from "@reach/router";
+import { Router, Redirect, globalHistory } from "@reach/router";
 import { ApolloProvider } from "@apollo/react-hooks";
 import AppMobileWrapper from "containers/AppMobileWrapper";
 import BrowserDetector from "components/BrowserDetector";
@@ -80,7 +80,8 @@ const App: React.FC = () => {
            <AppMobileWrapper>
              <Router>
                <FourOhFour path="/404" />
-               <Playground path="/*" />
+               <Playground path="/:projectId"/>
+               <Redirect noThrow={true} from="/*" to="/local"/>
              </Router>
              {version}
            </AppMobileWrapper>
