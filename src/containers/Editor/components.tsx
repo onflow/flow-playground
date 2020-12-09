@@ -20,6 +20,7 @@ import CadenceEditor from "components/CadenceEditor";
 import AccountBottomBar from "components/AccountBottomBar";
 import TransactionBottomBar from "components/TransactionBottomBar";
 import ScriptBottomBar from "components/ScriptBottomBar";
+import { Version } from "components/CadenceVersion";
 
 const Header: React.FC = ({ children }) => {
   return (
@@ -200,6 +201,8 @@ const EditorTitle: React.FC<EditorTitleProps> = ({ type }) => {
       {type === EntityType.Account && "Contract"}
       {type === EntityType.TransactionTemplate && "Transaction Template"}
       {type === EntityType.ScriptTemplate && "Script Template"}
+
+      <Version/>
     </Heading>
   );
 };
