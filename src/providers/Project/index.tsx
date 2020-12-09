@@ -1,11 +1,12 @@
 import React, { createContext, useState } from "react";
 import { useApolloClient, useQuery } from "@apollo/react-hooks";
-import { navigate } from "@reach/router";
+import {navigate, Redirect, useLocation} from "@reach/router";
 import ProjectMutator from "./projectMutator";
 import useGetProject from "./projectHooks";
 
 import { GET_ACTIVE_PROJECT } from "api/apollo/queries";
 import { Project, Account } from "api/apollo/generated/graphql";
+import {getParams} from "../../util/uuid";
 
 export enum EntityType {
   Account = 1,
@@ -103,6 +104,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const mutator = new ProjectMutator(client, projectID, isLocal);
 
   let timeout: any;
+
   const updateAccountDeployedCode: any = async () => {
     clearTimeout(timeout);
     const res = await mutator.updateAccountDeployedCode(
@@ -274,11 +276,74 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const activeEditor = getActiveEditor();
 
+  const location = useLocation();
+
   if (isLoading) return null;
   if (!isLoading && !project) {
     navigate("/404");
     return null;
   }
+
+  const params = getParams(location.search || "")
+  const { id } = params;
+  let templateIndex = 0;
+
+  // TODO: check if that project is local
+  // TODO: check that active item have the same id
+  switch (params.type){
+    case "tx":
+      if (id && id !== ""){
+        const foundIndex = project.transactionTemplates.findIndex(template => template.id === id)
+        if (foundIndex > 0) {
+          templateIndex = foundIndex
+        }
+      }
+      if (active.index !== templateIndex){
+        setActive({
+          type: EntityType.TransactionTemplate,
+          index: templateIndex
+        })
+        const templateId = project.transactionTemplates[templateIndex].id
+        return <Redirect to={`/${project.id}?type=tx&id=${templateId}`}/>
+      }
+      break;
+
+    case "script":
+      if (id && id !== ""){
+        const foundIndex = project.scriptTemplates.findIndex(template => template.id === id)
+        if (foundIndex > 0) {
+          templateIndex = foundIndex
+        }
+      }
+      if (active.index !== templateIndex) {
+        setActive({
+          type: EntityType.ScriptTemplate,
+          index: templateIndex
+        })
+        const templateId = project.scriptTemplates[templateIndex].id
+        return <Redirect to={`/${project.id}?type=script&id=${templateId}`}/>
+      }
+      break;
+
+    case "account":
+    default:
+      if (id && id !== ""){
+        const foundIndex = project.accounts.findIndex(template => template.id === id)
+        if (foundIndex > 0) {
+          templateIndex = foundIndex
+        }
+      }
+      if (active.index !== templateIndex) {
+        setActive({
+          type: EntityType.Account,
+          index: templateIndex
+        })
+        const templateId = project.accounts[templateIndex].id
+        return <Redirect to={`/${project.id}?type=account&id=${templateId}`}/>
+      }
+  }
+  console.log({active})
+
   return (
     <ProjectContext.Provider
       value={{
