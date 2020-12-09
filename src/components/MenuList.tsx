@@ -10,6 +10,7 @@ import { SidebarItemInput } from "layout/SidebarItemInput";
 import { SidebarItemEdit } from "layout/SidebarItemEdit";
 import { SidebarItemDelete } from "layout/SidebarItemDelete";
 import useKeyPress from "../hooks/useKeyPress";
+import {ExportButton} from "components/ExportButton";
 
 type MenuListProps = {
   active: number | null;
@@ -47,6 +48,7 @@ const MenuList: React.FC<MenuListProps> = ({
     }
     return setEditing([...editing, i]);
   };
+
 
   useEffect(() => {
     setEditing([]);
@@ -108,10 +110,15 @@ const MenuList: React.FC<MenuListProps> = ({
                 }}
               />
               {active === i && (
-                <SidebarItemEdit onClick={() => toggleEditing(i, value.title)}>
-                  <FaPen />
-                </SidebarItemEdit>
+                <>
+                  <SidebarItemEdit onClick={() => toggleEditing(i, value.title)}>
+                    <FaPen />
+                  </SidebarItemEdit>
+
+                  <ExportButton id={value.id} typeName={value.__typename}/>
+                </>
               )}
+
               {!editing.includes(i) && active === i && values.length > 1 && (
                 <SidebarItemDelete
                   onClick={(e: any) => {

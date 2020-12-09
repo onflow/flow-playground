@@ -17,12 +17,14 @@ function getDeployedContracts(account: Account): string {
 }
 
 import styled from "@emotion/styled";
+import {ExportButton} from "components/ExportButton";
 
 export const AccountCard = styled.div`
   display: flex;
   align-items: flex-end;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+  width: 100%;
 `;
 
 const AccountList: React.FC = () => {
@@ -37,18 +39,28 @@ const AccountList: React.FC = () => {
       <Header>Accounts</Header>
       <Items>
         {project.accounts.map((account: Account, i: number) => {
+          const isActive = active == i
+          const accountAddress = `0x${account.address.slice(-2)}`
+          const contractName = getDeployedContracts(account)
+          const title = contractName
+            ? `${contractName} is deployed to this account`
+            : `This account don't have any contracts`
+          const typeName = account.__typename
           return (
             <Item
               key={i}
-              active={active === i}
+              title={title}
+              active={isActive}
               onClick={() => setActive(EntityType.Account, i)}
             >
               <AccountCard>
                 <Avatar seed={project.seed} index={i} />
                 <Stack>
-                  <strong>0x{account.address.slice(-2)}</strong>
-                  <small>{getDeployedContracts(account) || "--"}</small>
+                  <strong>{accountAddress}</strong>
+                  <small>{contractName || '--'}</small>
                 </Stack>
+
+                {isActive && <ExportButton id={account.id} typeName={typeName}/>}
               </AccountCard>
             </Item>
           );
