@@ -1,13 +1,17 @@
 import React from "react";
-import { Account } from "api/apollo/generated/graphql";
-import { EntityType } from "providers/Project";
-import { SidebarSection as Root } from "layout/SidebarSection";
-import { SidebarHeader as Header } from "layout/SidebarHeader";
-import { SidebarItems as Items } from "layout/SidebarItems";
-import { SidebarItem as Item } from "layout/SidebarItem";
-import { Stack } from "layout/Stack";
-import { useProject } from "providers/Project/projectHooks";
+import {useLocation} from "@reach/router"
+import {Account} from "api/apollo/generated/graphql";
+import {EntityType} from "providers/Project";
+import {SidebarSection as Root} from "layout/SidebarSection";
+import {SidebarHeader as Header} from "layout/SidebarHeader";
+import {SidebarItems as Items} from "layout/SidebarItems";
+import {SidebarItem as Item} from "layout/SidebarItem";
+import {Stack} from "layout/Stack";
+import {useProject} from "providers/Project/projectHooks";
 import Avatar from "components/Avatar";
+import styled from "@emotion/styled";
+import {ExportButton} from "components/ExportButton";
+import {getParams, isUUUID} from "../util/uuid";
 
 function getDeployedContracts(account: Account): string {
   const contracts = account.deployedContracts.map(
@@ -15,9 +19,6 @@ function getDeployedContracts(account: Account): string {
   );
   return contracts.join(", ");
 }
-
-import styled from "@emotion/styled";
-import {ExportButton} from "components/ExportButton";
 
 export const AccountCard = styled.div`
   display: flex;
@@ -30,16 +31,22 @@ export const AccountCard = styled.div`
 const AccountList: React.FC = () => {
   const {
     project,
-    active: rawActive,
+    active,
     setActive
   } = useProject();
-  const active = rawActive.type === EntityType.Account ? rawActive.index : null;
+  const accountSelected = active.type === EntityType.Account
+  const projectPath = isUUUID(project.id) ? project.id : "local"
+
+  const location = useLocation();
+  const params = getParams(location.search)
+
   return (
     <Root>
       <Header>Accounts</Header>
       <Items>
         {project.accounts.map((account: Account, i: number) => {
-          const isActive = active == i
+          const { id } = account
+          const isActive = accountSelected && params.id === id
           const accountAddress = `0x${account.address.slice(-2)}`
           const contractName = getDeployedContracts(account)
           const title = contractName
@@ -48,7 +55,8 @@ const AccountList: React.FC = () => {
           const typeName = account.__typename
           return (
             <Item
-              key={i}
+              to={`/${projectPath}?type=account&id=${account.id}`}
+              key={id}
               title={title}
               active={isActive}
               onClick={() => setActive(EntityType.Account, i)}
