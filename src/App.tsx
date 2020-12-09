@@ -47,6 +47,14 @@ const headers = <Helmet>
   <meta property="twitter:image" content={seoImage}/>
 </Helmet>
 
+const Base = (props: any) => {
+  return(
+    <div>
+      {props.children}
+    </div>
+  )
+}
+
 const version = <Text
   sx={{
     color: "lightgrey",
@@ -79,9 +87,11 @@ const App: React.FC = () => {
         <ThemeProvider theme={theme}>
            <AppMobileWrapper>
              <Router>
-               <FourOhFour path="/404" />
-               <Playground path="/:projectId"/>
-               <Redirect noThrow={true} from="/*" to="/local"/>
+               <Base path="/">
+                 <FourOhFour path="404" />
+                 <Playground path=":projectId"/>
+                 <Redirect noThrow={true} from="*" to="local"/>
+               </Base>
              </Router>
              {version}
            </AppMobileWrapper>
