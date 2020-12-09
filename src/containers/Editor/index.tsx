@@ -6,12 +6,10 @@ import { Base } from "layout/Base"
 import EditorLayout from "./layout";
 import { isUUUID, getParams } from "../../util/uuid";
 
-const scriptTypes = ["account", "transaction", "script"]
+const scriptTypes = ["account", "tx", "script"]
 
-// const Project: React.FC<ProjectProps> = props => {
-const Project: any = (props: any) => {
+const Playground: any = (props: any) => {
   const params = getParams(props.location.search)
-  // const root = props.location.origin;
   const { projectId } = props;
 
   const isLocalProject = projectId === "local";
@@ -40,4 +38,4 @@ const Project: any = (props: any) => {
   );
 };
 
-export default Project;
+export default Playground;
