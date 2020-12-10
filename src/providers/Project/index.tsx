@@ -1,12 +1,12 @@
 import React, { createContext, useState } from "react";
 import { useApolloClient, useQuery } from "@apollo/react-hooks";
-import {navigate, Redirect, useLocation} from "@reach/router";
+import { navigate, Redirect, useLocation } from "@reach/router";
 import ProjectMutator from "./projectMutator";
 import useGetProject from "./projectHooks";
 
 import { GET_ACTIVE_PROJECT } from "api/apollo/queries";
 import { Project, Account } from "api/apollo/generated/graphql";
-import {getParams} from "../../util/uuid";
+import {getParams, scriptTypes} from "../../util/url";
 
 export enum EntityType {
   Account = 1,
@@ -91,6 +91,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     navigate("/404");
   }
 
+  const [initialLoad, setInitialLoad] = useState<boolean>(true)
   const [transactionAccounts, setTransactionAccounts] = useState<number[]>([0]);
   const [isSavingCode, setIsSaving] = useState(false);
 
@@ -285,20 +286,65 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   }
 
   const params = getParams(location.search || "")
-  const { id } = params;
-  let templateIndex = 0;
+  const { type, id } = params;
 
   // TODO: check if that project is local
   // TODO: check that active item have the same id
-  switch (params.type){
+
+  if (type == "" || type === undefined || !scriptTypes.includes(type)){
+    console.log("type empty - redirect")
+    return <Redirect to={`/${project.id}?type=account&id=${project.accounts[0].id}`}/>
+  }
+
+  if (id == "" || id === undefined){
+    let firstItemId
+    switch (type){
+      case "tx":
+        setActive({
+          type: EntityType.TransactionTemplate,
+          index: 0
+        })
+        firstItemId = project.transactionTemplates[0].id
+        break;
+      case "script":
+        setActive({
+          type: EntityType.ScriptTemplate,
+          index: 0
+        })
+        firstItemId = project.scriptTemplates[0].id
+        break;
+      case "account":
+      default:
+        setActive({
+          type: EntityType.Account,
+          index: 0
+        })
+        firstItemId = project.accounts[0].id
+        break;
+    }
+    console.log("id empty - redirect")
+    return <Redirect to={`/${project.id}?type=${type}&id=${firstItemId}`}/>
+  }
+
+  const activeType = type || "account"
+
+  console.log({activeType})
+
+  let templateIndex = 0;
+  switch (activeType){
     case "tx":
+      console.log({ active, params })
+      console.log("this is transaction")
       if (id && id !== ""){
+        console.log("non empty id")
         const foundIndex = project.transactionTemplates.findIndex(template => template.id === id)
         if (foundIndex > 0) {
           templateIndex = foundIndex
         }
       }
-      if (active.index !== templateIndex){
+      console.log(active.index, templateIndex)
+      if (active.index !== templateIndex || initialLoad){
+        setInitialLoad(false)
         setActive({
           type: EntityType.TransactionTemplate,
           index: templateIndex
@@ -315,7 +361,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           templateIndex = foundIndex
         }
       }
-      if (active.index !== templateIndex) {
+      if (active.index !== templateIndex || initialLoad) {
+        setInitialLoad(false)
         setActive({
           type: EntityType.ScriptTemplate,
           index: templateIndex
@@ -326,14 +373,14 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       break;
 
     case "account":
-    default:
       if (id && id !== ""){
         const foundIndex = project.accounts.findIndex(template => template.id === id)
         if (foundIndex > 0) {
           templateIndex = foundIndex
         }
       }
-      if (active.index !== templateIndex) {
+      if (active.index !== templateIndex || initialLoad) {
+        setInitialLoad(false)
         setActive({
           type: EntityType.Account,
           index: templateIndex
@@ -341,8 +388,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         const templateId = project.accounts[templateIndex].id
         return <Redirect to={`/${project.id}?type=account&id=${templateId}`}/>
       }
+      break;
+    default:
+      return null
   }
-  console.log({active})
 
   return (
     <ProjectContext.Provider
