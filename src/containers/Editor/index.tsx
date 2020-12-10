@@ -4,9 +4,7 @@ import { ProjectProvider } from "providers/Project";
 import { Base } from "layout/Base"
 
 import EditorLayout from "./layout";
-import { isUUUID, getParams } from "../../util/uuid";
-
-const scriptTypes = ["account", "tx", "script"]
+import { isUUUID, getParams, scriptTypes } from "../../util/uuid";
 
 const Playground: any = (props: any) => {
   const params = getParams(props.location.search)

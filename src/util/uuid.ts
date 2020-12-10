@@ -10,3 +10,5 @@ export const getParams = (url: string): any =>  {
     return acc
   },{})
 }
+
+export const scriptTypes = ["account", "tx", "script"]
