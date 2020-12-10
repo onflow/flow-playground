@@ -53,6 +53,7 @@ const MenuList: React.FC<MenuListProps> = ({
     return setEditing([...editing, i]);
   };
 
+
   useEffect(() => {
     setEditing([]);
   }, [items, active]);
