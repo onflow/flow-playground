@@ -5,12 +5,13 @@ import MenuList from "components/MenuList";
 import { Sidebar as SidebarRoot } from "layout/Sidebar";
 
 import { useProject } from "providers/Project/projectHooks";
+import { navigate } from "@reach/router";
+import { isUUUID } from "../util/url";
 
 const Sidebar: React.FC = () => {
   const {
     isLoading,
     active,
-    setActive,
     project,
     mutator,
     deleteTransactionTemplate,
@@ -21,6 +22,8 @@ const Sidebar: React.FC = () => {
 
   if (isLoading) return <p>Loading...</p>;
 
+  const projectPath = isUUUID(project.id) ? project.id : "local"
+
   return (
     <SidebarRoot>
       <AccountList />
@@ -30,36 +33,40 @@ const Sidebar: React.FC = () => {
         active={
           active.type == EntityType.TransactionTemplate ? active.index : null
         }
-        onSelect={(_, index) =>
-          setActive(EntityType.TransactionTemplate, index)
-        }
+        onSelect={(_, id) => {
+          navigate(`/${projectPath}?type=tx&id=${id}`)
+        }}
         onUpdate={(templateId: string, script: string, title: string) => {
           updateTransactionTemplate(templateId, script, title);
         }}
-        onDelete={(templateId: string) => {
-          deleteTransactionTemplate(templateId);
-          setActive(EntityType.TransactionTemplate, 0 );
+        onDelete={async (templateId: string) => {
+          await deleteTransactionTemplate(templateId);
+          const id = project.transactionTemplates[0].id;
+          navigate(`/${projectPath}?type=tx&id=${id}`)
         }}
         onInsert={async () => {
-          await mutator.createTransactionTemplate("", `New Transaction`)
-          setActive(EntityType.TransactionTemplate, project.transactionTemplates.length);
+          const res = await mutator.createTransactionTemplate("", `New Transaction`)
+          navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}`)
         }}
       />
       <MenuList
         title="Script Templates"
         items={project.scriptTemplates}
         active={active.type == EntityType.ScriptTemplate ? active.index : null}
-        onSelect={(_, index) => setActive(EntityType.ScriptTemplate, index)}
+        onSelect={(_, id) => {
+          navigate(`/${projectPath}?type=script&id=${id}`)
+        }}
         onUpdate={(templateId: string, script: string, title: string) => {
           updateScriptTemplate(templateId, script, title);
         }}
-        onDelete={(templateId: string) => {
-          deleteScriptTemplate(templateId);
-          setActive(EntityType.ScriptTemplate, 0);
+        onDelete={async (templateId: string) => {
+          await deleteScriptTemplate(templateId);
+          const id = project.scriptTemplates[0].id;
+          navigate(`/${projectPath}?type=script&id=${id}`)
         }}
         onInsert={async () => {
-          await mutator.createScriptTemplate("", `New Script`);
-          setActive(EntityType.ScriptTemplate, project.scriptTemplates.length);
+          const res = await mutator.createScriptTemplate("", `New Script`);
+          navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}`)
         }}
       />
     </SidebarRoot>

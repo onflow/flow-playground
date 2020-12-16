@@ -10,17 +10,17 @@ import {SidebarItemInput} from "layout/SidebarItemInput";
 import {SidebarItemEdit} from "layout/SidebarItemEdit";
 import {SidebarItemDelete} from "layout/SidebarItemDelete";
 import useKeyPress from "../hooks/useKeyPress";
-import {ExportButton} from "components/ExportButton";
-import {getParams, isUUUID} from "../util/url";
-import {useProject} from "providers/Project/projectHooks";
-import {EntityType} from "providers/Project";
-import {useLocation} from "@reach/router";
+import { ExportButton } from "components/ExportButton";
+import { getParams } from "../util/url";
+import { useProject } from "providers/Project/projectHooks";
+import { EntityType } from "providers/Project";
+import { useLocation } from "@reach/router";
 
 type MenuListProps = {
   active: number | null;
   title: string;
   items: any[];
-  onSelect: (e: SyntheticEvent, index: number) => void;
+  onSelect: (e: SyntheticEvent, id: string) => void;
   onUpdate: any;
   onInsert: (e: SyntheticEvent) => void;
   onDelete: any;
@@ -36,7 +36,7 @@ const MenuList: React.FC<MenuListProps> = ({
   onInsert,
   onDelete
 }) => {
-  const { project, active } = useProject()
+  const { active } = useProject()
   const isEditing = useRef<HTMLInputElement>();
   const [editing, setEditing] = useState([]);
   const enterPressed = useKeyPress("Enter");
@@ -71,10 +71,8 @@ const MenuList: React.FC<MenuListProps> = ({
     element?.select()
   };
 
-  const projectPath = isUUUID(project.id) ? project.id : "local"
   const isScript = title.toLowerCase().includes("script");
   const itemType = isScript ? EntityType.ScriptTemplate : EntityType.TransactionTemplate
-  const itemPath = isScript ? "script" : "tx"
 
   const location = useLocation();
   const params = getParams(location.search)
@@ -94,12 +92,11 @@ const MenuList: React.FC<MenuListProps> = ({
           const isActive = active.type === itemType && item.id === params.id
           return (
             <SidebarItem
-              title={value.title}
-              to={`/${projectPath}?type=${itemPath}&id=${item.id}`}
+              title={item.title}
               key={item.id}
               active={isActive}
               onClick={(e: React.SyntheticEvent<Element, Event>) =>
-                onSelect(e, i)
+                onSelect(e, item.id)
               }
             >
               {/* NOTE: Optimize this to a controlled input! */}

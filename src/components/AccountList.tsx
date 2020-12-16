@@ -1,5 +1,5 @@
 import React from "react";
-import {useLocation} from "@reach/router"
+import {navigate, useLocation} from "@reach/router"
 import {Account} from "api/apollo/generated/graphql";
 import {EntityType} from "providers/Project";
 import {SidebarSection as Root} from "layout/SidebarSection";
@@ -32,13 +32,12 @@ const AccountList: React.FC = () => {
   const {
     project,
     active,
-    setActive
   } = useProject();
   const accountSelected = active.type === EntityType.Account
-  const projectPath = isUUUID(project.id) ? project.id : "local"
 
   const location = useLocation();
   const params = getParams(location.search)
+  const projectPath = isUUUID(project.id) ? project.id : "local"
 
   return (
     <Root>
@@ -55,11 +54,10 @@ const AccountList: React.FC = () => {
           const typeName = account.__typename
           return (
             <Item
-              to={`/${projectPath}?type=account&id=${account.id}`}
               key={id}
               title={title}
               active={isActive}
-              onClick={() => setActive(EntityType.Account, i)}
+              onClick={() => navigate(`/${projectPath}?type=account&id=${id}`)}
             >
               <AccountCard>
                 <Avatar seed={project.seed} index={i} />
