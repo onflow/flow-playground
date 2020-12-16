@@ -292,7 +292,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   // TODO: check that active item have the same id
 
   if (type == "" || type === undefined || !scriptTypes.includes(type)){
-    console.log("type empty - redirect")
     return <Redirect to={`/${project.id}?type=account&id=${project.accounts[0].id}`}/>
   }
 
@@ -322,13 +321,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         firstItemId = project.accounts[0].id
         break;
     }
-    console.log("id empty - redirect")
     return <Redirect to={`/${project.id}?type=${type}&id=${firstItemId}`}/>
   }
 
   const activeType = type || "account"
-
-  console.log({activeType})
 
   let templateIndex = 0;
   switch (activeType){
@@ -339,7 +335,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           templateIndex = foundIndex
         }
       }
-      console.log(active.index, templateIndex)
       if (active.index !== templateIndex || initialLoad){
         setInitialLoad(false)
         setActive({
