@@ -26,7 +26,7 @@ const Sidebar: React.FC = () => {
       <AccountList />
       <MenuList
         title="Transaction Templates"
-        values={project.transactionTemplates}
+        items={project.transactionTemplates}
         active={
           active.type == EntityType.TransactionTemplate ? active.index : null
         }
@@ -49,7 +49,7 @@ const Sidebar: React.FC = () => {
       />
       <MenuList
         title="Script Templates"
-        values={project.scriptTemplates}
+        items={project.scriptTemplates}
         active={active.type == EntityType.ScriptTemplate ? active.index : null}
         onSelect={(_, index) => setActive(EntityType.ScriptTemplate, index)}
         onUpdate={(templateId: string, script: string, title: string) => {

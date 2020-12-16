@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import {Helmet} from "react-helmet";
 import { Global } from "@emotion/core";
 import { ThemeProvider, Text } from "theme-ui"
-import { Router, globalHistory } from "@reach/router";
+import { Router, Redirect, globalHistory } from "@reach/router";
 import { ApolloProvider } from "@apollo/react-hooks";
 import AppMobileWrapper from "containers/AppMobileWrapper";
 import BrowserDetector from "components/BrowserDetector";
@@ -47,6 +47,14 @@ const headers = <Helmet>
   <meta property="twitter:image" content={seoImage}/>
 </Helmet>
 
+const Base = (props: any) => {
+  return(
+    <div>
+      {props.children}
+    </div>
+  )
+}
+
 const version = <Text
   sx={{
     color: "lightgrey",
@@ -79,8 +87,11 @@ const App: React.FC = () => {
         <ThemeProvider theme={theme}>
            <AppMobileWrapper>
              <Router>
-               <FourOhFour path="/404" />
-               <Playground path="/*" />
+               <Base path="/">
+                 <FourOhFour path="404" />
+                 <Playground path=":projectId"/>
+                 <Redirect noThrow={true} from="*" to="local"/>
+               </Base>
              </Router>
              {version}
            </AppMobileWrapper>

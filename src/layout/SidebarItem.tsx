@@ -1,15 +1,15 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
+import { Link } from "@reach/router";
 import theme from "../theme";
 
 type ItemProps = {
   active?: boolean;
-  onClick?: (e: React.SyntheticEvent<Element, Event>) => any | void;
   children?: React.ReactNode;
 };
 
-export const SidebarItem = styled.div<ItemProps>`
+export const SidebarItem = styled(Link)<ItemProps>`
   --active-width: 6px;
 
   font-size: 1rem;
@@ -37,16 +37,13 @@ export const SidebarItem = styled.div<ItemProps>`
         background: ${theme.colors.primary};
       }
     `}
-  ${p =>
-    p.onClick &&
-    css`
-      cursor: pointer;
-      &:hover,
-      &:focus {
-        background: rgba(255, 255, 255, 0.75);
-      }
-    `}
 
+  cursor: pointer;
+  &:hover,
+  &:focus {
+    background: rgba(255, 255, 255, 0.75);
+  }
+  text-decoration: none;
   display:flex;
   align-items: center;
   font-weight: bold;

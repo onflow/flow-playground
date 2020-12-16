@@ -1,21 +1,25 @@
-import React, { SyntheticEvent, useState, useEffect, useRef } from "react";
-import { IoMdAddCircleOutline } from "react-icons/io";
-import { FaPen, FaTimes } from "react-icons/fa";
-import { SidebarSection } from "layout/SidebarSection";
-import { SidebarHeader } from "layout/SidebarHeader";
-import { SidebarItems } from "layout/SidebarItems";
-import { SidebarItem } from "layout/SidebarItem";
-import { SidebarItemInsert } from "layout/SidebarItemInsert";
-import { SidebarItemInput } from "layout/SidebarItemInput";
-import { SidebarItemEdit } from "layout/SidebarItemEdit";
-import { SidebarItemDelete } from "layout/SidebarItemDelete";
+import React, {SyntheticEvent, useEffect, useRef, useState} from "react";
+import {IoMdAddCircleOutline} from "react-icons/io";
+import {FaPen, FaTimes} from "react-icons/fa";
+import {SidebarSection} from "layout/SidebarSection";
+import {SidebarHeader} from "layout/SidebarHeader";
+import {SidebarItems} from "layout/SidebarItems";
+import {SidebarItem} from "layout/SidebarItem";
+import {SidebarItemInsert} from "layout/SidebarItemInsert";
+import {SidebarItemInput} from "layout/SidebarItemInput";
+import {SidebarItemEdit} from "layout/SidebarItemEdit";
+import {SidebarItemDelete} from "layout/SidebarItemDelete";
 import useKeyPress from "../hooks/useKeyPress";
 import {ExportButton} from "components/ExportButton";
+import {getParams, isUUUID} from "../util/url";
+import {useProject} from "providers/Project/projectHooks";
+import {EntityType} from "providers/Project";
+import {useLocation} from "@reach/router";
 
 type MenuListProps = {
   active: number | null;
   title: string;
-  values: any[];
+  items: any[];
   onSelect: (e: SyntheticEvent, index: number) => void;
   onUpdate: any;
   onInsert: (e: SyntheticEvent) => void;
@@ -25,14 +29,14 @@ type MenuListProps = {
 const NAME_MAX_CHARS = 50;
 
 const MenuList: React.FC<MenuListProps> = ({
-  active,
   title,
-  values,
+  items,
   onSelect,
   onUpdate,
   onInsert,
   onDelete
 }) => {
+  const { project, active } = useProject()
   const isEditing = useRef<HTMLInputElement>();
   const [editing, setEditing] = useState([]);
   const enterPressed = useKeyPress("Enter");
@@ -43,7 +47,7 @@ const MenuList: React.FC<MenuListProps> = ({
       let _editing = [...editing];
       _editing.splice(_editing.indexOf(i), 1);
       setEditing(_editing);
-      onUpdate(values[i].id, values[i].script, newTitle);
+      onUpdate(items[i].id, items[i].script, newTitle);
       return;
     }
     return setEditing([...editing, i]);
@@ -52,7 +56,7 @@ const MenuList: React.FC<MenuListProps> = ({
 
   useEffect(() => {
     setEditing([]);
-  }, [values, active]);
+  }, [items, active]);
 
   useEffect(() => {
     if (enterPressed || escapePressed) {
@@ -67,6 +71,14 @@ const MenuList: React.FC<MenuListProps> = ({
     element?.select()
   };
 
+  const projectPath = isUUUID(project.id) ? project.id : "local"
+  const isScript = title.toLowerCase().includes("script");
+  const itemType = isScript ? EntityType.ScriptTemplate : EntityType.TransactionTemplate
+  const itemPath = isScript ? "script" : "tx"
+
+  const location = useLocation();
+  const params = getParams(location.search)
+
   return (
     <SidebarSection>
       <SidebarHeader>
@@ -78,11 +90,13 @@ const MenuList: React.FC<MenuListProps> = ({
         )}
       </SidebarHeader>
       <SidebarItems>
-        {values.map((value, i) => {
+        {items.map((item, i) => {
+          const isActive = active.type === itemType && item.id === params.id
           return (
             <SidebarItem
-              key={value.id}
-              active={active === i}
+              to={`/${projectPath}?type=${itemPath}&id=${item.id}`}
+              key={item.id}
+              active={isActive}
               onClick={(e: React.SyntheticEvent<Element, Event>) =>
                 onSelect(e, i)
               }
@@ -93,12 +107,12 @@ const MenuList: React.FC<MenuListProps> = ({
                 type="text"
                 onBlur={(e: any) => {
                   if (e.target.value.length === 0) {
-                    isEditing.current.value = value.title;
+                    isEditing.current.value = item.title;
                   } else {
                     toggleEditing(i, e.target.value);
                   }
                 }}
-                defaultValue={value.title}
+                defaultValue={item.title}
                 readonly={!editing.includes(i)}
                 onChange={e => {
                   if (e.target.value.length > NAME_MAX_CHARS) {
@@ -109,21 +123,21 @@ const MenuList: React.FC<MenuListProps> = ({
                   }
                 }}
               />
-              {active === i && (
+              {isActive && (
                 <>
-                  <SidebarItemEdit onClick={() => toggleEditing(i, value.title)}>
+                  <SidebarItemEdit onClick={() => toggleEditing(i, item.title)}>
                     <FaPen />
                   </SidebarItemEdit>
 
-                  <ExportButton id={value.id} typeName={value.__typename}/>
+                  <ExportButton id={item.id} typeName={item.__typename}/>
                 </>
               )}
 
-              {!editing.includes(i) && active === i && values.length > 1 && (
+              {!editing.includes(i) && isActive && items.length > 1 && (
                 <SidebarItemDelete
                   onClick={(e: any) => {
                     e.stopPropagation();
-                    onDelete(value.id);
+                    onDelete(item.id);
                   }}>
                   <FaTimes />
                 </SidebarItemDelete>
