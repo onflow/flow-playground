@@ -225,7 +225,7 @@ export default class ProjectMutator {
       await this.createProject();
     }
 
-    await this.client.mutate({
+    const res = await this.client.mutate({
       mutation: CREATE_TRANSACTION_TEMPLATE,
       variables: {
         projectId: this.projectId,
@@ -234,12 +234,16 @@ export default class ProjectMutator {
       },
       refetchQueries: [
         { query: GET_PROJECT, variables: { projectId: this.projectId } }
-      ]
+      ],
+      awaitRefetchQueries: true
     });
+
     Mixpanel.track("Transaction template created", {
       projectId: this.projectId,
       script
     });
+
+    return res
   }
 
   async updateScriptTemplate(
@@ -337,7 +341,7 @@ export default class ProjectMutator {
       await this.createProject();
     }
 
-    await this.client.mutate({
+    const res = await this.client.mutate({
       mutation: CREATE_SCRIPT_TEMPLATE,
       variables: {
         projectId: this.projectId,
@@ -346,11 +350,15 @@ export default class ProjectMutator {
       },
       refetchQueries: [
         { query: GET_PROJECT, variables: { projectId: this.projectId } }
-      ]
+      ],
+      awaitRefetchQueries: true
     });
+
     Mixpanel.track("Script template created", {
       projectId: this.projectId,
       script
     });
+
+    return res
   }
 }

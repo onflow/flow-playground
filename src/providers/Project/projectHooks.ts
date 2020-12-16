@@ -23,8 +23,16 @@ function cloneProject(client: any, project: Project) {
     project.id,
     project.seed,
     project.accounts.map(acc => acc.draftCode),
-    project.transactionTemplates.map(tpl => tpl.script),
-    project.scriptTemplates.map(tpl => tpl.script)
+
+    project.transactionTemplates.map(tpl => ({
+        code: tpl.script,
+        title: tpl.title
+      })),
+
+    project.scriptTemplates.map(tpl => ({
+      code: tpl.script,
+      title: tpl.title
+    }))
   );
 
   client.writeData({

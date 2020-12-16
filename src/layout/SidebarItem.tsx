@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
-import { Link } from "@reach/router";
 import theme from "../theme";
 
 type ItemProps = {
@@ -9,7 +8,7 @@ type ItemProps = {
   children?: React.ReactNode;
 };
 
-export const SidebarItem = styled(Link)<ItemProps>`
+export const SidebarItem = styled.div<ItemProps>`
   --active-width: 6px;
 
   font-size: 1rem;
