@@ -94,6 +94,7 @@ const MenuList: React.FC<MenuListProps> = ({
           const isActive = active.type === itemType && item.id === params.id
           return (
             <SidebarItem
+              title={value.title}
               to={`/${projectPath}?type=${itemPath}&id=${item.id}`}
               key={item.id}
               active={isActive}
