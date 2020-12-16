@@ -333,10 +333,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   let templateIndex = 0;
   switch (activeType){
     case "tx":
-      console.log({ active, params })
-      console.log("this is transaction")
       if (id && id !== ""){
-        console.log("non empty id")
         const foundIndex = project.transactionTemplates.findIndex(template => template.id === id)
         if (foundIndex > 0) {
           templateIndex = foundIndex
