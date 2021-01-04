@@ -328,14 +328,18 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   let templateIndex = 0;
   switch (activeType){
-    case "tx":
-      if (id && id !== ""){
+    case "tx": {
+      if (id && id !== "") {
         const foundIndex = project.transactionTemplates.findIndex(template => template.id === id)
         if (foundIndex > 0) {
           templateIndex = foundIndex
         }
       }
-      if (active.index !== templateIndex || initialLoad){
+
+      const sameType = active.type == EntityType.TransactionTemplate
+      const sameIndex = active.index == templateIndex
+
+      if (!sameIndex || !sameType || initialLoad) {
         setInitialLoad(false)
         setActive({
           type: EntityType.TransactionTemplate,
@@ -345,15 +349,18 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         return <Redirect to={`/${project.id}?type=tx&id=${templateId}`}/>
       }
       break;
-
-    case "script":
-      if (id && id !== ""){
+    }
+    case "script": {
+      if (id && id !== "") {
         const foundIndex = project.scriptTemplates.findIndex(template => template.id === id)
         if (foundIndex > 0) {
           templateIndex = foundIndex
         }
       }
-      if (active.index !== templateIndex || initialLoad) {
+      const sameType = active.type == EntityType.ScriptTemplate
+      const sameIndex = active.index == templateIndex
+
+      if (!sameIndex || !sameType || initialLoad) {
         setInitialLoad(false)
         setActive({
           type: EntityType.ScriptTemplate,
@@ -363,15 +370,19 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         return <Redirect to={`/${project.id}?type=script&id=${templateId}`}/>
       }
       break;
+    }
 
-    case "account":
-      if (id && id !== ""){
+    case "account": {
+      if (id && id !== "") {
         const foundIndex = project.accounts.findIndex(template => template.id === id)
         if (foundIndex > 0) {
           templateIndex = foundIndex
         }
       }
-      if (active.index !== templateIndex || initialLoad) {
+      const sameType = active.type == EntityType.Account
+      const sameIndex = active.index == templateIndex
+
+      if (!sameIndex || !sameType || initialLoad){
         setInitialLoad(false)
         setActive({
           type: EntityType.Account,
@@ -381,6 +392,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         return <Redirect to={`/${project.id}?type=account&id=${templateId}`}/>
       }
       break;
+    }
     default:
       return null
   }
