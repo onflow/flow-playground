@@ -3,6 +3,7 @@ import { Text } from "theme-ui";
 import styled from "@emotion/styled";
 import { motion } from "framer-motion";
 import { IoMdClose } from "react-icons/io";
+import { WhiteOverlay } from "components/Common";
 
 import Mixpanel from "../util/mixpanel";
 
@@ -69,16 +70,6 @@ const ExamplesContainer = styled(motion.div)`
     -moz-appearance: none;
     -webkit-appearance: none;
   }
-`;
-
-const Background = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.95);
-  z-index: -1;
 `;
 
 const Stack = styled.div`
@@ -197,7 +188,7 @@ const Examples: React.FC<{
       animate={visible ? "visible" : "hidden"}
       variants={ExampleContainers}
     >
-      <Background onClick={triggerClose} />
+      <WhiteOverlay onClick={triggerClose} />
       <Stack>
         <Header>
           <h3>Playground Tutorials</h3>
