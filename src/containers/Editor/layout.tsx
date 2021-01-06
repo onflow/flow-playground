@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Flex, Text } from "theme-ui";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaCloudUploadAlt } from "react-icons/fa";
-import { FaCodeBranch, FaDiscord, FaTwitter } from "react-icons/fa";
+import { FaCodeBranch, FaDiscord, FaTwitter, FaArrowAltCircleDown } from "react-icons/fa";
 
 import { Header as HeaderRoot } from "layout/Header";
 import Sidebar from "components/Sidebar";
@@ -20,6 +20,8 @@ import {
 } from "./components";
 
 import { useProject } from "providers/Project/projectHooks";
+import ExportPopup from "components/ExportPopup";
+import {default as FlowButton} from "components/Button";
 
 const FDP = [
   "f1383d67-6f0a-4be7-8e61-f6141ebdd92c",
@@ -30,6 +32,7 @@ const FDP = [
 ];
 
 const EditorLayout: React.FC = () => {
+  const [showExport, toggleShowExport] = useState(false);
   const [showExamples, toggleShowExamples] = useState(false);
   const [projectIsPlayground, setIsPlayground] = useState(false);
 
@@ -162,6 +165,13 @@ const EditorLayout: React.FC = () => {
             >
               <NavButton>Flow Docs</NavButton>
             </a>
+            {project && (
+              <FlowButton
+                onClick={() => toggleShowExport(true)}
+                Icon={FaArrowAltCircleDown}
+              >Export
+              </FlowButton>
+            )}
           </Nav>
         </Header>
       </HeaderRoot>
@@ -177,6 +187,9 @@ const EditorLayout: React.FC = () => {
           toggleShowExamples(false);
         }}
       />
+      <ExportPopup visible={showExport} triggerClose={()=>{
+        toggleShowExport(false)
+      }}/>
     </>
   );
 };
