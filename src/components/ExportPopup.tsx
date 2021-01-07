@@ -11,6 +11,39 @@ import {
   SpaceBetween,
 } from 'components/Common';
 
+// TODO: should be replaced to "master" before merging or replaced with .env variable
+const BRANCH = "max/export-project-as-zip"
+const GENERATOR_ROOT = `https://raw.githubusercontent.com/onflow/flow-playground/${BRANCH}/project-generator`
+
+const getFile = async (filename: string) =>  {
+  const response = await fetch(`${GENERATOR_ROOT}/${filename}`)
+  const content = await response.text()
+  return content
+}
+
+const generateReadMe = async (id:"string") => {
+  const file = await getFile("files/README.md")
+  const readMeFile = file
+    .replace(/##PROJECT-ID##/g,`${id.toLowerCase()}`)
+    .replace(/##PROJECT-LINK##/g,`https://play.onflow.org/${id.toLowerCase()}`)
+  return readMeFile
+}
+const generatePackageConfig = async (projectName: string) => {
+  const file = await getFile("files/package.json")
+  const config = file
+    .replace(/##PROJECT-NAME##/g, projectName.toLowerCase())
+  return config
+}
+const generateTests = async (baseFolder: string) =>{
+  const base = await getFile("snippets/imports.js")
+  const content = base.replace(/##BASE-FOLDER##/, baseFolder)
+
+  // TODO: inject deployment scripts
+  // TODO: inject transactions and scripts in specified order via #pragma-order tags
+
+  return content
+}
+
 const ExportPopup: React.FC<{
   visible: boolean;
   triggerClose?: (e: React.SyntheticEvent) => any;
@@ -20,13 +53,21 @@ const ExportPopup: React.FC<{
 
   const createZip = async () => {
 
-    const readMeResponse = await fetch("https://raw.githubusercontent.com/onflow/flow-playground/master/README.md")
-    const readMeFile = await readMeResponse.text();
-    console.log({ readMeFile })
+    const zip = new JSZip();
+
+    // Create setup files
+    const readMeFile = await generateReadMe(project.id)
+    const packageConfig = await generatePackageConfig(`playground-project-${project.id.toLowerCase()}`)
+    const babelConfig = await getFile("files/babel.config.json")
+    const jestConfig = await getFile("files/package.json")
+    const testFile = await generateTests("cadence")
+    zip.file("test/README.md", readMeFile);
+    zip.file("test/package.json", packageConfig)
+    zip.file("test/babel.config.json", babelConfig)
+    zip.file("test/jest.config.json", jestConfig)
+    zip.file("test/index.test.js", testFile)
 
     const { accounts, transactionTemplates, scriptTemplates } = project;
-
-    const zip = new JSZip();
 
     for (let i = 0; i < accounts.length; i++) {
       const account = accounts[i];
@@ -68,6 +109,7 @@ const ExportPopup: React.FC<{
                   setProcessing(true);
                   await createZip();
                   setProcessing(false);
+                  triggerClose(null);
                 }}
               >
                 Export
