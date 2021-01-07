@@ -11,7 +11,7 @@ import { Int, Address } from "@onflow/types";
 import { getContractAddress } from "flow-js-testing/dist/utils/contract";
 import { getAccountAddress } from "flow-js-testing/dist/utils/create-account";
 
-const basePath = path.resolve(__dirname, "../cadence");
+const basePath = path.resolve(__dirname, "../##BASE-FOLDER##");
 
 beforeAll(() => {
     init(basePath);
