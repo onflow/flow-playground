@@ -1,4 +1,8 @@
-import { getImports } from '../../src/util/generator';
+import {
+  generateAddressMap,
+  generateGetAccounts,
+  getImports,
+} from '../../src/util/generator';
 
 describe('Generator Related Unit Tests', () => {
   test('should find no imports in a script template', () => {
@@ -51,5 +55,31 @@ describe('Generator Related Unit Tests', () => {
     const third = result[2];
     expect(third.name).toBe('Third');
     expect(third.address).toBe('0x03');
+  });
+
+  test('should  create address map for imports', () => {
+    const template = `
+      import First from 0x01
+      import Second from 0x02
+      pub fun main(){
+        console.log("Hello")
+      }
+    `;
+
+    const result = generateAddressMap(template);
+    console.log({ result });
+  });
+
+  test('should create proper account getters', () => {
+    const template = `
+      import First from 0x01
+      import Second from 0x02
+      pub fun main(){
+        console.log("Hello")
+      }
+    `;
+    const imports = getImports(template);
+    const getAccountsCode = generateGetAccounts(imports);
+    console.log(getAccountsCode);
   });
 });
