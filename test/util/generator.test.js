@@ -1,7 +1,10 @@
 import {
-  generateAddressMap,
-  generateGetAccounts,
   getImports,
+  generateAddressMap,
+  generateArguments,
+  generateGetAccounts,
+  generateScriptCode,
+  replaceScriptTemplate,
 } from '../../src/util/generator';
 
 describe('Generator Related Unit Tests', () => {
@@ -61,12 +64,15 @@ describe('Generator Related Unit Tests', () => {
     const template = `
       import First from 0x01
       import Second from 0x02
+      import Third from 0x03
+      
       pub fun main(){
         console.log("Hello")
       }
     `;
 
-    const result = generateAddressMap(template);
+    const imports = getImports(template);
+    const result = generateAddressMap(imports);
     console.log({ result });
   });
 
@@ -74,6 +80,8 @@ describe('Generator Related Unit Tests', () => {
     const template = `
       import First from 0x01
       import Second from 0x02
+      import Third from 0x03
+      
       pub fun main(){
         console.log("Hello")
       }
@@ -81,5 +89,38 @@ describe('Generator Related Unit Tests', () => {
     const imports = getImports(template);
     const getAccountsCode = generateGetAccounts(imports);
     console.log(getAccountsCode);
+  });
+
+  test('should create proper code for script', () => {
+    const template = `
+      import First from 0x01
+      import Second from 0x02
+      import Third from 0x03
+      
+      pub fun main(){
+        console.log("Hello")
+      }
+    `;
+
+    const generatedCode = generateScriptCode(template);
+    console.log(generatedCode);
+  });
+
+  test('should create full proper code script test', () => {
+    const template = `
+      import First from 0x01
+      import Second from 0x02
+      import Third from 0x03
+      
+      pub fun main(){
+        console.log("Hello")
+      }
+    `;
+
+    const scriptName = 'script-01';
+    const addressMapCode = generateScriptCode(template);
+    const argumentsCode = generateArguments(template);
+    const generatedCode = replaceScriptTemplate(scriptName, addressMapCode, argumentsCode);
+    console.log(generatedCode);
   });
 });
