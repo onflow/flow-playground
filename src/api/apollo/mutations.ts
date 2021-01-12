@@ -140,7 +140,19 @@ export const CREATE_TRANSACTION_EXECUTION = gql`
     ) {
       id
       script
-      errors
+      errors {
+        message
+        startPosition {
+          offset
+          line
+          column
+        }
+        endPosition {
+          offset
+          line
+          column
+        }
+      }
       logs
       events {
         type
@@ -200,7 +212,19 @@ export const CREATE_SCRIPT_EXECUTION = gql`
     createScriptExecution(input: { projectId: $projectId, script: $script, arguments: $arguments }) {
       id
       script
-      error
+      errors {
+        message
+        startPosition {
+          offset
+          line
+          column
+        }
+        endPosition {
+          offset
+          line
+          column
+        }
+      }
       logs
       value
     }
