@@ -69,7 +69,7 @@ module.exports = {
       },
     }),
     new webpack.EnvironmentPlugin([
-      'GRAPHQL_API',
+      'PLAYGROUND_API',
       'GA_TRACKING_CODE',
       'MIXPANEL_TOKEN',
       'DEFAULT_SEO_IMAGE',
