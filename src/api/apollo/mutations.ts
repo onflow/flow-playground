@@ -140,7 +140,7 @@ export const CREATE_TRANSACTION_EXECUTION = gql`
     ) {
       id
       script
-      error
+      errors
       logs
       events {
         type
