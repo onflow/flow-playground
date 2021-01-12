@@ -248,7 +248,7 @@ export const SET_EXECUTION_RESULT = gql`
     $rawResult: RawExecutionResult!
     $label: String
   ) {
-    updateResults(
+    updateCachedExecutionResults(
       resultType: $resultType
       rawResult: $rawResult
       label: $label
@@ -258,6 +258,6 @@ export const SET_EXECUTION_RESULT = gql`
 
 export const CLEAR_EXECUTION_RESULTS = gql`
   mutation ClearExecutionResults($resultType: ResultType!) {
-    clearResults(resultType: $resultType) @client
+    clearCachedExecutionResults(resultType: $resultType) @client
   }
 `;

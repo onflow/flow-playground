@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { getCachedExecutionResults } from "api/apollo/queries";
+import { GET_CACHED_EXECUTION_RESULTS } from "api/apollo/queries";
 import { ResultType } from "../../api/apollo/generated/graphql";
 import { Line as LineType } from "../../util/normalize-interaction-response";
 
@@ -19,7 +19,7 @@ export const RenderResponse: React.FC<{
   resultType: ResultType.Transaction | ResultType.Script | ResultType.Contract;
 }> = ({ resultType }) => {
   const { data, error, loading } = useQuery(
-    getCachedExecutionResults()
+    GET_CACHED_EXECUTION_RESULTS
   );
   return (
     <Root resultType={resultType}>

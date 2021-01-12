@@ -47,7 +47,7 @@ function getResultTypeFragment(resultType: ResultType) {
 
 const localResolvers = {
   Query: {
-    getResults: (
+    cachedExecutionResults: (
       _root: any,
       _: any,
       { cache }: { cache: InMemoryCache },
@@ -82,7 +82,7 @@ const localResolvers = {
     },
   },
   Mutation: {
-    updateResults: (
+    updateCachedExecutionResults: (
       _root: any,
       { resultType, label, rawResult }: SetExecutionResultsMutationVariables,
       { cache }: { cache: InMemoryCache },
@@ -132,7 +132,7 @@ const localResolvers = {
       cache.writeFragment({ fragment, id, data: update });
       return true;
     },
-    clearResults: (
+    clearCachedExecutionResults: (
       _root: any,
       { resultType }: ClearExecutionResultsMutationVariables,
       { cache }: { cache: InMemoryCache },

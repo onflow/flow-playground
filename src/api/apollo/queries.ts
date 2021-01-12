@@ -69,7 +69,7 @@ export const GET_ACTIVE_PROJECT = gql`
   }
 `;
 
-export const GET_EXECUTION_RESULTS = gql`
+export const GET_CACHED_EXECUTION_RESULTS = gql`
   fragment ExecutionResultDetails on ExecutionResult {
     timestamp
     tag
@@ -90,30 +90,3 @@ export const GET_EXECUTION_RESULTS = gql`
     }
   }
 `;
-
-export const getCachedExecutionResults = () => {
-  return gql`
-    query GetCachedResults {
-      cachedExecutionResults @client {
-        TRANSACTION {
-          timestamp
-          tag
-          value
-          label
-        }
-        SCRIPT {
-          timestamp
-          tag
-          value
-          label
-        }
-        CONTRACT {
-          timestamp
-          tag
-          value
-          label
-        }
-      }
-    }
-  `;
-};

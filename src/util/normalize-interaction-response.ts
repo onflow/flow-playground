@@ -2,7 +2,7 @@ export enum Tag {
   ERROR,
   LOG,
   VALUE,
-  UNKNOWN
+  UNKNOWN,
 }
 
 export type Line = {
@@ -21,7 +21,7 @@ export const isUnknown = is(Tag.UNKNOWN);
 const makeLine = (tag: Tag, value: string): Line => ({
   timestamp: new Date().toLocaleTimeString([], { hour12: false }),
   tag,
-  value
+  value,
 });
 
 const respIsUpdateAccount = (response: any): boolean => {
@@ -39,18 +39,18 @@ const respIsCreateScriptExecution = (response: any): boolean => {
 export const normalizeInteractionResponse = (response: any): Array<Line> => {
   if (response == null) return [];
 
-  if (typeof response === "string") {
+  if (typeof response === 'string') {
     return [makeLine(Tag.ERROR, response)];
   }
 
-  if (typeof response !== "object") {
+  if (typeof response !== 'object') {
     return [makeLine(Tag.UNKNOWN, response)];
   }
 
   if (respIsUpdateAccount(response)) {
     const scoped = response.data.updateAccount;
     return [
-      makeLine(Tag.LOG, `Deployed Contract To: 0x${scoped.address.slice(-2)}`)
+      makeLine(Tag.LOG, `Deployed Contract To: 0x${scoped.address.slice(-2)}`),
     ];
   }
 
@@ -58,7 +58,13 @@ export const normalizeInteractionResponse = (response: any): Array<Line> => {
     const scoped = response.data.createTransactionExecution;
     const lines = [];
     for (let d of scoped.logs) lines.push(makeLine(Tag.LOG, d));
-    if (scoped.error != null) lines.push(makeLine(Tag.ERROR, scoped.error));
+    if (scoped.errors && scoped.errors.length)
+      lines.push(
+        makeLine(
+          Tag.ERROR,
+          scoped.errors.map((err: any) => err.message).join('\r\n'),
+        ),
+      );
     return lines;
   }
 
@@ -66,7 +72,13 @@ export const normalizeInteractionResponse = (response: any): Array<Line> => {
     const scoped = response.data.createScriptExecution;
     const lines = [];
     for (let d of scoped.logs) lines.push(makeLine(Tag.LOG, d));
-    if (scoped.error != null) lines.push(makeLine(Tag.ERROR, scoped.error));
+    if (scoped.errors && scoped.errors.length)
+      lines.push(
+        makeLine(
+          Tag.ERROR,
+          scoped.errors.map((err: any) => err.message).join('\r\n'),
+        ),
+      );
     if (scoped.value != null) lines.push(makeLine(Tag.VALUE, scoped.value));
     return lines;
   }
