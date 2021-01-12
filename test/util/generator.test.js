@@ -5,6 +5,7 @@ import {
   generateGetAccounts,
   generateScriptCode,
   replaceScriptTemplate,
+  getArgumentsFromTemplate,
 } from '../../src/util/generator';
 
 describe('Generator Related Unit Tests', () => {
@@ -120,7 +121,75 @@ describe('Generator Related Unit Tests', () => {
     const scriptName = 'script-01';
     const addressMapCode = generateScriptCode(template);
     const argumentsCode = generateArguments(template);
-    const generatedCode = replaceScriptTemplate(scriptName, addressMapCode, argumentsCode);
+    const generatedCode = replaceScriptTemplate(
+      scriptName,
+      addressMapCode,
+      argumentsCode,
+    );
     console.log(generatedCode);
+  });
+
+  test('should return list of arguments from script template', () => {
+    const template = `
+      pub fun main(a: Int, b: Int, recipient: Address) {
+          log("hello, Jest")
+      }
+    `;
+
+    const args = getArgumentsFromTemplate(template);
+    expect(args.length).toBe(3);
+
+    expect(args[0].name).toBe('a');
+    expect(args[1].name).toBe('b');
+    expect(args[2].name).toBe('recipient');
+
+    expect(args[0].type).toBe('Int');
+    expect(args[1].type).toBe('Int');
+    expect(args[2].type).toBe('Address');
+  });
+
+  test('should return list of arguments from transaction template', () => {
+    const template = `
+      transaction (a: Int, b: Int, recipient: Address) {
+        prepare(){
+          log("hello, Jest")
+        }
+      }
+    `;
+
+    const args = getArgumentsFromTemplate(template);
+    expect(args.length).toBe(3);
+
+    expect(args[0].name).toBe('a');
+    expect(args[1].name).toBe('b');
+    expect(args[2].name).toBe('recipient');
+
+    expect(args[0].type).toBe('Int');
+    expect(args[1].type).toBe('Int');
+    expect(args[2].type).toBe('Address');
+  });
+
+  test('should return empty list of arguments from script with no arguments', () => {
+    const template = `
+      pub fun main() {
+        log("no args here")
+      }
+    `;
+
+    const args = getArgumentsFromTemplate(template);
+    expect(args.length).toBe(0);
+  });
+
+  test('should return list of arguments from transaction with no arguments', () => {
+    const template = `
+      transaction () {
+        prepare(){
+          log("hello, Jest")
+        }
+      }
+    `;
+
+    const args = getArgumentsFromTemplate(template);
+    expect(args.length).toBe(0);
   });
 });

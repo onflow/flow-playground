@@ -1,5 +1,16 @@
 import prettier from 'prettier';
 
+export const getNameByAddress = (address: string) => {
+  const addressBook: any = {
+    '0x01': 'Alice',
+    '0x02': 'Bob',
+    '0x03': 'Charlie',
+    '0x04': 'Dave',
+  };
+
+  return addressBook[address];
+};
+
 export const getImports = (
   template: string,
 ): { name: string; address: string }[] => {
@@ -15,17 +26,6 @@ export const getImports = (
   }
 
   return result;
-};
-
-export const getNameByAddress = (address: string) => {
-  const addressBook: any = {
-    '0x01': 'Alice',
-    '0x02': 'Bob',
-    '0x03': 'Charlie',
-    '0x04': 'Dave',
-  };
-
-  return addressBook[address];
 };
 
 export const generateGetAccounts = (
@@ -68,6 +68,21 @@ export const generateScriptCode = (template: string) => {
   result += addressMapCode;
 
   return result;
+};
+
+export const getArgumentsFromTemplate = (template: string) => {
+  const pattern = /(?:transaction\s*\()(.*)(?:\)\s*\{)|(?:fun main\()(.*)(?:\)\s*\{)/g;
+  const result = pattern.exec(template);
+
+  const match = result[1] || result[2];
+  if (match) {
+    return match.split(',').map((pair) => {
+      const [name, type] = pair.replace(/\s/g, '').split(':');
+      return { name, type };
+    });
+  }
+
+  return [];
 };
 
 export const generateArguments = (template: string) => {
