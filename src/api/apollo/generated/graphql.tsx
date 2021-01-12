@@ -10,11 +10,109 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  UUID: any;
   Address: any;
   Version: any;
-  UUID: any;
   ExecutionResultValue: any;
   RawExecutionResult: any;
+};
+
+
+export type Project = {
+  __typename?: 'Project';
+  id: Scalars['UUID'];
+  publicId: Scalars['UUID'];
+  parentId?: Maybe<Scalars['UUID']>;
+  title: Scalars['String'];
+  seed: Scalars['Int'];
+  version: Scalars['Version'];
+  persist?: Maybe<Scalars['Boolean']>;
+  mutable?: Maybe<Scalars['Boolean']>;
+  accounts?: Maybe<Array<Account>>;
+  transactionTemplates?: Maybe<Array<TransactionTemplate>>;
+  transactionExecutions?: Maybe<Array<TransactionExecution>>;
+  scriptTemplates?: Maybe<Array<ScriptTemplate>>;
+  scriptExecutions?: Maybe<Array<ScriptExecution>>;
+};
+
+export type Account = {
+  __typename?: 'Account';
+  id: Scalars['UUID'];
+  address: Scalars['Address'];
+  draftCode: Scalars['String'];
+  deployedCode: Scalars['String'];
+  deployedContracts: Array<Scalars['String']>;
+  state: Scalars['String'];
+};
+
+export type TransactionTemplate = {
+  __typename?: 'TransactionTemplate';
+  id: Scalars['UUID'];
+  index: Scalars['Int'];
+  title: Scalars['String'];
+  script: Scalars['String'];
+};
+
+export type Event = {
+  __typename?: 'Event';
+  type: Scalars['String'];
+  values: Array<Scalars['String']>;
+};
+
+export type NewProjectScriptTemplate = {
+  title: Scalars['String'];
+  script: Scalars['String'];
+};
+
+export type NewScriptExecution = {
+  projectId: Scalars['UUID'];
+  script: Scalars['String'];
+  arguments?: Maybe<Array<Scalars['String']>>;
+};
+
+export type ScriptTemplate = {
+  __typename?: 'ScriptTemplate';
+  id: Scalars['UUID'];
+  index: Scalars['Int'];
+  title: Scalars['String'];
+  script: Scalars['String'];
+};
+
+export type NewProjectTransactionTemplate = {
+  title: Scalars['String'];
+  script: Scalars['String'];
+};
+
+export type UpdateProject = {
+  id: Scalars['UUID'];
+  title?: Maybe<Scalars['String']>;
+  persist?: Maybe<Scalars['Boolean']>;
+};
+
+export type NewTransactionTemplate = {
+  projectId: Scalars['UUID'];
+  title: Scalars['String'];
+  script: Scalars['String'];
+};
+
+export type NewTransactionExecution = {
+  projectId: Scalars['UUID'];
+  script: Scalars['String'];
+  signers?: Maybe<Array<Scalars['Address']>>;
+  arguments?: Maybe<Array<Scalars['String']>>;
+};
+
+export type NewScriptTemplate = {
+  projectId: Scalars['UUID'];
+  title: Scalars['String'];
+  script: Scalars['String'];
+};
+
+export type ProgramError = {
+  __typename?: 'ProgramError';
+  message: Scalars['String'];
+  startPosition?: Maybe<ProgramPosition>;
+  endPosition?: Maybe<ProgramPosition>;
 };
 
 export type ScriptExecution = {
@@ -27,11 +125,15 @@ export type ScriptExecution = {
   logs: Array<Scalars['String']>;
 };
 
-export type ProgramError = {
-  __typename?: 'ProgramError';
-  message: Scalars['String'];
-  startPosition?: Maybe<ProgramPosition>;
-  endPosition?: Maybe<ProgramPosition>;
+export type TransactionExecution = {
+  __typename?: 'TransactionExecution';
+  id: Scalars['UUID'];
+  script: Scalars['String'];
+  arguments?: Maybe<Array<Scalars['String']>>;
+  signers: Array<Account>;
+  errors?: Maybe<Array<ProgramError>>;
+  events: Array<Maybe<Event>>;
+  logs: Array<Scalars['String']>;
 };
 
 export type Query = {
@@ -39,7 +141,7 @@ export type Query = {
   account: Account;
   activeProject: Scalars['Boolean'];
   activeProjectId?: Maybe<Scalars['Int']>;
-  getResults: Array<Maybe<ExecutionResults>>;
+  cachedExecutionResults: Array<Maybe<ExecutionResults>>;
   localProject?: Maybe<Project>;
   project: Project;
   scriptTemplate: ScriptTemplate;
@@ -51,11 +153,6 @@ export type QueryAccountArgs = {
   accountId?: Maybe<Scalars['String']>;
   id: Scalars['UUID'];
   projectId: Scalars['UUID'];
-};
-
-
-export type QueryGetResultsArgs = {
-  resultType: ResultType;
 };
 
 
@@ -73,17 +170,6 @@ export type QueryScriptTemplateArgs = {
 export type QueryTransactionTemplateArgs = {
   id: Scalars['UUID'];
   projectId: Scalars['UUID'];
-};
-
-export type TransactionExecution = {
-  __typename?: 'TransactionExecution';
-  id: Scalars['UUID'];
-  script: Scalars['String'];
-  arguments?: Maybe<Array<Scalars['String']>>;
-  signers: Array<Account>;
-  errors?: Maybe<Array<ProgramError>>;
-  events: Array<Maybe<Event>>;
-  logs: Array<Scalars['String']>;
 };
 
 export type ProgramPosition = {
@@ -217,97 +303,6 @@ export type MutationUpdateScriptTemplateArgs = {
 
 export type MutationUpdateTransactionTemplateArgs = {
   input: UpdateTransactionTemplate;
-};
-
-export type Account = {
-  __typename?: 'Account';
-  id: Scalars['UUID'];
-  address: Scalars['Address'];
-  draftCode: Scalars['String'];
-  deployedCode: Scalars['String'];
-  deployedContracts: Array<Scalars['String']>;
-  state: Scalars['String'];
-};
-
-export type TransactionTemplate = {
-  __typename?: 'TransactionTemplate';
-  id: Scalars['UUID'];
-  index: Scalars['Int'];
-  title: Scalars['String'];
-  script: Scalars['String'];
-};
-
-export type Event = {
-  __typename?: 'Event';
-  type: Scalars['String'];
-  values: Array<Scalars['String']>;
-};
-
-export type NewProjectScriptTemplate = {
-  title: Scalars['String'];
-  script: Scalars['String'];
-};
-
-
-export type Project = {
-  __typename?: 'Project';
-  id: Scalars['UUID'];
-  publicId: Scalars['UUID'];
-  parentId?: Maybe<Scalars['UUID']>;
-  title: Scalars['String'];
-  seed: Scalars['Int'];
-  version: Scalars['Version'];
-  persist?: Maybe<Scalars['Boolean']>;
-  mutable?: Maybe<Scalars['Boolean']>;
-  accounts?: Maybe<Array<Account>>;
-  transactionTemplates?: Maybe<Array<TransactionTemplate>>;
-  transactionExecutions?: Maybe<Array<TransactionExecution>>;
-  scriptTemplates?: Maybe<Array<ScriptTemplate>>;
-  scriptExecutions?: Maybe<Array<ScriptExecution>>;
-};
-
-export type NewScriptExecution = {
-  projectId: Scalars['UUID'];
-  script: Scalars['String'];
-  arguments?: Maybe<Array<Scalars['String']>>;
-};
-
-export type NewTransactionTemplate = {
-  projectId: Scalars['UUID'];
-  title: Scalars['String'];
-  script: Scalars['String'];
-};
-
-export type NewTransactionExecution = {
-  projectId: Scalars['UUID'];
-  script: Scalars['String'];
-  signers?: Maybe<Array<Scalars['Address']>>;
-  arguments?: Maybe<Array<Scalars['String']>>;
-};
-
-export type NewScriptTemplate = {
-  projectId: Scalars['UUID'];
-  title: Scalars['String'];
-  script: Scalars['String'];
-};
-
-export type ScriptTemplate = {
-  __typename?: 'ScriptTemplate';
-  id: Scalars['UUID'];
-  index: Scalars['Int'];
-  title: Scalars['String'];
-  script: Scalars['String'];
-};
-
-export type NewProjectTransactionTemplate = {
-  title: Scalars['String'];
-  script: Scalars['String'];
-};
-
-export type UpdateProject = {
-  id: Scalars['UUID'];
-  title?: Maybe<Scalars['String']>;
-  persist?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -631,14 +626,12 @@ export type ExecutionResultDetailsFragment = (
   & Pick<ExecutionResult, 'timestamp' | 'tag' | 'value'>
 );
 
-export type GetExecutionResultsQueryVariables = Exact<{
-  resultType: ResultType;
-}>;
+export type GetCachedExecutionResultsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetExecutionResultsQuery = (
+export type GetCachedExecutionResultsQuery = (
   { __typename?: 'Query' }
-  & { getResults: Array<Maybe<(
+  & { cachedExecutionResults: Array<Maybe<(
     { __typename?: 'ExecutionResults' }
     & { TRANSACTION?: Maybe<Array<Maybe<(
       { __typename?: 'ExecutionResult' }
@@ -653,11 +646,125 @@ export type GetExecutionResultsQuery = (
   )>> }
 );
 
+export type GetCachedResultsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCachedResultsQuery = (
+  { __typename?: 'Query' }
+  & { cachedExecutionResults: Array<Maybe<(
+    { __typename?: 'ExecutionResults' }
+    & { TRANSACTION?: Maybe<Array<Maybe<(
+      { __typename?: 'ExecutionResult' }
+      & Pick<ExecutionResult, 'timestamp' | 'tag' | 'value' | 'label'>
+    )>>>, SCRIPT?: Maybe<Array<Maybe<(
+      { __typename?: 'ExecutionResult' }
+      & Pick<ExecutionResult, 'timestamp' | 'tag' | 'value' | 'label'>
+    )>>>, CONTRACT?: Maybe<Array<Maybe<(
+      { __typename?: 'ExecutionResult' }
+      & Pick<ExecutionResult, 'timestamp' | 'tag' | 'value' | 'label'>
+    )>>> }
+  )>> }
+);
+
+export type TxResultsFragment = (
+  { __typename?: 'ExecutionResults' }
+  & { TRANSACTION?: Maybe<Array<Maybe<(
+    { __typename?: 'ExecutionResult' }
+    & Pick<ExecutionResult, 'timestamp' | 'tag' | 'value' | 'label'>
+  )>>> }
+);
+
+export type ScriptResultsFragment = (
+  { __typename?: 'ExecutionResults' }
+  & { SCRIPT?: Maybe<Array<Maybe<(
+    { __typename?: 'ExecutionResult' }
+    & Pick<ExecutionResult, 'timestamp' | 'tag' | 'value' | 'label'>
+  )>>> }
+);
+
+export type ContractResultsFragment = (
+  { __typename?: 'ExecutionResults' }
+  & { CONTRACT?: Maybe<Array<Maybe<(
+    { __typename?: 'ExecutionResult' }
+    & Pick<ExecutionResult, 'timestamp' | 'tag' | 'value' | 'label'>
+  )>>> }
+);
+
+export type GetExecutionResultsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetExecutionResultsQuery = (
+  { __typename?: 'Query' }
+  & { cachedExecutionResults: Array<Maybe<(
+    { __typename?: 'ExecutionResults' }
+    & { TRANSACTION?: Maybe<Array<Maybe<(
+      { __typename?: 'ExecutionResult' }
+      & Pick<ExecutionResult, 'timestamp' | 'tag' | 'value' | 'label'>
+    )>>>, SCRIPT?: Maybe<Array<Maybe<(
+      { __typename?: 'ExecutionResult' }
+      & Pick<ExecutionResult, 'timestamp' | 'tag' | 'value' | 'label'>
+    )>>>, CONTRACT?: Maybe<Array<Maybe<(
+      { __typename?: 'ExecutionResult' }
+      & Pick<ExecutionResult, 'timestamp' | 'tag' | 'value' | 'label'>
+    )>>> }
+  )>> }
+);
+
+export type GetResultsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetResultsQuery = (
+  { __typename?: 'Query' }
+  & { cachedExecutionResults: Array<Maybe<(
+    { __typename?: 'ExecutionResults' }
+    & { TRANSACTION?: Maybe<Array<Maybe<(
+      { __typename?: 'ExecutionResult' }
+      & Pick<ExecutionResult, 'timestamp' | 'tag' | 'value' | 'label'>
+    )>>>, SCRIPT?: Maybe<Array<Maybe<(
+      { __typename?: 'ExecutionResult' }
+      & Pick<ExecutionResult, 'timestamp' | 'tag' | 'value' | 'label'>
+    )>>>, CONTRACT?: Maybe<Array<Maybe<(
+      { __typename?: 'ExecutionResult' }
+      & Pick<ExecutionResult, 'timestamp' | 'tag' | 'value' | 'label'>
+    )>>> }
+  )>> }
+);
+
 export const ExecutionResultDetailsFragmentDoc = gql`
     fragment ExecutionResultDetails on ExecutionResult {
   timestamp
   tag
   value
+}
+    `;
+export const TxResultsFragmentDoc = gql`
+    fragment txResults on ExecutionResults {
+  TRANSACTION {
+    timestamp
+    tag
+    value
+    label
+  }
+}
+    `;
+export const ScriptResultsFragmentDoc = gql`
+    fragment scriptResults on ExecutionResults {
+  SCRIPT {
+    timestamp
+    tag
+    value
+    label
+  }
+}
+    `;
+export const ContractResultsFragmentDoc = gql`
+    fragment contractResults on ExecutionResults {
+  CONTRACT {
+    timestamp
+    tag
+    value
+    label
+  }
 }
     `;
 export const CreateProjectDocument = gql`
@@ -1378,9 +1485,9 @@ export function useGetActiveProjectLazyQuery(baseOptions?: ApolloReactHooks.Lazy
 export type GetActiveProjectQueryHookResult = ReturnType<typeof useGetActiveProjectQuery>;
 export type GetActiveProjectLazyQueryHookResult = ReturnType<typeof useGetActiveProjectLazyQuery>;
 export type GetActiveProjectQueryResult = ApolloReactCommon.QueryResult<GetActiveProjectQuery, GetActiveProjectQueryVariables>;
-export const GetExecutionResultsDocument = gql`
-    query GetExecutionResults($resultType: ResultType!) {
-  getResults(resultType: $resultType) @client {
+export const GetCachedExecutionResultsDocument = gql`
+    query GetCachedExecutionResults {
+  cachedExecutionResults @client {
     TRANSACTION {
       ...ExecutionResultDetails
     }
@@ -1395,6 +1502,104 @@ export const GetExecutionResultsDocument = gql`
     ${ExecutionResultDetailsFragmentDoc}`;
 
 /**
+ * __useGetCachedExecutionResultsQuery__
+ *
+ * To run a query within a React component, call `useGetCachedExecutionResultsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCachedExecutionResultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCachedExecutionResultsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCachedExecutionResultsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCachedExecutionResultsQuery, GetCachedExecutionResultsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCachedExecutionResultsQuery, GetCachedExecutionResultsQueryVariables>(GetCachedExecutionResultsDocument, baseOptions);
+      }
+export function useGetCachedExecutionResultsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCachedExecutionResultsQuery, GetCachedExecutionResultsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCachedExecutionResultsQuery, GetCachedExecutionResultsQueryVariables>(GetCachedExecutionResultsDocument, baseOptions);
+        }
+export type GetCachedExecutionResultsQueryHookResult = ReturnType<typeof useGetCachedExecutionResultsQuery>;
+export type GetCachedExecutionResultsLazyQueryHookResult = ReturnType<typeof useGetCachedExecutionResultsLazyQuery>;
+export type GetCachedExecutionResultsQueryResult = ApolloReactCommon.QueryResult<GetCachedExecutionResultsQuery, GetCachedExecutionResultsQueryVariables>;
+export const GetCachedResultsDocument = gql`
+    query GetCachedResults {
+  cachedExecutionResults @client {
+    TRANSACTION {
+      timestamp
+      tag
+      value
+      label
+    }
+    SCRIPT {
+      timestamp
+      tag
+      value
+      label
+    }
+    CONTRACT {
+      timestamp
+      tag
+      value
+      label
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCachedResultsQuery__
+ *
+ * To run a query within a React component, call `useGetCachedResultsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCachedResultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCachedResultsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCachedResultsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCachedResultsQuery, GetCachedResultsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCachedResultsQuery, GetCachedResultsQueryVariables>(GetCachedResultsDocument, baseOptions);
+      }
+export function useGetCachedResultsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCachedResultsQuery, GetCachedResultsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCachedResultsQuery, GetCachedResultsQueryVariables>(GetCachedResultsDocument, baseOptions);
+        }
+export type GetCachedResultsQueryHookResult = ReturnType<typeof useGetCachedResultsQuery>;
+export type GetCachedResultsLazyQueryHookResult = ReturnType<typeof useGetCachedResultsLazyQuery>;
+export type GetCachedResultsQueryResult = ApolloReactCommon.QueryResult<GetCachedResultsQuery, GetCachedResultsQueryVariables>;
+export const GetExecutionResultsDocument = gql`
+    query GetExecutionResults {
+  cachedExecutionResults {
+    TRANSACTION {
+      timestamp
+      tag
+      value
+      label
+    }
+    SCRIPT {
+      timestamp
+      tag
+      value
+      label
+    }
+    CONTRACT {
+      timestamp
+      tag
+      value
+      label
+    }
+  }
+}
+    `;
+
+/**
  * __useGetExecutionResultsQuery__
  *
  * To run a query within a React component, call `useGetExecutionResultsQuery` and pass it any options that fit your needs.
@@ -1406,7 +1611,6 @@ export const GetExecutionResultsDocument = gql`
  * @example
  * const { data, loading, error } = useGetExecutionResultsQuery({
  *   variables: {
- *      resultType: // value for 'resultType'
  *   },
  * });
  */
@@ -1419,6 +1623,55 @@ export function useGetExecutionResultsLazyQuery(baseOptions?: ApolloReactHooks.L
 export type GetExecutionResultsQueryHookResult = ReturnType<typeof useGetExecutionResultsQuery>;
 export type GetExecutionResultsLazyQueryHookResult = ReturnType<typeof useGetExecutionResultsLazyQuery>;
 export type GetExecutionResultsQueryResult = ApolloReactCommon.QueryResult<GetExecutionResultsQuery, GetExecutionResultsQueryVariables>;
+export const GetResultsDocument = gql`
+    query GetResults {
+  cachedExecutionResults {
+    TRANSACTION {
+      timestamp
+      tag
+      value
+      label
+    }
+    SCRIPT {
+      timestamp
+      tag
+      value
+      label
+    }
+    CONTRACT {
+      timestamp
+      tag
+      value
+      label
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetResultsQuery__
+ *
+ * To run a query within a React component, call `useGetResultsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetResultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetResultsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetResultsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetResultsQuery, GetResultsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetResultsQuery, GetResultsQueryVariables>(GetResultsDocument, baseOptions);
+      }
+export function useGetResultsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetResultsQuery, GetResultsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetResultsQuery, GetResultsQueryVariables>(GetResultsDocument, baseOptions);
+        }
+export type GetResultsQueryHookResult = ReturnType<typeof useGetResultsQuery>;
+export type GetResultsLazyQueryHookResult = ReturnType<typeof useGetResultsLazyQuery>;
+export type GetResultsQueryResult = ApolloReactCommon.QueryResult<GetResultsQuery, GetResultsQueryVariables>;
 
       export interface IntrospectionResultData {
         __schema: {

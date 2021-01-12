@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 
 export const CREATE_PROJECT = gql`
   mutation CreateProject(
@@ -136,7 +136,12 @@ export const CREATE_TRANSACTION_EXECUTION = gql`
     $arguments: [String!]
   ) {
     createTransactionExecution(
-      input: { projectId: $projectId, script: $script, signers: $signers, arguments: $arguments }
+      input: {
+        projectId: $projectId
+        script: $script
+        signers: $signers
+        arguments: $arguments
+      }
     ) {
       id
       script
@@ -208,8 +213,14 @@ export const DELETE_SCRIPT_TEMPLATE = gql`
 `;
 
 export const CREATE_SCRIPT_EXECUTION = gql`
-  mutation CreateScriptExecution($projectId: UUID!, $script: String!, $arguments: [String!]) {
-    createScriptExecution(input: { projectId: $projectId, script: $script, arguments: $arguments }) {
+  mutation CreateScriptExecution(
+    $projectId: UUID!
+    $script: String!
+    $arguments: [String!]
+  ) {
+    createScriptExecution(
+      input: { projectId: $projectId, script: $script, arguments: $arguments }
+    ) {
       id
       script
       errors {

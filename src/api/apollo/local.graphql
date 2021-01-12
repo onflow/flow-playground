@@ -29,7 +29,7 @@ type Query {
   activeProject: Boolean!
   account(accountId: String): Account
   activeProjectId: Int
-  getResults(resultType: ResultType!): [ExecutionResults]!
+  cachedExecutionResults: [ExecutionResults]!
 }
 
 type Mutation {
