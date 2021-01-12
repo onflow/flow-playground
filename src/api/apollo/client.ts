@@ -7,7 +7,7 @@ import localResolvers from "./resolvers";
 
 import { ResultType } from "./generated/graphql";
 
-const api = process.env.PLAYGROUND_API
+const PLAYGROUND_API = process.env.PLAYGROUND_API
 
 const cache = new InMemoryCache();
 
@@ -15,7 +15,7 @@ const client = new ApolloClient({
   cache: cache,
   link: ApolloLink.from([
     new HttpLink({
-      uri: `${api}/query`,
+      uri: PLAYGROUND_API+'/query',
       credentials: "include",
       fetch
     })
