@@ -74,6 +74,7 @@ export const GET_CACHED_EXECUTION_RESULTS = gql`
     timestamp
     tag
     value
+    label
   }
 
   query GetCachedExecutionResults {
