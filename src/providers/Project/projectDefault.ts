@@ -186,6 +186,7 @@ export function createLocalProject(
     parentId: parentId,
     accounts: accountEntities,
     transactionTemplates: transactionTemplatesEntities,
-    scriptTemplates: scriptsTemplatesEntities
+    scriptTemplates: scriptsTemplatesEntities,
+    version: ""
   };
 }
