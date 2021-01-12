@@ -156,7 +156,7 @@ const EditorLayout: React.FC = () => {
             </a>
             <a
               style={{ display: "flex", textDecoration: "none" }}
-              href="https://onflow.readme.io/docs"
+              href="https://docs.onflow.org"
               target="_blank"
               rel="noopener"
             >

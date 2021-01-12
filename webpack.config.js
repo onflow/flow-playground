@@ -28,6 +28,7 @@ module.exports = {
       vscode: require.resolve("monaco-languageclient/lib/vscode-compatibility")
     }
   },
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -49,6 +50,7 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
     disableHostCheck: true,
     historyApiFallback: true,
+    writeToDisk: true,
     port: 3000,
   },
   plugins: [
