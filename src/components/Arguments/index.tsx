@@ -17,6 +17,7 @@ import {
   Signers,
 } from './components';
 
+
 type ArgumentsProps = {
   type: EntityType;
   list: Argument[];
@@ -95,6 +96,17 @@ const validate = (list: any, values: any) => {
 
   return result;
 };
+
+const getLabel = (resultType: ResultType, project: any, index: number) : string => {
+  return resultType === ResultType.Contract
+  ? 'Deployment'
+  : resultType === ResultType.Script
+  ? project.scriptTemplates[index].title
+  : resultType === ResultType.Transaction
+  ? project.transactionTemplates[index].title
+  : 'Interaction';
+}
+
 
 type ScriptExecution = (args?: string[]) => Promise<any>;
 type TransactionExecution = (
@@ -209,14 +221,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     // Display result in the bottom area
     setResult({
       variables: {
-        label:
-          resultType === ResultType.Contract
-            ? 'Deployment'
-            : resultType === ResultType.Script
-            ? project.scriptTemplates[active.index].title
-            : resultType === ResultType.Transaction
-            ? project.transactionTemplates[active.index].title
-            : 'Interaction',
+        label: getLabel(resultType, project, active.index),
         resultType,
         rawResult,
       },
