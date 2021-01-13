@@ -27,17 +27,43 @@ export const getImports = (
   return result;
 };
 
-export const generateGetAccounts = (
-  imports: { name: string; address: string }[],
-) => {
-  let result = imports.reduce((acc, item) => {
-    const name = getNameByAddress(item.address);
-    acc = acc + `const ${name} = await getAccountAddress("${name}")\n`;
-    return acc;
-  }, '');
-  result += '\n';
+export const getAccountCalls = (template: string) => {
+  const matches = template.match(/(?:getAccount\()(0x.*)(?:\))/g);
+  if (matches) {
+    return matches.map((item: string) => item.match(/0x[\w\d]*/g)[0]);
+  }
+  return [];
+};
 
-  return result;
+export const generateGetAccounts = (accounts: string[]) => {
+  if (accounts.length > 0) {
+    let result = accounts.reduce((acc, item) => {
+      const name = getNameByAddress(item);
+      acc = acc + `const ${name} = await getAccountAddress("${name}")\n`;
+      return acc;
+    }, '');
+    result += '\n';
+
+    return result;
+  }
+  return '';
+};
+
+export const generateCodeReplacement = (accounts: string[]) => {
+  if (accounts.length > 0) {
+    return `
+    code = code.replace(/(?:getAccount\\()(0x.*)(?:\\))/g,(_, match ) => {
+    const accounts = {
+      ${accounts
+        .map((account) => `"${account}" : ${getNameByAddress(account)}`)
+        .join('\n')}
+    }
+    return accounts[match]
+  })
+  `;
+  }
+
+  return '';
 };
 
 export const generateAddressMap = (
@@ -45,11 +71,17 @@ export const generateAddressMap = (
 ) => {
   if (addressMap.length > 0) {
     let result = '\n';
-    result = 'const addressMap = {\n';
+    result += addressMap
+      .map(
+        (item) =>
+          `const ${item.name} = await getContractAddress("${item.name}");\n`,
+      )
+      .join('');
+    result += '\n';
+    result += 'const addressMap = {\n';
     result += addressMap.reduce((acc, item, i: number) => {
       const lastItem = i === addressMap.length - 1;
-      const address = getNameByAddress(item.address);
-      return acc + `\t${item.name}: ${address}${lastItem ? '\n' : ',\n'}`;
+      return acc + `${item.name}${lastItem ? '\n' : ',\n'}`;
     }, '');
     result += '}';
 
@@ -62,12 +94,15 @@ export const getArgumentsFromTemplate = (template: string) => {
   const pattern = /(?:transaction\s*\()(.*)(?:\).*)|(?:fun main\()(.*)(?:\).*)/g;
   const result = pattern.exec(template);
 
-  const match = result[1] || result[2];
-  if (match) {
-    return match.split(',').map((pair) => {
-      const [name, type] = pair.replace(/\s/g, '').split(':');
-      return { name, type };
-    });
+  if (result){
+    const match = result[1] || result[2];
+    if (match) {
+      return match.split(',').map((pair) => {
+        const [name, type] = pair.replace(/\s/g, '').split(':');
+        return { name, type };
+      });
+    }
+    return []
   }
 
   return [];
@@ -133,6 +168,18 @@ export const generateArgumentsCode = (argumentsList: any) => {
   return '';
 };
 
+export const getSignersAmount = (template: string): number => {
+  const match = /(?:prepare.*\()(.*)(?:\)\s*)/g.exec(template)[1];
+  return match ? match.replace(/\s/g, '').split(',').length : 0;
+};
+
+export const generateSignersCode = (
+  amount: number,
+  accounts: string[],
+): string => {
+  return '';
+};
+
 /*
   Script Generation Process
   - Gather Data
@@ -157,22 +204,26 @@ export const replaceScriptTemplate = (scriptName: string, template: string) => {
   const zippedArguments = zipArguments(argumentsList);
   const argumentsCode = generateArgumentsCode(zippedArguments);
 
-  // const accounts = generateGetAccounts(imports);
   const addressMap = generateAddressMap(imports);
 
-  let result = `test("test template for ##SCRIPT-NAME##", async () => {
+  const accounts = getAccountCalls(template);
+  const accountsCode = generateGetAccounts(accounts);
+  const replacementCode = generateCodeReplacement(accounts);
+
+  let result = `test("test script template ##SCRIPT-NAME##", async () => {
       // ##ADDRESS-MAP##
       
       const code = await getScriptCode({
         name: "##SCRIPT-NAME##", 
         // ##ADDRESS-MAP-CONDITIONAL##
       });
+     
+      // ##ARGUMENTS##
       
       // ##GET-ACCOUNTS##
-      // ##ACCOUNTS-REPLACEMENT##
-      
-      // ##ARGUMENTS##
             
+      // ##CODE-REPLACEMENT##    
+        
       const result = await executeScript({
         code, 
         // ##ARGS-CONDITIONAL##
@@ -199,18 +250,104 @@ export const replaceScriptTemplate = (scriptName: string, template: string) => {
     result = result.replace(/\/\/ ##ARGS-CONDITIONAL##/, '');
   }
 
+  if (accountsCode.length > 0) {
+    result = result.replace(/\/\/ ##GET-ACCOUNTS##/, accountsCode);
+  } else {
+    result = result.replace(/\/\/ ##GET-ACCOUNTS##/, '');
+  }
+
+  if (replacementCode.length > 0) {
+    result = result.replace(/\/\/ ##CODE-REPLACEMENT##/, replacementCode);
+  } else {
+    result = result.replace(/\/\/ ##CODE-REPLACEMENT##/, '');
+  }
+
   return prettier.format(result, { parser: 'babel' });
 };
 
-export const generateTransactionCode = (template: string) => {
+export const replaceTransactionTemplate = (
+  scriptName: string,
+  template: string,
+) => {
   const imports = getImports(template);
-  const accountsCode = generateGetAccounts(imports);
-  const addressMapCode = generateAddressMap(imports);
-  // TODO: add signers, but notify user that he shall update value here
-  // TODO: generate arguments, but mention, that user shall update values
+  const argumentsList = getArgumentsFromTemplate(template);
+  const zippedArguments = zipArguments(argumentsList);
+  const argumentsCode = generateArgumentsCode(zippedArguments);
 
-  let result = '\n';
-  result += accountsCode;
-  result += addressMapCode;
-  return result;
+  const addressMap = generateAddressMap(imports);
+
+  const singersAmount = getSignersAmount(template);
+  const accounts = getAccountCalls(template);
+  const accountsCode = generateGetAccounts(accounts);
+  const replacementCode = generateCodeReplacement(accounts);
+
+  const signersCode = generateSignersCode(singersAmount, accounts);
+
+  let result = `test("test transaction template ##TX-NAME##", async () => {
+      // ##ADDRESS-MAP##
+      
+      // ##ARGUMENTS##
+      
+      const code = await getTransactionCode({
+        name: "##TX-NAME##", 
+        // ##ADDRESS-MAP-CONDITIONAL##
+      });
+      
+      // ##GET-ACCOUNTS##
+      // ##CODE-REPLACEMENT##
+
+      let txResult;
+      try {
+        txResult = await sendTransaction({
+          code,
+          // ##SIGNERS-CONDITIONAL##
+        });
+      } catch (e) {
+        console.log(e);
+      }
+      
+      // Add your expectations here
+      expect(txResult.errorMessage).toBe("");
+      
+    });
+  `.replace(/##TX-NAME##/g, scriptName);
+
+  if (addressMap.length > 0) {
+    result = result.replace(/\/\/ ##ADDRESS-MAP##/, addressMap);
+    result = result.replace(/\/\/ ##ADDRESS-MAP-CONDITIONAL##/, 'addressMap');
+  } else {
+    result = result.replace(/\/\/ ##ADDRESS-MAP##/, '');
+    result = result.replace(/\/\/ ##ADDRESS-MAP-CONDITIONAL##/, '');
+  }
+
+  if (argumentsCode.length > 0) {
+    result = result.replace(/\/\/ ##ARGUMENTS##/, argumentsCode);
+    result = result.replace(/\/\/ ##ARGS-CONDITIONAL##/, 'args');
+  } else {
+    result = result.replace(/\/\/ ##ARGUMENTS##/, '');
+    result = result.replace(/\/\/ ##ARGS-CONDITIONAL##/, '');
+  }
+
+  if (accountsCode.length > 0) {
+    result = result.replace(/\/\/ ##GET-ACCOUNTS##/, accountsCode);
+  } else {
+    result = result.replace(/\/\/ ##GET-ACCOUNTS##/, '');
+  }
+
+  if (replacementCode.length > 0) {
+    result = result.replace(/\/\/ ##CODE-REPLACEMENT##/, replacementCode);
+  } else {
+    result = result.replace(/\/\/ ##CODE-REPLACEMENT##/, '');
+  }
+
+  if (signersCode.length > 0) {
+    result = result.replace(/\/\/ ##SIGNERS##/, accountsCode);
+    result = result.replace(/\/\/ ##SIGNERS-CONDITIONAL##/, 'signers');
+  } else {
+    result = result.replace(/\/\/ ##SIGNERS##/, '');
+    result = result.replace(/\/\/ ##SIGNERS-CONDITIONAL##/, '');
+  }
+
+
+  return prettier.format(result, { parser: 'babel' });
 };

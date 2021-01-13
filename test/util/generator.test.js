@@ -7,8 +7,8 @@ import {
   replaceScriptTemplate,
   getArgumentsFromTemplate,
   zipArguments,
-  generateArgumentsCode,
-} from '../../src/util/generator';
+  generateArgumentsCode, getAccountCalls, getSignersAmount, replaceTransactionTemplate,
+} from '../../src/util/generator'
 
 describe('Generator Related Unit Tests', () => {
   test('properly zip arguments', () => {
@@ -191,9 +191,96 @@ describe('Generator Related Unit Tests', () => {
     const args = getArgumentsFromTemplate(template);
     expect(args.length).toBe(0);
   });
+
+  test('get accounts calls', () => {
+    const template = `
+      getAccount(0x01)
+      getAccount(0x02)
+    `
+    const accounts = getAccountCalls(template)
+    expect(accounts.length).toBe(2)
+    expect(accounts[0]).toBe("0x01")
+    expect(accounts[1]).toBe("0x02")
+  })
+
+  test('get no accounts calls', () => {
+    const template = `
+      log("Nothing to see here")
+    `
+    const accounts = getAccountCalls(template)
+    expect(accounts.length).toBe(0)
+  })
+
+  test('find 2 signers', ()=>{
+    const signers = getSignersAmount(`
+        prepare(acct: AuthAccount, second: AuthAccount) {}
+    `)
+
+    expect(signers).toBe(2)
+  })
+
+  test('find no signers', ()=>{
+    const signers = getSignersAmount(`
+        prepare() {}
+    `)
+
+    expect(signers).toBe(0)
+  })
 });
 
 describe("Generator - Scripts", ()=>{
+
+  test('should create proper code - basic', () => {
+    const template = `
+      pub fun main() {
+        return "Hello, Jest"
+      }
+    `;
+
+    const scriptName = 'script-01';
+    const generatedCode = replaceScriptTemplate(
+      scriptName,
+      template
+    );
+    console.log(generatedCode);
+  });
+
+  test('should create proper code - return type and getAccount call', () => {
+    const template = `
+      pub fun main(): String {
+        let Dave = getAccount(0x04)
+        return "Hello, Jest"
+      }
+    `;
+
+    const scriptName = 'script-01';
+    const generatedCode = replaceScriptTemplate(
+      scriptName,
+      template
+    );
+    console.log(generatedCode);
+  });
+
+  test('should create proper code - imports, return type and getAccount', () => {
+    const template = `
+      import First from 0x01
+      import Second from 0x02
+      import Third from 0x03
+      
+      pub fun main(): String {
+        let Dave = getAccount(0x04)
+        return "Hello, Jest"
+      }
+    `;
+
+    const scriptName = 'script-01';
+    const generatedCode = replaceScriptTemplate(
+      scriptName,
+      template
+    );
+    console.log(generatedCode);
+  });
+
   test('should create proper code for all features', () => {
     const template = `
       import First from 0x01
@@ -213,4 +300,21 @@ describe("Generator - Scripts", ()=>{
     );
     console.log(generatedCode);
   });
+})
+
+describe("Generator - Transactions", ()=>{
+  test("should create proper code - basic", ()=>{
+    const template = `
+      transaction{
+        prepare(acc: AuthAccount){}
+      }  
+    `;
+
+    const scriptName = 'tx-01';
+    const generatedCode = replaceTransactionTemplate(
+      scriptName,
+      template
+    );
+    console.log(generatedCode);
+  })
 })
