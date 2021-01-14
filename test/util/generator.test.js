@@ -7,8 +7,13 @@ import {
   replaceScriptTemplate,
   getArgumentsFromTemplate,
   zipArguments,
-  generateArgumentsCode, getAccountCalls, getSignersAmount, replaceTransactionTemplate,
-} from '../../src/util/generator'
+  generateArgumentsCode,
+  getAccountCalls,
+  getSignersAmount,
+  replaceTransactionTemplate,
+  getFullAccountList,
+  filterExisting,
+} from '../../src/util/generator';
 
 describe('Generator Related Unit Tests', () => {
   test('properly zip arguments', () => {
@@ -194,42 +199,82 @@ describe('Generator Related Unit Tests', () => {
 
   test('get accounts calls', () => {
     const template = `
-      getAccount(0x01)
       getAccount(0x02)
-    `
-    const accounts = getAccountCalls(template)
-    expect(accounts.length).toBe(2)
-    expect(accounts[0]).toBe("0x01")
-    expect(accounts[1]).toBe("0x02")
-  })
+      getAccount(0x03)
+      getAccount(0x01)
+    `;
+    const accounts = getAccountCalls(template);
+    expect(accounts.length).toBe(3);
+    expect(accounts[0]).toBe('0x01');
+    expect(accounts[1]).toBe('0x02');
+    expect(accounts[2]).toBe('0x03');
+  });
 
   test('get no accounts calls', () => {
     const template = `
       log("Nothing to see here")
-    `
-    const accounts = getAccountCalls(template)
-    expect(accounts.length).toBe(0)
-  })
+    `;
+    const accounts = getAccountCalls(template);
+    expect(accounts.length).toBe(0);
+  });
 
-  test('find 2 signers', ()=>{
+  test('find 2 signers', () => {
     const signers = getSignersAmount(`
         prepare(acct: AuthAccount, second: AuthAccount) {}
-    `)
+    `);
 
-    expect(signers).toBe(2)
-  })
+    expect(signers).toBe(2);
+  });
 
-  test('find no signers', ()=>{
+  test('find no signers', () => {
     const signers = getSignersAmount(`
         prepare() {}
-    `)
+    `);
 
-    expect(signers).toBe(0)
-  })
+    expect(signers).toBe(0);
+  });
+
+  test('filter existing accounts', () => {
+    const accounts = ['0x01', '0x03'];
+    const filtered = filterExisting(accounts);
+
+    expect(filtered.length).toBe(2);
+    expect(filtered[0]).toBe('0x02');
+    expect(filtered[1]).toBe('0x04');
+  });
+
+  test('complete list to full - no accounts, 4 signers', () => {
+    const accounts = [];
+    const signersAmount = 4;
+    const fullList = getFullAccountList(accounts, signersAmount);
+
+    expect(fullList.length).toBe(4);
+    expect(fullList[0]).toBe('0x01');
+    expect(fullList[1]).toBe('0x02');
+    expect(fullList[2]).toBe('0x03');
+    expect(fullList[3]).toBe('0x04');
+  });
+
+  test('complete list to full - more signers', () => {
+    const accounts = ['0x03'];
+    const signersAmount = 3;
+    const fullList = getFullAccountList(accounts, signersAmount);
+
+    expect(fullList.length).toBe(3);
+    expect(fullList[0]).toBe('0x01');
+    expect(fullList[1]).toBe('0x02');
+    expect(fullList[2]).toBe('0x03');
+  });
+
+  test('complete list to full - equal amount', () => {
+    const accounts = ['0x01', '0x03'];
+    const signersAmount = 2;
+    const fullList = getFullAccountList(accounts, signersAmount);
+    expect(fullList.length).toBe(2);
+  });
 });
 
-describe("Generator - Scripts", ()=>{
-
+describe('Generator - Scripts', () => {
   test('should create proper code - basic', () => {
     const template = `
       pub fun main() {
@@ -238,10 +283,7 @@ describe("Generator - Scripts", ()=>{
     `;
 
     const scriptName = 'script-01';
-    const generatedCode = replaceScriptTemplate(
-      scriptName,
-      template
-    );
+    const generatedCode = replaceScriptTemplate(scriptName, template);
     console.log(generatedCode);
   });
 
@@ -254,10 +296,7 @@ describe("Generator - Scripts", ()=>{
     `;
 
     const scriptName = 'script-01';
-    const generatedCode = replaceScriptTemplate(
-      scriptName,
-      template
-    );
+    const generatedCode = replaceScriptTemplate(scriptName, template);
     console.log(generatedCode);
   });
 
@@ -274,10 +313,7 @@ describe("Generator - Scripts", ()=>{
     `;
 
     const scriptName = 'script-01';
-    const generatedCode = replaceScriptTemplate(
-      scriptName,
-      template
-    );
+    const generatedCode = replaceScriptTemplate(scriptName, template);
     console.log(generatedCode);
   });
 
@@ -294,16 +330,46 @@ describe("Generator - Scripts", ()=>{
     `;
 
     const scriptName = 'script-01';
-    const generatedCode = replaceScriptTemplate(
-      scriptName,
-      template
-    );
+    const generatedCode = replaceScriptTemplate(scriptName, template);
     console.log(generatedCode);
   });
-})
+});
 
-describe("Generator - Transactions", ()=>{
-  test("should create proper code - basic", ()=>{
+describe('Generator - Transactions', () => {
+  test('get number of signers - zero signers', () => {
+    const template = `
+      transaction{
+        prepare(){}
+      }  
+    `;
+
+    const signersAmount = getSignersAmount(template);
+    expect(signersAmount).toBe(0);
+  });
+
+  test('get number of signers - single signer', () => {
+    const template = `
+      transaction{
+        prepare(acc: AuthAccount){}
+      }  
+    `;
+
+    const signersAmount = getSignersAmount(template);
+    expect(signersAmount).toBe(1);
+  });
+
+  test('get number of signers - two signer', () => {
+    const template = `
+      transaction{
+        prepare(first: AuthAccount, second: AuthAccount){}
+      }  
+    `;
+
+    const signersAmount = getSignersAmount(template);
+    expect(signersAmount).toBe(2);
+  });
+
+  test('should create proper code - basic', () => {
     const template = `
       transaction{
         prepare(acc: AuthAccount){}
@@ -311,10 +377,37 @@ describe("Generator - Transactions", ()=>{
     `;
 
     const scriptName = 'tx-01';
-    const generatedCode = replaceTransactionTemplate(
-      scriptName,
-      template
-    );
+    const generatedCode = replaceTransactionTemplate(scriptName, template);
     console.log(generatedCode);
-  })
-})
+  });
+
+  test('should create proper code - multiple signers', () => {
+    const template = `
+      transaction{
+        prepare(first: AuthAccount, second: AuthAccount){
+          let Alice = getAccount(0x01)
+          log(Alice)
+        }
+      }  
+    `;
+
+    const scriptName = 'tx-01';
+    const generatedCode = replaceTransactionTemplate(scriptName, template);
+    console.log(generatedCode);
+  });
+
+  test('should create proper code - multiple signers, different account call', () => {
+    const template = `
+      transaction{
+        prepare(first: AuthAccount, second: AuthAccount){
+          let Charlie = getAccount(0x03)
+          log(Charlie)
+        }
+      }  
+    `;
+
+    const scriptName = 'tx-01';
+    const generatedCode = replaceTransactionTemplate(scriptName, template);
+    console.log(generatedCode);
+  });
+});

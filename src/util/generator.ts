@@ -1,4 +1,5 @@
 import prettier from 'prettier';
+import { number } from 'vscode-jsonrpc/lib/is';
 export const getNameByAddress = (address: string) => {
   const addressBook: any = {
     '0x01': 'Alice',
@@ -30,9 +31,34 @@ export const getImports = (
 export const getAccountCalls = (template: string) => {
   const matches = template.match(/(?:getAccount\()(0x.*)(?:\))/g);
   if (matches) {
-    return matches.map((item: string) => item.match(/0x[\w\d]*/g)[0]);
+    return matches.map((item: string) => item.match(/0x[\w\d]*/g)[0]).sort();
   }
   return [];
+};
+
+export const filterExisting = (accounts: string[]): string[] => {
+  return ['0x01', '0x02', '0x03', '0x04'].filter(
+    (item) => !accounts.includes(item),
+  );
+};
+
+export const getFullAccountList = (
+  accounts: string[],
+  signersAmount?: number,
+): string[] => {
+  if (accounts.length >= signersAmount) {
+    return accounts;
+  }
+
+  const available = filterExisting(accounts);
+  const fullList = [...accounts];
+  let shift = 0;
+  while (fullList.length < signersAmount) {
+    fullList.push(available[shift]);
+    shift += 1;
+  }
+
+  return fullList.sort();
 };
 
 export const generateGetAccounts = (accounts: string[]) => {
@@ -94,7 +120,7 @@ export const getArgumentsFromTemplate = (template: string) => {
   const pattern = /(?:transaction\s*\()(.*)(?:\).*)|(?:fun main\()(.*)(?:\).*)/g;
   const result = pattern.exec(template);
 
-  if (result){
+  if (result) {
     const match = result[1] || result[2];
     if (match) {
       return match.split(',').map((pair) => {
@@ -102,7 +128,7 @@ export const getArgumentsFromTemplate = (template: string) => {
         return { name, type };
       });
     }
-    return []
+    return [];
   }
 
   return [];
@@ -177,6 +203,11 @@ export const generateSignersCode = (
   amount: number,
   accounts: string[],
 ): string => {
+  if (amount > 0) {
+    return `const signers = [${accounts
+      .map((account) => getNameByAddress(account))
+      .join(',')}]`;
+  }
   return '';
 };
 
@@ -276,12 +307,13 @@ export const replaceTransactionTemplate = (
 
   const addressMap = generateAddressMap(imports);
 
-  const singersAmount = getSignersAmount(template);
+  const signersAmount = getSignersAmount(template);
   const accounts = getAccountCalls(template);
-  const accountsCode = generateGetAccounts(accounts);
-  const replacementCode = generateCodeReplacement(accounts);
+  const fullAccountList = getFullAccountList(accounts, signersAmount)
 
-  const signersCode = generateSignersCode(singersAmount, accounts);
+  const accountsCode = generateGetAccounts(fullAccountList);
+  const replacementCode = generateCodeReplacement(accounts);
+  const signersCode = generateSignersCode(signersAmount, fullAccountList);
 
   let result = `test("test transaction template ##TX-NAME##", async () => {
       // ##ADDRESS-MAP##
@@ -294,6 +326,8 @@ export const replaceTransactionTemplate = (
       });
       
       // ##GET-ACCOUNTS##
+      // ##SIGNERS##
+      
       // ##CODE-REPLACEMENT##
 
       let txResult;
@@ -341,13 +375,12 @@ export const replaceTransactionTemplate = (
   }
 
   if (signersCode.length > 0) {
-    result = result.replace(/\/\/ ##SIGNERS##/, accountsCode);
+    result = result.replace(/\/\/ ##SIGNERS##/, signersCode);
     result = result.replace(/\/\/ ##SIGNERS-CONDITIONAL##/, 'signers');
   } else {
     result = result.replace(/\/\/ ##SIGNERS##/, '');
     result = result.replace(/\/\/ ##SIGNERS-CONDITIONAL##/, '');
   }
-
 
   return prettier.format(result, { parser: 'babel' });
 };
