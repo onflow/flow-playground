@@ -1,5 +1,6 @@
 import prettier from 'prettier';
-import { number } from 'vscode-jsonrpc/lib/is';
+import result from 'api/apollo/generated/graphql';
+
 export const getNameByAddress = (address: string) => {
   const addressBook: any = {
     '0x01': 'Alice',
@@ -38,7 +39,7 @@ export const getAccountCalls = (template: string) => {
 
 export const filterExisting = (accounts: string[]): string[] => {
   return ['0x01', '0x02', '0x03', '0x04'].filter(
-    (item) => !accounts.includes(item),
+    item => !accounts.includes(item),
   );
 };
 
@@ -81,7 +82,7 @@ export const generateCodeReplacement = (accounts: string[]) => {
     code = code.replace(/(?:getAccount\\()(0x.*)(?:\\))/g,(_, match ) => {
     const accounts = {
       ${accounts
-        .map((account) => `"${account}" : ${getNameByAddress(account)}`)
+        .map(account => `"${account}" : ${getNameByAddress(account)}`)
         .join('\n')}
     }
     return accounts[match]
@@ -99,7 +100,7 @@ export const generateAddressMap = (
     let result = '\n';
     result += addressMap
       .map(
-        (item) =>
+        item =>
           `const ${item.name} = await getContractAddress("${item.name}");\n`,
       )
       .join('');
@@ -123,7 +124,7 @@ export const getArgumentsFromTemplate = (template: string) => {
   if (result) {
     const match = result[1] || result[2];
     if (match) {
-      return match.split(',').map((pair) => {
+      return match.split(',').map(pair => {
         const [name, type] = pair.replace(/\s/g, '').split(':');
         return { name, type };
       });
@@ -205,10 +206,24 @@ export const generateSignersCode = (
 ): string => {
   if (amount > 0) {
     return `const signers = [${accounts
-      .map((account) => getNameByAddress(account))
+      .map(account => getNameByAddress(account))
       .join(',')}]`;
   }
   return '';
+};
+
+export const getContractName = (template: string) => {
+  const match = template.match(/(?:contract\s*)([\d\w]*)(?:\s*{)/);
+  if (match) {
+    return match[1];
+  }
+  return '';
+};
+
+export const generateContractTarget = (toAddress: string) => {
+  return `
+    const to = getAccountAddress("${getNameByAddress(toAddress)}")
+  `;
 };
 
 /*
@@ -309,7 +324,7 @@ export const replaceTransactionTemplate = (
 
   const signersAmount = getSignersAmount(template);
   const accounts = getAccountCalls(template);
-  const fullAccountList = getFullAccountList(accounts, signersAmount)
+  const fullAccountList = getFullAccountList(accounts, signersAmount);
 
   const accountsCode = generateGetAccounts(fullAccountList);
   const replacementCode = generateCodeReplacement(accounts);
@@ -380,6 +395,53 @@ export const replaceTransactionTemplate = (
   } else {
     result = result.replace(/\/\/ ##SIGNERS##/, '');
     result = result.replace(/\/\/ ##SIGNERS-CONDITIONAL##/, '');
+  }
+
+  return prettier.format(result, { parser: 'babel' });
+};
+
+export const replaceContractTemplate = (
+  accountAddress: string,
+  template: string,
+) => {
+  let result = `
+    test("Deploy ##CONTRACT-NAME## contract", async () => {
+      const name = "##CONTRACT-NAME##"
+      ##ADDRESS-MAP##
+      ##TARGET-ADDRESS##
+      
+      let deployContract;
+      try {
+        deployContract = await deployContractByName({
+          name, to, ##ADDRESS-MAP-CONDITIONAL##
+        });
+      } catch (e) {
+        console.log(e);
+      }
+      expect(deployContract.errorMessage).toBe("");
+    })
+  `;
+
+  const imports = getImports(template);
+  const contractName = getContractName(template);
+  const addressMap = generateAddressMap(imports);
+
+  result = result.replace(
+    /##TARGET-ADDRESS##/,
+    generateContractTarget(accountAddress),
+  );
+
+  result = result.replace(
+    /##CONTRACT-NAME##/g,
+    contractName,
+  );
+
+  if (addressMap.length > 0) {
+    result = result.replace(/##ADDRESS-MAP##/, addressMap);
+    result = result.replace(/##ADDRESS-MAP-CONDITIONAL##/, 'addressMap');
+  } else {
+    result = result.replace(/##ADDRESS-MAP##/, '');
+    result = result.replace(/##ADDRESS-MAP-CONDITIONAL##/, '');
   }
 
   return prettier.format(result, { parser: 'babel' });
