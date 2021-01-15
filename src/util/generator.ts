@@ -1,5 +1,4 @@
 import prettier from 'prettier';
-import result from 'api/apollo/generated/graphql';
 
 export const getNameByAddress = (address: string) => {
   const addressBook: any = {
