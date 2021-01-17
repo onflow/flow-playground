@@ -36,3 +36,7 @@ describe("Deployment", () => {
 
     // ##DEPLOYMENT-TESTS##
 })
+
+describe("Transactions and Scripts", () => {
+    // ##TRANSACTIONS-AND-SCRIPTS-TESTS##
+})
