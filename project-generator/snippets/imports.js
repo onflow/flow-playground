@@ -1,4 +1,5 @@
 import path from "path";
+import * as types from "@onflow/types";
 import {
     init,
     sendTransaction,
@@ -7,7 +8,6 @@ import {
 } from "flow-js-testing/dist";
 import { getScriptCode } from "flow-js-testing/dist/utils/file";
 import { executeScript } from "flow-js-testing/dist/utils/interaction";
-import { Int, Address } from "@onflow/types";
 import { getContractAddress } from "flow-js-testing/dist/utils/contract";
 import { getAccountAddress } from "flow-js-testing/dist/utils/create-account";
 
