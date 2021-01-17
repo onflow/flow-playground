@@ -1,4 +1,5 @@
 import prettier from 'prettier';
+import parserBabel from 'prettier/parser-babel';
 
 export const getNameByAddress = (address: string) => {
   const addressBook: any = {
@@ -146,7 +147,7 @@ export const getDefaultValueForType = (type: string) => {
     UInt32: 32,
     UFix64: 1.0,
     String: 'Hello',
-    Address: '0x0ae53cb6e3f42a79', // default address for FlowToken on Emulator
+    Address: `"0x0ae53cb6e3f42a79"`, // default address for FlowToken on Emulator
   };
 
   return values[type];
@@ -307,7 +308,7 @@ export const replaceScriptTemplate = (scriptName: string, template: string) => {
     result = result.replace(/\/\/ ##CODE-REPLACEMENT##/, '');
   }
 
-  return prettier.format(result, { parser: 'babel' });
+  return prettier.format(result, { parser: 'babel', plugins: [parserBabel] });
 };
 
 export const replaceTransactionTemplate = (
@@ -396,7 +397,7 @@ export const replaceTransactionTemplate = (
     result = result.replace(/\/\/ ##SIGNERS-CONDITIONAL##/, '');
   }
 
-  return prettier.format(result, { parser: 'babel' });
+  return prettier.format(result, { parser: 'babel', plugins: [parserBabel] });
 };
 
 export const replaceContractTemplate = (
@@ -430,10 +431,7 @@ export const replaceContractTemplate = (
     generateContractTarget(accountAddress),
   );
 
-  result = result.replace(
-    /##CONTRACT-NAME##/g,
-    contractName,
-  );
+  result = result.replace(/##CONTRACT-NAME##/g, contractName);
 
   if (addressMap.length > 0) {
     result = result.replace(/##ADDRESS-MAP##/, addressMap);
@@ -443,5 +441,5 @@ export const replaceContractTemplate = (
     result = result.replace(/##ADDRESS-MAP-CONDITIONAL##/, '');
   }
 
-  return prettier.format(result, { parser: 'babel' });
+  return prettier.format(result, { parser: 'babel', plugins: [parserBabel] });
 };
