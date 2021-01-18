@@ -1,9 +1,7 @@
 import {
   getImports,
   generateAddressMap,
-  generateArguments,
   generateGetAccounts,
-  generateScriptCode,
   replaceScriptTemplate,
   getArgumentsFromTemplate,
   zipArguments,
@@ -14,6 +12,7 @@ import {
   getFullAccountList,
   filterExisting,
   replaceContractTemplate,
+  getContractName,
 } from '../../src/util/generator';
 
 describe('Generator Related Unit Tests', () => {
