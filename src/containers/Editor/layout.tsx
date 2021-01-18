@@ -34,7 +34,7 @@ const FDP = [
 ];
 
 const EditorLayout: React.FC = () => {
-  const [showExport, toggleShowExport] = useState(true); // TODO: reset to false
+  const [showExport, toggleShowExport] = useState(false);
   const [showExamples, toggleShowExamples] = useState(false);
   const [projectIsPlayground, setIsPlayground] = useState(false);
 

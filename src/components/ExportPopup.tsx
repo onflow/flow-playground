@@ -10,7 +10,7 @@ import {
   SpaceBetween,
 } from 'components/Common';
 
-import { createZip } from '../util/generator';
+import { createZip, generateContractUnitTest } from '../util/generator';
 import {
   Input,
   InputBlock,
@@ -30,7 +30,14 @@ const ExportPopup: React.FC<{
 
   useEffect(() => {
     firstInput.current?.focus();
-  },[firstInput.current]);
+  }, [firstInput.current]);
+
+  const generated = generateContractUnitTest(
+    '0x01',
+    project.accounts[0].draftCode,
+  );
+
+  console.log(generated);
 
   return (
     visible && (
