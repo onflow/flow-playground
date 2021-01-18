@@ -1,0 +1,9 @@
+{{#each imports}}
+const {{name}} = await getContractAddress("{{name}}")
+{{/each}}
+
+const addressMap = {
+{{#each imports}}
+    {{name}},
+{{/each}}
+}
