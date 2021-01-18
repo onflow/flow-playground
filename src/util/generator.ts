@@ -4,6 +4,8 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { Project } from 'api/apollo/generated/graphql';
 
+import contractUnitTestTemplate from '../templates/js/contractUnitTest.hbs';
+
 export const getNameByAddress = (address: string) => {
   const addressBook: any = {
     '0x01': 'Alice',
@@ -447,24 +449,37 @@ export const replaceContractTemplate = (
   return prettier.format(result, { parser: 'babel', plugins: [parserBabel] });
 };
 
+export const generateContractUnitTest = (
+  accountAddress: string,
+  template: string,
+) => {
+  const imports = getImports(template);
+  const contractName = getContractName(template);
+
+  return contractUnitTestTemplate({
+    accountAddress,
+    contractName,
+    imports,
+  });
+};
+
 // TODO: should be replaced to "master" before merging or replaced with .env variable
 const BRANCH = 'max/export-project-as-zip';
 const GENERATOR_ROOT = `https://raw.githubusercontent.com/onflow/flow-playground/${BRANCH}/project-generator`;
 
 export const getFile = async (filename: string) => {
   const response = await fetch(`${GENERATOR_ROOT}/${filename}`);
-  const content = await response.text();
-  return content;
+  return response.text();
 };
+
 export const generateReadMe = async (id: 'string') => {
   const file = await getFile('files/README.md');
-  const readMeFile = file
+  return file
     .replace(/##PROJECT-ID##/g, `${id.toLowerCase()}`)
     .replace(
       /##PROJECT-LINK##/g,
       `https://play.onflow.org/${id.toLowerCase()}`,
     );
-  return readMeFile;
 };
 
 export const generatePackageConfig = async (projectName: string) => {
@@ -509,7 +524,11 @@ const generateTests = async (baseFolder: string, project: Project) => {
   return prettier.format(content, { parser: 'babel', plugins: [parserBabel] });
 };
 
-export const createZip = async (folderName: string, projectName: string, project: Project) => {
+export const createZip = async (
+  folderName: string,
+  projectName: string,
+  project: Project,
+) => {
   const zip = new JSZip();
 
   // Create setup files
