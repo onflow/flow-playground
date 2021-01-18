@@ -1,5 +1,8 @@
 import prettier from 'prettier';
 import parserBabel from 'prettier/parser-babel';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
+import { Project } from 'api/apollo/generated/graphql';
 
 export const getNameByAddress = (address: string) => {
   const addressBook: any = {
@@ -39,7 +42,7 @@ export const getAccountCalls = (template: string) => {
 
 export const filterExisting = (accounts: string[]): string[] => {
   return ['0x01', '0x02', '0x03', '0x04'].filter(
-    item => !accounts.includes(item),
+    (item) => !accounts.includes(item),
   );
 };
 
@@ -82,7 +85,7 @@ export const generateCodeReplacement = (accounts: string[]) => {
     code = code.replace(/(?:getAccount\\()(0x.*)(?:\\))/g,(_, match ) => {
     const accounts = {
       ${accounts
-        .map(account => `"${account}" : ${getNameByAddress(account)}`)
+        .map((account) => `"${account}" : ${getNameByAddress(account)}`)
         .join('\n')}
     }
     return accounts[match]
@@ -100,7 +103,7 @@ export const generateAddressMap = (
     let result = '\n';
     result += addressMap
       .map(
-        item =>
+        (item) =>
           `const ${item.name} = await getContractAddress("${item.name}");\n`,
       )
       .join('');
@@ -124,7 +127,7 @@ export const getArgumentsFromTemplate = (template: string) => {
   if (result) {
     const match = result[1] || result[2];
     if (match) {
-      return match.split(',').map(pair => {
+      return match.split(',').map((pair) => {
         const [name, type] = pair.replace(/\s/g, '').split(':');
         return { name, type };
       });
@@ -206,7 +209,7 @@ export const generateSignersCode = (
 ): string => {
   if (amount > 0) {
     return `const signers = [${accounts
-      .map(account => getNameByAddress(account))
+      .map((account) => getNameByAddress(account))
       .join(',')}]`;
   }
   return '';
@@ -442,4 +445,112 @@ export const replaceContractTemplate = (
   }
 
   return prettier.format(result, { parser: 'babel', plugins: [parserBabel] });
+};
+
+// TODO: should be replaced to "master" before merging or replaced with .env variable
+const BRANCH = 'max/export-project-as-zip';
+const GENERATOR_ROOT = `https://raw.githubusercontent.com/onflow/flow-playground/${BRANCH}/project-generator`;
+
+export const getFile = async (filename: string) => {
+  const response = await fetch(`${GENERATOR_ROOT}/${filename}`);
+  const content = await response.text();
+  return content;
+};
+export const generateReadMe = async (id: 'string') => {
+  const file = await getFile('files/README.md');
+  const readMeFile = file
+    .replace(/##PROJECT-ID##/g, `${id.toLowerCase()}`)
+    .replace(
+      /##PROJECT-LINK##/g,
+      `https://play.onflow.org/${id.toLowerCase()}`,
+    );
+  return readMeFile;
+};
+
+export const generatePackageConfig = async (projectName: string) => {
+  const file = await getFile('files/package.json');
+  const config = file.replace(/##PROJECT-NAME##/g, projectName.toLowerCase());
+  return config;
+};
+
+const generateTests = async (baseFolder: string, project: Project) => {
+  const base = await getFile('snippets/imports.js');
+  let content = base.replace(/##BASE-FOLDER##/, baseFolder);
+
+  let deploymentTests = '';
+  for (let i = 0; i < project.accounts.length; i++) {
+    const account = project.accounts[i];
+    const address = `0x0${account.address.slice(-1)}`;
+    const code = account.draftCode;
+    const unitTest = replaceContractTemplate(address, code);
+    deploymentTests += unitTest;
+    deploymentTests += '\n';
+  }
+  content = content.replace(/\/\/ ##DEPLOYMENT-TESTS##/, deploymentTests);
+
+  let executionTests = '';
+  for (let i = 0; i < project.transactionTemplates.length; i++) {
+    const tx = project.transactionTemplates[i];
+    const unitTest = replaceTransactionTemplate(tx.title, tx.script);
+    executionTests += unitTest;
+    executionTests += '\n';
+  }
+
+  for (let i = 0; i < project.scriptTemplates.length; i++) {
+    const script = project.scriptTemplates[i];
+    const unitTest = replaceScriptTemplate(script.title, script.script);
+    executionTests += unitTest;
+    executionTests += '\n';
+  }
+  content = content.replace(
+    /\/\/ ##TRANSACTIONS-AND-SCRIPTS-TESTS##/,
+    executionTests,
+  );
+  return prettier.format(content, { parser: 'babel', plugins: [parserBabel] });
+};
+
+export const createZip = async (folderName: string, projectName: string, project: Project) => {
+  const zip = new JSZip();
+
+  // Create setup files
+  const readMeFile = await generateReadMe(project.id);
+  const packageConfig = await generatePackageConfig(
+    `playground-project-${project.id.toLowerCase()}`,
+  );
+  const babelConfig = await getFile('files/babel.config.json');
+  const jestConfig = await getFile('files/package.json');
+  const testFile = await generateTests(folderName, project);
+
+  zip.file('test/README.md', readMeFile);
+  zip.file('test/package.json', packageConfig);
+  zip.file('test/babel.config.json', babelConfig);
+  zip.file('test/jest.config.json', jestConfig);
+  zip.file('test/index.test.js', testFile);
+
+  const { accounts, transactionTemplates, scriptTemplates } = project;
+
+  for (let i = 0; i < accounts.length; i++) {
+    const account = accounts[i];
+    const name = getContractName(account.draftCode);
+    const fileName = `cadence/contracts/${name}.cdc`;
+    zip.file(fileName, account.draftCode);
+  }
+
+  for (let i = 0; i < transactionTemplates.length; i++) {
+    const template = transactionTemplates[i];
+    const name = template.title;
+    const fileName = `cadence/transactions/${name}.cdc`;
+    zip.file(fileName, template.script);
+  }
+
+  for (let i = 0; i < scriptTemplates.length; i++) {
+    const template = scriptTemplates[i];
+    const name = template.title;
+    const fileName = `cadence/scripts/${name}.cdc`;
+    zip.file(fileName, template.script);
+  }
+
+  // Save everything as ZIP
+  const projectFile = await zip.generateAsync({ type: 'blob' });
+  saveAs(projectFile, `${projectName}.zip`);
 };

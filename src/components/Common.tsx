@@ -35,10 +35,10 @@ export const PopupContainer = styled.div<PopupContainerProps>`
   width: ${({ width }) => width};
   max-width: 30%;
   flex-direction: column;
-  padding: 10px;
+  padding: 20px;
   border-radius: 6px;
   background-color: white;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1), 0 0 3px 1px rgba(0,0,0,0.05);
   z-index: 2;
   box-sizing: border-box;
 `;
@@ -46,12 +46,23 @@ export const PopupContainer = styled.div<PopupContainerProps>`
 interface CommonProps {
   mb?: string;
   color?: string;
+  lineColor?: string;
 }
 
 export const PopupHeader = styled.h3<CommonProps>`
   font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
   color: ${({ color = 'inherit' }) => color};
   margin-bottom: ${({ mb = '0' }) => mb};
+  :after{
+    content: "";
+    display: block;
+    height: 3px;
+    width: 16px;
+    background-color: ${({lineColor = "currentColor"}) => lineColor};
+    margin-top: 4px;
+  }
 `;
 
 export const SpaceBetween = styled.div<CommonProps>`
@@ -59,4 +70,11 @@ export const SpaceBetween = styled.div<CommonProps>`
   width: 100%;
   justify-content: space-between;
   margin-bottom: ${({ mb = '0' }) => mb};
+`;
+
+export const Separator = styled.div`
+  width: 2px;
+  height: 30px;
+  background-color: #ccc;
+  margin: 0 16px;
 `;
