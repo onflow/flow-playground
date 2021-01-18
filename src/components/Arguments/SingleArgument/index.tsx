@@ -1,6 +1,6 @@
 import React from "react";
 import { Argument } from "components/Arguments/types";
-import { Container, Input, Label, Type, Error } from "./styles";
+import { InputBlock, Input, Label, Type, Error } from "./styles";
 
 type SingleArgumentProps = {
   argument: Argument,
@@ -11,7 +11,7 @@ type SingleArgumentProps = {
 const SingleArgument: React.FC<SingleArgumentProps> = ({ argument, error, onChange }) => {
   const {name, type} = argument
   return (
-    <Container>
+    <InputBlock>
       <Label>
         {name}
         <Type>{type}</Type>
@@ -21,7 +21,7 @@ const SingleArgument: React.FC<SingleArgumentProps> = ({ argument, error, onChan
         onChange(name,value)
       }}/>
       {error && <Error>{error}</Error>}
-    </Container>
+    </InputBlock>
   )
 }
 

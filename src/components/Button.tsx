@@ -13,6 +13,11 @@ interface StyledButtonProps {
 }
 
 const StyledButton: React.FC<StyledButtonProps> = styled(ThemedButton)`
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
   @keyframes rotating {
     from {
       transform: rotate(0deg);
@@ -29,7 +34,23 @@ const StyledButton: React.FC<StyledButtonProps> = styled(ThemedButton)`
   .loading {
     animation: rotating 0.5s linear infinite;
   }
+  
+  &.violet{
+    background-color: #BDC4F4;
+    color: #575E89;
+  }
 
+  &.grey{
+    background-color: #EDEDED;
+    color: #696969;
+  }
+
+  &.modal{
+    width: 100px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
   display: flex;
   align-items: center;
   
