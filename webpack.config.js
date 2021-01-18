@@ -42,6 +42,14 @@ module.exports = {
       {
         test: /\.ttf$/,
         use: ["file-loader"]
+      },
+      { test: /\.hbs$/,
+        loader: "handlebars-loader",
+        options: {
+          knownHelpersOnly: false,
+          partialDirs: [path.join(__dirname, './src/templates/partials')],
+          helperDirs: [path.join(__dirname, './src/templates/helpers')],
+        },
       }
     ]
   },
