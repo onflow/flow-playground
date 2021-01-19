@@ -3,7 +3,7 @@ name: Sync Labels
 on:
   push:
     branches:
-      - sync-labels2
+      - sync-labels
     paths:
       - .github/labels.yml
 
