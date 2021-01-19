@@ -1,0 +1,6 @@
+{{#if accounts ~}}
+    // Import participating accounts
+    {{#each accounts ~}}
+        const {{this}} = getAccountAddress("{{this}}")
+    {{/each}}
+{{/if}}

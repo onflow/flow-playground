@@ -1,19 +1,19 @@
 test("Deploy {{contractName}} contract", async () => {
     const name = "{{contractName}}"
-    {{addressMapFrom imports}}
+    const to = getAccountAddress("{{getNameByAddress accountAddress}}")
 
-    const to = getAccountAddress({{getNameByAddress accountAddress}})
+    {{>addressMap imports=imports}}
 
-    let deployContract;
+    let result;
     try {
-        deployContract = await deployContractByName({
+        result = await deployContractByName({
         name,
         to,
-        {{conditionalAddressMap imports}}
+        {{#if imports}}addressMap{{/if}}
     });
     } catch (e) {
         console.log(e);
     }
 
-    expect(deployContract.errorMessage).toBe("");
+    expect(result.errorMessage).toBe("");
 })

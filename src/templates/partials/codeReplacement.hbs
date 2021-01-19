@@ -1,0 +1,11 @@
+{{#if accounts ~}}
+    // pass corrected addressed to getAccount calls
+    code = code.replace(/(?:getAccount\\()(0x.*)(?:\\))/g,(_, match ) => {
+        const accounts = {
+            {{#each accounts}}
+                "{{this}}" : {{getNameByAddress this}},
+            {{/each}}
+        }
+        return accounts[match]
+    })
+{{/if}}
