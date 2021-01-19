@@ -3,10 +3,9 @@ name: Sync Labels
 on:
   push:
     branches:
-      - sync-labels
+      - master
     paths:
       - .github/labels.yml
-      - .github/workflows/sync-labels.yml
 
 jobs:
   build:
