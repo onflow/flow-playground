@@ -28,6 +28,7 @@ module.exports = {
       vscode: require.resolve("monaco-languageclient/lib/vscode-compatibility")
     }
   },
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -57,6 +58,7 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
     disableHostCheck: true,
     historyApiFallback: true,
+    writeToDisk: true,
     port: 3000,
   },
   plugins: [
@@ -77,7 +79,7 @@ module.exports = {
       },
     }),
     new webpack.EnvironmentPlugin([
-      'GRAPHQL_API',
+      'PLAYGROUND_API',
       'GA_TRACKING_CODE',
       'MIXPANEL_TOKEN',
       'DEFAULT_SEO_IMAGE',

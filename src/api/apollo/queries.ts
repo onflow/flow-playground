@@ -1,5 +1,4 @@
-import gql from "graphql-tag";
-import { ResultType } from "./generated/graphql";
+import gql from 'graphql-tag';
 
 export const GET_PROJECT = gql`
   query GetProject($projectId: UUID!) {
@@ -70,15 +69,16 @@ export const GET_ACTIVE_PROJECT = gql`
   }
 `;
 
-export const GET_EXECUTION_RESULTS = gql`
+export const GET_CACHED_EXECUTION_RESULTS = gql`
   fragment ExecutionResultDetails on ExecutionResult {
     timestamp
     tag
     value
+    label
   }
 
-  query GetExecutionResults($resultType: ResultType!) {
-    getResults(resultType: $resultType) @client {
+  query GetCachedExecutionResults {
+    cachedExecutionResults @client {
       TRANSACTION {
         ...ExecutionResultDetails
       }
@@ -91,17 +91,3 @@ export const GET_EXECUTION_RESULTS = gql`
     }
   }
 `;
-
-export const getExecutionResultsByType = (resultType: ResultType) => {
-  return gql` query GetResults {
-    executionResults @client {
-      ${resultType} {
-        timestamp
-        tag
-        value
-        label
-      }
-    }
-  }
-`;
-};

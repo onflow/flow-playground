@@ -13,42 +13,42 @@ const examples = [
     subtitle:
       "Learn how to use smart contracts, switch accounts, and view account state.",
     emoji: "🏃",
-    link: "https://docs.onflow.org/tutorial/cadence/01-first-steps/"
+    link: "https://docs.onflow.org/cadence/tutorial/01-first-steps/"
   },
   {
     title: "Hello, World!",
     subtitle:
       "Write your first contract on Flow. This is the perfect place to start to get the hang of the fundamentals of Cadence.",
     emoji: "🌎",
-    link: "https://docs.onflow.org/tutorial/cadence/02-hello-world/"
+    link: "https://docs.onflow.org/cadence/tutorial/02-hello-world/"
   },
   {
     title: "Mint Fungible Tokens",
     subtitle:
       "Create and sell digital assets of your own in this tutorial! This tutorial will teach you the basics of creating, storing, and moving digital assets and tokens.",
     emoji: "💸",
-    link: "https://docs.onflow.org/tutorial/cadence/03-fungible-tokens/"
+    link: "https://docs.onflow.org/cadence/tutorial/03-fungible-tokens/"
   },
   {
     title: "Create Non-Fungible Tokens",
     subtitle:
       "Create and shape your own unique digital objects. Here you’ll learn what really makes blockchains magic - the ability for unique items to be created, shared, and stored forever.",
     emoji: "😺",
-    link: "https://docs.onflow.org/tutorial/cadence/04-non-fungible-tokens/"
+    link: "https://docs.onflow.org/cadence/tutorial/04-non-fungible-tokens/"
   },
   {
     title: "Build a Marketplace",
     subtitle:
       "Put it all together in a marketplace! This tutorial will teach you how to turn all the concepts you’ve learned into a place for people to share their creations with the community.",
     emoji: "🤝",
-    link: "https://docs.onflow.org/tutorial/cadence/05-marketplace-setup/"
+    link: "https://docs.onflow.org/cadence/tutorial/05-marketplace-setup/"
   },
   {
     title: "Expand Non-Fungible Tokens",
     subtitle:
       "This tutorial is for the brave and the bold, an opportunity to discover what resources make possible - resources owning other resources. If you can imagine it, you can create it.",
     emoji: "🤠",
-    link: "https://docs.onflow.org/tutorial/cadence/07-resources-compose/"
+    link: "https://docs.onflow.org/cadence/tutorial/07-resources-compose/"
   }
 ];
 

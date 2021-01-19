@@ -29,15 +29,15 @@ type Query {
   activeProject: Boolean!
   account(accountId: String): Account
   activeProjectId: Int
-  getResults(resultType: ResultType!): [ExecutionResults]!
+  cachedExecutionResults: [ExecutionResults]!
 }
 
 type Mutation {
   setActiveProjectId(id: Int): Boolean
-  updateResults(
+  updateCachedExecutionResults(
     resultType: ResultType!
     rawResult: RawExecutionResult!
     label: String
   ): Boolean
-  clearResults(resultType: ResultType!): Boolean
+  clearCachedExecutionResults(resultType: ResultType!): Boolean
 }
