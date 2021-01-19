@@ -5,6 +5,13 @@ import { saveAs } from 'file-saver';
 import { Project } from 'api/apollo/generated/graphql';
 
 import contractUnitTestTemplate from '../templates/js/contractUnitTest.hbs';
+import transactionUnitTestTemplate from '../templates/js/transactionUnitTest.hbs';
+import scriptUnitTestTemplate from '../templates/js/scriptUnitTest.hbs';
+import testSuit from '../templates/js/testSuit.hbs';
+
+export const prettify = (code: string): string => {
+  return prettier.format(code, { parser: 'babel', plugins: [parserBabel] });
+};
 
 export const getNameByAddress = (address: string) => {
   const addressBook: any = {
@@ -67,60 +74,6 @@ export const getFullAccountList = (
   return fullList.sort();
 };
 
-export const generateGetAccounts = (accounts: string[]) => {
-  if (accounts.length > 0) {
-    let result = accounts.reduce((acc, item) => {
-      const name = getNameByAddress(item);
-      acc = acc + `const ${name} = await getAccountAddress("${name}")\n`;
-      return acc;
-    }, '');
-    result += '\n';
-
-    return result;
-  }
-  return '';
-};
-
-export const generateCodeReplacement = (accounts: string[]) => {
-  if (accounts.length > 0) {
-    return `
-    code = code.replace(/(?:getAccount\\()(0x.*)(?:\\))/g,(_, match ) => {
-    const accounts = {
-      ${accounts
-        .map((account) => `"${account}" : ${getNameByAddress(account)}`)
-        .join('\n')}
-    }
-    return accounts[match]
-  })
-  `;
-  }
-
-  return '';
-};
-
-export const generateAddressMap = (
-  addressMap: { name: string; address: string }[],
-) => {
-  if (addressMap.length > 0) {
-    let result = '\n';
-    result += addressMap
-      .map(
-        (item) =>
-          `const ${item.name} = await getContractAddress("${item.name}");\n`,
-      )
-      .join('');
-    result += '\n';
-    result += 'const addressMap = {\n';
-    result += addressMap.reduce((acc, item, i: number) => {
-      const lastItem = i === addressMap.length - 1;
-      return acc + `${item.name}${lastItem ? '\n' : ',\n'}`;
-    }, '');
-    result += '}';
-
-    return result;
-  }
-  return '';
-};
 
 export const getArgumentsFromTemplate = (template: string) => {
   const pattern = /(?:transaction\s*\()(.*)(?:\).*)|(?:fun main\()(.*)(?:\).*)/g;
@@ -141,21 +94,40 @@ export const getArgumentsFromTemplate = (template: string) => {
 };
 
 export const getDefaultValueForType = (type: string) => {
-  const values: { [index: string]: number | string } = {
-    Int: 1337,
+  const values: { [index: string]: number | string | boolean } = {
+    Address: `0x0ae53cb6e3f42a79`, // default address for FlowToken on Emulator
+
+    Bool: true,
+
+    Character: 'a',
+    String: 'Hello',
+
     Int8: 8,
     Int16: 16,
     Int32: 32,
-    UInt: 1337,
+    Int64: 64,
+    Int128: 128,
+    Int256: 256,
+
     UInt8: 8,
     UInt16: 16,
     UInt32: 32,
-    UFix64: 1.0,
-    String: 'Hello',
-    Address: `"0x0ae53cb6e3f42a79"`, // default address for FlowToken on Emulator
+    UInt64: 64,
+    UInt128: 128,
+    UInt256: 256,
+
+    Word8: 8,
+    Word16: 16,
+    Word32: 32,
+    Word64: 64,
+    Word128: 128,
+    Word256: 256,
+
+    Fix64: '64.0',
+    UFix64: '64.0',
   };
 
-  return values[type];
+  return values[type] || 'Unsupported';
 };
 
 export const zipArguments = (
@@ -187,35 +159,11 @@ export const zipArguments = (
   );
 };
 
-export const generateArgumentsCode = (argumentsList: any) => {
-  if (argumentsList.length > 0) {
-    let result = `const args = [
-      ${argumentsList.map((item: { values: any[]; type: string }) => {
-        return `[${item.values.join(',')}, types.${item.type}]`;
-      })}
-    ]`;
-    return result;
-  }
-
-  return '';
-};
-
 export const getSignersAmount = (template: string): number => {
   const match = /(?:prepare.*\()(.*)(?:\)\s*)/g.exec(template)[1];
   return match ? match.replace(/\s/g, '').split(',').length : 0;
 };
 
-export const generateSignersCode = (
-  amount: number,
-  accounts: string[],
-): string => {
-  if (amount > 0) {
-    return `const signers = [${accounts
-      .map((account) => getNameByAddress(account))
-      .join(',')}]`;
-  }
-  return '';
-};
 
 export const getContractName = (template: string) => {
   const match = template.match(/(?:contract\s*)([\d\w]*)(?:\s*{)/);
@@ -231,224 +179,6 @@ export const generateContractTarget = (toAddress: string) => {
   `;
 };
 
-/*
-  Script Generation Process
-  - Gather Data
-    - get list of imports
-    - get list of arguments
-    - get expected result type
-    - get list of "getAccount" calls, then add new addressed to account list
-
-  - Generate Code
-    - generate getContractAddress($name) from list of imports
-    - generate "getAccountAddress($name)" calls from account list
-    - generate argument creation from list of arguments
-      - provide meaningful default values
-      - add comment that those values shall be updated
-    - generate "executeScript" call
-    - generate basic expectancy test (no errors)
-    - generate mockup expectancy test based on result type
-* */
-export const replaceScriptTemplate = (scriptName: string, template: string) => {
-  const imports = getImports(template);
-  const argumentsList = getArgumentsFromTemplate(template);
-  const zippedArguments = zipArguments(argumentsList);
-  const argumentsCode = generateArgumentsCode(zippedArguments);
-
-  const addressMap = generateAddressMap(imports);
-
-  const accounts = getAccountCalls(template);
-  const accountsCode = generateGetAccounts(accounts);
-  const replacementCode = generateCodeReplacement(accounts);
-
-  let result = `test("test script template ##SCRIPT-NAME##", async () => {
-      // ##ADDRESS-MAP##
-      
-      const code = await getScriptCode({
-        name: "##SCRIPT-NAME##", 
-        // ##ADDRESS-MAP-CONDITIONAL##
-      });
-     
-      // ##ARGUMENTS##
-      
-      // ##GET-ACCOUNTS##
-            
-      // ##CODE-REPLACEMENT##    
-        
-      const result = await executeScript({
-        code, 
-        // ##ARGS-CONDITIONAL##
-      });
-      
-      // Add your expectations here
-      expect().toBe();
-    });
-  `.replace(/##SCRIPT-NAME##/g, scriptName);
-
-  if (addressMap.length > 0) {
-    result = result.replace(/\/\/ ##ADDRESS-MAP##/, addressMap);
-    result = result.replace(/\/\/ ##ADDRESS-MAP-CONDITIONAL##/, 'addressMap');
-  } else {
-    result = result.replace(/\/\/ ##ADDRESS-MAP##/, '');
-    result = result.replace(/\/\/ ##ADDRESS-MAP-CONDITIONAL##/, '');
-  }
-
-  if (argumentsCode.length > 0) {
-    result = result.replace(/\/\/ ##ARGUMENTS##/, argumentsCode);
-    result = result.replace(/\/\/ ##ARGS-CONDITIONAL##/, 'args');
-  } else {
-    result = result.replace(/\/\/ ##ARGUMENTS##/, '');
-    result = result.replace(/\/\/ ##ARGS-CONDITIONAL##/, '');
-  }
-
-  if (accountsCode.length > 0) {
-    result = result.replace(/\/\/ ##GET-ACCOUNTS##/, accountsCode);
-  } else {
-    result = result.replace(/\/\/ ##GET-ACCOUNTS##/, '');
-  }
-
-  if (replacementCode.length > 0) {
-    result = result.replace(/\/\/ ##CODE-REPLACEMENT##/, replacementCode);
-  } else {
-    result = result.replace(/\/\/ ##CODE-REPLACEMENT##/, '');
-  }
-
-  return prettier.format(result, { parser: 'babel', plugins: [parserBabel] });
-};
-
-export const replaceTransactionTemplate = (
-  scriptName: string,
-  template: string,
-) => {
-  const imports = getImports(template);
-  const argumentsList = getArgumentsFromTemplate(template);
-  const zippedArguments = zipArguments(argumentsList);
-  const argumentsCode = generateArgumentsCode(zippedArguments);
-
-  const addressMap = generateAddressMap(imports);
-
-  const signersAmount = getSignersAmount(template);
-  const accounts = getAccountCalls(template);
-  const fullAccountList = getFullAccountList(accounts, signersAmount);
-
-  const accountsCode = generateGetAccounts(fullAccountList);
-  const replacementCode = generateCodeReplacement(accounts);
-  const signersCode = generateSignersCode(signersAmount, fullAccountList);
-
-  let result = `test("test transaction template ##TX-NAME##", async () => {
-      // ##ADDRESS-MAP##
-      
-      // ##ARGUMENTS##
-      
-      const code = await getTransactionCode({
-        name: "##TX-NAME##", 
-        // ##ADDRESS-MAP-CONDITIONAL##
-      });
-      
-      // ##GET-ACCOUNTS##
-      // ##SIGNERS##
-      
-      // ##CODE-REPLACEMENT##
-
-      let txResult;
-      try {
-        txResult = await sendTransaction({
-          code,
-          // ##SIGNERS-CONDITIONAL##
-        });
-      } catch (e) {
-        console.log(e);
-      }
-      
-      // Add your expectations here
-      expect(txResult.errorMessage).toBe("");
-      
-    });
-  `.replace(/##TX-NAME##/g, scriptName);
-
-  if (addressMap.length > 0) {
-    result = result.replace(/\/\/ ##ADDRESS-MAP##/, addressMap);
-    result = result.replace(/\/\/ ##ADDRESS-MAP-CONDITIONAL##/, 'addressMap');
-  } else {
-    result = result.replace(/\/\/ ##ADDRESS-MAP##/, '');
-    result = result.replace(/\/\/ ##ADDRESS-MAP-CONDITIONAL##/, '');
-  }
-
-  if (argumentsCode.length > 0) {
-    result = result.replace(/\/\/ ##ARGUMENTS##/, argumentsCode);
-    result = result.replace(/\/\/ ##ARGS-CONDITIONAL##/, 'args');
-  } else {
-    result = result.replace(/\/\/ ##ARGUMENTS##/, '');
-    result = result.replace(/\/\/ ##ARGS-CONDITIONAL##/, '');
-  }
-
-  if (accountsCode.length > 0) {
-    result = result.replace(/\/\/ ##GET-ACCOUNTS##/, accountsCode);
-  } else {
-    result = result.replace(/\/\/ ##GET-ACCOUNTS##/, '');
-  }
-
-  if (replacementCode.length > 0) {
-    result = result.replace(/\/\/ ##CODE-REPLACEMENT##/, replacementCode);
-  } else {
-    result = result.replace(/\/\/ ##CODE-REPLACEMENT##/, '');
-  }
-
-  if (signersCode.length > 0) {
-    result = result.replace(/\/\/ ##SIGNERS##/, signersCode);
-    result = result.replace(/\/\/ ##SIGNERS-CONDITIONAL##/, 'signers');
-  } else {
-    result = result.replace(/\/\/ ##SIGNERS##/, '');
-    result = result.replace(/\/\/ ##SIGNERS-CONDITIONAL##/, '');
-  }
-
-  return prettier.format(result, { parser: 'babel', plugins: [parserBabel] });
-};
-
-export const replaceContractTemplate = (
-  accountAddress: string,
-  template: string,
-) => {
-  let result = `
-    test("Deploy ##CONTRACT-NAME## contract", async () => {
-      const name = "##CONTRACT-NAME##"
-      ##ADDRESS-MAP##
-      ##TARGET-ADDRESS##
-      
-      let deployContract;
-      try {
-        deployContract = await deployContractByName({
-          name, to, ##ADDRESS-MAP-CONDITIONAL##
-        });
-      } catch (e) {
-        console.log(e);
-      }
-      expect(deployContract.errorMessage).toBe("");
-    })
-  `;
-
-  const imports = getImports(template);
-  const contractName = getContractName(template);
-  const addressMap = generateAddressMap(imports);
-
-  result = result.replace(
-    /##TARGET-ADDRESS##/,
-    generateContractTarget(accountAddress),
-  );
-
-  result = result.replace(/##CONTRACT-NAME##/g, contractName);
-
-  if (addressMap.length > 0) {
-    result = result.replace(/##ADDRESS-MAP##/, addressMap);
-    result = result.replace(/##ADDRESS-MAP-CONDITIONAL##/, 'addressMap');
-  } else {
-    result = result.replace(/##ADDRESS-MAP##/, '');
-    result = result.replace(/##ADDRESS-MAP-CONDITIONAL##/, '');
-  }
-
-  return prettier.format(result, { parser: 'babel', plugins: [parserBabel] });
-};
-
 export const generateContractUnitTest = (
   accountAddress: string,
   template: string,
@@ -456,14 +186,60 @@ export const generateContractUnitTest = (
   const imports = getImports(template);
   const contractName = getContractName(template);
 
-  return contractUnitTestTemplate({
+  const unitTest = contractUnitTestTemplate({
     accountAddress,
     contractName,
     imports,
   });
+
+  return prettify(unitTest);
+};
+export const generateTransactionUnitTest = (name: string, template: string) => {
+  const imports = getImports(template);
+  const argumentsList = getArgumentsFromTemplate(template);
+  const zippedArguments = zipArguments(argumentsList);
+
+  const signersAmount = getSignersAmount(template);
+  const accountCalls = getAccountCalls(template);
+  const fullAccountList = getFullAccountList(accountCalls, signersAmount);
+  const accounts = fullAccountList.map((item) => getNameByAddress(item));
+  const signers = accounts.slice(0, signersAmount);
+
+  const code = transactionUnitTestTemplate({
+    name,
+    imports,
+    signers,
+    accounts,
+    accountCalls,
+    arguments: zippedArguments,
+  });
+
+  return prettify(code);
+};
+export const generateScriptUnitTest = (
+  name: string,
+  template: string,
+): string => {
+  const imports = getImports(template);
+  const argumentsList = getArgumentsFromTemplate(template);
+  const zippedArguments = zipArguments(argumentsList);
+
+  const accountCalls = getAccountCalls(template);
+  const accounts = accountCalls.map((item) => getNameByAddress(item));
+
+  const code = scriptUnitTestTemplate({
+    name,
+    imports,
+    arguments: zippedArguments,
+    accounts,
+    accountCalls,
+  });
+
+  return prettify(code);
 };
 
 // TODO: should be replaced to "master" before merging or replaced with .env variable
+// TODO: or replaced with Handlebars templates...
 const BRANCH = 'max/export-project-as-zip';
 const GENERATOR_ROOT = `https://raw.githubusercontent.com/onflow/flow-playground/${BRANCH}/project-generator`;
 
@@ -488,40 +264,40 @@ export const generatePackageConfig = async (projectName: string) => {
   return config;
 };
 
-const generateTests = async (baseFolder: string, project: Project) => {
-  const base = await getFile('snippets/imports.js');
-  let content = base.replace(/##BASE-FOLDER##/, baseFolder);
-
-  let deploymentTests = '';
+const generateTests = async (cadenceFolder: string, project: Project) => {
+  const contractsUnitTests = [];
   for (let i = 0; i < project.accounts.length; i++) {
     const account = project.accounts[i];
     const address = `0x0${account.address.slice(-1)}`;
     const code = account.draftCode;
-    const unitTest = replaceContractTemplate(address, code);
-    deploymentTests += unitTest;
-    deploymentTests += '\n';
+    if (code.length > 0) {
+      const unitTest = generateContractUnitTest(address, code);
+      contractsUnitTests.push(unitTest);
+    }
   }
-  content = content.replace(/\/\/ ##DEPLOYMENT-TESTS##/, deploymentTests);
 
-  let executionTests = '';
+  const transactionsUnitTests = [];
   for (let i = 0; i < project.transactionTemplates.length; i++) {
     const tx = project.transactionTemplates[i];
-    const unitTest = replaceTransactionTemplate(tx.title, tx.script);
-    executionTests += unitTest;
-    executionTests += '\n';
+    const unitTest = generateTransactionUnitTest(tx.title, tx.script);
+    transactionsUnitTests.push(unitTest);
   }
 
+  const scriptsUnitTests = [];
   for (let i = 0; i < project.scriptTemplates.length; i++) {
     const script = project.scriptTemplates[i];
-    const unitTest = replaceScriptTemplate(script.title, script.script);
-    executionTests += unitTest;
-    executionTests += '\n';
+    const unitTest = generateScriptUnitTest(script.title, script.script);
+    scriptsUnitTests.push(unitTest);
   }
-  content = content.replace(
-    /\/\/ ##TRANSACTIONS-AND-SCRIPTS-TESTS##/,
-    executionTests,
-  );
-  return prettier.format(content, { parser: 'babel', plugins: [parserBabel] });
+
+  const code = testSuit({
+    cadenceFolder,
+    contractsUnitTests,
+    transactionsUnitTests,
+    scriptsUnitTests,
+  });
+
+  return prettify(code);
 };
 
 export const createZip = async (
