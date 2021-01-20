@@ -24,7 +24,7 @@
       "layout/*": ["src/layout/*"],
       "types/*": ["types/*"]
     },
-    "lib": ["dom", "es2015", "es2016"]
+    "lib": ["dom", "es2015", "es2016", "es2020.string"]
   },
   "exclude": ["dist/**/*", "public/**/*", "node_modules"]
 }

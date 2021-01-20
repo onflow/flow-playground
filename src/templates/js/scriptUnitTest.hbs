@@ -1,0 +1,24 @@
+test("test script template {{name}}", async () => {
+    const name = "{{name}}"
+
+    {{>getAccounts accounts=accounts}}
+
+    {{>addressMap imports=imports}}
+
+    let code = await getScriptCode({
+        name,
+        {{#if imports}}addressMap{{/if}}
+    });
+
+    {{>codeReplacement accounts=accountCalls}}
+
+    {{>defineArguments arguments=arguments}}
+
+    const result = await executeScript({
+        code,
+        {{#if arguments}}args{{/if}}
+    });
+
+    // Add your expectations here
+    expect().toBe();
+})

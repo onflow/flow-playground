@@ -1,0 +1,29 @@
+test("test transaction template {{name}}", async () => {
+    const name = "{{name}}"
+
+    {{>getAccounts accounts=accounts}}
+
+    {{>addSigners signers=signers}}
+
+    {{>defineArguments arguments=arguments}}
+
+    {{>addressMap imports=imports}}
+
+    let code = await getTransactionCode({
+        name,
+        {{#if imports}}addressMap{{/if}}
+    })
+
+    {{>codeReplacement accounts=accountCalls}}
+
+    let txResult;
+    try {
+        txResult = await sendTransaction({
+            code,{{#if arguments ~}}args,{{/if}}{{#if signers ~}}signers{{/if}}
+        });
+    } catch (e) {
+        console.log(e);
+    }
+
+    expect(txResult.errorMessage).toBe("");
+});

@@ -1,17 +1,20 @@
 import styled from "styled-components"
 
-export const Container = styled.div`
+interface InpubBlockProps {
+  mb?: string
+}
+
+export const InputBlock = styled.div<InpubBlockProps>`
   display: flex;
   flex-direction: column;
+  margin-bottom: ${({mb = "0"}) => mb};
 `
 
 export const Label = styled.p`
   margin: 0;
-  font-size: 12px;
-  margin-bottom: 1em;
-  color: #000;
-  font-weight: bold;
+  font-size: 14px;
   margin-bottom: 5px;
+  color: #000;
 `;
 
 export const Type = styled.span`

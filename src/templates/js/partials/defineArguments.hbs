@@ -1,0 +1,13 @@
+{{#if arguments ~}}
+    // Define arguments
+    const args = [
+        {{#each arguments}}
+            [
+                {{#each values}}
+                    {{> quoteWrap item=this wrap=(isString this)}},
+                {{/each}}
+                types.{{type}}
+            ],
+        {{/each}}
+    ]
+{{/if}}
