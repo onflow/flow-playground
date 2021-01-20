@@ -9,6 +9,11 @@ import transactionUnitTestTemplate from '../templates/js/transactionUnitTest.hbs
 import scriptUnitTestTemplate from '../templates/js/scriptUnitTest.hbs';
 import testSuit from '../templates/js/testSuit.hbs';
 
+import readmeTemplate from '../templates/js/config/README.md.hbs';
+import babelConfigTemplate from '../templates/js/config/babel.config.hbs';
+import packageTemplate from '../templates/js/config/package.json.hbs';
+import jestConfigTemplate from '../templates/js/config/jest.config.js.hbs';
+
 export const prettify = (code: string): string => {
   return prettier.format(code, { parser: 'babel', plugins: [parserBabel] });
 };
@@ -74,7 +79,6 @@ export const getFullAccountList = (
   return fullList.sort();
 };
 
-
 export const getArgumentsFromTemplate = (template: string) => {
   const pattern = /(?:transaction\s*\()(.*)(?:\).*)|(?:fun main\()(.*)(?:\).*)/g;
   const result = pattern.exec(template);
@@ -102,6 +106,7 @@ export const getDefaultValueForType = (type: string) => {
     Character: 'a',
     String: 'Hello',
 
+    Int: 1337,
     Int8: 8,
     Int16: 16,
     Int32: 32,
@@ -109,6 +114,7 @@ export const getDefaultValueForType = (type: string) => {
     Int128: 128,
     Int256: 256,
 
+    UInt: 1337,
     UInt8: 8,
     UInt16: 16,
     UInt32: 32,
@@ -164,7 +170,6 @@ export const getSignersAmount = (template: string): number => {
   return match ? match.replace(/\s/g, '').split(',').length : 0;
 };
 
-
 export const getContractName = (template: string) => {
   const match = template.match(/(?:contract\s*)([\d\w]*)(?:\s*{)/);
   if (match) {
@@ -194,6 +199,7 @@ export const generateContractUnitTest = (
 
   return prettify(unitTest);
 };
+
 export const generateTransactionUnitTest = (name: string, template: string) => {
   const imports = getImports(template);
   const argumentsList = getArgumentsFromTemplate(template);
@@ -238,30 +244,16 @@ export const generateScriptUnitTest = (
   return prettify(code);
 };
 
-// TODO: should be replaced to "master" before merging or replaced with .env variable
-// TODO: or replaced with Handlebars templates...
-const BRANCH = 'max/export-project-as-zip';
-const GENERATOR_ROOT = `https://raw.githubusercontent.com/onflow/flow-playground/${BRANCH}/project-generator`;
-
-export const getFile = async (filename: string) => {
-  const response = await fetch(`${GENERATOR_ROOT}/${filename}`);
-  return response.text();
-};
-
 export const generateReadMe = async (id: 'string') => {
-  const file = await getFile('files/README.md');
-  return file
-    .replace(/##PROJECT-ID##/g, `${id.toLowerCase()}`)
-    .replace(
-      /##PROJECT-LINK##/g,
-      `https://play.onflow.org/${id.toLowerCase()}`,
-    );
+  return readmeTemplate({
+    projectLink: `https://play.onflow.org/${id.toLowerCase()}`,
+  });
 };
 
 export const generatePackageConfig = async (projectName: string) => {
-  const file = await getFile('files/package.json');
-  const config = file.replace(/##PROJECT-NAME##/g, projectName.toLowerCase());
-  return config;
+  return packageTemplate({
+    name: projectName,
+  });
 };
 
 const generateTests = async (cadenceFolder: string, project: Project) => {
@@ -307,13 +299,14 @@ export const createZip = async (
 ) => {
   const zip = new JSZip();
 
-  // Create setup files
-  const readMeFile = await generateReadMe(project.id);
-  const packageConfig = await generatePackageConfig(
-    `playground-project-${project.id.toLowerCase()}`,
-  );
-  const babelConfig = await getFile('files/babel.config.json');
-  const jestConfig = await getFile('files/package.json');
+  const id = project.id.toLowerCase();
+
+  const readMeFile = await readmeTemplate({
+    projectLink: `https://play.onflow.org/${id}`,
+  });
+  const packageConfig = await packageTemplate({ name: projectName });
+  const babelConfig = await babelConfigTemplate();
+  const jestConfig = await jestConfigTemplate();
   const testFile = await generateTests(folderName, project);
 
   zip.file('test/README.md', readMeFile);

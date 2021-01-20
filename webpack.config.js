@@ -48,8 +48,8 @@ module.exports = {
         loader: "handlebars-loader",
         options: {
           knownHelpersOnly: false,
-          partialDirs: [path.join(__dirname, './src/templates/partials')],
-          helperDirs: [path.join(__dirname, './src/templates/helpers')],
+          partialDirs: [path.join(__dirname, './src/templates/js/partials')],
+          helperDirs: [path.join(__dirname, './src/templates/js/helpers')],
         },
       }
     ]

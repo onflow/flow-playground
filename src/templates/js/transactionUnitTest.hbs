@@ -3,7 +3,7 @@ test("test transaction template {{name}}", async () => {
 
     {{>getAccounts accounts=accounts}}
 
-    {{>addSigners signers=accounts}}
+    {{>addSigners signers=signers}}
 
     {{>defineArguments arguments=arguments}}
 
@@ -19,9 +19,7 @@ test("test transaction template {{name}}", async () => {
     let txResult;
     try {
         txResult = await sendTransaction({
-            code,
-            {{#if arguments}}args{{/if}}
-            {{#if signersAmount}}signers{{/if}}
+            code,{{#if arguments ~}}args,{{/if}}{{#if signers ~}}signers{{/if}}
         });
     } catch (e) {
         console.log(e);
