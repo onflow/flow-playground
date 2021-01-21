@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ResultType } from 'api/apollo/generated/graphql';
 
-// import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { useProject } from 'providers/Project/projectHooks';
 import useMousePosition from '../hooks/useMousePosition';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';

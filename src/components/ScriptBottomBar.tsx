@@ -7,7 +7,6 @@ import { Feedback as FeedbackRoot } from "layout/Feedback";
 import { ResizeHeading } from 'layout/Heading';
 import { ClearResults } from "./TransactionBottomBar";
 
-
 const RESULT_PANEL_MIN_HEIGHT = 180
 const PLAYGROUND_HEADER_HEIGHT = 75
 

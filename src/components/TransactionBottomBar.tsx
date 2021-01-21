@@ -43,9 +43,6 @@ const FeedbackContainer = styled.div<{ height: number }>`
 `;
 
 
-
-
-
 export const ClearResults: React.FC<{ type: ResultType }> = ({ type }) => {
   const [clearResults] = useClearExecutionResultsMutation();
   return (
