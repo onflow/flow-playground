@@ -73,6 +73,7 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         { from: 'public', to: '.' },
+        { from: 'node_modules/@onflow/cadence-language-server/dist/cadence-language-server.wasm', to: '.'}
       ],
       options: {
         concurrency: 100,

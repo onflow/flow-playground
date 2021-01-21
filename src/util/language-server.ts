@@ -58,7 +58,7 @@ export class CadenceLanguageServer {
       return
     }
 
-    const wasm = await fetch("./languageserver.wasm")
+    const wasm = await fetch("./cadence-language-server.wasm")
     const go = new Go()
     const module = await WebAssembly.instantiateStreaming(wasm, go.importObject)
 
