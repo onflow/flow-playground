@@ -30,55 +30,99 @@ const ExportPopup: React.FC<{
   const firstInput = useRef<HTMLInputElement>(null!);
 
   useEffect(() => {
-    firstInput.current?.focus();
+    firstInput.current.focus();
   }, [firstInput.current]);
 
+  const containerFrames = {
+    visible: {
+      display: 'flex',
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+      zIndex: 20,
+    },
+    hidden: {
+      opacity: 0,
+      transition: {
+        when: 'afterChildren',
+        staggerChildren: 0,
+        staggerDirection: -1,
+      },
+      zIndex: -1,
+    },
+  };
+
+  const spring = {
+    type: 'spring',
+    damping: 11,
+    stiffness: 120,
+  };
+
+  const popupFrames = {
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: spring,
+    },
+    hidden: {
+      opacity: 0,
+      y: -200,
+      transition: {
+        ease: [1, 0.5, 0, 0]
+      },
+    },
+  };
+
   return (
-    visible && (
-      <FullScreenContainer elevation={15}>
-        <PopupContainer width="350px">
-          <PopupHeader mb="20px" color="#575E89" lineColor="#B4BEFC">
-            Export Project
-          </PopupHeader>
-          <InputBlock mb={'12px'}>
-            <Label>Project Name</Label>
-            <Input
-              ref={firstInput}
-              value={projectName}
-              onChange={(event) => setProjectName(event.target.value)}
-            />
-          </InputBlock>
-          <InputBlock mb={'30px'}>
-            <Label>Cadence Folder</Label>
-            <Input
-              value={folderName}
-              onChange={(event) => setFolderName(event.target.value)}
-            />
-          </InputBlock>
-          {processing ? (
-            <p>Processing...</p>
-          ) : (
-            <SpaceBetween>
-              <FlowButton className="grey modal" onClick={triggerClose}>
-                Close
-              </FlowButton>
-              <FlowButton
-                className="violet modal"
-                onClick={async () => {
-                  setProcessing(true);
-                  await createZip(folderName, projectName, project);
-                  setProcessing(false);
-                  triggerClose(null);
-                }}
-              >
-                Export
-              </FlowButton>
-            </SpaceBetween>
-          )}
-        </PopupContainer>
-        <WhiteOverlay onClick={triggerClose} />
-      </FullScreenContainer>
-    )
+    <FullScreenContainer
+      elevation={15}
+      initial="hidden"
+      animate={visible ? 'visible' : 'hidden'}
+      variants={containerFrames}
+    >
+      <PopupContainer width="350px" variants={popupFrames}>
+        <PopupHeader mb="20px" color="#575E89" lineColor="#B4BEFC">
+          Export Project
+        </PopupHeader>
+        <InputBlock mb={'12px'}>
+          <Label>Project Name</Label>
+          <Input
+            ref={firstInput}
+            value={projectName}
+            onChange={event => setProjectName(event.target.value)}
+          />
+        </InputBlock>
+        <InputBlock mb={'30px'}>
+          <Label>Cadence Folder</Label>
+          <Input
+            value={folderName}
+            onChange={event => setFolderName(event.target.value)}
+          />
+        </InputBlock>
+        {processing ? (
+          <p>Processing...</p>
+        ) : (
+          <SpaceBetween>
+            <FlowButton className="grey modal" onClick={triggerClose}>
+              Close
+            </FlowButton>
+            <FlowButton
+              className="violet modal"
+              onClick={async () => {
+                setProcessing(true);
+                await createZip(folderName, projectName, project);
+                setProcessing(false);
+                triggerClose(null);
+              }}
+            >
+              Export
+            </FlowButton>
+          </SpaceBetween>
+        )}
+      </PopupContainer>
+      <WhiteOverlay onClick={triggerClose} />
+    </FullScreenContainer>
   );
 };
 
