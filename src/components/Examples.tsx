@@ -152,7 +152,7 @@ const Examples: React.FC<{
       transition: {
         staggerChildren: 0.1
       },
-      zIndex: 20
+      zIndex: 99
     },
     hidden: {
       opacity: 0,

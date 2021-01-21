@@ -6,5 +6,5 @@ export const Feedback = styled.div<{ height?: number }>`
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: 179px;
+  min-height:80px;
 `;

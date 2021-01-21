@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { ResultType } from "api/apollo/generated/graphql";
+import React, { useState, useEffect } from 'react';
+import { ResultType } from 'api/apollo/generated/graphql';
 
-import { GoGrabber } from "react-icons/go";
-import { useProject } from "providers/Project/projectHooks";
-import useMousePosition from "../hooks/useMousePosition";
-import { Feedback as FeedbackRoot } from "layout/Feedback";
-import { FeedbackActions } from "layout/FeedbackActions";
-import { SidebarItemInsert } from "layout/SidebarItemInsert";
-import styled from "@emotion/styled";
-import theme from "../theme";
-import { Heading } from "layout/Heading";
+import { GoChevronDown, GoChevronUp } from 'react-icons/go';
+import { useProject } from 'providers/Project/projectHooks';
+import useMousePosition from '../hooks/useMousePosition';
+import { Feedback as FeedbackRoot } from 'layout/Feedback';
+import { FeedbackActions } from 'layout/FeedbackActions';
+import { SidebarItemInsert } from 'layout/SidebarItemInsert';
+import styled from '@emotion/styled';
+import theme from '../theme';
+import { ResizeHeading } from 'layout/Heading';
 
-import { RenderResponse } from "components/RenderResponse";
-import { ClearResults } from "./TransactionBottomBar";
+import { RenderResponse } from 'components/RenderResponse';
+import { ClearResults } from './TransactionBottomBar';
 
-const STORAGE_PANEL_MIN_HEIGHT = 180;
+const PANEL_MINIMIZED = 40;
+const RESULT_PANEL_MIN_HEIGHT = 40;
+const STORAGE_PANEL_MIN_HEIGHT = 40 + RESULT_PANEL_MIN_HEIGHT;
 const PLAYGROUND_HEADER_HEIGHT = 75;
 
 const TypeListItem = styled.li<{ active: boolean }>`
@@ -23,7 +25,7 @@ const TypeListItem = styled.li<{ active: boolean }>`
   font-size: 14px;
   font-weight: 600;
   color: #2f2f2f;
-  ${li => (li.active ? "background: #f5f5f5;" : "")}
+  ${(li) => (li.active ? 'background: #f5f5f5;' : '')}
   &:hover {
     background: #f5f5f5;
   }
@@ -40,7 +42,17 @@ const AccountStateContainer = styled.div<{ height: number }>`
   width: 100%;
   background: white;
   border-top: var(--gap) solid var(--key);
-  min-height: ${p => p.height || STORAGE_PANEL_MIN_HEIGHT}px;
+  height: ${(p) => p.height}px;
+`;
+
+const DeploymentResultContainer = styled.div<{ height: number }>`
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  background: white;
+  border-top: var(--gap) solid var(--key);
+  height: ${(p) => p.height}px;
+  overflow-y: hidden;
 `;
 
 const StorageListContainer = styled.div`
@@ -50,39 +62,28 @@ const StorageListContainer = styled.div`
   border-right: var(--gap) solid var(--key);
 `;
 
-const DeploymentResultContainer = styled.div`
-  position: absolute;
-  bottom: 0px;
-  width: 100%;
-  background: white;
-  border-top: var(--gap) solid var(--key);
-`;
-
 interface TypeListProps {
   identifiers: string[];
   selected: string;
   onSelect: (type: string) => void;
-  toggleResizing: (toggle: boolean) => void;
+	controls: () => any;
+	resize: () => any;
 }
 // @ts-ignore
 const IdentifierList: React.FC<TypeListProps> = ({
   identifiers,
   selected,
   onSelect,
-  toggleResizing
+	controls,
+	resize
 }) => (
   <StorageListContainer>
-    <Heading>
-      Storage{" "}
-      <SidebarItemInsert grab={true}>
-        <GoGrabber size="16px" onMouseDown={() => toggleResizing(true)} />
-      </SidebarItemInsert>
-    </Heading>
+    <ResizeHeading onMouseDown={resize}>Storage {controls()}</ResizeHeading>
 
     <div
       style={{
-        width: "288px",
-        overflow: "scroll"
+        width: '288px',
+        overflow: 'auto',
       }}
     >
       <ul>
@@ -103,14 +104,14 @@ const IdentifierList: React.FC<TypeListProps> = ({
 const StateContainer: React.FC<{ value: any }> = ({ value }) => (
   <div
     style={{
-      width: "100%",
-      backgroundColor: "#f3f3f3",
-      paddingTop: "2em",
+      width: '100%',
+      backgroundColor: '#f3f3f3',
+      paddingTop: '2em',
       paddingBottom: STORAGE_PANEL_MIN_HEIGHT - 40,
-      paddingLeft: "1.5em",
+      paddingLeft: '1.5em',
       fontFamily: theme.fonts.monospace,
       fontSize: theme.fontSizes[4],
-      overflow: "scroll"
+      overflow: 'scroll',
     }}
   >
     <pre>{JSON.stringify(value, null, 2)}</pre>
@@ -120,9 +121,9 @@ const StateContainer: React.FC<{ value: any }> = ({ value }) => (
 const AccountState: React.FC<{
   state: any;
   renderDeployButton: () => JSX.Element;
-}> = ({ state, renderDeployButton }) => {
+}> = ({ state }) => {
   if (!state) {
-    state = "{}";
+    state = '{}';
   }
 
   const storage: { [identifier: string]: string } = {};
@@ -134,9 +135,9 @@ const AccountState: React.FC<{
       continue;
     }
 
-    const [domain, identifier] = key.split("\u001f");
+    const [domain, identifier] = key.split('\u001f');
 
-    if (domain === "storage") {
+    if (domain === 'storage') {
       storage[identifier] = parsed[key];
     }
   }
@@ -145,67 +146,117 @@ const AccountState: React.FC<{
 
   // @ts-ignore
   const [selected, setSelected] = useState(
-    identifiers.length > 0 ? identifiers[0] : null
+    identifiers.length > 0 ? identifiers[0] : null,
   );
 
   const { x, y } = useMousePosition();
-  const [panelHeight, setPanelHeight] = useState(STORAGE_PANEL_MIN_HEIGHT);
-  const [isResizing, setIsResizing] = useState(false);
+  const [storageHeight, setStorageHeight] = useState(180);
+  const [resultHeight, setResultHeight] = useState(140);
+  const [isResizingStorage, setIsResizingStorage] = useState(false);
+  const [isResizingResult, setIsResizingResult] = useState(false);
 
-  const toggleResizing = (toggle: boolean) => {
-    setIsResizing(toggle);
+  const toggleResizingStorage = (toggle: boolean) => {
+    setIsResizingStorage(toggle);
+  };
+
+  const toggleResizingResult = (toggle: boolean) => {
+    setIsResizingResult(toggle);
   };
 
   const toggleResizeListener = () => {
-    toggleResizing(false);
+    toggleResizingStorage(false);
+    toggleResizingResult(false);
   };
 
   useEffect(() => {
     if (
-      isResizing &&
-      y > STORAGE_PANEL_MIN_HEIGHT &&
+      isResizingStorage &&
+      y > 35 + resultHeight &&
       y < window.innerHeight - PLAYGROUND_HEADER_HEIGHT
     ) {
-      setPanelHeight(y);
+      setStorageHeight(y - resultHeight);
     }
   }, [x, y]);
 
   useEffect(() => {
-    window.addEventListener("mouseup", toggleResizeListener, false);
+    if (
+      isResizingResult &&
+      y > RESULT_PANEL_MIN_HEIGHT &&
+      y < window.innerHeight - PLAYGROUND_HEADER_HEIGHT
+    ) {
+      setResultHeight(y);
+    }
+  }, [x, y]);
+
+  useEffect(() => {
+    window.addEventListener('mouseup', toggleResizeListener, false);
     return () => {
-      window.removeEventListener("mouseup", toggleResizeListener, false);
+      window.removeEventListener('mouseup', toggleResizeListener, false);
     };
   }, []);
 
   return (
-    <div>
-      <AccountStateContainer height={panelHeight}>
-        {renderDeployButton()}
+    <>
+      <AccountStateContainer
+				height={storageHeight + resultHeight}
+      >
         <IdentifierList
           identifiers={identifiers}
           selected={selected}
-          onSelect={setSelected}
-          toggleResizing={toggleResizing}
+					onSelect={setSelected}
+					resize={() => toggleResizingStorage(true)}
+          controls={() => {
+            return (
+              <SidebarItemInsert grab={false}>
+                {storageHeight === PANEL_MINIMIZED ? (
+                  <GoChevronUp
+                    size="16px"
+                    onClick={() => {
+                      setStorageHeight(180);
+                    }}
+                  />
+                ) : (
+                  <GoChevronDown
+                    size="16px"
+                    onClick={() => {
+                      setStorageHeight(PANEL_MINIMIZED);
+                    }}
+                  />
+                )}
+              </SidebarItemInsert>
+            );
+          }}
         />
         <StateContainer value={storage[selected]} />
       </AccountStateContainer>
-      <DeploymentResultContainer>
-        <Heading>
+      <DeploymentResultContainer height={resultHeight}>
+        <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
           Deployment Result
           <ClearResults type={ResultType.Contract} />
-        </Heading>
+          {resultHeight === PANEL_MINIMIZED ? (
+            <GoChevronUp
+							size="16px"
+              onClick={() => {
+                setResultHeight(180);
+              }}
+            />
+          ) : (
+            <GoChevronDown
+              size="16px"
+              onClick={() => {
+                setResultHeight(PANEL_MINIMIZED);
+              }}
+            />
+          )}
+        </ResizeHeading>
         <RenderResponse resultType={ResultType.Contract} />
       </DeploymentResultContainer>
-    </div>
+    </>
   );
 };
 
 const AccountBottomBar: React.FC = () => {
-  const {
-    project,
-    active,
-    isLoading,
-  } = useProject();
+  const { project, active, isLoading } = useProject();
 
   return (
     <FeedbackRoot>
@@ -216,9 +267,7 @@ const AccountBottomBar: React.FC = () => {
           <AccountState
             state={project.accounts[active.index].state}
             renderDeployButton={() => {
-              return (
-                <FeedbackActions/>
-              );
+              return <FeedbackActions />;
             }}
           />
         </>
