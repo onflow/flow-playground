@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
 
 export const Feedback = styled.div<{ height?: number }>`
-  height: ${div => div.height}px;
+  height: ${div => div.height || 180}px;
+	border-top: var(--gap) solid var(--key);
   position: relative;
   display: flex;
   flex-direction: column;

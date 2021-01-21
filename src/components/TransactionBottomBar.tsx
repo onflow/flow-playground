@@ -1,14 +1,13 @@
-import React from "react";
+import React, { useState, useEffect} from "react";
 import {
   useClearExecutionResultsMutation,
   ResultType
 } from "api/apollo/generated/graphql";
-
+import useMousePosition from '../hooks/useMousePosition';
 import { FaEraser } from "react-icons/fa";
-import { GoChevronDown } from 'react-icons/go';
 import { RenderResponse } from "components/RenderResponse";
 import { Feedback as FeedbackRoot } from "layout/Feedback";
-import { Heading } from "layout/Heading";
+import { ResizeHeading } from "layout/Heading";
 
 import styled from "@emotion/styled";
 import theme from "../theme";
@@ -25,6 +24,27 @@ const Clear = styled.div`
     color: ${theme.colors.error};
   }
 `;
+
+const RESULT_PANEL_MIN_HEIGHT = 180
+const PLAYGROUND_HEADER_HEIGHT = 75
+
+const FeedbackContainer = styled.div<{ height: number }>`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-even;
+  height: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 245px;
+  background: white;
+	width: calc(100vw - 245px);
+  height: ${(p) => p.height}px;
+	overflow-y: hidden;
+`;
+
+
+
+
 
 export const ClearResults: React.FC<{ type: ResultType }> = ({ type }) => {
   const [clearResults] = useClearExecutionResultsMutation();
@@ -44,20 +64,50 @@ export const ClearResults: React.FC<{ type: ResultType }> = ({ type }) => {
 };
 
 const TransactionBottomBar: React.FC = () => {
+
+	const { x, y } = useMousePosition();
+
+  const [resultHeight, setResultHeight] = useState(140);
+  const [isResizingResult, setIsResizingResult] = useState(false);
+
+
+  const toggleResizingResult = (toggle: boolean) => {
+    setIsResizingResult(toggle);
+  };
+
+  const toggleResizeListener = () => {
+    toggleResizingResult(false);
+  };
+
+  useEffect(() => {
+    if (
+      isResizingResult &&
+      y > RESULT_PANEL_MIN_HEIGHT &&
+      y < window.innerHeight - PLAYGROUND_HEADER_HEIGHT
+    ) {
+      setResultHeight(y);
+    }
+  }, [x, y]);
+
+  useEffect(() => {
+    window.addEventListener('mouseup', toggleResizeListener, false);
+    return () => {
+      window.removeEventListener('mouseup', toggleResizeListener, false);
+    };
+  }, []);
+
+
   return (
+		<FeedbackContainer height={resultHeight}>
     <FeedbackRoot>
-      <Heading>
+		<ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
         Transaction Results
         <ClearResults type={ResultType.Transaction} />
-				<GoChevronDown
-            size="16px"
-            onClick={() => {
-
-            }}
-          />
-      </Heading>
+			<div></div>
+      </ResizeHeading>
       <RenderResponse resultType={ResultType.Transaction} />
     </FeedbackRoot>
+		</FeedbackContainer>
   );
 };
 

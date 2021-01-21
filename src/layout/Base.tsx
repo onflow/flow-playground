@@ -20,4 +20,5 @@ export const Base = styled.div`
   grid-template-columns: 244px auto;
   grid-template-rows: 72px auto;
   background: var(--key);
+	overflow: hidden;
 `;

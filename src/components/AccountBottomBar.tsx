@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ResultType } from 'api/apollo/generated/graphql';
 
-import { GoChevronDown, GoChevronUp } from 'react-icons/go';
+// import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { useProject } from 'providers/Project/projectHooks';
 import useMousePosition from '../hooks/useMousePosition';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
@@ -14,9 +14,9 @@ import { ResizeHeading } from 'layout/Heading';
 import { RenderResponse } from 'components/RenderResponse';
 import { ClearResults } from './TransactionBottomBar';
 
-const PANEL_MINIMIZED = 40;
-const RESULT_PANEL_MIN_HEIGHT = 40;
-const STORAGE_PANEL_MIN_HEIGHT = 40 + RESULT_PANEL_MIN_HEIGHT;
+
+const RESULT_PANEL_MIN_HEIGHT = 100;
+const STORAGE_PANEL_MIN_HEIGHT = 100 + RESULT_PANEL_MIN_HEIGHT;
 const PLAYGROUND_HEADER_HEIGHT = 75;
 
 const TypeListItem = styled.li<{ active: boolean }>`
@@ -150,8 +150,8 @@ const AccountState: React.FC<{
   );
 
   const { x, y } = useMousePosition();
-  const [storageHeight, setStorageHeight] = useState(180);
-  const [resultHeight, setResultHeight] = useState(140);
+  const [storageHeight, setStorageHeight] = useState(STORAGE_PANEL_MIN_HEIGHT);
+  const [resultHeight, setResultHeight] = useState(180);
   const [isResizingStorage, setIsResizingStorage] = useState(false);
   const [isResizingResult, setIsResizingResult] = useState(false);
 
@@ -171,7 +171,7 @@ const AccountState: React.FC<{
   useEffect(() => {
     if (
       isResizingStorage &&
-      y > 35 + resultHeight &&
+      y > STORAGE_PANEL_MIN_HEIGHT - 30 + resultHeight &&
       y < window.innerHeight - PLAYGROUND_HEADER_HEIGHT
     ) {
       setStorageHeight(y - resultHeight);
@@ -197,7 +197,7 @@ const AccountState: React.FC<{
 
   return (
     <>
-      <AccountStateContainer
+      { identifiers.length ? <AccountStateContainer
 				height={storageHeight + resultHeight}
       >
         <IdentifierList
@@ -208,46 +208,18 @@ const AccountState: React.FC<{
           controls={() => {
             return (
               <SidebarItemInsert grab={false}>
-                {storageHeight === PANEL_MINIMIZED ? (
-                  <GoChevronUp
-                    size="16px"
-                    onClick={() => {
-                      setStorageHeight(180);
-                    }}
-                  />
-                ) : (
-                  <GoChevronDown
-                    size="16px"
-                    onClick={() => {
-                      setStorageHeight(PANEL_MINIMIZED);
-                    }}
-                  />
-                )}
+								<></>
               </SidebarItemInsert>
             );
           }}
         />
         <StateContainer value={storage[selected]} />
-      </AccountStateContainer>
+      </AccountStateContainer> : ''}
       <DeploymentResultContainer height={resultHeight}>
         <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
           Deployment Result
           <ClearResults type={ResultType.Contract} />
-          {resultHeight === PANEL_MINIMIZED ? (
-            <GoChevronUp
-							size="16px"
-              onClick={() => {
-                setResultHeight(180);
-              }}
-            />
-          ) : (
-            <GoChevronDown
-              size="16px"
-              onClick={() => {
-                setResultHeight(PANEL_MINIMIZED);
-              }}
-            />
-          )}
+          <div></div>
         </ResizeHeading>
         <RenderResponse resultType={ResultType.Contract} />
       </DeploymentResultContainer>
