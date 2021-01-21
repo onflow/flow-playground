@@ -29,3 +29,10 @@ export const Heading = styled.div`
     border-radius: 3px;
   }
 `;
+
+
+export const ResizeHeading = styled(Heading)`
+	&:hover {
+		cursor: ns-resize;
+	}
+`
