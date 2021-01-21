@@ -73,13 +73,10 @@ const EditorLayout: React.FC = () => {
               Playground
             </Text>
 
-            {!projectIsPlayground && (
+            {!projectIsPlayground && (<>
               <Button
                 variant="secondary"
-                sx={{
-                  position: "relative",
-                  top: "2px"
-                }}
+
                 ml={2}
                 onClick={() => {
                   toggleShowExamples(true);
@@ -88,6 +85,36 @@ const EditorLayout: React.FC = () => {
               >
                 <AnimatedText>Click here to start a tutorial</AnimatedText>
               </Button>
+							<Separator/>
+							<a
+                style={{ display: "flex", textDecoration: "none" }}
+                href="https://docs.onflow.org"
+                target="_blank"
+                rel="noopener"
+              >
+                <NavButton>Flow Docs</NavButton>
+              </a>
+							<a
+                style={{ display: "flex" }}
+                href="https://twitter.com/flow_blockchain"
+                target="_blank"
+                rel="noopener"
+              >
+                <NavButton>
+                  <FaTwitter size={"20px"} />
+                </NavButton>
+              </a>
+              <a
+                style={{ display: "flex" }}
+                href="https://discord.gg/2h6hgBF"
+                target="_blank"
+                rel="noopener"
+              >
+                <NavButton>
+                  <FaDiscord size={"20px"} />
+                </NavButton>
+              </a>
+							</>
             )}
           </Flex>
           {/* <Text>New Project</Text> */}
@@ -143,37 +170,8 @@ const EditorLayout: React.FC = () => {
                   icon={project.parentId ? FaCodeBranch : FaCloudUploadAlt}
                 />
               )}
-              <a
-                style={{ display: "flex" }}
-                href="https://twitter.com/flow_blockchain"
-                target="_blank"
-                rel="noopener"
-              >
-                <NavButton>
-                  <FaTwitter size={"20px"} />
-                </NavButton>
-              </a>
-              <a
-                style={{ display: "flex" }}
-                href="https://discord.gg/2h6hgBF"
-                target="_blank"
-                rel="noopener"
-              >
-                <NavButton>
-                  <FaDiscord size={"20px"} />
-                </NavButton>
-              </a>
-              <a
-                style={{ display: "flex", textDecoration: "none" }}
-                href="https://docs.onflow.org"
-                target="_blank"
-                rel="noopener"
-              >
-                <NavButton>Flow Docs</NavButton>
-              </a>
               {project && (
                 <>
-                <Separator/>
                 <FlowButton
                   className="violet"
                   onClick={() => toggleShowExport(true)}

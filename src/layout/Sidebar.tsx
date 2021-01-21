@@ -5,5 +5,5 @@ export const Sidebar = styled.div`
   display: flex;
   flex-direction: column;
   background: var(--bg);
-  overflow-y:scroll;
+  overflow-y:auto;
 `;
