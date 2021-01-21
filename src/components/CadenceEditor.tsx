@@ -7,6 +7,7 @@ import * as monaco from "monaco-editor/esm/vs/editor/editor.api"
 import {EntityType} from "providers/Project";
 import Arguments from "components/Arguments";
 import { Argument } from "components/Arguments/types";
+import {CadenceSyntaxError, formatMarker, goTo} from "../util/language-syntax-errors";
 import {
   MonacoLanguageClient,
   ExecuteCommandRequest,
@@ -61,6 +62,7 @@ type CadenceEditorProps = {
 type CadenceEditorState = {
   args: {[key: string]: Argument[]}
   valid: {[key: string]: boolean}
+  syntaxErrors: {[key: string]: CadenceSyntaxError[]}
 }
 
 class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorState> {
@@ -87,7 +89,8 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
 
     this.state = {
       args:{},
-      valid: {}
+      valid: {},
+      syntaxErrors: {}
     }
   }
 
@@ -173,6 +176,8 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
           this.setExecutionArguments(params)
         }
         this.setValidState(result.valid)
+
+        this.processMarkers()
       })
     })
   }
@@ -189,6 +194,19 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
     } catch (error) {
       console.error(error)
     }
+  }
+
+  processMarkers(){
+    // Try to get list of markers
+    const model = this.editor.getModel();
+    const modelMarkers = monaco.editor.getModelMarkers({resource: model.uri})
+    const errors = modelMarkers.map(formatMarker)
+    const {activeId} = this.props;
+    this.setState({
+      syntaxErrors: {
+        [activeId]: errors
+      }
+    })
   }
 
   setExecutionArguments(args: Argument[]){
@@ -299,18 +317,26 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
       .length
   }
 
+  hover(marker: monaco.editor.IMarker): void {
+    console.log({marker})
+  }
+
+  hideDecorations(): void {
+    console.log("Hide decorations")
+  }
+
   render() {
     const { type, code } = this.props;
 
     /// Get a list of args from language server
     const { activeId } = this.props;
-    const { args, valid } = this.state;
+    const { args, syntaxErrors, valid } = this.state;
     const list = args[activeId] || []
     const validCode = valid[activeId]
 
     /// Extract number of signers from code
     const signers = this.extractSigners(code);
-
+    const errors = syntaxErrors[activeId] || []
     return (
       <EditorContainer id={this.props.mount}>
         <Arguments
@@ -318,6 +344,10 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
           list={list}
           signers={signers}
           validCode={validCode}
+          syntaxErrors={errors}
+          hover={this.hover}
+          hideDecorations={this.hideDecorations}
+          goTo={(position: monaco.IPosition)=> goTo(this.editor, position)}
         />
       </EditorContainer>
     );
