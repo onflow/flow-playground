@@ -24,4 +24,3 @@ export type ArgumentsListProps = {
   onChange: (name: String, value: any) => void,
   errors: any,
 }
-

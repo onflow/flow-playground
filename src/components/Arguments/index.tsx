@@ -8,7 +8,9 @@ import {
   ResultType,
   useSetExecutionResultsMutation,
 } from 'api/apollo/generated/graphql';
-import { ControlContainer, HoverPanel, StatusMessage } from './styles';
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api"
+
+import { ControlContainer, HoverPanel, StatusMessage, Heading, Title } from './styles';
 import { Argument } from './types';
 import {
   ActionButton,
@@ -16,13 +18,19 @@ import {
   ArgumentsTitle,
   Signers,
 } from './components';
+import { CadenceSyntaxError, Highlight } from "../../util/language-syntax-errors";
+import { Stack } from "layout/Stack";
 
 
 type ArgumentsProps = {
   type: EntityType;
   list: Argument[];
-  signers: number;
   validCode: boolean;
+  signers: number;
+  syntaxErrors: CadenceSyntaxError[];
+  goTo: (position: monaco.IPosition) => void;
+  hover: (highlight: Highlight) => void;
+  hideDecorations: () => void;
 };
 
 const validateByType = (value: any, type: string) => {
@@ -144,6 +152,7 @@ interface IValue {
 
 const Arguments: React.FC<ArgumentsProps> = (props) => {
   const { type, list, signers, validCode } = props;
+  const { goTo, hover, hideDecorations, syntaxErrors } = props;
   const needSigners = type == EntityType.TransactionTemplate && signers > 0;
   const [selected, updateSelectedAccounts] = useState([]);
   const [expanded, setExpanded] = useState(true);
@@ -272,6 +281,23 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
               }
             </>
           )}
+          {
+            syntaxErrors.length > 0 && (
+              <Stack>
+                <Heading>
+                  <Title>Syntax Errors</Title>
+                </Heading>
+                <Stack>
+                  {syntaxErrors.map((item: CadenceSyntaxError) =>{
+                    return <div
+                      onClick={()=>goTo(item.position)}
+                      onMouseOver={()=>hover(item.highlight)}
+                      onMouseOut={()=>hideDecorations()}>{item.message}</div>
+                  })}
+                </Stack>
+              </Stack>
+            )
+          }
           {needSigners && (
             <Signers
               maxSelection={signers}
