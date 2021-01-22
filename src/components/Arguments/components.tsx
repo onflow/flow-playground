@@ -115,7 +115,7 @@ export const Signers: React.FC<SignersProps> = (props) => {
       {enoughSigners &&
         <SignersError>
           <FaExclamationTriangle/>
-          "Not enough signers..."
+          Not enough signers...
         </SignersError>
       }
 
