@@ -17,6 +17,8 @@ const Clear = styled.div`
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  position: absolute;
+  left: 50%;
   span {
     padding-right: 0.2rem;
   }
