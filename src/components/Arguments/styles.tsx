@@ -1,17 +1,18 @@
-import styled from 'styled-components'
-import { FaCaretSquareDown } from 'react-icons/fa'
-import theme from "../../theme";
+import styled from 'styled-components';
+import { FaCaretSquareDown } from 'react-icons/fa';
+import theme from '../../theme';
 
 interface HoverPanelProps {
-  width?: string
+  width?: string;
 }
 
 export const HoverPanel = styled.div<HoverPanelProps>`
-  width: ${({width = "300px"}) => width};
+  width: ${({ width = '300px' }) => width};
   padding: 20px;
   border-radius: 4px;
   background-color: #fff;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.35), 0 6px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff;
+  /* border: var(--gap) solid var(--key); */
 `;
 
 export const Heading = styled.div`
@@ -31,7 +32,7 @@ export const Title = styled.div`
 
   &:after {
     opacity: 0.5;
-    content: "";
+    content: '';
     display: block;
     position: absolute;
     left: 0;
@@ -53,26 +54,26 @@ export const Badge = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #EE431E;
+  background-color: #ee431e;
   color: #fff;
   font-weight: bold;
   font-size: 12px;
-  
+
   --size: 16px;
   width: var(--size);
   height: var(--size);
   border-radius: var(--size);
-  
+
   span {
     transform: translateY(1px);
   }
 `;
 
 interface ListProps {
-  hidden: boolean
+  hidden: boolean;
 }
 export const List = styled.div<ListProps>`
-  display: ${({ hidden }) => hidden ? 'none' : 'grid'};
+  display: ${({ hidden }) => (hidden ? 'none' : 'grid')};
   grid-gap: 12px;
   grid-template-columns: 100%;
   margin-bottom: 20px;
@@ -82,22 +83,22 @@ export const SignersContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-
 interface ToggleProps {
-  expanded: boolean
+  expanded: boolean;
 }
 export const ToggleExpand = styled(FaCaretSquareDown).attrs({
-  size: 18
+  size: 18,
 })<ToggleProps>`
   cursor: pointer;
   opacity: 0.2;
-  transform: ${({expanded}) => expanded ? 'rotate(180deg)' : 'rotate(0deg)'};
+  transform: ${({ expanded }) =>
+    expanded ? 'rotate(180deg)' : 'rotate(0deg)'};
   margin-left: 5px;
 `;
 
 interface ControlContainerProps {
-  isOk: boolean,
-  progress: boolean
+  isOk: boolean;
+  progress: boolean;
 }
 export const ControlContainer = styled.div<ControlContainerProps>`
   display: flex;
@@ -105,16 +106,15 @@ export const ControlContainer = styled.div<ControlContainerProps>`
   justify-content: space-between;
   color: ${({ isOk, progress }) => {
     switch (true) {
-      case (progress):
-        return "#a2a2a2"
-      case (isOk):
-        return "#2bb169"
+      case progress:
+        return '#a2a2a2';
+      case isOk:
+        return '#2bb169';
       default:
-        return "#EE431E"
+        return '#EE431E';
     }
   }};
 `;
-
 
 export const StatusMessage = styled.div`
   @keyframes spin {
@@ -129,10 +129,10 @@ export const StatusMessage = styled.div`
   display: flex;
   justify-content: flex-start;
   font-size: 16px;
-  svg{
+  svg {
     margin-right: 5px;
   }
-  
+
   svg.spin {
     animation: spin 0.5s linear infinite;
   }
