@@ -8,9 +8,19 @@ import {
   ResultType,
   useSetExecutionResultsMutation,
 } from 'api/apollo/generated/graphql';
-import * as monaco from "monaco-editor/esm/vs/editor/editor.api"
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
-import { ControlContainer, HoverPanel, StatusMessage, Heading, Title } from './styles';
+import {
+  ControlContainer,
+  HoverPanel,
+  StatusMessage,
+  Heading,
+  Title,
+  ErrorsContainer,
+  SingleError,
+  ErrorIndex,
+  ErrorMessage,
+} from './styles';
 import { Argument } from './types';
 import {
   ActionButton,
@@ -18,14 +28,16 @@ import {
   ArgumentsTitle,
   Signers,
 } from './components';
-import { CadenceSyntaxError, Highlight } from "../../util/language-syntax-errors";
-import { Stack } from "layout/Stack";
-
+import {
+  CadenceSyntaxError,
+  Highlight,
+} from '../../util/language-syntax-errors';
+import { Stack } from 'layout/Stack';
+import theme from '../../theme';
 
 type ArgumentsProps = {
   type: EntityType;
   list: Argument[];
-  validCode: boolean;
   signers: number;
   syntaxErrors: CadenceSyntaxError[];
   goTo: (position: monaco.IPosition) => void;
@@ -105,16 +117,19 @@ const validate = (list: any, values: any) => {
   return result;
 };
 
-const getLabel = (resultType: ResultType, project: any, index: number) : string => {
+const getLabel = (
+  resultType: ResultType,
+  project: any,
+  index: number,
+): string => {
   return resultType === ResultType.Contract
-  ? 'Deployment'
-  : resultType === ResultType.Script
-  ? project.scriptTemplates[index].title
-  : resultType === ResultType.Transaction
-  ? project.transactionTemplates[index].title
-  : 'Interaction';
-}
-
+    ? 'Deployment'
+    : resultType === ResultType.Script
+    ? project.scriptTemplates[index].title
+    : resultType === ResultType.Transaction
+    ? project.transactionTemplates[index].title
+    : 'Interaction';
+};
 
 type ScriptExecution = (args?: string[]) => Promise<any>;
 type TransactionExecution = (
@@ -151,8 +166,9 @@ interface IValue {
 }
 
 const Arguments: React.FC<ArgumentsProps> = (props) => {
-  const { type, list, signers, validCode } = props;
+  const { type, list, signers } = props;
   const { goTo, hover, hideDecorations, syntaxErrors } = props;
+  const validCode = syntaxErrors.length === 0;
   const needSigners = type == EntityType.TransactionTemplate && signers > 0;
   const [selected, updateSelectedAccounts] = useState([]);
   const [expanded, setExpanded] = useState(true);
@@ -258,52 +274,62 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
         dragElastic={1}
       >
         <HoverPanel>
-          {list.length > 0 && (
+          {validCode && (
             <>
-              <ArgumentsTitle
-                type={type}
-                errors={numberOfErrors}
-                expanded={expanded}
-                setExpanded={setExpanded}
-              />
+              {list.length > 0 && (
+                <>
+                  <ArgumentsTitle
+                    type={type}
+                    errors={numberOfErrors}
+                    expanded={expanded}
+                    setExpanded={setExpanded}
+                  />
 
-              {
-                <ArgumentsList
-                  list={list}
-                  errors={errors}
-                  hidden={!expanded}
-                  onChange={(name, value) => {
-                    let key = name.toString();
-                    let newValue = { ...values, [key]: value };
-                    setValue(newValue);
-                  }}
+                  {
+                    <ArgumentsList
+                      list={list}
+                      errors={errors}
+                      hidden={!expanded}
+                      onChange={(name, value) => {
+                        let key = name.toString();
+                        let newValue = { ...values, [key]: value };
+                        setValue(newValue);
+                      }}
+                    />
+                  }
+                </>
+              )}
+              {needSigners && (
+                <Signers
+                  maxSelection={signers}
+                  selected={selected}
+                  updateSelectedAccounts={updateSelectedAccounts}
                 />
-              }
+              )}
             </>
           )}
-          {
-            syntaxErrors.length > 0 && (
-              <Stack>
-                <Heading>
-                  <Title>Syntax Errors</Title>
-                </Heading>
-                <Stack>
-                  {syntaxErrors.map((item: CadenceSyntaxError) =>{
-                    return <div
-                      onClick={()=>goTo(item.position)}
-                      onMouseOver={()=>hover(item.highlight)}
-                      onMouseOut={()=>hideDecorations()}>{item.message}</div>
-                  })}
-                </Stack>
-              </Stack>
-            )
-          }
-          {needSigners && (
-            <Signers
-              maxSelection={signers}
-              selected={selected}
-              updateSelectedAccounts={updateSelectedAccounts}
-            />
+          {!validCode && (
+            <Stack>
+              <Heading>
+                <Title lineColor={theme.colors.error}>Syntax Errors</Title>
+              </Heading>
+              <ErrorsContainer>
+                {syntaxErrors.map((item: CadenceSyntaxError, i) => {
+                  return (
+                    <SingleError
+                      onClick={() => goTo(item.position)}
+                      onMouseOver={() => hover(item.highlight)}
+                      onMouseOut={() => hideDecorations()}
+                    >
+                      <ErrorIndex>
+                        <span>{i + 1}</span>
+                      </ErrorIndex>
+                      <ErrorMessage>{item.message}</ErrorMessage>
+                    </SingleError>
+                  );
+                })}
+              </ErrorsContainer>
+            </Stack>
           )}
           <ControlContainer isOk={isOk} progress={progress}>
             <StatusMessage>
