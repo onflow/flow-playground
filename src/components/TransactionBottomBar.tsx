@@ -5,6 +5,7 @@ import {
 } from 'api/apollo/generated/graphql';
 import useMousePosition from '../hooks/useMousePosition';
 import { FaEraser } from 'react-icons/fa';
+import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { RenderResponse } from 'components/RenderResponse';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 import { ResizeHeading } from 'layout/Heading';
@@ -16,6 +17,8 @@ const Clear = styled.div`
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  position: absolute;
+  left: 50%;
   span {
     padding-right: 0.2rem;
   }
@@ -25,7 +28,7 @@ const Clear = styled.div`
   }
 `;
 
-const RESULT_PANEL_MIN_HEIGHT = 180;
+const RESULT_PANEL_MIN_HEIGHT = 80;
 const PLAYGROUND_HEADER_HEIGHT = 75;
 
 const FeedbackContainer = styled.div<{ height: number }>`
@@ -96,7 +99,14 @@ const TransactionBottomBar: React.FC = () => {
         <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
           Transaction Results
           <ClearResults type={ResultType.Transaction} />
-          <div></div>
+          {resultHeight > 40 ? (
+            <GoChevronDown size="16px" onClick={() => setResultHeight(40)} />
+          ) : (
+            <GoChevronUp
+              size="16px"
+              onClick={() => setResultHeight(RESULT_PANEL_MIN_HEIGHT * 2)}
+            />
+          )}
         </ResizeHeading>
         <RenderResponse resultType={ResultType.Transaction} />
       </FeedbackRoot>

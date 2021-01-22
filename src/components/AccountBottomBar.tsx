@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ResultType } from 'api/apollo/generated/graphql';
-
+import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { useProject } from 'providers/Project/projectHooks';
 import useMousePosition from '../hooks/useMousePosition';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
@@ -13,9 +13,8 @@ import { ResizeHeading } from 'layout/Heading';
 import { RenderResponse } from 'components/RenderResponse';
 import { ClearResults } from './TransactionBottomBar';
 
-
-const RESULT_PANEL_MIN_HEIGHT = 100;
-const STORAGE_PANEL_MIN_HEIGHT = 100 + RESULT_PANEL_MIN_HEIGHT;
+const RESULT_PANEL_MIN_HEIGHT = 80;
+const STORAGE_PANEL_MIN_HEIGHT = 80 + RESULT_PANEL_MIN_HEIGHT;
 const PLAYGROUND_HEADER_HEIGHT = 75;
 
 const TypeListItem = styled.li<{ active: boolean }>`
@@ -65,16 +64,16 @@ interface TypeListProps {
   identifiers: string[];
   selected: string;
   onSelect: (type: string) => void;
-	controls: () => any;
-	resize: () => any;
+  controls: () => any;
+  resize: () => any;
 }
 // @ts-ignore
 const IdentifierList: React.FC<TypeListProps> = ({
   identifiers,
   selected,
   onSelect,
-	controls,
-	resize
+  controls,
+  resize,
 }) => (
   <StorageListContainer>
     <ResizeHeading onMouseDown={resize}>Storage {controls()}</ResizeHeading>
@@ -150,7 +149,7 @@ const AccountState: React.FC<{
 
   const { x, y } = useMousePosition();
   const [storageHeight, setStorageHeight] = useState(STORAGE_PANEL_MIN_HEIGHT);
-  const [resultHeight, setResultHeight] = useState(180);
+  const [resultHeight, setResultHeight] = useState(RESULT_PANEL_MIN_HEIGHT);
   const [isResizingStorage, setIsResizingStorage] = useState(false);
   const [isResizingResult, setIsResizingResult] = useState(false);
 
@@ -196,29 +195,50 @@ const AccountState: React.FC<{
 
   return (
     <>
-      { identifiers.length ? <AccountStateContainer
-				height={storageHeight + resultHeight}
-      >
-        <IdentifierList
-          identifiers={identifiers}
-          selected={selected}
-					onSelect={setSelected}
-					resize={() => toggleResizingStorage(true)}
-          controls={() => {
-            return (
-              <SidebarItemInsert grab={false}>
-								<></>
-              </SidebarItemInsert>
-            );
-          }}
-        />
-        <StateContainer value={storage[selected]} />
-      </AccountStateContainer> : ''}
+      {identifiers.length ? (
+        <AccountStateContainer height={storageHeight + resultHeight}>
+          <IdentifierList
+            identifiers={identifiers}
+            selected={selected}
+            onSelect={setSelected}
+            resize={() => toggleResizingStorage(true)}
+            controls={() => {
+              return (
+                <SidebarItemInsert grab={false}>
+                  {storageHeight > 40 ? (
+                    <GoChevronDown
+                      size="16px"
+                      onClick={() => setStorageHeight(40)}
+                    />
+                  ) : (
+                    <GoChevronUp
+                      size="16px"
+                      onClick={() =>
+                        setStorageHeight(STORAGE_PANEL_MIN_HEIGHT * 2)
+                      }
+                    />
+                  )}
+                </SidebarItemInsert>
+              );
+            }}
+          />
+          <StateContainer value={storage[selected]} />
+        </AccountStateContainer>
+      ) : (
+        ''
+      )}
       <DeploymentResultContainer height={resultHeight}>
         <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
           Deployment Result
           <ClearResults type={ResultType.Contract} />
-          <div></div>
+          {resultHeight > 40 ? (
+            <GoChevronDown size="16px" onClick={() => setResultHeight(40)} />
+          ) : (
+            <GoChevronUp
+              size="16px"
+              onClick={() => setResultHeight(RESULT_PANEL_MIN_HEIGHT * 2)}
+            />
+          )}
         </ResizeHeading>
         <RenderResponse resultType={ResultType.Contract} />
       </DeploymentResultContainer>
