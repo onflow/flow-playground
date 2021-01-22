@@ -178,3 +178,15 @@ export const ErrorMessage = styled.p`
   line-height: 1.2;
   word-break: break-word;
 `;
+
+export const SignersError = styled.p`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  margin: 10px 0;
+  color: ${theme.colors.error};
+  svg{
+    margin-right: 0.5em;
+  }
+`;

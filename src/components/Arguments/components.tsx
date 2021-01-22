@@ -1,12 +1,22 @@
 import React from "react";
-import { FaArrowCircleRight } from "react-icons/fa";
+import { FaArrowCircleRight, FaExclamationTriangle } from "react-icons/fa";
 import { EntityType } from "providers/Project";
 import Button from "components/Button";
 import { useProject } from "providers/Project/projectHooks";
 import AccountPicker from "components/AccountPicker";
-import { Badge, Controls, Heading, List, Title, SignersContainer, ToggleExpand } from "./styles";
+import {
+  Badge,
+  Controls,
+  Heading,
+  List,
+  Title,
+  SignersContainer,
+  ToggleExpand,
+  SignersError
+} from "./styles";
 import { ArgumentsListProps, ArgumentsTitleProps, InteractionButtonProps } from "./types";
 import SingleArgument from "./SingleArgument";
+import theme from "../../theme";
 
 export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
   const { type, errors, expanded, setExpanded } = props
@@ -87,11 +97,14 @@ export const Signers: React.FC<SignersProps> = (props) => {
     project
   } = useProject();
   const { accounts } = project;
-
   const { maxSelection, selected, updateSelectedAccounts } = props;
+
+  const enoughSigners = selected.length < maxSelection
+  const lineColor = enoughSigners ? theme.colors.error : null
+
   return(
     <SignersContainer>
-      <Title>Transaction Signers</Title>
+      <Title lineColor={lineColor}>Transaction Signers</Title>
       <AccountPicker
         project={project}
         accounts={accounts}
@@ -99,7 +112,13 @@ export const Signers: React.FC<SignersProps> = (props) => {
         onChange={updateSelectedAccounts}
         maxSelection={maxSelection}
       />
-      {selected.length < maxSelection && <p>Not enough signers...</p>}
+      {enoughSigners &&
+        <SignersError>
+          <FaExclamationTriangle/>
+          "Not enough signers..."
+        </SignersError>
+      }
+
     </SignersContainer>
   )
 }
