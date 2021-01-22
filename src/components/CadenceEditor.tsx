@@ -1,5 +1,6 @@
 import React from "react"
 import styled from "@emotion/styled"
+import { keyframes } from "@emotion/core";
 import configureCadence, {CADENCE_LANGUAGE_ID} from "../util/cadence"
 import {CadenceCheckCompleted, CadenceLanguageServer, Callbacks} from "../util/language-server"
 import {createCadenceLanguageClient} from "../util/language-client"
@@ -7,13 +8,19 @@ import * as monaco from "monaco-editor/esm/vs/editor/editor.api"
 import {EntityType} from "providers/Project";
 import Arguments from "components/Arguments";
 import { Argument } from "components/Arguments/types";
-import {CadenceSyntaxError, formatMarker, goTo} from "../util/language-syntax-errors";
+import {CadenceSyntaxError, formatMarker, goTo, Highlight} from "../util/language-syntax-errors";
 import {
   MonacoLanguageClient,
   ExecuteCommandRequest,
 } from "monaco-languageclient"
 
 const {MonacoServices} = require("monaco-languageclient/lib/monaco-services");
+
+const blink = keyframes`
+  50% {
+    opacity: 0.5;
+  }
+`;
 
 const EditorContainer = styled.div`
   width: 100%;
@@ -39,6 +46,16 @@ const EditorContainer = styled.div`
     bottom: 2vw;
     pointer-events: none;
   }
+
+  .playground-syntax-error-hover{
+    background-color: rgba(238,67, 30, 0.1);
+  }
+  
+  .playground-syntax-error-hover-selection{
+    background-color: rgba(238,67, 30, 0.3);
+    border-radius: 3px;
+    animation: ${blink} 1s ease-in-out infinite;
+  }
 `;
 
 type EditorState = {
@@ -61,7 +78,6 @@ type CadenceEditorProps = {
 
 type CadenceEditorState = {
   args: {[key: string]: Argument[]}
-  valid: {[key: string]: boolean}
   syntaxErrors: {[key: string]: CadenceSyntaxError[]}
 }
 
@@ -89,7 +105,6 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
 
     this.state = {
       args:{},
-      valid: {},
       syntaxErrors: {}
     }
   }
@@ -175,8 +190,6 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
           const params = await this.getParameters()
           this.setExecutionArguments(params)
         }
-        this.setValidState(result.valid)
-
         this.processMarkers()
       })
     })
@@ -197,7 +210,6 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
   }
 
   processMarkers(){
-    // Try to get list of markers
     const model = this.editor.getModel();
     const modelMarkers = monaco.editor.getModelMarkers({resource: model.uri})
     const errors = modelMarkers.map(formatMarker)
@@ -214,15 +226,6 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
     this.setState({
       args: {
         [activeId]: args
-      }
-    })
-  }
-
-  setValidState(valid: boolean){
-    const { activeId } = this.props;
-    this.setState({
-      valid: {
-        [activeId]: valid
       }
     })
   }
@@ -317,12 +320,53 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
       .length
   }
 
-  hover(marker: monaco.editor.IMarker): void {
-    console.log({marker})
+  hover(highlight: Highlight): void {
+    const { startLine, startColumn, endLine, endColumn } = highlight
+    const model = this.editor.getModel()
+
+    const selection = model
+      .getAllDecorations()
+      .find((item: any) => {
+        return (
+          item.range.startLineNumber === startLine &&
+          item.range.startColumn === startColumn
+        )
+      })
+
+    const selectionEndLine = selection ? selection.range.endLineNumber : endLine
+    const selectionEndColumn = selection ? selection.range.endColumn : endColumn
+
+    const highlightLine = [
+      {
+        range: new monaco.Range(startLine, startColumn, endLine, endColumn),
+        options: {
+          isWholeLine: true,
+          className: 'playground-syntax-error-hover',
+        },
+      },
+      {
+        range: new monaco.Range(startLine, startColumn, selectionEndLine, selectionEndColumn),
+        options: {
+          isWholeLine: false,
+          className: 'playground-syntax-error-hover-selection',
+        }
+      }
+    ]
+    this.editor.getModel().deltaDecorations([], highlightLine)
   }
 
   hideDecorations(): void {
-    console.log("Hide decorations")
+    const model = this.editor.getModel()
+    const current = model
+        .getAllDecorations()
+        .filter(item => {
+          return [
+            "playground-syntax-error-hover",
+            "playground-syntax-error-hover-selection"
+          ].includes(item.options.className )
+        }).map(item => item.id)
+
+    model.deltaDecorations(current, [])
   }
 
   render() {
@@ -330,9 +374,8 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
 
     /// Get a list of args from language server
     const { activeId } = this.props;
-    const { args, syntaxErrors, valid } = this.state;
+    const { args, syntaxErrors } = this.state;
     const list = args[activeId] || []
-    const validCode = valid[activeId]
 
     /// Extract number of signers from code
     const signers = this.extractSigners(code);
@@ -343,10 +386,9 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
           type={type}
           list={list}
           signers={signers}
-          validCode={validCode}
           syntaxErrors={errors}
-          hover={this.hover}
-          hideDecorations={this.hideDecorations}
+          hover={(highlight)=> this.hover(highlight)}
+          hideDecorations={()=>this.hideDecorations()}
           goTo={(position: monaco.IPosition)=> goTo(this.editor, position)}
         />
       </EditorContainer>
