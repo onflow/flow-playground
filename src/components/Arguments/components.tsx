@@ -20,15 +20,19 @@ import theme from "../../theme";
 
 export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
   const { type, errors, expanded, setExpanded } = props
+
+  const hasErrors = errors > 0
+  const lineColor = hasErrors ? theme.colors.error : null
+
   return (
     <Heading>
-      <Title>
+      <Title lineColor={lineColor}>
         {type === EntityType.Account && "Contract Arguments"}
         {type === EntityType.TransactionTemplate && "Transaction Arguments"}
         {type === EntityType.ScriptTemplate && "Script Arguments"}
       </Title>
       <Controls>
-        {errors > 0 && <Badge><span>{errors}</span></Badge>}
+        {hasErrors && <Badge><span>{errors}</span></Badge>}
         <ToggleExpand className="icon" expanded={expanded} onClick={()=>setExpanded(!expanded)} />
       </Controls>
     </Heading>
