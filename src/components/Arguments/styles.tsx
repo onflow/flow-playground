@@ -21,7 +21,11 @@ export const Heading = styled.div`
   margin-bottom: 16px;
 `;
 
-export const Title = styled.div`
+interface TitleProps {
+  lineColor?: string
+}
+
+export const Title = styled.div<TitleProps>`
   font-size: 10px;
   font-weight: bold;
   text-transform: uppercase;
@@ -35,7 +39,7 @@ export const Title = styled.div`
     display: block;
     position: absolute;
     left: 0;
-    background: ${theme.colors.primary};
+    background: ${(props: any) => props.lineColor || theme.colors.primary};
     height: 3px;
     width: 1rem;
     bottom: -6px;
@@ -136,4 +140,41 @@ export const StatusMessage = styled.div`
   svg.spin {
     animation: spin 0.5s linear infinite;
   }
+`;
+
+export const ErrorsContainer = styled.div`
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: 100%;
+  margin-bottom: 12px;
+`;
+
+export const SingleError = styled.div`
+  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: 4px;
+  &:hover{
+    background-color: rgba(244, 57, 64, 0.15);
+  }
+`
+
+export const ErrorIndex = styled.div`
+  width: 20px;
+  height: 20px;
+  background-color: rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  margin-right: 8px;
+  flex: 0 0 auto;
+`;
+
+export const ErrorMessage = styled.p`
+  font-size: 16px;
+  line-height: 1.2;
+  word-break: break-word;
 `;
