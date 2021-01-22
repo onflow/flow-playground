@@ -12,7 +12,6 @@ export const HoverPanel = styled.div<HoverPanelProps>`
   border-radius: 4px;
   background-color: #fff;
   box-shadow: 10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff;
-  /* border: var(--gap) solid var(--key); */
 `;
 
 export const Heading = styled.div`
