@@ -35,8 +35,8 @@ export const formatMarker = (marker: monaco.editor.IMarker): CadenceSyntaxError 
     highlight: {
       startLine: marker.startLineNumber,
       endLine: marker.endLineNumber,
-      startColumn: marker.startLineNumber,
-      endColumn: marker.startLineNumber
+      startColumn: marker.startColumn,
+      endColumn: marker.endColumn
     }
   }
 };
