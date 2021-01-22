@@ -99,6 +99,7 @@ export const Signers: React.FC<SignersProps> = (props) => {
         onChange={updateSelectedAccounts}
         maxSelection={maxSelection}
       />
+      {selected.length < maxSelection && <p>Not enough signers...</p>}
     </SignersContainer>
   )
 }
