@@ -5,7 +5,6 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require('copy-webpack-plugin');
 const webpack = require("webpack")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   entry: [
@@ -87,7 +86,6 @@ module.exports = {
       'DEFAULT_SEO_IMAGE',
       'AVATAAR_URL',
 		]),
-		new BundleAnalyzerPlugin()
 ],
   node: {
     net: 'empty',
