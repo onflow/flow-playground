@@ -312,7 +312,7 @@ export const createZip = async (
   zip.file('test/README.md', readMeFile);
   zip.file('test/package.json', packageConfig);
   zip.file('test/babel.config.json', babelConfig);
-  zip.file('test/jest.config.json', jestConfig);
+  zip.file('test/jest.config.js', jestConfig);
   zip.file('test/index.test.js', testFile);
 
   const { accounts, transactionTemplates, scriptTemplates } = project;
