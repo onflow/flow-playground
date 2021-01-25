@@ -1,6 +1,6 @@
 test("Deploy {{contractName}} contract", async () => {
     const name = "{{contractName}}"
-    const to = getAccountAddress("{{getNameByAddress accountAddress}}")
+    const to = await getAccountAddress("{{getNameByAddress accountAddress}}")
 
     {{>addressMap imports=imports}}
 
