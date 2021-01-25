@@ -135,7 +135,7 @@ const AccountState: React.FC<{
 
     const tuple = key.split('\u001f')
     const [domain, identifier] = tuple
-    
+
     if (tuple.length === 2 && domain === 'storage') {
       storage[identifier] = parsed[key];
     }
