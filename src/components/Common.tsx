@@ -1,10 +1,11 @@
 import styled from '@emotion/styled';
+import { motion } from "framer-motion";
 
 interface FullScreenContainerProps {
   elevation?: number;
 }
 
-export const FullScreenContainer = styled.div<FullScreenContainerProps>`
+export const FullScreenContainer = styled(motion.div)<FullScreenContainerProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -30,7 +31,7 @@ interface PopupContainerProps {
   width?: string;
 }
 
-export const PopupContainer = styled.div<PopupContainerProps>`
+export const PopupContainer = styled(motion.div)<PopupContainerProps>`
   display: flex;
   width: ${({ width }) => width};
   max-width: 30%;
