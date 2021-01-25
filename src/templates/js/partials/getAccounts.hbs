@@ -1,6 +1,6 @@
 {{#if accounts ~}}
     // Import participating accounts
     {{#each accounts ~}}
-        const {{this}} = getAccountAddress("{{this}}")
+        const {{this}} = await getAccountAddress("{{this}}")
     {{/each}}
 {{/if}}
