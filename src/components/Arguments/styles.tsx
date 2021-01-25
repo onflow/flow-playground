@@ -16,7 +16,7 @@ export const HoverPanel = styled.div<HoverPanelProps>`
 
 export const Heading = styled.div`
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 16px;
 `;
@@ -73,13 +73,13 @@ export const Badge = styled.div`
 `;
 
 interface ListProps {
-  hidden: boolean
+  hidden?: boolean
 }
 export const List = styled.div<ListProps>`
   display: ${({ hidden }) => hidden ? 'none' : 'grid'};
   grid-gap: 12px;
   grid-template-columns: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 `;
 
 export const SignersContainer = styled.div`
@@ -156,6 +156,7 @@ export const SingleError = styled.div`
   box-sizing: border-box;
   padding: 10px;
   border-radius: 4px;
+  font-size: 14px;
   &:hover{
     background-color: rgba(244, 57, 64, 0.15);
   }
@@ -174,7 +175,6 @@ export const ErrorIndex = styled.div`
 `;
 
 export const ErrorMessage = styled.p`
-  font-size: 16px;
   line-height: 1.2;
   word-break: break-word;
 `;

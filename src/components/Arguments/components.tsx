@@ -12,11 +12,14 @@ import {
   Title,
   SignersContainer,
   ToggleExpand,
-  SignersError
+  SignersError, SingleError, ErrorIndex, ErrorMessage
 } from "./styles";
 import { ArgumentsListProps, ArgumentsTitleProps, InteractionButtonProps } from "./types";
 import SingleArgument from "./SingleArgument";
 import theme from "../../theme";
+import {Stack} from "layout/Stack";
+import {CadenceSyntaxError} from "../../util/language-syntax-errors";
+import { ErrorListProps } from "./types";
 
 export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
   const { type, errors, expanded, setExpanded } = props
@@ -50,6 +53,33 @@ export const ArgumentsList: React.FC<ArgumentsListProps> = ({list, errors, onCha
           : null
       })}
     </List>
+  )
+}
+
+export const ErrorsList: React.FC<ErrorListProps> = props => {
+  const { list, goTo, hideDecorations, hover } =  props
+  return (
+    <Stack>
+      <Heading>
+        <Title lineColor={theme.colors.error}>Syntax Errors</Title>
+      </Heading>
+      <List>
+        {list.map((item: CadenceSyntaxError, i) => {
+          return (
+            <SingleError
+              onClick={() => goTo(item.position)}
+              onMouseOver={() => hover(item.highlight)}
+              onMouseOut={() => hideDecorations()}
+            >
+              <ErrorIndex>
+                <span>{i + 1}</span>
+              </ErrorIndex>
+              <ErrorMessage>{item.message}</ErrorMessage>
+            </SingleError>
+          );
+        })}
+      </List>
+    </Stack>
   )
 }
 

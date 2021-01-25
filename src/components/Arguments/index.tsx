@@ -6,44 +6,23 @@ import { useProject } from 'providers/Project/projectHooks';
 import {
   Account,
   ResultType,
-  useSetExecutionResultsMutation,
+  useSetExecutionResultsMutation
 } from 'api/apollo/generated/graphql';
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+
+import { ArgumentsProps } from "components/Arguments/types";
 
 import {
   ControlContainer,
   HoverPanel,
-  StatusMessage,
-  Heading,
-  Title,
-  ErrorsContainer,
-  SingleError,
-  ErrorIndex,
-  ErrorMessage,
+  StatusMessage
 } from './styles';
-import { Argument } from './types';
+
 import {
   ActionButton,
   ArgumentsList,
-  ArgumentsTitle,
+  ArgumentsTitle, ErrorsList,
   Signers,
 } from './components';
-import {
-  CadenceSyntaxError,
-  Highlight,
-} from '../../util/language-syntax-errors';
-import { Stack } from 'layout/Stack';
-import theme from '../../theme';
-
-type ArgumentsProps = {
-  type: EntityType;
-  list: Argument[];
-  signers: number;
-  syntaxErrors: CadenceSyntaxError[];
-  goTo: (position: monaco.IPosition) => void;
-  hover: (highlight: Highlight) => void;
-  hideDecorations: () => void;
-};
 
 const validateByType = (value: any, type: string) => {
   if (value.length === 0) {
@@ -58,7 +37,7 @@ const validateByType = (value: any, type: string) => {
 
     // Integers
     case type.includes('Int'): {
-      if (isNaN(value)) {
+      if (isNaN(value) || value === "") {
         return 'Should be a valid Integer number';
       }
       return null;
@@ -66,7 +45,7 @@ const validateByType = (value: any, type: string) => {
 
     // Words
     case type.includes('Word'): {
-      if (isNaN(value)) {
+      if (isNaN(value) || value === "") {
         return 'Should be a valid Word number';
       }
       return null;
@@ -74,7 +53,7 @@ const validateByType = (value: any, type: string) => {
 
     // Fixed Point
     case type.includes('Fix'): {
-      if (isNaN(value)) {
+      if (isNaN(value) || value === "") {
         return 'Should be a valid fixed point number';
       }
       return null;
@@ -102,7 +81,7 @@ const validateByType = (value: any, type: string) => {
 };
 
 const validate = (list: any, values: any) => {
-  const result = list.reduce((acc: any, item: any) => {
+  return list.reduce((acc: any, item: any) => {
     const { name, type } = item;
     const value = values[name];
     if (value) {
@@ -113,8 +92,6 @@ const validate = (list: any, values: any) => {
     }
     return acc;
   }, {});
-
-  return result;
 };
 
 const getLabel = (
@@ -284,19 +261,16 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                     expanded={expanded}
                     setExpanded={setExpanded}
                   />
-
-                  {
-                    <ArgumentsList
-                      list={list}
-                      errors={errors}
-                      hidden={!expanded}
-                      onChange={(name, value) => {
-                        let key = name.toString();
-                        let newValue = { ...values, [key]: value };
-                        setValue(newValue);
-                      }}
-                    />
-                  }
+                  <ArgumentsList
+                    list={list}
+                    errors={errors}
+                    hidden={!expanded}
+                    onChange={(name, value) => {
+                      let key = name.toString();
+                      let newValue = { ...values, [key]: value };
+                      setValue(newValue);
+                    }}
+                  />
                 </>
               )}
               {needSigners && (
@@ -308,29 +282,9 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
               )}
             </>
           )}
-          {!validCode && (
-            <Stack>
-              <Heading>
-                <Title lineColor={theme.colors.error}>Syntax Errors</Title>
-              </Heading>
-              <ErrorsContainer>
-                {syntaxErrors.map((item: CadenceSyntaxError, i) => {
-                  return (
-                    <SingleError
-                      onClick={() => goTo(item.position)}
-                      onMouseOver={() => hover(item.highlight)}
-                      onMouseOut={() => hideDecorations()}
-                    >
-                      <ErrorIndex>
-                        <span>{i + 1}</span>
-                      </ErrorIndex>
-                      <ErrorMessage>{item.message}</ErrorMessage>
-                    </SingleError>
-                  );
-                })}
-              </ErrorsContainer>
-            </Stack>
-          )}
+          {!validCode &&
+            <ErrorsList list={syntaxErrors} goTo={goTo} hover={hover} hideDecorations={hideDecorations}/>
+          }
           <ControlContainer isOk={isOk} progress={progress}>
             <StatusMessage>
               {statusIcon}
