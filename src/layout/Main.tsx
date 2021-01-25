@@ -5,4 +5,5 @@ export const Main = styled.div`
   display: flex;
   flex-direction: column;
   background: var(--bg);
+  overflow: hidden;
 `;

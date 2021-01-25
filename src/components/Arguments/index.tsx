@@ -6,24 +6,23 @@ import { useProject } from 'providers/Project/projectHooks';
 import {
   Account,
   ResultType,
-  useSetExecutionResultsMutation,
+  useSetExecutionResultsMutation
 } from 'api/apollo/generated/graphql';
-import { ControlContainer, HoverPanel, StatusMessage } from './styles';
-import { Argument } from './types';
+
+import { ArgumentsProps } from "components/Arguments/types";
+
+import {
+  ControlContainer,
+  HoverPanel,
+  StatusMessage
+} from './styles';
+
 import {
   ActionButton,
   ArgumentsList,
-  ArgumentsTitle,
+  ArgumentsTitle, ErrorsList,
   Signers,
 } from './components';
-
-
-type ArgumentsProps = {
-  type: EntityType;
-  list: Argument[];
-  signers: number;
-  validCode: boolean;
-};
 
 const validateByType = (value: any, type: string) => {
   if (value.length === 0) {
@@ -38,7 +37,7 @@ const validateByType = (value: any, type: string) => {
 
     // Integers
     case type.includes('Int'): {
-      if (isNaN(value)) {
+      if (isNaN(value) || value === "") {
         return 'Should be a valid Integer number';
       }
       return null;
@@ -46,7 +45,7 @@ const validateByType = (value: any, type: string) => {
 
     // Words
     case type.includes('Word'): {
-      if (isNaN(value)) {
+      if (isNaN(value) || value === "") {
         return 'Should be a valid Word number';
       }
       return null;
@@ -54,7 +53,7 @@ const validateByType = (value: any, type: string) => {
 
     // Fixed Point
     case type.includes('Fix'): {
-      if (isNaN(value)) {
+      if (isNaN(value) || value === "") {
         return 'Should be a valid fixed point number';
       }
       return null;
@@ -82,7 +81,7 @@ const validateByType = (value: any, type: string) => {
 };
 
 const validate = (list: any, values: any) => {
-  const result = list.reduce((acc: any, item: any) => {
+  return list.reduce((acc: any, item: any) => {
     const { name, type } = item;
     const value = values[name];
     if (value) {
@@ -93,20 +92,21 @@ const validate = (list: any, values: any) => {
     }
     return acc;
   }, {});
-
-  return result;
 };
 
-const getLabel = (resultType: ResultType, project: any, index: number) : string => {
+const getLabel = (
+  resultType: ResultType,
+  project: any,
+  index: number,
+): string => {
   return resultType === ResultType.Contract
-  ? 'Deployment'
-  : resultType === ResultType.Script
-  ? project.scriptTemplates[index].title
-  : resultType === ResultType.Transaction
-  ? project.transactionTemplates[index].title
-  : 'Interaction';
-}
-
+    ? 'Deployment'
+    : resultType === ResultType.Script
+    ? project.scriptTemplates[index].title
+    : resultType === ResultType.Transaction
+    ? project.transactionTemplates[index].title
+    : 'Interaction';
+};
 
 type ScriptExecution = (args?: string[]) => Promise<any>;
 type TransactionExecution = (
@@ -143,7 +143,9 @@ interface IValue {
 }
 
 const Arguments: React.FC<ArgumentsProps> = (props) => {
-  const { type, list, signers, validCode } = props;
+  const { type, list, signers } = props;
+  const { goTo, hover, hideDecorations, syntaxErrors } = props;
+  const validCode = syntaxErrors.length === 0;
   const needSigners = type == EntityType.TransactionTemplate && signers > 0;
   const [selected, updateSelectedAccounts] = useState([]);
   const [expanded, setExpanded] = useState(true);
@@ -249,36 +251,40 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
         dragElastic={1}
       >
         <HoverPanel>
-          {list.length > 0 && (
+          {validCode && (
             <>
-              <ArgumentsTitle
-                type={type}
-                errors={numberOfErrors}
-                expanded={expanded}
-                setExpanded={setExpanded}
-              />
-
-              {
-                <ArgumentsList
-                  list={list}
-                  errors={errors}
-                  hidden={!expanded}
-                  onChange={(name, value) => {
-                    let key = name.toString();
-                    let newValue = { ...values, [key]: value };
-                    setValue(newValue);
-                  }}
+              {list.length > 0 && (
+                <>
+                  <ArgumentsTitle
+                    type={type}
+                    errors={numberOfErrors}
+                    expanded={expanded}
+                    setExpanded={setExpanded}
+                  />
+                  <ArgumentsList
+                    list={list}
+                    errors={errors}
+                    hidden={!expanded}
+                    onChange={(name, value) => {
+                      let key = name.toString();
+                      let newValue = { ...values, [key]: value };
+                      setValue(newValue);
+                    }}
+                  />
+                </>
+              )}
+              {needSigners && (
+                <Signers
+                  maxSelection={signers}
+                  selected={selected}
+                  updateSelectedAccounts={updateSelectedAccounts}
                 />
-              }
+              )}
             </>
           )}
-          {needSigners && (
-            <Signers
-              maxSelection={signers}
-              selected={selected}
-              updateSelectedAccounts={updateSelectedAccounts}
-            />
-          )}
+          {!validCode &&
+            <ErrorsList list={syntaxErrors} goTo={goTo} hover={hover} hideDecorations={hideDecorations}/>
+          }
           <ControlContainer isOk={isOk} progress={progress}>
             <StatusMessage>
               {statusIcon}

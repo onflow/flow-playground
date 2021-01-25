@@ -16,7 +16,9 @@ const SingleArgument: React.FC<SingleArgumentProps> = ({ argument, error, onChan
         {name}
         <Type>{type}</Type>
       </Label>
-      <Input onChange={(event)=>{
+      <Input
+        name={`${name}-${type}`}
+        onChange={(event)=>{
         const {value} = event.target
         onChange(name,value)
       }}/>
