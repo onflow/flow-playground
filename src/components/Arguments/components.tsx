@@ -84,7 +84,10 @@ export const ArgumentsList: React.FC<ArgumentsListProps> = ({
 
 const getSpanClass = (message: string):string => {
   // We can potentially bring better displayed messages later
-  if (message.includes("exported declarations")){
+  if (
+    message.includes("exported declarations") ||
+    message.includes("consider")
+  ){
     return "suggestion"
   }
 
@@ -107,7 +110,6 @@ const renderMessage = (message: string) => {
       if (item.startsWith('`')) {
         acc.startNew = true;
         const span = <span className={spanClass}>{item.replace(/`/g, '')}</span>;
-        acc.items.push(current);
         acc.items.push(span);
         acc.startNew = true;
       } else {
