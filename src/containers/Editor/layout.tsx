@@ -10,6 +10,7 @@ import { Separator } from "components/Common";
 import Examples from "components/Examples";
 import ExportPopup from "components/ExportPopup";
 import Sidebar from "components/Sidebar";
+import { IconCadence } from "components/Icons";
 
 import Mixpanel from "../../util/mixpanel";
 
@@ -94,8 +95,19 @@ const EditorLayout: React.FC = () => {
               >
                 <NavButton>Flow Docs</NavButton>
               </a>
+              <a
+                style={{ display: "flex" }}
+                href="https://docs.onflow.org/cadence/language"
+                target="_blank"
+                rel="noopener"
+              >
+                <NavButton>
+                  <IconCadence size={"22px"} title={"Cadence Language Reference"} />
+                </NavButton>
+              </a>
 							<a
                 style={{ display: "flex" }}
+                title={"Flow on Twitter"}
                 href="https://twitter.com/flow_blockchain"
                 target="_blank"
                 rel="noopener"
@@ -106,6 +118,7 @@ const EditorLayout: React.FC = () => {
               </a>
               <a
                 style={{ display: "flex" }}
+                title={"Flow on Discord"}
                 href="https://discord.gg/2h6hgBF"
                 target="_blank"
                 rel="noopener"
