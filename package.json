@@ -40,6 +40,7 @@
     "reset-css": "^5.0.1",
     "styled-components": "^5.2.0",
     "theme-ui": "^0.3.1",
+    "unique-names-generator": "^4.3.1",
     "vscode-jsonrpc": "^5.0.1"
   },
   "devDependencies": {
