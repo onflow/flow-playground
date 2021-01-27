@@ -61,7 +61,7 @@ export const ErrorsList: React.FC<ErrorListProps> = props => {
   return (
     <Stack>
       <Heading>
-        <Title lineColor={theme.colors.error}>Syntax Errors</Title>
+        <Title lineColor={theme.colors.error}>Problems</Title>
       </Heading>
       <List>
         {list.map((item: CadenceSyntaxError, i) => {
