@@ -58,6 +58,7 @@ export const goTo = (
   editor: monaco.editor.ICodeEditor,
   position: monaco.IPosition,
 ) => {
+  editor.revealLineInCenter(position.lineNumber);
   editor.setPosition(position);
   editor.focus();
 };

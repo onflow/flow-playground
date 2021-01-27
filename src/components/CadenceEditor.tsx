@@ -353,6 +353,7 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
       }
     ]
     this.editor.getModel().deltaDecorations([], highlightLine)
+    this.editor.revealLineInCenter(startLine);
   }
 
   hideDecorations(): void {

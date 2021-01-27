@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { uniqueNamesGenerator, adjectives, colors, } from 'unique-names-generator';
+import { FaSyncAlt } from 'react-icons/fa';
 import { useProject } from 'providers/Project/projectHooks';
 import { default as FlowButton } from 'components/Button';
 
@@ -14,9 +16,19 @@ import { createZip } from '../util/generator';
 
 import {
   Input,
-  InputBlock,
+  InputBlock, InputIcon,
   Label,
 } from 'components/Arguments/SingleArgument/styles';
+
+const generateProjectName = () => {
+  const prefix: string = uniqueNamesGenerator({
+    dictionaries: [colors, adjectives],
+    separator: '-',
+    length: 2,
+  })
+
+  return `${prefix}-playground`
+}
 
 const ExportPopup: React.FC<{
   visible: boolean;
@@ -24,8 +36,13 @@ const ExportPopup: React.FC<{
 }> = ({ visible, triggerClose }) => {
   const { project } = useProject();
   const [processing, setProcessing] = useState(false);
-  const [projectName, setProjectName] = useState(`project-${project.id}`);
+  const [projectName, setProjectName] = useState(generateProjectName());
   const [folderName, setFolderName] = useState('cadence');
+
+  const regenerateProjectName = () => {
+    const newName = generateProjectName()
+    setProjectName(newName)
+  }
 
   const firstInput = useRef<HTMLInputElement>(null!);
 
@@ -92,6 +109,7 @@ const ExportPopup: React.FC<{
             value={projectName}
             onChange={event => setProjectName(event.target.value)}
           />
+          <InputIcon icon={<FaSyncAlt/>} onClick={regenerateProjectName}/>
         </InputBlock>
         <InputBlock mb={'30px'}>
           <Label>Cadence Folder</Label>

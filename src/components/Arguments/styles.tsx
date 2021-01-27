@@ -176,6 +176,16 @@ export const ErrorIndex = styled.div`
 export const ErrorMessage = styled.p`
   line-height: 1.2;
   word-break: break-word;
+  span {
+    background-color: rgba(0,0, 0, 0.05);
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin: 3px 3px 3px 5px;
+    line-height: 20px;
+    .suggestion{
+      background-color: ${theme.colors.primary}
+    }
+  }
 `;
 
 export const SignersError = styled.p`
