@@ -25,7 +25,7 @@ import {
 import SingleArgument from './SingleArgument';
 import theme from '../../theme';
 import { Stack } from 'layout/Stack';
-import { CadenceSyntaxError } from '../../util/language-syntax-errors';
+import { CadenceProblem } from '../../util/language-syntax-errors';
 import { ErrorListProps } from './types';
 
 export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
@@ -95,7 +95,6 @@ const getSpanClass = (message: string):string => {
 }
 
 const renderMessage = (message: string) => {
-  console.log({message})
   let spanClass = getSpanClass(message);
 
   const {items} = message.split(' ').reduce(
@@ -134,10 +133,11 @@ export const ErrorsList: React.FC<ErrorListProps> = (props) => {
         <Title lineColor={theme.colors.error}>Problems</Title>
       </Heading>
       <List>
-        {list.map((item: CadenceSyntaxError, i) => {
+        {list.map((item: CadenceProblem, i) => {
           const message = renderMessage(item.message);
           return (
             <SingleError
+              key={`${i}-${item.message}`}
               onClick={() => goTo(item.position)}
               onMouseOver={() => hover(item.highlight)}
               onMouseOut={() => hideDecorations()}
