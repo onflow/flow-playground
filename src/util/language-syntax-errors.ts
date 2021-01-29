@@ -2,10 +2,12 @@
 import { FaExclamationTriangle } from 'react-icons/fa';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
-export enum SyntaxError {
-  Generic = 'generic',
-  MissingInitializer = 'init-missing',
-  TypeMissmatch = 'type-missmatch',
+export enum ProblemType {
+  Error = 'error',
+  Warning = 'warning',
+  Info = 'suggestion',
+  Hint = 'hint',
+  Unknown = "unknown"
 }
 
 export type Highlight = {
@@ -15,7 +17,7 @@ export type Highlight = {
   endColumn: number
 }
 
-export type CadenceSyntaxError = {
+export type CadenceProblem = {
   message: string,
   type: string,
   position: monaco.IPosition,
@@ -23,10 +25,29 @@ export type CadenceSyntaxError = {
   highlight: Highlight
 }
 
-export const formatMarker = (marker: monaco.editor.IMarker): CadenceSyntaxError => {
+export type ProblemsList = {
+  [key: string]: CadenceProblem[]
+}
+
+const getMarkerType = (severity: number): ProblemType => {
+  switch (true) {
+    case (severity === 8):
+      return ProblemType.Error
+    case (severity === 4):
+      return ProblemType.Warning
+    case (severity === 2):
+      return ProblemType.Info
+    case (severity === 1):
+      return ProblemType.Hint
+    default:
+      return ProblemType.Unknown
+  }
+}
+
+export const formatMarker = (marker: monaco.editor.IMarker): CadenceProblem => {
   return {
     message: marker.message,
-    type: SyntaxError.Generic,
+    type: getMarkerType(marker.severity),
     icon: FaExclamationTriangle,
     position: {
       lineNumber: marker.startLineNumber,
@@ -40,6 +61,10 @@ export const formatMarker = (marker: monaco.editor.IMarker): CadenceSyntaxError 
     }
   }
 };
+
+export const hasErrors = (problemList: any[]):boolean => {
+  return problemList.filter(problem => problem.type === ProblemType.Error).length === 0
+}
 
 export const getIconByErrorType = (errorType: SyntaxError): any => {
   switch (errorType) {

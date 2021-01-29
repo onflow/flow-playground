@@ -8,7 +8,7 @@ import * as monaco from "monaco-editor/esm/vs/editor/editor.api"
 import {EntityType} from "providers/Project";
 import Arguments from "components/Arguments";
 import { Argument } from "components/Arguments/types";
-import {CadenceSyntaxError, formatMarker, goTo, Highlight} from "../util/language-syntax-errors";
+import {CadenceProblem, formatMarker, goTo, Highlight, ProblemsList} from "../util/language-syntax-errors";
 import {
   MonacoLanguageClient,
   ExecuteCommandRequest,
@@ -78,7 +78,7 @@ type CadenceEditorProps = {
 
 type CadenceEditorState = {
   args: {[key: string]: Argument[]}
-  syntaxErrors: {[key: string]: CadenceSyntaxError[]}
+  problems: {[key: string]: ProblemsList}
 }
 
 class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorState> {
@@ -105,7 +105,7 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
 
     this.state = {
       args:{},
-      syntaxErrors: {}
+      problems: {}
     }
   }
 
@@ -212,10 +212,21 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
   processMarkers(){
     const model = this.editor.getModel();
     const modelMarkers = monaco.editor.getModelMarkers({resource: model.uri})
-    const errors = modelMarkers.map(formatMarker)
+    const errors = modelMarkers
+      .reduce((acc: {[key:string]: CadenceProblem[]}, marker) => {
+        const mappedMarker:CadenceProblem = formatMarker(marker);
+        acc[mappedMarker.type].push(mappedMarker)
+        return acc
+      },{
+        "error": [],
+        "warning": [],
+        "info": [],
+        "hint": []
+      })
+
     const {activeId} = this.props;
     this.setState({
-      syntaxErrors: {
+      problems: {
         [activeId]: errors
       }
     })
@@ -375,19 +386,24 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
 
     /// Get a list of args from language server
     const { activeId } = this.props;
-    const { args, syntaxErrors } = this.state;
+    const { args, problems } = this.state;
     const list = args[activeId] || []
 
     /// Extract number of signers from code
     const signers = this.extractSigners(code);
-    const errors = syntaxErrors[activeId] || []
+    const problemsList: ProblemsList  = problems[activeId] || {
+      error: [],
+      warning: [],
+      hint: [],
+      info: []
+    }
     return (
       <EditorContainer id={this.props.mount}>
         <Arguments
           type={type}
           list={list}
           signers={signers}
-          syntaxErrors={errors}
+          problems={problemsList}
           hover={(highlight)=> this.hover(highlight)}
           hideDecorations={()=>this.hideDecorations()}
           goTo={(position: monaco.IPosition)=> goTo(this.editor, position)}

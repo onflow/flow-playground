@@ -1,6 +1,6 @@
 import * as monaco from "monaco-editor";
 import {EntityType} from "providers/Project";
-import {CadenceSyntaxError, Highlight} from "../../util/language-syntax-errors";
+import {CadenceProblem, Highlight, ProblemsList} from "../../util/language-syntax-errors";
 
 export type InteractionButtonProps = {
   onClick: () => void,
@@ -17,7 +17,7 @@ export type ArgumentsProps = {
   type: EntityType;
   list: Argument[];
   signers: number;
-  syntaxErrors: CadenceSyntaxError[];
+  problems: ProblemsList;
   goTo: (position: monaco.IPosition) => void;
   hover: (highlight: Highlight) => void;
   hideDecorations: () => void;
@@ -38,8 +38,15 @@ export type ArgumentsListProps = {
 }
 
 export type ErrorListProps = {
-  list: CadenceSyntaxError[],
+  list: CadenceProblem[],
   goTo: (position: monaco.IPosition) => void;
   hover: (highlight: Highlight) => void;
   hideDecorations: () => void;
+}
+
+export type HintsProps = {
+  problems: ProblemsList,
+  goTo: (position: monaco.IPosition) => void,
+  hover: (highlight: Highlight) => void,
+  hideDecorations: () => void,
 }
