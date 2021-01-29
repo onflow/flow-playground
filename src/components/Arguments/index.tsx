@@ -20,7 +20,7 @@ import {
 import {
   ActionButton,
   ArgumentsList,
-  ArgumentsTitle, ErrorsList,
+  ArgumentsTitle, ErrorsList, Hints,
   Signers,
 } from './components';
 
@@ -295,6 +295,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           {!validCode &&
             <ErrorsList list={problems.error} goTo={goTo} hover={hover} hideDecorations={hideDecorations}/>
           }
+          <Hints problems={problems} goTo={goTo} hover={hover} hideDecorations={hideDecorations}/>
           <ControlContainer isOk={isOk} progress={progress}>
             <StatusMessage>
               {statusIcon}

@@ -26,7 +26,7 @@ import SingleArgument from './SingleArgument';
 import theme from '../../theme';
 import { Stack } from 'layout/Stack';
 import { CadenceProblem } from '../../util/language-syntax-errors';
-import { ErrorListProps } from './types';
+import { ErrorListProps, HintsProps } from './types';
 
 export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
   const { type, errors, expanded, setExpanded } = props;
@@ -134,6 +134,40 @@ export const ErrorsList: React.FC<ErrorListProps> = (props) => {
       </Heading>
       <List>
         {list.map((item: CadenceProblem, i) => {
+          const message = renderMessage(item.message);
+          return (
+            <SingleError
+              key={`${i}-${item.message}`}
+              onClick={() => goTo(item.position)}
+              onMouseOver={() => hover(item.highlight)}
+              onMouseOut={() => hideDecorations()}
+            >
+              <ErrorIndex>
+                <span>{i + 1}</span>
+              </ErrorIndex>
+              <ErrorMessage>{message}</ErrorMessage>
+            </SingleError>
+          );
+        })}
+      </List>
+    </Stack>
+  );
+};
+
+export const Hints: React.FC<HintsProps> = (props) => {
+  const { problems, goTo, hideDecorations, hover } = props;
+
+  if (problems.warning.length === 0 && problems.info.length === 0){
+    return null
+  }
+  const fullList = [...problems.warning, ...problems.info]
+  return (
+    <Stack>
+      <Heading>
+        <Title lineColor={"orange"}>Warnings and Hints</Title>
+      </Heading>
+      <List>
+        {fullList.map((item: CadenceProblem, i) => {
           const message = renderMessage(item.message);
           return (
             <SingleError

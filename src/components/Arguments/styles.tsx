@@ -80,6 +80,8 @@ export const List = styled.div<ListProps>`
   grid-gap: 12px;
   grid-template-columns: 100%;
   margin-bottom: 24px;
+  max-height: 400px;
+  overflow-y: auto;
 `;
 
 export const SignersContainer = styled.div`

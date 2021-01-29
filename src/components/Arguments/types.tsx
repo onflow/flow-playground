@@ -43,3 +43,10 @@ export type ErrorListProps = {
   hover: (highlight: Highlight) => void;
   hideDecorations: () => void;
 }
+
+export type HintsProps = {
+  problems: ProblemsList,
+  goTo: (position: monaco.IPosition) => void,
+  hover: (highlight: Highlight) => void,
+  hideDecorations: () => void,
+}
