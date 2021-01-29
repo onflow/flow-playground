@@ -144,8 +144,9 @@ interface IValue {
 
 const Arguments: React.FC<ArgumentsProps> = (props) => {
   const { type, list, signers } = props;
-  const { goTo, hover, hideDecorations, syntaxErrors } = props;
-  const validCode = syntaxErrors.length === 0;
+  const { goTo, hover, hideDecorations, problems } = props;
+  const validCode = problems.error.length === 0
+
   const needSigners = type == EntityType.TransactionTemplate && signers > 0;
   const [selected, updateSelectedAccounts] = useState([]);
   const [expanded, setExpanded] = useState(true);
@@ -283,7 +284,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
             </>
           )}
           {!validCode &&
-            <ErrorsList list={syntaxErrors} goTo={goTo} hover={hover} hideDecorations={hideDecorations}/>
+            <ErrorsList list={problems.error} goTo={goTo} hover={hover} hideDecorations={hideDecorations}/>
           }
           <ControlContainer isOk={isOk} progress={progress}>
             <StatusMessage>
