@@ -179,7 +179,16 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     // Map values to strings that will be passed to backend
     const args = list.map((arg) => {
       const { name, type } = arg;
-      return JSON.stringify({ value: values[name], type });
+      let value = values[name];
+
+      // We probably better fix this on server side...
+      if (type === "UFix64"){
+        if (value.indexOf('.') < 0 ){
+          value = `${value}.0`
+        }
+      }
+
+      return JSON.stringify({ value, type });
     });
 
     let rawResult, resultType;
