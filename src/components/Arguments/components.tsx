@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaArrowCircleRight, FaExclamationTriangle } from 'react-icons/fa';
 import { EntityType } from 'providers/Project';
 import Button from 'components/Button';
@@ -41,7 +41,7 @@ export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
         {type === EntityType.TransactionTemplate && 'Transaction Arguments'}
         {type === EntityType.ScriptTemplate && 'Script Arguments'}
       </Title>
-      <Controls>
+      <Controls onClick={() => setExpanded(!expanded)}>
         {hasErrors && (
           <Badge>
             <span>{errors}</span>
@@ -50,7 +50,6 @@ export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
         <ToggleExpand
           className="icon"
           expanded={expanded}
-          onClick={() => setExpanded(!expanded)}
         />
       </Controls>
     </Heading>
@@ -81,34 +80,35 @@ export const ArgumentsList: React.FC<ArgumentsListProps> = ({
   );
 };
 
-
-const getSpanClass = (message: string):string => {
+const getSpanClass = (message: string): string => {
   // We can potentially bring better displayed messages later
   if (
-    message.includes("exported declarations") ||
-    message.includes("consider")
-  ){
-    return "suggestion"
+    message.includes('exported declarations') ||
+    message.includes('consider')
+  ) {
+    return 'suggestion';
   }
 
-  return ""
-}
+  return '';
+};
 
 const renderMessage = (message: string) => {
   let spanClass = getSpanClass(message);
 
-  const {items} = message.split(' ').reduce(
+  const { items } = message.split(' ').reduce(
     (acc, item) => {
       let current = acc.items[acc.items.length - 1];
       if (acc.startNew) {
         acc.startNew = false;
-        acc.items.push(item)
-        return acc
+        acc.items.push(item);
+        return acc;
       }
 
       if (item.startsWith('`')) {
         acc.startNew = true;
-        const span = <span className={spanClass}>{item.replace(/`/g, '')}</span>;
+        const span = (
+          <span className={spanClass}>{item.replace(/`/g, '')}</span>
+        );
         acc.items.push(span);
         acc.startNew = true;
       } else {
@@ -122,11 +122,14 @@ const renderMessage = (message: string) => {
     { startNew: true, items: [] },
   );
 
-  return items
+  return items;
 };
 
 export const ErrorsList: React.FC<ErrorListProps> = (props) => {
   const { list, goTo, hideDecorations, hover } = props;
+  if (list.length === 0) {
+    return null;
+  }
   return (
     <Stack>
       <Heading>
@@ -154,36 +157,56 @@ export const ErrorsList: React.FC<ErrorListProps> = (props) => {
   );
 };
 
-export const Hints: React.FC<HintsProps> = (props) => {
+export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
+  const [ expanded, setExpanded ] = useState(true);
   const { problems, goTo, hideDecorations, hover } = props;
 
-  if (problems.warning.length === 0 && problems.info.length === 0){
-    return null
+  const toggle = () => {
+    setExpanded(!expanded);
+  };
+
+  if (problems.warning.length === 0 && problems.info.length === 0) {
+    return null;
   }
-  const fullList = [...problems.warning, ...problems.info]
+  const fullList = [...problems.warning, ...problems.info];
+  const hintsAmount = fullList.length
   return (
     <Stack>
       <Heading>
-        <Title lineColor={"orange"}>Warnings and Hints</Title>
+        <Title>Warnings and Hints</Title>
+        <Controls onClick={toggle}>
+          {hintsAmount > 0 && (
+            <Badge className="green">
+              <span>{hintsAmount}</span>
+            </Badge>
+          )}
+          <ToggleExpand
+            className="icon"
+            expanded={expanded}
+          />
+        </Controls>
       </Heading>
-      <List>
-        {fullList.map((item: CadenceProblem, i) => {
-          const message = renderMessage(item.message);
-          return (
-            <SingleError
-              key={`${i}-${item.message}`}
-              onClick={() => goTo(item.position)}
-              onMouseOver={() => hover(item.highlight)}
-              onMouseOut={() => hideDecorations()}
-            >
-              <ErrorIndex>
-                <span>{i + 1}</span>
-              </ErrorIndex>
-              <ErrorMessage>{message}</ErrorMessage>
-            </SingleError>
-          );
-        })}
-      </List>
+      {expanded && (
+        <List>
+          {fullList.map((item: CadenceProblem, i) => {
+            const message = renderMessage(item.message);
+            return (
+              <SingleError
+                className={`hint-${item.type}`}
+                key={`${i}-${item.message}`}
+                onClick={() => goTo(item.position)}
+                onMouseOver={() => hover(item.highlight)}
+                onMouseOut={() => hideDecorations()}
+              >
+                <ErrorIndex>
+                  <span>{i + 1}</span>
+                </ErrorIndex>
+                <ErrorMessage>{message}</ErrorMessage>
+              </SingleError>
+            );
+          })}
+        </List>
+      )}
     </Stack>
   );
 };

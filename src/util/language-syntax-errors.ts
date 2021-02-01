@@ -5,12 +5,13 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 export enum ProblemType {
   Error = 'error',
   Warning = 'warning',
-  Info = 'suggestion',
+  Info = 'info',
   Hint = 'hint',
   Unknown = "unknown"
 }
 
 export type Highlight = {
+  color: string,
   startLine: number,
   startColumn: number,
   endLine: number,
@@ -22,7 +23,7 @@ export type CadenceProblem = {
   type: string,
   position: monaco.IPosition,
   icon: any,
-  highlight: Highlight
+  highlight: Highlight,
 }
 
 export type ProblemsList = {
@@ -45,19 +46,23 @@ const getMarkerType = (severity: number): ProblemType => {
 }
 
 export const formatMarker = (marker: monaco.editor.IMarker): CadenceProblem => {
+
+  const markerType = getMarkerType(marker.severity);
+
   return {
+    type: markerType,
     message: marker.message,
-    type: getMarkerType(marker.severity),
     icon: FaExclamationTriangle,
     position: {
       lineNumber: marker.startLineNumber,
       column: marker.startColumn
     },
     highlight: {
+      color: markerType,
       startLine: marker.startLineNumber,
       endLine: marker.endLineNumber,
       startColumn: marker.startColumn,
-      endColumn: marker.endColumn
+      endColumn: marker.endColumn,
     }
   }
 };

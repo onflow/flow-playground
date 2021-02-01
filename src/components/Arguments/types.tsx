@@ -50,3 +50,7 @@ export type HintsProps = {
   hover: (highlight: Highlight) => void,
   hideDecorations: () => void,
 }
+
+export type HintsState = {
+  expanded: boolean
+}
