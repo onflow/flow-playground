@@ -26,8 +26,8 @@ const EditorContainer = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
-  
-  .drag-box{
+
+  .drag-box {
     width: fit-content;
     height: fit-content;
     position: absolute;
@@ -35,8 +35,8 @@ const EditorContainer = styled.div`
     top: 0;
     z-index: 12;
   }
-  
-  .constraints{
+
+  .constraints {
     width: 96vw;
     height: 90vh;
     position: fixed;
@@ -47,12 +47,44 @@ const EditorContainer = styled.div`
     pointer-events: none;
   }
 
-  .playground-syntax-error-hover{
-    background-color: rgba(238,67, 30, 0.1);
+  .playground-syntax-error-hover {
+    background-color: rgba(238, 67, 30, 0.1);
   }
-  
-  .playground-syntax-error-hover-selection{
-    background-color: rgba(238,67, 30, 0.3);
+
+  .playground-syntax-error-hover-selection {
+    background-color: rgba(238, 67, 30, 0.3);
+    border-radius: 3px;
+    animation: ${blink} 1s ease-in-out infinite;
+  }
+
+  .playground-syntax-warning-hover {
+    background-color: rgb(238, 169, 30, 0.1);
+  }
+
+  .playground-syntax-warning-hover-selection {
+    background-color: rgb(238, 169, 30, 0.3);
+    border-radius: 3px;
+    animation: ${blink} 1s ease-in-out infinite;
+  }
+
+  .playground-syntax-info-hover {
+    background-color: rgb(85, 238, 30, 0.1);
+  }
+
+  .playground-syntax-info-hover-selection {
+    background-color: rgb(85, 238, 30, 0.3);
+    border-radius: 3px;
+    animation: ${blink} 1s ease-in-out infinite;
+  }
+
+  .playground-syntax-hint-hover,
+  .playground-syntax-unknown-hover {
+    background-color: rgb(160, 160, 160, 0.1);
+  }
+
+  .playground-syntax-hint-hover-selection,
+  .playground-syntax-unknown-hover-selection {
+    background-color: rgb(160, 160, 160, 0.3);
     border-radius: 3px;
     animation: ${blink} 1s ease-in-out infinite;
   }
@@ -225,6 +257,7 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
       })
 
     const {activeId} = this.props;
+
     this.setState({
       problems: {
         [activeId]: errors
@@ -332,7 +365,7 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
   }
 
   hover(highlight: Highlight): void {
-    const { startLine, startColumn, endLine, endColumn } = highlight
+    const { startLine, startColumn, endLine, endColumn, color } = highlight
     const model = this.editor.getModel()
 
     const selection = model
@@ -352,14 +385,14 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
         range: new monaco.Range(startLine, startColumn, endLine, endColumn),
         options: {
           isWholeLine: true,
-          className: 'playground-syntax-error-hover',
+          className: `playground-syntax-${color}-hover`,
         },
       },
       {
         range: new monaco.Range(startLine, startColumn, selectionEndLine, selectionEndColumn),
         options: {
           isWholeLine: false,
-          className: 'playground-syntax-error-hover-selection',
+          className: `playground-syntax-${color}-hover-selection`,
         }
       }
     ]
@@ -369,13 +402,11 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
 
   hideDecorations(): void {
     const model = this.editor.getModel()
-    const current = model
+    let current = model
         .getAllDecorations()
         .filter(item => {
-          return [
-            "playground-syntax-error-hover",
-            "playground-syntax-error-hover-selection"
-          ].includes(item.options.className )
+          const { className } = item.options
+          return className?.includes("playground-syntax")
         }).map(item => item.id)
 
     model.deltaDecorations(current, [])

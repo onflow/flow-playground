@@ -51,13 +51,13 @@ export const Controls = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  cursor: pointer;
 `;
 
 export const Badge = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ee431e;
   color: #fff;
   font-weight: bold;
   font-size: 12px;
@@ -70,6 +70,12 @@ export const Badge = styled.div`
   span {
     transform: translateY(1px);
   }
+
+  background-color: #ee431e;
+  &.green {
+    background-color: ${theme.colors.primary};
+    color: #222;
+  }
 `;
 
 interface ListProps {
@@ -80,7 +86,7 @@ export const List = styled.div<ListProps>`
   grid-gap: 12px;
   grid-template-columns: 100%;
   margin-bottom: 24px;
-  max-height: 400px;
+  max-height: 350px;
   overflow-y: auto;
 `;
 
@@ -160,6 +166,14 @@ export const SingleError = styled.div`
   font-size: 14px;
   &:hover{
     background-color: rgba(244, 57, 64, 0.15);
+    
+    &.hint-warning{
+      background-color: rgb(238, 169, 30, 0.15);
+    }
+
+    &.hint-info{
+      background-color: rgb(85, 238, 30, 0.15);
+    }
   }
 `
 

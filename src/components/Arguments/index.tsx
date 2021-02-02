@@ -89,6 +89,10 @@ const validate = (list: any, values: any) => {
       if (error) {
         acc[name] = error;
       }
+    } else {
+      if (type !== "String"){
+        acc[name] = "Value can't be empty"
+      }
     }
     return acc;
   }, {});
@@ -251,6 +255,8 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     statusMessage = 'Please, wait...';
   }
 
+  const actions = { goTo, hover, hideDecorations}
+
   return (
     <>
       <div ref={constraintsRef} className="constraints" />
@@ -292,10 +298,10 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
               )}
             </>
           )}
-          {!validCode &&
-            <ErrorsList list={problems.error} goTo={goTo} hover={hover} hideDecorations={hideDecorations}/>
-          }
-          <Hints problems={problems} goTo={goTo} hover={hover} hideDecorations={hideDecorations}/>
+
+          <ErrorsList list={problems.error} {...actions}/>
+          <Hints problems={problems} {...actions}/>
+
           <ControlContainer isOk={isOk} progress={progress}>
             <StatusMessage>
               {statusIcon}
