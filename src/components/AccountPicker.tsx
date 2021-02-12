@@ -52,7 +52,6 @@ const AccountPicker: React.FC<AccountPickerProps> = ({
           border: `1px solid ${theme.colors.borderDark}`,
           backgroundColor: theme.colors.background,
           borderRadius: "50px",
-          width: "224px"
         }}
       >
         <AccountAvatars
