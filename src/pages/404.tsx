@@ -35,11 +35,9 @@ const FourOhFour: React.FC<ProjectProps> = () => {
           width: '50%',
         }}
       >
-        (If you were expecting a project here, you may be experiencing a
-
-        🐛. Please clear your browser's cookies and browser cache. This is a
-        known issue. Thanks for your patience! 🙏)
-
+        (If you were expecting a project here, you may be experiencing a 🐛.
+        Please clear your browser's cookies and browser cache. This is a known
+        issue. Thanks for your patience! 🙏)
       </Text>
       <Button
         sx={{
