@@ -1,20 +1,30 @@
-import React from "react"
-import styled from "@emotion/styled"
-import { keyframes } from "@emotion/core";
-import configureCadence, {CADENCE_LANGUAGE_ID} from "../util/cadence"
-import {CadenceCheckCompleted, CadenceLanguageServer, Callbacks} from "../util/language-server"
-import {createCadenceLanguageClient} from "../util/language-client"
-import * as monaco from "monaco-editor/esm/vs/editor/editor.api"
-import {EntityType} from "providers/Project";
-import Arguments from "components/Arguments";
-import { Argument } from "components/Arguments/types";
-import {CadenceProblem, formatMarker, goTo, Highlight, ProblemsList} from "../util/language-syntax-errors";
+import React from 'react';
+import styled from '@emotion/styled';
+import { keyframes } from '@emotion/core';
+import configureCadence, { CADENCE_LANGUAGE_ID } from '../util/cadence';
+import {
+  CadenceCheckCompleted,
+  CadenceLanguageServer,
+  Callbacks,
+} from '../util/language-server';
+import { createCadenceLanguageClient } from '../util/language-client';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import { EntityType } from 'providers/Project';
+import Arguments from 'components/Arguments';
+import { Argument } from 'components/Arguments/types';
+import {
+  CadenceProblem,
+  formatMarker,
+  goTo,
+  Highlight,
+  ProblemsList,
+} from '../util/language-syntax-errors';
 import {
   MonacoLanguageClient,
   ExecuteCommandRequest,
-} from "monaco-languageclient"
+} from 'monaco-languageclient';
 
-const {MonacoServices} = require("monaco-languageclient/lib/monaco-services");
+const { MonacoServices } = require('monaco-languageclient/lib/monaco-services');
 
 const blink = keyframes`
   50% {
@@ -97,7 +107,7 @@ type EditorState = {
 
 let monacoServicesInstalled = false;
 
-type CodeGetter = (index: number) => string | undefined
+type CodeGetter = (index: number) => string | undefined;
 
 type CadenceEditorProps = {
   code: string;
@@ -106,14 +116,17 @@ type CadenceEditorProps = {
   activeId: string;
   type: EntityType;
   getCode: CodeGetter;
-}
+};
 
 type CadenceEditorState = {
-  args: {[key: string]: Argument[]}
-  problems: {[key: string]: ProblemsList}
-}
+  args: { [key: string]: Argument[] };
+  problems: { [key: string]: ProblemsList };
+};
 
-class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorState> {
+class CadenceEditor extends React.Component<
+  CadenceEditorProps,
+  CadenceEditorState
+> {
   editor: monaco.editor.ICodeEditor;
   languageClient?: MonacoLanguageClient;
   _subscription: any;
@@ -132,13 +145,13 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
 
     this.editorStates = {};
     this.handleResize = this.handleResize.bind(this);
-    window.addEventListener("resize", this.handleResize);
+    window.addEventListener('resize', this.handleResize);
     configureCadence();
 
     this.state = {
-      args:{},
-      problems: {}
-    }
+      args: {},
+      problems: {},
+    };
   }
 
   handleResize() {
@@ -152,11 +165,11 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
         theme: 'vs-light',
         language: CADENCE_LANGUAGE_ID,
         minimap: {
-          enabled: false
-        }
-      }
+          enabled: false,
+        },
+      },
     );
-    this.editor = editor
+    this.editor = editor;
 
     this._subscription = this.editor.onDidChangeModelContent((event: any) => {
       this.props.onChange(this.editor.getValue(), event);
@@ -164,18 +177,22 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
 
     const state = this.getOrCreateEditorState(
       this.props.activeId,
-      this.props.code
+      this.props.code,
     );
     this.editor.setModel(state.model);
     this.editor.focus();
 
     if (this.props.activeId && !this.callbacks) {
-      await this.loadLanguageServer(editor, (index) => this.props.getCode(index))
+      await this.loadLanguageServer(editor, (index) =>
+        this.props.getCode(index),
+      );
     }
   }
 
-  private async loadLanguageServer(editor: monaco.editor.ICodeEditor, getCode: CodeGetter) {
-
+  private async loadLanguageServer(
+    editor: monaco.editor.ICodeEditor,
+    getCode: CodeGetter,
+  ) {
     this.callbacks = {
       // The actual callback will be set as soon as the language server is initialized
       toServer: null,
@@ -190,20 +207,20 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
       toClient: null,
 
       getAddressCode(address: string): string | undefined {
-        const number = parseInt(address, 16)
+        const number = parseInt(address, 16);
         if (!number) {
-          return
+          return;
         }
-        return getCode(number - 1)
+        return getCode(number - 1);
       },
-    }
+    };
 
     // The Monaco Language Client services have to be installed globally, once.
     // An editor must be passed, which is only used for commands.
     // As the Cadence language server is not providing any commands this is OK
 
     if (!monacoServicesInstalled) {
-      monacoServicesInstalled = true
+      monacoServicesInstalled = true;
       MonacoServices.install(editor);
     }
 
@@ -215,63 +232,71 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
     await CadenceLanguageServer.create(this.callbacks);
 
     this.languageClient = createCadenceLanguageClient(this.callbacks);
-    this.languageClient.start()
+    this.languageClient.start();
     this.languageClient.onReady().then(() => {
-      this.languageClient.onNotification(CadenceCheckCompleted.methodName, async (result: CadenceCheckCompleted.Params) => {
-        if (result.valid) {
-          const params = await this.getParameters()
-          this.setExecutionArguments(params)
-        }
-        this.processMarkers()
-      })
-    })
+      this.languageClient.onNotification(
+        CadenceCheckCompleted.methodName,
+        async (result: CadenceCheckCompleted.Params) => {
+          if (result.valid) {
+            const params = await this.getParameters();
+            this.setExecutionArguments(params);
+          }
+          this.processMarkers();
+        },
+      );
+    });
   }
 
   private async getParameters() {
-    await this.languageClient.onReady()
+    await this.languageClient.onReady();
 
     try {
-      const args = await this.languageClient.sendRequest(ExecuteCommandRequest.type, {
-        command: "cadence.server.getEntryPointParameters",
-        arguments: [this.editor.getModel().uri.toString()]
-      })
-      return args || []
+      const args = await this.languageClient.sendRequest(
+        ExecuteCommandRequest.type,
+        {
+          command: 'cadence.server.getEntryPointParameters',
+          arguments: [this.editor.getModel().uri.toString()],
+        },
+      );
+      return args || [];
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   }
 
-  processMarkers(){
+  processMarkers() {
     const model = this.editor.getModel();
-    const modelMarkers = monaco.editor.getModelMarkers({resource: model.uri})
-    const errors = modelMarkers
-      .reduce((acc: {[key:string]: CadenceProblem[]}, marker) => {
-        const mappedMarker:CadenceProblem = formatMarker(marker);
-        acc[mappedMarker.type].push(mappedMarker)
-        return acc
-      },{
-        "error": [],
-        "warning": [],
-        "info": [],
-        "hint": []
-      })
+    const modelMarkers = monaco.editor.getModelMarkers({ resource: model.uri });
+    const errors = modelMarkers.reduce(
+      (acc: { [key: string]: CadenceProblem[] }, marker) => {
+        const mappedMarker: CadenceProblem = formatMarker(marker);
+        acc[mappedMarker.type].push(mappedMarker);
+        return acc;
+      },
+      {
+        error: [],
+        warning: [],
+        info: [],
+        hint: [],
+      },
+    );
 
-    const {activeId} = this.props;
+    const { activeId } = this.props;
 
     this.setState({
       problems: {
-        [activeId]: errors
-      }
-    })
+        [activeId]: errors,
+      },
+    });
   }
 
-  setExecutionArguments(args: Argument[]){
-    const {activeId} = this.props;
+  setExecutionArguments(args: Argument[]) {
+    const { activeId } = this.props;
     this.setState({
       args: {
-        [activeId]: args
-      }
-    })
+        [activeId]: args,
+      },
+    });
   }
 
   getOrCreateEditorState(id: string, code: string): EditorState {
@@ -281,12 +306,12 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
       return existingState;
     }
 
-    const monaco = require("monaco-editor");
+    const monaco = require('monaco-editor');
     const model = monaco.editor.createModel(code, CADENCE_LANGUAGE_ID);
 
     const state: EditorState = {
       model,
-      viewState: null
+      viewState: null,
     };
 
     this.editorStates[id] = state;
@@ -312,9 +337,9 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
 
   componentWillUnmount() {
     this.destroyMonaco();
-    window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener('resize', this.handleResize);
     if (this.callbacks && this.callbacks.onClientClose) {
-      this.callbacks.onClientClose()
+      this.callbacks.onClientClose();
     }
   }
 
@@ -339,46 +364,43 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
     }
   }
 
-  extract(code: string, keyWord: string):string[]{
+  extract(code: string, keyWord: string): string[] {
     // TODO: add different processors for contract, scripts and transactions
 
     const target = code
       .split(/\r\n|\n|\r/)
-      .find(line => line.includes(keyWord))
+      .find((line) => line.includes(keyWord));
 
-    if (target){
-      const match = target.match(/(?:\()(.*)(?:\))/)
-      if (match){
-        return match[1]
-          .split(",")
-          .map(item => item.replace(/\s*/g,''))
+    if (target) {
+      const match = target.match(/(?:\()(.*)(?:\))/);
+      if (match) {
+        return match[1].split(',').map((item) => item.replace(/\s*/g, ''));
       }
     }
-    return []
+    return [];
   }
 
-  extractSigners(code: string):number{
-    return this
-      .extract(code, "prepare")
-      .filter(item => !!item)
-      .length
+  extractSigners(code: string): number {
+    return this.extract(code, 'prepare').filter((item) => !!item).length;
   }
 
   hover(highlight: Highlight): void {
-    const { startLine, startColumn, endLine, endColumn, color } = highlight
-    const model = this.editor.getModel()
+    const { startLine, startColumn, endLine, endColumn, color } = highlight;
+    const model = this.editor.getModel();
 
-    const selection = model
-      .getAllDecorations()
-      .find((item: any) => {
-        return (
-          item.range.startLineNumber === startLine &&
-          item.range.startColumn === startColumn
-        )
-      })
+    const selection = model.getAllDecorations().find((item: any) => {
+      return (
+        item.range.startLineNumber === startLine &&
+        item.range.startColumn === startColumn
+      );
+    });
 
-    const selectionEndLine = selection ? selection.range.endLineNumber : endLine
-    const selectionEndColumn = selection ? selection.range.endColumn : endColumn
+    const selectionEndLine = selection
+      ? selection.range.endLineNumber
+      : endLine;
+    const selectionEndColumn = selection
+      ? selection.range.endColumn
+      : endColumn;
 
     const highlightLine = [
       {
@@ -389,27 +411,33 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
         },
       },
       {
-        range: new monaco.Range(startLine, startColumn, selectionEndLine, selectionEndColumn),
+        range: new monaco.Range(
+          startLine,
+          startColumn,
+          selectionEndLine,
+          selectionEndColumn,
+        ),
         options: {
           isWholeLine: false,
           className: `playground-syntax-${color}-hover-selection`,
-        }
-      }
-    ]
-    this.editor.getModel().deltaDecorations([], highlightLine)
+        },
+      },
+    ];
+    this.editor.getModel().deltaDecorations([], highlightLine);
     this.editor.revealLineInCenter(startLine);
   }
 
   hideDecorations(): void {
-    const model = this.editor.getModel()
+    const model = this.editor.getModel();
     let current = model
-        .getAllDecorations()
-        .filter(item => {
-          const { className } = item.options
-          return className?.includes("playground-syntax")
-        }).map(item => item.id)
+      .getAllDecorations()
+      .filter((item) => {
+        const { className } = item.options;
+        return className?.includes('playground-syntax');
+      })
+      .map((item) => item.id);
 
-    model.deltaDecorations(current, [])
+    model.deltaDecorations(current, []);
   }
 
   render() {
@@ -418,16 +446,16 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
     /// Get a list of args from language server
     const { activeId } = this.props;
     const { args, problems } = this.state;
-    const list = args[activeId] || []
+    const list = args[activeId] || [];
 
     /// Extract number of signers from code
     const signers = this.extractSigners(code);
-    const problemsList: ProblemsList  = problems[activeId] || {
+    const problemsList: ProblemsList = problems[activeId] || {
       error: [],
       warning: [],
       hint: [],
-      info: []
-    }
+      info: [],
+    };
     return (
       <EditorContainer id={this.props.mount}>
         <Arguments
@@ -435,9 +463,11 @@ class CadenceEditor extends React.Component<CadenceEditorProps, CadenceEditorSta
           list={list}
           signers={signers}
           problems={problemsList}
-          hover={(highlight)=> this.hover(highlight)}
-          hideDecorations={()=>this.hideDecorations()}
-          goTo={(position: monaco.IPosition)=> goTo(this.editor, position)}
+          hover={(highlight) => this.hover(highlight)}
+          hideDecorations={() => this.hideDecorations()}
+          goTo={(position: monaco.IPosition) => goTo(this.editor, position)}
+          editor={this.editor}
+          languageClient={this.languageClient}
         />
       </EditorContainer>
     );

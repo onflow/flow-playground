@@ -1,6 +1,6 @@
-import ApolloClient from "apollo-client";
-import { navigate } from "@reach/router";
-import Mixpanel from "../../util/mixpanel";
+import { navigate } from '@reach/router';
+
+import ApolloClient from 'apollo-client';
 
 import {
   CREATE_PROJECT,
@@ -15,16 +15,16 @@ import {
   UPDATE_SCRIPT_TEMPLATE,
   CREATE_SCRIPT_TEMPLATE,
   DELETE_SCRIPT_TEMPLATE,
-  DELETE_TRANSACTION_TEMPLATE
-} from "api/apollo/mutations";
+  DELETE_TRANSACTION_TEMPLATE,
+} from 'api/apollo/mutations';
+import { Project, Account } from 'api/apollo/generated/graphql';
+import { GET_LOCAL_PROJECT, GET_PROJECT } from 'api/apollo/queries';
 
-import { Project, Account } from "api/apollo/generated/graphql";
-import { GET_LOCAL_PROJECT, GET_PROJECT } from "api/apollo/queries";
-
+import Mixpanel from '../../util/mixpanel';
 import {
   registerOnCloseSaveMessage,
-  unregisterOnCloseSaveMessage
-} from "../../util/onclose";
+  unregisterOnCloseSaveMessage,
+} from '../../util/onclose';
 
 export default class ProjectMutator {
   client: ApolloClient<object>;
@@ -35,7 +35,7 @@ export default class ProjectMutator {
   constructor(
     client: ApolloClient<object>,
     projectId: string | null,
-    isLocal: boolean
+    isLocal: boolean,
   ) {
     this.client = client;
     this.projectId = projectId;
@@ -44,18 +44,18 @@ export default class ProjectMutator {
 
   async createProject(): Promise<Project> {
     const { project: localProject } = this.client.readQuery({
-      query: GET_LOCAL_PROJECT
+      query: GET_LOCAL_PROJECT,
     });
 
     const parentId = localProject.parentId;
     const accounts = localProject.accounts.map((acc: Account) => acc.draftCode);
     const seed = localProject.seed;
     const transactionTemplates = localProject.transactionTemplates.map(
-      (tpl: any) => ({ script: tpl.script, title: tpl.title })
+      (tpl: any) => ({ script: tpl.script, title: tpl.title }),
     );
     const scriptTemplates = localProject.scriptTemplates.map((tpl: any) => ({
       script: tpl.script,
-      title: tpl.title
+      title: tpl.title,
     }));
 
     const { data } = await this.client.mutate({
@@ -64,10 +64,10 @@ export default class ProjectMutator {
         parentId: parentId,
         accounts: accounts,
         seed: seed,
-        title: "",
+        title: '',
         transactionTemplates: transactionTemplates,
-        scriptTemplates: scriptTemplates
-      }
+        scriptTemplates: scriptTemplates,
+      },
     });
 
     const project = data.project;
@@ -78,13 +78,13 @@ export default class ProjectMutator {
     this.client.mutate({
       mutation: SET_ACTIVE_PROJECT,
       variables: {
-        id: this.projectId
-      }
+        id: this.projectId,
+      },
     });
     Mixpanel.people.set({
-      projectId: project.id
+      projectId: project.id,
     });
-    Mixpanel.track("Project created", { projectId: project.id, project });
+    Mixpanel.track('Project created', { projectId: project.id, project });
     return project;
   }
 
@@ -97,14 +97,14 @@ export default class ProjectMutator {
     await this.client.mutate({
       mutation: PERSIST_PROJECT,
       variables: {
-        projectId: this.projectId
-      }
+        projectId: this.projectId,
+      },
     });
 
     if (isFork) {
-      Mixpanel.track("Project forked", { projectId: this.projectId });
+      Mixpanel.track('Project forked', { projectId: this.projectId });
     } else {
-      Mixpanel.track("Project saved", { projectId: this.projectId });
+      Mixpanel.track('Project saved', { projectId: this.projectId });
     }
 
     navigate(`/${this.projectId}`, { replace: true });
@@ -115,9 +115,9 @@ export default class ProjectMutator {
       this.client.writeData({
         id: `Account:${account.id}`,
         data: {
-          __typename: "Account",
-          draftCode: code
-        }
+          __typename: 'Account',
+          draftCode: code,
+        },
       });
       registerOnCloseSaveMessage();
 
@@ -129,8 +129,8 @@ export default class ProjectMutator {
       variables: {
         projectId: this.projectId,
         accountId: account.id,
-        code
-      }
+        code,
+      },
     });
   }
 
@@ -146,16 +146,16 @@ export default class ProjectMutator {
       variables: {
         projectId: this.projectId,
         accountId: account.id,
-        code: account.draftCode
+        code: account.draftCode,
       },
       refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } }
-      ]
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
     });
-    Mixpanel.track("Contract deployed", {
+    Mixpanel.track('Contract deployed', {
       projectId: this.projectId,
       accountId: account.id,
-      code: account.draftCode
+      code: account.draftCode,
     });
     return res;
   }
@@ -163,15 +163,15 @@ export default class ProjectMutator {
   async updateTransactionTemplate(
     templateId: string,
     script: string,
-    title: string
+    title: string,
   ) {
     if (this.isLocal) {
       this.client.writeData({
         id: `TransactionTemplate:${templateId}`,
         data: {
           script: script,
-          title: title
-        }
+          title: title,
+        },
       });
       registerOnCloseSaveMessage();
       return;
@@ -183,21 +183,25 @@ export default class ProjectMutator {
         projectId: this.projectId,
         templateId: templateId,
         script: script,
-        title: title
+        title: title,
       },
       refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } }
-      ]
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
     });
   }
 
-  async createTransactionExecution(script: string, signers: Account[], args: string[]) {
+  async createTransactionExecution(
+    script: string,
+    signers: Account[],
+    args: string[],
+  ) {
     if (this.isLocal) {
       await this.createProject();
     }
 
     const signerAddresses: string[] = signers.map(
-      (account: Account) => account.address
+      (account: Account) => account.address,
     );
 
     const res = await this.client.mutate({
@@ -206,15 +210,15 @@ export default class ProjectMutator {
         projectId: this.projectId,
         signers: signerAddresses,
         arguments: args,
-        script
+        script,
       },
       refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } }
-      ]
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
     });
-    Mixpanel.track("Transaction template executed", {
+    Mixpanel.track('Transaction template executed', {
       projectId: this.projectId,
-      script
+      script,
     });
 
     return res;
@@ -230,34 +234,34 @@ export default class ProjectMutator {
       variables: {
         projectId: this.projectId,
         script,
-        title
+        title,
       },
       refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } }
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
       ],
-      awaitRefetchQueries: true
+      awaitRefetchQueries: true,
     });
 
-    Mixpanel.track("Transaction template created", {
+    Mixpanel.track('Transaction template created', {
       projectId: this.projectId,
-      script
+      script,
     });
 
-    return res
+    return res;
   }
 
   async updateScriptTemplate(
     templateId: string,
     script: string,
-    title: string
+    title: string,
   ) {
     if (this.isLocal) {
       this.client.writeData({
         id: `ScriptTemplate:${templateId}`,
         data: {
           script: script,
-          title: title
-        }
+          title: title,
+        },
       });
       registerOnCloseSaveMessage();
       return;
@@ -269,11 +273,11 @@ export default class ProjectMutator {
         projectId: this.projectId,
         templateId: templateId,
         script: script,
-        title: title
+        title: title,
       },
       refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } }
-      ]
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
     });
   }
 
@@ -286,11 +290,11 @@ export default class ProjectMutator {
       mutation: DELETE_TRANSACTION_TEMPLATE,
       variables: {
         projectId: this.projectId,
-        templateId
+        templateId,
       },
       refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } }
-      ]
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
     });
 
     return res;
@@ -305,18 +309,17 @@ export default class ProjectMutator {
       mutation: DELETE_SCRIPT_TEMPLATE,
       variables: {
         projectId: this.projectId,
-        templateId
+        templateId,
       },
       refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } }
-      ]
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
     });
 
     return res;
   }
 
   async createScriptExecution(script: string, args: string[]) {
-
     if (this.isLocal) {
       await this.createProject();
     }
@@ -326,12 +329,12 @@ export default class ProjectMutator {
       variables: {
         projectId: this.projectId,
         script,
-        arguments: args
-      }
+        arguments: args,
+      },
     });
-    Mixpanel.track("Script template executed", {
+    Mixpanel.track('Script template executed', {
       projectId: this.projectId,
-      script
+      script,
     });
     return res;
   }
@@ -346,19 +349,19 @@ export default class ProjectMutator {
       variables: {
         projectId: this.projectId,
         script,
-        title
+        title,
       },
       refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } }
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
       ],
-      awaitRefetchQueries: true
+      awaitRefetchQueries: true,
     });
 
-    Mixpanel.track("Script template created", {
+    Mixpanel.track('Script template created', {
       projectId: this.projectId,
-      script
+      script,
     });
 
-    return res
+    return res;
   }
 }

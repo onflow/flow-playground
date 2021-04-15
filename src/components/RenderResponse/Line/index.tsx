@@ -74,7 +74,7 @@ const Label = styled.strong<{ tag: Tag }>`
     `}
 `;
 
-const Value = styled.span<{ tag: Tag }>`
+const StringValue = styled.pre<{ tag: Tag }>`
   ${p =>
     p.tag === Tag.ERROR &&
     css`
@@ -82,7 +82,7 @@ const Value = styled.span<{ tag: Tag }>`
     `}
 `;
 
-const Pre = styled.pre`
+const ObjectValue = styled.pre`
   border-radius: 3px;
   padding: 13px;
   background: ${theme.colors.muted};
@@ -99,13 +99,11 @@ export const Line: React.FC<LineType> = ({ timestamp, tag, value, label }) => {
       <IoIosArrowForward />
       <Label tag={tag}>{PS1(tag)}</Label>
       <IoIosArrowForward />
-      {typeof value === "string" ? (
-        <>
-          <Value tag={tag}>{value}</Value>
-        </>
-      ) : (
-        <Pre>{JSON.stringify(value, null, 2)}</Pre>
-      )}
+      {
+        typeof value === "string"
+          ? <StringValue tag={tag}>{value}</StringValue>
+          : <ObjectValue>{JSON.stringify(value, null, 2)}</ObjectValue>
+      }
     </Root>
   );
 };

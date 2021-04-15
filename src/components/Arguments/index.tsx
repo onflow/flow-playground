@@ -6,92 +6,107 @@ import { useProject } from 'providers/Project/projectHooks';
 import {
   Account,
   ResultType,
-  useSetExecutionResultsMutation
+  useSetExecutionResultsMutation,
 } from 'api/apollo/generated/graphql';
 
-import { ArgumentsProps } from "components/Arguments/types";
+import { ArgumentsProps } from 'components/Arguments/types';
+import { ExecuteCommandRequest } from 'monaco-languageclient';
 
-import {
-  ControlContainer,
-  HoverPanel,
-  StatusMessage
-} from './styles';
+import { ControlContainer, HoverPanel, StatusMessage } from './styles';
 
 import {
   ActionButton,
   ArgumentsList,
-  ArgumentsTitle, ErrorsList, Hints,
+  ArgumentsTitle,
+  ErrorsList,
+  Hints,
   Signers,
 } from './components';
 
-const validateByType = (value: any, type: string) => {
+const validateByType = async (
+  value: any,
+  type: string,
+  editor,
+  languageClient,
+) => {
   if (value.length === 0) {
     return "Value can't be empty";
   }
 
   switch (true) {
-    // Strings
-    case type === 'String': {
-      return null; // no need to validate String for now
-    }
+    // // Strings
+    // case type === 'String': {
+    //   return null; // no need to validate String for now
+    // }
 
-    // Integers
-    case type.includes('Int'): {
-      if (isNaN(value) || value === "") {
-        return 'Should be a valid Integer number';
+    // // Integers
+    // case type.includes('Int'): {
+    //   if (isNaN(value) || value === '') {
+    //     return 'Should be a valid Integer number';
+    //   }
+    //   return null;
+    // }
+
+    // // Words
+    // case type.includes('Word'): {
+    //   if (isNaN(value) || value === '') {
+    //     return 'Should be a valid Word number';
+    //   }
+    //   return null;
+    // }
+
+    // // Fixed Point
+    // case type.includes('Fix'): {
+    //   if (isNaN(value) || value === '') {
+    //     return 'Should be a valid fixed point number';
+    //   }
+    //   return null;
+    // }
+
+    // // Address
+    // case type === 'Address': {
+    //   if (!value.match(/(^0x[\w\d]{16})|(^0x[\w\d]{1,4})/)) {
+    //     return 'Not a valid Address';
+    //   }
+    //   return null;
+    // }
+
+    // // Booleans
+    // case type === 'Bool': {
+    //   if (value !== 'true' && value !== 'false') {
+    //     return 'Boolean values can be either true or false';
+    //   }
+    //   return null;
+    // }
+
+    default: {
+      const result = await languageClient.sendRequest(
+        ExecuteCommandRequest.type,
+        {
+          command: 'cadence.server.parseEntryPointArguments',
+          arguments: [editor.getModel().uri.toString()],
+        },
+      );
+      if (!result) {
+        return 'Argument value is invalid.';
       }
       return null;
     }
-
-    // Words
-    case type.includes('Word'): {
-      if (isNaN(value) || value === "") {
-        return 'Should be a valid Word number';
-      }
-      return null;
-    }
-
-    // Fixed Point
-    case type.includes('Fix'): {
-      if (isNaN(value) || value === "") {
-        return 'Should be a valid fixed point number';
-      }
-      return null;
-    }
-
-    // Address
-    case type === 'Address': {
-      if (!value.match(/(^0x[\w\d]{16})|(^0x[\w\d]{1,4})/)) {
-        return 'Not a valid Address';
-      }
-      return null;
-    }
-
-    // Booleans
-    case type === 'Bool': {
-      if (value !== 'true' && value !== 'false') {
-        return 'Boolean values can be either true or false';
-      }
-      return null;
-    }
-
-    default:
-      return null;
   }
 };
 
-const validate = (list: any, values: any) => {
+const validate = (list: any, values: any, editor: any, languageClient: any) => {
   return list.reduce((acc: any, item: any) => {
     const { name, type } = item;
     const value = values[name];
     if (value) {
-      const error = validateByType(value, type);
+      const error = validateByType(value, type, editor, languageClient);
       if (error) {
         acc[name] = error;
       }
     } else {
-      if (type !== "String"){
-        acc[name] = "Value can't be empty"
+      if (type !== 'String') {
+        acc[name] = "Value can't be empty";
       }
     }
     return acc;
@@ -141,7 +156,6 @@ const useTemplateType = (): ProcessingArgs => {
     contractDeployment: updateAccountDeployedCode,
   };
 };
-
 interface IValue {
   [key: string]: string;
 }
@@ -149,7 +163,7 @@ interface IValue {
 const Arguments: React.FC<ArgumentsProps> = (props) => {
   const { type, list, signers } = props;
   const { goTo, hover, hideDecorations, problems } = props;
-  const validCode = problems.error.length === 0
+  const validCode = problems.error.length === 0;
 
   const needSigners = type == EntityType.TransactionTemplate && signers > 0;
   const [selected, updateSelectedAccounts] = useState([]);
@@ -157,7 +171,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const [values, setValue] = useState<IValue>({});
   const constraintsRef = useRef();
 
-  const errors = validate(list, values);
+  const errors = validate(list, values, props.editor, props.languageClient);
   const numberOfErrors = Object.keys(errors).length;
   const notEnoughSigners = needSigners && selected.length < signers;
   const haveErrors = numberOfErrors > 0 || notEnoughSigners;
@@ -186,9 +200,9 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
       let value = values[name];
 
       // We probably better fix this on server side...
-      if (type === "UFix64"){
-        if (value.indexOf('.') < 0 ){
-          value = `${value}.0`
+      if (type === 'UFix64') {
+        if (value.indexOf('.') < 0) {
+          value = `${value}.0`;
         }
       }
 
@@ -255,7 +269,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     statusMessage = 'Please, wait...';
   }
 
-  const actions = { goTo, hover, hideDecorations}
+  const actions = { goTo, hover, hideDecorations };
 
   return (
     <>
@@ -299,8 +313,8 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
             </>
           )}
 
-          <ErrorsList list={problems.error} {...actions}/>
-          <Hints problems={problems} {...actions}/>
+          <ErrorsList list={problems.error} {...actions} />
+          <Hints problems={problems} {...actions} />
 
           <ControlContainer isOk={isOk} progress={progress}>
             <StatusMessage>
