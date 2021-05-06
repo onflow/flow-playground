@@ -23,11 +23,12 @@ import {
   Signers,
 } from './components';
 
+/*
 const validateByType = async (
   value: any,
-  type: string,
-  editor,
-  languageClient,
+  // type: string,
+  // editor,
+  // languageClient,
 ) => {
   if (value.length === 0) {
     return "Value can't be empty";
@@ -80,7 +81,7 @@ const validateByType = async (
     // }
 
     default: {
-      const result = await languageClient.sendRequest(
+/*      const result = await languageClient.sendRequest(
         ExecuteCommandRequest.type,
         {
           command: 'cadence.server.parseEntryPointArguments',
@@ -90,17 +91,40 @@ const validateByType = async (
       if (!result) {
         return 'Argument value is invalid.';
       }
+
+
       return null;
     }
   }
 };
+ */
 
-const validate = (list: any, values: any, editor: any, languageClient: any) => {
+const validate = async (list: any, values: any, editor: any, languageClient: any) => {
+
+  return {}
+
+  console.log({list})
+
+  const result = await languageClient.sendRequest(
+    ExecuteCommandRequest.type,
+    {
+      command: 'cadence.server.parseEntryPointArguments',
+      arguments: [
+        editor.getModel().uri.toString(),
+        Object.values(values)
+      ],
+    },
+  );
+
+  console.log({result})
+
+  return {};
+  /*
   return list.reduce((acc: any, item: any) => {
     const { name, type } = item;
     const value = values[name];
     if (value) {
-      const error = validateByType(value, type, editor, languageClient);
+      const error = validateByType(value)//, type, editor, languageClient);
       if (error) {
         acc[name] = error;
       }
@@ -111,6 +135,7 @@ const validate = (list: any, values: any, editor: any, languageClient: any) => {
     }
     return acc;
   }, {});
+   */
 };
 
 const getLabel = (
@@ -208,6 +233,25 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
       return JSON.stringify({ value, type });
     });
+
+    console.log({ args })
+
+    console.log(props.editor.getModel());
+
+    const formatted = await props.languageClient.sendRequest(
+      ExecuteCommandRequest.type,
+      {
+        command: 'cadence.server.parseEntryPointArguments',
+        arguments: [
+          props.editor.getModel().uri.toString(),
+          Object.values(args)
+        ],
+      },
+    );
+
+    console.log({formatted})
+
+    return
 
     let rawResult, resultType;
     try {
