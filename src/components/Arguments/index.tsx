@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { EntityType } from 'providers/Project';
@@ -26,81 +26,34 @@ import {
 const validateByType = async (
   value: any,
   type: string,
-  editor,
-  languageClient,
+  editor: any,
+  languageClient: any,
 ) => {
   if (value.length === 0) {
     return "Value can't be empty";
   }
-
-  switch (true) {
-    // // Strings
-    // case type === 'String': {
-    //   return null; // no need to validate String for now
-    // }
-
-    // // Integers
-    // case type.includes('Int'): {
-    //   if (isNaN(value) || value === '') {
-    //     return 'Should be a valid Integer number';
-    //   }
-    //   return null;
-    // }
-
-    // // Words
-    // case type.includes('Word'): {
-    //   if (isNaN(value) || value === '') {
-    //     return 'Should be a valid Word number';
-    //   }
-    //   return null;
-    // }
-
-    // // Fixed Point
-    // case type.includes('Fix'): {
-    //   if (isNaN(value) || value === '') {
-    //     return 'Should be a valid fixed point number';
-    //   }
-    //   return null;
-    // }
-
-    // // Address
-    // case type === 'Address': {
-    //   if (!value.match(/(^0x[\w\d]{16})|(^0x[\w\d]{1,4})/)) {
-    //     return 'Not a valid Address';
-    //   }
-    //   return null;
-    // }
-
-    // // Booleans
-    // case type === 'Bool': {
-    //   if (value !== 'true' && value !== 'false') {
-    //     return 'Boolean values can be either true or false';
-    //   }
-    //   return null;
-    // }
-
-    default: {
-      const result = await languageClient.sendRequest(
-        ExecuteCommandRequest.type,
-        {
-          command: 'cadence.server.parseEntryPointArguments',
-          arguments: [editor.getModel().uri.toString()],
-        },
-      );
-      if (!result) {
-        return 'Argument value is invalid.';
-      }
-      return null;
-    }
+  try {
+    await languageClient.sendRequest(ExecuteCommandRequest.type, {
+      command: 'cadence.server.parseEntryPointArguments',
+      arguments: [editor.getModel().uri.toString(), [value]],
+    });
+    return null;
+  } catch (e) {
+    return `Oops, argument does not match type: ${type}`;
   }
 };
 
-const validate = (list: any, values: any, editor: any, languageClient: any) => {
-  return list.reduce((acc: any, item: any) => {
+const validate = async (
+  list: any,
+  values: any,
+  editor: any,
+  languageClient: any,
+) => {
+  const errors = list.reduce(async (acc: any, item: any) => {
     const { name, type } = item;
     const value = values[name];
     if (value) {
-      const error = validateByType(value, type, editor, languageClient);
+      const error = await validateByType(value, type, editor, languageClient);
       if (error) {
         acc[name] = error;
       }
@@ -111,6 +64,8 @@ const validate = (list: any, values: any, editor: any, languageClient: any) => {
     }
     return acc;
   }, {});
+
+  return errors;
 };
 
 const getLabel = (
@@ -169,9 +124,22 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const [selected, updateSelectedAccounts] = useState([]);
   const [expanded, setExpanded] = useState(true);
   const [values, setValue] = useState<IValue>({});
+  const [errors, setErrors] = useState<any>({});
   const constraintsRef = useRef();
 
-  const errors = validate(list, values, props.editor, props.languageClient);
+  useEffect(() => {
+    async function doValidate() {
+      let result = await validate(
+        list,
+        values,
+        props.editor,
+        props.languageClient,
+      );
+      setErrors(result);
+    }
+    doValidate();
+  }, [list, values]);
+
   const numberOfErrors = Object.keys(errors).length;
   const notEnoughSigners = needSigners && selected.length < signers;
   const haveErrors = numberOfErrors > 0 || notEnoughSigners;
@@ -184,6 +152,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     transactionFactory,
     contractDeployment,
   } = useTemplateType();
+
   const { project, active, isSavingCode } = useProject();
   const { accounts } = project;
 
