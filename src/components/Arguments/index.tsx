@@ -23,8 +23,27 @@ import {
   Signers,
 } from './components';
 
+const isDictionaary = (type:string) => type.includes("{")
+const isArray = (type:string) => type.includes("[")
+const isImportedType = (type:string) => type.includes(".")
+const isComplexType = (type:string)=> isDictionaary(type)
+  || isArray(type)
+  || isImportedType(type)
 
-const validateByType = async (
+const startsWith = (value : string, prefix: string) => {
+  return value.startsWith(prefix) || value.startsWith("U"+prefix)
+}
+
+const checkJSON = (value: any, type: string) => {
+  try{
+    JSON.parse(value)
+    return null
+  } catch (e){
+    return `Not a valid argument of type ${type}`
+  }
+}
+
+const validateByType = (
   value: any,
   type: string,
 ) => {
@@ -39,7 +58,7 @@ const validateByType = async (
     }
 
     // Integers
-    case type.includes('Int'): {
+    case startsWith(type,'Int'): {
       if (isNaN(value) || value === '') {
         return 'Should be a valid Integer number';
       }
@@ -47,7 +66,7 @@ const validateByType = async (
     }
 
     // Words
-    case type.includes('Word'): {
+    case startsWith(type,'Word'): {
       if (isNaN(value) || value === '') {
         return 'Should be a valid Word number';
       }
@@ -55,22 +74,16 @@ const validateByType = async (
     }
 
     // Fixed Point
-    case type.includes('Fix'): {
+    case startsWith(type, 'Fix'): {
       if (isNaN(value) || value === '') {
         return 'Should be a valid fixed point number';
       }
       return null;
     }
 
-    case type.includes('{'): {
+    case isComplexType(type): {
       // This case it to catch complex arguments like Dictionaries
-      try{
-        console.log(value);
-        JSON.parse(value)
-        return null
-      } catch (e){
-        return `Not a valid argument of type ${type}`
-      }
+      return checkJSON(value, type);
     }
 
     // Address
@@ -177,6 +190,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
       return acc;
     }, {});
 
+    console.log({errors});
     setErrors(errors);
   };
 
@@ -234,7 +248,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
       const value = fixed[index]
 
       // If we have a complex type - return value formatted by language server
-      if ( type.includes("{")){
+      if ( isComplexType(type)){
         return JSON.stringify(formatted[index])
       }
 
