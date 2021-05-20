@@ -26,7 +26,7 @@ export type ArgumentsProps = {
   goTo: (position: monaco.IPosition) => void;
   hover: (highlight: Highlight) => void;
   hideDecorations: () => void;
-  editor: monaco.editor.IEditor;
+  editor: any;
   languageClient: MonacoLanguageClient;
 };
 

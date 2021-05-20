@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { EntityType } from 'providers/Project';
@@ -23,95 +23,91 @@ import {
   Signers,
 } from './components';
 
-const validateByType = async (
+const isDictionaary = (type:string) => type.includes("{")
+const isArray = (type:string) => type.includes("[")
+const isImportedType = (type:string) => type.includes(".")
+const isComplexType = (type:string)=> isDictionaary(type)
+  || isArray(type)
+  || isImportedType(type)
+
+const startsWith = (value : string, prefix: string) => {
+  return value.startsWith(prefix) || value.startsWith("U"+prefix)
+}
+
+const checkJSON = (value: any, type: string) => {
+  try{
+    JSON.parse(value)
+    return null
+  } catch (e){
+    return `Not a valid argument of type ${type}`
+  }
+}
+
+const validateByType = (
   value: any,
   type: string,
-  editor,
-  languageClient,
 ) => {
   if (value.length === 0) {
     return "Value can't be empty";
   }
 
   switch (true) {
-    // // Strings
-    // case type === 'String': {
-    //   return null; // no need to validate String for now
-    // }
+    // Strings
+    case type === 'String': {
+      return null; // no need to validate String for now
+    }
 
-    // // Integers
-    // case type.includes('Int'): {
-    //   if (isNaN(value) || value === '') {
-    //     return 'Should be a valid Integer number';
-    //   }
-    //   return null;
-    // }
+    // Integers
+    case startsWith(type,'Int'): {
+      if (isNaN(value) || value === '') {
+        return 'Should be a valid Integer number';
+      }
+      return null;
+    }
 
-    // // Words
-    // case type.includes('Word'): {
-    //   if (isNaN(value) || value === '') {
-    //     return 'Should be a valid Word number';
-    //   }
-    //   return null;
-    // }
+    // Words
+    case startsWith(type,'Word'): {
+      if (isNaN(value) || value === '') {
+        return 'Should be a valid Word number';
+      }
+      return null;
+    }
 
-    // // Fixed Point
-    // case type.includes('Fix'): {
-    //   if (isNaN(value) || value === '') {
-    //     return 'Should be a valid fixed point number';
-    //   }
-    //   return null;
-    // }
+    // Fixed Point
+    case startsWith(type, 'Fix'): {
+      if (isNaN(value) || value === '') {
+        return 'Should be a valid fixed point number';
+      }
+      return null;
+    }
 
-    // // Address
-    // case type === 'Address': {
-    //   if (!value.match(/(^0x[\w\d]{16})|(^0x[\w\d]{1,4})/)) {
-    //     return 'Not a valid Address';
-    //   }
-    //   return null;
-    // }
+    case isComplexType(type): {
+      // This case it to catch complex arguments like Dictionaries
+      return checkJSON(value, type);
+    }
 
-    // // Booleans
-    // case type === 'Bool': {
-    //   if (value !== 'true' && value !== 'false') {
-    //     return 'Boolean values can be either true or false';
-    //   }
-    //   return null;
-    // }
+    // Address
+    case type === 'Address': {
+      if (!value.match(/(^0x[\w\d]{16})|(^0x[\w\d]{1,4})/)) {
+        return 'Not a valid Address';
+      }
+      return null;
+    }
+
+    // Booleans
+    case type === 'Bool': {
+      if (value !== 'true' && value !== 'false') {
+        return 'Boolean values can be either true or false';
+      }
+      return null;
+    }
 
     default: {
-      const result = await languageClient.sendRequest(
-        ExecuteCommandRequest.type,
-        {
-          command: 'cadence.server.parseEntryPointArguments',
-          arguments: [editor.getModel().uri.toString()],
-        },
-      );
-      if (!result) {
-        return 'Argument value is invalid.';
-      }
       return null;
     }
   }
 };
 
-const validate = (list: any, values: any, editor: any, languageClient: any) => {
-  return list.reduce((acc: any, item: any) => {
-    const { name, type } = item;
-    const value = values[name];
-    if (value) {
-      const error = validateByType(value, type, editor, languageClient);
-      if (error) {
-        acc[name] = error;
-      }
-    } else {
-      if (type !== 'String') {
-        acc[name] = "Value can't be empty";
-      }
-    }
-    return acc;
-  }, {});
-};
 
 const getLabel = (
   resultType: ResultType,
@@ -167,14 +163,40 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
   const needSigners = type == EntityType.TransactionTemplate && signers > 0;
   const [selected, updateSelectedAccounts] = useState([]);
+  const [errors, setErrors] = useState({})
   const [expanded, setExpanded] = useState(true);
   const [values, setValue] = useState<IValue>({});
   const constraintsRef = useRef();
 
-  const errors = validate(list, values, props.editor, props.languageClient);
+  // const errors = validate(list, values);
   const numberOfErrors = Object.keys(errors).length;
   const notEnoughSigners = needSigners && selected.length < signers;
   const haveErrors = numberOfErrors > 0 || notEnoughSigners;
+
+  const validate = (list: any, values: any) => {
+    const errors = list.reduce((acc: any, item: any) => {
+      const { name, type } = item;
+      const value = values[name];
+      if (value) {
+        const error = validateByType(value, type);
+        if (error) {
+          acc[name] = error;
+        }
+      } else {
+        if (type !== 'String') {
+          acc[name] = "Value can't be empty";
+        }
+      }
+      return acc;
+    }, {});
+
+    console.log({errors});
+    setErrors(errors);
+  };
+
+  useEffect(()=>{
+    validate(list, values)
+  }, [list, values]);
 
   const [processingStatus, setProcessingStatus] = useState(false);
 
@@ -194,8 +216,9 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
       setProcessingStatus(true);
     }
 
-    // Map values to strings that will be passed to backend
-    const args = list.map((arg) => {
+    // TODO: implement algorithm for drilling down dictionaries
+
+    const fixed = list.map((arg) => {
       const { name, type } = arg;
       let value = values[name];
 
@@ -204,6 +227,29 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
         if (value.indexOf('.') < 0) {
           value = `${value}.0`;
         }
+      }
+      return value;
+    });
+
+    const formatted = await props.languageClient.sendRequest(
+      ExecuteCommandRequest.type,
+      {
+        command: 'cadence.server.parseEntryPointArguments',
+        arguments: [
+          props.editor.getModel().uri.toString(),
+          fixed
+        ],
+      },
+    );
+
+    // Map values to strings that will be passed to backend
+    const args:any = list.map((arg, index) => {
+      const { type } = arg;
+      const value = fixed[index]
+
+      // If we have a complex type - return value formatted by language server
+      if ( isComplexType(type)){
+        return JSON.stringify(formatted[index])
       }
 
       return JSON.stringify({ value, type });
