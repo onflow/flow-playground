@@ -12,7 +12,7 @@ const DEFAULT_ACCOUNT_1 = `// HelloWorld.cdc
 //
 // The HelloWorld contract contains a single string field and a public getter function.
 //
-// Follow the "Hello, World!" tutorial to learn more: https://docs.onflow.org/docs/hello-world
+// Follow the "Hello, World!" tutorial to learn more: https://docs.onflow.org/cadence/tutorial/02-hello-world/
 
 access(all) contract HelloWorld {
 
