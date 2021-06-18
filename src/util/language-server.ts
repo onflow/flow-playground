@@ -1,5 +1,5 @@
 import { DocumentUri } from "monaco-languageclient";
-import {Message} from "vscode-jsonrpc/lib/messages";
+import {Message} from "vscode-jsonrpc";
 
 // The global `Go` is declared by `wasm_exec.js`.
 // Instead of improving the that file, we use it as-is,

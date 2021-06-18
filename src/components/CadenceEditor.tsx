@@ -183,14 +183,13 @@ class CadenceEditor extends React.Component<
     this.editor.focus();
 
     if (this.props.activeId && !this.callbacks) {
-      await this.loadLanguageServer(editor, (index) =>
-        this.props.getCode(index),
-      );
+      const getCode = (index: number) =>
+        this.props.getCode(index)
+      await this.loadLanguageServer(getCode);
     }
   }
 
   private async loadLanguageServer(
-    editor: monaco.editor.ICodeEditor,
     getCode: CodeGetter,
   ) {
     this.callbacks = {
@@ -221,7 +220,7 @@ class CadenceEditor extends React.Component<
 
     if (!monacoServicesInstalled) {
       monacoServicesInstalled = true;
-      MonacoServices.install(editor);
+      MonacoServices.install(monaco);
     }
 
     // Start one language server per editor.
@@ -306,7 +305,6 @@ class CadenceEditor extends React.Component<
       return existingState;
     }
 
-    const monaco = require('monaco-editor');
     const model = monaco.editor.createModel(code, CADENCE_LANGUAGE_ID);
 
     const state: EditorState = {
