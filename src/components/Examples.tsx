@@ -141,7 +141,6 @@ const Example = styled.div`
   height: 100%;
   border-radius: 10px;
   padding: 2rem;
-  cursor: pointer;
   box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.07);
   transition: all 0.25s ease-in-out;
   background: white;
