@@ -1,4 +1,3 @@
-
 import {CADENCE_LANGUAGE_ID} from './cadence'
 import {Callbacks} from './language-server'
 import {
@@ -10,7 +9,7 @@ import {
   MessageReader,
   MessageWriter,
   PartialMessageInfo
-} from "vscode-jsonrpc";
+} from "vscode-jsonrpc"
 import {ConnectionErrorHandler} from "monaco-languageclient/src/connection"
 import {ConnectionCloseHandler} from "monaco-languageclient"
 
@@ -39,9 +38,10 @@ export function createCadenceLanguageClient(callbacks: Callbacks) {
       return Disposable.create(() => {
       })
     },
-    write(msg: Message) {
+    async write(msg: Message): Promise<void> {
       callbacks.toServer(null, msg)
     },
+    end() {},
     dispose() {
       callbacks.onClientClose()
     }
@@ -60,8 +60,10 @@ export function createCadenceLanguageClient(callbacks: Callbacks) {
       return Disposable.create(() => {
       })
     },
-    listen(dataCallback: DataCallback) {
+    listen(dataCallback: DataCallback): Disposable {
       callbacks.toClient = (message) => dataCallback(message)
+      return Disposable.create(() => {
+      })
     },
     dispose() {
       callbacks.onClientClose()
