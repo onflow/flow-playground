@@ -27,7 +27,7 @@
     "graphql-tag": "^2.11.0",
     "handlebars-loader": "^1.7.1",
     "isomorphic-fetch": "^3.0.0",
-    "jszip": "^3.5.0",
+    "jszip": "^3.7.0",
     "mixpanel-browser": "^2.39.0",
     "monaco-editor": "^0.22.3",
     "monaco-languageclient": "^0.13.1-next.9",
