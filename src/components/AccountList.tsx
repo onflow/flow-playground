@@ -62,27 +62,29 @@ const AccountList: React.FC = () => {
             : `This account don't have any contracts`
           const typeName = account.__typename
           return (
-            <Item
-              key={id}
-              title={title}
-              active={isActive}
-              onClick={() => navigate(`/${projectPath}?type=account&id=${id}`)}
-            >
-              <AccountCard>
-                <button
-                  onClick={() => setSelectedResourceAccount(i)}
-                >
-                  Resources
-                </button>
-                <Avatar seed={project.seed} index={i} />
-                <Stack>
-                  <strong>{accountAddress}</strong>
-                  <small>{contractName || '--'}</small>
-                </Stack>
+            <>
+              <Item
+                key={id}
+                title={title}
+                active={isActive}
+                onClick={() => navigate(`/${projectPath}?type=account&id=${id}`)}
+              >
+                <AccountCard>
+                  <Avatar seed={project.seed} index={i} />
+                  <Stack>
+                    <strong>{accountAddress}</strong>
+                    <small>{contractName || '--'}</small>
+                  </Stack>
 
-                {isActive && <ExportButton id={account.id} typeName={typeName}/>}
-              </AccountCard>
-            </Item>
+                  {isActive && <ExportButton id={account.id} typeName={typeName}/>}
+                </AccountCard>
+              </Item>
+              <button
+                onClick={() => setSelectedResourceAccount(i)}
+              >
+                Resources
+              </button>
+            </>
           );
         })}
       </Items>
