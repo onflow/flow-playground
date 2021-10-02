@@ -53,8 +53,8 @@ export interface ProjectContextValue {
   active: ActiveEditor;
   setActive: (type: EntityType, index: number) => void;
 
-  selectedResourceAccount: string;
-  setSelectedResourceAccount: (account: string) => void;
+  selectedResourceAccount: number;
+  setSelectedResourceAccount: (account: number) => void;
   transactionAccounts: number[];
   isSavingCode: boolean;
 }
@@ -105,7 +105,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     index: 0,
   });
 
-  const [selectedResourceAccount, setSelectedResourceAccount] = useState< string | null >(null)
+  const [selectedResourceAccount, setSelectedResourceAccount] = useState< number | null >(null)
 
   const projectID = project ? project.id : null;
 
@@ -256,7 +256,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     setActive({ type: EntityType.Account, index: accountIndex });
   };
 
-  const updateSelectedResourceAccount = (account: string) => {
+  // TODO: delete, probably don't need this
+  const updateSelectedResourceAccount = (account: number) => {
     setSelectedResourceAccount(account);
   };
 
@@ -445,9 +446,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           setActive({ type, index });
         },
         selectedResourceAccount,
-        setSelectedResourceAccount: (account: string) => {
-          setSelectedResourceAccount(account)
-        },
+        setSelectedResourceAccount: updateSelectedResourceAccount,
+        // setSelectedResourceAccount: (account: number) => {
+        //   setSelectedResourceAccount(account)
+        // },
         transactionAccounts,
       }}
     >

@@ -32,8 +32,13 @@ const AccountList: React.FC = () => {
   const {
     project,
     active,
+    setSelectedResourceAccount,
   } = useProject();
   const accountSelected = active.type === EntityType.Account
+  // console.log("SET SELCTED RESOURCE ACCOUNT FROM ACCOUNT LIST:", setSelectedResourceAccount);
+  console.log("ACTIVE STATE FROM ACCOUNTLIST:", active);
+  
+  
 
   const location = useLocation();
   const params = getParams(location.search)
@@ -44,6 +49,10 @@ const AccountList: React.FC = () => {
       <Header>Accounts</Header>
       <Items>
         {project.accounts.map((account: Account, i: number) => {
+          // console.log("MAP FUNCTION ACCOUNT:", account);
+          // console.log("MAP FUNCTION I:", i);
+          
+          
           const { id } = account
           const isActive = accountSelected && params.id === id
           const accountAddress = `0x${account.address.slice(-2)}`
@@ -60,6 +69,11 @@ const AccountList: React.FC = () => {
               onClick={() => navigate(`/${projectPath}?type=account&id=${id}`)}
             >
               <AccountCard>
+                <button
+                  onClick={() => setSelectedResourceAccount(i)}
+                >
+                  Resources
+                </button>
                 <Avatar seed={project.seed} index={i} />
                 <Stack>
                   <strong>{accountAddress}</strong>
