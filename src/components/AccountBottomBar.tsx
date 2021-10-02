@@ -253,6 +253,7 @@ const AccountState: React.FC<{
 const AccountBottomBar: React.FC = () => {
   const { project, active, isLoading, selectedResourceAccount } = useProject();
   console.log("ACCOUNT BOTTOM BAR PROJECT:", project);
+  console.log("ACCOUNT BOTTOM BAR ACTIVE:", active);
   console.log("SELECTED RESOURCE ACCOUNT IN ACCOUNT BOTTOM BAR:", selectedResourceAccount);
   
 
@@ -263,7 +264,8 @@ const AccountBottomBar: React.FC = () => {
       ) : (
         <>
           <AccountState
-            state={project.accounts[active.index].state}
+            // TODO: defaults to 0 when selectedResourceAccount resolves to null, need to handle this so no render happ
+            state={project.accounts[selectedResourceAccount || 0].state}
             renderDeployButton={() => {
               return <FeedbackActions />;
             }}
