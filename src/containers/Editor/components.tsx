@@ -217,9 +217,9 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({ active }) => {
     case EntityType.Account:
       return <AccountBottomBar />;
     case EntityType.TransactionTemplate:
-      return <TransactionBottomBar />;
+      return (<> <AccountBottomBar />  <TransactionBottomBar /> </>);
     case EntityType.ScriptTemplate:
-      return <ScriptBottomBar />;
+      return (<> <AccountBottomBar />  <ScriptBottomBar /> </>);
     default:
       return null;
   }
