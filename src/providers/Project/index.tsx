@@ -256,11 +256,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     setActive({ type: EntityType.Account, index: accountIndex });
   };
 
-  // TODO: delete, probably don't need this
-  const updateSelectedResourceAccount = (account: number) => {
-    setSelectedResourceAccount(account);
-  };
-
   const updateSelectedTransactionAccounts = (accountIndexes: number[]) => {
     setTransactionAccounts(accountIndexes);
   };
@@ -446,10 +441,9 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           setActive({ type, index });
         },
         selectedResourceAccount,
-        setSelectedResourceAccount: updateSelectedResourceAccount,
-        // setSelectedResourceAccount: (account: number) => {
-        //   setSelectedResourceAccount(account)
-        // },
+        setSelectedResourceAccount: (account: number) => {
+          setSelectedResourceAccount(account)
+        },
         transactionAccounts,
       }}
     >
