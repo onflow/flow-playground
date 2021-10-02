@@ -123,6 +123,7 @@ const AccountState: React.FC<{
   if (!state) {
     state = '{}';
   }
+  // console.log("STATE OBJ PASSED INTO ACCOUNT BOTTOM BAR:", state);
 
   const storage: { [identifier: string]: string } = {};
 
@@ -194,6 +195,8 @@ const AccountState: React.FC<{
     };
   }, []);
 
+  // console.log("STORAGE FROM INSIDE ACCOUNTBOTTOMBAR:", storage);
+  
   return (
     <>
       {identifiers.length ? (
@@ -249,6 +252,7 @@ const AccountState: React.FC<{
 
 const AccountBottomBar: React.FC = () => {
   const { project, active, isLoading } = useProject();
+  console.log("ACCOUNT BOTTOM BAR PROJECT:", project);
 
   return (
     <FeedbackRoot>
