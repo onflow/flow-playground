@@ -36,7 +36,7 @@ const AccountList: React.FC = () => {
   } = useProject();
   const accountSelected = active.type === EntityType.Account
   // console.log("SET SELCTED RESOURCE ACCOUNT FROM ACCOUNT LIST:", setSelectedResourceAccount);
-  console.log("ACTIVE STATE FROM ACCOUNTLIST:", active);
+  // console.log("ACTIVE STATE FROM ACCOUNTLIST:", active);
   
   
 

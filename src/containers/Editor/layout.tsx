@@ -40,6 +40,7 @@ const EditorLayout: React.FC = () => {
   const [projectIsPlayground, setIsPlayground] = useState(false);
 
   const { project, mutator, isSavingCode, isLoading, active } = useProject();
+  // console.log("PROJECT OBJ FROM LAYOUT:", project);
 
   useEffect(() => {
     if (project && project.id) {

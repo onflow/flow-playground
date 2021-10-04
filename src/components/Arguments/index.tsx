@@ -266,7 +266,9 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
         case EntityType.TransactionTemplate: {
           resultType = ResultType.Transaction;
+          console.log("TX ARGS @@@@@@@@@@@@@@@@@@@@@@@@:", args);
           rawResult = await transactionFactory(signersAccounts, args);
+          console.log("TX RAW RESULT @@@@@@@@@@@@@@@@@:", rawResult);
           break;
         }
 
@@ -291,6 +293,11 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
       console.error(e);
       rawResult = e.toString();
     }
+
+    // console.log("Label @@@@@@@@@@@@@:", getLabel(resultType, project, active.index));
+    // console.log("RAW RESULT @@@@@@@@@@@@@@@@:", rawResult);
+    
+    
 
     setProcessingStatus(false);
 

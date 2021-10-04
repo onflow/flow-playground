@@ -128,6 +128,7 @@ const AccountState: React.FC<{
   const storage: { [identifier: string]: string } = {};
 
   const parsed = JSON.parse(state);
+  // console.log("PARSED ACCOUNT STATE:", parsed);
 
   for (let key in parsed) {
     if (!parsed.hasOwnProperty(key)) {
@@ -252,9 +253,9 @@ const AccountState: React.FC<{
 
 const AccountBottomBar: React.FC = () => {
   const { project, active, isLoading, selectedResourceAccount } = useProject();
-  console.log("ACCOUNT BOTTOM BAR PROJECT:", project);
-  console.log("ACCOUNT BOTTOM BAR ACTIVE:", active);
-  console.log("SELECTED RESOURCE ACCOUNT IN ACCOUNT BOTTOM BAR:", selectedResourceAccount);
+  // console.log("ACCOUNT BOTTOM BAR PROJECT:", project);
+  // console.log("ACCOUNT BOTTOM BAR ACTIVE:", active);
+  // console.log("SELECTED RESOURCE ACCOUNT IN ACCOUNT BOTTOM BAR:", selectedResourceAccount);
   
 
   return (

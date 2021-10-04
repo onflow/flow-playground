@@ -98,6 +98,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [transactionAccounts, setTransactionAccounts] = useState<number[]>([0]);
+  console.log("TRANSACTION ACCOUNTS::::::::::::::::::::::::::::::", transactionAccounts);
   const [isSavingCode, setIsSaving] = useState(false);
 
   const [active, setActive] = useState<{ type: EntityType; index: number }>({
@@ -106,6 +107,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   });
 
   const [selectedResourceAccount, setSelectedResourceAccount] = useState< number | null >(null)
+  console.log("SELECTED RESOURCE ACCOUNT@@@@@@@@@@@@@@@@@@@@@", selectedResourceAccount);
 
   const projectID = project ? project.id : null;
 
@@ -165,6 +167,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       script,
       title,
     );
+    console.log("UPDATE TRANSACTION TEMPLATE RAN::::::::::::", res);
+    
     timeout = setTimeout(() => {
       setIsSaving(false);
     }, 1000);
@@ -189,6 +193,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     script: string,
     title: string,
   ) => {
+    console.log("UPDATE ACTIVE TRANSACTION TEMPLAYE RAN:");
     clearTimeout(timeout);
     setIsSaving(true);
     const res = await mutator.updateTransactionTemplate(
@@ -196,6 +201,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       script,
       title,
     );
+    console.log("RES FROM UPDATE ACTIVE TX TEMPLATE:", res);
     timeout = setTimeout(() => {
       setIsSaving(false);
     }, 1000);
@@ -213,6 +219,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       signingAccounts,
       args,
     );
+    console.log("RES FROM PROVIDER TX$$$$$$$$$$$$$$$$$$$$$$$$$$:", res);
     timeout = setTimeout(() => {
       setIsSaving(false);
     }, 1000);
