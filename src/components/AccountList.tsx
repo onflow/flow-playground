@@ -12,6 +12,7 @@ import Avatar from "components/Avatar";
 import styled from "@emotion/styled";
 import {ExportButton} from "components/ExportButton";
 import {getParams, isUUUID} from "../util/url";
+import { Flex } from "theme-ui";
 
 function getDeployedContracts(account: Account): string {
   const contracts = account.deployedContracts.map(
@@ -49,8 +50,8 @@ const AccountList: React.FC = () => {
       <Header>Accounts</Header>
       <Items>
         {project.accounts.map((account: Account, i: number) => {
-          // console.log("MAP FUNCTION ACCOUNT:", account);
-          // console.log("MAP FUNCTION I:", i);
+          console.log("MAP FUNCTION ACCOUNT:", account);
+          console.log("MAP FUNCTION I:", i);
           
           
           const { id } = account
@@ -62,9 +63,10 @@ const AccountList: React.FC = () => {
             : `This account don't have any contracts`
           const typeName = account.__typename
           return (
-            <>
+            <Flex
+              key={account.address}
+            >
               <Item
-                key={id}
                 title={title}
                 active={isActive}
                 onClick={() => navigate(`/${projectPath}?type=account&id=${id}`)}
@@ -84,7 +86,7 @@ const AccountList: React.FC = () => {
               >
                 Resources
               </button>
-            </>
+            </Flex>
           );
         })}
       </Items>
