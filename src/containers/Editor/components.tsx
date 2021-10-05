@@ -212,7 +212,6 @@ type BottomBarContainerProps = {
 };
 
 const BottomBarContainer: React.FC<BottomBarContainerProps> = ({ active }) => {
-  // console.log("ACTIVE@@@@@@@@@@@@@@@@@@@:", active);
   switch (active.type) {
     case EntityType.Account:
       return <AccountBottomBar />;

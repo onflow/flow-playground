@@ -266,9 +266,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
         case EntityType.TransactionTemplate: {
           resultType = ResultType.Transaction;
-          console.log("TX ARGS @@@@@@@@@@@@@@@@@@@@@@@@:", args);
           rawResult = await transactionFactory(signersAccounts, args);
-          console.log("TX RAW RESULT @@@@@@@@@@@@@@@@@:", rawResult);
           break;
         }
 

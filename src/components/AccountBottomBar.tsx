@@ -254,6 +254,7 @@ const AccountState: React.FC<{
 const AccountBottomBar: React.FC = () => {
   const { project, isLoading, selectedResourceAccount } = useProject();
   // console.log("ACCOUNT BOTTOM BAR PROJECT:", project);
+  
   // console.log("ACCOUNT BOTTOM BAR ACTIVE:", active);
   // console.log("SELECTED RESOURCE ACCOUNT IN ACCOUNT BOTTOM BAR:", selectedResourceAccount);
   
