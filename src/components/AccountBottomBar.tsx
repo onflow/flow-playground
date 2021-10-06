@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { ResultType } from 'api/apollo/generated/graphql';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
+import {IoMdAddCircleOutline} from "react-icons/io";
 import { useProject } from 'providers/Project/projectHooks';
+import { navigate } from "@reach/router";
+import { isUUUID } from "../util/url";
 import useMousePosition from '../hooks/useMousePosition';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 import { FeedbackActions } from 'layout/FeedbackActions';
 import { SidebarItemInsert } from 'layout/SidebarItemInsert';
+import { BottomBarItemInsert } from 'layout/BottomBarItemInsert';
 import styled from '@emotion/styled';
 import theme from '../theme';
 import { ResizeHeading } from 'layout/Heading';
@@ -62,6 +66,7 @@ const StorageListContainer = styled.div`
 
 interface TypeListProps {
   identifiers: string[];
+  types: { [identifier: string]: string };
   selected: string;
   onSelect: (type: string) => void;
   controls: () => any;
@@ -70,34 +75,49 @@ interface TypeListProps {
 // @ts-ignore
 const IdentifierList: React.FC<TypeListProps> = ({
   identifiers,
+  types,
   selected,
   onSelect,
   controls,
   resize,
-}) => (
-  <StorageListContainer>
-    <ResizeHeading onMouseDown={resize}>Storage {controls()}</ResizeHeading>
+}) => {
+  const { project, mutator } = useProject();
+  const projectPath = isUUUID(project.id) ? project.id : "local"
 
-    <div
-      style={{
-        width: '288px',
-        overflow: 'auto',
-      }}
-    >
-      <ul>
-        {identifiers.map((type: string) => (
-          <TypeListItem
-            key={type}
-            active={type == selected}
-            onClick={() => onSelect(type)}
-          >
-            {type}
-          </TypeListItem>
-        ))}
-      </ul>
-    </div>
-  </StorageListContainer>
-);
+  return (
+    <StorageListContainer>
+      <ResizeHeading onMouseDown={resize}>Storage {controls()}</ResizeHeading>
+
+      <div
+        style={{
+          width: '288px',
+          overflow: 'auto',
+        }}
+      >
+        <ul>
+          {identifiers.map((identifier: string) => (
+            <TypeListItem
+              key={identifier}
+              active={identifier == selected}
+              onClick={() => onSelect(identifier)}
+            >
+              {identifier}
+              {types[identifier] == "Link" &&
+                <BottomBarItemInsert onClick={ async () => {
+                  const res = await mutator.createTransactionTemplate("", `New Transaction`)
+                  navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}`)
+                }}>
+                  <IoMdAddCircleOutline size="20px" />
+                </BottomBarItemInsert>
+              }
+
+            </TypeListItem>
+          ))}
+        </ul>
+      </div>
+    </StorageListContainer>
+  );
+}
 
 const StateContainer: React.FC<{ value: any }> = ({ value }) => (
   <div
@@ -137,7 +157,7 @@ const AccountState: React.FC<{
     }
 
     const tuple = key.split('\u001f')
-    console.log("KEY TUPLE:", tuple);
+    // console.log("KEY TUPLE:", tuple);
     
     const [domain, identifier] = tuple
 
@@ -145,13 +165,23 @@ const AccountState: React.FC<{
       storage[identifier] = parsed[key];
     }
   }
-
+  console.log("STORAGE:", storage);
+  
   const identifiers = Object.keys(storage);
+
+  const types: { [identifier: string]: string } = {};
+  for (const [key, value] of Object.entries<any>(storage)) {
+    types[key] = value["value"]["type"]
+  }
+  console.log("TYPES:", types);
+  
 
   // @ts-ignore
   const [selected, setSelected] = useState(
     identifiers.length > 0 ? identifiers[0] : null,
   );
+  console.log("SELECTED:", selected);
+  
 
   const { x, y } = useMousePosition();
   const [storageHeight, setStorageHeight] = useState(STORAGE_PANEL_MIN_HEIGHT);
@@ -207,6 +237,7 @@ const AccountState: React.FC<{
         <AccountStateContainer height={storageHeight + resultHeight}>
           <IdentifierList
             identifiers={identifiers}
+            types={types}
             selected={selected}
             onSelect={setSelected}
             resize={() => toggleResizingStorage(true)}
