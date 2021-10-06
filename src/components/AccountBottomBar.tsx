@@ -123,7 +123,6 @@ const AccountState: React.FC<{
   if (!state) {
     state = '{}';
   }
-  // console.log("STATE OBJ PASSED INTO ACCOUNT BOTTOM BAR:", state);
 
   const storage: { [identifier: string]: string } = {};
 
@@ -131,14 +130,18 @@ const AccountState: React.FC<{
   // console.log("PARSED ACCOUNT STATE:", parsed);
 
   for (let key in parsed) {
+    // console.log("KEY:", key);
+    
     if (!parsed.hasOwnProperty(key)) {
       continue;
     }
 
     const tuple = key.split('\u001f')
+    console.log("KEY TUPLE:", tuple);
+    
     const [domain, identifier] = tuple
 
-    if (tuple.length === 2 && domain === 'storage') {
+    if (tuple.length === 2 && ['storage', 'public', 'private'].includes(domain)) {
       storage[identifier] = parsed[key];
     }
   }
