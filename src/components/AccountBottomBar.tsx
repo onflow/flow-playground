@@ -81,7 +81,9 @@ const IdentifierList: React.FC<TypeListProps> = ({
   controls,
   resize,
 }) => {
-  const { project, mutator } = useProject();
+  const { project, mutator, selectedResourceAccount } = useProject();
+  console.log("SELECTED RESOURCE ACCOUNT FROM IDENTIFIERS LIST:", selectedResourceAccount);
+  
   const projectPath = isUUUID(project.id) ? project.id : "local"
 
   return (
@@ -105,7 +107,7 @@ const IdentifierList: React.FC<TypeListProps> = ({
               {types[identifier] == "Link" &&
                 <BottomBarItemInsert onClick={ async () => {
                   const res = await mutator.createTransactionTemplate("", `New Transaction`)
-                  navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}`)
+                  navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount + 1 || 'none'}`)
                 }}>
                   <IoMdAddCircleOutline size="20px" />
                 </BottomBarItemInsert>
@@ -140,8 +142,6 @@ const AccountState: React.FC<{
   state: any;
   renderDeployButton: () => JSX.Element;
 }> = ({ state }) => {
-  console.log("RAW STATE:", state);
-  
   if (!state) {
     state = '{}';
   }

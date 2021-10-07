@@ -133,7 +133,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   
 
   const [selectedResourceAccount, setSelectedResourceAccount] = useState< number | null >(null)
-  // console.log("SELECTED RESOURCE ACCOUNT@@@@@@@@@@@@@@@@@@@@@", selectedResourceAccount);
+  console.log("SELECTED RESOURCE ACCOUNT@@@@@@@@@@@@@@@@@@@@@", selectedResourceAccount);
 
   const projectID = project ? project.id : null;
 
@@ -326,7 +326,9 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   }
 
   const params = getParams(location.search || '');
-  const { type, id } = params;
+  // const { type, id, storage } = params;
+  const { type, id, storage: storageParam } = params;
+  const storage = storageParam || 'none'
 
   // TODO: check if that project is local
   // TODO: check that active item have the same id
@@ -334,7 +336,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   if (type == '' || type === undefined || !scriptTypes.includes(type)) {
     return (
       <Redirect noThrow
-        to={`/${project.id}?type=account&id=${project.accounts[0].id}`}
+        to={`/${project.id}?type=account&id=${project.accounts[0].id}&storage=${storage}`}
       />
     );
   }
@@ -365,7 +367,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         firstItemId = project.accounts[0].id;
         break;
     }
-    return <Redirect noThrow to={`/${project.id}?type=${type}&id=${firstItemId}`} />;
+    return <Redirect noThrow to={`/${project.id}?type=${type}&id=${firstItemId}&storage=${storage}`} />;
   }
 
   const activeType = type || 'account';
@@ -392,7 +394,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           index: templateIndex,
         });
         const templateId = project.transactionTemplates[templateIndex].id;
-        return <Redirect noThrow to={`/${project.id}?type=tx&id=${templateId}`} />;
+        return <Redirect noThrow to={`/${project.id}?type=tx&id=${templateId}&storage=${storage}`} />;
       }
       break;
     }
@@ -415,7 +417,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           index: templateIndex,
         });
         const templateId = project.scriptTemplates[templateIndex].id;
-        return <Redirect noThrow to={`/${project.id}?type=script&id=${templateId}`} />;
+        return <Redirect noThrow to={`/${project.id}?type=script&id=${templateId}&storage=${storage}`} />;
       }
       break;
     }
@@ -439,7 +441,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           index: templateIndex,
         });
         const templateId = project.accounts[templateIndex].id;
-        return <Redirect noThrow to={`/${project.id}?type=account&id=${templateId}`} />;
+        return <Redirect noThrow to={`/${project.id}?type=account&id=${templateId}&storage=${storage}`} />;
       }
       break;
     }

@@ -3,6 +3,8 @@ import { Button, Flex, Text } from "theme-ui";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { FaCodeBranch, FaDiscord, FaTwitter, FaArrowAltCircleDown } from "react-icons/fa";
+import { useLocation} from "@reach/router"
+import { getParams } from "../../util/url";
 
 import { Header as HeaderRoot } from "layout/Header";
 import { default as FlowButton } from "components/Button";
@@ -39,7 +41,7 @@ const EditorLayout: React.FC = () => {
   const [showExamples, toggleShowExamples] = useState(false);
   const [projectIsPlayground, setIsPlayground] = useState(false);
 
-  const { project, mutator, isSavingCode, isLoading, active } = useProject();
+  const { project, mutator, isSavingCode, isLoading, active, setSelectedResourceAccount } = useProject();
   // console.log("PROJECT OBJ FROM LAYOUT:", project);
 
   useEffect(() => {
@@ -47,6 +49,14 @@ const EditorLayout: React.FC = () => {
       setIsPlayground(FDP.includes(project.id));
     }
   }, [project]);
+
+  const location = useLocation();
+  const params = getParams(location.search)
+  useEffect(() => {
+    // shift 'storage' int. Ex. acct 0x02 is 'storage=2' in URL, but index 1
+    params.storage && setSelectedResourceAccount(params.storage - 1)
+  },[params])
+
 
   if (!isLoading && !project) {
     // NOTE: Leave this. 404 redirect is handled in

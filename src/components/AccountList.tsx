@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {navigate, useLocation} from "@reach/router"
 import {Account} from "api/apollo/generated/graphql";
 import {EntityType} from "providers/Project";
@@ -43,11 +43,6 @@ const AccountList: React.FC = () => {
   
   const projectPath = isUUUID(project.id) ? project.id : "local"
 
-  useEffect(() => {
-    // shift 'storage' int. Ex. acct 0x02 is 'storage=2' in URL, but index 1
-    params.storage && setSelectedResourceAccount(params.storage - 1)
-  },[params])
-
   return (
     <Root>
       <Header>Accounts</Header>
@@ -85,7 +80,10 @@ const AccountList: React.FC = () => {
                 </AccountCard>
               </Item>
               <button
-                onClick={() => setSelectedResourceAccount(i)}
+                onClick={() => {
+                  setSelectedResourceAccount(i)
+                  navigate(`/${projectPath}?type=account&id=${id}&storage=${i + 1 || 'none'}`)
+                }}
               >
                 Resources
               </button>
