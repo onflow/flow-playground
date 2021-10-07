@@ -140,6 +140,8 @@ const AccountState: React.FC<{
   state: any;
   renderDeployButton: () => JSX.Element;
 }> = ({ state }) => {
+  console.log("RAW STATE:", state);
+  
   if (!state) {
     state = '{}';
   }
@@ -165,7 +167,7 @@ const AccountState: React.FC<{
       storage[identifier] = parsed[key];
     }
   }
-  console.log("STORAGE:", storage);
+  // console.log("STORAGE:", storage);
   
   const identifiers = Object.keys(storage);
 
@@ -173,14 +175,14 @@ const AccountState: React.FC<{
   for (const [key, value] of Object.entries<any>(storage)) {
     types[key] = value["value"]["type"]
   }
-  console.log("TYPES:", types);
+  // console.log("TYPES:", types);
   
 
   // @ts-ignore
   const [selected, setSelected] = useState(
     identifiers.length > 0 ? identifiers[0] : null,
   );
-  console.log("SELECTED:", selected);
+  // console.log("SELECTED:", selected);
   
 
   const { x, y } = useMousePosition();
@@ -287,7 +289,15 @@ const AccountState: React.FC<{
 
 const AccountBottomBar: React.FC = () => {
   const { project, isLoading, selectedResourceAccount } = useProject();
-  // console.log("ACCOUNT BOTTOM BAR PROJECT:", project);
+  // console.log("ACCOUNT BOTTOM BAR PROJECT:", project.accounts[1].state);
+  // console.log("SELECTED RESOURCE ACCOUNT:", selectedResourceAccount);
+  // (project && selectedResourceAccount) && console.log("STATE FROM SELECTED:", project.accounts[selectedResourceAccount]);
+  // (project) && console.log("STATE FROM SELECTED:", project.accounts[selectedResourceAccount].state);
+  // console.log("SELECTED RESOURCE ACCOUNT:", selectedResourceAccount);
+  
+  
+
+  
   
   // console.log("ACCOUNT BOTTOM BAR ACTIVE:", active);
   // console.log("SELECTED RESOURCE ACCOUNT IN ACCOUNT BOTTOM BAR:", selectedResourceAccount);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {navigate, useLocation} from "@reach/router"
 import {Account} from "api/apollo/generated/graphql";
 import {EntityType} from "providers/Project";
@@ -37,13 +37,16 @@ const AccountList: React.FC = () => {
     updatedStorageAccts,
   } = useProject();
   const accountSelected = active.type === EntityType.Account
-  // console.log("SET SELCTED RESOURCE ACCOUNT FROM ACCOUNT LIST:", setSelectedResourceAccount);
-  // console.log("ACTIVE STATE FROM ACCOUNTLIST:", active);
-  console.log("UPDATED STORAGE ACOCUNTS FROM ITEMS LIST", updatedStorageAccts);
 
   const location = useLocation();
   const params = getParams(location.search)
+  
   const projectPath = isUUUID(project.id) ? project.id : "local"
+
+  useEffect(() => {
+    // shift 'storage' int. Ex. acct 0x02 is 'storage=2' in URL, but index 1
+    params.storage && setSelectedResourceAccount(params.storage - 1)
+  },[params])
 
   return (
     <Root>

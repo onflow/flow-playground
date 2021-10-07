@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { navigate, Redirect, useLocation } from '@reach/router';
+
 import ProjectMutator from './projectMutator';
 import useGetProject from './projectHooks';
 
@@ -317,7 +318,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const activeEditor = getActiveEditor();
 
   const location = useLocation();
-
+  
   if (isLoading) return null;
   if (!isLoading && !project) {
     navigate('/404');
