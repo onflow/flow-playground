@@ -42,7 +42,6 @@ const EditorLayout: React.FC = () => {
   const [projectIsPlayground, setIsPlayground] = useState(false);
 
   const { project, mutator, isSavingCode, isLoading, active, setSelectedResourceAccount } = useProject();
-  // console.log("PROJECT OBJ FROM LAYOUT:", project);
 
   useEffect(() => {
     if (project && project.id) {
@@ -56,7 +55,6 @@ const EditorLayout: React.FC = () => {
     // shift 'storage' int. Ex. acct 0x02 is 'storage=2' in URL, but index 1
     params.storage && setSelectedResourceAccount(params.storage - 1)
   },[params])
-
 
   if (!isLoading && !project) {
     // NOTE: Leave this. 404 redirect is handled in

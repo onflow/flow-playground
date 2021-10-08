@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { navigate } from "@reach/router";
 import { ResultType } from 'api/apollo/generated/graphql';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import {IoMdAddCircleOutline} from "react-icons/io";
 import { useProject } from 'providers/Project/projectHooks';
-import { navigate } from "@reach/router";
 import { isUUUID } from "../util/url";
 import useMousePosition from '../hooks/useMousePosition';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
@@ -81,15 +81,14 @@ const IdentifierList: React.FC<TypeListProps> = ({
   controls,
   resize,
 }) => {
+
   const { project, mutator, selectedResourceAccount } = useProject();
-  console.log("SELECTED RESOURCE ACCOUNT FROM IDENTIFIERS LIST:", selectedResourceAccount);
   
   const projectPath = isUUUID(project.id) ? project.id : "local"
 
   return (
     <StorageListContainer>
       <ResizeHeading onMouseDown={resize}>Storage {controls()}</ResizeHeading>
-
       <div
         style={{
           width: '288px',
@@ -149,41 +148,30 @@ const AccountState: React.FC<{
   const storage: { [identifier: string]: string } = {};
 
   const parsed = JSON.parse(state);
-  // console.log("PARSED ACCOUNT STATE:", parsed);
 
   for (let key in parsed) {
-    // console.log("KEY:", key);
-    
     if (!parsed.hasOwnProperty(key)) {
       continue;
     }
 
     const tuple = key.split('\u001f')
-    // console.log("KEY TUPLE:", tuple);
-    
     const [domain, identifier] = tuple
 
     if (tuple.length === 2 && ['storage', 'public', 'private'].includes(domain)) {
       storage[identifier] = parsed[key];
     }
   }
-  // console.log("STORAGE:", storage);
-  
   const identifiers = Object.keys(storage);
 
   const types: { [identifier: string]: string } = {};
   for (const [key, value] of Object.entries<any>(storage)) {
     types[key] = value["value"]["type"]
   }
-  // console.log("TYPES:", types);
-  
 
   // @ts-ignore
   const [selected, setSelected] = useState(
     identifiers.length > 0 ? identifiers[0] : null,
   );
-  // console.log("SELECTED:", selected);
-  
 
   const { x, y } = useMousePosition();
   const [storageHeight, setStorageHeight] = useState(STORAGE_PANEL_MIN_HEIGHT);
@@ -231,8 +219,6 @@ const AccountState: React.FC<{
     };
   }, []);
 
-  // console.log("STORAGE FROM INSIDE ACCOUNTBOTTOMBAR:", storage);
-  
   return (
     <>
       {identifiers.length ? (
@@ -289,19 +275,6 @@ const AccountState: React.FC<{
 
 const AccountBottomBar: React.FC = () => {
   const { project, isLoading, selectedResourceAccount } = useProject();
-  // console.log("ACCOUNT BOTTOM BAR PROJECT:", project.accounts[1].state);
-  // console.log("SELECTED RESOURCE ACCOUNT:", selectedResourceAccount);
-  // (project && selectedResourceAccount) && console.log("STATE FROM SELECTED:", project.accounts[selectedResourceAccount]);
-  // (project) && console.log("STATE FROM SELECTED:", project.accounts[selectedResourceAccount].state);
-  // console.log("SELECTED RESOURCE ACCOUNT:", selectedResourceAccount);
-  
-  
-
-  
-  
-  // console.log("ACCOUNT BOTTOM BAR ACTIVE:", active);
-  // console.log("SELECTED RESOURCE ACCOUNT IN ACCOUNT BOTTOM BAR:", selectedResourceAccount);
-  
 
   return (
     <FeedbackRoot>
@@ -310,7 +283,6 @@ const AccountBottomBar: React.FC = () => {
       ) : (
         <>
           <AccountState
-            // TODO: defaults to 0 when selectedResourceAccount resolves to null, need to handle this so no render happ
             state={project.accounts[selectedResourceAccount || 0].state}
             renderDeployButton={() => {
               return <FeedbackActions />;

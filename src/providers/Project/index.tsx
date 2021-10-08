@@ -1,7 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { navigate, Redirect, useLocation } from '@reach/router';
-
 import ProjectMutator from './projectMutator';
 import useGetProject from './projectHooks';
 
@@ -53,7 +52,6 @@ export interface ProjectContextValue {
   createScriptExecution: (args?: string[]) => Promise<any>;
   active: ActiveEditor;
   setActive: (type: EntityType, index: number) => void;
-
   selectedResourceAccount: number;
   setSelectedResourceAccount: (account: number) => void;
   transactionAccounts: number[];
@@ -100,7 +98,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [transactionAccounts, setTransactionAccounts] = useState<number[]>([0]);
-  // console.log("TRANSACTION ACCOUNTS::::::::::::::::::::::::::::::", transactionAccounts);
   const [isSavingCode, setIsSaving] = useState(false);
 
   const [active, setActive] = useState<{ type: EntityType; index: number }>({
@@ -128,9 +125,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       setAllAccountsStorage(accountsStorage)
     }
   },[project])
-  // console.log("STORAGE UPDATED ACCTS:", updatedStorageAccts);
-  
-  
 
   const [selectedResourceAccount, setSelectedResourceAccount] = useState< number | null >(null)
   console.log("SELECTED RESOURCE ACCOUNT@@@@@@@@@@@@@@@@@@@@@", selectedResourceAccount);
@@ -241,8 +235,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       signingAccounts,
       args,
     );
-    // console.log("CREATE TRANSACTION EXECUTION RAN!!!");
-    // console.log("RES FROM PROVIDER TX$$$$$$$$$$$$$$$$$$$$$$$$$$:", res);
     timeout = setTimeout(() => {
       setIsSaving(false);
     }, 1000);
@@ -326,7 +318,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   }
 
   const params = getParams(location.search || '');
-  // const { type, id, storage } = params;
   const { type, id, storage: storageParam } = params;
   const storage = storageParam || 'none'
 

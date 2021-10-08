@@ -40,7 +40,6 @@ const AccountList: React.FC = () => {
 
   const location = useLocation();
   const params = getParams(location.search)
-  
   const projectPath = isUUUID(project.id) ? project.id : "local"
 
   return (
@@ -48,9 +47,6 @@ const AccountList: React.FC = () => {
       <Header>Accounts</Header>
       <Items>
         {project.accounts.map((account: Account, i: number) => {
-          
-          updatedStorageAccts && updatedStorageAccts.includes(i) && console.log(`ITEM ${i} was updated!!!`);
-          
           const { id } = account
           const isActive = accountSelected && params.id === id
           const accountAddress = `0x${account.address.slice(-2)}`
@@ -75,7 +71,6 @@ const AccountList: React.FC = () => {
                     <strong>{accountAddress}</strong>
                     <small>{contractName || '--'}</small>
                   </Stack>
-
                   {isActive && <ExportButton id={account.id} typeName={typeName}/>}
                 </AccountCard>
               </Item>

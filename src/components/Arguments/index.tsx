@@ -291,12 +291,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
       console.error(e);
       rawResult = e.toString();
     }
-
-    // console.log("Label @@@@@@@@@@@@@:", getLabel(resultType, project, active.index));
-    // console.log("RAW RESULT @@@@@@@@@@@@@@@@:", rawResult);
     
-    
-
     setProcessingStatus(false);
 
     // Display result in the bottom area
