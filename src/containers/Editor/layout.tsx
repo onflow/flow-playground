@@ -52,8 +52,7 @@ const EditorLayout: React.FC = () => {
   const location = useLocation();
   const params = getParams(location.search)
   useEffect(() => {
-    // shift 'storage' int. Ex. acct 0x02 is 'storage=2' in URL, but index 1
-    params.storage && setSelectedResourceAccount(params.storage - 1)
+    params.storage && setSelectedResourceAccount(params.storage)
   },[params])
 
   if (!isLoading && !project) {

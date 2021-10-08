@@ -39,7 +39,7 @@ const AccountList: React.FC = () => {
   const accountSelected = active.type === EntityType.Account
 
   const location = useLocation();
-  const params = getParams(location.search)
+  const params = getParams(location.search);
   const projectPath = isUUUID(project.id) ? project.id : "local"
 
   return (
@@ -76,8 +76,8 @@ const AccountList: React.FC = () => {
               </Item>
               <button
                 onClick={() => {
-                  setSelectedResourceAccount(i)
-                  navigate(`/${projectPath}?type=account&id=${id}&storage=${i + 1 || 'none'}`)
+                  setSelectedResourceAccount(accountAddress)
+                  navigate(`/${projectPath}?type=account&id=${id}&storage=${accountAddress || 'none'}`)
                 }}
               >
                 Resources

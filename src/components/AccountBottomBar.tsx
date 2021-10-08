@@ -276,6 +276,14 @@ const AccountState: React.FC<{
 const AccountBottomBar: React.FC = () => {
   const { project, isLoading, selectedResourceAccount } = useProject();
 
+  const storageMap: { [account: string]: number} = {
+    "0x01": 0,
+    "0x02": 1,
+    "0x03": 2,
+    "0x04": 3,
+    "0x05": 4
+  }
+
   return (
     <FeedbackRoot>
       {isLoading ? (
@@ -283,7 +291,7 @@ const AccountBottomBar: React.FC = () => {
       ) : (
         <>
           <AccountState
-            state={project.accounts[selectedResourceAccount || 0].state}
+            state={project.accounts[storageMap[selectedResourceAccount] || 0].state}
             renderDeployButton={() => {
               return <FeedbackActions />;
             }}
