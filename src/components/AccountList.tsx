@@ -11,8 +11,9 @@ import {useProject} from "providers/Project/projectHooks";
 import Avatar from "components/Avatar";
 import styled from "@emotion/styled";
 import {ExportButton} from "components/ExportButton";
-import {getParams, isUUUID} from "../util/url";
+import {ResourcesExplorerButton} from "components/ResourcesExplorerButton";
 import { Flex } from "theme-ui";
+import {getParams, isUUUID} from "../util/url";
 
 function getDeployedContracts(account: Account): string {
   const contracts = account.deployedContracts.map(
@@ -23,7 +24,7 @@ function getDeployedContracts(account: Account): string {
 
 export const AccountCard = styled.div`
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   width: 100%;
@@ -33,8 +34,7 @@ const AccountList: React.FC = () => {
   const {
     project,
     active,
-    setSelectedResourceAccount,
-    updatedStorageAccts,
+    // updatedStorageAccts,
   } = useProject();
   const accountSelected = active.type === EntityType.Account
 
@@ -47,6 +47,8 @@ const AccountList: React.FC = () => {
       <Header>Accounts</Header>
       <Items>
         {project.accounts.map((account: Account, i: number) => {
+          // console.log("ACCOUNT:::::::::", account);
+          
           const { id } = account
           const isActive = accountSelected && params.id === id
           const accountAddress = `0x${account.address.slice(-2)}`
@@ -56,14 +58,12 @@ const AccountList: React.FC = () => {
             : `This account don't have any contracts`
           const typeName = account.__typename
           return (
-            <Flex
-              key={account.address}
-              bg={updatedStorageAccts && updatedStorageAccts.includes(i) ? "red" : "blue"}
-            >
+            <Flex>
               <Item
+                key={account.address}
                 title={title}
                 active={isActive}
-                onClick={() => navigate(`/${projectPath}?type=account&id=${id}`)}
+                onClick={() => navigate(`/${projectPath}?type=account&id=${id}&storage=${accountAddress || 'none'}`)}
               >
                 <AccountCard>
                   <Avatar seed={project.seed} index={i} />
@@ -74,14 +74,7 @@ const AccountList: React.FC = () => {
                   {isActive && <ExportButton id={account.id} typeName={typeName}/>}
                 </AccountCard>
               </Item>
-              <button
-                onClick={() => {
-                  setSelectedResourceAccount(accountAddress)
-                  navigate(`/${projectPath}?type=account&id=${id}&storage=${accountAddress || 'none'}`)
-                }}
-              >
-                Resources
-              </button>
+              <ResourcesExplorerButton addr={accountAddress} />
             </Flex>
           );
         })}
