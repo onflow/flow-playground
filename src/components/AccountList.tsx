@@ -58,9 +58,10 @@ const AccountList: React.FC = () => {
             : `This account don't have any contracts`
           const typeName = account.__typename
           return (
-            <Flex>
+            <Flex
+              key={account.address}
+            >
               <Item
-                key={account.address}
                 title={title}
                 active={isActive}
                 onClick={() => navigate(`/${projectPath}?type=account&id=${id}&storage=${accountAddress || 'none'}`)}
