@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { uniqueNamesGenerator, adjectives, colors, } from 'unique-names-generator';
 import { FaSyncAlt } from 'react-icons/fa';
-import { useProject } from 'providers/Project/projectHooks';
+// import { useProject } from 'providers/Project/projectHooks';
 import { default as FlowButton } from 'components/Button';
+import theme from '../theme';
 
 import {
   FullScreenContainer,
@@ -12,37 +12,20 @@ import {
   SpaceBetween,
 } from 'components/Common';
 
-import { createZip } from '../util/generator';
-
 import {
   Input,
-  InputBlock, InputIcon,
+  InputBlock,
   Label,
 } from 'components/Arguments/SingleArgument/styles';
-
-const generateProjectName = () => {
-  const prefix: string = uniqueNamesGenerator({
-    dictionaries: [colors, adjectives],
-    separator: '-',
-    length: 2,
-  })
-
-  return `${prefix}-playground`
-}
 
 const AutoTemplatePopup: React.FC<{
   visible: boolean;
   triggerClose?: (e: React.SyntheticEvent) => any;
 }> = ({ visible, triggerClose }) => {
-  const { project } = useProject();
+  // const { project } = useProject();
   const [processing, setProcessing] = useState(false);
-  const [projectName, setProjectName] = useState(generateProjectName());
+  const [name, setName] = useState("My amazing script or transaction");
   const [folderName, setFolderName] = useState('cadence');
-
-  const regenerateProjectName = () => {
-    const newName = generateProjectName()
-    setProjectName(newName)
-  }
 
   const firstInput = useRef<HTMLInputElement>(null!);
 
@@ -84,7 +67,7 @@ const AutoTemplatePopup: React.FC<{
     },
     hidden: {
       opacity: 0,
-      y: -200,
+      y: 200,
       transition: {
         ease: [1, 0.5, 0, 0]
       },
@@ -98,18 +81,17 @@ const AutoTemplatePopup: React.FC<{
       animate={visible ? 'visible' : 'hidden'}
       variants={containerFrames}
     >
-      <PopupContainer width="350px" variants={popupFrames}>
-        <PopupHeader mb="20px" color="#575E89" lineColor="#B4BEFC">
-          Export Project
+      <PopupContainer width="550px" variants={popupFrames}>
+        <PopupHeader mb="20px" color={theme.colors.darkGrey} lineColor={theme.colors.primary}>
+          Create a Script or Transaction Template
         </PopupHeader>
         <InputBlock mb={'12px'}>
-          <Label>Project Name</Label>
+          <Label>Name</Label>
           <Input
             ref={firstInput}
-            value={projectName}
-            onChange={event => setProjectName(event.target.value)}
+            value={name}
+            onChange={event => setName(event.target.value)}
           />
-          <InputIcon icon={<FaSyncAlt/>} onClick={regenerateProjectName}/>
         </InputBlock>
         <InputBlock mb={'30px'}>
           <Label>Cadence Folder</Label>
@@ -129,7 +111,6 @@ const AutoTemplatePopup: React.FC<{
               className="violet modal"
               onClick={async () => {
                 setProcessing(true);
-                await createZip(folderName, projectName, project);
                 setProcessing(false);
                 triggerClose(null);
               }}
@@ -139,7 +120,7 @@ const AutoTemplatePopup: React.FC<{
           </SpaceBetween>
         )}
       </PopupContainer>
-      <WhiteOverlay onClick={triggerClose} />
+      <WhiteOverlay opacity={0.5} onClick={triggerClose} />
     </FullScreenContainer>
   );
 };

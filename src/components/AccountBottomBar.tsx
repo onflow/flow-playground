@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { navigate } from "@reach/router";
+// import { navigate } from "@reach/router";
 import { ResultType } from 'api/apollo/generated/graphql';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
-import {IoMdAddCircleOutline} from "react-icons/io";
+import { IoMdAddCircleOutline } from "react-icons/io";
 import { useProject } from 'providers/Project/projectHooks';
-import { isUUUID } from "../util/url";
+// import { isUUUID } from "../util/url";
 import useMousePosition from '../hooks/useMousePosition';
 import AutoTemplatePopup from 'components/AutoTemplatePopup'
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
@@ -86,12 +86,14 @@ const IdentifierList: React.FC<TypeListProps> = ({
   resize,
 }) => {
 
-  const [showTemplatePopup, toggleShowTemplatePopup] = useState< boolean >(false)
+  const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false)
 
-  const { project, mutator, selectedResourceAccount } = useProject();
-  
-  const projectPath = isUUUID(project.id) ? project.id : "local"
-  
+  // const { project, mutator, selectedResourceAccount } = useProject();
+  // const { project, selectedResourceAccount } = useProject();
+  const { selectedResourceAccount } = useProject();
+
+  // const projectPath = isUUUID(project.id) ? project.id : "local"
+
   return (
     <>
       <StorageListContainer>
@@ -116,9 +118,9 @@ const IdentifierList: React.FC<TypeListProps> = ({
                 >
                   {identifier}
                   {/* Milestone 2: temp render of badge */}
-                  {identifier === "MainReceiver" ? 
-                    <Badge 
-                      variant="outline" 
+                  {identifier === "MainReceiver" ?
+                    <Badge
+                      variant="outline"
                       px={"5px"}
                       sx={{
                         fontSize: 3,
@@ -128,12 +130,12 @@ const IdentifierList: React.FC<TypeListProps> = ({
                         paddingY: "2px",
                         marginX: "0.5rem"
                       }}
-                      >
-                        Capability
-                      </Badge>
+                    >
+                      Capability
+                    </Badge>
                     :
                     <Badge
-                      variant="outline" 
+                      variant="outline"
                       px={"5px"}
                       sx={{
                         fontSize: 3,
@@ -143,15 +145,15 @@ const IdentifierList: React.FC<TypeListProps> = ({
                         paddingY: "2px",
                         marginX: "0.5rem"
                       }}
-                      >
-                        Resource
-                      </Badge>
+                    >
+                      Resource
+                    </Badge>
                   }
                 </Flex>
 
                 <Flex>
                   {types[identifier] == "Link" &&
-                    <BottomBarItemInsert onClick={ async () => {
+                    <BottomBarItemInsert onClick={async () => {
                       toggleShowTemplatePopup(true)
                       // const res = await mutator.createTransactionTemplate("", `New Transaction`)
                       // navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
@@ -166,9 +168,9 @@ const IdentifierList: React.FC<TypeListProps> = ({
           </ul>
         </div>
       </StorageListContainer>
-      <AutoTemplatePopup visible={showTemplatePopup} triggerClose={()=>{
+      <AutoTemplatePopup visible={showTemplatePopup} triggerClose={() => {
         toggleShowTemplatePopup(false)
-      }}/>
+      }} />
     </>
 
 
@@ -331,7 +333,7 @@ const AccountState: React.FC<{
 const AccountBottomBar: React.FC = () => {
   const { project, isLoading, selectedResourceAccount } = useProject();
 
-  const storageMap: { [account: string]: number} = {
+  const storageMap: { [account: string]: number } = {
     "0x01": 0,
     "0x02": 1,
     "0x03": 2,
