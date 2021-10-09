@@ -18,7 +18,6 @@ export const SidebarItem = styled.div<ItemProps>`
   padding-bottom: 0.2rem;
   background: var(--bg);
   position: relative;
-  flex: 1 1 auto;
 
   ${p =>
     p.active &&
