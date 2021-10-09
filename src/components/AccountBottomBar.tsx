@@ -11,7 +11,7 @@ import { FeedbackActions } from 'layout/FeedbackActions';
 import { SidebarItemInsert } from 'layout/SidebarItemInsert';
 import { BottomBarItemInsert } from 'layout/BottomBarItemInsert';
 import styled from '@emotion/styled';
-import { Badge } from 'theme-ui'
+import { Badge, Flex } from 'theme-ui'
 import theme from '../theme';
 import { ResizeHeading } from 'layout/Heading';
 
@@ -23,7 +23,9 @@ const STORAGE_PANEL_MIN_HEIGHT = 80 + RESULT_PANEL_MIN_HEIGHT;
 const PLAYGROUND_HEADER_HEIGHT = 75;
 
 const TypeListItem = styled.li<{ active: boolean }>`
+  align-items: center;
   padding: 14px;
+  display: flex;
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;
@@ -103,51 +105,56 @@ const IdentifierList: React.FC<TypeListProps> = ({
               active={identifier == selected}
               onClick={() => onSelect(identifier)}
             >
-              {identifier}
+              <Flex
+                sx={{
+                  flex: "1 1 auto"
+                }}
+              >
+                {identifier}
+                {/* Milestone 2: temp render of badge */}
+                {identifier === "MainReceiver" ? 
+                  <Badge 
+                    variant="outline" 
+                    px={"5px"}
+                    sx={{
+                      fontSize: 3,
+                      backgroundColor: theme.colors.badgeCapability,
+                      fontStyle: "normal",
+                      paddingX: "5px",
+                      paddingY: "2px",
+                      marginX: "0.5rem"
+                    }}
+                    >
+                      Capability
+                    </Badge>
+                  :
+                  <Badge
+                    variant="outline" 
+                    px={"5px"}
+                    sx={{
+                      fontSize: 3,
+                      backgroundColor: theme.colors.badgeResource,
+                      fontStyle: "normal",
+                      paddingX: "5px",
+                      paddingY: "2px",
+                      marginX: "0.5rem"
+                    }}
+                    >
+                      Resource
+                    </Badge>
+                }
+              </Flex>
 
-
-              {/* Milestone 2: temp render of badge */}
-              {identifier === "MainReceiver" ? 
-                <Badge 
-                  variant="outline" 
-                  px={"5px"}
-                  sx={{
-                    fontSize: 3,
-                    backgroundColor: theme.colors.badgeCapability,
-                    fontStyle: "normal",
-                    paddingX: "5px",
-                    paddingY: "2px",
-                    marginX: "0.5rem"
-                  }}
-                  >
-                    Capability
-                  </Badge>
-                :
-                <Badge
-                  variant="outline" 
-                  px={"5px"}
-                  sx={{
-                    fontSize: 3,
-                    backgroundColor: theme.colors.badgeResource,
-                    fontStyle: "normal",
-                    paddingX: "5px",
-                    paddingY: "2px",
-                    marginX: "0.5rem"
-                  }}
-                  >
-                    Resource
-                  </Badge>
-              }
-
-
-              {types[identifier] == "Link" &&
-                <BottomBarItemInsert onClick={ async () => {
-                  const res = await mutator.createTransactionTemplate("", `New Transaction`)
-                  navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount + 1 || 'none'}`)
-                }}>
-                  <IoMdAddCircleOutline size="20px" />
-                </BottomBarItemInsert>
-              }
+              <Flex>
+                {types[identifier] == "Link" &&
+                  <BottomBarItemInsert onClick={ async () => {
+                    const res = await mutator.createTransactionTemplate("", `New Transaction`)
+                    navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount + 1 || 'none'}`)
+                  }}>
+                    <IoMdAddCircleOutline size="20px" />
+                  </BottomBarItemInsert>
+                }
+              </Flex>
 
             </TypeListItem>
           ))}

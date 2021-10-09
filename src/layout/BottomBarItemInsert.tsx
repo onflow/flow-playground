@@ -11,12 +11,9 @@ export const BottomBarItemInsert = styled.button<SidebarItemInsertProps>`
   border: none;
   padding: none;
   background: transparent;
-  // position: absolute;
-  right: 0.75rem;
-  top: 56%;
-  transform: translateY(-50%);
+  align-content: center;
 
-  color: ${theme.colors.grey};
+  color: ${theme.colors.darkGrey};
   &:hover {
     color: ${theme.colors.heading};
     cursor: ${p => (p.grab ? "grab" : "pointer")};

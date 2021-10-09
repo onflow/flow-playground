@@ -5,6 +5,7 @@ export default {
     text: "#222",
     muted: "#6a6a6a",
     grey: "#DDDDDD",
+    darkGrey: "#808080",
     greyBorder: "#D8D8D8",
     purple: "#f694ff",
     border: "rgb(240, 240, 240)",
