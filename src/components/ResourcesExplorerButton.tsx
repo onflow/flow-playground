@@ -17,7 +17,7 @@ export const ResourcesExplorerButton = (props: ResourcesExplorerButtonProps) => 
 
   const location = useLocation();
   const params = getParams(location.search);
-  const { type, id } = params;  
+  const { type, id, storage } = params;  
 
   return project.id === 'LOCAL-project' ? null : (
     <SidebarItemToggleResources
@@ -26,7 +26,7 @@ export const ResourcesExplorerButton = (props: ResourcesExplorerButtonProps) => 
         navigate(`/${projectPath}?type=${type}&id=${id}&storage=${addr || 'none'}`)
       }}
       title={'Open the resources explorer'}
-      active={true}
+      active={addr === storage}
     >
       <FaDatabase />
     </SidebarItemToggleResources>

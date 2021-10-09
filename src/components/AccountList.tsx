@@ -47,8 +47,6 @@ const AccountList: React.FC = () => {
       <Header>Accounts</Header>
       <Items>
         {project.accounts.map((account: Account, i: number) => {
-          // console.log("ACCOUNT:::::::::", account);
-          
           const { id } = account
           const isActive = accountSelected && params.id === id
           const accountAddress = `0x${account.address.slice(-2)}`
