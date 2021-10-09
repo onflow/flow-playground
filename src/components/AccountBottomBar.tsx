@@ -86,8 +86,6 @@ const IdentifierList: React.FC<TypeListProps> = ({
   const { project, mutator, selectedResourceAccount } = useProject();
   
   const projectPath = isUUUID(project.id) ? project.id : "local"
-
-  console.log("IDENTIFIERS:", identifiers);
   
   return (
     <StorageListContainer>
@@ -106,6 +104,7 @@ const IdentifierList: React.FC<TypeListProps> = ({
               onClick={() => onSelect(identifier)}
             >
               {identifier}
+
 
               {/* Milestone 2: temp render of badge */}
               {identifier === "MainReceiver" ? 
