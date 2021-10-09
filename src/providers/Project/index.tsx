@@ -52,8 +52,13 @@ export interface ProjectContextValue {
   createScriptExecution: (args?: string[]) => Promise<any>;
   active: ActiveEditor;
   setActive: (type: EntityType, index: number) => void;
+
   selectedResourceAccount: string;
   setSelectedResourceAccount: (account: string) => void;
+
+  lastTxSigners: string[];
+  setLastTxSigners: (signers: string[]) => void;
+
   transactionAccounts: number[];
   isSavingCode: boolean;
   updatedStorageAccts: number[];
@@ -99,6 +104,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [transactionAccounts, setTransactionAccounts] = useState<number[]>([0]);
   const [isSavingCode, setIsSaving] = useState(false);
+  const [lastTxSigners, setLastTxSigners] = useState(null);
 
   const [active, setActive] = useState<{ type: EntityType; index: number }>({
     type: EntityType.Account,
@@ -234,6 +240,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       signingAccounts,
       args,
     );
+
+    setLastTxSigners(signingAccounts)
+    // console.log("SIGNING ACCOUNTS FROM PROVIDER:", signingAccounts);
+
     timeout = setTimeout(() => {
       setIsSaving(false);
     }, 1000);
@@ -465,6 +475,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         selectedResourceAccount,
         setSelectedResourceAccount: (account: string) => {
           setSelectedResourceAccount(account)
+        },
+        lastTxSigners,
+        setLastTxSigners: (signers: string[]) => {
+          setLastTxSigners(signers)
         },
         transactionAccounts,
         updatedStorageAccts,

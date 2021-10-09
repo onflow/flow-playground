@@ -206,7 +206,14 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     transactionFactory,
     contractDeployment,
   } = useTemplateType();
-  const { project, active, isSavingCode } = useProject();
+  const { project, active, isSavingCode, updatedStorageAccts, lastTxSigners } = useProject();
+  
+  // console.log("PROJECT:", project);
+  console.log("UPDATED STORAGE ACCOUNTS:", updatedStorageAccts);
+  console.log("LAST TX SIGNERS FROM INDEX:", lastTxSigners);
+  
+  
+
   const { accounts } = project;
 
   const signersAccounts = selected.map((i) => accounts[i]);
