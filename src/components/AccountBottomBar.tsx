@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-// import { navigate } from "@reach/router";
 import { ResultType } from 'api/apollo/generated/graphql';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { useProject } from 'providers/Project/projectHooks';
-// import { isUUUID } from "../util/url";
 import useMousePosition from '../hooks/useMousePosition';
 import AutoTemplatePopup from 'components/AutoTemplatePopup'
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
@@ -88,11 +86,7 @@ const IdentifierList: React.FC<TypeListProps> = ({
 
   const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false)
 
-  // const { project, mutator, selectedResourceAccount } = useProject();
-  // const { project, selectedResourceAccount } = useProject();
   const { selectedResourceAccount } = useProject();
-
-  // const projectPath = isUUUID(project.id) ? project.id : "local"
 
   return (
     <>
@@ -155,8 +149,6 @@ const IdentifierList: React.FC<TypeListProps> = ({
                   {types[identifier] == "Link" &&
                     <BottomBarItemInsert onClick={async () => {
                       toggleShowTemplatePopup(true)
-                      // const res = await mutator.createTransactionTemplate("", `New Transaction`)
-                      // navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
                     }}>
                       <IoMdAddCircleOutline size="20px" />
                     </BottomBarItemInsert>
@@ -172,8 +164,6 @@ const IdentifierList: React.FC<TypeListProps> = ({
         toggleShowTemplatePopup(false)
       }} />
     </>
-
-
   );
 }
 
