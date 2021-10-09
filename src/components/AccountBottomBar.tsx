@@ -6,6 +6,7 @@ import {IoMdAddCircleOutline} from "react-icons/io";
 import { useProject } from 'providers/Project/projectHooks';
 import { isUUUID } from "../util/url";
 import useMousePosition from '../hooks/useMousePosition';
+import AutoTemplatePopup from 'components/AutoTemplatePopup'
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 import { FeedbackActions } from 'layout/FeedbackActions';
 import { SidebarItemInsert } from 'layout/SidebarItemInsert';
@@ -149,7 +150,7 @@ const IdentifierList: React.FC<TypeListProps> = ({
                 {types[identifier] == "Link" &&
                   <BottomBarItemInsert onClick={ async () => {
                     const res = await mutator.createTransactionTemplate("", `New Transaction`)
-                    navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount + 1 || 'none'}`)
+                    navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
                   }}>
                     <IoMdAddCircleOutline size="20px" />
                   </BottomBarItemInsert>
@@ -320,6 +321,8 @@ const AccountState: React.FC<{
 const AccountBottomBar: React.FC = () => {
   const { project, isLoading, selectedResourceAccount } = useProject();
 
+  const [showTemplatePopup, toggleShowTemplatePopup] = useState< boolean >(false)
+
   const storageMap: { [account: string]: number} = {
     "0x01": 0,
     "0x02": 1,
@@ -340,6 +343,10 @@ const AccountBottomBar: React.FC = () => {
               return <FeedbackActions />;
             }}
           />
+        <AutoTemplatePopup visible={showTemplatePopup} triggerClose={()=>{
+          toggleShowTemplatePopup(false)
+        }}/>
+
         </>
       )}
     </FeedbackRoot>
