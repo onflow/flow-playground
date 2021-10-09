@@ -13,7 +13,8 @@ export const SidebarItemToggleResources = styled.div<SidebarItemToggleResourcesP
   transition: color 0.2s;
   font-size: 14px;
   padding: 5px;
-  margin-right: 0.75rem;
+  margin-right: 0.5rem;
+  margin-left: 0.1rem;
   border-radius: 5px;
   color: ${({ active }) => (active ? '#00ff76' : '#c1c1c1')};
   &:hover {

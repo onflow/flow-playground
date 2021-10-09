@@ -64,9 +64,10 @@ const AccountList: React.FC = () => {
               <Item
                 title={title}
                 active={isActive}
-                onClick={() => navigate(`/${projectPath}?type=account&id=${id}&storage=${accountAddress || 'none'}`)}
               >
-                <AccountCard>
+                <AccountCard
+                  onClick={() => navigate(`/${projectPath}?type=account&id=${id}&storage=${accountAddress || 'none'}`)}
+                >
                   <Avatar seed={project.seed} index={i} />
                   <Stack>
                     <strong>{accountAddress}</strong>
@@ -74,8 +75,8 @@ const AccountList: React.FC = () => {
                   </Stack>
                   {isActive && <ExportButton id={account.id} typeName={typeName}/>}
                 </AccountCard>
+                <ResourcesExplorerButton addr={accountAddress} />
               </Item>
-              <ResourcesExplorerButton addr={accountAddress} />
             </Flex>
           );
         })}
