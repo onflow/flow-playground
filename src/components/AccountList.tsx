@@ -34,7 +34,7 @@ const AccountList: React.FC = () => {
   const {
     project,
     active,
-    // updatedStorageAccts,
+    selectedResourceAccount
   } = useProject();
   const accountSelected = active.type === EntityType.Account
 
@@ -64,7 +64,7 @@ const AccountList: React.FC = () => {
                 active={isActive}
               >
                 <AccountCard
-                  onClick={() => navigate(`/${projectPath}?type=account&id=${id}&storage=${accountAddress || 'none'}`)}
+                  onClick={() => navigate(`/${projectPath}?type=account&id=${id}&storage=${selectedResourceAccount || 'none'}`)}
                 >
                   <Avatar seed={project.seed} index={i} />
                   <Stack>
