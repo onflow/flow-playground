@@ -12,7 +12,6 @@ import Avatar from "components/Avatar";
 import styled from "@emotion/styled";
 import {ExportButton} from "components/ExportButton";
 import {ResourcesExplorerButton} from "components/ResourcesExplorerButton";
-import { Flex } from "theme-ui";
 import {getParams, isUUUID} from "../util/url";
 
 function getDeployedContracts(account: Account): string {
