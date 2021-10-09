@@ -86,82 +86,92 @@ const IdentifierList: React.FC<TypeListProps> = ({
   resize,
 }) => {
 
+  const [showTemplatePopup, toggleShowTemplatePopup] = useState< boolean >(false)
+
   const { project, mutator, selectedResourceAccount } = useProject();
   
   const projectPath = isUUUID(project.id) ? project.id : "local"
   
   return (
-    <StorageListContainer>
-      <ResizeHeading onMouseDown={resize}>Account {selectedResourceAccount} Storage {controls()}</ResizeHeading>
-      <div
-        style={{
-          width: '288px',
-          overflow: 'auto',
-        }}
-      >
-        <ul>
-          {identifiers.map((identifier: string) => (
-            <TypeListItem
-              key={identifier}
-              active={identifier == selected}
-              onClick={() => onSelect(identifier)}
-            >
-              <Flex
-                sx={{
-                  flex: "1 1 auto"
-                }}
+    <>
+      <StorageListContainer>
+        <ResizeHeading onMouseDown={resize}>Account {selectedResourceAccount} Storage {controls()}</ResizeHeading>
+        <div
+          style={{
+            width: '288px',
+            overflow: 'auto',
+          }}
+        >
+          <ul>
+            {identifiers.map((identifier: string) => (
+              <TypeListItem
+                key={identifier}
+                active={identifier == selected}
+                onClick={() => onSelect(identifier)}
               >
-                {identifier}
-                {/* Milestone 2: temp render of badge */}
-                {identifier === "MainReceiver" ? 
-                  <Badge 
-                    variant="outline" 
-                    px={"5px"}
-                    sx={{
-                      fontSize: 3,
-                      backgroundColor: theme.colors.badgeCapability,
-                      fontStyle: "normal",
-                      paddingX: "5px",
-                      paddingY: "2px",
-                      marginX: "0.5rem"
-                    }}
-                    >
-                      Capability
-                    </Badge>
-                  :
-                  <Badge
-                    variant="outline" 
-                    px={"5px"}
-                    sx={{
-                      fontSize: 3,
-                      backgroundColor: theme.colors.badgeResource,
-                      fontStyle: "normal",
-                      paddingX: "5px",
-                      paddingY: "2px",
-                      marginX: "0.5rem"
-                    }}
-                    >
-                      Resource
-                    </Badge>
-                }
-              </Flex>
+                <Flex
+                  sx={{
+                    flex: "1 1 auto"
+                  }}
+                >
+                  {identifier}
+                  {/* Milestone 2: temp render of badge */}
+                  {identifier === "MainReceiver" ? 
+                    <Badge 
+                      variant="outline" 
+                      px={"5px"}
+                      sx={{
+                        fontSize: 3,
+                        backgroundColor: theme.colors.badgeCapability,
+                        fontStyle: "normal",
+                        paddingX: "5px",
+                        paddingY: "2px",
+                        marginX: "0.5rem"
+                      }}
+                      >
+                        Capability
+                      </Badge>
+                    :
+                    <Badge
+                      variant="outline" 
+                      px={"5px"}
+                      sx={{
+                        fontSize: 3,
+                        backgroundColor: theme.colors.badgeResource,
+                        fontStyle: "normal",
+                        paddingX: "5px",
+                        paddingY: "2px",
+                        marginX: "0.5rem"
+                      }}
+                      >
+                        Resource
+                      </Badge>
+                  }
+                </Flex>
 
-              <Flex>
-                {types[identifier] == "Link" &&
-                  <BottomBarItemInsert onClick={ async () => {
-                    const res = await mutator.createTransactionTemplate("", `New Transaction`)
-                    navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
-                  }}>
-                    <IoMdAddCircleOutline size="20px" />
-                  </BottomBarItemInsert>
-                }
-              </Flex>
+                <Flex>
+                  {types[identifier] == "Link" &&
+                    <BottomBarItemInsert onClick={ async () => {
+                      toggleShowTemplatePopup(true)
+                      // const res = await mutator.createTransactionTemplate("", `New Transaction`)
+                      // navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
+                    }}>
+                      <IoMdAddCircleOutline size="20px" />
+                    </BottomBarItemInsert>
+                  }
+                </Flex>
 
-            </TypeListItem>
-          ))}
-        </ul>
-      </div>
-    </StorageListContainer>
+              </TypeListItem>
+            ))}
+          </ul>
+        </div>
+      </StorageListContainer>
+      <AutoTemplatePopup visible={showTemplatePopup} triggerClose={()=>{
+        toggleShowTemplatePopup(false)
+      }}/>
+    </>
+
+
   );
 }
 
@@ -321,8 +331,6 @@ const AccountState: React.FC<{
 const AccountBottomBar: React.FC = () => {
   const { project, isLoading, selectedResourceAccount } = useProject();
 
-  const [showTemplatePopup, toggleShowTemplatePopup] = useState< boolean >(false)
-
   const storageMap: { [account: string]: number} = {
     "0x01": 0,
     "0x02": 1,
@@ -343,10 +351,6 @@ const AccountBottomBar: React.FC = () => {
               return <FeedbackActions />;
             }}
           />
-        <AutoTemplatePopup visible={showTemplatePopup} triggerClose={()=>{
-          toggleShowTemplatePopup(false)
-        }}/>
-
         </>
       )}
     </FeedbackRoot>
