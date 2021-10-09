@@ -12,7 +12,10 @@ export default {
     shadowColor: "rgb(222, 222, 222)",
     error: "#f44336",
     blue: "#0000ff",
-    heading: "#919191"
+    heading: "#919191",
+    badgeResource: "#0DDE79",
+    badgeCapability: "#FA8C28"
+
   },
   fonts: {
     body: "Interstate, system-ui, sans-serif",

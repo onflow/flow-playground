@@ -11,6 +11,7 @@ import { FeedbackActions } from 'layout/FeedbackActions';
 import { SidebarItemInsert } from 'layout/SidebarItemInsert';
 import { BottomBarItemInsert } from 'layout/BottomBarItemInsert';
 import styled from '@emotion/styled';
+import { Badge } from 'theme-ui'
 import theme from '../theme';
 import { ResizeHeading } from 'layout/Heading';
 
@@ -86,9 +87,11 @@ const IdentifierList: React.FC<TypeListProps> = ({
   
   const projectPath = isUUUID(project.id) ? project.id : "local"
 
+  console.log("IDENTIFIERS:", identifiers);
+  
   return (
     <StorageListContainer>
-      <ResizeHeading onMouseDown={resize}>Storage {controls()}</ResizeHeading>
+      <ResizeHeading onMouseDown={resize}>Account {selectedResourceAccount} Storage {controls()}</ResizeHeading>
       <div
         style={{
           width: '288px',
@@ -103,6 +106,41 @@ const IdentifierList: React.FC<TypeListProps> = ({
               onClick={() => onSelect(identifier)}
             >
               {identifier}
+
+              {/* Milestone 2: temp render of badge */}
+              {identifier === "MainReceiver" ? 
+                <Badge 
+                  variant="outline" 
+                  px={"5px"}
+                  sx={{
+                    fontSize: 3,
+                    backgroundColor: theme.colors.badgeCapability,
+                    fontStyle: "normal",
+                    paddingX: "5px",
+                    paddingY: "2px",
+                    marginX: "0.5rem"
+                  }}
+                  >
+                    Capability
+                  </Badge>
+                :
+                <Badge
+                  variant="outline" 
+                  px={"5px"}
+                  sx={{
+                    fontSize: 3,
+                    backgroundColor: theme.colors.badgeResource,
+                    fontStyle: "normal",
+                    paddingX: "5px",
+                    paddingY: "2px",
+                    marginX: "0.5rem"
+                  }}
+                  >
+                    Resource
+                  </Badge>
+              }
+
+
               {types[identifier] == "Link" &&
                 <BottomBarItemInsert onClick={ async () => {
                   const res = await mutator.createTransactionTemplate("", `New Transaction`)
