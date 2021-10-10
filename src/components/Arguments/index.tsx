@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from "framer-motion";
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import {
@@ -168,6 +168,21 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const [values, setValue] = useState<IValue>({});
   const constraintsRef = useRef();
 
+  const [notifications, setNotifications] = useState([]);
+  const [counter, setCounter] = useState(0);
+  console.log(notifications);
+
+  const removeNotification = (set, id) => {
+    set((prev) => {
+      const newArr = [...prev];
+      newArr.splice(
+        newArr.findIndex((i) => i === id),
+        1
+      );
+      return newArr;
+    });
+  };
+
   // const errors = validate(list, values);
   const numberOfErrors = Object.keys(errors).length;
   const notEnoughSigners = needSigners && selected.length < signers;
@@ -274,6 +289,12 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
         case EntityType.TransactionTemplate: {
           resultType = ResultType.Transaction;
           rawResult = await transactionFactory(signersAccounts, args);
+          
+          console.log("TX RAW RESULT", rawResult);
+          setNotifications((prev) => [...prev, counter]);
+          setTimeout(() => removeNotification(setNotifications, counter), 3000);
+          setCounter((prev) => prev + 1);
+
           break;
         }
 
@@ -370,10 +391,39 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           <Hints problems={problems} {...actions} />
 
           <ControlContainer isOk={isOk} progress={progress}>
+
             <StatusMessage>
               {statusIcon}
               <p>{statusMessage}</p>
             </StatusMessage>
+
+            <StatusMessage>
+              <p>Poo</p>
+              <ul>
+                <AnimatePresence initial={true}>
+                  {notifications.map((id) => (
+                    <motion.li
+                      key={id}
+                      layout
+                      initial={{ opacity: 0, y: 50, scale: 0.3 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+                    >
+                      dude
+                      {/* <CloseButton
+                        close={() => removeNotification(setNotifications, id)}
+                      /> */}
+                      <button
+                        onClick={() => removeNotification(setNotifications, id)}
+                      >
+                        Close
+                      </button>
+                    </motion.li>
+                  ))}
+                </AnimatePresence>
+              </ul>
+            </StatusMessage>
+
             <ActionButton active={isOk} type={type} onClick={send} />
           </ControlContainer>
         </HoverPanel>
