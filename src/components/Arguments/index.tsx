@@ -292,7 +292,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
           console.log("TX RAW RESULT", rawResult);
           setNotifications((prev) => [...prev, counter]);
-          setTimeout(() => removeNotification(setNotifications, counter), 3000);
+          setTimeout(() => removeNotification(setNotifications, counter), 5000);
           setCounter((prev) => prev + 1);
 
           break;
@@ -409,9 +409,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                       exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
                     >
                       dude
-                      {/* <CloseButton
-                        close={() => removeNotification(setNotifications, id)}
-                      /> */}
                       <button
                         onClick={() => removeNotification(setNotifications, id)}
                       >
