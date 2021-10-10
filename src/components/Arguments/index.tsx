@@ -172,8 +172,8 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const [counter, setCounter] = useState(0);
   console.log(notifications);
 
-  const removeNotification = (set, id) => {
-    set((prev) => {
+  const removeNotification = (set: { (setType: (prev: number[]) => number[]): void; }, id: number) => {
+    set((prev: number[]) => {
       const newArr = [...prev];
       newArr.splice(
         newArr.findIndex((i) => i === id),
@@ -289,7 +289,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
         case EntityType.TransactionTemplate: {
           resultType = ResultType.Transaction;
           rawResult = await transactionFactory(signersAccounts, args);
-          
+
           console.log("TX RAW RESULT", rawResult);
           setNotifications((prev) => [...prev, counter]);
           setTimeout(() => removeNotification(setNotifications, counter), 3000);
@@ -398,7 +398,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
             </StatusMessage>
 
             <StatusMessage>
-              <p>Poo</p>
               <ul>
                 <AnimatePresence initial={true}>
                   {notifications.map((id) => (
