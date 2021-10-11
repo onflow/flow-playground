@@ -171,7 +171,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const [notifications, setNotifications] = useState([]);
   const [counter, setCounter] = useState(0);
   console.log(notifications);
-
   const removeNotification = (set: { (setType: (prev: number[]) => number[]): void; }, id: number) => {
     set((prev: number[]) => {
       const newArr = [...prev];
@@ -292,7 +291,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
           console.log("TX RAW RESULT", rawResult);
           setNotifications((prev) => [...prev, counter]);
-          setTimeout(() => removeNotification(setNotifications, counter), 5000);
+          // setTimeout(() => removeNotification(setNotifications, counter), 5000);
           setCounter((prev) => prev + 1);
 
           break;
@@ -389,15 +388,15 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
           <ErrorsList list={problems.error} {...actions} />
           <Hints problems={problems} {...actions} />
-
           <ControlContainer isOk={isOk} progress={progress}>
-
             <StatusMessage>
               {statusIcon}
               <p>{statusMessage}</p>
             </StatusMessage>
+            <ActionButton active={isOk} type={type} onClick={send} />
+          </ControlContainer>
 
-            <StatusMessage>
+          <ControlContainer isOk={isOk} progress={progress}>
               <ul>
                 <AnimatePresence initial={true}>
                   {notifications.map((id) => (
@@ -418,10 +417,8 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                   ))}
                 </AnimatePresence>
               </ul>
-            </StatusMessage>
-
-            <ActionButton active={isOk} type={type} onClick={send} />
           </ControlContainer>
+
         </HoverPanel>
       </motion.div>
     </>
