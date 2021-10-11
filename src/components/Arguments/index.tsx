@@ -3,7 +3,7 @@ import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
 import { motion, AnimatePresence } from "framer-motion";
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import { useThemeUI, Flex } from 'theme-ui';
+import { useThemeUI, Box } from 'theme-ui';
 import {
   Account,
   ResultType,
@@ -222,11 +222,16 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     transactionFactory,
     contractDeployment,
   } = useTemplateType();
-  const { project, active, isSavingCode, updatedStorageAccts, lastTxSigners } = useProject();
+  const { 
+    project, 
+    active, 
+    isSavingCode, 
+    // updatedStorageAccts, 
+    // lastTxSigners 
+  } = useProject();
   
-  // console.log("PROJECT:", project);
-  console.log("UPDATED STORAGE ACCOUNTS:", updatedStorageAccts);
-  console.log("LAST TX SIGNERS FROM INDEX:", lastTxSigners);
+  // console.log("UPDATED STORAGE ACCOUNTS:", updatedStorageAccts);
+  // console.log("LAST TX SIGNERS FROM INDEX:", lastTxSigners);
 
   const { accounts } = project;
 
@@ -392,37 +397,45 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
             </StatusMessage>
             <ActionButton active={isOk} type={type} onClick={send} />
           </ControlContainer>
-
-          <ControlContainer isOk={isOk} progress={progress}>
-              <ul>
-                <AnimatePresence initial={true}>
-                  {notifications.map((id) => (
-                    <motion.li
-                      key={id}
-                      layout
-                      initial={{ opacity: 0, y: 50, scale: 0.3 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
-                    >
-                      <Flex
-                        my={1}
-                        sx={{
-                          padding: "0.8rem 0.5rem",
-                          alignItems: "center",
-                          border: `1px solid ${theme.colors.borderDark}`,
-                          backgroundColor: theme.colors.background,
-                          borderRadius: "8px"
-                        }}
-                      >
-                        Account 0x01 has completed a transaciton, updating 0x02's storage.
-                      </Flex>
-                    </motion.li>
-                  ))}
-                </AnimatePresence>
-              </ul>
-          </ControlContainer>
-
         </HoverPanel>
+
+        {/* 
+          Milestone 2: hard code message from user. For Milestone 3, the provider
+          state of 'updatedStorageAccts' and 'lastTxSigners' will be used to 
+          make this render dynamically based on tx signer and storage account that
+          will have been updated.
+         */}
+        <ControlContainer isOk={isOk} progress={progress}>
+            <ul>
+              <AnimatePresence initial={true}>
+                {notifications.map((id) => (
+                  <motion.li
+                    key={id}
+                    layout
+                    initial={{ opacity: 0, y: 50, scale: 0.3 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+                  >
+                    <Box
+                      my={1}
+                      sx={{
+                        padding: "0.8rem 0.5rem",
+                        alignItems: "center",
+                        border: `1px solid ${theme.colors.borderDark}`,
+                        backgroundColor: theme.colors.background,
+                        borderRadius: "8px",
+                        width: "250px",
+                        boxShadow: "10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff"
+                      }}
+                    >
+                      Account 0x01 has completed a transaciton, updating 0x02's storage.
+                    </Box>
+                  </motion.li>
+                ))}
+              </AnimatePresence>
+            </ul>
+        </ControlContainer>
+
       </motion.div>
     </>
   );
