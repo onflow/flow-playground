@@ -242,7 +242,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     );
 
     setLastTxSigners(signingAccounts)
-    // console.log("SIGNING ACCOUNTS FROM PROVIDER:", signingAccounts);
 
     timeout = setTimeout(() => {
       setIsSaving(false);
@@ -319,7 +318,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const activeEditor = getActiveEditor();
 
   const location = useLocation();
-  
   if (isLoading) return null;
   if (!isLoading && !project) {
     navigate('/404');

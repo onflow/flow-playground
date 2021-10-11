@@ -172,7 +172,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
   const [notifications, setNotifications] = useState([]);
   const [counter, setCounter] = useState(0);
-  console.log(notifications);
   const removeNotification = (set: { (setType: (prev: number[]) => number[]): void; }, id: number) => {
     set((prev: number[]) => {
       const newArr = [...prev];
@@ -230,6 +229,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     // lastTxSigners 
   } = useProject();
   
+  // Milestone 2: these state from the provider will be used for Milestone3
   // console.log("UPDATED STORAGE ACCOUNTS:", updatedStorageAccts);
   // console.log("LAST TX SIGNERS FROM INDEX:", lastTxSigners);
 
@@ -320,7 +320,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
       console.error(e);
       rawResult = e.toString();
     }
-    
     setProcessingStatus(false);
 
     // Display result in the bottom area
