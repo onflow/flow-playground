@@ -3,6 +3,7 @@ import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
 import { motion, AnimatePresence } from "framer-motion";
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
+import { useThemeUI, Flex } from 'theme-ui';
 import {
   Account,
   ResultType,
@@ -157,6 +158,7 @@ interface IValue {
 }
 
 const Arguments: React.FC<ArgumentsProps> = (props) => {
+  const { theme } = useThemeUI();
   const { type, list, signers } = props;
   const { goTo, hover, hideDecorations, problems } = props;
   const validCode = problems.error.length === 0;
@@ -225,8 +227,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   // console.log("PROJECT:", project);
   console.log("UPDATED STORAGE ACCOUNTS:", updatedStorageAccts);
   console.log("LAST TX SIGNERS FROM INDEX:", lastTxSigners);
-  
-  
 
   const { accounts } = project;
 
@@ -288,12 +288,9 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
         case EntityType.TransactionTemplate: {
           resultType = ResultType.Transaction;
           rawResult = await transactionFactory(signersAccounts, args);
-
-          console.log("TX RAW RESULT", rawResult);
           setNotifications((prev) => [...prev, counter]);
-          // setTimeout(() => removeNotification(setNotifications, counter), 5000);
+          setTimeout(() => removeNotification(setNotifications, counter), 5000);
           setCounter((prev) => prev + 1);
-
           break;
         }
 
@@ -407,12 +404,18 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
                     >
-                      dude
-                      <button
-                        onClick={() => removeNotification(setNotifications, id)}
+                      <Flex
+                        my={1}
+                        sx={{
+                          padding: "0.8rem 0.5rem",
+                          alignItems: "center",
+                          border: `1px solid ${theme.colors.borderDark}`,
+                          backgroundColor: theme.colors.background,
+                          borderRadius: "8px"
+                        }}
                       >
-                        Close
-                      </button>
+                        Account 0x01 has completed a transaciton, updating 0x02's storage.
+                      </Flex>
                     </motion.li>
                   ))}
                 </AnimatePresence>

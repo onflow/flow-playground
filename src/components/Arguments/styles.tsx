@@ -128,23 +128,6 @@ export const ControlContainer = styled.div<ControlContainerProps>`
   }};
 `;
 
-// // interface StatusToastUlProps {
-
-// // }
-
-// // export const StatusToastUl = styled.ul<StatusToastUlProps>`
-// export const StatusToastUl = styled.ul`
-//   position: fixed;
-//   bottom: 0;
-//   right: 0;
-//   top: 0;
-//   display: flex;
-//   flex-direction: column;
-//   list-style: none;
-//   justify-content: flex-end;
-//   background: red;
-// `;
-
 export const StatusMessage = styled.div`
   @keyframes spin {
     from {
