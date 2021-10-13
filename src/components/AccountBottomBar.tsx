@@ -195,8 +195,9 @@ const StateContainer: React.FC<{ value?: any }> = ({ value }) => (
 
 const AccountState: React.FC<{
   state: any;
+  selectedResourcesAccount: string;
   renderDeployButton: () => JSX.Element;
-}> = ({ state }) => {
+}> = ({ state, selectedResourcesAccount }) => {
   if (!state) {
     state = '{}';
   }
@@ -277,65 +278,67 @@ const AccountState: React.FC<{
   return (
     <>
       {identifiers.length ? (
-        <AccountStateContainer height={storageHeight + resultHeight}>
-          <IdentifierList
-            identifiers={identifiers}
-            types={types}
-            selected={selected}
-            onSelect={setSelected}
-            resize={() => toggleResizingStorage(true)}
-            controls={() => {
-              return (
-                <SidebarItemInsert grab={false}>
-                  {storageHeight > 40 ? (
-                    <GoChevronDown
-                      size="16px"
-                      onClick={() => setStorageHeight(40)}
-                    />
-                  ) : (
-                    <GoChevronUp
-                      size="16px"
-                      onClick={() =>
-                        setStorageHeight(STORAGE_PANEL_MIN_HEIGHT * 2)
-                      }
-                    />
-                  )}
-                </SidebarItemInsert>
-              );
-            }}
-          />
-          <StateContainer value={storage[selected]} />
-        </AccountStateContainer>
+        selectedResourcesAccount !== 'none' &&
+          <AccountStateContainer height={storageHeight + resultHeight}>
+            <IdentifierList
+              identifiers={identifiers}
+              types={types}
+              selected={selected}
+              onSelect={setSelected}
+              resize={() => toggleResizingStorage(true)}
+              controls={() => {
+                return (
+                  <SidebarItemInsert grab={false}>
+                    {storageHeight > 40 ? (
+                      <GoChevronDown
+                        size="16px"
+                        onClick={() => setStorageHeight(40)}
+                      />
+                    ) : (
+                      <GoChevronUp
+                        size="16px"
+                        onClick={() =>
+                          setStorageHeight(STORAGE_PANEL_MIN_HEIGHT * 2)
+                        }
+                      />
+                    )}
+                  </SidebarItemInsert>
+                );
+              }}
+            />
+            <StateContainer value={storage[selected]} />
+          </AccountStateContainer>
       ) : (
-        <AccountStateContainer height={storageHeight + resultHeight}>
-          <IdentifierList
-            identifiers={[]}
-            types={{}}
-            selected={selected}
-            onSelect={setSelected}
-            resize={() => toggleResizingStorage(true)}
-            controls={() => {
-              return (
-                <SidebarItemInsert grab={false}>
-                  {storageHeight > 40 ? (
-                    <GoChevronDown
-                      size="16px"
-                      onClick={() => setStorageHeight(40)}
-                    />
-                  ) : (
-                    <GoChevronUp
-                      size="16px"
-                      onClick={() =>
-                        setStorageHeight(STORAGE_PANEL_MIN_HEIGHT * 2)
-                      }
-                    />
-                  )}
-                </SidebarItemInsert>
-              );
-            }}
-          />
-          <StateContainer />
-        </AccountStateContainer>
+        selectedResourcesAccount !== 'none' &&
+          <AccountStateContainer height={storageHeight + resultHeight}>
+            <IdentifierList
+              identifiers={[]}
+              types={{}}
+              selected={selected}
+              onSelect={setSelected}
+              resize={() => toggleResizingStorage(true)}
+              controls={() => {
+                return (
+                  <SidebarItemInsert grab={false}>
+                    {storageHeight > 40 ? (
+                      <GoChevronDown
+                        size="16px"
+                        onClick={() => setStorageHeight(40)}
+                      />
+                    ) : (
+                      <GoChevronUp
+                        size="16px"
+                        onClick={() =>
+                          setStorageHeight(STORAGE_PANEL_MIN_HEIGHT * 2)
+                        }
+                      />
+                    )}
+                  </SidebarItemInsert>
+                );
+              }}
+            />
+            <StateContainer />
+          </AccountStateContainer>
       )}
       <DeploymentResultContainer height={resultHeight}>
         <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
@@ -367,19 +370,19 @@ const AccountBottomBar: React.FC = () => {
     "0x04": 3,
     "0x05": 4
   }
-  
+
   return (
     <FeedbackRoot>
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        selectedResourceAccount !== 'none' &&
-          <AccountState
-            state={project.accounts[storageMap[selectedResourceAccount] || 0].state}
-            renderDeployButton={() => {
-              return <FeedbackActions />;
-            }}
-          />
+        <AccountState
+          state={project.accounts[storageMap[selectedResourceAccount] || 0].state}
+          selectedResourcesAccount={selectedResourceAccount}
+          renderDeployButton={() => {
+            return <FeedbackActions />;
+          }}
+        />
       )}
     </FeedbackRoot>
   );
