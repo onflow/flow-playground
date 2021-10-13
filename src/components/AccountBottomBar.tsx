@@ -219,7 +219,7 @@ const AccountState: React.FC<{
     }
   }
   const identifiers = Object.keys(storage);
-
+ 
   const types: { [identifier: string]: string } = {};
   for (const [key, value] of Object.entries<any>(storage)) {
     types[key] = value["value"]["type"]
@@ -275,10 +275,16 @@ const AccountState: React.FC<{
       window.removeEventListener('mouseup', toggleResizeListener, false);
     };
   }, []);
+
+  console.log("STORAGE", storage);
+  console.log("SELECETD:", selected);
+  console.log("IDENTIFIERS:", identifiers);
+  
+
+
   return (
     <>
-      {identifiers.length ? (
-        selectedResourcesAccount !== 'none' &&
+      {selectedResourcesAccount !== 'none' && (
           <AccountStateContainer height={storageHeight + resultHeight}>
             <IdentifierList
               identifiers={identifiers}
@@ -306,10 +312,16 @@ const AccountState: React.FC<{
                 );
               }}
             />
-            <StateContainer value={storage[selected]} />
+            <StateContainer value={storage[selected || identifiers[0]]} />
+            {/* {(selectedResourcesAccount !== 'none') ?
+              <StateContainer value={storage[selected]} />
+                :
+              <StateContainer />
+            } */}
           </AccountStateContainer>
-      ) : (
-        selectedResourcesAccount !== 'none' &&
+      )}
+      {/* ) : (
+        // selectedResourcesAccount !== 'none' &&
           <AccountStateContainer height={storageHeight + resultHeight}>
             <IdentifierList
               identifiers={[]}
@@ -339,7 +351,7 @@ const AccountState: React.FC<{
             />
             <StateContainer />
           </AccountStateContainer>
-      )}
+      )} */}
       <DeploymentResultContainer height={resultHeight}>
         <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
           Deployment Result
