@@ -91,7 +91,6 @@ const IdentifierList: React.FC<TypeListProps> = ({
   return (
     <>
       <StorageListContainer>
-        {/* <ResizeHeading onMouseDown={resize}>Account {selectedResourceAccount} Storage {controls()}</ResizeHeading> */}
         <ResizeHeading 
           onMouseDown={resize}
           textTransform="none"
