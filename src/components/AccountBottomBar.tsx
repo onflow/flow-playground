@@ -276,12 +276,6 @@ const AccountState: React.FC<{
     };
   }, []);
 
-  console.log("STORAGE", storage);
-  console.log("SELECETD:", selected);
-  console.log("IDENTIFIERS:", identifiers);
-  
-
-
   return (
     <>
       {selectedResourcesAccount !== 'none' && (
@@ -313,45 +307,8 @@ const AccountState: React.FC<{
               }}
             />
             <StateContainer value={storage[selected || identifiers[0]]} />
-            {/* {(selectedResourcesAccount !== 'none') ?
-              <StateContainer value={storage[selected]} />
-                :
-              <StateContainer />
-            } */}
           </AccountStateContainer>
       )}
-      {/* ) : (
-        // selectedResourcesAccount !== 'none' &&
-          <AccountStateContainer height={storageHeight + resultHeight}>
-            <IdentifierList
-              identifiers={[]}
-              types={{}}
-              selected={selected}
-              onSelect={setSelected}
-              resize={() => toggleResizingStorage(true)}
-              controls={() => {
-                return (
-                  <SidebarItemInsert grab={false}>
-                    {storageHeight > 40 ? (
-                      <GoChevronDown
-                        size="16px"
-                        onClick={() => setStorageHeight(40)}
-                      />
-                    ) : (
-                      <GoChevronUp
-                        size="16px"
-                        onClick={() =>
-                          setStorageHeight(STORAGE_PANEL_MIN_HEIGHT * 2)
-                        }
-                      />
-                    )}
-                  </SidebarItemInsert>
-                );
-              }}
-            />
-            <StateContainer />
-          </AccountStateContainer>
-      )} */}
       <DeploymentResultContainer height={resultHeight}>
         <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
           Deployment Result
@@ -367,7 +324,6 @@ const AccountState: React.FC<{
         </ResizeHeading>
         <RenderResponse resultType={ResultType.Contract} />
       </DeploymentResultContainer>
-
     </>
   );
 };
