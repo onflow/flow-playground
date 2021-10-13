@@ -172,7 +172,7 @@ const IdentifierList: React.FC<TypeListProps> = ({
   );
 }
 
-const StateContainer: React.FC<{ value: any }> = ({ value }) => (
+const StateContainer: React.FC<{ value?: any }> = ({ value }) => (
   <div
     style={{
       width: '100%',
@@ -185,7 +185,11 @@ const StateContainer: React.FC<{ value: any }> = ({ value }) => (
       overflow: 'scroll',
     }}
   >
-    <pre>{JSON.stringify(value, null, 2)}</pre>
+    {value ?
+      <pre>{JSON.stringify(value, null, 2)}</pre>
+      :
+      '(account storage is empty)'
+    }
   </div>
 );
 
@@ -270,7 +274,6 @@ const AccountState: React.FC<{
       window.removeEventListener('mouseup', toggleResizeListener, false);
     };
   }, []);
-
   return (
     <>
       {identifiers.length ? (
@@ -304,7 +307,35 @@ const AccountState: React.FC<{
           <StateContainer value={storage[selected]} />
         </AccountStateContainer>
       ) : (
-        ''
+        <AccountStateContainer height={storageHeight + resultHeight}>
+          <IdentifierList
+            identifiers={[]}
+            types={{}}
+            selected={selected}
+            onSelect={setSelected}
+            resize={() => toggleResizingStorage(true)}
+            controls={() => {
+              return (
+                <SidebarItemInsert grab={false}>
+                  {storageHeight > 40 ? (
+                    <GoChevronDown
+                      size="16px"
+                      onClick={() => setStorageHeight(40)}
+                    />
+                  ) : (
+                    <GoChevronUp
+                      size="16px"
+                      onClick={() =>
+                        setStorageHeight(STORAGE_PANEL_MIN_HEIGHT * 2)
+                      }
+                    />
+                  )}
+                </SidebarItemInsert>
+              );
+            }}
+          />
+          <StateContainer />
+        </AccountStateContainer>
       )}
       <DeploymentResultContainer height={resultHeight}>
         <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
@@ -321,6 +352,7 @@ const AccountState: React.FC<{
         </ResizeHeading>
         <RenderResponse resultType={ResultType.Contract} />
       </DeploymentResultContainer>
+
     </>
   );
 };
