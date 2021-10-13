@@ -22,8 +22,13 @@ export const ResourcesExplorerButton = (props: ResourcesExplorerButtonProps) => 
   return project.id === 'LOCAL-project' ? null : (
     <SidebarItemToggleResources
       onClick={() => {
-        setSelectedResourceAccount(addr)
-        navigate(`/${projectPath}?type=${type}&id=${id}&storage=${addr || 'none'}`)
+        if (addr === storage) {
+          setSelectedResourceAccount('none')
+          navigate(`/${projectPath}?type=${type}&id=${id}&storage=${'none'}`)
+        } else {
+          setSelectedResourceAccount(addr)
+          navigate(`/${projectPath}?type=${type}&id=${id}&storage=${addr}`)
+        }
       }}
       title={'Open the resources explorer'}
       active={addr === storage}

@@ -367,20 +367,19 @@ const AccountBottomBar: React.FC = () => {
     "0x04": 3,
     "0x05": 4
   }
-
+  
   return (
     <FeedbackRoot>
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        <>
+        selectedResourceAccount !== 'none' &&
           <AccountState
             state={project.accounts[storageMap[selectedResourceAccount] || 0].state}
             renderDeployButton={() => {
               return <FeedbackActions />;
             }}
           />
-        </>
       )}
     </FeedbackRoot>
   );

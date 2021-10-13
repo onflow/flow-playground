@@ -132,7 +132,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     }
   },[project])
 
-  const [selectedResourceAccount, setSelectedResourceAccount] = useState< string | null >(null)
+  const [selectedResourceAccount, setSelectedResourceAccount] = useState< string >('none')
 
   const projectID = project ? project.id : null;
 
