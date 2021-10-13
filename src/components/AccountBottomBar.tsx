@@ -11,6 +11,7 @@ import { SidebarItemInsert } from 'layout/SidebarItemInsert';
 import { BottomBarItemInsert } from 'layout/BottomBarItemInsert';
 import styled from '@emotion/styled';
 import { Badge, Flex } from 'theme-ui'
+import { storageMap } from '../util/accounts';
 import theme from '../theme';
 import { ResizeHeading } from 'layout/Heading';
 
@@ -330,14 +331,6 @@ const AccountState: React.FC<{
 
 const AccountBottomBar: React.FC = () => {
   const { project, isLoading, selectedResourceAccount } = useProject();
-
-  const storageMap: { [account: string]: number } = {
-    "0x01": 0,
-    "0x02": 1,
-    "0x03": 2,
-    "0x04": 3,
-    "0x05": 4
-  }
 
   return (
     <FeedbackRoot>

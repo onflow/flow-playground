@@ -225,13 +225,14 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     project, 
     active, 
     isSavingCode, 
-    // updatedStorageAccts, 
-    // lastTxSigners 
+    updatedStorageAccts, 
+    lastTxSigners 
   } = useProject();
   
-  // Milestone 2: these state from the provider will be used for Milestone3
-  // console.log("UPDATED STORAGE ACCOUNTS:", updatedStorageAccts);
-  // console.log("LAST TX SIGNERS FROM INDEX:", lastTxSigners);
+  console.log("UPDATED STORAGE ACCOUNTS:", updatedStorageAccts);
+  console.log("LAST TX SIGNERS FROM INDEX:", lastTxSigners);
+  console.log("PROJECT:", project);
+  
 
   const { accounts } = project;
 
