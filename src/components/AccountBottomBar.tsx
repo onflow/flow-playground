@@ -199,6 +199,10 @@ const AccountState: React.FC<{
   selectedResourcesAccount: string;
   renderDeployButton: () => JSX.Element;
 }> = ({ state, selectedResourcesAccount }) => {
+
+  console.log("ACCOUNT RAW STATE:", state);
+  
+
   if (!state) {
     state = '{}';
   }
@@ -223,8 +227,10 @@ const AccountState: React.FC<{
  
   const types: { [identifier: string]: string } = {};
   for (const [key, value] of Object.entries<any>(storage)) {
-    types[key] = value["value"]["type"]
+    value["value"] ? (types[key] = value["value"]["type"]) : (types[key] = 'nil')
   }
+  console.log("TYPES:", types);
+  
 
   // @ts-ignore
   const [selected, setSelected] = useState(
