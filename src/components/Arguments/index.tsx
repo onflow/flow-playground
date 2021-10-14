@@ -451,7 +451,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                         }}
                       >
                         {lastTxHadErrors ?
-                          `Transaction had an error, please try again.`
+                          "Flow-ly cow! The ransaction had an error, see 'TRANSACTION RESULTS' for details."
                           :
                           `Account${lastTxSignerAccts?.length > 1 ? "s" : ""} 
                           ${lastTxSignerAccts.join(", ")} completed a transaction,
