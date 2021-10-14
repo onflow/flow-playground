@@ -232,22 +232,45 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   
   // console.log("UPDATED STORAGE ACCOUNTS:", updatedStorageAccts);
   // console.log("KEYS:", Object.keys(storageMap));
-  const storageAccts = Object.keys(storageMap)
-  let lastUpdatedAccounts: string[] = []
-  updatedStorageAccts?.map((acctIdx) => lastUpdatedAccounts.push(storageAccts[acctIdx]))
-  console.log("LAST UPDATED ACCOUNTS:", lastUpdatedAccounts);
+  const storageAcctKeys = Object.keys(storageMap)
+  // let lastUpdatedAccounts: string[] = []
+  // updatedStorageAccts?.map((acctIdx) => lastUpdatedAccounts.push(storageAccts[acctIdx]))
+  // console.log("LAST UPDATED ACCOUNTS:", lastUpdatedAccounts);
   
-  let lastTxSignerAccts: string[] = []
-  lastTxSigners?.map((acct: any) => {
-    const addr = acct.address
-    const acctNum = addr.charAt(addr.length-1)
-    const acctHex = `0x0${acctNum}`
-    lastTxSignerAccts.push(acctHex)
-  })
+  // let lastTxSignerAccts: string[] = []
+  // lastTxSigners?.map((acct: any) => {
+  //   const addr = acct.address
+  //   const acctNum = addr.charAt(addr.length-1)
+  //   const acctHex = `0x0${acctNum}`
+  //   lastTxSignerAccts.push(acctHex)
+  // })
 
-  console.log("LAST TX SIGNERS FROM INDEX:", lastTxSignerAccts);
+  // console.log("LAST TX SIGNERS FROM INDEX:", lastTxSignerAccts);
   // console.log("PROJECT:", project);
   
+  const [lastUpdatedAccts, setLastUpdatedAccts] = useState< string[] | null >(null)
+  lastUpdatedAccts && console.log("LAST UPDATED ACCTS:", lastUpdatedAccts.join(", "))
+  const [lastTxSignerAccts, setLastTxSignerAccts] = useState< string[] | null >(null)
+  console.log("LAST TX SIGNER ACCTS:", lastTxSignerAccts);
+  
+  useEffect(() => {
+    if (updatedStorageAccts && lastTxSigners) {
+
+      let storageAccts: string[] = []
+      updatedStorageAccts?.map((acctIdx) => storageAccts.push(storageAcctKeys[acctIdx]))
+      setLastUpdatedAccts(storageAccts)
+
+      let txSignerAccts: string[] = []
+      lastTxSigners?.map((acct: any) => {
+        const addr = acct.address
+        const acctNum = addr.charAt(addr.length-1)
+        const acctHex = `0x0${acctNum}`
+        txSignerAccts.push(acctHex)
+      })
+      setLastTxSignerAccts(txSignerAccts)
+
+    }
+  },[updatedStorageAccts, lastTxSigners])
   
 
   const { accounts } = project;
@@ -414,43 +437,44 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
             <ActionButton active={isOk} type={type} onClick={send} />
           </ControlContainer>
         </HoverPanel>
-
-        {/* 
-          Milestone 2: hard code message from user. For Milestone 3, the provider
-          state of 'updatedStorageAccts' and 'lastTxSigners' will be used to 
-          make this render dynamically based on tx signer and storage account that
-          will have been updated.
-         */}
-        <ControlContainer isOk={isOk} progress={progress}>
-            <ul>
-              <AnimatePresence initial={true}>
-                {notifications.map((id) => (
-                  <motion.li
-                    key={id}
-                    layout
-                    initial={{ opacity: 0, y: 50, scale: 0.3 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
-                  >
-                    <Box
-                      my={1}
-                      sx={{
-                        padding: "0.8rem 0.5rem",
-                        alignItems: "center",
-                        border: `1px solid ${theme.colors.borderDark}`,
-                        backgroundColor: theme.colors.background,
-                        borderRadius: "8px",
-                        width: "250px",
-                        boxShadow: "10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff"
-                      }}
+        {(lastTxSignerAccts && lastUpdatedAccts) &&
+          <ControlContainer isOk={isOk} progress={progress}>
+              <ul>
+                <AnimatePresence initial={true}>
+                  {notifications.map((id) => (
+                    <motion.li
+                      key={id}
+                      layout
+                      initial={{ opacity: 0, y: 50, scale: 0.3 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
                     >
-                      Account 0x01 has completed a transaciton, updating 0x02's storage.
-                    </Box>
-                  </motion.li>
-                ))}
-              </AnimatePresence>
-            </ul>
-        </ControlContainer>
+                      <Box
+                        my={1}
+                        sx={{
+                          padding: "0.8rem 0.5rem",
+                          alignItems: "center",
+                          border: `1px solid ${theme.colors.borderDark}`,
+                          backgroundColor: theme.colors.background,
+                          borderRadius: "8px",
+                          width: "250px",
+                          boxShadow: "10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff"
+                        }}
+                      >
+                        {`
+                          Account${lastTxSignerAccts?.length > 1 ? "s" : ""} 
+                          ${lastTxSignerAccts.join(", ")} completed a transaction,
+                          updating the storage in 
+                          account${lastUpdatedAccts?.length > 1 ? "s" : ""} 
+                          ${lastUpdatedAccts.join(", ")}.
+                        `}
+                      </Box>
+                    </motion.li>
+                  ))}
+                </AnimatePresence>
+              </ul>
+          </ControlContainer>
+        }
 
       </motion.div>
     </>
