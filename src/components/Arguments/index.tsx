@@ -259,6 +259,9 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
   const signersAccounts = selected.map((i) => accounts[i]);
 
+
+  const [lastTxHadErrors, setLastTxHadErrors] = useState< boolean | null >(null)
+
   const send = async () => {
     if (!processingStatus) {
       setProcessingStatus(true);
@@ -315,6 +318,10 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
         case EntityType.TransactionTemplate: {
           resultType = ResultType.Transaction;
           rawResult = await transactionFactory(signersAccounts, args);
+          const txErrors = rawResult.data.createTransactionExecution.errors
+          txErrors?.length > 0 ? setLastTxHadErrors(true) : setLastTxHadErrors(false)
+          
+          
           setNotifications((prev) => [...prev, counter]);
           setTimeout(() => removeNotification(setNotifications, counter), 5000);
           setCounter((prev) => prev + 1);
@@ -420,7 +427,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           </ControlContainer>
         </HoverPanel>
         {(lastTxSignerAccts && lastUpdatedAccts && !progress) &&
-            <ToastContainer>
+            <ToastContainer lastTxHadErrors={lastTxHadErrors}>
               <ul>
                 <AnimatePresence initial={true}>
                   {notifications.map((id) => (
@@ -443,13 +450,15 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                           boxShadow: "10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff"
                         }}
                       >
-                        {`
-                          Account${lastTxSignerAccts?.length > 1 ? "s" : ""} 
+                        {lastTxHadErrors ?
+                          `Transaction had an error, please try again.`
+                          :
+                          `Account${lastTxSignerAccts?.length > 1 ? "s" : ""} 
                           ${lastTxSignerAccts.join(", ")} completed a transaction,
                           updating the storage in 
                           account${lastUpdatedAccts?.length > 1 ? "s" : ""} 
-                          ${lastUpdatedAccts.join(", ")}.
-                        `}
+                          ${lastUpdatedAccts.join(", ")}.`
+                        }
                       </Box>
                     </motion.li>
                   ))}

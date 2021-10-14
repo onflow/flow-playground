@@ -129,11 +129,26 @@ export const ControlContainer = styled.div<ControlContainerProps>`
   }};
 `;
 
-export const ToastContainer = styled.div`
+interface ToastContainerProps {
+  lastTxHadErrors: boolean;
+}
+
+export const ToastContainer = styled.div<ToastContainerProps>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #2bb169;
+  color: ${({ lastTxHadErrors }) => {
+    switch (lastTxHadErrors) {
+      case true:
+        return '#f44336';
+      case false:
+        return '#2bb169';
+      default:
+        return '#EE431E';
+    }
+  }};
+
+
 `;
 
 export const StatusMessage = styled.div`
