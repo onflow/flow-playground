@@ -420,7 +420,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           </ControlContainer>
         </HoverPanel>
         {(lastTxSignerAccts && lastUpdatedAccts && !progress) &&
-          <ToastContainer isOk={isOk} progress={progress}>
+            <ToastContainer>
               <ul>
                 <AnimatePresence initial={true}>
                   {notifications.map((id) => (
@@ -455,7 +455,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                   ))}
                 </AnimatePresence>
               </ul>
-          </ToastContainer>
+            </ToastContainer>
         }
 
       </motion.div>

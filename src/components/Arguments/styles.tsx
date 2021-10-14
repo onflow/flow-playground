@@ -129,7 +129,7 @@ export const ControlContainer = styled.div<ControlContainerProps>`
   }};
 `;
 
-export const ToastContainer = styled.div<ControlContainerProps>`
+export const ToastContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
