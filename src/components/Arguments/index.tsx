@@ -10,6 +10,7 @@ import {
   useSetExecutionResultsMutation,
 } from 'api/apollo/generated/graphql';
 
+import { storageMap } from '../../util/accounts';
 import { ArgumentsProps } from 'components/Arguments/types';
 import { ExecuteCommandRequest } from 'monaco-languageclient';
 
@@ -229,9 +230,24 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     lastTxSigners 
   } = useProject();
   
-  console.log("UPDATED STORAGE ACCOUNTS:", updatedStorageAccts);
-  console.log("LAST TX SIGNERS FROM INDEX:", lastTxSigners);
-  console.log("PROJECT:", project);
+  // console.log("UPDATED STORAGE ACCOUNTS:", updatedStorageAccts);
+  // console.log("KEYS:", Object.keys(storageMap));
+  const storageAccts = Object.keys(storageMap)
+  let lastUpdatedAccounts: string[] = []
+  updatedStorageAccts?.map((acctIdx) => lastUpdatedAccounts.push(storageAccts[acctIdx]))
+  console.log("LAST UPDATED ACCOUNTS:", lastUpdatedAccounts);
+  
+  let lastTxSignerAccts: string[] = []
+  lastTxSigners?.map((acct: any) => {
+    const addr = acct.address
+    const acctNum = addr.charAt(addr.length-1)
+    const acctHex = `0x0${acctNum}`
+    lastTxSignerAccts.push(acctHex)
+  })
+
+  console.log("LAST TX SIGNERS FROM INDEX:", lastTxSignerAccts);
+  // console.log("PROJECT:", project);
+  
   
 
   const { accounts } = project;
