@@ -230,29 +230,11 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     lastTxSigners 
   } = useProject();
   
-  // console.log("UPDATED STORAGE ACCOUNTS:", updatedStorageAccts);
-  // console.log("KEYS:", Object.keys(storageMap));
   const storageAcctKeys = Object.keys(storageMap)
-  // let lastUpdatedAccounts: string[] = []
-  // updatedStorageAccts?.map((acctIdx) => lastUpdatedAccounts.push(storageAccts[acctIdx]))
-  // console.log("LAST UPDATED ACCOUNTS:", lastUpdatedAccounts);
-  
-  // let lastTxSignerAccts: string[] = []
-  // lastTxSigners?.map((acct: any) => {
-  //   const addr = acct.address
-  //   const acctNum = addr.charAt(addr.length-1)
-  //   const acctHex = `0x0${acctNum}`
-  //   lastTxSignerAccts.push(acctHex)
-  // })
 
-  // console.log("LAST TX SIGNERS FROM INDEX:", lastTxSignerAccts);
-  // console.log("PROJECT:", project);
-  
+  // create state for account signers and accounts who's sstorage is updated after a tx
   const [lastUpdatedAccts, setLastUpdatedAccts] = useState< string[] | null >(null)
-  lastUpdatedAccts && console.log("LAST UPDATED ACCTS:", lastUpdatedAccts.join(", "))
   const [lastTxSignerAccts, setLastTxSignerAccts] = useState< string[] | null >(null)
-  console.log("LAST TX SIGNER ACCTS:", lastTxSignerAccts);
-  
   useEffect(() => {
     if (updatedStorageAccts && lastTxSigners) {
 
