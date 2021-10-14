@@ -15,7 +15,9 @@ export default {
     blue: "#0000ff",
     heading: "#919191",
     badgeResource: "#0DDE79",
-    badgeCapability: "#FA8C28"
+    badgeCapability: "#FA8C28",
+    badgeStruct: "#FA8C28",
+    badgeNull: "#DDDDD",
 
   },
   fonts: {

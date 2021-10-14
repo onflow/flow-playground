@@ -67,7 +67,34 @@ const StorageListContainer = styled.div`
   border-right: var(--gap) solid var(--key);
 `;
 
-interface TypeListProps {
+interface StorageBadgeProps {
+  color: string;
+  text: string;
+}
+
+const StorageBadge: React.FC<StorageBadgeProps> = ({
+  color,
+  text
+}) => {
+  return (
+    <Badge
+      variant="outline"
+      px={"5px"}
+      sx={{
+        fontSize: 3,
+        backgroundColor: color,
+        fontStyle: "normal",
+        paddingX: "5px",
+        paddingY: "2px",
+        marginX: "0.5rem"
+      }}
+    >
+      {text}
+    </Badge>
+  )
+}
+
+interface IdentifierTypeListProps {
   identifiers: string[];
   types: { [identifier: string]: string };
   selected: string;
@@ -76,7 +103,7 @@ interface TypeListProps {
   resize: () => any;
 }
 // @ts-ignore
-const IdentifierList: React.FC<TypeListProps> = ({
+const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
   identifiers,
   types,
   selected,
@@ -89,6 +116,10 @@ const IdentifierList: React.FC<TypeListProps> = ({
 
   const { selectedResourceAccount } = useProject();
 
+  console.log("IDENTIFIER LIST, identifiers", identifiers);
+  console.log("IDENTIFIER LIST, types:", types);
+  
+  
   return (
     <>
       <StorageListContainer>
@@ -105,7 +136,39 @@ const IdentifierList: React.FC<TypeListProps> = ({
           }}
         >
           <ul>
-            {identifiers.map((identifier: string) => (
+            {Object.keys(types).map((key) => {
+              const identifierType = types[key]
+              console.log("IDENTIFIER TYPE:", identifierType);
+              return(
+                <TypeListItem
+                  key={key}
+                  active={key == selected}
+                  onClick={() => onSelect(key)}
+                >
+                  <Flex
+                    sx={{
+                      flex: "1 1 auto"
+                    }}
+                  >
+                    {key}
+                    {identifierType === "Struct" &&
+                      <StorageBadge
+                        color={theme.colors.badgeStruct}
+                        text="Struct"
+                      />
+                    }
+                    {identifierType === "null" &&
+                      <StorageBadge
+                        color={theme.colors.badgeNull}
+                        text="Null"
+                      />
+                    }
+                  </Flex>
+                </TypeListItem>
+              )
+            })}
+
+            {/* {identifiers.map((identifier: string) => (
               <TypeListItem
                 key={identifier}
                 active={identifier == selected}
@@ -117,40 +180,13 @@ const IdentifierList: React.FC<TypeListProps> = ({
                   }}
                 >
                   {identifier}
-                  {/* Milestone 2: temp render of badge */}
-                  {identifier === "MainReceiver" ?
-                    <Badge
-                      variant="outline"
-                      px={"5px"}
-                      sx={{
-                        fontSize: 3,
-                        backgroundColor: theme.colors.badgeCapability,
-                        fontStyle: "normal",
-                        paddingX: "5px",
-                        paddingY: "2px",
-                        marginX: "0.5rem"
-                      }}
-                    >
-                      Capability
-                    </Badge>
-                    :
-                    <Badge
-                      variant="outline"
-                      px={"5px"}
-                      sx={{
-                        fontSize: 3,
-                        backgroundColor: theme.colors.badgeResource,
-                        fontStyle: "normal",
-                        paddingX: "5px",
-                        paddingY: "2px",
-                        marginX: "0.5rem"
-                      }}
-                    >
-                      Resource
-                    </Badge>
+                  {identifier === "MainReceiver" &&
+                    <StorageBadge
+                      color={theme.colors.badgeCapability}
+                      text="Capability"
+                    />
                   }
                 </Flex>
-
                 <Flex>
                   {types[identifier] == "Link" &&
                     <BottomBarItemInsert onClick={async () => {
@@ -160,9 +196,8 @@ const IdentifierList: React.FC<TypeListProps> = ({
                     </BottomBarItemInsert>
                   }
                 </Flex>
-
               </TypeListItem>
-            ))}
+            ))} */}
           </ul>
         </div>
       </StorageListContainer>
@@ -199,10 +234,6 @@ const AccountState: React.FC<{
   selectedResourcesAccount: string;
   renderDeployButton: () => JSX.Element;
 }> = ({ state, selectedResourcesAccount }) => {
-
-  console.log("ACCOUNT RAW STATE:", state);
-  
-
   if (!state) {
     state = '{}';
   }
@@ -224,13 +255,14 @@ const AccountState: React.FC<{
     }
   }
   const identifiers = Object.keys(storage);
+  // console.log("IDENTIFIERS:", identifiers);
+  
  
   const types: { [identifier: string]: string } = {};
   for (const [key, value] of Object.entries<any>(storage)) {
-    value["value"] ? (types[key] = value["value"]["type"]) : (types[key] = 'nil')
+    value["value"] ? (types[key] = value["value"]["type"]) : (types[key] = 'null')
   }
-  console.log("TYPES:", types);
-  
+  // console.log("TYPES:", types);
 
   // @ts-ignore
   const [selected, setSelected] = useState(
@@ -287,7 +319,7 @@ const AccountState: React.FC<{
     <>
       {selectedResourcesAccount !== 'none' && (
           <AccountStateContainer height={storageHeight + resultHeight}>
-            <IdentifierList
+            <IdentifierTypeList
               identifiers={identifiers}
               types={types}
               selected={selected}
