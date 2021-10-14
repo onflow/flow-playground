@@ -112,6 +112,7 @@ interface ControlContainerProps {
   isOk: boolean;
   progress: boolean;
 }
+
 export const ControlContainer = styled.div<ControlContainerProps>`
   display: flex;
   align-items: center;
@@ -126,6 +127,13 @@ export const ControlContainer = styled.div<ControlContainerProps>`
         return '#EE431E';
     }
   }};
+`;
+
+export const ToastContainer = styled.div<ControlContainerProps>`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #2bb169;
 `;
 
 export const StatusMessage = styled.div`

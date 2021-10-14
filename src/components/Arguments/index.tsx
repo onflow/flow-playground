@@ -14,7 +14,7 @@ import { storageMap } from '../../util/accounts';
 import { ArgumentsProps } from 'components/Arguments/types';
 import { ExecuteCommandRequest } from 'monaco-languageclient';
 
-import { ControlContainer, HoverPanel, StatusMessage } from './styles';
+import { ControlContainer, ToastContainer, HoverPanel, StatusMessage } from './styles';
 
 import {
   ActionButton,
@@ -419,8 +419,8 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
             <ActionButton active={isOk} type={type} onClick={send} />
           </ControlContainer>
         </HoverPanel>
-        {(lastTxSignerAccts && lastUpdatedAccts) &&
-          <ControlContainer isOk={isOk} progress={progress}>
+        {(lastTxSignerAccts && lastUpdatedAccts && !progress) &&
+          <ToastContainer isOk={isOk} progress={progress}>
               <ul>
                 <AnimatePresence initial={true}>
                   {notifications.map((id) => (
@@ -455,7 +455,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                   ))}
                 </AnimatePresence>
               </ul>
-          </ControlContainer>
+          </ToastContainer>
         }
 
       </motion.div>
