@@ -2,7 +2,7 @@
 //   "dude1": "yooo"
 // })
 
-export const transactionTemplates = {
+export const transactionTemplates: { [identifier: string]: string} = {
   "dude1": `access(all) contract HelloWorld {
 
   // Declare a public field of type String.

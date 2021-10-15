@@ -29,6 +29,9 @@ const AutoTemplatePopup: React.FC<{
 
   const [processing, setProcessing] = useState(false);
   const [name, setName] = useState("My amazing script or transaction");
+  const [selectedTxTemplate, setSelectedTxTemplate] = useState< string >(Object.keys(transactionTemplates)[0])
+  console.log("SELECTEDTX", selectedTxTemplate, typeof(selectedTxTemplate));
+  
 
   const projectPath = isUUUID(project.id) ? project.id : "local"
 
@@ -94,6 +97,7 @@ const AutoTemplatePopup: React.FC<{
         <InputBlock mb={'12px'}>
           <Label>Select</Label>
           <Select 
+            onChange={(event) => setSelectedTxTemplate(event.target.value)}
             defaultValue="Get Receiver Capability"
             sx={{
               border: "1px solid #C4C4C4",
@@ -106,8 +110,9 @@ const AutoTemplatePopup: React.FC<{
               borderRadius: "2px"
             }}
           >
-            <option>Get Receiver Capability</option>
-            <option>Create New Capability</option>
+            {Object.keys(transactionTemplates).map((templateKey) => 
+              <option>{templateKey}</option>
+            )}
           </Select>
         </InputBlock>
         <InputBlock mb={'24px'}>
@@ -125,10 +130,10 @@ const AutoTemplatePopup: React.FC<{
           <FlowButton
             className="green modal"
             onClick={async () => {
-              console.log("TRANSACTION TEMPLATES", transactionTemplates);
-              
               setProcessing(true);
-              const res = await mutator.createTransactionTemplate(transactionTemplates['dude1'], name)
+
+              const res = await mutator.createTransactionTemplate(transactionTemplates[selectedTxTemplate], name)
+              
               navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
               setProcessing(false);
               triggerClose(null);
