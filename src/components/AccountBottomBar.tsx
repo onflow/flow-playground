@@ -287,6 +287,9 @@ const AccountState: React.FC<{
 
   return (
     <>
+    {console.log("STORAGE:", storage)}
+    {console.log("SELECTED:", selected)}
+    {console.log("IDENTIFIERS:", identifiers)}
       {selectedResourcesAccount !== 'none' && (
           <AccountStateContainer height={storageHeight + resultHeight}>
             <IdentifierTypeList
@@ -339,12 +342,15 @@ const AccountState: React.FC<{
 const AccountBottomBar: React.FC = () => {
   const { project, isLoading, selectedResourceAccount } = useProject();
 
+  console.log("SELECTED RESOURCE ACCOUNT:", selectedResourceAccount);
+  
+
   return (
     <FeedbackRoot>
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        <AccountState
+        selectedResourceAccount && <AccountState
           state={project.accounts[storageMap[selectedResourceAccount] || 0].state}
           selectedResourcesAccount={selectedResourceAccount}
           renderDeployButton={() => {
