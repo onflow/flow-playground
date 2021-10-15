@@ -205,8 +205,6 @@ const AccountState: React.FC<{
   selectedResourcesAccount: string;
   renderDeployButton: () => JSX.Element;
 }> = ({ state, selectedResourcesAccount }) => {
-  console.log("RAW STATE:", state);
-  
   if (!state) {
     state = '{}';
   }
