@@ -90,7 +90,7 @@ const StorageBadge: React.FC<StorageBadgeProps> = ({
               return theme.colors.badgeStruct;
             case "Resource":
               return theme.colors.badgeResource;
-            case "Capability":
+            case "Link":
               return theme.colors.badgeCapability;
             case "null":
               return theme.colors.badgeNull
@@ -98,13 +98,12 @@ const StorageBadge: React.FC<StorageBadgeProps> = ({
         },
       }}
     >
-      {type}
+      {type === "Link" ? "Capability" : type}
     </Badge>
   )
 }
 
 interface IdentifierTypeListProps {
-  identifiers: string[];
   types: { [identifier: string]: string };
   selected: string;
   onSelect: (type: string) => void;
@@ -113,7 +112,6 @@ interface IdentifierTypeListProps {
 }
 // @ts-ignore
 const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
-  identifiers,
   types,
   selected,
   onSelect,
@@ -124,10 +122,6 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
   const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false)
 
   const { selectedResourceAccount } = useProject();
-
-  console.log("IDENTIFIER LIST, identifiers", identifiers);
-  console.log("IDENTIFIER LIST, types:", types);
-  
   
   return (
     <>
@@ -147,7 +141,6 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
           <ul>
             {Object.keys(types).map((key) => {
               const identifierType = types[key]
-              console.log("IDENTIFIER TYPE:", identifierType);
               return(
                 <TypeListItem
                   key={key}
@@ -161,58 +154,12 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
                   >
                     {key}
                     <StorageBadge
-                      // color={theme.colors.badgeStruct}
-                      // text={identifierType}
                       type={identifierType}
                     />
-
-                    {/* {identifierType === "Struct" &&
-                      <StorageBadge
-                        color={theme.colors.badgeStruct}
-                        text="Struct"
-                      />
-                    }
-                    {identifierType === "null" &&
-                      <StorageBadge
-                        color={theme.colors.badgeNull}
-                        text="Null"
-                      />
-                    } */}
                   </Flex>
                 </TypeListItem>
               )
             })}
-
-            {/* {identifiers.map((identifier: string) => (
-              <TypeListItem
-                key={identifier}
-                active={identifier == selected}
-                onClick={() => onSelect(identifier)}
-              >
-                <Flex
-                  sx={{
-                    flex: "1 1 auto"
-                  }}
-                >
-                  {identifier}
-                  {identifier === "MainReceiver" &&
-                    <StorageBadge
-                      color={theme.colors.badgeCapability}
-                      text="Capability"
-                    />
-                  }
-                </Flex>
-                <Flex>
-                  {types[identifier] == "Link" &&
-                    <BottomBarItemInsert onClick={async () => {
-                      toggleShowTemplatePopup(true)
-                    }}>
-                      <IoMdAddCircleOutline size="20px" />
-                    </BottomBarItemInsert>
-                  }
-                </Flex>
-              </TypeListItem>
-            ))} */}
           </ul>
         </div>
       </StorageListContainer>
@@ -270,14 +217,11 @@ const AccountState: React.FC<{
     }
   }
   const identifiers = Object.keys(storage);
-  // console.log("IDENTIFIERS:", identifiers);
-  
  
   const types: { [identifier: string]: string } = {};
   for (const [key, value] of Object.entries<any>(storage)) {
     value["value"] ? (types[key] = value["value"]["type"]) : (types[key] = 'null')
   }
-  // console.log("TYPES:", types);
 
   // @ts-ignore
   const [selected, setSelected] = useState(
@@ -335,7 +279,6 @@ const AccountState: React.FC<{
       {selectedResourcesAccount !== 'none' && (
           <AccountStateContainer height={storageHeight + resultHeight}>
             <IdentifierTypeList
-              identifiers={identifiers}
               types={types}
               selected={selected}
               onSelect={setSelected}

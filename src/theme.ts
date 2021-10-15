@@ -17,8 +17,7 @@ export default {
     badgeResource: "#0093AF",
     badgeCapability: "#3DDC84",
     badgeStruct: "#FA8C28",
-    badgeNull: "#D8D8D8",
-
+    badgeNull: "#8C92AC",
   },
   fonts: {
     body: "Interstate, system-ui, sans-serif",
