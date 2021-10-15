@@ -157,6 +157,15 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
                       type={identifierType}
                     />
                   </Flex>
+                  <Flex>
+                    {identifierType == "Link" &&
+                      <BottomBarItemInsert onClick={async () => {
+                        toggleShowTemplatePopup(true)
+                      }}>
+                        <IoMdAddCircleOutline size="20px" />
+                      </BottomBarItemInsert>
+                    }
+                  </Flex>
                 </TypeListItem>
               )
             })}
@@ -196,6 +205,8 @@ const AccountState: React.FC<{
   selectedResourcesAccount: string;
   renderDeployButton: () => JSX.Element;
 }> = ({ state, selectedResourcesAccount }) => {
+  console.log("RAW STATE:", state);
+  
   if (!state) {
     state = '{}';
   }

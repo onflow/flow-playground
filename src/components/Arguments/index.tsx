@@ -430,14 +430,12 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
         {console.log("LAST UPDATED OUTSIDE TOAST CONTAINER:", lastUpdatedAccts)}
         {console.log("LAST NOT PROGRESS OUTSIDE TOAST CONTAINER:", !progress)}
         {console.log("NOTIFICATIONS OUTSIDE PROGRESS TOAST CONTAINER:", notifications)} */}
-
         {(lastTxSignerAccts && lastUpdatedAccts && !progress) &&
             <ToastContainer lastTxHadErrors={lastTxHadErrors}>
               {/* {console.log("LAST TX SIGNERS ACCTS IN TOAST CONTAINER:", lastTxSignerAccts)}
               {console.log("LAST UPDATED IN TOAST CONTAINER:", lastUpdatedAccts)}
               {console.log("LAST NOT PROGRESS IN TOAST CONTAINER:", !progress)}
               {console.log("NOTIFICATIONS IN PROGRESS TOAST CONTAINER:", notifications)} */}
-              
               <ul>
                 <AnimatePresence initial={true}>
                   {notifications.map((id) => (
