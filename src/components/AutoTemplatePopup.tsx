@@ -5,6 +5,7 @@ import theme from '../theme';
 import { Select } from '@theme-ui/components';
 import { useProject } from 'providers/Project/projectHooks';
 import { isUUUID } from "../util/url";
+import { transactionTemplates } from '../util/templates';
 
 import {
   FullScreenContainer,
@@ -124,8 +125,10 @@ const AutoTemplatePopup: React.FC<{
           <FlowButton
             className="green modal"
             onClick={async () => {
+              console.log("TRANSACTION TEMPLATES", transactionTemplates);
+              
               setProcessing(true);
-              const res = await mutator.createTransactionTemplate("", `New Transaction`)
+              const res = await mutator.createTransactionTemplate(transactionTemplates['dude1'], name)
               navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
               setProcessing(false);
               triggerClose(null);
