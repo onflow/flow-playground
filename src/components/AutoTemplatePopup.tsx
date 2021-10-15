@@ -30,8 +30,6 @@ const AutoTemplatePopup: React.FC<{
   const [processing, setProcessing] = useState(false);
   const [name, setName] = useState("My amazing script or transaction");
   const [selectedTxTemplate, setSelectedTxTemplate] = useState< string >(Object.keys(transactionTemplates)[0])
-  console.log("SELECTEDTX", selectedTxTemplate, typeof(selectedTxTemplate));
-  
 
   const projectPath = isUUUID(project.id) ? project.id : "local"
 
@@ -131,9 +129,7 @@ const AutoTemplatePopup: React.FC<{
             className="green modal"
             onClick={async () => {
               setProcessing(true);
-
               const res = await mutator.createTransactionTemplate(transactionTemplates[selectedTxTemplate], name)
-              
               navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
               setProcessing(false);
               triggerClose(null);
