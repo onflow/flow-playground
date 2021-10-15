@@ -109,7 +109,7 @@ const AutoTemplatePopup: React.FC<{
             }}
           >
             {Object.keys(transactionTemplates).map((templateKey) => 
-              <option>{templateKey}</option>
+              <option key={templateKey}>{templateKey}</option>
             )}
           </Select>
         </InputBlock>
