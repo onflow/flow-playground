@@ -10,7 +10,7 @@ import { FeedbackActions } from 'layout/FeedbackActions';
 import { SidebarItemInsert } from 'layout/SidebarItemInsert';
 import { BottomBarItemInsert } from 'layout/BottomBarItemInsert';
 import styled from '@emotion/styled';
-import { Badge, Flex } from 'theme-ui'
+import { Badge, Flex, Box, Divider } from 'theme-ui'
 import { storageMap } from '../util/accounts';
 import theme from '../theme';
 import { ResizeHeading } from 'layout/Heading';
@@ -179,21 +179,79 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
   );
 }
 
-const StateContainer: React.FC<{ value?: any }> = ({ value }) => (
+const StateContainer: React.FC<{ 
+  value?: any 
+  path?: any
+}> = ({ value, path }) => (
   <div
     style={{
       width: '100%',
       backgroundColor: '#f3f3f3',
-      paddingTop: '2em',
+      paddingTop: '1.0em',
       paddingBottom: STORAGE_PANEL_MIN_HEIGHT - 40,
       paddingLeft: '1.5em',
-      fontFamily: theme.fonts.monospace,
-      fontSize: theme.fontSizes[4],
       overflow: 'scroll',
     }}
   >
     {value ?
-      <pre>{JSON.stringify(value, null, 2)}</pre>
+      <>
+        <Flex
+          sx={{
+          }}
+        >
+          <Box
+            sx={{
+              padding: "0.25rem",
+              minWidth: "75px",
+              font: theme.fonts.body,
+              fontSize: theme.fontSizes[4]
+            }}
+          >
+            Path:
+          </Box>
+          <Box
+            sx={{
+              padding: "0.25rem",
+              fontFamily: theme.fonts.monospace,
+              fontSize: theme.fontSizes[4]
+            }}
+          >
+            {path}
+          </Box>
+        </Flex>
+        <Divider 
+          sx={{
+            color: theme.colors.grey,
+            opacity: "0.7",
+            marginX: "2rem",
+            marginY: "0.5rem"
+          }}
+        />
+        <Flex
+          sx={{
+          }}
+        >
+          <Box
+            sx={{
+              padding: "0.25rem",
+              minWidth: "75px",
+              font: theme.fonts.body,
+              fontSize: theme.fontSizes[4]
+            }}
+          >
+            Object:
+          </Box>
+          <Box
+            sx={{
+              padding: "0.25rem",
+              fontFamily: theme.fonts.monospace,
+              fontSize: theme.fontSizes[4]
+            }}
+          >
+            <pre>{JSON.stringify(value, null, 2)}</pre>
+          </Box>
+        </Flex>
+      </>
       :
       '(account storage is empty)'
     }
@@ -210,6 +268,7 @@ const AccountState: React.FC<{
   }
 
   const storage: { [identifier: string]: string } = {};
+  const paths: { [identifier: string]: string } = {};
 
   const parsed = JSON.parse(state);
 
@@ -223,6 +282,7 @@ const AccountState: React.FC<{
 
     if (tuple.length === 2 && ['storage', 'public', 'private'].includes(domain)) {
       storage[identifier] = parsed[key];
+      paths[identifier] = `/${domain}/${identifier}`
     }
   }
   const identifiers = Object.keys(storage);
@@ -312,7 +372,7 @@ const AccountState: React.FC<{
                 );
               }}
             />
-            <StateContainer value={storage[selected || identifiers[0]]} />
+            <StateContainer value={storage[selected || identifiers[0]]} path={paths[selected || identifiers[0]]} />
           </AccountStateContainer>
       )}
       <DeploymentResultContainer height={resultHeight}>
@@ -336,9 +396,6 @@ const AccountState: React.FC<{
 
 const AccountBottomBar: React.FC = () => {
   const { project, isLoading, selectedResourceAccount } = useProject();
-
-  console.log("SELECTED RESOURCE ACCOUNT:", selectedResourceAccount);
-  
 
   return (
     <FeedbackRoot>
