@@ -287,9 +287,6 @@ const AccountState: React.FC<{
 
   return (
     <>
-    {console.log("STORAGE:", storage)}
-    {console.log("SELECTED:", selected)}
-    {console.log("IDENTIFIERS:", identifiers)}
       {selectedResourcesAccount !== 'none' && (
           <AccountStateContainer height={storageHeight + resultHeight}>
             <IdentifierTypeList
