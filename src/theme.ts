@@ -14,10 +14,10 @@ export default {
     error: "#f44336",
     blue: "#0000ff",
     heading: "#919191",
-    badgeResource: "#0DDE79",
-    badgeCapability: "#FA8C28",
+    badgeResource: "#0093AF",
+    badgeCapability: "#3DDC84",
     badgeStruct: "#FA8C28",
-    badgeNull: "#DDDDD",
+    badgeNull: "#D8D8D8",
 
   },
   fonts: {

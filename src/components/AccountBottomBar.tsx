@@ -68,13 +68,11 @@ const StorageListContainer = styled.div`
 `;
 
 interface StorageBadgeProps {
-  color: string;
-  text: string;
+  type: string;
 }
 
 const StorageBadge: React.FC<StorageBadgeProps> = ({
-  color,
-  text
+  type
 }) => {
   return (
     <Badge
@@ -82,14 +80,25 @@ const StorageBadge: React.FC<StorageBadgeProps> = ({
       px={"5px"}
       sx={{
         fontSize: 3,
-        backgroundColor: color,
         fontStyle: "normal",
         paddingX: "5px",
         paddingY: "2px",
-        marginX: "0.5rem"
+        marginX: "0.5rem",
+        backgroundColor: () => {
+          switch (type) {
+            case "Struct":
+              return theme.colors.badgeStruct;
+            case "Resource":
+              return theme.colors.badgeResource;
+            case "Capability":
+              return theme.colors.badgeCapability;
+            case "null":
+              return theme.colors.badgeNull
+          }
+        },
       }}
     >
-      {text}
+      {type}
     </Badge>
   )
 }
@@ -151,7 +160,13 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
                     }}
                   >
                     {key}
-                    {identifierType === "Struct" &&
+                    <StorageBadge
+                      // color={theme.colors.badgeStruct}
+                      // text={identifierType}
+                      type={identifierType}
+                    />
+
+                    {/* {identifierType === "Struct" &&
                       <StorageBadge
                         color={theme.colors.badgeStruct}
                         text="Struct"
@@ -162,7 +177,7 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
                         color={theme.colors.badgeNull}
                         text="Null"
                       />
-                    }
+                    } */}
                   </Flex>
                 </TypeListItem>
               )
