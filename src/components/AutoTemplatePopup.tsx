@@ -112,10 +112,6 @@ const AutoTemplatePopup: React.FC<{
               borderRadius: "2px"
             }}
           >
-            {/* {Object.keys(transactionTemplates).map((templateKey) => 
-              <option key={templateKey}>{templateKey}</option>
-            )} */}
-
             {Object.keys(options).map((optionKey) => 
               options[optionKey] === "Link" && <option key={optionKey}>{optionKey}</option>
             )}
