@@ -5,7 +5,8 @@ import theme from '../theme';
 import { Select } from '@theme-ui/components';
 import { useProject } from 'providers/Project/projectHooks';
 import { isUUUID } from "../util/url";
-import { transactionTemplates } from '../util/templates';
+import { getInterpolatedTemplate } from '../util/templates';
+// import { transactionTemplates } from '../util/templates';
 
 import {
   FullScreenContainer,
@@ -34,10 +35,14 @@ const AutoTemplatePopup: React.FC<{
   const [name, setName] = useState("My amazing script or transaction");
 
   // TODO: change this default based on input param
-  const [selectedTxTemplate, setSelectedTxTemplate] = useState< string >(Object.keys(transactionTemplates)[0])
+  // const [selectedTxTemplate, setSelectedTxTemplate] = useState< string >(Object.keys(transactionTemplates)[0])
 
   const [codeSnippet, setCodeSnippet] = useState< string | null >(Object.keys(options)[0] || null)
-  console.log("CODE SNIPPET:", codeSnippet);
+  // console.log("CODE SNIPPET:", codeSnippet);
+
+  useEffect(() => {
+    codeSnippet && console.log("INTERPOLATED CODE:", getInterpolatedTemplate(codeSnippet))
+  },[codeSnippet])
 
   const projectPath = isUUUID(project.id) ? project.id : "local"
 
@@ -104,7 +109,7 @@ const AutoTemplatePopup: React.FC<{
           <Label>Select</Label>
           <Select 
             onChange={(event) => {
-              setSelectedTxTemplate(event.target.value)
+              // setSelectedTxTemplate(event.target.value)
               setCodeSnippet(event.target.value)
             }}
             defaultValue={Object.keys(options)[0]}

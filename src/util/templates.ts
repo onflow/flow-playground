@@ -1,8 +1,5 @@
-// export const transactionTemplates = () => ({
-//   "dude1": "yooo"
-// })
-
 export const transactionTemplates: { [identifier: string]: string} = {
+
   "dude1": `access(all) contract HelloWorld {
 
   // Declare a public field of type String.
@@ -21,6 +18,7 @@ export const transactionTemplates: { [identifier: string]: string} = {
   }
 }
 `,
+
 "dude2": `access(all) contract HelloWorld {
 
   // Declare a public field of type String.
@@ -39,4 +37,9 @@ export const transactionTemplates: { [identifier: string]: string} = {
   }
 }
 `
+
+}
+
+export const getInterpolatedTemplate = (capCode: string): any => {
+  return "Hi" + capCode
 }
