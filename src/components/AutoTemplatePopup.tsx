@@ -36,7 +36,7 @@ const AutoTemplatePopup: React.FC<{
   // TODO: change this default based on input param
   const [selectedTxTemplate, setSelectedTxTemplate] = useState< string >(Object.keys(transactionTemplates)[0])
 
-  const [codeSnippet, setCodeSnippet] = useState< string | null >(null)
+  const [codeSnippet, setCodeSnippet] = useState< string | null >(Object.keys(options)[0] || null)
   console.log("CODE SNIPPET:", codeSnippet);
 
   const projectPath = isUUUID(project.id) ? project.id : "local"
@@ -105,7 +105,7 @@ const AutoTemplatePopup: React.FC<{
           <Select 
             onChange={(event) => {
               setSelectedTxTemplate(event.target.value)
-              setCodeSnippet("POOP")
+              setCodeSnippet(event.target.value)
             }}
             defaultValue={Object.keys(options)[0]}
             sx={{
