@@ -6,6 +6,7 @@ import { Select } from '@theme-ui/components';
 import { useProject } from 'providers/Project/projectHooks';
 import { isUUUID } from "../util/url";
 import { getInterpolatedTemplate } from '../util/templates';
+import { Text } from '@theme-ui/components';
 // import { transactionTemplates } from '../util/templates';
 
 import {
@@ -39,6 +40,8 @@ const AutoTemplatePopup: React.FC<{
 
   const [codeSnippet, setCodeSnippet] = useState< string | null >(Object.keys(options)[0] || null)
   // console.log("CODE SNIPPET:", codeSnippet);
+
+  const [type, setType] = useState< string >("script")
 
   useEffect(() => {
     codeSnippet && console.log("INTERPOLATED CODE:", getInterpolatedTemplate(codeSnippet))
@@ -106,7 +109,27 @@ const AutoTemplatePopup: React.FC<{
         </PopupHeader>
 
         <InputBlock mb={'12px'}>
-          <Label>Select</Label>
+          <Label>Type</Label>
+          <Select 
+            onChange={(event) => {
+              setType(event.target.value)
+            }}
+            defaultValue="Script"
+            sx={{
+              border: "1px solid #C4C4C4",
+              fontSize: "14px",
+              color: "#000",
+              padding: "8px",
+              width: "100%",
+              fontWeight: "bold",
+              marginBottom: "5px",
+              borderRadius: "2px"
+            }}
+          >
+            <option>Script</option>
+            <option>Transaction</option>
+          </Select>
+          <Label>Capability</Label>
           <Select 
             onChange={(event) => {
               // setSelectedTxTemplate(event.target.value)
@@ -125,7 +148,13 @@ const AutoTemplatePopup: React.FC<{
             }}
           >
             {Object.keys(options).map((optionKey) => 
-              options[optionKey] === "Link" && <option key={optionKey}>{optionKey}</option>
+              options[optionKey] === "Link" && 
+                <option 
+                  key={optionKey}
+                  value={optionKey}
+                >
+                  {`${optionKey} - get and borrow the Capability`}
+                </option>
             )}
           </Select>
         </InputBlock>

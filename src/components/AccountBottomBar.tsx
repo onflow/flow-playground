@@ -345,6 +345,8 @@ const AccountState: React.FC<{
       window.removeEventListener('mouseup', toggleResizeListener, false);
     };
   }, []);
+  console.log("STORAGE:", storage);
+  
 
   return (
     <>
