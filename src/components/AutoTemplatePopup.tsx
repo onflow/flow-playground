@@ -23,9 +23,13 @@ import {
 
 const AutoTemplatePopup: React.FC<{
   visible: boolean;
+  options: { [identifier: string]: string};
   triggerClose?: (e: React.SyntheticEvent) => any;
-}> = ({ visible, triggerClose }) => {
+}> = ({ visible, options, triggerClose }) => {
   const { project, mutator, selectedResourceAccount } = useProject();
+
+  console.log("OPTIONS FORM POPUP:", options);
+  
 
   const [processing, setProcessing] = useState(false);
   const [name, setName] = useState("My amazing script or transaction");
@@ -108,8 +112,12 @@ const AutoTemplatePopup: React.FC<{
               borderRadius: "2px"
             }}
           >
-            {Object.keys(transactionTemplates).map((templateKey) => 
+            {/* {Object.keys(transactionTemplates).map((templateKey) => 
               <option key={templateKey}>{templateKey}</option>
+            )} */}
+
+            {Object.keys(options).map((optionKey) => 
+              options[optionKey] === "Link" && <option key={optionKey}>{optionKey}</option>
             )}
           </Select>
         </InputBlock>

@@ -118,7 +118,6 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
   controls,
   resize,
 }) => {
-
   const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false)
 
   const { selectedResourceAccount } = useProject();
@@ -172,9 +171,13 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
           </ul>
         </div>
       </StorageListContainer>
-      <AutoTemplatePopup visible={showTemplatePopup} triggerClose={() => {
-        toggleShowTemplatePopup(false)
-      }} />
+      <AutoTemplatePopup 
+        visible={showTemplatePopup} 
+        options={types}
+        triggerClose={() => {
+          toggleShowTemplatePopup(false)
+        }} 
+      />
     </>
   );
 }
