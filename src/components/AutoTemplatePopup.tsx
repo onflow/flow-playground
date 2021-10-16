@@ -147,7 +147,7 @@ const AutoTemplatePopup: React.FC<{
               setProcessing(true);
               // TODO: this is where a function call to the template util can return an interpolated string for the code text
               // const res = await mutator.createTransactionTemplate(transactionTemplates[selectedTxTemplate], name)
-              const res = await mutator.createTransactionTemplate(codeSnippet, name)
+              const res = await mutator.createTransactionTemplate(getInterpolatedTemplate(codeSnippet), name)
               navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
               setProcessing(false);
               triggerClose(null);
