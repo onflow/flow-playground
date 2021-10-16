@@ -28,12 +28,16 @@ const AutoTemplatePopup: React.FC<{
 }> = ({ visible, options, triggerClose }) => {
   const { project, mutator, selectedResourceAccount } = useProject();
 
-  console.log("OPTIONS FORM POPUP:", options);
-  
+  // console.log("OPTIONS FORM POPUP:", options);
 
   const [processing, setProcessing] = useState(false);
   const [name, setName] = useState("My amazing script or transaction");
+
+  // TODO: change this default based on input param
   const [selectedTxTemplate, setSelectedTxTemplate] = useState< string >(Object.keys(transactionTemplates)[0])
+
+  const [codeSnippet, setCodeSnippet] = useState< string | null >(null)
+  console.log("CODE SNIPPET:", codeSnippet);
 
   const projectPath = isUUUID(project.id) ? project.id : "local"
 
@@ -99,8 +103,11 @@ const AutoTemplatePopup: React.FC<{
         <InputBlock mb={'12px'}>
           <Label>Select</Label>
           <Select 
-            onChange={(event) => setSelectedTxTemplate(event.target.value)}
-            defaultValue="Get Receiver Capability"
+            onChange={(event) => {
+              setSelectedTxTemplate(event.target.value)
+              setCodeSnippet("POOP")
+            }}
+            defaultValue={Object.keys(options)[0]}
             sx={{
               border: "1px solid #C4C4C4",
               fontSize: "14px",
