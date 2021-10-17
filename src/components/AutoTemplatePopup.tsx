@@ -52,10 +52,14 @@ const AutoTemplatePopup: React.FC<{
 
   const [contractResource, setContractResource] = useState< string | null>(null)
   const [interfaces, setInterfaces] = useState< string | null>(null)
+  const [contractOwner, setContractOwner] = useState< string | null >(null)
 
  useEffect(() => {
     if (capability && storage) {
       const storageBorrowType = storage[capability].value.value.borrowType
+
+      const rawAcct = storageBorrowType.split(".")[1]
+      setContractOwner("0x0" + rawAcct.substr(rawAcct.length - 1))
       
       let rxp = /{([^}]+)}/g
       let foundInterfaces = rxp.exec(storageBorrowType)[1]
@@ -185,10 +189,10 @@ const AutoTemplatePopup: React.FC<{
               setProcessing(true);
 
               if (type === "Transaction") {
-                  const res = await mutator.createTransactionTemplate(getInterpolatedTemplate(paths[capability], contractResource, interfaces), name)
+                  const res = await mutator.createTransactionTemplate(getInterpolatedTemplate(contractOwner, paths[capability], contractResource, interfaces), name)
                   navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
               } else if (type === "Script") {
-                  const res = await mutator.createScriptTemplate(getInterpolatedTemplate(paths[capability], contractResource, interfaces), name)
+                  const res = await mutator.createScriptTemplate(getInterpolatedTemplate(contractOwner, paths[capability], contractResource, interfaces), name)
                   navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
               }
           
