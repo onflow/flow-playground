@@ -22,7 +22,6 @@ import { storageMap } from '../util/accounts';
 type MenuListProps = {
   active: number | null;
   title: string;
-  type: string;
   items: any[];
   onSelect: (e: SyntheticEvent, id: string) => void;
   onUpdate: any;
@@ -33,16 +32,12 @@ const NAME_MAX_CHARS = 50;
 
 const MenuList: React.FC<MenuListProps> = ({
   title,
-  type,
   items,
   onSelect,
   onUpdate,
   onDelete
 }) => {
   const { active, project, selectedResourceAccount } = useProject()
-
-
-
 
   const selectedAcctState = project.accounts[storageMap[selectedResourceAccount] || 0].state
   const { storage, paths, types } = getStorageData(selectedAcctState)
@@ -164,7 +159,7 @@ const MenuList: React.FC<MenuListProps> = ({
         </SidebarItems>
       </SidebarSection>
       <AutoTemplatePopup 
-        type={type}
+        type={title.split(" ")[0]}
         storage={storage}
         paths={paths}
         visible={showTemplatePopup} 

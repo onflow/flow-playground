@@ -33,6 +33,9 @@ const AutoTemplatePopup: React.FC<{
 }> = ({ type, storage,  paths, visible, options, triggerClose }) => {
   const { project, mutator, selectedResourceAccount } = useProject();
 
+  
+  
+
   // console.log("PATHS:", paths);
   // console.log("OPTIONS FORM POPUP:", options);
   // console.log("STORAGE FORM POPUP:", storage);
@@ -132,30 +135,10 @@ const AutoTemplatePopup: React.FC<{
     >
       <PopupContainer width="550px" variants={popupFrames}>
         <PopupHeader mb="20px" color={theme.colors.darkGrey} lineColor={theme.colors.primary}>
-          Create a Script or Transaction Template
+          {`Create a ${type} from a template`}
         </PopupHeader>
 
         <InputBlock mb={'12px'}>
-          <Label>Type</Label>
-          <Select 
-            onChange={(event) => {
-              // setType(event.target.value)
-            }}
-            defaultValue="Script"
-            sx={{
-              border: "1px solid #C4C4C4",
-              fontSize: "14px",
-              color: "#000",
-              padding: "8px",
-              width: "100%",
-              fontWeight: "bold",
-              marginBottom: "5px",
-              borderRadius: "2px"
-            }}
-          >
-            <option>Script</option>
-            <option>Transaction</option>
-          </Select>
           <Label>Capability</Label>
           <Select 
             onChange={(event) => {
