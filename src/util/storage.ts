@@ -1,14 +1,10 @@
 export const getStorageData = (state: string): any => {
 
   const storage: { [identifier: string]: string } = {};
-  // console.log("ACCOUNTSTATE STORAGE:", storage);
   const paths: { [identifier: string]: string } = {};
-  // console.log("ACCOUNTSTATE PATHS:", paths);
   const types: { [identifier: string]: string } = {};
-  
 
   const parsed = JSON.parse(state);
-  // console.log("PARSED", parsed);
 
   for (let key in parsed) {
     if (!parsed.hasOwnProperty(key)) {

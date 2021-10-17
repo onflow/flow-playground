@@ -42,10 +42,15 @@ const MenuList: React.FC<MenuListProps> = ({
   const { active, project, selectedResourceAccount } = useProject()
 
 
+
+
   const selectedAcctState = project.accounts[storageMap[selectedResourceAccount] || 0].state
-  // console.log("SELECTED ACCTS STATE FROM MENU LIST:", selectedAcctState);
   const { storage, paths, types } = getStorageData(selectedAcctState)
   const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false)
+
+  
+
+
 
   const isEditing = useRef<HTMLInputElement>();
   const [editing, setEditing] = useState([]);
