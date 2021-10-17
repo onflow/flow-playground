@@ -201,13 +201,12 @@ const AutoTemplatePopup: React.FC<{
             onClick={async () => {
               setProcessing(true);
               // TODO: this is where a function call to the template util can return an interpolated string for the code text
-              // const res = await mutator.createTransactionTemplate(transactionTemplates[selectedTxTemplate], name)
 
               // const res = await mutator.createTransactionTemplate(getInterpolatedTemplate(path, contractResource, interfaces), name)
               const res = await mutator.createScriptTemplate(getInterpolatedTemplate(paths[capability], contractResource, interfaces), name)
 
               // navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
-              navigate(`/${projectPath}?type=tx&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
+              navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
 
               setProcessing(false);
               triggerClose(null);
