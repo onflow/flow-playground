@@ -31,6 +31,7 @@ const AutoTemplatePopup: React.FC<{
   options: { [identifier: string]: string};
   triggerClose?: (e: React.SyntheticEvent) => any;
 }> = ({ type, storage,  paths, visible, options, triggerClose }) => {
+  
   const { project, mutator, selectedResourceAccount } = useProject();
 
   
@@ -189,10 +190,10 @@ const AutoTemplatePopup: React.FC<{
               setProcessing(true);
 
               if (type === "Transaction") {
-                  const res = await mutator.createTransactionTemplate(getInterpolatedTemplate(contractOwner, paths[capability], contractResource, interfaces), name)
+                  const res = await mutator.createTransactionTemplate(getInterpolatedTemplate("tx", contractOwner, paths[capability], contractResource, interfaces), name)
                   navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
               } else if (type === "Script") {
-                  const res = await mutator.createScriptTemplate(getInterpolatedTemplate(contractOwner, paths[capability], contractResource, interfaces), name)
+                  const res = await mutator.createScriptTemplate(getInterpolatedTemplate("script", contractOwner, paths[capability], contractResource, interfaces), name)
                   navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
               }
           

@@ -245,9 +245,6 @@ const AccountState: React.FC<{
   selectedResourcesAccount: string;
   renderDeployButton: () => JSX.Element;
 }> = ({ state, selectedResourcesAccount }) => {
-  if (!state) {
-    state = '{}';
-  }
 
   const { storage, paths, types } = getStorageData(state)
 

@@ -1,4 +1,8 @@
-export const getStorageData = (state: string): any => {
+export const getStorageData = (state: string = ''): any => {
+
+  if (state === '') {
+    return { storage: {}, paths: {}, types: {}}
+  }
 
   const storage: { [identifier: string]: string } = {};
   const paths: { [identifier: string]: string } = {};

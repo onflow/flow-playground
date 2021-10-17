@@ -1,9 +1,30 @@
 import { getAccountCalls } from "./generator"
 
-export const getInterpolatedTemplate = (contractOwner: string, path: string, contractResource: string, interfaces: string): any => {
-  return `
+export const getInterpolatedTemplate = (type: string, contractOwner: string, path: string, contractResource: string, interfaces: string): any => {
+  if (type === 'tx') {
+  return `// The 'borrowedCapability' constant borrows a capability from a public path
+    // for a given account. The capability is scoped to a contract its implemented
+    // contract-level interfaces. It was deployed in this playground by ${contractOwner}.
 
-    // The 'borrowedCapability' constant borrows a capability from a public path
+    // Copy-paste 'borrowedCapability into a script that suits your needs. Make
+    // sure the 'address' parameter in 'getAccount()' is a valid account address.
+
+    /*
+      ...
+    */
+  
+
+    // Here's an example transaction that uses a capability scoped to a fungible token
+    // contract that implements the 'Balance' interface and returns the balance
+    // as a UFix64 type
+
+    /*
+      ...
+    */
+      `
+
+  } else if (type === 'script') {
+  return `// The 'borrowedCapability' constant borrows a capability from a public path
     // for a given account. The capability is scoped to a contract its implemented
     // contract-level interfaces. It was deployed in this playground by ${contractOwner}.
 
@@ -37,5 +58,6 @@ export const getInterpolatedTemplate = (contractOwner: string, path: string, con
       }
       */
       `
+  }
 
 }
