@@ -201,17 +201,15 @@ const AutoTemplatePopup: React.FC<{
             className="green modal"
             onClick={async () => {
               setProcessing(true);
-          
-              let res
-              switch (type) {
-                case "tx":
-                  res = await mutator.createTransactionTemplate(getInterpolatedTemplate(paths[capability], contractResource, interfaces), name)
+
+              if (type === "tx") {
+                  const res = await mutator.createTransactionTemplate(getInterpolatedTemplate(paths[capability], contractResource, interfaces), name)
                   navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
-                case "script":
-                  res = await mutator.createScriptTemplate(getInterpolatedTemplate(paths[capability], contractResource, interfaces), name)
+              } else if (type === "script") {
+                  const res = await mutator.createScriptTemplate(getInterpolatedTemplate(paths[capability], contractResource, interfaces), name)
                   navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
               }
-
+          
               setProcessing(false);
               triggerClose(null);
             }}
