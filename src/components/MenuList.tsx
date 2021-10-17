@@ -13,11 +13,11 @@ import useKeyPress from "../hooks/useKeyPress";
 import { ExportButton } from "components/ExportButton";
 import AutoTemplatePopup from "components/AutoTemplatePopup"
 import { getParams } from "../util/url";
-import { getStorageData } from "../util/storage"
+// import { getStorageData } from "../util/storage"
 import { useProject } from "providers/Project/projectHooks";
 import { EntityType } from "providers/Project";
 import { useLocation } from "@reach/router";
-import { storageMap } from '../util/accounts';
+// import { storageMap } from '../util/accounts';
 
 type MenuListProps = {
   active: number | null;
@@ -37,11 +37,12 @@ const MenuList: React.FC<MenuListProps> = ({
   onUpdate,
   onDelete
 }) => {
-  const { active, project, selectedResourceAccount } = useProject()
+  // const { active, project, selectedResourceAccount } = useProject()
+  const { active } = useProject()
 
-  const selectedAcctState = project.accounts[storageMap[selectedResourceAccount] || 0].state
+  // const selectedAcctState = project.accounts[storageMap[selectedResourceAccount] || 0].state
 
-  const { storage, paths, types } = getStorageData(selectedAcctState)
+  // const { storage, paths, types } = getStorageData(selectedAcctState)
   const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false)
 
   const isEditing = useRef<HTMLInputElement>();
@@ -157,10 +158,10 @@ const MenuList: React.FC<MenuListProps> = ({
       </SidebarSection>
       <AutoTemplatePopup 
         type={title.split(" ")[0]}
-        storage={storage}
-        paths={paths}
+        // storage={storage}
+        // paths={paths}
         visible={showTemplatePopup} 
-        options={types}
+        // options={types}
         triggerClose={() => {
           toggleShowTemplatePopup(false)
         }} 

@@ -1,5 +1,3 @@
-import { getAccountCalls } from "./generator"
-
 export const getInterpolatedTemplate = (type: string, contractOwner: string, path: string, contractResource: string, interfaces: string): any => {
   if (type === 'tx') {
   return `// The 'borrowedCapability' constant borrows a capability from a public path

@@ -6,6 +6,8 @@ import { Select } from '@theme-ui/components';
 import { useProject } from 'providers/Project/projectHooks';
 import { isUUUID } from "../util/url";
 import { getInterpolatedTemplate } from '../util/templates';
+import { getStorageData } from "../util/storage"
+import { storageMap } from '../util/accounts';
 // import { Text } from '@theme-ui/components';
 // import { transactionTemplates } from '../util/templates';
 
@@ -25,16 +27,20 @@ import {
 
 const AutoTemplatePopup: React.FC<{
   type: string;
-  storage: { [identifier: string]: string};
-  paths: { [identifier: string]: string};
+  // storage: { [identifier: string]: string};
+  // paths: { [identifier: string]: string};
   visible: boolean;
-  options: { [identifier: string]: string};
+  // options: { [identifier: string]: string};
   triggerClose?: (e: React.SyntheticEvent) => any;
-}> = ({ type, storage,  paths, visible, options, triggerClose }) => {
+// }> = ({ type, storage,  paths, visible, options, triggerClose }) => {
+}> = ({ type, visible, triggerClose }) => {
   
   const { project, mutator, selectedResourceAccount } = useProject();
 
   
+  const selectedAcctState = project.accounts[storageMap[selectedResourceAccount] || 0].state
+
+  const { storage, paths, types } = getStorageData(selectedAcctState)
   
 
   // console.log("PATHS:", paths);
@@ -47,7 +53,7 @@ const AutoTemplatePopup: React.FC<{
   // TODO: change this default based on input param
   // const [selectedTxTemplate, setSelectedTxTemplate] = useState< string >(Object.keys(transactionTemplates)[0])
 
-  const [capability, setCapability] = useState< string | null >(Object.keys(options)[0] || null)
+  const [capability, setCapability] = useState< string | null >(Object.keys(types)[0] || null)
 
   // const [type, setType] = useState< string >("script")
 
@@ -149,7 +155,7 @@ const AutoTemplatePopup: React.FC<{
             onChange={(event) => {
               setCapability(event.target.value)
             }}
-            defaultValue={Object.keys(options)[0]}
+            defaultValue={Object.keys(types)[0]}
             sx={{
               border: "1px solid #C4C4C4",
               fontSize: "14px",
@@ -161,8 +167,8 @@ const AutoTemplatePopup: React.FC<{
               borderRadius: "2px"
             }}
           >
-            {Object.keys(options).map((optionKey) => 
-              options[optionKey] === "Link" && 
+            {Object.keys(types).map((optionKey) => 
+              types[optionKey] === "Link" && 
                 <option 
                   key={optionKey}
                   value={optionKey}
