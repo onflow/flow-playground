@@ -24,12 +24,13 @@ import {
 } from 'components/Arguments/SingleArgument/styles';
 
 const AutoTemplatePopup: React.FC<{
+  type: string;
   storage: { [identifier: string]: string};
   paths: { [identifier: string]: string};
   visible: boolean;
   options: { [identifier: string]: string};
   triggerClose?: (e: React.SyntheticEvent) => any;
-}> = ({ storage,  paths, visible, options, triggerClose }) => {
+}> = ({ type, storage,  paths, visible, options, triggerClose }) => {
   const { project, mutator, selectedResourceAccount } = useProject();
 
   // console.log("PATHS:", paths);
@@ -200,13 +201,16 @@ const AutoTemplatePopup: React.FC<{
             className="green modal"
             onClick={async () => {
               setProcessing(true);
-              // TODO: this is where a function call to the template util can return an interpolated string for the code text
-
-              // const res = await mutator.createTransactionTemplate(getInterpolatedTemplate(path, contractResource, interfaces), name)
-              const res = await mutator.createScriptTemplate(getInterpolatedTemplate(paths[capability], contractResource, interfaces), name)
-
-              // navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
-              navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
+          
+              let res
+              switch (type) {
+                case "tx":
+                  res = await mutator.createTransactionTemplate(getInterpolatedTemplate(paths[capability], contractResource, interfaces), name)
+                  navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
+                case "script":
+                  res = await mutator.createScriptTemplate(getInterpolatedTemplate(paths[capability], contractResource, interfaces), name)
+                  navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
+              }
 
               setProcessing(false);
               triggerClose(null);

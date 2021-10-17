@@ -22,6 +22,7 @@ import { storageMap } from '../util/accounts';
 type MenuListProps = {
   active: number | null;
   title: string;
+  type: string;
   items: any[];
   onSelect: (e: SyntheticEvent, id: string) => void;
   onUpdate: any;
@@ -32,6 +33,7 @@ const NAME_MAX_CHARS = 50;
 
 const MenuList: React.FC<MenuListProps> = ({
   title,
+  type,
   items,
   onSelect,
   onUpdate,
@@ -162,6 +164,7 @@ const MenuList: React.FC<MenuListProps> = ({
         </SidebarItems>
       </SidebarSection>
       <AutoTemplatePopup 
+        type={type}
         storage={storage}
         paths={paths}
         visible={showTemplatePopup} 

@@ -29,6 +29,7 @@ const Sidebar: React.FC = () => {
       <AccountList />
       <MenuList
         title="Transaction Templates"
+        type="tx"
         items={project.transactionTemplates}
         active={
           active.type == EntityType.TransactionTemplate ? active.index : null
@@ -47,6 +48,7 @@ const Sidebar: React.FC = () => {
       />
       <MenuList
         title="Script Templates"
+        type="script"
         items={project.scriptTemplates}
         active={active.type == EntityType.ScriptTemplate ? active.index : null}
         onSelect={(_, id) => {
