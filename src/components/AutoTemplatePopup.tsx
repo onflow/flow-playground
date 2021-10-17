@@ -8,8 +8,6 @@ import { isUUUID } from "../util/url";
 import { getInterpolatedTemplate } from '../util/templates';
 import { getStorageData } from "../util/storage"
 import { storageMap } from '../util/accounts';
-// import { Text } from '@theme-ui/components';
-// import { transactionTemplates } from '../util/templates';
 
 import {
   FullScreenContainer,
@@ -27,12 +25,8 @@ import {
 
 const AutoTemplatePopup: React.FC<{
   type: string;
-  // storage: { [identifier: string]: string};
-  // paths: { [identifier: string]: string};
   visible: boolean;
-  // options: { [identifier: string]: string};
   triggerClose?: (e: React.SyntheticEvent) => any;
-// }> = ({ type, storage,  paths, visible, options, triggerClose }) => {
 }> = ({ type, visible, triggerClose }) => {
   
   const { project, mutator, selectedResourceAccount } = useProject();
@@ -41,21 +35,12 @@ const AutoTemplatePopup: React.FC<{
   const selectedAcctState = project.accounts[storageMap[selectedResourceAccount] || 0].state
 
   const { storage, paths, types } = getStorageData(selectedAcctState)
-  
-
-  // console.log("PATHS:", paths);
-  // console.log("OPTIONS FORM POPUP:", options);
-  // console.log("STORAGE FORM POPUP:", storage);
 
   const [processing, setProcessing] = useState(false);
   const [name, setName] = useState("My amazing script or transaction");
 
-  // TODO: change this default based on input param
-  // const [selectedTxTemplate, setSelectedTxTemplate] = useState< string >(Object.keys(transactionTemplates)[0])
-
   const [capability, setCapability] = useState< string | null >(Object.keys(types)[0] || null)
 
-  // const [type, setType] = useState< string >("script")
 
   const [contractResource, setContractResource] = useState< string | null>(null)
   const [interfaces, setInterfaces] = useState< string | null>(null)
