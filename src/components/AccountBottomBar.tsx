@@ -4,7 +4,7 @@ import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { useProject } from 'providers/Project/projectHooks';
 import useMousePosition from '../hooks/useMousePosition';
-import AutoTemplatePopup from 'components/AutoTemplatePopup'
+// import AutoTemplatePopup from 'components/AutoTemplatePopup'
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 import { FeedbackActions } from 'layout/FeedbackActions';
 import { SidebarItemInsert } from 'layout/SidebarItemInsert';
@@ -176,7 +176,7 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
           </ul>
         </div>
       </StorageListContainer>
-      <AutoTemplatePopup 
+      {/* <AutoTemplatePopup 
         storage={storage}
         path={path}
         visible={showTemplatePopup} 
@@ -184,7 +184,7 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
         triggerClose={() => {
           toggleShowTemplatePopup(false)
         }} 
-      />
+      /> */}
     </>
   );
 }
@@ -277,16 +277,10 @@ const AccountState: React.FC<{
     state = '{}';
   }
 
-  const { storage, paths } = getStorageData(state)
+  const { storage, paths, types } = getStorageData(state)
 
   const identifiers = Object.keys(storage);
  
-  const types: { [identifier: string]: string } = {};
-  for (const [key, value] of Object.entries<any>(storage)) {
-    value["value"] ? (types[key] = value["value"]["type"]) : (types[key] = 'null')
-  }
-  console.log("ACCOUNTSTORAGE TYPES:", types);
-
   // @ts-ignore
   const [selected, setSelected] = useState(
     identifiers.length > 0 ? identifiers[0] : null,

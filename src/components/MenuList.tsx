@@ -11,7 +11,7 @@ import {SidebarItemEdit} from "layout/SidebarItemEdit";
 import {SidebarItemDelete} from "layout/SidebarItemDelete";
 import useKeyPress from "../hooks/useKeyPress";
 import { ExportButton } from "components/ExportButton";
-// import { AutoTemplatePopup } from "components/AutoTemplatePopup"
+import AutoTemplatePopup from "components/AutoTemplatePopup"
 import { getParams } from "../util/url";
 import { getStorageData } from "../util/storage"
 import { useProject } from "providers/Project/projectHooks";
@@ -44,15 +44,8 @@ const MenuList: React.FC<MenuListProps> = ({
 
   const selectedAcctState = project.accounts[storageMap[selectedResourceAccount] || 0].state
   // console.log("SELECTED ACCTS STATE FROM MENU LIST:", selectedAcctState);
-  const { storage, paths } = getStorageData(selectedAcctState)
-  console.log("STORAGE FROM MENU LIST:", storage);
-  console.log("PATHS FROM MENU LIST", paths); 
-  
-  
-
-  // const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false)
-
-
+  const { storage, paths, types } = getStorageData(selectedAcctState)
+  const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false)
 
   const isEditing = useRef<HTMLInputElement>();
   const [editing, setEditing] = useState([]);
@@ -101,8 +94,8 @@ const MenuList: React.FC<MenuListProps> = ({
           {title}
           {onInsert && (
             <SidebarItemInsert onClick={() => {
-                (e: React.SyntheticEvent) => onInsert(e)
-                // toggleShowTemplatePopup(true)
+                // (e: React.SyntheticEvent) => onInsert(e)
+                toggleShowTemplatePopup(true)
             }}
             >
               <IoMdAddCircleOutline size="20px" />
@@ -167,15 +160,15 @@ const MenuList: React.FC<MenuListProps> = ({
           })}
         </SidebarItems>
       </SidebarSection>
-      {/* <AutoTemplatePopup 
-        storage={selectedAcctState}
-        path={path}
+      <AutoTemplatePopup 
+        storage={storage}
+        paths={paths}
         visible={showTemplatePopup} 
         options={types}
         triggerClose={() => {
           toggleShowTemplatePopup(false)
         }} 
-      /> */}
+      />
     </>
   );
 };

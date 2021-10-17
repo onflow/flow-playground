@@ -25,11 +25,11 @@ import {
 
 const AutoTemplatePopup: React.FC<{
   storage: { [identifier: string]: string};
-  path: string;
+  paths: { [identifier: string]: string};
   visible: boolean;
   options: { [identifier: string]: string};
   triggerClose?: (e: React.SyntheticEvent) => any;
-}> = ({ storage,  path, visible, options, triggerClose }) => {
+}> = ({ storage,  paths, visible, options, triggerClose }) => {
   const { project, mutator, selectedResourceAccount } = useProject();
 
   // console.log("PATHS:", paths);
@@ -204,7 +204,7 @@ const AutoTemplatePopup: React.FC<{
               // const res = await mutator.createTransactionTemplate(transactionTemplates[selectedTxTemplate], name)
 
               // const res = await mutator.createTransactionTemplate(getInterpolatedTemplate(path, contractResource, interfaces), name)
-              const res = await mutator.createScriptTemplate(getInterpolatedTemplate(path, contractResource, interfaces), name)
+              const res = await mutator.createScriptTemplate(getInterpolatedTemplate(paths[capability], contractResource, interfaces), name)
 
               // navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
               navigate(`/${projectPath}?type=tx&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)

@@ -4,6 +4,8 @@ export const getStorageData = (state: string): any => {
   // console.log("ACCOUNTSTATE STORAGE:", storage);
   const paths: { [identifier: string]: string } = {};
   // console.log("ACCOUNTSTATE PATHS:", paths);
+  const types: { [identifier: string]: string } = {};
+  
 
   const parsed = JSON.parse(state);
   // console.log("PARSED", parsed);
@@ -19,9 +21,10 @@ export const getStorageData = (state: string): any => {
     if (tuple.length === 2 && ['storage', 'public', 'private'].includes(domain)) {
       storage[identifier] = parsed[key];
       paths[identifier] = `/${domain}/${identifier}`
+      types[identifier] = parsed[key].value.type
     }
   }
 
-  return { storage, paths }
+  return { storage, paths, types }
  
 }
