@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { ResultType } from 'api/apollo/generated/graphql';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
-import { IoMdAddCircleOutline } from "react-icons/io";
 import { useProject } from 'providers/Project/projectHooks';
 import useMousePosition from '../hooks/useMousePosition';
-// import AutoTemplatePopup from 'components/AutoTemplatePopup'
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 import { FeedbackActions } from 'layout/FeedbackActions';
 import { SidebarItemInsert } from 'layout/SidebarItemInsert';
-import { BottomBarItemInsert } from 'layout/BottomBarItemInsert';
 import styled from '@emotion/styled';
 import { Badge, Flex, Box, Divider } from 'theme-ui'
 import { storageMap } from '../util/accounts';
@@ -105,8 +102,6 @@ const StorageBadge: React.FC<StorageBadgeProps> = ({
 }
 
 interface IdentifierTypeListProps {
-  storage: { [identifier: string]: string };
-  path: string;
   types: { [identifier: string]: string };
   selected: string;
   onSelect: (type: string) => void;
@@ -115,77 +110,54 @@ interface IdentifierTypeListProps {
 }
 // @ts-ignore
 const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
-  storage,
-  path,
   types,
   selected,
   onSelect,
   controls,
   resize,
 }) => {
-  const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false)
 
   const { selectedResourceAccount } = useProject();
   
   return (
-    <>
-      <StorageListContainer>
-        <ResizeHeading 
-          onMouseDown={resize}
-          textTransform="none"
-        > 
-          ACCOUNT {selectedResourceAccount} STORAGE {controls()}
-        </ResizeHeading>
-        <div
-          style={{
-            width: '288px',
-            overflow: 'auto',
-          }}
-        >
-          <ul>
-            {Object.keys(types).map((key) => {
-              const identifierType = types[key]
-              return(
-                <TypeListItem
-                  key={key}
-                  active={key == selected}
-                  onClick={() => onSelect(key)}
+    <StorageListContainer>
+      <ResizeHeading 
+        onMouseDown={resize}
+        textTransform="none"
+      > 
+        ACCOUNT {selectedResourceAccount} STORAGE {controls()}
+      </ResizeHeading>
+      <div
+        style={{
+          width: '288px',
+          overflow: 'auto',
+        }}
+      >
+        <ul>
+          {Object.keys(types).map((key) => {
+            const identifierType = types[key]
+            return(
+              <TypeListItem
+                key={key}
+                active={key == selected}
+                onClick={() => onSelect(key)}
+              >
+                <Flex
+                  sx={{
+                    flex: "1 1 auto"
+                  }}
                 >
-                  <Flex
-                    sx={{
-                      flex: "1 1 auto"
-                    }}
-                  >
-                    {key}
-                    <StorageBadge
-                      type={identifierType}
-                    />
-                  </Flex>
-                  <Flex>
-                    {identifierType == "Link" &&
-                      <BottomBarItemInsert onClick={async () => {
-                        toggleShowTemplatePopup(true)
-                      }}>
-                        <IoMdAddCircleOutline size="20px" />
-                      </BottomBarItemInsert>
-                    }
-                  </Flex>
-                </TypeListItem>
-              )
-            })}
-          </ul>
-        </div>
-      </StorageListContainer>
-      {/* <AutoTemplatePopup 
-        storage={storage}
-        path={path}
-        visible={showTemplatePopup} 
-        options={types}
-        triggerClose={() => {
-          toggleShowTemplatePopup(false)
-        }} 
-      /> */}
-    </>
+                  {key}
+                  <StorageBadge
+                    type={identifierType}
+                  />
+                </Flex>
+              </TypeListItem>
+            )
+          })}
+        </ul>
+      </div>
+    </StorageListContainer>
   );
 }
 
@@ -337,8 +309,6 @@ const AccountState: React.FC<{
       {selectedResourcesAccount !== 'none' && (
           <AccountStateContainer height={storageHeight + resultHeight}>
             <IdentifierTypeList
-              storage={storage}
-              path={paths[selected || identifiers[0]]}
               types={types}
               selected={selected}
               onSelect={setSelected}
