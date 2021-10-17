@@ -142,7 +142,6 @@ const AutoTemplatePopup: React.FC<{
           <Label>Capability</Label>
           <Select 
             onChange={(event) => {
-              // setSelectedTxTemplate(event.target.value)
               setCapability(event.target.value)
             }}
             defaultValue={Object.keys(options)[0]}
@@ -185,10 +184,10 @@ const AutoTemplatePopup: React.FC<{
             onClick={async () => {
               setProcessing(true);
 
-              if (type === "tx") {
+              if (type === "Transaction") {
                   const res = await mutator.createTransactionTemplate(getInterpolatedTemplate(paths[capability], contractResource, interfaces), name)
                   navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
-              } else if (type === "script") {
+              } else if (type === "Script") {
                   const res = await mutator.createScriptTemplate(getInterpolatedTemplate(paths[capability], contractResource, interfaces), name)
                   navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
               }
