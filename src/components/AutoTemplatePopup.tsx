@@ -25,12 +25,11 @@ import {
 
 const AutoTemplatePopup: React.FC<{
   storage: { [identifier: string]: string};
-  paths: { [identifier: string]: string};
   path: string;
   visible: boolean;
   options: { [identifier: string]: string};
   triggerClose?: (e: React.SyntheticEvent) => any;
-}> = ({ storage, paths, path, visible, options, triggerClose }) => {
+}> = ({ storage,  path, visible, options, triggerClose }) => {
   const { project, mutator, selectedResourceAccount } = useProject();
 
   // console.log("PATHS:", paths);

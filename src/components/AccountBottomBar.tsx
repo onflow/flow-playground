@@ -105,7 +105,6 @@ const StorageBadge: React.FC<StorageBadgeProps> = ({
 
 interface IdentifierTypeListProps {
   storage: { [identifier: string]: string };
-  paths: { [identifier: string]: string };
   path: string;
   types: { [identifier: string]: string };
   selected: string;
@@ -116,7 +115,6 @@ interface IdentifierTypeListProps {
 // @ts-ignore
 const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
   storage,
-  paths,
   path,
   types,
   selected,
@@ -179,7 +177,6 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
       </StorageListContainer>
       <AutoTemplatePopup 
         storage={storage}
-        paths={paths}
         path={path}
         visible={showTemplatePopup} 
         options={types}
@@ -280,7 +277,9 @@ const AccountState: React.FC<{
   }
 
   const storage: { [identifier: string]: string } = {};
+  console.log("ACCOUNTSTATE STORAGE:", storage);
   const paths: { [identifier: string]: string } = {};
+  console.log("ACCOUNTSTATE PATHS:", paths);
 
   const parsed = JSON.parse(state);
   // console.log("PARSED", parsed);
@@ -306,6 +305,7 @@ const AccountState: React.FC<{
   for (const [key, value] of Object.entries<any>(storage)) {
     value["value"] ? (types[key] = value["value"]["type"]) : (types[key] = 'null')
   }
+  console.log("ACCOUNTSTORAGE TYPES:", types);
 
   // @ts-ignore
   const [selected, setSelected] = useState(
@@ -364,7 +364,6 @@ const AccountState: React.FC<{
           <AccountStateContainer height={storageHeight + resultHeight}>
             <IdentifierTypeList
               storage={storage}
-              paths={paths}
               path={paths[selected || identifiers[0]]}
               types={types}
               selected={selected}
