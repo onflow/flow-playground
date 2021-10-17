@@ -12,6 +12,7 @@ import { BottomBarItemInsert } from 'layout/BottomBarItemInsert';
 import styled from '@emotion/styled';
 import { Badge, Flex, Box, Divider } from 'theme-ui'
 import { storageMap } from '../util/accounts';
+import { getStorageData } from '../util/storage';
 import theme from '../theme';
 import { ResizeHeading } from 'layout/Heading';
 
@@ -276,29 +277,31 @@ const AccountState: React.FC<{
     state = '{}';
   }
 
-  const storage: { [identifier: string]: string } = {};
-  console.log("ACCOUNTSTATE STORAGE:", storage);
-  const paths: { [identifier: string]: string } = {};
-  console.log("ACCOUNTSTATE PATHS:", paths);
+  const { storage, paths } = getStorageData(state)
 
-  const parsed = JSON.parse(state);
-  // console.log("PARSED", parsed);
+  // const storage: { [identifier: string]: string } = {};
+  // console.log("ACCOUNTSTATE STORAGE:", storage);
+  // const paths: { [identifier: string]: string } = {};
+  // console.log("ACCOUNTSTATE PATHS:", paths);
+
+  // const parsed = JSON.parse(state);
+  // // console.log("PARSED", parsed);
   
 
-  for (let key in parsed) {
-    if (!parsed.hasOwnProperty(key)) {
-      continue;
-    }
+  // for (let key in parsed) {
+  //   if (!parsed.hasOwnProperty(key)) {
+  //     continue;
+  //   }
 
-    const tuple = key.split('\u001f')
-    const [domain, identifier] = tuple
+  //   const tuple = key.split('\u001f')
+  //   const [domain, identifier] = tuple
     
 
-    if (tuple.length === 2 && ['storage', 'public', 'private'].includes(domain)) {
-      storage[identifier] = parsed[key];
-      paths[identifier] = `/${domain}/${identifier}`
-    }
-  }
+  //   if (tuple.length === 2 && ['storage', 'public', 'private'].includes(domain)) {
+  //     storage[identifier] = parsed[key];
+  //     paths[identifier] = `/${domain}/${identifier}`
+  //   }
+  // }
   const identifiers = Object.keys(storage);
  
   const types: { [identifier: string]: string } = {};
