@@ -104,6 +104,9 @@ const StorageBadge: React.FC<StorageBadgeProps> = ({
 }
 
 interface IdentifierTypeListProps {
+  storage: { [identifier: string]: string };
+  paths: { [identifier: string]: string };
+  path: string;
   types: { [identifier: string]: string };
   selected: string;
   onSelect: (type: string) => void;
@@ -112,6 +115,9 @@ interface IdentifierTypeListProps {
 }
 // @ts-ignore
 const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
+  storage,
+  paths,
+  path,
   types,
   selected,
   onSelect,
@@ -172,6 +178,9 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
         </div>
       </StorageListContainer>
       <AutoTemplatePopup 
+        storage={storage}
+        paths={paths}
+        path={path}
         visible={showTemplatePopup} 
         options={types}
         triggerClose={() => {
@@ -274,6 +283,8 @@ const AccountState: React.FC<{
   const paths: { [identifier: string]: string } = {};
 
   const parsed = JSON.parse(state);
+  // console.log("PARSED", parsed);
+  
 
   for (let key in parsed) {
     if (!parsed.hasOwnProperty(key)) {
@@ -282,6 +293,7 @@ const AccountState: React.FC<{
 
     const tuple = key.split('\u001f')
     const [domain, identifier] = tuple
+    
 
     if (tuple.length === 2 && ['storage', 'public', 'private'].includes(domain)) {
       storage[identifier] = parsed[key];
@@ -345,14 +357,15 @@ const AccountState: React.FC<{
       window.removeEventListener('mouseup', toggleResizeListener, false);
     };
   }, []);
-  console.log("STORAGE:", storage);
-  
 
   return (
     <>
       {selectedResourcesAccount !== 'none' && (
           <AccountStateContainer height={storageHeight + resultHeight}>
             <IdentifierTypeList
+              storage={storage}
+              paths={paths}
+              path={paths[selected || identifiers[0]]}
               types={types}
               selected={selected}
               onSelect={setSelected}

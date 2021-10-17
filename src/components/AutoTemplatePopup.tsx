@@ -6,7 +6,7 @@ import { Select } from '@theme-ui/components';
 import { useProject } from 'providers/Project/projectHooks';
 import { isUUUID } from "../util/url";
 import { getInterpolatedTemplate } from '../util/templates';
-import { Text } from '@theme-ui/components';
+// import { Text } from '@theme-ui/components';
 // import { transactionTemplates } from '../util/templates';
 
 import {
@@ -24,13 +24,18 @@ import {
 } from 'components/Arguments/SingleArgument/styles';
 
 const AutoTemplatePopup: React.FC<{
+  storage: { [identifier: string]: string};
+  paths: { [identifier: string]: string};
+  path: string;
   visible: boolean;
   options: { [identifier: string]: string};
   triggerClose?: (e: React.SyntheticEvent) => any;
-}> = ({ visible, options, triggerClose }) => {
+}> = ({ storage, paths, path, visible, options, triggerClose }) => {
   const { project, mutator, selectedResourceAccount } = useProject();
 
+  // console.log("PATHS:", paths);
   // console.log("OPTIONS FORM POPUP:", options);
+  // console.log("STORAGE FORM POPUP:", storage);
 
   const [processing, setProcessing] = useState(false);
   const [name, setName] = useState("My amazing script or transaction");
@@ -38,14 +43,36 @@ const AutoTemplatePopup: React.FC<{
   // TODO: change this default based on input param
   // const [selectedTxTemplate, setSelectedTxTemplate] = useState< string >(Object.keys(transactionTemplates)[0])
 
-  const [codeSnippet, setCodeSnippet] = useState< string | null >(Object.keys(options)[0] || null)
-  // console.log("CODE SNIPPET:", codeSnippet);
+  const [capability, setCapability] = useState< string | null >(Object.keys(options)[0] || null)
 
-  const [type, setType] = useState< string >("script")
+  // const [type, setType] = useState< string >("script")
 
-  useEffect(() => {
-    codeSnippet && console.log("INTERPOLATED CODE:", getInterpolatedTemplate(codeSnippet))
-  },[codeSnippet])
+  const [contractResource, setContractResource] = useState< string | null>(null)
+  const [interfaces, setInterfaces] = useState< string | null>(null)
+
+ useEffect(() => {
+    if (capability && storage) {
+      const storageBorrowType = storage[capability].value.value.borrowType
+      
+      let rxp = /{([^}]+)}/g
+      let foundInterfaces = rxp.exec(storageBorrowType)[1]
+      let fullyQualifiedInterfaces = foundInterfaces.split(',')
+      let interfacesShort: string[] = []
+      fullyQualifiedInterfaces.map((fullyQualifiedInterface) => {
+        interfacesShort.push(fullyQualifiedInterface.split(".")[2] + "." + fullyQualifiedInterface.split(".")[3])
+      })
+
+      const interfacesFinalString = interfacesShort.join(",")
+      setInterfaces(interfacesFinalString)
+
+      const splitBorrowType = storageBorrowType.split(".")
+      
+      const contract = splitBorrowType[2]
+      const resourceWithBracket = splitBorrowType[3]
+      const resource = resourceWithBracket.split("{")[0]
+      setContractResource(contract + "." + resource)
+    }
+  },[capability, storage])
 
   const projectPath = isUUUID(project.id) ? project.id : "local"
 
@@ -112,7 +139,7 @@ const AutoTemplatePopup: React.FC<{
           <Label>Type</Label>
           <Select 
             onChange={(event) => {
-              setType(event.target.value)
+              // setType(event.target.value)
             }}
             defaultValue="Script"
             sx={{
@@ -133,7 +160,7 @@ const AutoTemplatePopup: React.FC<{
           <Select 
             onChange={(event) => {
               // setSelectedTxTemplate(event.target.value)
-              setCodeSnippet(event.target.value)
+              setCapability(event.target.value)
             }}
             defaultValue={Object.keys(options)[0]}
             sx={{
@@ -176,8 +203,13 @@ const AutoTemplatePopup: React.FC<{
               setProcessing(true);
               // TODO: this is where a function call to the template util can return an interpolated string for the code text
               // const res = await mutator.createTransactionTemplate(transactionTemplates[selectedTxTemplate], name)
-              const res = await mutator.createTransactionTemplate(getInterpolatedTemplate(codeSnippet), name)
-              navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
+
+              // const res = await mutator.createTransactionTemplate(getInterpolatedTemplate(path, contractResource, interfaces), name)
+              const res = await mutator.createScriptTemplate(getInterpolatedTemplate(path, contractResource, interfaces), name)
+
+              // navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
+              navigate(`/${projectPath}?type=tx&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
+
               setProcessing(false);
               triggerClose(null);
             }}
