@@ -13,7 +13,6 @@ const Sidebar: React.FC = () => {
     isLoading,
     active,
     project,
-    mutator,
     deleteTransactionTemplate,
     deleteScriptTemplate,
     updateTransactionTemplate,
