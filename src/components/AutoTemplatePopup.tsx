@@ -96,12 +96,15 @@ const AutoTemplatePopup: React.FC<{
       initial="hidden"
       animate={visible ? 'visible' : 'hidden'}
       variants={containerFrames}
+      onAnimationComplete={() => {setProcessing(false)}}
     >
-      <PopupContainer width="550px" variants={popupFrames}>
+      <PopupContainer 
+        width="550px" 
+        variants={popupFrames}
+      >
         <PopupHeader mb="20px" color={theme.colors.darkGrey} lineColor={theme.colors.primary}>
           {`Create a ${type} from a template`}
         </PopupHeader>
-
         <InputBlock mb={'12px'}>
           <Label>Capability</Label>
           <Select 
@@ -159,7 +162,7 @@ const AutoTemplatePopup: React.FC<{
                 }
             
                 triggerClose(null);
-                setProcessing(false);
+                // setProcessing(false);
               }}
             >
               {processing ?
