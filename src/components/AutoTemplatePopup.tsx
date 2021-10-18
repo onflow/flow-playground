@@ -34,7 +34,9 @@ const AutoTemplatePopup: React.FC<{
   const selectedAcctState = project.accounts[storageMap[selectedResourceAccount] || 0].state
 
   const { types, capabilities } = getStorageData(selectedAcctState)
-  const capabilitiesKeys = Object.keys(capabilities)
+  console.log("CAPABILITIES:", capabilities);
+  
+  const capabilitiesKeys = Object.keys(capabilities || [])
 
   const [processing, setProcessing] = useState(false);
   const [templateName, setTemplateName] = useState("My amazing script or transaction");
