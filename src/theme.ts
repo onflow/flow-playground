@@ -127,5 +127,10 @@ export default {
         marginRight: "0.2rem"
       }
     }
-  }
+  },
+  styles: {
+    spinner: {
+      color: 'red',
+    },
+  },
 };

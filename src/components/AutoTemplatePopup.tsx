@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { navigate } from "@reach/router";
 import { default as FlowButton } from 'components/Button';
 import theme from '../theme';
-import { Select } from '@theme-ui/components';
+import { Select, Spinner } from '@theme-ui/components';
 import { useProject } from 'providers/Project/projectHooks';
 import { isUUUID } from "../util/url";
 import { getInterpolatedTemplate } from '../util/templates';
@@ -143,27 +143,31 @@ const AutoTemplatePopup: React.FC<{
           <FlowButton className="grey modal" onClick={triggerClose}>
             Close
           </FlowButton>
-          <FlowButton
-            className="green modal"
-            onClick={async () => {
-              setProcessing(true);
+            <FlowButton
+              className="green modal"
+              onClick={async () => {
+                setProcessing(true);
 
-              const capData = capabilities[selectedCapability]
+                const capData = capabilities[selectedCapability]
 
-              if (type === "Transaction") {
-                  const res = await mutator.createTransactionTemplate(getInterpolatedTemplate("tx", capData.contractAddr, capData.path, `${capData.resourceContract}.${capData.resource}`, capData.contractImplementedInterfaces.join(",")), templateName)
-                  navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
-              } else if (type === "Script") {
-                  const res = await mutator.createScriptTemplate(getInterpolatedTemplate("script", capData.contractAddr, capData.path, `${capData.resourceContract}.${capData.resource}`, capData.contractImplementedInterfaces.join(",")), templateName)
-                  navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
+                if (type === "Transaction") {
+                    const res = await mutator.createTransactionTemplate(getInterpolatedTemplate("tx", capData.contractAddr, capData.path, `${capData.resourceContract}.${capData.resource}`, capData.contractImplementedInterfaces.join(",")), templateName)
+                    navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
+                } else if (type === "Script") {
+                    const res = await mutator.createScriptTemplate(getInterpolatedTemplate("script", capData.contractAddr, capData.path, `${capData.resourceContract}.${capData.resource}`, capData.contractImplementedInterfaces.join(",")), templateName)
+                    navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
+                }
+            
+                triggerClose(null);
+                setProcessing(false);
+              }}
+            >
+              {processing ?
+                <Spinner size="20" color="#303030"/>
+                  :
+                "Create"
               }
-          
-              setProcessing(false);
-              triggerClose(null);
-            }}
-          >
-            {processing ? "Processing..." : "Create"}
-          </FlowButton>
+            </FlowButton>
         </SpaceBetween>
       </PopupContainer>
       <WhiteOverlay opacity={0.5} onClick={triggerClose} />
