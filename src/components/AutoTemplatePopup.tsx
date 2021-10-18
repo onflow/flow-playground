@@ -31,47 +31,15 @@ const AutoTemplatePopup: React.FC<{
   
   const { project, mutator, selectedResourceAccount } = useProject();
 
-  
   const selectedAcctState = project.accounts[storageMap[selectedResourceAccount] || 0].state
 
-  const { storage, paths, types } = getStorageData(selectedAcctState)
+  const { types, capabilities } = getStorageData(selectedAcctState)
+  const capabilitiesKeys = Object.keys(capabilities)
 
   const [processing, setProcessing] = useState(false);
-  const [name, setName] = useState("My amazing script or transaction");
+  const [templateName, setTemplateName] = useState("My amazing script or transaction");
 
-  const [capability, setCapability] = useState< string | null >(Object.keys(types)[0] || null)
-
-
-  const [contractResource, setContractResource] = useState< string | null>(null)
-  const [interfaces, setInterfaces] = useState< string | null>(null)
-  const [contractOwner, setContractOwner] = useState< string | null >(null)
-
- useEffect(() => {
-    if (capability && storage) {
-      const storageBorrowType = storage[capability].value.value.borrowType
-
-      const rawAcct = storageBorrowType.split(".")[1]
-      setContractOwner("0x0" + rawAcct.substr(rawAcct.length - 1))
-      
-      let rxp = /{([^}]+)}/g
-      let foundInterfaces = rxp.exec(storageBorrowType)[1]
-      let fullyQualifiedInterfaces = foundInterfaces.split(',')
-      let interfacesShort: string[] = []
-      fullyQualifiedInterfaces.map((fullyQualifiedInterface) => {
-        interfacesShort.push(fullyQualifiedInterface.split(".")[2] + "." + fullyQualifiedInterface.split(".")[3])
-      })
-
-      const interfacesFinalString = interfacesShort.join(",")
-      setInterfaces(interfacesFinalString)
-
-      const splitBorrowType = storageBorrowType.split(".")
-      
-      const contract = splitBorrowType[2]
-      const resourceWithBracket = splitBorrowType[3]
-      const resource = resourceWithBracket.split("{")[0]
-      setContractResource(contract + "." + resource)
-    }
-  },[capability, storage])
+  const [selectedCapability, setSelectedCapability] = useState< string | null >(capabilitiesKeys[0] || null)
 
   const projectPath = isUUUID(project.id) ? project.id : "local"
 
@@ -138,9 +106,9 @@ const AutoTemplatePopup: React.FC<{
           <Label>Capability</Label>
           <Select 
             onChange={(event) => {
-              setCapability(event.target.value)
+              setSelectedCapability(event.target.value)
             }}
-            defaultValue={Object.keys(types)[0]}
+            defaultValue={capabilitiesKeys[0]}
             sx={{
               border: "1px solid #C4C4C4",
               fontSize: "14px",
@@ -152,13 +120,13 @@ const AutoTemplatePopup: React.FC<{
               borderRadius: "2px"
             }}
           >
-            {Object.keys(types).map((optionKey) => 
-              types[optionKey] === "Link" && 
+            {capabilitiesKeys.map((capabilityKey) => 
+              types[capabilityKey] === "Link" && 
                 <option 
-                  key={optionKey}
-                  value={optionKey}
+                  key={capabilityKey}
+                  value={capabilityKey}
                 >
-                  {`${optionKey} - get and borrow the Capability`}
+                  {`${capabilityKey} - get and borrow the Capability`}
                 </option>
             )}
           </Select>
@@ -167,8 +135,8 @@ const AutoTemplatePopup: React.FC<{
           <Label>Name</Label>
           <Input
             ref={firstInput}
-            value={name}
-            onChange={event => setName(event.target.value)}
+            value={templateName}
+            onChange={event => setTemplateName(event.target.value)}
           />
         </InputBlock>
         <SpaceBetween>
@@ -180,11 +148,13 @@ const AutoTemplatePopup: React.FC<{
             onClick={async () => {
               setProcessing(true);
 
+              const capData = capabilities[selectedCapability]
+
               if (type === "Transaction") {
-                  const res = await mutator.createTransactionTemplate(getInterpolatedTemplate("tx", contractOwner, paths[capability], contractResource, interfaces), name)
+                  const res = await mutator.createTransactionTemplate(getInterpolatedTemplate("tx", capData.contractAddr, capData.path, `${capData.resourceContract}.${capData.resource}`, capData.contractImplementedInterfaces.join(",")), templateName)
                   navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
               } else if (type === "Script") {
-                  const res = await mutator.createScriptTemplate(getInterpolatedTemplate("script", contractOwner, paths[capability], contractResource, interfaces), name)
+                  const res = await mutator.createScriptTemplate(getInterpolatedTemplate("script", capData.contractAddr, capData.path, `${capData.resourceContract}.${capData.resource}`, capData.contractImplementedInterfaces.join(",")), templateName)
                   navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
               }
           

@@ -7,6 +7,7 @@ export const getStorageData = (state: string = ''): any => {
   const storage: { [identifier: string]: string } = {};
   const paths: { [identifier: string]: string } = {};
   const types: { [identifier: string]: string } = {};
+  const capabilities: { [identifier: string]: any } = {};
 
   const parsed = JSON.parse(state);
 
@@ -20,11 +21,41 @@ export const getStorageData = (state: string = ''): any => {
 
     if (tuple.length === 2 && ['storage', 'public', 'private'].includes(domain)) {
       storage[identifier] = parsed[key];
-      paths[identifier] = `/${domain}/${identifier}`
-      types[identifier] = parsed[key].value.type
+      const path = `/${domain}/${identifier}`
+      paths[identifier] = path
+
+      const storageItemType = parsed[key].value.type
+      types[identifier] = storageItemType
+
+      if (storageItemType === "Link") {
+        const borrowType = parsed[key].value.value.borrowType
+        const borrowTypeSplit = borrowType.split(".")
+        const contractAcctId = borrowTypeSplit[1]
+        const contractAddr = `0x0${contractAcctId.substr(contractAcctId.length - 1)}`
+        const contract = borrowTypeSplit[2]
+        const resourcePart = borrowTypeSplit[3]
+        const resource = resourcePart.split("{")[0]
+
+
+        const rxp = /{([^}]+)}/g
+        const foundInterfaces = rxp.exec(borrowType)[1]
+        const fullyQualifiedInterfaces = foundInterfaces.split(',')
+        let interfaces: string[] = []
+        fullyQualifiedInterfaces.map((fullyQualifiedInterface) => {
+          interfaces.push(fullyQualifiedInterface.split(".")[2] + "." + fullyQualifiedInterface.split(".")[3])
+        })
+
+        capabilities[identifier] = {
+          path: path,
+          contractAddr: contractAddr,
+          resourceContract: contract,
+          resource: resource,
+          contractImplementedInterfaces: interfaces
+        }
+      }
     }
   }
 
-  return { storage, paths, types }
+  return { storage, paths, types, capabilities }
  
 }
