@@ -34,7 +34,6 @@ const AutoTemplatePopup: React.FC<{
   const selectedAcctState = project.accounts[storageMap[selectedResourceAccount] || 0].state
 
   const { types, capabilities } = getStorageData(selectedAcctState)
-  console.log("CAPABILITIES:", capabilities);
   
   const capabilitiesKeys = Object.keys(capabilities || [])
 

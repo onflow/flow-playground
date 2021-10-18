@@ -19,7 +19,7 @@ export const ResourcesExplorerButton = (props: ResourcesExplorerButtonProps) => 
   const params = getParams(location.search);
   const { type, id, storage } = params;  
 
-  return project.id === 'LOCAL-project' ? null : (
+  return (
     <SidebarItemToggleResources
       onClick={() => {
         if (addr === storage) {
