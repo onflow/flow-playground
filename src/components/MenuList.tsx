@@ -23,6 +23,7 @@ type MenuListProps = {
   items: any[];
   onSelect: (e: SyntheticEvent, id: string) => void;
   onUpdate: any;
+  onInsert: (e: SyntheticEvent) => void;
   onDelete: any;
 };
 
@@ -33,6 +34,7 @@ const MenuList: React.FC<MenuListProps> = ({
   items,
   onSelect,
   onUpdate,
+  onInsert,
   onDelete
 }) => {
   const { active } = useProject()
@@ -84,13 +86,11 @@ const MenuList: React.FC<MenuListProps> = ({
       <SidebarSection>
         <SidebarHeader>
           {title}
-          <SidebarItemInsert onClick={() => {
-              // (e: React.SyntheticEvent) => onInsert(e)
-              toggleShowTemplatePopup(true)
-          }}
-          >
-            <IoMdAddCircleOutline size="20px" />
-          </SidebarItemInsert>
+          {onInsert && (
+            <SidebarItemInsert onClick={(e: React.SyntheticEvent) => onInsert(e)}>
+              <IoMdAddCircleOutline size="20px" />
+            </SidebarItemInsert>
+          )}
         </SidebarHeader>
         <SidebarItems>
           {items.map((item, i) => {

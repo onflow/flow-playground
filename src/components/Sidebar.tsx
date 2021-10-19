@@ -13,6 +13,7 @@ const Sidebar: React.FC = () => {
     isLoading,
     active,
     project,
+    mutator,
     deleteTransactionTemplate,
     deleteScriptTemplate,
     updateTransactionTemplate,
@@ -44,6 +45,11 @@ const Sidebar: React.FC = () => {
           const id = project.transactionTemplates[0].id;
           navigate(`/${projectPath}?type=tx&id=${id}&storage=${selectedResourceAccount || 'none'}`)
         }}
+        onInsert={async () => {
+          console.log("POOPPP");
+          const res = await mutator.createTransactionTemplate("", `New Transaction`)
+          navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
+        }}
       />
       <MenuList
         title="Script Templates"
@@ -59,6 +65,11 @@ const Sidebar: React.FC = () => {
           await deleteScriptTemplate(templateId);
           const id = project.scriptTemplates[0].id;
           navigate(`/${projectPath}?type=script&id=${id}&storage=${selectedResourceAccount || 'none'}`)
+        }}
+        onInsert={async () => {
+          console.log("POOPPP");
+          const res = await mutator.createScriptTemplate("", `New Script`);
+          navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
         }}
       />
     </SidebarRoot>
