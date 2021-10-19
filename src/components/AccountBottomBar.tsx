@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { ResultType } from 'api/apollo/generated/graphql';
+import AutoTemplatePopup from "components/AutoTemplatePopup"
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
+import { IoMdAddCircleOutline } from "react-icons/io";
 import { useProject } from 'providers/Project/projectHooks';
 import useMousePosition from '../hooks/useMousePosition';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 import { FeedbackActions } from 'layout/FeedbackActions';
 import { SidebarItemInsert } from 'layout/SidebarItemInsert';
+import { BottomBarItemInsert } from 'layout/BottomBarItemInsert';
 import styled from '@emotion/styled';
 import { Badge, Flex, Box, Divider } from 'theme-ui'
 import { storageMap } from '../util/accounts';
@@ -117,47 +120,67 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
   resize,
 }) => {
 
+  const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false)
+
   const { selectedResourceAccount } = useProject();
   
   return (
-    <StorageListContainer>
-      <ResizeHeading 
-        onMouseDown={resize}
-        textTransform="none"
-      > 
-        ACCOUNT {selectedResourceAccount} STORAGE {controls()}
-      </ResizeHeading>
-      <div
-        style={{
-          width: '288px',
-          overflow: 'auto',
-        }}
-      >
-        <ul>
-          {Object.keys(types).map((key) => {
-            const identifierType = types[key]
-            return(
-              <TypeListItem
-                key={key}
-                active={key == selected}
-                onClick={() => onSelect(key)}
-              >
-                <Flex
-                  sx={{
-                    flex: "1 1 auto"
-                  }}
+    <>
+      <StorageListContainer>
+        <ResizeHeading 
+          onMouseDown={resize}
+          textTransform="none"
+        > 
+          ACCOUNT {selectedResourceAccount} STORAGE {controls()}
+        </ResizeHeading>
+        <div
+          style={{
+            width: '288px',
+            overflow: 'auto',
+          }}
+        >
+          <ul>
+            {Object.keys(types).map((key) => {
+              const identifierType = types[key]
+              return(
+                <TypeListItem
+                  key={key}
+                  active={key == selected}
+                  onClick={() => onSelect(key)}
                 >
-                  {key}
-                  <StorageBadge
-                    type={identifierType}
-                  />
-                </Flex>
-              </TypeListItem>
-            )
-          })}
-        </ul>
-      </div>
-    </StorageListContainer>
+                  <Flex
+                    sx={{
+                      flex: "1 1 auto"
+                    }}
+                  >
+                    {key}
+                    <StorageBadge
+                      type={identifierType}
+                    />
+                  </Flex>
+                  <Flex>
+                    {identifierType == "Link" &&
+                      <BottomBarItemInsert onClick={async () => {
+                        toggleShowTemplatePopup(true)
+                      }}>
+                        <IoMdAddCircleOutline size="20px" />
+                      </BottomBarItemInsert>
+                    }
+                  </Flex>
+                </TypeListItem>
+              )
+            })}
+          </ul>
+        </div>
+      </StorageListContainer>
+      <AutoTemplatePopup 
+        type="Transaction"
+        visible={showTemplatePopup} 
+        triggerClose={() => {
+          toggleShowTemplatePopup(false)
+        }} 
+      />
+    </>
   );
 }
 
