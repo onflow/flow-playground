@@ -11,7 +11,6 @@ import {SidebarItemEdit} from "layout/SidebarItemEdit";
 import {SidebarItemDelete} from "layout/SidebarItemDelete";
 import useKeyPress from "../hooks/useKeyPress";
 import { ExportButton } from "components/ExportButton";
-import AutoTemplatePopup from "components/AutoTemplatePopup"
 import { getParams } from "../util/url";
 import { useProject } from "providers/Project/projectHooks";
 import { EntityType } from "providers/Project";
@@ -38,8 +37,6 @@ const MenuList: React.FC<MenuListProps> = ({
   onDelete
 }) => {
   const { active } = useProject()
-
-  const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false)
 
   const isEditing = useRef<HTMLInputElement>();
   const [editing, setEditing] = useState([]);
@@ -82,82 +79,73 @@ const MenuList: React.FC<MenuListProps> = ({
   const params = getParams(location.search)
 
   return (
-    <>
-      <SidebarSection>
-        <SidebarHeader>
-          {title}
-          {onInsert && (
-            <SidebarItemInsert onClick={(e: React.SyntheticEvent) => onInsert(e)}>
-              <IoMdAddCircleOutline size="20px" />
-            </SidebarItemInsert>
-          )}
-        </SidebarHeader>
-        <SidebarItems>
-          {items.map((item, i) => {
-            const isActive = active.type === itemType && item.id === params.id
-            return (
-              <SidebarItem
-                title={item.title}
-                key={item.id}
-                active={isActive}
-                onClick={(e: React.SyntheticEvent<Element, Event>) =>
-                  onSelect(e, item.id)
-                }
-              >
-                {/* NOTE: Optimize this to a controlled input! */}
-                <SidebarItemInput
-                  ref={editing.includes(i) ? setEditingRef : () => {}}
-                  type="text"
-                  onBlur={(e: any) => {
-                    if (e.target.value.length === 0) {
-                      isEditing.current.value = item.title;
-                    } else {
-                      toggleEditing(i, e.target.value);
-                    }
-                  }}
-                  defaultValue={item.title}
-                  readonly={!editing.includes(i)}
-                  onChange={e => {
-                    if (e.target.value.length > NAME_MAX_CHARS) {
-                      isEditing.current.value = e.target.value.substr(
-                        0,
-                        NAME_MAX_CHARS - 1
-                      );
-                    }
-                  }}
-                />
-                {isActive && (
-                  <>
-                    <SidebarItemEdit onClick={() => toggleEditing(i, item.title)}>
-                      <FaPen />
-                    </SidebarItemEdit>
+    <SidebarSection>
+      <SidebarHeader>
+        {title}
+        {onInsert && (
+          <SidebarItemInsert onClick={(e: React.SyntheticEvent) => onInsert(e)}>
+            <IoMdAddCircleOutline size="20px" />
+          </SidebarItemInsert>
+        )}
+      </SidebarHeader>
+      <SidebarItems>
+        {items.map((item, i) => {
+          const isActive = active.type === itemType && item.id === params.id
+          return (
+            <SidebarItem
+              title={item.title}
+              key={item.id}
+              active={isActive}
+              onClick={(e: React.SyntheticEvent<Element, Event>) =>
+                onSelect(e, item.id)
+              }
+            >
+              {/* NOTE: Optimize this to a controlled input! */}
+              <SidebarItemInput
+                ref={editing.includes(i) ? setEditingRef : () => {}}
+                type="text"
+                onBlur={(e: any) => {
+                  if (e.target.value.length === 0) {
+                    isEditing.current.value = item.title;
+                  } else {
+                    toggleEditing(i, e.target.value);
+                  }
+                }}
+                defaultValue={item.title}
+                readonly={!editing.includes(i)}
+                onChange={e => {
+                  if (e.target.value.length > NAME_MAX_CHARS) {
+                    isEditing.current.value = e.target.value.substr(
+                      0,
+                      NAME_MAX_CHARS - 1
+                    );
+                  }
+                }}
+              />
+              {isActive && (
+                <>
+                  <SidebarItemEdit onClick={() => toggleEditing(i, item.title)}>
+                    <FaPen />
+                  </SidebarItemEdit>
 
-                    <ExportButton id={item.id} typeName={item.__typename}/>
-                  </>
-                )}
+                  <ExportButton id={item.id} typeName={item.__typename}/>
+                </>
+              )}
 
-                {!editing.includes(i) && isActive && items.length > 1 && (
-                  <SidebarItemDelete
-                    onClick={(e: any) => {
-                      e.stopPropagation();
-                      onDelete(item.id);
-                    }}>
-                    <FaTimes />
-                  </SidebarItemDelete>
-                )}
-              </SidebarItem>
-            );
-          })}
-        </SidebarItems>
-      </SidebarSection>
-      <AutoTemplatePopup 
-        type={title.split(" ")[0]}
-        visible={showTemplatePopup} 
-        triggerClose={() => {
-          toggleShowTemplatePopup(false)
-        }} 
-      />
-    </>
+              {!editing.includes(i) && isActive && items.length > 1 && (
+                <SidebarItemDelete
+                  onClick={(e: any) => {
+                    e.stopPropagation();
+                    onDelete(item.id);
+                  }}>
+                  <FaTimes />
+                </SidebarItemDelete>
+              )}
+            </SidebarItem>
+          );
+        })}
+      </SidebarItems>
+    </SidebarSection>
   );
 };
 
