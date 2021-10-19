@@ -443,14 +443,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                 >
                   <Flex
                     sx={{
-                      // position: "fixed",
-                      // right: "0",
-                      // top: "0"
-                      // bg: "red",
                       justifyContent: "flex-end",
-                      // transform: "translateY(25px) transalteX(-50px)"
-                      // background: "blue",
-                      // transform: "translate(20px, 20px)"
                     }}
                   >
                     <RemoveToastButton
@@ -473,12 +466,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                       boxShadow: "10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff"
                     }}
                   >
-                    {/* <RemoveToastButton
-                      onClick={() => removeNotification(setNotifications, counter)}
-                    >
-                      <AiFillCloseCircle color="grey" size="32"/>
-                    </RemoveToastButton>
- */}
                     <Text
                       sx={{
                         padding: "0.75rem"
