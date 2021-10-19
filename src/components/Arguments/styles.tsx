@@ -134,6 +134,10 @@ interface ToastContainerProps {
 }
 
 export const ToastContainer = styled.div<ToastContainerProps>`
+  z-index: 1000;
+  position: fixed;
+  bottom: 40px;
+  left: 80px;
   display: flex;
   align-items: center;
   justify-content: space-between;

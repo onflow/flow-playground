@@ -46,6 +46,8 @@ export default class ProjectMutator {
     const { project: localProject } = this.client.readQuery({
       query: GET_LOCAL_PROJECT,
     });
+    console.log("LOCAL PROJECT:", localProject);
+    
 
     const parentId = localProject.parentId;
     const accounts = localProject.accounts.map((acc: Account) => acc.draftCode);
@@ -58,6 +60,15 @@ export default class ProjectMutator {
       title: tpl.title,
     }));
 
+    console.log("PARENT ID:", parentId);
+    console.log("ACCOUNTS:", accounts);
+    console.log("SEED:", seed);
+    console.log("TRANSACTION TEMPLATES:", transactionTemplates);
+    console.log("SCRIPT TEMPLATES:", scriptTemplates);
+    
+    
+    
+    
     const { data } = await this.client.mutate({
       mutation: CREATE_PROJECT,
       variables: {
@@ -69,6 +80,8 @@ export default class ProjectMutator {
         scriptTemplates: scriptTemplates,
       },
     });
+    console.log("DATA FROM MUTATE:", data);
+    
 
     const project = data.project;
 
@@ -90,6 +103,7 @@ export default class ProjectMutator {
 
   async saveProject(isFork: boolean) {
     if (this.isLocal) {
+      console.log("IS LOCAL:", this.isLocal);
       await this.createProject();
       unregisterOnCloseSaveMessage();
     }

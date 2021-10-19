@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
+import { AiFillCloseCircle } from 'react-icons/ai'
 import { motion, AnimatePresence } from "framer-motion";
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import { useThemeUI, Box } from 'theme-ui';
+import { RemoveToastButton } from 'layout/RemoveToastButton';
+import { useThemeUI, Box, Text } from 'theme-ui';
 import {
   Account,
   ResultType,
@@ -426,56 +428,76 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
             <ActionButton active={isOk} type={type} onClick={send} />
           </ControlContainer>
         </HoverPanel>
-        {/* {console.log("LAST TX SIGNERS ACCTS OUTSIDE TOAST CONTAINER:", lastTxSignerAccts)}
-        {console.log("LAST UPDATED OUTSIDE TOAST CONTAINER:", lastUpdatedAccts)}
-        {console.log("LAST NOT PROGRESS OUTSIDE TOAST CONTAINER:", !progress)}
-        {console.log("NOTIFICATIONS OUTSIDE PROGRESS TOAST CONTAINER:", notifications)} */}
-        {(lastTxSignerAccts && lastUpdatedAccts && !progress) &&
-            <ToastContainer lastTxHadErrors={lastTxHadErrors}>
-              {/* {console.log("LAST TX SIGNERS ACCTS IN TOAST CONTAINER:", lastTxSignerAccts)}
-              {console.log("LAST UPDATED IN TOAST CONTAINER:", lastUpdatedAccts)}
-              {console.log("LAST NOT PROGRESS IN TOAST CONTAINER:", !progress)}
-              {console.log("NOTIFICATIONS IN PROGRESS TOAST CONTAINER:", notifications)} */}
-              <ul>
-                <AnimatePresence initial={true}>
-                  {notifications.map((id) => (
-                    <motion.li
-                      key={id}
-                      layout
-                      initial={{ opacity: 0, y: 50, scale: 0.3 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
-                    >
-                      <Box
-                        my={1}
-                        sx={{
-                          padding: "0.8rem 0.5rem",
-                          alignItems: "center",
-                          border: `1px solid ${theme.colors.borderDark}`,
-                          backgroundColor: theme.colors.background,
-                          borderRadius: "8px",
-                          width: "250px",
-                          boxShadow: "10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff"
-                        }}
-                      >
-                        {lastTxHadErrors ?
-                          "Flow-ly cow! The ransaction had an error, see 'TRANSACTION RESULTS' for details."
-                          :
-                          `Account${lastTxSignerAccts?.length > 1 ? "s" : ""} 
-                          ${lastTxSignerAccts.join(", ")} completed a transaction,
-                          updating the storage in 
-                          account${lastUpdatedAccts?.length > 1 ? "s" : ""} 
-                          ${lastUpdatedAccts.join(", ")}.`
-                        }
-                      </Box>
-                    </motion.li>
-                  ))}
-                </AnimatePresence>
-              </ul>
-            </ToastContainer>
-        }
-
       </motion.div>
+      {(lastTxSignerAccts && lastUpdatedAccts && !progress) &&
+        <ToastContainer lastTxHadErrors={lastTxHadErrors}>
+          <ul>
+            <AnimatePresence initial={true}>
+              {notifications.map((id) => (
+                <motion.li
+                  key={id}
+                  layout
+                  initial={{ opacity: 0, y: 50, scale: 0.3 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+                >
+                  {/* <Flex
+                    sx={{
+                      // position: "fixed",
+                      // right: "0",
+                      // top: "0"
+                      // bg: "red",
+                      justifyContent: "flex-end",
+                      // transform: "translateY(25px) transalteX(-50px)"
+                      background: "blue",
+                      transform: "translate(20px, 20px)"
+                    }}
+                  >
+                    <RemoveToastButton>
+                      <AiOutlineCloseCircle color="green" size="32"/>
+                    </RemoveToastButton>
+                  </Flex> */}
+                  <Box
+                    my={1}
+                    sx={{
+                      // marginTop: "0.0rem",
+                      padding: "0.8rem 0.5rem",
+                      alignItems: "center",
+                      border: `1px solid ${theme.colors.borderDark}`,
+                      backgroundColor: theme.colors.background,
+                      borderRadius: "8px",
+                      maxWidth: "500px",
+                      boxShadow: "10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff"
+                    }}
+                  >
+                    <RemoveToastButton
+                      onClick={() => removeNotification(setNotifications, counter)}
+                    >
+                      <AiFillCloseCircle color="grey" size="32"/>
+                    </RemoveToastButton>
+
+                    <Text
+                      sx={{
+                        padding: "0.75rem"
+                      }}
+                    >
+                      {lastTxHadErrors ?
+                        "Floh-ly cow! The transaction had an error, see 'TRANSACTION RESULTS' for details."
+                        :
+                        `Account${lastTxSignerAccts?.length > 1 ? "s" : ""} 
+                        ${lastTxSignerAccts.join(", ")} completed a transaction,
+                        updating the storage in 
+                        account${lastUpdatedAccts?.length > 1 ? "s" : ""} 
+                        ${lastUpdatedAccts.join(", ")}.`
+                      }
+                    </Text>
+                  </Box>
+                </motion.li>
+              ))}
+            </AnimatePresence>
+          </ul>
+        </ToastContainer>
+      }
     </>
   );
 };
