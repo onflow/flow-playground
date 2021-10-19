@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ResultType } from 'api/apollo/generated/graphql';
-import AutoTemplatePopup from "components/AutoTemplatePopup"
+import TemplatePopup from "components/TemplatePopup"
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { useProject } from 'providers/Project/projectHooks';
@@ -173,7 +173,7 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
           </ul>
         </div>
       </StorageListContainer>
-      <AutoTemplatePopup 
+      <TemplatePopup 
         type="Transaction"
         visible={showTemplatePopup} 
         triggerClose={() => {

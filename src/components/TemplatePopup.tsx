@@ -23,7 +23,7 @@ import {
   Label,
 } from 'components/Arguments/SingleArgument/styles';
 
-const AutoTemplatePopup: React.FC<{
+const TemplatePopup: React.FC<{
   type: string;
   visible: boolean;
   triggerClose?: (e: React.SyntheticEvent) => any;
@@ -179,4 +179,4 @@ const AutoTemplatePopup: React.FC<{
   );
 };
 
-export default AutoTemplatePopup;
+export default TemplatePopup;
