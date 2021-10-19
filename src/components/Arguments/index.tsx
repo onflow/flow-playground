@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import { RemoveToastButton } from 'layout/RemoveToastButton';
-import { useThemeUI, Box, Text } from 'theme-ui';
+import { useThemeUI, Box, Text, Flex } from 'theme-ui';
 import {
   Account,
   ResultType,
@@ -441,7 +441,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
                 >
-                  {/* <Flex
+                  <Flex
                     sx={{
                       // position: "fixed",
                       // right: "0",
@@ -449,18 +449,21 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                       // bg: "red",
                       justifyContent: "flex-end",
                       // transform: "translateY(25px) transalteX(-50px)"
-                      background: "blue",
-                      transform: "translate(20px, 20px)"
+                      // background: "blue",
+                      // transform: "translate(20px, 20px)"
                     }}
                   >
-                    <RemoveToastButton>
-                      <AiOutlineCloseCircle color="green" size="32"/>
+                    <RemoveToastButton
+                      onClick={() => removeNotification(setNotifications, counter)}
+                    >
+                      <AiFillCloseCircle color="grey" size="32"/>
                     </RemoveToastButton>
-                  </Flex> */}
+                  </Flex>
+
                   <Box
                     my={1}
                     sx={{
-                      // marginTop: "0.0rem",
+                      marginTop: "0.0rem",
                       padding: "0.8rem 0.5rem",
                       alignItems: "center",
                       border: `1px solid ${theme.colors.borderDark}`,
@@ -470,12 +473,12 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                       boxShadow: "10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff"
                     }}
                   >
-                    <RemoveToastButton
+                    {/* <RemoveToastButton
                       onClick={() => removeNotification(setNotifications, counter)}
                     >
                       <AiFillCloseCircle color="grey" size="32"/>
                     </RemoveToastButton>
-
+ */}
                     <Text
                       sx={{
                         padding: "0.75rem"

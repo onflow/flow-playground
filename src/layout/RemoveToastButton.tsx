@@ -9,10 +9,11 @@ export const RemoveToastButton = styled.button`
   // border-radius: 100%;
 
   background: transparent;
-  position: absolute;
-  right: 0;
-  top: 0;
-  transform: translate(30%, -30%);
+  // background: red;
+  // position: absolute;
+  // right: 0;
+  // top: 0;
+  transform: translate(25%, 50%);
   color: ${theme.colors.grey};
   &:hover {
     color: ${theme.colors.heading};
