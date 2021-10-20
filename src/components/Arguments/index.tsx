@@ -231,7 +231,57 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     updatedStorageAccts, 
     lastTxSigners 
   } = useProject();
+  // console.log("PROJECT IN ARGS INDEX:", project);
   
+  // const [updatedStorageAccts2, setUpdatedStorageAccts2] = useState< number[] | null>(null)
+  // const [allAccountsStorage2, setAllAccountsStorage2] = useState< string[] | null>(null)
+  // useEffect(() => {
+
+  //   if (allAccountsStorage2) {
+  //     let changedAccounts: number[] = []
+  //     project.accounts.map((account, index) => {
+  //       account.state !== allAccountsStorage2[index] && changedAccounts.push(index)
+  //     })
+  //     setUpdatedStorageAccts2(changedAccounts)
+  //   }
+
+  //   if (project) {
+  //     let accountsStorage: string[] = []
+  //     project.accounts.map((account) => {
+  //       accountsStorage.push(account.state)
+  //     })
+  //     setAllAccountsStorage2(accountsStorage)
+  //   }
+  // },[project])
+
+  const [accountsDetail, setAccountsDetail] = useState(project.accounts)
+  const [notifications2, setNotifications2] = useState({})
+  console.log("NOTIFICATIONS2:::::::::::", notifications2);
+  const [counter2, setCounter2] = useState(0)
+  useEffect(() => {
+    if (project) {
+      setAccountsDetail((prevAccounts) => {
+        const latestAccounts = project.accounts
+        const updatedAccounts = latestAccounts.filter((account, index)=> account.state !== prevAccounts[index].state)
+        console.log("COMPARE RESULTS", updatedAccounts);
+
+        if (updatedAccounts.length > 0) {
+          setNotifications2((prev) => {
+            return {
+              ...prev,
+              [counter2]: updatedAccounts
+            }
+          });
+          setCounter2((prev) => prev + 1);
+        }
+        
+
+        return project.accounts
+      })
+    }
+  },[project])
+
+ 
   const storageAcctKeys = Object.keys(storageMap)
 
   // create state for account signers and accounts who's sstorage is updated after a tx
@@ -322,7 +372,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           rawResult = await transactionFactory(signersAccounts, args);
           const txErrors = rawResult.data.createTransactionExecution.errors
           txErrors?.length > 0 ? setLastTxHadErrors(true) : setLastTxHadErrors(false)
-          
           
           setNotifications((prev) => [...prev, counter]);
           setTimeout(() => removeNotification(setNotifications, counter), 5000);
@@ -429,7 +478,76 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           </ControlContainer>
         </HoverPanel>
       </motion.div>
-      {(lastTxSignerAccts && lastUpdatedAccts && !progress) &&
+
+      <ToastContainer lastTxHadErrors={false}>
+        <ul>
+          <AnimatePresence initial={true}>
+            {Object.keys(notifications2).map((id) => {
+
+              const updatedAccounts = notifications2[id]
+              // console.log("UPDATED ACCOUNTS:", updatedAccounts);
+
+              let updatedStorageAccts: string[] = []
+              updatedAccounts.map((acct: any) => {
+                const addr = acct.address
+                const acctNum = addr.charAt(addr.length-1)
+                const acctHex = `0x0${acctNum}`
+                updatedStorageAccts.push(acctHex)
+              })
+              console.log("UPDATED STORAGE ACCOUNTS:", updatedStorageAccts);
+              
+                      
+
+              return (
+                <motion.li
+                  key={id}
+                  layout
+                  initial={{ opacity: 0, y: 50, scale: 0.3 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+                >
+                  <Flex
+                    sx={{
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <RemoveToastButton
+                      // onClick={() => removeNotification(setNotifications, counter)}
+                    >
+                      <AiFillCloseCircle color="grey" size="32"/>
+                    </RemoveToastButton>
+                  </Flex>
+
+                  <Box
+                    my={1}
+                    sx={{
+                      marginTop: "0.0rem",
+                      padding: "0.8rem 0.5rem",
+                      alignItems: "center",
+                      border: `1px solid ${theme.colors.borderDark}`,
+                      backgroundColor: theme.colors.background,
+                      borderRadius: "8px",
+                      maxWidth: "500px",
+                      boxShadow: "10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff"
+                    }}
+                  >
+                    <Text
+                      sx={{
+                        padding: "0.75rem"
+                      }}
+                    >
+                      Accoun(s) {updatedStorageAccts.join(", ")} were updated
+                    </Text>
+                  </Box>
+                </motion.li>
+              )
+
+            })}
+          </AnimatePresence>
+        </ul>
+      </ToastContainer>
+
+      {/* {(lastTxSignerAccts && lastUpdatedAccts && !progress) &&
         <ToastContainer lastTxHadErrors={lastTxHadErrors}>
           <ul>
             <AnimatePresence initial={true}>
@@ -487,7 +605,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
             </AnimatePresence>
           </ul>
         </ToastContainer>
-      }
+      } */}
     </>
   );
 };
