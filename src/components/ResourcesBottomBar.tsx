@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import { ResultType } from 'api/apollo/generated/graphql';
 import { Badge, Flex, Box, Divider } from 'theme-ui';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { IoMdAddCircleOutline } from "react-icons/io";
@@ -15,9 +14,6 @@ import { storageMap } from '../util/accounts';
 import { getStorageData } from '../util/storage';
 import theme from '../theme';
 import { ResizeHeading } from 'layout/Heading';
-
-// import { RenderResponse } from 'components/RenderResponse';
-// import { ClearResults } from './TransactionBottomBar';
 
 const RESULT_PANEL_MIN_HEIGHT = 80;
 const STORAGE_PANEL_MIN_HEIGHT = 80 + RESULT_PANEL_MIN_HEIGHT;
@@ -49,16 +45,6 @@ const AccountStateContainer = styled.div<{ height: number }>`
   background: white;
   border-top: var(--gap) solid var(--key);
   height: ${(p) => p.height}px;
-`;
-
-const DeploymentResultContainer = styled.div<{ height: number }>`
-  position: absolute;
-  bottom: 0px;
-  width: 100%;
-  background: white;
-  border-top: var(--gap) solid var(--key);
-  height: ${(p) => p.height}px;
-  overflow-y: hidden;
 `;
 
 const StorageListContainer = styled.div`
