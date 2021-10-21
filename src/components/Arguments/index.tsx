@@ -248,30 +248,8 @@ const removeNotification2 = (set: any, id: number) => {
     updatedStorageAccts, 
     lastTxSigners 
   } = useProject();
-  // console.log("PROJECT IN ARGS INDEX:", project);
-  
-  // const [updatedStorageAccts2, setUpdatedStorageAccts2] = useState< number[] | null>(null)
-  // const [allAccountsStorage2, setAllAccountsStorage2] = useState< string[] | null>(null)
-  // useEffect(() => {
 
-  //   if (allAccountsStorage2) {
-  //     let changedAccounts: number[] = []
-  //     project.accounts.map((account, index) => {
-  //       account.state !== allAccountsStorage2[index] && changedAccounts.push(index)
-  //     })
-  //     setUpdatedStorageAccts2(changedAccounts)
-  //   }
-
-  //   if (project) {
-  //     let accountsStorage: string[] = []
-  //     project.accounts.map((account) => {
-  //       accountsStorage.push(account.state)
-  //     })
-  //     setAllAccountsStorage2(accountsStorage)
-  //   }
-  // },[project])
-
-  const [accountsDetail, setAccountsDetail] = useState(project.accounts)
+  const [_, setAccountsDetail] = useState(project.accounts)
   const [notifications2, setNotifications2] = useState({})
   console.log("NOTIFICATIONS2:::::::::::", notifications2);
   const [counter2, setCounter2] = useState(0)
