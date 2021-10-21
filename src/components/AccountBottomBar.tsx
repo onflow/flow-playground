@@ -174,7 +174,6 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
         </div>
       </StorageListContainer>
       <TemplatePopup 
-        type="Transaction"
         visible={showTemplatePopup} 
         triggerClose={() => {
           toggleShowTemplatePopup(false)

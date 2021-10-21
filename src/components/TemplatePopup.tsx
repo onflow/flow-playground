@@ -24,10 +24,9 @@ import {
 } from 'components/Arguments/SingleArgument/styles';
 
 const TemplatePopup: React.FC<{
-  type: string;
   visible: boolean;
   triggerClose?: (e: React.SyntheticEvent) => any;
-}> = ({ type, visible, triggerClose }) => {
+}> = ({ visible, triggerClose }) => {
   
   const { project, mutator, selectedResourceAccount } = useProject();
 
@@ -39,6 +38,7 @@ const TemplatePopup: React.FC<{
 
   const [processing, setProcessing] = useState(false);
   const [templateName, setTemplateName] = useState("My amazing script or transaction");
+  const [templateType, setTemplateType] = useState("Script")
 
   const [selectedCapability, setSelectedCapability] = useState< string | null >(capabilitiesKeys[0] || null)
 
@@ -104,9 +104,30 @@ const TemplatePopup: React.FC<{
         variants={popupFrames}
       >
         <PopupHeader mb="20px" color={theme.colors.darkGrey} lineColor={theme.colors.primary}>
-          {`Create a ${type} from a template`}
+          {`Create a ${templateType} from a template`}
         </PopupHeader>
         <InputBlock mb={'12px'}>
+          <Label>Type</Label>
+          <Select
+            onChange={(event) => {
+              setTemplateType(event.target.value)
+            }}
+            defaultValue="Script"
+            sx={{
+              border: "1px solid #C4C4C4",
+              fontSize: "14px",
+              color: "#000",
+              padding: "8px",
+              width: "100%",
+              fontWeight: "bold",
+              marginBottom: "5px",
+              borderRadius: "2px"
+            }}
+          >
+            <option>Script</option>
+            <option>Transaction</option>
+          </Select>
+
           <Label>Capability</Label>
           <Select 
             onChange={(event) => {
@@ -154,10 +175,10 @@ const TemplatePopup: React.FC<{
 
                 const capData = capabilities[selectedCapability]
 
-                if (type === "Transaction") {
+                if (templateType=== "Transaction") {
                     const res = await mutator.createTransactionTemplate(getInterpolatedTemplate("tx", capData.contractAddr, capData.path, `${capData.resourceContract}.${capData.resource}`, capData.contractImplementedInterfaces.join(",")), templateName)
                     navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
-                } else if (type === "Script") {
+                } else if (templateType === "Script") {
                     const res = await mutator.createScriptTemplate(getInterpolatedTemplate("script", capData.contractAddr, capData.path, `${capData.resourceContract}.${capData.resource}`, capData.contractImplementedInterfaces.join(",")), templateName)
                     navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
                 }
