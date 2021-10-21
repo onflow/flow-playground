@@ -233,7 +233,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   useEffect(() => {
     setProjectAccts((prevAccounts) => {
       const latestAccounts = project.accounts;
-      const updatedAccounts = latestAccounts.filter((account, index)=> account.state !== prevAccounts[index].state);
+      const updatedAccounts = latestAccounts.filter((latestAccount, index)=> latestAccount.state !== prevAccounts[index].state);
 
       if (updatedAccounts.length > 0) {
         setNotifications((prev) => {

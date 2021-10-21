@@ -46,7 +46,6 @@ const Sidebar: React.FC = () => {
           navigate(`/${projectPath}?type=tx&id=${id}&storage=${selectedResourceAccount || 'none'}`)
         }}
         onInsert={async () => {
-          console.log("POOPPP");
           const res = await mutator.createTransactionTemplate("", `New Transaction`)
           navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
         }}
@@ -67,7 +66,6 @@ const Sidebar: React.FC = () => {
           navigate(`/${projectPath}?type=script&id=${id}&storage=${selectedResourceAccount || 'none'}`)
         }}
         onInsert={async () => {
-          console.log("POOPPP");
           const res = await mutator.createScriptTemplate("", `New Script`);
           navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
         }}
