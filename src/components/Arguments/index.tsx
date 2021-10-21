@@ -12,7 +12,6 @@ import {
   useSetExecutionResultsMutation,
 } from 'api/apollo/generated/graphql';
 
-import { storageMap } from '../../util/accounts';
 import { ArgumentsProps } from 'components/Arguments/types';
 import { ExecuteCommandRequest } from 'monaco-languageclient';
 
@@ -173,37 +172,15 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const [values, setValue] = useState<IValue>({});
   const constraintsRef = useRef();
 
-  const [notifications, setNotifications] = useState([]);
-  const [counter, setCounter] = useState(0);
-  const removeNotification = (set: { (setType: (prev: number[]) => number[]): void; }, id: number) => {
-    set((prev: number[]) => {
-      const newArr = [...prev];
-      newArr.splice(
-        newArr.findIndex((i) => i === id),
-        1
-      );
-      return newArr;
-    });
-  };
-const removeNotification2 = (set: any, id: number) => {
-  // console.log("SET:", set);
-  console.log("ID:", id);
-  set((prev) => {
-    console.log("PREV:", prev);
-    
-    delete prev[id]
+  const removeNotification2 = (set: any, id: number) => {
+    set((prev: any[]) => {
+      delete prev[id]
+      return {
+        ...prev
+      }
+    })
+  }
 
-    console.log("PREV AFTER DELETE:", prev);
-    
-    
-    return {
-      ...prev
-    }
-    // return delete prev.id
-  })
-}
-
-  // const errors = validate(list, values);
   const numberOfErrors = Object.keys(errors).length;
   const notEnoughSigners = needSigners && selected.length < signers;
   const haveErrors = numberOfErrors > 0 || notEnoughSigners;
@@ -245,13 +222,13 @@ const removeNotification2 = (set: any, id: number) => {
     project, 
     active, 
     isSavingCode, 
-    updatedStorageAccts, 
     lastTxSigners 
   } = useProject();
+  console.log("LAST TX SIGNERS:", lastTxSigners);
+  
 
   const [_, setAccountsDetail] = useState(project.accounts)
   const [notifications2, setNotifications2] = useState({})
-  console.log("NOTIFICATIONS2:::::::::::", notifications2);
   const [counter2, setCounter2] = useState(0)
   useEffect(() => {
     if (project) {
@@ -278,9 +255,6 @@ const removeNotification2 = (set: any, id: number) => {
   const { accounts } = project;
 
   const signersAccounts = selected.map((i) => accounts[i]);
-
-
-  const [lastTxHadErrors, setLastTxHadErrors] = useState< boolean | null >(null)
 
   const send = async () => {
     if (!processingStatus) {
@@ -338,12 +312,6 @@ const removeNotification2 = (set: any, id: number) => {
         case EntityType.TransactionTemplate: {
           resultType = ResultType.Transaction;
           rawResult = await transactionFactory(signersAccounts, args);
-          const txErrors = rawResult.data.createTransactionExecution.errors
-          txErrors?.length > 0 ? setLastTxHadErrors(true) : setLastTxHadErrors(false)
-          
-          setNotifications((prev) => [...prev, counter]);
-          setTimeout(() => removeNotification(setNotifications, counter), 5000);
-          setCounter((prev) => prev + 1);
           break;
         }
 
@@ -446,13 +414,10 @@ const removeNotification2 = (set: any, id: number) => {
           </ControlContainer>
         </HoverPanel>
       </motion.div>
-
       <ToastContainer>
         <ul>
           <AnimatePresence initial={true}>
             {Object.keys(notifications2).map((id) => {
-
-              
 
               const updatedAccounts = notifications2[id]
               console.log(`UPDATED ACCOUNTS FROM TOAST ${id}:`, updatedAccounts);
@@ -506,7 +471,7 @@ const removeNotification2 = (set: any, id: number) => {
                         padding: "0.75rem"
                       }}
                     >
-                      Accoun(s) {updatedStorageAccts.join(", ")} were updated
+                      Accoun(s) {updatedStorageAccts.join(", ")} were updated by {lastTxSigners.join(", ")}
                     </Text>
                   </Box>
                 </motion.li>
@@ -516,66 +481,6 @@ const removeNotification2 = (set: any, id: number) => {
           </AnimatePresence>
         </ul>
       </ToastContainer>
-
-      {/* {(lastTxSignerAccts && lastUpdatedAccts && !progress) &&
-        <ToastContainer lastTxHadErrors={lastTxHadErrors}>
-          <ul>
-            <AnimatePresence initial={true}>
-              {notifications.map((id) => (
-                <motion.li
-                  key={id}
-                  layout
-                  initial={{ opacity: 0, y: 50, scale: 0.3 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
-                >
-                  <Flex
-                    sx={{
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <RemoveToastButton
-                      onClick={() => removeNotification(setNotifications, counter)}
-                    >
-                      <AiFillCloseCircle color="grey" size="32"/>
-                    </RemoveToastButton>
-                  </Flex>
-
-                  <Box
-                    my={1}
-                    sx={{
-                      marginTop: "0.0rem",
-                      padding: "0.8rem 0.5rem",
-                      alignItems: "center",
-                      border: `1px solid ${theme.colors.borderDark}`,
-                      backgroundColor: theme.colors.background,
-                      borderRadius: "8px",
-                      maxWidth: "500px",
-                      boxShadow: "10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff"
-                    }}
-                  >
-                    <Text
-                      sx={{
-                        padding: "0.75rem"
-                      }}
-                    >
-                      {lastTxHadErrors ?
-                        "Floh-ly cow! The transaction had an error, see 'TRANSACTION RESULTS' for details."
-                        :
-                        `Account${lastTxSignerAccts?.length > 1 ? "s" : ""} 
-                        ${lastTxSignerAccts.join(", ")} completed a transaction,
-                        updating the storage in 
-                        account${lastUpdatedAccts?.length > 1 ? "s" : ""} 
-                        ${lastUpdatedAccts.join(", ")}.`
-                      }
-                    </Text>
-                  </Box>
-                </motion.li>
-              ))}
-            </AnimatePresence>
-          </ul>
-        </ToastContainer>
-      } */}
     </>
   );
 };
