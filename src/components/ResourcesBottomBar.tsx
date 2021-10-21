@@ -356,27 +356,11 @@ const AccountState: React.FC<{
             <StateContainer value={storage[selected || identifiers[0]]} path={paths[selected || identifiers[0]]} />
           </AccountStateContainer>
       )}
-      <DeploymentResultContainer height={resultHeight}>
-      {console.log("DEPLOYMENT RESULT:", resultHeight)}
-        <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
-          Deployment Result
-          <ClearResults type={ResultType.Contract} />
-          {resultHeight > 40 ? (
-            <GoChevronDown size="16px" onClick={() => setResultHeight(40)} />
-          ) : (
-            <GoChevronUp
-              size="16px"
-              onClick={() => setResultHeight(RESULT_PANEL_MIN_HEIGHT * 2)}
-            />
-          )}
-        </ResizeHeading>
-        <RenderResponse resultType={ResultType.Contract} />
-      </DeploymentResultContainer>
     </>
   );
 };
 
-const ResourcesBottomBar: React.FC = () => {
+const AccountBottomBar: React.FC = () => {
   const { project, isLoading, selectedResourceAccount } = useProject();
 
   return (
@@ -396,4 +380,4 @@ const ResourcesBottomBar: React.FC = () => {
   );
 };
 
-export default ResourcesBottomBar;
+export default AccountBottomBar;

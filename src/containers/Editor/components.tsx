@@ -21,6 +21,8 @@ import AccountBottomBar from "components/AccountBottomBar";
 import TransactionBottomBar from "components/TransactionBottomBar";
 import ScriptBottomBar from "components/ScriptBottomBar";
 import { Version } from "components/CadenceVersion";
+import DeploymentBottomBar from "components/DeploymentBottomBar";
+import ResourcesBottomBar from "components/AccountBottomBar";
 
 const Header: React.FC = ({ children }) => {
   return (
@@ -214,15 +216,28 @@ type BottomBarContainerProps = {
 const BottomBarContainer: React.FC<BottomBarContainerProps> = ({ active }) => {
   switch (active.type) {
     case EntityType.Account:
-      return <AccountBottomBar />;
+      return <> <ResourcesBottomBar /> <DeploymentBottomBar /> </>;
     case EntityType.TransactionTemplate:
-      return (<> <AccountBottomBar />  <TransactionBottomBar /> </>);
+      return (<> <ResourcesBottomBar />  <TransactionBottomBar /> </>);
     case EntityType.ScriptTemplate:
-      return (<> <AccountBottomBar />  <ScriptBottomBar /> </>);
+      return (<> <ResourcesBottomBar />  <ScriptBottomBar /> </>);
     default:
       return null;
   }
 };
+
+// const BottomBarContainer: React.FC<BottomBarContainerProps> = ({ active }) => {
+//   switch (active.type) {
+//     case EntityType.Account:
+//       return <AccountBottomBar />;
+//     case EntityType.TransactionTemplate:
+//       return (<> <AccountBottomBar />  <TransactionBottomBar /> </>);
+//     case EntityType.ScriptTemplate:
+//       return (<> <AccountBottomBar />  <ScriptBottomBar /> </>);
+//     default:
+//       return null;
+//   }
+// };
 
 const AnimatedText = styled.div`
   position: relative;

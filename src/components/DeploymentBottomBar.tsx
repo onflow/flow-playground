@@ -262,49 +262,45 @@ const StateContainer: React.FC<{
   </div>
 );
 
-const AccountState: React.FC<{
-  state: any;
-  selectedResourcesAccount: string;
-  renderDeployButton: () => JSX.Element;
-}> = ({ state, selectedResourcesAccount }) => {
+const DeploymentBottomBar: React.FC = () => {
 
-  const { storage, paths, types } = getStorageData(state);
+  // const { storage } = getStorageData(state);
 
-  const identifiers = Object.keys(storage);
+  // const identifiers = Object.keys(storage);
  
-  // @ts-ignore
-  const [selected, setSelected] = useState(
-    identifiers.length > 0 ? identifiers[0] : null,
-  );
+  // // @ts-ignore
+  // const [selected, setSelected] = useState(
+  //   identifiers.length > 0 ? identifiers[0] : null,
+  // );
 
   const { x, y } = useMousePosition();
-  const [storageHeight, setStorageHeight] = useState(STORAGE_PANEL_MIN_HEIGHT);
+  // const [storageHeight, setStorageHeight] = useState(STORAGE_PANEL_MIN_HEIGHT);
   const [resultHeight, setResultHeight] = useState(RESULT_PANEL_MIN_HEIGHT);
-  const [isResizingStorage, setIsResizingStorage] = useState(false);
+  // const [isResizingStorage, setIsResizingStorage] = useState(false);
   const [isResizingResult, setIsResizingResult] = useState(false);
 
-  const toggleResizingStorage = (toggle: boolean) => {
-    setIsResizingStorage(toggle);
-  };
+  // const toggleResizingStorage = (toggle: boolean) => {
+  //   setIsResizingResult(toggle);
+  // };
 
   const toggleResizingResult = (toggle: boolean) => {
     setIsResizingResult(toggle);
   };
 
-  const toggleResizeListener = () => {
-    toggleResizingStorage(false);
-    toggleResizingResult(false);
-  };
+  // const toggleResizeListener = () => {
+  //   toggleResizingStorage(false);
+  //   toggleResizingResult(false);
+  // };
 
-  useEffect(() => {
-    if (
-      isResizingStorage &&
-      y > STORAGE_PANEL_MIN_HEIGHT - 30 + resultHeight &&
-      y < window.innerHeight - PLAYGROUND_HEADER_HEIGHT
-    ) {
-      setStorageHeight(y - resultHeight);
-    }
-  }, [x, y]);
+  // useEffect(() => {
+  //   if (
+  //     isResizingStorage &&
+  //     y > STORAGE_PANEL_MIN_HEIGHT - 30 + resultHeight &&
+  //     y < window.innerHeight - PLAYGROUND_HEADER_HEIGHT
+  //   ) {
+  //     setStorageHeight(y - resultHeight);
+  //   }
+  // }, [x, y]);
 
   useEffect(() => {
     if (
@@ -316,46 +312,15 @@ const AccountState: React.FC<{
     }
   }, [x, y]);
 
-  useEffect(() => {
-    window.addEventListener('mouseup', toggleResizeListener, false);
-    return () => {
-      window.removeEventListener('mouseup', toggleResizeListener, false);
-    };
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener('mouseup', toggleResizeListener, false);
+  //   return () => {
+  //     window.removeEventListener('mouseup', toggleResizeListener, false);
+  //   };
+  // }, []);
 
   return (
     <>
-      {selectedResourcesAccount !== 'none' && (
-          <AccountStateContainer height={storageHeight + resultHeight}>
-          {console.log("ACCOUNT STATE:", storageHeight + resultHeight)}
-            <IdentifierTypeList
-              types={types}
-              selected={selected}
-              onSelect={setSelected}
-              resize={() => toggleResizingStorage(true)}
-              controls={() => {
-                return (
-                  <SidebarItemInsert grab={false}>
-                    {storageHeight > 40 ? (
-                      <GoChevronDown
-                        size="16px"
-                        onClick={() => setStorageHeight(40)}
-                      />
-                    ) : (
-                      <GoChevronUp
-                        size="16px"
-                        onClick={() =>
-                          setStorageHeight(STORAGE_PANEL_MIN_HEIGHT * 2)
-                        }
-                      />
-                    )}
-                  </SidebarItemInsert>
-                );
-              }}
-            />
-            <StateContainer value={storage[selected || identifiers[0]]} path={paths[selected || identifiers[0]]} />
-          </AccountStateContainer>
-      )}
       <DeploymentResultContainer height={resultHeight}>
       {console.log("DEPLOYMENT RESULT:", resultHeight)}
         <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
@@ -376,24 +341,4 @@ const AccountState: React.FC<{
   );
 };
 
-const ResourcesBottomBar: React.FC = () => {
-  const { project, isLoading, selectedResourceAccount } = useProject();
-
-  return (
-    <FeedbackRoot>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        selectedResourceAccount && <AccountState
-          state={project.accounts[storageMap[selectedResourceAccount] || 0].state}
-          selectedResourcesAccount={selectedResourceAccount}
-          renderDeployButton={() => {
-            return <FeedbackActions />;
-          }}
-        />
-      )}
-    </FeedbackRoot>
-  );
-};
-
-export default ResourcesBottomBar;
+export default DeploymentBottomBar;
