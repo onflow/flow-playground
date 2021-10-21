@@ -225,30 +225,29 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     lastTxSigners 
   } = useProject();
 
-  const [_, setAccountsDetail] = useState(project.accounts)
-  const [notifications, setNotifications] = useState< { [identifier: string]: string[] } >({})
-  const [counter, setCounter] = useState(0)
-  useEffect(() => {
-    if (project) {
-      setAccountsDetail((prevAccounts) => {
-        const latestAccounts = project.accounts
-        const updatedAccounts = latestAccounts.filter((account, index)=> account.state !== prevAccounts[index].state)
+  const [notifications, setNotifications] = useState< { [identifier: string]: string[] } >({});
 
-        if (updatedAccounts.length > 0) {
-          setNotifications((prev) => {
-            return {
-              ...prev,
-              [counter]: updatedAccounts
-            }
-          });
-          setTimeout(() => removeNotification(setNotifications, counter), 5000)
-          setCounter((prev) => prev + 1);
-        }
-        return project.accounts
-      })
-    }
-  },[project])
- 
+  // @ts-ignore: this state is used to compare and render notifications
+  const [_, setProjectAccts] = useState(project.accounts);
+  const [counter, setCounter] = useState(0);
+  useEffect(() => {
+    setProjectAccts((prevAccounts) => {
+      const latestAccounts = project.accounts;
+      const updatedAccounts = latestAccounts.filter((account, index)=> account.state !== prevAccounts[index].state);
+
+      if (updatedAccounts.length > 0) {
+        setNotifications((prev) => {
+          return {
+            ...prev,
+            [counter]: updatedAccounts
+          };
+        });
+        setTimeout(() => removeNotification(setNotifications, counter), 5000);
+        setCounter((prev) => prev + 1);
+      };
+      return project.accounts;
+    });
+  },[project]);
 
   const { accounts } = project;
 
@@ -356,8 +355,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     statusIcon = <FaSpinner className="spin" />;
     statusMessage = 'Please, wait...';
   }
-  console.log("PROGRESS:", progress);
-  
 
   const actions = { goTo, hover, hideDecorations };
 
@@ -419,15 +416,15 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           <AnimatePresence initial={true}>
             {Object.keys(notifications).map((id) => {
 
-              const updatedAccounts = notifications[id]
+              const updatedAccounts = notifications[id];
 
-              let updatedStorageAccts: string[] = []
+              let updatedStorageAccts: string[] = [];
               updatedAccounts.map((acct: any) => {
-                const addr = acct.address
-                const acctNum = addr.charAt(addr.length-1)
-                const acctHex = `0x0${acctNum}`
-                updatedStorageAccts.push(acctHex)
-              })
+                const addr = acct.address;
+                const acctNum = addr.charAt(addr.length-1);
+                const acctHex = `0x0${acctNum}`;
+                updatedStorageAccts.push(acctHex);
+              });
 
               return (
                 <motion.li
@@ -448,7 +445,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                       <AiFillCloseCircle color="grey" size="32"/>
                     </RemoveToastButton>
                   </Flex>
-
                   <Box
                     my={1}
                     sx={{
