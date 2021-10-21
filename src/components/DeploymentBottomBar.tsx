@@ -16,15 +16,11 @@ const DeploymentResultContainer = styled.div<{ height: number }>`
   display: flex;
   flex-direction: row;
   justify-content: space-even;
-  // height: 100%;
   left: 245px;
   width: calc(100vw - 245px);
-
   position: absolute;
   bottom: 0px;
-  // width: 100%;
   background: white;
-  // border-top: var(--gap) solid var(--key);
   height: ${(p) => p.height}px;
   overflow-y: hidden;
 `;
