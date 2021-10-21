@@ -172,7 +172,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const [values, setValue] = useState<IValue>({});
   const constraintsRef = useRef();
 
-  const removeNotification2 = (set: any, id: number) => {
+  const removeNotification = (set: any, id: number) => {
     set((prev: any[]) => {
       delete prev[id]
       return {
@@ -227,7 +227,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
   const [_, setAccountsDetail] = useState(project.accounts)
   const [notifications, setNotifications] = useState< { [identifier: string]: string[] } >({})
-  const [counter2, setCounter2] = useState(0)
+  const [counter, setCounter] = useState(0)
   useEffect(() => {
     if (project) {
       setAccountsDetail((prevAccounts) => {
@@ -238,11 +238,11 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           setNotifications((prev) => {
             return {
               ...prev,
-              [counter2]: updatedAccounts
+              [counter]: updatedAccounts
             }
           });
-          setTimeout(() => removeNotification2(setNotifications, counter2), 5000)
-          setCounter2((prev) => prev + 1);
+          setTimeout(() => removeNotification(setNotifications, counter), 5000)
+          setCounter((prev) => prev + 1);
         }
         return project.accounts
       })
@@ -356,6 +356,8 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     statusIcon = <FaSpinner className="spin" />;
     statusMessage = 'Please, wait...';
   }
+  console.log("PROGRESS:", progress);
+  
 
   const actions = { goTo, hover, hideDecorations };
 
@@ -418,7 +420,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
             {Object.keys(notifications).map((id) => {
 
               const updatedAccounts = notifications[id]
-              // console.log(`UPDATED ACCOUNTS FROM TOAST ${id}:`, updatedAccounts);
 
               let updatedStorageAccts: string[] = []
               updatedAccounts.map((acct: any) => {
@@ -427,9 +428,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                 const acctHex = `0x0${acctNum}`
                 updatedStorageAccts.push(acctHex)
               })
-              // console.log("UPDATED STORAGE ACCOUNTS:", updatedStorageAccts);
-              
-                      
 
               return (
                 <motion.li
@@ -445,7 +443,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                     }}
                   >
                     <RemoveToastButton
-                      onClick={() => removeNotification2(setNotifications, id)}
+                      onClick={() => removeNotification(setNotifications, parseInt(id))}
                     >
                       <AiFillCloseCircle color="grey" size="32"/>
                     </RemoveToastButton>
@@ -469,19 +467,15 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                         padding: "0.75rem"
                       }}
                     >
-                      {
-                        `Account${lastTxSigners?.length > 1 ? "s" : ""}
+                      {`Account${lastTxSigners?.length > 1 ? "s" : ""}
                         ${lastTxSigners.join(", ")} completed a transaction,
                         updating the storage in
                         account${updatedStorageAccts?.length > 1 ? "s" : ""}
-                        ${updatedStorageAccts.join(", ")}.`
-                      }
-
+                        ${updatedStorageAccts.join(", ")}.`}
                     </Text>
                   </Box>
                 </motion.li>
               )
-
             })}
           </AnimatePresence>
         </ul>
