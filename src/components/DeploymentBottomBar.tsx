@@ -275,7 +275,7 @@ const DeploymentBottomBar: React.FC = () => {
 
   const { x, y } = useMousePosition();
   // const [storageHeight, setStorageHeight] = useState(STORAGE_PANEL_MIN_HEIGHT);
-  const [resultHeight, setResultHeight] = useState(RESULT_PANEL_MIN_HEIGHT);
+  const [resultHeight, setResultHeight] = useState(140);
   // const [isResizingStorage, setIsResizingStorage] = useState(false);
   const [isResizingResult, setIsResizingResult] = useState(false);
 
