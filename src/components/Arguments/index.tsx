@@ -288,6 +288,7 @@ const removeNotification2 = (set: any, id: number) => {
               [counter2]: updatedAccounts
             }
           });
+          setTimeout(() => removeNotification2(setNotifications2, counter2), 5000)
           setCounter2((prev) => prev + 1);
         }
         return project.accounts
