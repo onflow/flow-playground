@@ -185,6 +185,23 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
       return newArr;
     });
   };
+const removeNotification2 = (set: any, id: number) => {
+  // console.log("SET:", set);
+  console.log("ID:", id);
+  set((prev) => {
+    console.log("PREV:", prev);
+    
+    delete prev[id]
+
+    console.log("PREV AFTER DELETE:", prev);
+    
+    
+    return {
+      ...prev
+    }
+    // return delete prev.id
+  })
+}
 
   // const errors = validate(list, values);
   const numberOfErrors = Object.keys(errors).length;
@@ -263,7 +280,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
       setAccountsDetail((prevAccounts) => {
         const latestAccounts = project.accounts
         const updatedAccounts = latestAccounts.filter((account, index)=> account.state !== prevAccounts[index].state)
-        console.log("COMPARE RESULTS", updatedAccounts);
 
         if (updatedAccounts.length > 0) {
           setNotifications2((prev) => {
@@ -274,8 +290,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           });
           setCounter2((prev) => prev + 1);
         }
-        
-
         return project.accounts
       })
     }
@@ -484,8 +498,10 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           <AnimatePresence initial={true}>
             {Object.keys(notifications2).map((id) => {
 
+              
+
               const updatedAccounts = notifications2[id]
-              // console.log("UPDATED ACCOUNTS:", updatedAccounts);
+              console.log(`UPDATED ACCOUNTS FROM TOAST ${id}:`, updatedAccounts);
 
               let updatedStorageAccts: string[] = []
               updatedAccounts.map((acct: any) => {
@@ -494,7 +510,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                 const acctHex = `0x0${acctNum}`
                 updatedStorageAccts.push(acctHex)
               })
-              console.log("UPDATED STORAGE ACCOUNTS:", updatedStorageAccts);
+              // console.log("UPDATED STORAGE ACCOUNTS:", updatedStorageAccts);
               
                       
 
@@ -512,7 +528,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                     }}
                   >
                     <RemoveToastButton
-                      // onClick={() => removeNotification(setNotifications, counter)}
+                      onClick={() => removeNotification2(setNotifications2, id)}
                     >
                       <AiFillCloseCircle color="grey" size="32"/>
                     </RemoveToastButton>
