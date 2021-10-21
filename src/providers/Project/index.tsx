@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useState } from 'react';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { navigate, Redirect, useLocation } from '@reach/router';
 import ProjectMutator from './projectMutator';
@@ -61,7 +61,6 @@ export interface ProjectContextValue {
 
   transactionAccounts: number[];
   isSavingCode: boolean;
-  // updatedStorageAccts: number[];
 }
 
 export const ProjectContext: React.Context<ProjectContextValue> = createContext(
@@ -110,27 +109,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     type: EntityType.Account,
     index: 0,
   });
-
-  // const [updatedStorageAccts, setUpdatedStorageAccts] = useState< number[] | null>(null)
-  // const [allAccountsStorage, setAllAccountsStorage] = useState< string[] | null>(null)
-  // useEffect(() => {
-
-  //   if (allAccountsStorage) {
-  //     let changedAccounts: number[] = []
-  //     project.accounts.map((account, index) => {
-  //       account.state !== allAccountsStorage[index] && changedAccounts.push(index)
-  //     })
-  //     setUpdatedStorageAccts(changedAccounts)
-  //   }
-
-  //   if (project) {
-  //     let accountsStorage: string[] = []
-  //     project.accounts.map((account) => {
-  //       accountsStorage.push(account.state)
-  //     })
-  //     setAllAccountsStorage(accountsStorage)
-  //   }
-  // },[project])
 
   const [selectedResourceAccount, setSelectedResourceAccount] = useState< string | null>(null)
 
@@ -488,7 +466,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           setLastTxSigners(signers)
         },
         transactionAccounts,
-        // updatedStorageAccts,
       }}
     >
       {children}
