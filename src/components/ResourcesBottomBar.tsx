@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ResultType } from 'api/apollo/generated/graphql';
+// import { ResultType } from 'api/apollo/generated/graphql';
 import { Badge, Flex, Box, Divider } from 'theme-ui';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { IoMdAddCircleOutline } from "react-icons/io";
@@ -16,8 +16,8 @@ import { getStorageData } from '../util/storage';
 import theme from '../theme';
 import { ResizeHeading } from 'layout/Heading';
 
-import { RenderResponse } from 'components/RenderResponse';
-import { ClearResults } from './TransactionBottomBar';
+// import { RenderResponse } from 'components/RenderResponse';
+// import { ClearResults } from './TransactionBottomBar';
 
 const RESULT_PANEL_MIN_HEIGHT = 80;
 const STORAGE_PANEL_MIN_HEIGHT = 80 + RESULT_PANEL_MIN_HEIGHT;
@@ -327,7 +327,7 @@ const AccountState: React.FC<{
     <>
       {selectedResourcesAccount !== 'none' && (
           <AccountStateContainer height={storageHeight + resultHeight}>
-          {console.log("ACCOUNT STATE:", storageHeight + resultHeight)}
+          {console.log("RESOURCES RESULT HEIGHT:", storageHeight + resultHeight)}
             <IdentifierTypeList
               types={types}
               selected={selected}
@@ -360,7 +360,7 @@ const AccountState: React.FC<{
   );
 };
 
-const AccountBottomBar: React.FC = () => {
+const ResourcesBottomBar: React.FC = () => {
   const { project, isLoading, selectedResourceAccount } = useProject();
 
   return (
@@ -380,4 +380,4 @@ const AccountBottomBar: React.FC = () => {
   );
 };
 
-export default AccountBottomBar;
+export default ResourcesBottomBar;

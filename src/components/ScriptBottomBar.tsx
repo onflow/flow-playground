@@ -58,6 +58,7 @@ const ScriptBottomBar: React.FC = () => {
 
   return (
     <FeedbackContainer height={resultHeight}>
+    {console.log("SCRIPT RESULT HEIGHT:", resultHeight)}
       <FeedbackRoot>
         <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
           Script Results <ClearResults type={ResultType.Script} />

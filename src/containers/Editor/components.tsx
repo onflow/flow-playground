@@ -17,12 +17,11 @@ import Mixpanel from "../../util/mixpanel";
 
 import { default as FlowButton } from "components/Button";
 import CadenceEditor from "components/CadenceEditor";
-import AccountBottomBar from "components/AccountBottomBar";
 import TransactionBottomBar from "components/TransactionBottomBar";
 import ScriptBottomBar from "components/ScriptBottomBar";
 import { Version } from "components/CadenceVersion";
 import DeploymentBottomBar from "components/DeploymentBottomBar";
-import ResourcesBottomBar from "components/AccountBottomBar";
+import ResourcesBottomBar from "components/ResourcesBottomBar";
 
 const Header: React.FC = ({ children }) => {
   return (
@@ -225,19 +224,6 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({ active }) => {
       return null;
   }
 };
-
-// const BottomBarContainer: React.FC<BottomBarContainerProps> = ({ active }) => {
-//   switch (active.type) {
-//     case EntityType.Account:
-//       return <AccountBottomBar />;
-//     case EntityType.TransactionTemplate:
-//       return (<> <AccountBottomBar />  <TransactionBottomBar /> </>);
-//     case EntityType.ScriptTemplate:
-//       return (<> <AccountBottomBar />  <ScriptBottomBar /> </>);
-//     default:
-//       return null;
-//   }
-// };
 
 const AnimatedText = styled.div`
   position: relative;
