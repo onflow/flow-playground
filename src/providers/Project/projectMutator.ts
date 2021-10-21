@@ -58,15 +58,6 @@ export default class ProjectMutator {
       title: tpl.title,
     }));
 
-    console.log("PARENT ID:", parentId);
-    console.log("ACCOUNTS:", accounts);
-    console.log("SEED:", seed);
-    console.log("TRANSACTION TEMPLATES:", transactionTemplates);
-    console.log("SCRIPT TEMPLATES:", scriptTemplates);
-    
-    
-    
-    
     const { data } = await this.client.mutate({
       mutation: CREATE_PROJECT,
       variables: {
@@ -78,8 +69,6 @@ export default class ProjectMutator {
         scriptTemplates: scriptTemplates,
       },
     });
-    console.log("DATA FROM MUTATE:", data);
-    
 
     const project = data.project;
 
