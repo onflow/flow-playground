@@ -96,19 +96,6 @@ export const SignersContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-// interface ToggleProps {
-//   expanded: boolean;
-// }
-// export const ToggleExpand = styled(FaCaretSquareDown).attrs({
-//   size: 18,
-// })<ToggleProps>`
-//   cursor: pointer;
-//   opacity: 0.2;
-//   transform: ${({ expanded }) =>
-//     expanded ? 'rotate(180deg)' : 'rotate(0deg)'};
-//   margin-left: 5px;
-// `;
-
 interface ControlContainerProps {
   isOk: boolean;
   progress: boolean;

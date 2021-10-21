@@ -11,7 +11,6 @@ import {
   List,
   Title,
   SignersContainer,
-  // ToggleExpand,
   SignersError,
   SingleError,
   ErrorIndex,
@@ -58,10 +57,6 @@ export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
             opacity="0.2"
           />
         }
-        {/* <ToggleExpand
-          className="icon"
-          expanded={expanded}
-        /> */}
       </Controls>
     </Heading>
   );
@@ -202,10 +197,6 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
               opacity="0.2"
             />
           }
-          {/* <ToggleExpand
-            className="icon"
-            expanded={expanded}
-          /> */}
         </Controls>
       </Heading>
       {expanded && (
