@@ -4,6 +4,7 @@ import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import useMousePosition from '../hooks/useMousePosition';
 import styled from '@emotion/styled';
 import { ResizeHeading } from 'layout/Heading';
+import { Feedback as FeedbackRoot } from 'layout/Feedback';
 
 import { RenderResponse } from 'components/RenderResponse';
 import { ClearResults } from './TransactionBottomBar';
@@ -12,11 +13,18 @@ const RESULT_PANEL_MIN_HEIGHT = 80;
 const PLAYGROUND_HEADER_HEIGHT = 75;
 
 const DeploymentResultContainer = styled.div<{ height: number }>`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-even;
+  // height: 100%;
+  left: 245px;
+  width: calc(100vw - 245px);
+
   position: absolute;
   bottom: 0px;
-  width: 100%;
+  // width: 100%;
   background: white;
-  border-top: var(--gap) solid var(--key);
+  // border-top: var(--gap) solid var(--key);
   height: ${(p) => p.height}px;
   overflow-y: hidden;
 `;
@@ -56,19 +64,21 @@ const DeploymentBottomBar: React.FC = () => {
     <>
       <DeploymentResultContainer height={resultHeight}>
       {console.log("DEPLOYMENT RESULT HEIGHT:", resultHeight)}
-        <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
-          Deployment Result
-          <ClearResults type={ResultType.Contract} />
-          {resultHeight > 40 ? (
-            <GoChevronDown size="16px" onClick={() => setResultHeight(40)} />
-          ) : (
-            <GoChevronUp
-              size="16px"
-              onClick={() => setResultHeight(RESULT_PANEL_MIN_HEIGHT * 2)}
-            />
-          )}
-        </ResizeHeading>
-        <RenderResponse resultType={ResultType.Contract} />
+        <FeedbackRoot>
+          <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
+            Deployment Result
+            <ClearResults type={ResultType.Contract} />
+            {resultHeight > 40 ? (
+              <GoChevronDown size="16px" onClick={() => setResultHeight(40)} />
+            ) : (
+              <GoChevronUp
+                size="16px"
+                onClick={() => setResultHeight(RESULT_PANEL_MIN_HEIGHT * 2)}
+              />
+            )}
+          </ResizeHeading>
+          <RenderResponse resultType={ResultType.Contract} />
+        </FeedbackRoot>
       </DeploymentResultContainer>
     </>
   );
