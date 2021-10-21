@@ -50,11 +50,13 @@ export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
           <FaCaretSquareUp
             cursor="pointer"
             opacity="0.2"
+            size="18"
           />
             :
           <FaCaretSquareDown
             cursor="pointer"
             opacity="0.2"
+            size="18"
           />
         }
       </Controls>
