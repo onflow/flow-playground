@@ -263,6 +263,18 @@ const StateContainer: React.FC<{
 );
 
 const DeploymentBottomBar: React.FC = () => {
+  const { x, y } = useMousePosition();
+
+  const [resultHeight, setResultHeight] = useState(140);
+  const [isResizingResult, setIsResizingResult] = useState(false);
+
+  const toggleResizingResult = (toggle: boolean) => {
+    setIsResizingResult(toggle);
+  };
+
+  const toggleResizeListener = () => {
+    toggleResizingResult(false);
+  };
 
   // const { storage } = getStorageData(state);
 
@@ -273,24 +285,11 @@ const DeploymentBottomBar: React.FC = () => {
   //   identifiers.length > 0 ? identifiers[0] : null,
   // );
 
-  const { x, y } = useMousePosition();
   // const [storageHeight, setStorageHeight] = useState(STORAGE_PANEL_MIN_HEIGHT);
-  const [resultHeight, setResultHeight] = useState(140);
   // const [isResizingStorage, setIsResizingStorage] = useState(false);
-  const [isResizingResult, setIsResizingResult] = useState(false);
 
-  // const toggleResizingStorage = (toggle: boolean) => {
-  //   setIsResizingResult(toggle);
-  // };
 
-  const toggleResizingResult = (toggle: boolean) => {
-    setIsResizingResult(toggle);
-  };
 
-  // const toggleResizeListener = () => {
-  //   toggleResizingStorage(false);
-  //   toggleResizingResult(false);
-  // };
 
   // useEffect(() => {
   //   if (
@@ -312,12 +311,12 @@ const DeploymentBottomBar: React.FC = () => {
     }
   }, [x, y]);
 
-  // useEffect(() => {
-  //   window.addEventListener('mouseup', toggleResizeListener, false);
-  //   return () => {
-  //     window.removeEventListener('mouseup', toggleResizeListener, false);
-  //   };
-  // }, []);
+  useEffect(() => {
+    window.addEventListener('mouseup', toggleResizeListener, false);
+    return () => {
+      window.removeEventListener('mouseup', toggleResizeListener, false);
+    };
+  }, []);
 
   return (
     <>
