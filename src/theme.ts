@@ -1,6 +1,7 @@
 export default {
   colors: {
     primary: "#00ff76",
+    darkPrimary: "#2bb169",
     background: "#fff",
     text: "#222",
     muted: "#6a6a6a",

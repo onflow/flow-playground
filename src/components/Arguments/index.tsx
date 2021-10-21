@@ -273,32 +273,7 @@ const removeNotification2 = (set: any, id: number) => {
       })
     }
   },[project])
-
  
-  const storageAcctKeys = Object.keys(storageMap)
-
-  // create state for account signers and accounts who's sstorage is updated after a tx
-  const [lastUpdatedAccts, setLastUpdatedAccts] = useState< string[] | null >(null)
-  const [lastTxSignerAccts, setLastTxSignerAccts] = useState< string[] | null >(null)
-  useEffect(() => {
-    if (updatedStorageAccts && lastTxSigners) {
-
-      let storageAccts: string[] = []
-      updatedStorageAccts?.map((acctIdx) => storageAccts.push(storageAcctKeys[acctIdx]))
-      setLastUpdatedAccts(storageAccts)
-
-      let txSignerAccts: string[] = []
-      lastTxSigners?.map((acct: any) => {
-        const addr = acct.address
-        const acctNum = addr.charAt(addr.length-1)
-        const acctHex = `0x0${acctNum}`
-        txSignerAccts.push(acctHex)
-      })
-      setLastTxSignerAccts(txSignerAccts)
-
-    }
-  },[updatedStorageAccts, lastTxSigners])
-  
 
   const { accounts } = project;
 
@@ -472,7 +447,7 @@ const removeNotification2 = (set: any, id: number) => {
         </HoverPanel>
       </motion.div>
 
-      <ToastContainer lastTxHadErrors={false}>
+      <ToastContainer>
         <ul>
           <AnimatePresence initial={true}>
             {Object.keys(notifications2).map((id) => {

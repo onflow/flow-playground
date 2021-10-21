@@ -129,11 +129,7 @@ export const ControlContainer = styled.div<ControlContainerProps>`
   }};
 `;
 
-interface ToastContainerProps {
-  lastTxHadErrors: boolean;
-}
-
-export const ToastContainer = styled.div<ToastContainerProps>`
+export const ToastContainer = styled.div`
   z-index: 1000;
   position: fixed;
   bottom: 40px;
@@ -141,18 +137,7 @@ export const ToastContainer = styled.div<ToastContainerProps>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: ${({ lastTxHadErrors }) => {
-    switch (lastTxHadErrors) {
-      case true:
-        return '#f44336';
-      case false:
-        return '#2bb169';
-      default:
-        return '#EE431E';
-    }
-  }};
-
-
+  color: ${theme.colors.darkPrimary};
 `;
 
 export const StatusMessage = styled.div`
