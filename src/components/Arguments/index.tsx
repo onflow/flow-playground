@@ -224,11 +224,9 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     isSavingCode, 
     lastTxSigners 
   } = useProject();
-  console.log("LAST TX SIGNERS:", lastTxSigners);
-  
 
   const [_, setAccountsDetail] = useState(project.accounts)
-  const [notifications2, setNotifications2] = useState({})
+  const [notifications, setNotifications] = useState< { [identifier: string]: string[] } >({})
   const [counter2, setCounter2] = useState(0)
   useEffect(() => {
     if (project) {
@@ -237,13 +235,13 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
         const updatedAccounts = latestAccounts.filter((account, index)=> account.state !== prevAccounts[index].state)
 
         if (updatedAccounts.length > 0) {
-          setNotifications2((prev) => {
+          setNotifications((prev) => {
             return {
               ...prev,
               [counter2]: updatedAccounts
             }
           });
-          setTimeout(() => removeNotification2(setNotifications2, counter2), 5000)
+          setTimeout(() => removeNotification2(setNotifications, counter2), 5000)
           setCounter2((prev) => prev + 1);
         }
         return project.accounts
@@ -417,10 +415,10 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
       <ToastContainer>
         <ul>
           <AnimatePresence initial={true}>
-            {Object.keys(notifications2).map((id) => {
+            {Object.keys(notifications).map((id) => {
 
-              const updatedAccounts = notifications2[id]
-              console.log(`UPDATED ACCOUNTS FROM TOAST ${id}:`, updatedAccounts);
+              const updatedAccounts = notifications[id]
+              // console.log(`UPDATED ACCOUNTS FROM TOAST ${id}:`, updatedAccounts);
 
               let updatedStorageAccts: string[] = []
               updatedAccounts.map((acct: any) => {
@@ -447,7 +445,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                     }}
                   >
                     <RemoveToastButton
-                      onClick={() => removeNotification2(setNotifications2, id)}
+                      onClick={() => removeNotification2(setNotifications, id)}
                     >
                       <AiFillCloseCircle color="grey" size="32"/>
                     </RemoveToastButton>
@@ -471,7 +469,14 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                         padding: "0.75rem"
                       }}
                     >
-                      Accoun(s) {updatedStorageAccts.join(", ")} were updated by {lastTxSigners.join(", ")}
+                      {
+                        `Account${lastTxSigners?.length > 1 ? "s" : ""}
+                        ${lastTxSigners.join(", ")} completed a transaction,
+                        updating the storage in
+                        account${updatedStorageAccts?.length > 1 ? "s" : ""}
+                        ${updatedStorageAccts.join(", ")}.`
+                      }
+
                     </Text>
                   </Box>
                 </motion.li>
