@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useLocation} from "@reach/router";
 import { Button, Flex, Text } from "theme-ui";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { FaCodeBranch, FaDiscord, FaTwitter, FaArrowAltCircleDown } from "react-icons/fa";
-import { useLocation} from "@reach/router"
 import { getParams } from "../../util/url";
 
 import { Header as HeaderRoot } from "layout/Header";

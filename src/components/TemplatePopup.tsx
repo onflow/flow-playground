@@ -6,7 +6,7 @@ import { Select, Spinner } from '@theme-ui/components';
 import { useProject } from 'providers/Project/projectHooks';
 import { isUUUID } from "../util/url";
 import { getInterpolatedTemplate } from '../util/templates';
-import { getStorageData } from "../util/storage"
+import { getStorageData } from "../util/storage";
 import { storageMap } from '../util/accounts';
 
 import {
@@ -30,19 +30,19 @@ const TemplatePopup: React.FC<{
   
   const { project, mutator, selectedResourceAccount } = useProject();
 
-  const selectedAcctState = project.accounts[storageMap[selectedResourceAccount] || 0].state
+  const selectedAcctState = project.accounts[storageMap[selectedResourceAccount] || 0].state;
 
-  const { types, capabilities } = getStorageData(selectedAcctState)
+  const { types, capabilities } = getStorageData(selectedAcctState);
   
-  const capabilitiesKeys = Object.keys(capabilities || [])
+  const capabilitiesKeys = Object.keys(capabilities || []);
 
   const [processing, setProcessing] = useState(false);
   const [templateName, setTemplateName] = useState("My amazing script or transaction");
-  const [templateType, setTemplateType] = useState("Script")
+  const [templateType, setTemplateType] = useState("Script");
 
-  const [selectedCapability, setSelectedCapability] = useState< string | null >(capabilitiesKeys[0] || null)
+  const [selectedCapability, setSelectedCapability] = useState< string | null >(capabilitiesKeys[0] || null);
 
-  const projectPath = isUUUID(project.id) ? project.id : "local"
+  const projectPath = isUUUID(project.id) ? project.id : "local";
 
   const firstInput = useRef<HTMLInputElement>(null!);
 
@@ -173,19 +173,35 @@ const TemplatePopup: React.FC<{
               className="green modal"
               onClick={async () => {
                 setProcessing(true);
-
-                const capData = capabilities[selectedCapability]
+                const capData = capabilities[selectedCapability];
 
                 if (templateType=== "Transaction") {
-                    const res = await mutator.createTransactionTemplate(getInterpolatedTemplate("tx", capData.contractAddr, capData.path, `${capData.resourceContract}.${capData.resource}`, capData.contractImplementedInterfaces.join(",")), templateName)
+                    const res = await mutator.createTransactionTemplate(
+                      getInterpolatedTemplate(
+                        "tx", 
+                        capData.contractAddr, 
+                        capData.path, 
+                        `${capData.resourceContract}.${capData.resource}`, 
+                        capData.contractImplementedInterfaces.join(",")
+                      ), 
+                      templateName
+                    )
                     navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
                 } else if (templateType === "Script") {
-                    const res = await mutator.createScriptTemplate(getInterpolatedTemplate("script", capData.contractAddr, capData.path, `${capData.resourceContract}.${capData.resource}`, capData.contractImplementedInterfaces.join(",")), templateName)
+                    const res = await mutator.createScriptTemplate(
+                      getInterpolatedTemplate(
+                        "script", 
+                        capData.contractAddr, 
+                        capData.path, 
+                        `${capData.resourceContract}.${capData.resource}`, 
+                        capData.contractImplementedInterfaces.join(",")
+                      ), 
+                      templateName
+                    )
                     navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
                 }
             
                 triggerClose(null);
-                // setProcessing(false);
               }}
             >
               {processing ?

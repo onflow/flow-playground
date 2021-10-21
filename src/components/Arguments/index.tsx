@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
-import { AiFillCloseCircle } from 'react-icons/ai'
+import { AiFillCloseCircle } from 'react-icons/ai';
 import { motion, AnimatePresence } from "framer-motion";
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
@@ -174,12 +174,12 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
   const removeNotification = (set: any, id: number) => {
     set((prev: any[]) => {
-      delete prev[id]
+      delete prev[id];
       return {
         ...prev
-      }
-    })
-  }
+      };
+    });
+  };
 
   const numberOfErrors = Object.keys(errors).length;
   const notEnoughSigners = needSigners && selected.length < signers;
@@ -227,6 +227,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
   const [notifications, setNotifications] = useState< { [identifier: string]: string[] } >({});
 
+  // compare 'state' field for each account, set 'notifications' state for new data
   // @ts-ignore: this state is used to compare and render notifications
   const [_, setProjectAccts] = useState(project.accounts);
   const [counter, setCounter] = useState(0);
@@ -333,6 +334,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
       console.error(e);
       rawResult = e.toString();
     }
+
     setProcessingStatus(false);
 
     // Display result in the bottom area
@@ -402,6 +404,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
           <ErrorsList list={problems.error} {...actions} />
           <Hints problems={problems} {...actions} />
+
           <ControlContainer isOk={isOk} progress={progress}>
             <StatusMessage>
               {statusIcon}
@@ -415,7 +418,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
         <ul>
           <AnimatePresence initial={true}>
             {Object.keys(notifications).map((id) => {
-
               const updatedAccounts = notifications[id];
 
               let updatedStorageAccts: string[] = [];
@@ -426,6 +428,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                 updatedStorageAccts.push(acctHex);
               });
 
+              // render a new list item for each new id in 'notifications' state
               return (
                 <motion.li
                   key={id}

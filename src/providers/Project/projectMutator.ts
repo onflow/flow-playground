@@ -90,7 +90,6 @@ export default class ProjectMutator {
 
   async saveProject(isFork: boolean) {
     if (this.isLocal) {
-      console.log("IS LOCAL:", this.isLocal);
       await this.createProject();
       unregisterOnCloseSaveMessage();
     }

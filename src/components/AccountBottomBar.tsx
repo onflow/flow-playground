@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { ResultType } from 'api/apollo/generated/graphql';
-import TemplatePopup from "components/TemplatePopup"
+import { Badge, Flex, Box, Divider } from 'theme-ui';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { useProject } from 'providers/Project/projectHooks';
 import useMousePosition from '../hooks/useMousePosition';
+import TemplatePopup from "components/TemplatePopup";
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 import { FeedbackActions } from 'layout/FeedbackActions';
 import { SidebarItemInsert } from 'layout/SidebarItemInsert';
 import { BottomBarItemInsert } from 'layout/BottomBarItemInsert';
 import styled from '@emotion/styled';
-import { Badge, Flex, Box, Divider } from 'theme-ui'
 import { storageMap } from '../util/accounts';
 import { getStorageData } from '../util/storage';
 import theme from '../theme';
@@ -94,15 +94,15 @@ const StorageBadge: React.FC<StorageBadgeProps> = ({
             case "Link":
               return theme.colors.badgeCapability;
             case "null":
-              return theme.colors.badgeNull
+              return theme.colors.badgeNull;
           }
         },
       }}
     >
       {type === "Link" ? "Capability" : type}
     </Badge>
-  )
-}
+  );
+};
 
 interface IdentifierTypeListProps {
   types: { [identifier: string]: string };
@@ -120,7 +120,7 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
   resize,
 }) => {
 
-  const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false)
+  const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false);
 
   const { selectedResourceAccount } = useProject();
   
@@ -141,7 +141,7 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
         >
           <ul>
             {Object.keys(types).map((key) => {
-              const identifierType = types[key]
+              const identifierType = types[key];
               return(
                 <TypeListItem
                   key={key}
@@ -177,11 +177,11 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
         visible={showTemplatePopup} 
         triggerClose={() => {
           toggleShowTemplatePopup(false)
-        }} 
+        }}
       />
     </>
   );
-}
+};
 
 const StateContainer: React.FC<{ 
   value?: any 
@@ -268,7 +268,7 @@ const AccountState: React.FC<{
   renderDeployButton: () => JSX.Element;
 }> = ({ state, selectedResourcesAccount }) => {
 
-  const { storage, paths, types } = getStorageData(state)
+  const { storage, paths, types } = getStorageData(state);
 
   const identifiers = Object.keys(storage);
  

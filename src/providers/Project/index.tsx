@@ -52,13 +52,10 @@ export interface ProjectContextValue {
   createScriptExecution: (args?: string[]) => Promise<any>;
   active: ActiveEditor;
   setActive: (type: EntityType, index: number) => void;
-
   selectedResourceAccount: string;
   setSelectedResourceAccount: (account: string) => void;
-
   lastTxSigners: string[];
   setLastTxSigners: (signers: string[]) => void;
-
   transactionAccounts: number[];
   isSavingCode: boolean;
 }
@@ -219,16 +216,16 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       args,
     );
 
-    let signers: string[] = []
+    let signers: string[] = [];
 
     signingAccounts?.map((acct: any) => {
-      const addr = acct.address
-      const acctNum = addr.charAt(addr.length - 1)
-      const acctHex = `0x0${acctNum}`
-      signers.push(acctHex)
-    })
+      const addr = acct.address;
+      const acctNum = addr.charAt(addr.length - 1);
+      const acctHex = `0x0${acctNum}`;
+      signers.push(acctHex);
+    });
     
-    setLastTxSigners(signers)
+    setLastTxSigners(signers);
 
     timeout = setTimeout(() => {
       setIsSaving(false);
@@ -313,7 +310,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const params = getParams(location.search || '');
   const { type, id, storage: storageParam } = params;
-  const storage = storageParam || 'none'
+  const storage = storageParam || 'none';
 
   // TODO: check if that project is local
   // TODO: check that active item have the same id

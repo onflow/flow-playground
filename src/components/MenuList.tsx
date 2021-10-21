@@ -37,7 +37,6 @@ const MenuList: React.FC<MenuListProps> = ({
   onDelete
 }) => {
   const { active } = useProject()
-
   const isEditing = useRef<HTMLInputElement>();
   const [editing, setEditing] = useState([]);
   const enterPressed = useKeyPress("Enter");

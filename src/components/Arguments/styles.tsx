@@ -112,7 +112,6 @@ interface ControlContainerProps {
   isOk: boolean;
   progress: boolean;
 }
-
 export const ControlContainer = styled.div<ControlContainerProps>`
   display: flex;
   align-items: center;

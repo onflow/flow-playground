@@ -24,7 +24,6 @@ const Sidebar: React.FC = () => {
   if (isLoading) return <p>Loading...</p>;
 
   const projectPath = isUUUID(project.id) ? project.id : "local"
-  
 
   return (
     <SidebarRoot>
@@ -48,12 +47,6 @@ const Sidebar: React.FC = () => {
         }}
         onInsert={async () => {
           const res = await mutator.createTransactionTemplate("", `New Transaction`)
-
-          console.log("PROJECT PATH:", projectPath);
-          console.log("RES FROM CREATE TX MUTATE:", res);
-          console.log("SELECTED RESOURCE ACCOUNT OR NONE:", selectedResourceAccount || 'none');
-          
-
           navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
         }}
       />

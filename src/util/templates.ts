@@ -52,6 +52,5 @@ import ExampleToken from 0x01
 
       return vaultRef.balance
   }`
-  }
-
-}
+  };
+};
