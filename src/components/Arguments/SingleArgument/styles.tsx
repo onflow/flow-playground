@@ -42,6 +42,7 @@ export const Input = styled.input`
   &:last-child{
     margin-bottom: 0;
   }
+  box-sizing: border-box;
 `;
 
 export const Error = styled.p`

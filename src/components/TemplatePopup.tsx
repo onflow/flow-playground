@@ -127,7 +127,8 @@ const TemplatePopup: React.FC<{
             <option>Script</option>
             <option>Transaction</option>
           </Select>
-
+        </InputBlock>
+        <InputBlock mb={'12px'}>
           <Label>Capability</Label>
           <Select 
             onChange={(event) => {
