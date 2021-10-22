@@ -7,7 +7,6 @@ import useMousePosition from '../hooks/useMousePosition';
 import { FaEraser } from 'react-icons/fa';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { RenderResponse } from 'components/RenderResponse';
-// import ResourcesBar from './ResourcesBar';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 import { ResizeHeading } from 'layout/Heading';
 
@@ -100,26 +99,23 @@ const TransactionBottomBar: React.FC<TransactionBottomBarProps> = ({ setBottomBa
   }, []);
 
   return (
-    <>
-      {/* <ResourcesBar resultHeight={resultHeight} /> */}
-      <FeedbackContainer height={resultHeight}>
-        <FeedbackRoot>
-          <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
-            Transaction Results
-            <ClearResults type={ResultType.Transaction} />
-            {resultHeight > 40 ? (
-              <GoChevronDown size="16px" onClick={() => setResultHeight(40)} />
-            ) : (
-              <GoChevronUp
-                size="16px"
-                onClick={() => setResultHeight(RESULT_PANEL_MIN_HEIGHT * 2)}
-              />
-            )}
-          </ResizeHeading>
-          <RenderResponse resultType={ResultType.Transaction} />
-        </FeedbackRoot>
-      </FeedbackContainer>
-    </>
+    <FeedbackContainer height={resultHeight}>
+      <FeedbackRoot>
+        <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
+          Transaction Results
+          <ClearResults type={ResultType.Transaction} />
+          {resultHeight > 40 ? (
+            <GoChevronDown size="16px" onClick={() => setResultHeight(40)} />
+          ) : (
+            <GoChevronUp
+              size="16px"
+              onClick={() => setResultHeight(RESULT_PANEL_MIN_HEIGHT * 2)}
+            />
+          )}
+        </ResizeHeading>
+        <RenderResponse resultType={ResultType.Transaction} />
+      </FeedbackRoot>
+    </FeedbackContainer>
   );
 };
 

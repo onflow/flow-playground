@@ -7,7 +7,6 @@ import { ResizeHeading } from 'layout/Heading';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 
 import { RenderResponse } from 'components/RenderResponse';
-// import ResourcesBar from './ResourcesBar';
 import { ClearResults } from './TransactionBottomBar';
 
 const RESULT_PANEL_MIN_HEIGHT = 80;
@@ -63,26 +62,23 @@ const DeploymentBottomBar: React.FC<DeploymentBottomBarProps> = ({ setBottomBarH
   }, []);
 
   return (
-    <>
-      {/* <ResourcesBar resultHeight={resultHeight} /> */}
-      <DeploymentResultContainer height={resultHeight}>
-        <FeedbackRoot>
-          <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
-            Deployment Result
-            <ClearResults type={ResultType.Contract} />
-            {resultHeight > 40 ? (
-              <GoChevronDown size="16px" onClick={() => setResultHeight(40)} />
-            ) : (
-              <GoChevronUp
-                size="16px"
-                onClick={() => setResultHeight(RESULT_PANEL_MIN_HEIGHT * 2)}
-              />
-            )}
-          </ResizeHeading>
-          <RenderResponse resultType={ResultType.Contract} />
-        </FeedbackRoot>
-      </DeploymentResultContainer>
-    </>
+    <DeploymentResultContainer height={resultHeight}>
+      <FeedbackRoot>
+        <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
+          Deployment Result
+          <ClearResults type={ResultType.Contract} />
+          {resultHeight > 40 ? (
+            <GoChevronDown size="16px" onClick={() => setResultHeight(40)} />
+          ) : (
+            <GoChevronUp
+              size="16px"
+              onClick={() => setResultHeight(RESULT_PANEL_MIN_HEIGHT * 2)}
+            />
+          )}
+        </ResizeHeading>
+        <RenderResponse resultType={ResultType.Contract} />
+      </FeedbackRoot>
+    </DeploymentResultContainer>
   );
 };
 
