@@ -3,7 +3,7 @@ import { ResultType } from 'api/apollo/generated/graphql';
 import styled from '@emotion/styled';
 import useMousePosition from '../hooks/useMousePosition';
 import { RenderResponse } from 'components/RenderResponse';
-import ResourcesBar from './ResourcesBar';
+// import ResourcesBar from './ResourcesBar';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 import { ResizeHeading } from 'layout/Heading';
 import { ClearResults } from './TransactionBottomBar';
@@ -26,7 +26,11 @@ const FeedbackContainer = styled.div<{ height: number }>`
   overflow-y: hidden;
 `;
 
-const ScriptBottomBar: React.FC = () => {
+interface ScriptBottomBarProps {
+  setBottomBarHeight: (height: number) => void;
+}
+
+const ScriptBottomBar: React.FC<ScriptBottomBarProps> = ({ setBottomBarHeight }) => {
   const { x, y } = useMousePosition();
 
   const [resultHeight, setResultHeight] = useState(140);
@@ -47,6 +51,7 @@ const ScriptBottomBar: React.FC = () => {
       y < window.innerHeight - PLAYGROUND_HEADER_HEIGHT
     ) {
       setResultHeight(y);
+      setBottomBarHeight(y);
     }
   }, [x, y]);
 
@@ -59,7 +64,7 @@ const ScriptBottomBar: React.FC = () => {
 
   return (
     <>
-      <ResourcesBar resultHeight={resultHeight} />
+      {/* <ResourcesBar resultHeight={resultHeight} /> */}
       <FeedbackContainer height={resultHeight}>
         <FeedbackRoot>
           <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>

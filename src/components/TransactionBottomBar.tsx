@@ -7,7 +7,7 @@ import useMousePosition from '../hooks/useMousePosition';
 import { FaEraser } from 'react-icons/fa';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { RenderResponse } from 'components/RenderResponse';
-import ResourcesBar from './ResourcesBar';
+// import ResourcesBar from './ResourcesBar';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 import { ResizeHeading } from 'layout/Heading';
 
@@ -63,7 +63,11 @@ export const ClearResults: React.FC<{ type: ResultType }> = ({ type }) => {
   );
 };
 
-const TransactionBottomBar: React.FC = () => {
+interface TransactionBottomBarProps {
+  setBottomBarHeight: (height: number) => void;
+}
+
+const TransactionBottomBar: React.FC<TransactionBottomBarProps> = ({ setBottomBarHeight }) => {
   const { x, y } = useMousePosition();
 
   const [resultHeight, setResultHeight] = useState(140);
@@ -84,6 +88,7 @@ const TransactionBottomBar: React.FC = () => {
       y < window.innerHeight - PLAYGROUND_HEADER_HEIGHT
     ) {
       setResultHeight(y);
+      setBottomBarHeight(y);
     }
   }, [x, y]);
 
@@ -96,7 +101,7 @@ const TransactionBottomBar: React.FC = () => {
 
   return (
     <>
-      <ResourcesBar resultHeight={resultHeight} />
+      {/* <ResourcesBar resultHeight={resultHeight} /> */}
       <FeedbackContainer height={resultHeight}>
         <FeedbackRoot>
           <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>

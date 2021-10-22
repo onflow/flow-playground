@@ -7,7 +7,7 @@ import { ResizeHeading } from 'layout/Heading';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 
 import { RenderResponse } from 'components/RenderResponse';
-import ResourcesBar from './ResourcesBar';
+// import ResourcesBar from './ResourcesBar';
 import { ClearResults } from './TransactionBottomBar';
 
 const RESULT_PANEL_MIN_HEIGHT = 80;
@@ -26,7 +26,11 @@ const DeploymentResultContainer = styled.div<{ height: number }>`
   overflow-y: hidden;
 `;
 
-const DeploymentBottomBar: React.FC = () => {
+interface DeploymentBottomBarProps {
+  setBottomBarHeight: (height: number) => void;
+}
+
+const DeploymentBottomBar: React.FC<DeploymentBottomBarProps> = ({ setBottomBarHeight }) => {
   const { x, y } = useMousePosition();
 
   const [resultHeight, setResultHeight] = useState(140);
@@ -47,6 +51,7 @@ const DeploymentBottomBar: React.FC = () => {
       y < window.innerHeight - PLAYGROUND_HEADER_HEIGHT
     ) {
       setResultHeight(y);
+      setBottomBarHeight(y);
     }
   }, [x, y]);
 
@@ -59,7 +64,7 @@ const DeploymentBottomBar: React.FC = () => {
 
   return (
     <>
-      <ResourcesBar resultHeight={resultHeight} />
+      {/* <ResourcesBar resultHeight={resultHeight} /> */}
       <DeploymentResultContainer height={resultHeight}>
         <FeedbackRoot>
           <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
