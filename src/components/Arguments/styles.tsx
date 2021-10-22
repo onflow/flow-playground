@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-// import { FaCaretSquareDown } from 'react-icons/fa';
 import theme from '../../theme';
 
 interface HoverPanelProps {

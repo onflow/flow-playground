@@ -217,14 +217,12 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     );
 
     let signers: string[] = [];
-
     signingAccounts?.map((acct: any) => {
       const addr = acct.address;
       const acctNum = addr.charAt(addr.length - 1);
       const acctHex = `0x0${acctNum}`;
       signers.push(acctHex);
     });
-    
     setLastTxSigners(signers);
 
     timeout = setTimeout(() => {

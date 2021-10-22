@@ -1,3 +1,4 @@
+// take in the state for an account, return data for resources explorer
 export const getStorageData = (state: string = ''): any => {
 
   if (state === '') {
