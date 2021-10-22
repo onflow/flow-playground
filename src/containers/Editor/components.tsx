@@ -21,7 +21,6 @@ import TransactionBottomBar from "components/TransactionBottomBar";
 import ScriptBottomBar from "components/ScriptBottomBar";
 import { Version } from "components/CadenceVersion";
 import DeploymentBottomBar from "components/DeploymentBottomBar";
-import ResourcesBottomBar from "components/ResourcesBottomBar";
 
 const Header: React.FC = ({ children }) => {
   return (
@@ -215,11 +214,11 @@ type BottomBarContainerProps = {
 const BottomBarContainer: React.FC<BottomBarContainerProps> = ({ active }) => {
   switch (active.type) {
     case EntityType.Account:
-      return <> <ResourcesBottomBar /> <DeploymentBottomBar /> </>;
+      return <DeploymentBottomBar />;
     case EntityType.TransactionTemplate:
-      return (<> <ResourcesBottomBar />  <TransactionBottomBar /> </>);
+      return <TransactionBottomBar />;
     case EntityType.ScriptTemplate:
-      return (<> <ResourcesBottomBar />  <ScriptBottomBar /> </>);
+      return <ScriptBottomBar />;
     default:
       return null;
   }

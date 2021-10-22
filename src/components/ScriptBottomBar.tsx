@@ -3,6 +3,7 @@ import { ResultType } from 'api/apollo/generated/graphql';
 import styled from '@emotion/styled';
 import useMousePosition from '../hooks/useMousePosition';
 import { RenderResponse } from 'components/RenderResponse';
+import ResourcesBar from './ResourcesBar';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 import { ResizeHeading } from 'layout/Heading';
 import { ClearResults } from './TransactionBottomBar';
@@ -57,23 +58,26 @@ const ScriptBottomBar: React.FC = () => {
   }, []);
 
   return (
-    <FeedbackContainer height={resultHeight}>
-    {console.log("SCRIPT RESULT HEIGHT:", resultHeight)}
-      <FeedbackRoot>
-        <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
-          Script Results <ClearResults type={ResultType.Script} />
-          {resultHeight > 40 ? (
-            <GoChevronDown size="16px" onClick={() => setResultHeight(40)} />
-          ) : (
-            <GoChevronUp
-              size="16px"
-              onClick={() => setResultHeight(RESULT_PANEL_MIN_HEIGHT * 2)}
-            />
-          )}
-        </ResizeHeading>
-        <RenderResponse resultType={ResultType.Script} />
-      </FeedbackRoot>
-    </FeedbackContainer>
+    <>
+      <ResourcesBar resultHeight={resultHeight} />
+      <FeedbackContainer height={resultHeight}>
+      {/* {console.log("SCRIPT RESULT HEIGHT:", resultHeight)} */}
+        <FeedbackRoot>
+          <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
+            Script Results <ClearResults type={ResultType.Script} />
+            {resultHeight > 40 ? (
+              <GoChevronDown size="16px" onClick={() => setResultHeight(40)} />
+            ) : (
+              <GoChevronUp
+                size="16px"
+                onClick={() => setResultHeight(RESULT_PANEL_MIN_HEIGHT * 2)}
+              />
+            )}
+          </ResizeHeading>
+          <RenderResponse resultType={ResultType.Script} />
+        </FeedbackRoot>
+      </FeedbackContainer>
+    </>
   );
 };
 

@@ -7,6 +7,7 @@ import useMousePosition from '../hooks/useMousePosition';
 import { FaEraser } from 'react-icons/fa';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { RenderResponse } from 'components/RenderResponse';
+import ResourcesBar from './ResourcesBar';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 import { ResizeHeading } from 'layout/Heading';
 
@@ -67,12 +68,15 @@ const TransactionBottomBar: React.FC = () => {
 
   const [resultHeight, setResultHeight] = useState(140);
   const [isResizingResult, setIsResizingResult] = useState(false);
+  // console.log("IS RESISZING RESULT FROM TX BOTTOM BAR:", isResizingResult);
+  
 
   const toggleResizingResult = (toggle: boolean) => {
     setIsResizingResult(toggle);
   };
 
   const toggleResizeListener = () => {
+    // console.log("TOGGLE RESIZE LISTENER FIRED!!!!!!!!!!!!!!!!!!!");
     toggleResizingResult(false);
   };
 
@@ -94,24 +98,27 @@ const TransactionBottomBar: React.FC = () => {
   }, []);
 
   return (
-    <FeedbackContainer height={resultHeight}>
-      {console.log("TX RESULT HEIGHT:", resultHeight)}
-      <FeedbackRoot>
-        <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
-          Transaction Results
-          <ClearResults type={ResultType.Transaction} />
-          {resultHeight > 40 ? (
-            <GoChevronDown size="16px" onClick={() => setResultHeight(40)} />
-          ) : (
-            <GoChevronUp
-              size="16px"
-              onClick={() => setResultHeight(RESULT_PANEL_MIN_HEIGHT * 2)}
-            />
-          )}
-        </ResizeHeading>
-        <RenderResponse resultType={ResultType.Transaction} />
-      </FeedbackRoot>
-    </FeedbackContainer>
+    <>
+      <ResourcesBar resultHeight={resultHeight} />
+      <FeedbackContainer height={resultHeight}>
+        {/* {console.log("TX RESULT HEIGHT:", resultHeight)} */}
+        <FeedbackRoot>
+          <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
+            Transaction Results
+            <ClearResults type={ResultType.Transaction} />
+            {resultHeight > 40 ? (
+              <GoChevronDown size="16px" onClick={() => setResultHeight(40)} />
+            ) : (
+              <GoChevronUp
+                size="16px"
+                onClick={() => setResultHeight(RESULT_PANEL_MIN_HEIGHT * 2)}
+              />
+            )}
+          </ResizeHeading>
+          <RenderResponse resultType={ResultType.Transaction} />
+        </FeedbackRoot>
+      </FeedbackContainer>
+    </>
   );
 };
 

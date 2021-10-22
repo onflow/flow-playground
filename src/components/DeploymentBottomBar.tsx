@@ -7,6 +7,7 @@ import { ResizeHeading } from 'layout/Heading';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 
 import { RenderResponse } from 'components/RenderResponse';
+import ResourcesBar from './ResourcesBar';
 import { ClearResults } from './TransactionBottomBar';
 
 const RESULT_PANEL_MIN_HEIGHT = 80;
@@ -58,6 +59,7 @@ const DeploymentBottomBar: React.FC = () => {
 
   return (
     <>
+      <ResourcesBar resultHeight={resultHeight} />
       <DeploymentResultContainer height={resultHeight}>
       {console.log("DEPLOYMENT RESULT HEIGHT:", resultHeight)}
         <FeedbackRoot>
