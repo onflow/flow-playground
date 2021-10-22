@@ -213,7 +213,7 @@ type BottomBarContainerProps = {
 };
 
 const BottomBarContainer: React.FC<BottomBarContainerProps> = ({ active }) => {
-  const [bottomBarHeight, setBottomBarHeight] = useState(140)
+  const [bottomBarHeight, setBottomBarHeight] = useState(140);
   switch (active.type) {
     case EntityType.Account:
       return (

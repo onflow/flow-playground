@@ -228,7 +228,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const [notifications, setNotifications] = useState< { [identifier: string]: string[] } >({});
 
   // compare 'state' field for each account, set 'notifications' state for new data
-  // @ts-ignore: this state is used to compare and render notifications
+  // @ts-ignore: <- this state is only used to compare and render notifications
   const [_, setProjectAccts] = useState(project.accounts);
   const [counter, setCounter] = useState(0);
   useEffect(() => {
