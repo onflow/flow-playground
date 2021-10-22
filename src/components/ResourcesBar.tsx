@@ -322,7 +322,10 @@ const AccountState: React.FC<{
                 );
               }}
             />
-            <StateContainer value={storage[selected || identifiers[0]]} path={paths[selected || identifiers[0]]} />
+            <StateContainer 
+              value={storage[selected] || storage[identifiers[0]]} 
+              path={paths[selected] || paths[identifiers[0]]} 
+            />
           </AccountStateContainer>
       )}
     </>
