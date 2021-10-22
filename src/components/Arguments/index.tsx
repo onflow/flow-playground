@@ -430,7 +430,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
               // render a new list item for each new id in 'notifications' state
               return (
-                <motion.li
+                (lastTxSigners && updatedStorageAccts) && <motion.li
                   key={id}
                   layout
                   initial={{ opacity: 0, y: 50, scale: 0.3 }}
