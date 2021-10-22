@@ -68,15 +68,12 @@ const TransactionBottomBar: React.FC = () => {
 
   const [resultHeight, setResultHeight] = useState(140);
   const [isResizingResult, setIsResizingResult] = useState(false);
-  // console.log("IS RESISZING RESULT FROM TX BOTTOM BAR:", isResizingResult);
-  
 
   const toggleResizingResult = (toggle: boolean) => {
     setIsResizingResult(toggle);
   };
 
   const toggleResizeListener = () => {
-    // console.log("TOGGLE RESIZE LISTENER FIRED!!!!!!!!!!!!!!!!!!!");
     toggleResizingResult(false);
   };
 
@@ -101,7 +98,6 @@ const TransactionBottomBar: React.FC = () => {
     <>
       <ResourcesBar resultHeight={resultHeight} />
       <FeedbackContainer height={resultHeight}>
-        {/* {console.log("TX RESULT HEIGHT:", resultHeight)} */}
         <FeedbackRoot>
           <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
             Transaction Results
