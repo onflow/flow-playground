@@ -13,7 +13,7 @@ export const SidebarItem = styled.div<ItemProps>`
 
   font-size: 1rem;
   padding-left: 1rem;
-  padding-right: 1rem;
+  padding-right: 0.25rem;
   padding-top: 0.2rem;
   padding-bottom: 0.2rem;
   background: var(--bg);

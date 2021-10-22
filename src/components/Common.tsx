@@ -17,13 +17,17 @@ export const FullScreenContainer = styled(motion.div)<FullScreenContainerProps>`
   position: fixed;
 `;
 
-export const WhiteOverlay = styled.div`
+interface WhiteOverlayProps {
+  opacity?: number;
+}
+
+export const WhiteOverlay = styled.div<WhiteOverlayProps>`
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, ${({ opacity = 0.9 }) => opacity});
   z-index: -1;
 `;
 
@@ -34,7 +38,7 @@ interface PopupContainerProps {
 export const PopupContainer = styled(motion.div)<PopupContainerProps>`
   display: flex;
   width: ${({ width }) => width};
-  max-width: 30%;
+  max-width: 50%;
   flex-direction: column;
   padding: 20px;
   border-radius: 6px;
