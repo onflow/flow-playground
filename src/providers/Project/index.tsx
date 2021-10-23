@@ -66,11 +66,15 @@ export const ProjectContext: React.Context<ProjectContextValue> = createContext(
 interface ProjectProviderProps {
   children: any;
   urlProjectId: string | null;
+  active: any;
+  setActive: any;
 }
 
 export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   children,
   urlProjectId,
+  active,
+  setActive
 }) => {
   const client = useApolloClient();
 
@@ -100,10 +104,12 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const [transactionAccounts, setTransactionAccounts] = useState<number[]>([0]);
   const [isSavingCode, setIsSaving] = useState(false);
 
-  const [active, setActive] = useState<{ type: EntityType; index: number }>({
-    type: EntityType.Account,
-    index: 0,
-  });
+  // const [active, setActive] = useState<{ type: EntityType; index: number }>({
+  //   type: EntityType.Account,
+  //   index: 0,
+  // });
+  console.log("ACTIVE FROM INSIDE PROVIDER:", active);
+  
 
   const projectID = project ? project.id : null;
 
@@ -259,6 +265,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   };
 
   const getActiveEditor = (): ActiveEditor => {
+    console.log("GET ACTIVE EDITOR ACTIVE:", active);
+    
     switch (active.type) {
       case EntityType.Account:
         return {

@@ -12,19 +12,21 @@ import EditorLayout from "./layout";
 import { isUUUID, getParams, scriptTypes } from "../../util/url";
 
 const Playground: any = (props: any) => {
-  console.log("PLAYGORUND RAN!!!");
-  console.log("PROPS:", props);
+  // console.log("PLAYGORUND RAN!!!");
+  // console.log("PROPS:", props);
   
   
   const params = getParams(props.location.search)
   const { type, id } = params;
   const { projectId } = props;
+  console.log("PROJECT ID FROM INDEX:", projectId);
+  
 
-  const isLocalProject = projectId === "local";
+  const isLocalProject = projectId === "LOCAL-project";
   const correctUUID = isUUUID(projectId);
 
   const wrongProjectUUID = !correctUUID && !isLocalProject
-  console.log("WRONG UUID:", wrongProjectUUID);
+  // console.log("WRONG UUID:", wrongProjectUUID);
   
   const correctProject = !isLocalProject && correctUUID;
 
@@ -122,7 +124,7 @@ const Playground: any = (props: any) => {
             }
             setActive({
               type: EntityType.TransactionTemplate,
-              index: templateId,
+              index: foundIndex,
             });
             break;
           case 'script':
@@ -136,7 +138,7 @@ const Playground: any = (props: any) => {
             }
             setActive({
               type: EntityType.ScriptTemplate,
-              index: templateId,
+              index: foundIndex,
             });
             break;
           case 'account':
@@ -151,7 +153,7 @@ const Playground: any = (props: any) => {
             }
             setActive({
               type: EntityType.Account,
-              index: templateId,
+              index: foundIndex,
             });
             break;
         }
@@ -169,9 +171,9 @@ const Playground: any = (props: any) => {
       }
       if (project && activeType && templateId) {
         // navigate(`/${project.id}?type=${activeType}&id=${templateId}`)
-        console.log("PROJECT:", project);
-        console.log("ACTIVE TYPE:", activeType);
-        console.log("TEMPLATE ID:", templateId);
+        // console.log("PROJECT:", project);
+        // console.log("ACTIVE TYPE:", activeType);
+        // console.log("TEMPLATE ID:", templateId);
       }
 
     }
