@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import { Redirect, navigate } from "@reach/router";
 import { useApolloClient } from '@apollo/react-hooks';
 import { ProjectProvider } from "providers/Project";
 import { Base } from "layout/Base"
@@ -9,6 +8,7 @@ import { EntityType } from "providers/Project";
 
 import EditorLayout from "./layout";
 import { isUUUID, getParams, scriptTypes } from "../../util/url";
+import { navigate } from "@reach/router";
 
 const Playground: any = (props: any) => {
   
@@ -18,9 +18,11 @@ const Playground: any = (props: any) => {
 
   const isLocalProject = projectId === "LOCAL-project";
   const correctUUID = isUUUID(projectId);
+  console.log("CORRECT UUID::::::::::::::", correctUUID);
+  
 
-  // const wrongProjectUUID = !correctUUID && !isLocalProject
-  // console.log("WRONG UUID:", wrongProjectUUID);
+  const wrongProjectUUID = !correctUUID && !isLocalProject
+  console.log("WRONG UUID::::::::::::::::::", wrongProjectUUID);
   
   // const correctProject = !isLocalProject && correctUUID;
 
@@ -61,7 +63,6 @@ const Playground: any = (props: any) => {
         activeType = type
       }
       
-      let templateId;
       if (id == '' || id === undefined) {
         switch (activeType) {
           case 'tx':
@@ -69,14 +70,12 @@ const Playground: any = (props: any) => {
               type: EntityType.TransactionTemplate,
               index: 0,
             });
-            templateId = project.transactionTemplates[0].id;
             break;
           case 'script':
             setActive({
               type: EntityType.ScriptTemplate,
               index: 0,
             });
-            templateId = project.scriptTemplates[0].id;
             break;
           case 'account':
           default:
@@ -84,11 +83,9 @@ const Playground: any = (props: any) => {
               type: EntityType.Account,
               index: 0,
             });
-            templateId = project.accounts[0].id;
             break;
         }
       } else {
-
         let foundIndex;
         switch (activeType) {
           case 'tx':
@@ -96,28 +93,34 @@ const Playground: any = (props: any) => {
               (template: { id: string; }) => template.id === id,
             );
             if (foundIndex > 0) {
-              templateId = project.transactionTemplates[foundIndex].id;
+              setActive({
+                type: EntityType.TransactionTemplate,
+                index: foundIndex,
+              });
             } else {
-              templateId = project.transactionTemplates[0].id;
+              setActive({
+                type: EntityType.TransactionTemplate,
+                index: 0,
+              });
+              navigate(`/${project.id}?type=tx&id=${project.transactionTemplates[0].id}`)
             }
-            setActive({
-              type: EntityType.TransactionTemplate,
-              index: foundIndex,
-            });
             break;
           case 'script':
             foundIndex = project.scriptTemplates.findIndex(
               (template: { id: string; }) => template.id === id,
             );
             if (foundIndex > 0) {
-              templateId = project.scriptTemplates[foundIndex].id;
+              setActive({
+                type: EntityType.ScriptTemplate,
+                index: foundIndex,
+              });
             } else {
-              templateId = project.scriptTemplates[0].id;
+              setActive({
+                type: EntityType.ScriptTemplate,
+                index: 0,
+              });
+              navigate(`/${project.id}?type=script&id=${project.scriptTemplates[0].id}`)
             }
-            setActive({
-              type: EntityType.ScriptTemplate,
-              index: foundIndex,
-            });
             break;
           case 'account':
           default:
@@ -125,14 +128,18 @@ const Playground: any = (props: any) => {
               (template: { id: string; }) => template.id === id,
             );
             if (foundIndex > 0) {
-              templateId = project.accounts[foundIndex].id;
+              setActive({
+                type: EntityType.Account,
+                index: foundIndex,
+              });
+
             } else {
-              templateId = project.accounts[0].id;
+              setActive({
+                type: EntityType.Account,
+                index: 0,
+              });
+              navigate(`/${project.id}?type=account&id=${project.accounts[0].id}`)
             }
-            setActive({
-              type: EntityType.Account,
-              index: foundIndex,
-            });
             break;
         }
       }
