@@ -108,7 +108,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   //   type: EntityType.Account,
   //   index: 0,
   // });
-  console.log("ACTIVE FROM INSIDE PROVIDER:", active);
+  // console.log("ACTIVE FROM INSIDE PROVIDER:", active);
   
 
   const projectID = project ? project.id : null;
@@ -265,7 +265,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   };
 
   const getActiveEditor = (): ActiveEditor => {
-    console.log("GET ACTIVE EDITOR ACTIVE:", active);
+    // console.log("GET ACTIVE EDITOR ACTIVE:", active);
     
     switch (active.type) {
       case EntityType.Account:

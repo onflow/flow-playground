@@ -1,6 +1,5 @@
-// import React, { useEffect, useState } from "react";
 import React, { useEffect, useState } from "react";
-import { Redirect, navigate } from "@reach/router";
+// import { Redirect, navigate } from "@reach/router";
 import { useApolloClient } from '@apollo/react-hooks';
 import { ProjectProvider } from "providers/Project";
 import { Base } from "layout/Base"
@@ -12,28 +11,24 @@ import EditorLayout from "./layout";
 import { isUUUID, getParams, scriptTypes } from "../../util/url";
 
 const Playground: any = (props: any) => {
-  // console.log("PLAYGORUND RAN!!!");
-  // console.log("PROPS:", props);
-  
   
   const params = getParams(props.location.search)
   const { type, id } = params;
   const { projectId } = props;
-  console.log("PROJECT ID FROM INDEX:", projectId);
-  
 
   const isLocalProject = projectId === "LOCAL-project";
   const correctUUID = isUUUID(projectId);
 
-  const wrongProjectUUID = !correctUUID && !isLocalProject
+  // const wrongProjectUUID = !correctUUID && !isLocalProject
   // console.log("WRONG UUID:", wrongProjectUUID);
   
-  const correctProject = !isLocalProject && correctUUID;
+  // const correctProject = !isLocalProject && correctUUID;
 
-  const correctScriptType = scriptTypes.includes(params.type)
+  // const correctScriptType = scriptTypes.includes(params.type)
 
   // if (wrongProjectUUID){
-  //   return <Redirect noThrow={true} to={"/"}/>
+  //   console.log("WRONG PROJECT UUID FOUND::::::::::::", wrongProjectUUID);
+  //   // return <Redirect noThrow={true} to={"/"}/>
   // }
 
   // if (correctProject && !correctScriptType){
@@ -47,19 +42,9 @@ const Playground: any = (props: any) => {
   const client = useApolloClient();
   const foundProjectId = correctUUID ? projectId : null
   const {
-    project: project,
-    // isLocal: isLocal,
-    // isLoading: isLoading,
+    project
   } = useGetProject(client, foundProjectId, isActiveProject);
   
-  // console.log("IS LOCAL:", isLocal);
-  // console.log("IS LOADING:", isLoading);
-
-  // const [active, setActive] = useState<{ type: EntityType; index: number }>({
-  //   type: EntityType.Account,
-  //   index: 0,
-  // });
-
   const [active, setActive] = useState<{ type: EntityType; index: number }>({
     type: EntityType.Account,
     index: 0,
@@ -67,8 +52,6 @@ const Playground: any = (props: any) => {
 
 
   useEffect(() => {
-    // project && console.log("PROJECT!!!:", project);
-
     if (project) {
 
       let activeType
@@ -77,14 +60,9 @@ const Playground: any = (props: any) => {
       } else {
         activeType = type
       }
-      // console.log("FINAL LOAD TYPE:", activeType);
-
-      // console.log("ID:", id);
-      
       
       let templateId;
       if (id == '' || id === undefined) {
-        // console.log("id was empty or undefined (cont)");
         switch (activeType) {
           case 'tx':
             setActive({
@@ -158,24 +136,6 @@ const Playground: any = (props: any) => {
             break;
         }
       }
-      // console.log("TEMPLATE ID:", templateId);
-
-      // navigate(`/${project.id}?type=${activeType}&id=${templateId}`)
-
-      console.log("PROJECT ID:", projectId);
-      
-
-      if (projectId !== "LOCAL-project") {
-        // navigate(`/${project.id}?type=${activeType}&id=${templateId}`)
-
-      }
-      if (project && activeType && templateId) {
-        // navigate(`/${project.id}?type=${activeType}&id=${templateId}`)
-        // console.log("PROJECT:", project);
-        // console.log("ACTIVE TYPE:", activeType);
-        // console.log("TEMPLATE ID:", templateId);
-      }
-
     }
 
   },[project, type, id])
