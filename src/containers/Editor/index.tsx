@@ -18,26 +18,7 @@ const Playground: any = (props: any) => {
 
   const isLocalProject = projectId === "LOCAL-project";
   const correctUUID = isUUUID(projectId);
-  console.log("CORRECT UUID::::::::::::::", correctUUID);
   
-
-  const wrongProjectUUID = !correctUUID && !isLocalProject
-  console.log("WRONG UUID::::::::::::::::::", wrongProjectUUID);
-  
-  // const correctProject = !isLocalProject && correctUUID;
-
-  // const correctScriptType = scriptTypes.includes(params.type)
-
-  // if (wrongProjectUUID){
-  //   console.log("WRONG PROJECT UUID FOUND::::::::::::", wrongProjectUUID);
-  //   // return <Redirect noThrow={true} to={"/"}/>
-  // }
-
-  // if (correctProject && !correctScriptType){
-  //   const to = `/${projectId}?type=account&id=0`
-  //   return <Redirect noThrow={true} to={to}/>
-  // }
-
   const { data: freshProject } = useGetActiveProjectQuery()
   const isActiveProject = freshProject.activeProject
 
@@ -144,10 +125,7 @@ const Playground: any = (props: any) => {
         }
       }
     }
-
   },[project, type, id])
-
-
 
   return (
     <Base>
