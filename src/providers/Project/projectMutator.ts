@@ -100,6 +100,7 @@ export default class ProjectMutator {
         projectId: this.projectId,
       },
     });
+    
 
     if (isFork) {
       Mixpanel.track('Project forked', { projectId: this.projectId });
