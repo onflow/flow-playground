@@ -11,28 +11,28 @@ import { isUUUID, getParams, scriptTypes } from "../../util/url";
 import { navigate } from "@reach/router";
 
 const Playground: any = (props: any) => {
+
+  const { projectId } = props;
   
   const params = getParams(props.location.search)
   const { type, id } = params;
-  const { projectId } = props;
 
   const isLocalProject = projectId === "LOCAL-project";
   const correctUUID = isUUUID(projectId);
   
-  const { data: freshProject } = useGetActiveProjectQuery()
-  const isActiveProject = freshProject.activeProject
+  const { data } = useGetActiveProjectQuery()
+  const isActiveProject = data.activeProject
 
   const client = useApolloClient();
-  const foundProjectId = correctUUID ? projectId : null
+  const resolvedProjectId = correctUUID ? projectId : null
   const {
     project
-  } = useGetProject(client, foundProjectId, isActiveProject);
+  } = useGetProject(client, resolvedProjectId, isActiveProject);
   
   const [active, setActive] = useState<{ type: EntityType; index: number }>({
     type: EntityType.Account,
     index: 0,
   });
-
 
   useEffect(() => {
     if (project) {
