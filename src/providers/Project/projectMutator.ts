@@ -101,14 +101,11 @@ export default class ProjectMutator {
       },
     });
     
-
     if (isFork) {
       Mixpanel.track('Project forked', { projectId: this.projectId });
     } else {
       Mixpanel.track('Project saved', { projectId: this.projectId });
     }
-
-    console.log("SAVE PROJECT PROJECT ID:", this.projectId);
     
     navigate(`/${this.projectId}`, { replace: true});
   }
