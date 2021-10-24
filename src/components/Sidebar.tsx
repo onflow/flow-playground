@@ -22,7 +22,7 @@ const Sidebar: React.FC = () => {
 
   if (isLoading) return <p>Loading...</p>;
 
-  const projectPath = isUUUID(project.id) ? project.id : "local"
+  const projectPath = isUUUID(project.id) ? project.id : "LOCAL-project"
 
   return (
     <SidebarRoot>

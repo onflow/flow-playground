@@ -37,7 +37,7 @@ const AccountList: React.FC = () => {
 
   const location = useLocation();
   const params = getParams(location.search)
-  const projectPath = isUUUID(project.id) ? project.id : "local"
+  const projectPath = isUUUID(project.id) ? project.id : "LOCAL-project"
 
   return (
     <Root>
