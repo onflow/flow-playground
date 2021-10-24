@@ -14,14 +14,14 @@ const Playground: any = (props: any) => {
 
   const { projectId } = props;
   
-  const params = getParams(props.location.search)
+  const params = getParams(props.location.search);
   const { type, id } = params;
 
   const isLocalProject = projectId === "LOCAL-project";
   const correctUUID = isUUUID(projectId);
   
-  const { data } = useGetActiveProjectQuery()
-  const isActiveProject = data.activeProject
+  const { data } = useGetActiveProjectQuery();
+  const isActiveProject = data.activeProject;
 
   const client = useApolloClient();
   const resolvedProjectId = correctUUID ? projectId : null
@@ -37,12 +37,12 @@ const Playground: any = (props: any) => {
   useEffect(() => {
     if (project) {
 
-      let activeType
+      let activeType;
       if (type == '' || type === undefined || !scriptTypes.includes(type)) {
-        activeType = 'account'
+        activeType = 'account';
       } else {
-        activeType = type
-      }
+        activeType = type;
+      };
       
       if (id == '' || id === undefined) {
         switch (activeType) {

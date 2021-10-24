@@ -108,7 +108,9 @@ export default class ProjectMutator {
       Mixpanel.track('Project saved', { projectId: this.projectId });
     }
 
-    navigate(`/${this.projectId}`, { replace: true });
+    console.log("SAVE PROJECT PROJECT ID:", this.projectId);
+    
+    navigate(`/${this.projectId}`, { replace: true});
   }
 
   async updateAccountDraftCode(account: Account, code: string) {
