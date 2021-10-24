@@ -13,29 +13,22 @@ import { navigate } from "@reach/router";
 const Playground: any = (props: any) => {
 
   const { projectId } = props;
-  console.log("PROJECT ID FROM PROPS:::::::::::::", projectId);
-  
   
   const params = getParams(props.location.search);
   const { type, id } = params;
 
   const isLocalProject = projectId === "LOCAL-project";
   const correctUUID = isUUUID(projectId);
-  console.log("CORRECT UUID::::::::::::", correctUUID);
-  
   
   const { data } = useGetActiveProjectQuery();
   const isActiveProject = data.activeProject;
 
   const client = useApolloClient();
   const resolvedProjectId = correctUUID ? projectId : null
-  console.log("RESOLVED PROJECT ID:::::::::::::", resolvedProjectId);
   
   const {
     project
   } = useGetProject(client, resolvedProjectId, isActiveProject);
-  console.log("PROJECT::::::::::::::", project);
-  
   
   const [active, setActive] = useState<{ type: EntityType; index: number }>({
     type: EntityType.Account,
@@ -44,8 +37,6 @@ const Playground: any = (props: any) => {
 
   useEffect(() => {
     if (project) {
-      console.log("PROCECT ID::::::::::::::::::::::", project.id);
-      
 
       let activeType;
       if (type == '' || type === undefined || !scriptTypes.includes(type)) {
