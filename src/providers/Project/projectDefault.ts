@@ -138,6 +138,56 @@ export function createDefaultProject(): Project {
   return createLocalProject(
     null,
     strToSeed(uuid()),
+    "Default project title ~ Hello World!",
+    "Default project description ~ This project demonstrates...",
+`# My Project README!
+
+[![](https://avatars.githubusercontent.com/u/1680273?s=80&v=4)](https://avatars.githubusercontent.com/u/1680273?v=4)
+
+**This** is an *example* ~~text~~.
+
+Unordered list example:
+
+* hi
+* hello
+* howdy
+
+> This is a famous quote
+
+[Now try a link](https://www.onflow.org/)
+
+
+And some code:
+
+\`\`\`
+// HelloWorld.cdc
+//
+// Welcome to Cadence! This is one of the simplest programs you can deploy on Flow.
+//
+// The HelloWorld contract contains a single string field and a public getter function.
+//
+// Follow the "Hello, World!" tutorial to learn more:
+// https://docs.onflow.org/cadence/tutorial/02-hello-world/
+
+access(all) contract HelloWorld {
+
+    // Declare a public field of type String.
+    //
+    // All fields must be initialized in the init() function.
+    access(all) let greeting: String
+
+    // The init() function is required if the contract contains any fields.
+    init() {
+        self.greeting = "Hello, World!"
+    }
+
+    // Public function that returns our friendly greeting!
+    access(all) fun hello(): String {
+        return self.greeting
+    }
+}
+\`\`\`
+`,
     DEFAULT_ACCOUNTS,
     [{ title: "Transaction", code: DEFAULT_TRANSACTION }],
     [{ title: "Script" , code :DEFAULT_SCRIPT }]
@@ -152,6 +202,9 @@ type ScriptDetails = {
 export function createLocalProject(
   parentId: string | null,
   seed: number,
+  title: string,
+  description: string,
+  readme: string,
   accounts: Array<string>,
   transactionTemplates: Array<ScriptDetails>,
   scriptTemplates: Array<ScriptDetails>
@@ -161,7 +214,9 @@ export function createLocalProject(
       __typename: "Account",
       id: `LOCAL-account-${i}`,
       address: `000000000000000000000000000000000000000${i + 1}`,
-      title: "",
+      title: title,
+      description: description,
+      readme: readme,
       draftCode: script,
       deployedCode: "",
       deployedContracts: [],
@@ -201,7 +256,9 @@ export function createLocalProject(
     publicId: "",
     persist: false,
     mutable: false,
-    title: "",
+    title: title, 
+    description: description,
+    readme: readme,
     seed: seed,
     parentId: parentId,
     accounts: accountEntities,

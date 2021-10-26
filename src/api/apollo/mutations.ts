@@ -6,6 +6,8 @@ export const CREATE_PROJECT = gql`
     $accounts: [String!]!
     $seed: Int!
     $title: String!
+    $description: String!
+    $readme: String!
     $transactionTemplates: [NewProjectTransactionTemplate!]!
     $scriptTemplates: [NewProjectScriptTemplate!]!
   ) {
@@ -15,6 +17,8 @@ export const CREATE_PROJECT = gql`
         accounts: $accounts
         seed: $seed
         title: $title
+        description: $description
+        readme: $readme
         transactionTemplates: $transactionTemplates
         scriptTemplates: $scriptTemplates
       }
@@ -33,11 +37,14 @@ export const CREATE_PROJECT = gql`
   }
 `;
 
-export const PERSIST_PROJECT = gql`
-  mutation PersistProject($projectId: UUID!) {
-    updateProject(input: { id: $projectId, persist: true }) {
+export const SAVE_PROJECT = gql`
+  mutation UpdateProject($projectId: UUID!, $title: String!, $description: String!, $readme: String!) {
+    updateProject(input: { id: $projectId, persist: true, title: $title, description: $description, readme: $readme }) {
       id
       persist
+      title
+      description
+      readme
     }
   }
 `;

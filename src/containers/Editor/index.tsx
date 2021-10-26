@@ -7,13 +7,18 @@ import EditorLayout from "./layout";
 import { isUUUID, getParams, scriptTypes } from "../../util/url";
 
 const Playground: any = (props: any) => {
-  const params = getParams(props.location.search)
+    
+  const params = getParams(props.location.search);
+  
   const { projectId } = props;
+  
 
   const isLocalProject = projectId === "local";
+  
   const correctUUID = isUUUID(projectId);
-
-  const wrongProjectUUID = !correctUUID && !isLocalProject
+  
+  const wrongProjectUUID = !correctUUID && !isLocalProject;
+  
   const correctProject = !isLocalProject && correctUUID;
 
   const correctScriptType = scriptTypes.includes(params.type)

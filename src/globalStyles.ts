@@ -472,6 +472,12 @@ export default css`
     width: 100vw;
     font-family: "Overpass", sans-serif;
   }
+
+  /* applies to the markdown editor button text */
+  button i::before {
+    font-style: normal;
+  }
+
   button,
   button:focus {
     outline: 0;

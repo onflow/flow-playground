@@ -1,6 +1,7 @@
 import React from "react";
 import { EntityType } from "providers/Project";
 import AccountList from "components/AccountList";
+import ProjectInfo from "components/ProjectInfo";
 import MenuList from "components/MenuList";
 import { Sidebar as SidebarRoot } from "layout/Sidebar";
 
@@ -26,6 +27,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <SidebarRoot>
+      <ProjectInfo />
       <AccountList />
       <MenuList
         title="Transaction Templates"
