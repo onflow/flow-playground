@@ -24,9 +24,6 @@ export const getStorageData = (state: string = ''): any => {
       storage[identifier] = parsed[key];
       const path = `/${domain}/${identifier}`;
       paths[identifier] = path;
-
-      console.log("PARSED[KEY]", parsed[key]);
-      
       const storageItemType = parsed[key].value?.type || null;
       types[identifier] = storageItemType;
 
