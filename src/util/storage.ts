@@ -25,7 +25,7 @@ export const getStorageData = (state: string = ''): any => {
       const path = `/${domain}/${identifier}`;
       paths[identifier] = path;
 
-      const storageItemType = parsed[key].value.type;
+      const storageItemType = parsed[key]?.value?.type;
       types[identifier] = storageItemType;
 
       if (storageItemType === "Link") {
