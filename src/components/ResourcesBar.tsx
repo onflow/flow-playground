@@ -61,6 +61,8 @@ interface StorageBadgeProps {
 const StorageBadge: React.FC<StorageBadgeProps> = ({
   type
 }) => {
+  console.log("STORAGE BADGE TYPE", type);
+  
   return (
     <Badge
       variant="outline"
@@ -79,13 +81,14 @@ const StorageBadge: React.FC<StorageBadgeProps> = ({
               return theme.colors.badgeResource;
             case "Link":
               return theme.colors.badgeCapability;
-            case "null":
+            case null:
               return theme.colors.badgeNull;
           }
         },
       }}
     >
       {type === "Link" ? "Capability" : type}
+      {type === null && "null"}
     </Badge>
   );
 };
@@ -105,6 +108,8 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
   controls,
   resize,
 }) => {
+  console.log("IDENTIFIER LIST TYPES:", types);
+  
 
   const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false);
 

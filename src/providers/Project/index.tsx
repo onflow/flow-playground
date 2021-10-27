@@ -54,8 +54,8 @@ export interface ProjectContextValue {
   setActive: (type: EntityType, index: number) => void;
   selectedResourceAccount: string;
   setSelectedResourceAccount: (account: string) => void;
-  lastTxSigners: string[];
-  setLastTxSigners: (signers: string[]) => void;
+  lastSigners: string[];
+  setLastSigners: (signers: string[]) => void;
   transactionAccounts: number[];
   isSavingCode: boolean;
 }
@@ -100,7 +100,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [transactionAccounts, setTransactionAccounts] = useState<number[]>([0]);
   const [isSavingCode, setIsSaving] = useState(false);
-  const [lastTxSigners, setLastTxSigners] = useState(null);
+  const [lastSigners, setLastSigners] = useState(null);
 
   const [active, setActive] = useState<{ type: EntityType; index: number }>({
     type: EntityType.Account,
@@ -121,6 +121,13 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       project.accounts[active.index],
       active.index,
     );
+
+    const addr = project.accounts[active.index].address;
+    const acctNum = addr.charAt(addr.length - 1);
+    const acctHex = `0x0${acctNum}`;
+    const signer = [acctHex]
+    setLastSigners(signer);
+    
     setIsSaving(true);
     timeout = setTimeout(() => {
       setIsSaving(false);
@@ -223,7 +230,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       const acctHex = `0x0${acctNum}`;
       signers.push(acctHex);
     });
-    setLastTxSigners(signers);
+    setLastSigners(signers);
 
     timeout = setTimeout(() => {
       setIsSaving(false);
@@ -456,9 +463,9 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         setSelectedResourceAccount: (account: string) => {
           setSelectedResourceAccount(account)
         },
-        lastTxSigners,
-        setLastTxSigners: (signers: string[]) => {
-          setLastTxSigners(signers)
+        lastSigners,
+        setLastSigners: (signers: string[]) => {
+          setLastSigners(signers)
         },
         transactionAccounts,
       }}
