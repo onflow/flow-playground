@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { FaCaretSquareDown } from 'react-icons/fa';
 import theme from '../../theme';
 
 interface HoverPanelProps {
@@ -62,6 +61,7 @@ export const Badge = styled.div`
   color: #fff;
   font-weight: bold;
   font-size: 12px;
+  margin-right: 5px;
 
   --size: 16px;
   width: var(--size);
@@ -95,19 +95,6 @@ export const SignersContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-interface ToggleProps {
-  expanded: boolean;
-}
-export const ToggleExpand = styled(FaCaretSquareDown).attrs({
-  size: 18,
-})<ToggleProps>`
-  cursor: pointer;
-  opacity: 0.2;
-  transform: ${({ expanded }) =>
-    expanded ? 'rotate(180deg)' : 'rotate(0deg)'};
-  margin-left: 5px;
-`;
-
 interface ControlContainerProps {
   isOk: boolean;
   progress: boolean;
@@ -126,6 +113,17 @@ export const ControlContainer = styled.div<ControlContainerProps>`
         return '#EE431E';
     }
   }};
+`;
+
+export const ToastContainer = styled.div`
+  z-index: 1000;
+  position: fixed;
+  bottom: 40px;
+  left: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: ${theme.colors.darkPrimary};
 `;
 
 export const StatusMessage = styled.div`

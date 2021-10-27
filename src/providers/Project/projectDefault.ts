@@ -165,7 +165,7 @@ export function createLocalProject(
       draftCode: script,
       deployedCode: "",
       deployedContracts: [],
-      state: ""
+      state: "{}"
     };
   });
 

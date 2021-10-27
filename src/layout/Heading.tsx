@@ -1,11 +1,15 @@
 import styled from "@emotion/styled";
 import theme from "../theme";
 
-export const Heading = styled.div`
+type HeadingProps = {
+  textTransform?: string;
+}
+
+export const Heading = styled.div<HeadingProps>`
   padding: 1rem;
   font-size: 10px;
   font-weight: bold;
-  text-transform: uppercase;
+  text-transform: ${({ textTransform = "uppercase" }) => (textTransform)};
   letter-spacing: 0.1em;
   color: ${theme.colors.heading};
   padding-bottom: calc(1rem - 3px);

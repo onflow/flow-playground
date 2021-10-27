@@ -11,6 +11,7 @@ import {useProject} from "providers/Project/projectHooks";
 import Avatar from "components/Avatar";
 import styled from "@emotion/styled";
 import {ExportButton} from "components/ExportButton";
+import {ResourcesExplorerButton} from "components/ResourcesExplorerButton";
 import {getParams, isUUUID} from "../util/url";
 
 function getDeployedContracts(account: Account): string {
@@ -22,7 +23,7 @@ function getDeployedContracts(account: Account): string {
 
 export const AccountCard = styled.div`
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   width: 100%;
@@ -32,11 +33,12 @@ const AccountList: React.FC = () => {
   const {
     project,
     active,
+    selectedResourceAccount
   } = useProject();
   const accountSelected = active.type === EntityType.Account
 
   const location = useLocation();
-  const params = getParams(location.search)
+  const params = getParams(location.search);
   const projectPath = isUUUID(project.id) ? project.id : "local"
 
   return (
@@ -54,20 +56,21 @@ const AccountList: React.FC = () => {
           const typeName = account.__typename
           return (
             <Item
-              key={id}
               title={title}
               active={isActive}
-              onClick={() => navigate(`/${projectPath}?type=account&id=${id}`)}
+              key={account.address}
             >
-              <AccountCard>
+              <AccountCard
+                onClick={() => navigate(`/${projectPath}?type=account&id=${id}&storage=${selectedResourceAccount || 'none'}`)}
+              >
                 <Avatar seed={project.seed} index={i} />
                 <Stack>
                   <strong>{accountAddress}</strong>
                   <small>{contractName || '--'}</small>
                 </Stack>
-
                 {isActive && <ExportButton id={account.id} typeName={typeName}/>}
               </AccountCard>
+              <ResourcesExplorerButton addr={accountAddress} />
             </Item>
           );
         })}
