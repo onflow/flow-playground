@@ -222,7 +222,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     project, 
     active, 
     isSavingCode, 
-    lastTxSigners 
+    lastSigners 
   } = useProject();
 
   const [notifications, setNotifications] = useState< { [identifier: string]: string[] } >({});
@@ -430,7 +430,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
               // render a new list item for each new id in 'notifications' state
               return (
-                (lastTxSigners && updatedStorageAccts) && <motion.li
+                (lastSigners && updatedStorageAccts) && <motion.li
                   key={id}
                   layout
                   initial={{ opacity: 0, y: 50, scale: 0.3 }}
@@ -466,9 +466,9 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                         padding: "0.75rem"
                       }}
                     >
-                      {`Account${lastTxSigners?.length > 1 ? "s" : ""}
-                        ${lastTxSigners.join(", ")} completed a transaction,
-                        updating the storage in
+                      {`Account${lastSigners?.length > 1 ? "s" : ""}
+                        ${lastSigners.join(", ")}
+                        updated the storage in
                         account${updatedStorageAccts?.length > 1 ? "s" : ""}
                         ${updatedStorageAccts.join(", ")}.`}
                     </Text>
