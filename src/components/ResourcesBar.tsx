@@ -108,8 +108,6 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
   controls,
   resize,
 }) => {
-  console.log("IDENTIFIER LIST TYPES:", types);
-  
 
   const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false);
 
