@@ -81,16 +81,14 @@ const StorageBadge: React.FC<StorageBadgeProps> = ({
               return theme.colors.badgeResource;
             case "Link":
               return theme.colors.badgeCapability;
-            case "null":
-              return theme.colors.badgeNull;
-            case undefined:
+            case null:
               return theme.colors.badgeNull;
           }
         },
       }}
     >
       {type === "Link" ? "Capability" : type}
-      {type === undefined && "null"}
+      {type === null && "null"}
     </Badge>
   );
 };
