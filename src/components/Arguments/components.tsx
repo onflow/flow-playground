@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaArrowCircleRight, FaExclamationTriangle } from 'react-icons/fa';
+import { FaArrowCircleRight, FaExclamationTriangle, FaCaretSquareUp, FaCaretSquareDown } from 'react-icons/fa';
 import { EntityType } from 'providers/Project';
 import Button from 'components/Button';
 import { useProject } from 'providers/Project/projectHooks';
@@ -11,7 +11,6 @@ import {
   List,
   Title,
   SignersContainer,
-  ToggleExpand,
   SignersError,
   SingleError,
   ErrorIndex,
@@ -47,10 +46,19 @@ export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
             <span>{errors}</span>
           </Badge>
         )}
-        <ToggleExpand
-          className="icon"
-          expanded={expanded}
-        />
+        {expanded ?
+          <FaCaretSquareUp
+            cursor="pointer"
+            opacity="0.2"
+            size="18"
+          />
+            :
+          <FaCaretSquareDown
+            cursor="pointer"
+            opacity="0.2"
+            size="18"
+          />
+        }
       </Controls>
     </Heading>
   );
@@ -180,10 +188,17 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
               <span>{hintsAmount}</span>
             </Badge>
           )}
-          <ToggleExpand
-            className="icon"
-            expanded={expanded}
-          />
+          {expanded ?
+            <FaCaretSquareUp
+              cursor="pointer"
+              opacity="0.2"
+            />
+              :
+            <FaCaretSquareDown
+              cursor="pointer"
+              opacity="0.2"
+            />
+          }
         </Controls>
       </Heading>
       {expanded && (
