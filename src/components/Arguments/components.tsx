@@ -214,7 +214,7 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
 const getLabel = (type: EntityType) => {
   const { project, active } = useProject();
   const { accounts } = project;
-
+  
   switch (true) {
     case type === EntityType.Account:
       return accounts[active.index].deployedCode ? 'Redeploy' : 'Deploy';

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 // import { Helmet } from 'react-helmet';
 import { Global } from '@emotion/core';
 import { ThemeProvider, Text } from 'theme-ui';
-import { Router, Redirect, globalHistory } from '@reach/router';
+import { Router, globalHistory } from '@reach/router';
 import { ApolloProvider } from '@apollo/react-hooks';
 import AppMobileWrapper from 'containers/AppMobileWrapper';
 import BrowserDetector from 'components/BrowserDetector';
@@ -54,11 +54,11 @@ const App: React.FC = () => {
         <ThemeProvider theme={theme}>
           <AppMobileWrapper>
             <Router>
-              <Base path="/">
-                <FourOhFour path="404" />
-                <Playground path=":projectId" />
-                <Redirect noThrow={true} from="*" to="local" />
-              </Base>
+                <Base path="/">
+                  <FourOhFour path="404" />
+                  <Playground path="/" />
+                  <Playground path="/:projectId" />
+                </Base>
             </Router>
             {version}
           </AppMobileWrapper>

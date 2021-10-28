@@ -1,12 +1,11 @@
 import React, { createContext, useState } from 'react';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
-import { navigate, Redirect, useLocation } from '@reach/router';
+import { navigate } from '@reach/router';
 import ProjectMutator from './projectMutator';
 import useGetProject from './projectHooks';
 
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
 import { Project, Account } from 'api/apollo/generated/graphql';
-import { getParams, scriptTypes } from '../../util/url';
 
 export enum EntityType {
   Account = 1,
@@ -64,11 +63,15 @@ export const ProjectContext: React.Context<ProjectContextValue> = createContext(
 interface ProjectProviderProps {
   children: any;
   urlProjectId: string | null;
+  active: any;
+  setActive: any;
 }
 
 export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   children,
   urlProjectId,
+  active,
+  setActive
 }) => {
   const client = useApolloClient();
 
@@ -94,14 +97,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     navigate('/404');
   }
 
-  const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [transactionAccounts, setTransactionAccounts] = useState<number[]>([0]);
   const [isSavingCode, setIsSaving] = useState(false);
-
-  const [active, setActive] = useState<{ type: EntityType; index: number }>({
-    type: EntityType.Account,
-    index: 0,
-  });
 
   const projectID = project ? project.id : null;
 
@@ -257,6 +254,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   };
 
   const getActiveEditor = (): ActiveEditor => {
+    // console.log("GET ACTIVE EDITOR ACTIVE:", active);
+    
     switch (active.type) {
       case EntityType.Account:
         return {
@@ -283,134 +282,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const activeEditor = getActiveEditor();
 
-  const location = useLocation();
-
   if (isLoading) return null;
   if (!isLoading && !project) {
-    navigate('/404');
+    navigate('/');
     return null;
-  }
-
-  const params = getParams(location.search || '');
-  const { type, id } = params;
-
-  // TODO: check if that project is local
-  // TODO: check that active item have the same id
-
-  if (type == '' || type === undefined || !scriptTypes.includes(type)) {
-    return (
-      <Redirect
-        to={`/${project.id}?type=account&id=${project.accounts[0].id}`}
-      />
-    );
-  }
-
-  if (id == '' || id === undefined) {
-    let firstItemId;
-    switch (type) {
-      case 'tx':
-        setActive({
-          type: EntityType.TransactionTemplate,
-          index: 0,
-        });
-        firstItemId = project.transactionTemplates[0].id;
-        break;
-      case 'script':
-        setActive({
-          type: EntityType.ScriptTemplate,
-          index: 0,
-        });
-        firstItemId = project.scriptTemplates[0].id;
-        break;
-      case 'account':
-      default:
-        setActive({
-          type: EntityType.Account,
-          index: 0,
-        });
-        firstItemId = project.accounts[0].id;
-        break;
-    }
-    return <Redirect to={`/${project.id}?type=${type}&id=${firstItemId}`} />;
-  }
-
-  const activeType = type || 'account';
-
-  let templateIndex = 0;
-  switch (activeType) {
-    case 'tx': {
-      if (id && id !== '') {
-        const foundIndex = project.transactionTemplates.findIndex(
-          (template) => template.id === id,
-        );
-        if (foundIndex > 0) {
-          templateIndex = foundIndex;
-        }
-      }
-
-      const sameType = active.type == EntityType.TransactionTemplate;
-      const sameIndex = active.index == templateIndex;
-
-      if (!sameIndex || !sameType || initialLoad) {
-        setInitialLoad(false);
-        setActive({
-          type: EntityType.TransactionTemplate,
-          index: templateIndex,
-        });
-        const templateId = project.transactionTemplates[templateIndex].id;
-        return <Redirect to={`/${project.id}?type=tx&id=${templateId}`} />;
-      }
-      break;
-    }
-    case 'script': {
-      if (id && id !== '') {
-        const foundIndex = project.scriptTemplates.findIndex(
-          (template) => template.id === id,
-        );
-        if (foundIndex > 0) {
-          templateIndex = foundIndex;
-        }
-      }
-      const sameType = active.type == EntityType.ScriptTemplate;
-      const sameIndex = active.index == templateIndex;
-
-      if (!sameIndex || !sameType || initialLoad) {
-        setInitialLoad(false);
-        setActive({
-          type: EntityType.ScriptTemplate,
-          index: templateIndex,
-        });
-        const templateId = project.scriptTemplates[templateIndex].id;
-        return <Redirect to={`/${project.id}?type=script&id=${templateId}`} />;
-      }
-      break;
-    }
-
-    case 'account': {
-      if (id && id !== '') {
-        const foundIndex = project.accounts.findIndex(
-          (template) => template.id === id,
-        );
-        if (foundIndex > 0) {
-          templateIndex = foundIndex;
-        }
-      }
-      const sameType = active.type == EntityType.Account;
-      const sameIndex = active.index == templateIndex;
-
-      if (!sameIndex || !sameType || initialLoad) {
-        setInitialLoad(false);
-        setActive({
-          type: EntityType.Account,
-          index: templateIndex,
-        });
-        const templateId = project.accounts[templateIndex].id;
-        return <Redirect to={`/${project.id}?type=account&id=${templateId}`} />;
-      }
-      break;
-    }
-    default:
-      return null;
   }
 
   return (
