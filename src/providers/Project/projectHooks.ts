@@ -24,6 +24,12 @@ function cloneProject(client: any, project: Project) {
     project.seed,
     project.accounts.map(acc => acc.draftCode),
 
+    project.contracts.map(con => ({
+      code: con.script,
+      title: con.title,
+      index: con.index
+    })),
+
     project.transactionTemplates.map(tpl => ({
         code: tpl.script,
         title: tpl.title

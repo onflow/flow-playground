@@ -8,6 +8,10 @@ import {
   SET_ACTIVE_PROJECT,
   UPDATE_ACCOUNT_DRAFT_CODE,
   UPDATE_ACCOUNT_DEPLOYED_CODE,
+  UPDATE_CONTRACT,
+  UPDATE_CONTRACT_DEPLOYED_SCRIPT,
+  CREATE_CONTRACT,
+  DELETE_CONTRACT,
   UPDATE_TRANSACTION_TEMPLATE,
   CREATE_TRANSACTION_EXECUTION,
   CREATE_TRANSACTION_TEMPLATE,
@@ -50,6 +54,9 @@ export default class ProjectMutator {
     const parentId = localProject.parentId;
     const accounts = localProject.accounts.map((acc: Account) => acc.draftCode);
     const seed = localProject.seed;
+    const contracts = localProject.contracts.map(
+      (con: any) => ({ script: con.script, title: con.title, index: con.index }),
+    );
     const transactionTemplates = localProject.transactionTemplates.map(
       (tpl: any) => ({ script: tpl.script, title: tpl.title }),
     );
@@ -65,6 +72,7 @@ export default class ProjectMutator {
         accounts: accounts,
         seed: seed,
         title: '',
+        contracts: contracts,
         transactionTemplates: transactionTemplates,
         scriptTemplates: scriptTemplates,
       },
@@ -134,7 +142,7 @@ export default class ProjectMutator {
     });
   }
 
-  async updateAccountDeployedCode(account: Account, index: number) {
+  async updateAccountDeployedCode(account: Account, index: number, contractId: string, script: string) {
     if (this.isLocal) {
       const project = await this.createProject();
       account = project.accounts[index];
@@ -146,7 +154,9 @@ export default class ProjectMutator {
       variables: {
         projectId: this.projectId,
         accountId: account.id,
-        code: account.draftCode,
+        contractId: contractId,
+        //soe code is replaced with active contract's script
+        code: script,
       },
       refetchQueries: [
         { query: GET_PROJECT, variables: { projectId: this.projectId } },
@@ -157,6 +167,109 @@ export default class ProjectMutator {
       accountId: account.id,
       code: account.draftCode,
     });
+    return res;
+  }
+
+  async updateContract(contractId: string, script: string, title: string) {
+    if (this.isLocal) {
+      this.client.writeData({
+        id: `Contract:${contractId}`,
+        data: {
+          script: script,
+          title: title,
+        },
+      });
+      registerOnCloseSaveMessage();
+      return;
+    }
+
+    await this.client.mutate({
+      mutation: UPDATE_CONTRACT,
+      variables: {
+        projectId: this.projectId,
+        contractId: contractId,
+        script: script,
+        title: title,
+      },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
+    });
+  }
+
+  async updateContractDeployedScript(contractId: string, script: string, title: string) {
+    if (this.isLocal) {
+      // to-do: need to recheck this
+      //const project = await this.createProject();
+      await this.createProject();
+      //account = project.accounts[index];
+      unregisterOnCloseSaveMessage();
+    }
+
+    const res = await this.client.mutate({
+      mutation: UPDATE_CONTRACT_DEPLOYED_SCRIPT,
+      variables: {
+        projectId: this.projectId,
+        contractId: contractId,
+        script: script,
+        deployedScript: script,
+        title: title,
+      },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
+    });
+    Mixpanel.track('Contract deployed', {
+      projectId: this.projectId,
+      contractId: contractId,
+      deployedScript: script,
+    });
+    return res;
+  }
+
+  async createContract(index: number, script: string, title: string) {
+    if (this.isLocal) {
+      await this.createProject();
+    }
+
+    const res = await this.client.mutate({
+      mutation: CREATE_CONTRACT,
+      variables: {
+        projectId: this.projectId,
+        index,
+        script,
+        title,
+      },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
+      awaitRefetchQueries: true,
+    });
+
+    Mixpanel.track('Contract created', {
+      projectId: this.projectId,
+      script,
+    });
+
+    return res;
+  }
+
+  async deleteContract(contractId: string) {
+    if (this.isLocal) {
+      this.createProject();
+    }
+
+    const res = await this.client.mutate({
+      mutation: DELETE_CONTRACT,
+      variables: {
+        projectId: this.projectId,
+        contractId,
+      },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
+    });
+
     return res;
   }
 

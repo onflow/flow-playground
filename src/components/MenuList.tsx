@@ -71,11 +71,18 @@ const MenuList: React.FC<MenuListProps> = ({
     element?.select()
   };
 
-  const isScript = title.toLowerCase().includes("script");
-  const itemType = isScript ? EntityType.ScriptTemplate : EntityType.TransactionTemplate
+  //const isScript = title.toLowerCase().includes("script");
+  //const itemType = isScript ? EntityType.ScriptTemplate : EntityType.TransactionTemplate
 
   const location = useLocation();
   const params = getParams(location.search)
+
+  var itemType = 0;
+  switch (params.type) {
+    case 'account': {itemType = EntityType.Account; params.id = params.contractId; break;}
+    case 'tx': {itemType = EntityType.TransactionTemplate; break;}
+    case 'script': {itemType = EntityType.ScriptTemplate; break;}
+  }
 
   return (
     <SidebarSection>

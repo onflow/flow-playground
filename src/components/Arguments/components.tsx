@@ -213,11 +213,13 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
 
 const getLabel = (type: EntityType) => {
   const { project, active } = useProject();
-  const { accounts } = project;
+  const { contracts } = project;
 
   switch (true) {
     case type === EntityType.Account:
-      return accounts[active.index].deployedCode ? 'Redeploy' : 'Deploy';
+      //return accounts[active.index].deployedCode ? 'Redeploy' : 'Deploy';
+      //soe deploy or redeploy active contract's script
+      return contracts[active.contractIndex].deployedScript ? 'Redeploy' : 'Deploy';
     case type === EntityType.TransactionTemplate:
       return 'Send';
     case type === EntityType.ScriptTemplate:

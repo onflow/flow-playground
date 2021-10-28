@@ -22,6 +22,10 @@ import TransactionBottomBar from "components/TransactionBottomBar";
 import ScriptBottomBar from "components/ScriptBottomBar";
 import { Version } from "components/CadenceVersion";
 
+import ContractList from "components/ContractList";
+import { navigate } from "@reach/router";
+import { isUUUID } from "../../util/url";
+
 const Header: React.FC = ({ children }) => {
   return (
     <motion.div>
@@ -113,9 +117,15 @@ type EditorContainerProps = {
 };
 
 function getActiveCode(project: Project, active: ActiveEditor): string {
+  //soe logging type,index,contractIndex inside getActiveCode
+  console.log(`type,index,contractIndex: ${active.type},${active.index},${active.contractIndex}`);
   switch (active.type) {
     case EntityType.Account:
-      return project.accounts[active.index].draftCode;
+      //return project.accounts[active.index].draftCode;
+      //soe now needs to get Account's active contract's script
+      return project.contracts[active.contractIndex]
+        ? project.contracts[active.contractIndex].script 
+        : "";
     case EntityType.TransactionTemplate:
       return project.transactionTemplates[active.index]
         ? project.transactionTemplates[active.index].script
@@ -132,7 +142,13 @@ function getActiveCode(project: Project, active: ActiveEditor): string {
 function getActiveId(project: Project, active: ActiveEditor): string {
   switch (active.type) {
     case EntityType.Account:
-      return project.accounts[active.index].id;
+      //return project.accounts[active.index].id;
+      //soe get id of active contract
+      return project.contracts[active.contractIndex]
+        ? project.contracts[active.contractIndex].id
+        : "";
+    /*case EntityType.Contract:
+      return project.contracts[active.index].id;*/
     case EntityType.TransactionTemplate:
       return project.transactionTemplates[active.index]
         ? project.transactionTemplates[active.index].id
@@ -196,11 +212,47 @@ type EditorTitleProps = {
 };
 
 const EditorTitle: React.FC<EditorTitleProps> = ({ type }) => {
+
+  const {
+    active,
+    project,
+    mutator,
+    deleteContract,
+  } = useProject();
+
+  const projectPath = isUUUID(project.id) ? project.id : "local";
+
   return (
     <Heading>
-      {type === EntityType.Account && "Contract"}
+      {type === EntityType.Account && "Contracts"}
       {type === EntityType.TransactionTemplate && "Transaction Template"}
       {type === EntityType.ScriptTemplate && "Script Template"}
+
+      {type === EntityType.Account && <ContractList
+          title="Contracts"
+
+          //soe          
+          items={
+            project.contracts.filter(item => item.index === active.index)
+          }
+          active={
+            active.type == EntityType.Account ? active.index : null
+          }
+          onSelect={(_, id) => {
+            navigate(`/${projectPath}?type=account&id=${project.accounts[active.index].id}&contractId=${id}`)
+          }}
+          onUpdate={(_: any) => {}}
+          onDelete={async (templateId: string) => {
+            //soe delete contract and redirect to the account
+            await deleteContract(templateId);
+            navigate(`/${projectPath}?type=account&id=${project.accounts[active.index].id}`)
+          }}
+          onInsert={async () => {
+            console.log(`createContract with index: ${active.index}`);
+            const res = await mutator.createContract(active.index, `// draft contract`, `[DRAFT_CONTRACT]`)
+            navigate(`/${projectPath}?type=account&id=${project.accounts[active.index].id}&contractId=${res.data?.createContract?.id}`)
+          }}
+      />}
 
       <Version/>
     </Heading>

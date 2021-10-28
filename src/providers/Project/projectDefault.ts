@@ -1,9 +1,11 @@
 import {
   Project,
   Account,
+  Contract,
   TransactionTemplate,
   ScriptTemplate
 } from "api/apollo/generated/graphql";
+import { integer } from "vscode-languageserver-types";
 import { strToSeed, uuid } from "../../util/rng";
 
 const DEFAULT_ACCOUNT_1 = `// HelloWorld.cdc
@@ -139,6 +141,14 @@ export function createDefaultProject(): Project {
     null,
     strToSeed(uuid()),
     DEFAULT_ACCOUNTS,
+    [
+      { title: "HolaWorld1_1", code: `access(all) contract HolaWorld_0x01_1 {}`, index: 0}, 
+      { title: "HolaWorld1_2", code: `access(all) contract HolaWorld_0x01_2 {}`, index: 0},
+      { title: "HolaWorld2_1", code: `access(all) contract HolaWorld_0x02_1 {}`, index: 1},
+      { title: "HolaWorld3_1", code: `access(all) contract HolaWorld_0x03_1 {}`, index: 2},
+      { title: "HolaWorld4_1", code: `access(all) contract HolaWorld_0x04_1 {}`, index: 3},
+
+    ],
     [{ title: "Transaction", code: DEFAULT_TRANSACTION }],
     [{ title: "Script" , code :DEFAULT_SCRIPT }]
   );
@@ -149,10 +159,17 @@ type ScriptDetails = {
   title: string
 }
 
+type ContractDetails = {
+  code: string,
+  title: string,
+  index: integer
+}
+
 export function createLocalProject(
   parentId: string | null,
   seed: number,
   accounts: Array<string>,
+  contracts: Array<ContractDetails>,
   transactionTemplates: Array<ScriptDetails>,
   scriptTemplates: Array<ScriptDetails>
 ): Project {
@@ -168,6 +185,20 @@ export function createLocalProject(
       state: ""
     };
   });
+
+  const contractsEntities: Contract[] = contracts.map(
+    (script, i) => {
+      const { title, code, index } = script
+      return {
+        __typename: "Contract",
+        id: `LOCAL-con-temp-${i}`,
+        title: title || `CONTRACT_${i + 1}`,
+        script: code,
+        deployedScript: "",
+        index: index,
+      };
+    }
+  );
 
   const transactionTemplatesEntities: TransactionTemplate[] = transactionTemplates.map(
     (script, i) => {
@@ -205,6 +236,7 @@ export function createLocalProject(
     seed: seed,
     parentId: parentId,
     accounts: accountEntities,
+    contracts: contractsEntities,
     transactionTemplates: transactionTemplatesEntities,
     scriptTemplates: scriptsTemplatesEntities,
     version: ""

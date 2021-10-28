@@ -2,6 +2,7 @@ import React from "react";
 import { EntityType } from "providers/Project";
 import AccountList from "components/AccountList";
 import MenuList from "components/MenuList";
+//import ContractList from "components/ContractList";
 import { Sidebar as SidebarRoot } from "layout/Sidebar";
 
 import { useProject } from "providers/Project/projectHooks";

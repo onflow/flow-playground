@@ -17,6 +17,13 @@ export const GET_PROJECT = gql`
         deployedContracts
         state
       }
+      contracts {
+        id
+        accountId
+        script
+        title
+        index
+      }
       transactionTemplates {
         id
         script
@@ -48,6 +55,12 @@ export const GET_LOCAL_PROJECT = gql`
         deployedContracts
         state
       }
+      contracts {
+        id
+        script
+        title
+        index
+      }      
       transactionTemplates {
         id
         script
