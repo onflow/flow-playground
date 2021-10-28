@@ -1,5 +1,7 @@
 // take in the state for an account, return data for resources explorer
 export const getStorageData = (state: string = ''): any => {
+  console.log("STORAGE DATA STATE:", state);
+  
 
   if (state === '') {
     return { storage: {}, paths: {}, types: {}};
@@ -37,12 +39,17 @@ export const getStorageData = (state: string = ''): any => {
         const resource = resourcePart.split("{")[0];
 
         const rxp = /{([^}]+)}/g;
-        const foundInterfaces = rxp.exec(borrowType)[1];
-        const fullyQualifiedInterfaces = foundInterfaces.split(',');
+
+        const foundInterfacesRegEx = rxp.exec(borrowType)
+
         let interfaces: string[] = [];
-        fullyQualifiedInterfaces.map((fullyQualifiedInterface) => {
-          interfaces.push(fullyQualifiedInterface.split(".")[2] + "." + fullyQualifiedInterface.split(".")[3]);
-        });
+        if (foundInterfacesRegEx) {
+          const foundInterfaces = foundInterfacesRegEx[1];
+          const fullyQualifiedInterfaces = foundInterfaces.split(',');
+          fullyQualifiedInterfaces.map((fullyQualifiedInterface) => {
+            interfaces.push(fullyQualifiedInterface.split(".")[2] + "." + fullyQualifiedInterface.split(".")[3]);
+          });
+        }
 
         capabilities[identifier] = {
           path: path,
