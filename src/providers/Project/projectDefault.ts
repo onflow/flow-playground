@@ -8,116 +8,34 @@ import {
 import { integer } from "vscode-languageserver-types";
 import { strToSeed, uuid } from "../../util/rng";
 
-const DEFAULT_ACCOUNT_1 = `// HelloWorld.cdc
-//
+const CONTRACT_TEMPLATE = `// Cadence contract
 // Welcome to Cadence! This is one of the simplest programs you can deploy on Flow.
-//
 // The HelloWorld contract contains a single string field and a public getter function.
-//
 // Follow the "Hello, World!" tutorial to learn more: https://docs.onflow.org/cadence/tutorial/02-hello-world/
 
-access(all) contract HelloWorld {
-
-    // Declare a public field of type String.
-    //
-    // All fields must be initialized in the init() function.
-    access(all) let greeting: String
-
-    // The init() function is required if the contract contains any fields.
-    init() {
-        self.greeting = "Hello, World!"
-    }
-
-    // Public function that returns our friendly greeting!
-    access(all) fun hello(): String {
-        return self.greeting
-    }
-}
-`;
-
-const DEFAULT_ACCOUNT_2 = `access(all) contract HelloWorld {
+access(all) contract {FUNCTION_NAME} {
 
   // Declare a public field of type String.
-  //
   // All fields must be initialized in the init() function.
   access(all) let greeting: String
 
   // The init() function is required if the contract contains any fields.
   init() {
-      self.greeting = "Hello from account 2!"
+      self.greeting = "{GREETING} from account {ACCOUNT}!"
   }
 
   // Public function that returns our friendly greeting!
-  access(all) fun hello(): String {
+  access(all) fun greet(): String {
       return self.greeting
   }
 }
 `;
 
-const DEFAULT_ACCOUNT_3 = `access(all) contract HelloWorld {
-
-  // Declare a public field of type String.
-  //
-  // All fields must be initialized in the init() function.
-  access(all) let greeting: String
-
-  // The init() function is required if the contract contains any fields.
-  init() {
-      self.greeting = "Hello from account 3!"
-  }
-
-  // Public function that returns our friendly greeting!
-  access(all) fun hello(): String {
-      return self.greeting
-  }
+export function makeContract(functionName: string, greeting: string, accountName: string) {
+  return CONTRACT_TEMPLATE.replace(`{FUNCTION_NAME}`, functionName)
+                          .replace(`{GREETING}`, greeting)
+                          .replace(`{ACCOUNT}`, accountName);
 }
-`;
-
-const DEFAULT_ACCOUNT_4 = `access(all) contract HelloWorld {
-
-  // Declare a public field of type String.
-  //
-  // All fields must be initialized in the init() function.
-  access(all) let greeting: String
-
-  // The init() function is required if the contract contains any fields.
-  init() {
-      self.greeting = "Hello from account 4!"
-  }
-
-  // Public function that returns our friendly greeting!
-  access(all) fun hello(): String {
-      return self.greeting
-  }
-}
-`;
-
-const DEFAULT_ACCOUNT_5 = `access(all) contract HelloWorld {
-
-  // Declare a public field of type String.
-  //
-  // All fields must be initialized in the init() function.
-  access(all) let greeting: String
-
-  // The init() function is required if the contract contains any fields.
-  init() {
-      self.greeting = "Hello from account 4!"
-  }
-
-  // Public function that returns our friendly greeting!
-  access(all) fun hello(): String {
-      return self.greeting
-  }
-}
-`;
-
-const DEFAULT_ACCOUNTS = [
-  DEFAULT_ACCOUNT_1,
-  DEFAULT_ACCOUNT_2,
-  DEFAULT_ACCOUNT_3,
-  DEFAULT_ACCOUNT_4,
-  DEFAULT_ACCOUNT_5
-];
 
 const DEFAULT_TRANSACTION = `import HelloWorld from 0x01
 
@@ -126,7 +44,7 @@ transaction {
   prepare(acct: AuthAccount) {}
 
   execute {
-    log(HelloWorld.hello())
+    log(HelloWorld.greet())
   }
 }
 `;
@@ -140,14 +58,18 @@ export function createDefaultProject(): Project {
   return createLocalProject(
     null,
     strToSeed(uuid()),
-    DEFAULT_ACCOUNTS,
+    //soe this needs to be updated when number of accounts are made flexible instead of fixed 5
+    ['','','','',''],
     [
-      { title: "HolaWorld1_1", code: `access(all) contract HolaWorld_0x01_1 {}`, index: 0}, 
-      { title: "HolaWorld1_2", code: `access(all) contract HolaWorld_0x01_2 {}`, index: 0},
-      { title: "HolaWorld2_1", code: `access(all) contract HolaWorld_0x02_1 {}`, index: 1},
-      { title: "HolaWorld3_1", code: `access(all) contract HolaWorld_0x03_1 {}`, index: 2},
-      { title: "HolaWorld4_1", code: `access(all) contract HolaWorld_0x04_1 {}`, index: 3},
-
+      { title: "[DRAFT]", code: makeContract(`HelloWorld`, `Hello`, `0x01`), index: 0}, 
+      { title: "[DRAFT]", code: makeContract(`HelloWorldA`, `HelloA`, `0x01`), index: 0},
+      { title: "[DRAFT]", code: makeContract(`HelloWorldB`, `HelloB`, `0x01`), index: 0},
+      { title: "[DRAFT]", code: makeContract(`HiWorld`, `Hi`, `0x02`), index: 1},
+      { title: "[DRAFT]", code: makeContract(`HiWorldA`, `HiA`, `0x02`), index: 1},
+      { title: "[DRAFT]", code: makeContract(`YoWorld`, `Yo`, `0x03`), index: 2},
+      { title: "[DRAFT]", code: makeContract(`HolaWorld`, `Hola`, `0x04`), index: 3},
+      { title: "[DRAFT]", code: makeContract(`HejsanWorld`, `Hejsan`, `0x05`), index: 4},
+      { title: "[DRAFT]", code: makeContract(`HejsanWorldA`, `HejsanA`, `0x05`), index: 4},
     ],
     [{ title: "Transaction", code: DEFAULT_TRANSACTION }],
     [{ title: "Script" , code :DEFAULT_SCRIPT }]
