@@ -9,7 +9,7 @@ import {
   UPDATE_ACCOUNT_DRAFT_CODE,
   UPDATE_ACCOUNT_DEPLOYED_CODE,
   UPDATE_CONTRACT,
-  UPDATE_CONTRACT_DEPLOYED_SCRIPT,
+  DEPLOY_CONTRACT,
   CREATE_CONTRACT,
   DELETE_CONTRACT,
   UPDATE_TRANSACTION_TEMPLATE,
@@ -197,30 +197,31 @@ export default class ProjectMutator {
     });
   }
 
-  async updateContractDeployedScript(contractId: string, script: string, title: string) {
+  async deployContract(account: Account, index: number, contractId: string, script: string) {
     if (this.isLocal) {
-      // to-do: need to recheck this
-      //const project = await this.createProject();
-      await this.createProject();
-      //account = project.accounts[index];
+      const project = await this.createProject();
+      account = project.accounts[index];
       unregisterOnCloseSaveMessage();
     }
 
     const res = await this.client.mutate({
-      mutation: UPDATE_CONTRACT_DEPLOYED_SCRIPT,
+      mutation: DEPLOY_CONTRACT,
       variables: {
         projectId: this.projectId,
+        accountId: account.id,
         contractId: contractId,
-        script: script,
-        deployedScript: script,
-        title: title,
+        //soe code is replaced with active contract's script
+        code: script,
       },
       refetchQueries: [
         { query: GET_PROJECT, variables: { projectId: this.projectId } },
       ],
     });
+
+    console.log(`DEPLOY CONTRACT`);
     Mixpanel.track('Contract deployed', {
       projectId: this.projectId,
+      accountId: account.id,
       contractId: contractId,
       deployedScript: script,
     });

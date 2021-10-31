@@ -142,14 +142,14 @@ const useTemplateType = (): ProcessingArgs => {
   const {
     createScriptExecution,
     createTransactionExecution,
-    updateAccountDeployedCode,
+    deployContract,
   } = useProject();
 
   return {
     disabled: isSavingCode,
     scriptFactory: createScriptExecution,
     transactionFactory: createTransactionExecution,
-    contractDeployment: updateAccountDeployedCode,
+    contractDeployment: deployContract,
   };
 };
 interface IValue {

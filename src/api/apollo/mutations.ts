@@ -105,21 +105,19 @@ export const UPDATE_CONTRACT = gql`
   }
 `;
 
-export const UPDATE_CONTRACT_DEPLOYED_SCRIPT = gql`
-  mutation UpdateContractDeployedScript(
+export const DEPLOY_CONTRACT = gql`
+  mutation DeployContract(
     $projectId: UUID!
+    $accountId: UUID!
     $contractId: UUID!
-    $script: String!
-    $title: String
+    $code: String!
   ) {
-    updateContract(
-      input: { projectId: $projectId, id: $contractId, deployedScript: $script, title: $title }
+    updateAccount(
+      input: { projectId: $projectId, id: $accountId, contractId: $contractId, deployedCode: $code }
     ) {
       id
-      accountId
-      script
-      title
-      index
+      address
+      deployedContracts
     }
   }
 `;
