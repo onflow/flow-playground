@@ -254,7 +254,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   };
 
   const getActiveEditor = (): ActiveEditor => {
-    // console.log("GET ACTIVE EDITOR ACTIVE:", active);
     
     switch (active.type) {
       case EntityType.Account:

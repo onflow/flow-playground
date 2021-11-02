@@ -7,7 +7,7 @@ import useGetProject from '../../providers/Project/projectHooks';
 import { EntityType } from "providers/Project";
 
 import EditorLayout from "./layout";
-import { isUUUID, getParams, scriptTypes } from "../../util/url";
+import { isUUUID, getParams, scriptTypes, localProjectId } from "../../util/url";
 import { navigate } from "@reach/router";
 
 const Playground: any = (props: any) => {
@@ -17,7 +17,7 @@ const Playground: any = (props: any) => {
   const params = getParams(props.location.search);
   const { type, id } = params;
 
-  const isLocalProject = projectId === "LOCAL-project";
+  const isLocalProject = projectId === localProjectId;
   const correctUUID = isUUUID(projectId);
   
   const { data } = useGetActiveProjectQuery();

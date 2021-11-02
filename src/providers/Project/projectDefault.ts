@@ -5,6 +5,7 @@ import {
   ScriptTemplate
 } from "api/apollo/generated/graphql";
 import { strToSeed, uuid } from "../../util/rng";
+import { localProjectId } from "../../util/url";
 
 const DEFAULT_ACCOUNT_1 = `// HelloWorld.cdc
 //
@@ -159,7 +160,7 @@ export function createLocalProject(
   const accountEntities: Account[] = accounts.map((script, i) => {
     return {
       __typename: "Account",
-      id: `LOCAL-account-${i}`,
+      id: `local-account-${i}`,
       address: `000000000000000000000000000000000000000${i + 1}`,
       title: "",
       draftCode: script,
@@ -174,7 +175,7 @@ export function createLocalProject(
       const { title, code } = script
       return {
         __typename: "TransactionTemplate",
-        id: `LOCAL-tx-temp-${i}`,
+        id: `local-tx-temp-${i}`,
         title: title || `Transaction ${i + 1}`,
         script: code,
         index: i,
@@ -187,7 +188,7 @@ export function createLocalProject(
       const { title, code } = script
       return {
         __typename: "ScriptTemplate",
-        id: `LOCAL-script-temp-${i}`,
+        id: `local-script-temp-${i}`,
         title: title || `Script ${i + 1}`,
         script: code,
         index: i,
@@ -197,7 +198,7 @@ export function createLocalProject(
 
   return {
     __typename: "Project",
-    id: "LOCAL-project",
+    id: localProjectId,
     publicId: "",
     persist: false,
     mutable: false,

@@ -11,7 +11,7 @@ import {useProject} from "providers/Project/projectHooks";
 import Avatar from "components/Avatar";
 import styled from "@emotion/styled";
 import {ExportButton} from "components/ExportButton";
-import {getParams, isUUUID} from "../util/url";
+import {getParams, isUUUID, localProjectId} from "../util/url";
 
 function getDeployedContracts(account: Account): string {
   const contracts = account.deployedContracts.map(
@@ -37,7 +37,7 @@ const AccountList: React.FC = () => {
 
   const location = useLocation();
   const params = getParams(location.search)
-  const projectPath = isUUUID(project.id) ? project.id : "LOCAL-project"
+  const projectPath = isUUUID(project.id) ? project.id : localProjectId 
 
   return (
     <Root>

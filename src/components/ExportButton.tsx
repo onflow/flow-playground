@@ -4,6 +4,7 @@ import { FaClipboard, FaClipboardCheck } from 'react-icons/fa';
 import { SidebarItemExport } from 'layout/SidebarItemExport';
 import { useProject } from 'providers/Project/projectHooks';
 import { generateCode } from '../util/generate-code';
+import { localProjectId } from '../util/url'
 
 type ExportButtonProps = {
   id: string;
@@ -18,7 +19,7 @@ export const ExportButton = (props: ExportButtonProps) => {
     successDuration: 1000,
   });
 
-  return project.id === 'LOCAL-project' ? null : (
+  return project.id === localProjectId ? null : (
     <SidebarItemExport
       onClick={setCopied}
       title={'Copy snippet to clipboard'}
