@@ -6,12 +6,12 @@ import { useProject } from 'providers/Project/projectHooks';
 import {isUUUID, getParams} from "../util/url";
 
 type ResourcesExplorerButtonProps = {
-  addr: string;
+  address: string;
 };
 
 export const ResourcesExplorerButton = (props: ResourcesExplorerButtonProps) => {
   const { project, setSelectedResourceAccount } = useProject();
-  const { addr } = props;
+  const { address } = props;
 
   const projectPath = isUUUID(project.id) ? project.id : "local";
 
@@ -22,16 +22,16 @@ export const ResourcesExplorerButton = (props: ResourcesExplorerButtonProps) => 
   return (
     <SidebarItemToggleResources
       onClick={() => {
-        if (addr === storage) {
+        if (address === storage) {
           setSelectedResourceAccount('none');
           navigate(`/${projectPath}?type=${type}&id=${id}&storage=${'none'}`);
         } else {
-          setSelectedResourceAccount(addr);
-          navigate(`/${projectPath}?type=${type}&id=${id}&storage=${addr}`);
+          setSelectedResourceAccount(address);
+          navigate(`/${projectPath}?type=${type}&id=${id}&storage=${address}`);
         }
       }}
       title={'Open the resources explorer'}
-      active={addr === storage}
+      active={address === storage}
     >
       <FaDatabase />
     </SidebarItemToggleResources>

@@ -1,7 +1,5 @@
 // take in the state for an account, return data for resources explorer
 export const getStorageData = (state: string = ''): any => {
-  console.log("STORAGE DATA STATE:", state);
-  
 
   if (state === '') {
     return { storage: {}, paths: {}, types: {}};

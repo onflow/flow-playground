@@ -25,6 +25,8 @@ const Sidebar: React.FC = () => {
 
   const projectPath = isUUUID(project.id) ? project.id : "local"
 
+  const storageAcct = selectedResourceAccount || 'none'
+
   return (
     <SidebarRoot>
       <AccountList />
@@ -35,7 +37,7 @@ const Sidebar: React.FC = () => {
           active.type == EntityType.TransactionTemplate ? active.index : null
         }
         onSelect={(_, id) => {
-          navigate(`/${projectPath}?type=tx&id=${id}&storage=${selectedResourceAccount || 'none'}`)
+          navigate(`/${projectPath}?type=tx&id=${id}&storage=${storageAcct}`)
         }}
         onUpdate={(templateId: string, script: string, title: string) => {
           updateTransactionTemplate(templateId, script, title);
@@ -43,11 +45,11 @@ const Sidebar: React.FC = () => {
         onDelete={async (templateId: string) => {
           await deleteTransactionTemplate(templateId);
           const id = project.transactionTemplates[0].id;
-          navigate(`/${projectPath}?type=tx&id=${id}&storage=${selectedResourceAccount || 'none'}`)
+          navigate(`/${projectPath}?type=tx&id=${id}&storage=${storageAcct}`)
         }}
         onInsert={async () => {
           const res = await mutator.createTransactionTemplate("", `New Transaction`)
-          navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
+          navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${storageAcct}`)
         }}
       />
       <MenuList
@@ -55,7 +57,7 @@ const Sidebar: React.FC = () => {
         items={project.scriptTemplates}
         active={active.type == EntityType.ScriptTemplate ? active.index : null}
         onSelect={(_, id) => {
-          navigate(`/${projectPath}?type=script&id=${id}&storage=${selectedResourceAccount || 'none'}`)
+          navigate(`/${projectPath}?type=script&id=${id}&storage=${storageAcct}`)
         }}
         onUpdate={(templateId: string, script: string, title: string) => {
           updateScriptTemplate(templateId, script, title);
@@ -63,11 +65,11 @@ const Sidebar: React.FC = () => {
         onDelete={async (templateId: string) => {
           await deleteScriptTemplate(templateId);
           const id = project.scriptTemplates[0].id;
-          navigate(`/${projectPath}?type=script&id=${id}&storage=${selectedResourceAccount || 'none'}`)
+          navigate(`/${projectPath}?type=script&id=${id}&storage=${storageAcct}`)
         }}
         onInsert={async () => {
           const res = await mutator.createScriptTemplate("", `New Script`);
-          navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
+          navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${storageAcct}`)
         }}
       />
     </SidebarRoot>

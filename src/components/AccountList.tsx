@@ -70,7 +70,7 @@ const AccountList: React.FC = () => {
                 </Stack>
                 {isActive && <ExportButton id={account.id} typeName={typeName}/>}
               </AccountCard>
-              <ResourcesExplorerButton addr={accountAddress} />
+              <ResourcesExplorerButton address={accountAddress} />
             </Item>
           );
         })}

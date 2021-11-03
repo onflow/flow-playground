@@ -46,6 +46,8 @@ const TemplatePopup: React.FC<{
 
   const firstInput = useRef<HTMLInputElement>(null!);
 
+  const storageAcct = selectedResourceAccount || 'none'
+
   useEffect(() => {
     firstInput.current.focus();
   }, [firstInput.current]);
@@ -186,7 +188,7 @@ const TemplatePopup: React.FC<{
                       ), 
                       templateName
                     )
-                    navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
+                    navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${storageAcct}`)
                 } else if (templateType === "Script") {
                     const res = await mutator.createScriptTemplate(
                       getInterpolatedTemplate(
@@ -198,7 +200,7 @@ const TemplatePopup: React.FC<{
                       ), 
                       templateName
                     )
-                    navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${selectedResourceAccount || 'none'}`)
+                    navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${storageAcct}`)
                 }
             
                 triggerClose(null);
