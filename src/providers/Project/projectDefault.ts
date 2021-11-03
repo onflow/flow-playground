@@ -5,7 +5,7 @@ import {
   ScriptTemplate
 } from "api/apollo/generated/graphql";
 import { strToSeed, uuid } from "../../util/rng";
-import { localProjectId } from "../../util/url";
+import { LOCAL_PROJECT_ID } from "../../util/url";
 
 const DEFAULT_ACCOUNT_1 = `// HelloWorld.cdc
 //
@@ -198,7 +198,7 @@ export function createLocalProject(
 
   return {
     __typename: "Project",
-    id: localProjectId,
+    id: LOCAL_PROJECT_ID,
     publicId: "",
     persist: false,
     mutable: false,

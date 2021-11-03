@@ -6,7 +6,7 @@ import { Sidebar as SidebarRoot } from "layout/Sidebar";
 
 import { useProject } from "providers/Project/projectHooks";
 import { navigate } from "@reach/router";
-import { isUUUID, localProjectId } from "../util/url";
+import { isUUUID, LOCAL_PROJECT_ID } from "../util/url";
 
 const Sidebar: React.FC = () => {
   const {
@@ -22,7 +22,7 @@ const Sidebar: React.FC = () => {
 
   if (isLoading) return <p>Loading...</p>;
 
-  const projectPath = isUUUID(project.id) ? project.id : localProjectId
+  const projectPath = isUUUID(project.id) ? project.id : LOCAL_PROJECT_ID
 
   return (
     <SidebarRoot>

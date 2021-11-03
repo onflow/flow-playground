@@ -13,4 +13,4 @@ export const getParams = (url: string): any =>  {
 
 export const scriptTypes = ["account", "tx", "script"]
 
-export const localProjectId = "local-project"
+export const LOCAL_PROJECT_ID = "local-project"
