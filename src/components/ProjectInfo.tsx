@@ -26,11 +26,7 @@ const ProjectInfo: React.FC = () => {
             navigate(`/${projectPath}?type=readme&id=LOCAL-account-0`)
           }}
         >
-          <Box
-            sx={{
-              marginLeft: "0.25rem"
-            }}
-          >
+          <Box sx={{ marginLeft: "0.25rem" }}>
             <HiOutlineDocumentReport fontSize="1.5rem"/> 
           </Box>
             <Text sx={{ marginLeft: "1.15rem"}}>Project</Text>

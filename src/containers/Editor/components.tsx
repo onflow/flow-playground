@@ -168,21 +168,16 @@ const ProjectHeading = styled.div`
 
 const ProjectDescription = styled.div`
   font-size: 1.2rem;
-  margin-top: 2.0rem;
-  margin-left: 1.0rem;
-  margin-right: 1.0rem;
-  margin-bottom: 1.0rem;
-  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  margin: 1rem;
+  margin-top: 2rem;
+  padding: 0.5rem;
   border-radius: 2px;
   font-style: italic;
   `;
 
 const ReadmeHtmlContainer = styled.div`
-  // padding: 1rem 1rem 1rem 1rem;
-  margin-top: 0.0rem;
-  margin-left: 1.0rem;
-  margin-right: 1.0rem;
-  margin-bottom: 1.0rem;
+  margin: 1rem;
+  margin-top: 0rem;
   `;
 
 
