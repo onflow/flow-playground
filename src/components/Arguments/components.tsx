@@ -24,7 +24,7 @@ import {
 import SingleArgument from './SingleArgument';
 import theme from '../../theme';
 import { Stack } from 'layout/Stack';
-import { CadenceProblem } from '../../util/language-syntax-errors';
+import { CadenceProblem } from 'util/language-syntax-errors';
 import { ErrorListProps, HintsProps } from './types';
 
 export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
