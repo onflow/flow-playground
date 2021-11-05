@@ -21,7 +21,7 @@ import AccountBottomBar from "components/AccountBottomBar";
 import TransactionBottomBar from "components/TransactionBottomBar";
 import ScriptBottomBar from "components/ScriptBottomBar";
 import { Version } from "components/CadenceVersion";
-import { MdeEditor } from '../../components/MdeEditor';
+import { MdeEditor } from "components/MdeEditor"
 import {
   Input,
   InputBlock,
