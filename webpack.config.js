@@ -26,7 +26,7 @@ module.exports = {
       "api": path.resolve(__dirname, "src/api"),
       "layout": path.resolve(__dirname, "src/layout"),
       "util": path.resolve(__dirname, "src/util"),
-      "MdeEditor": path.resolve(__dirname, "src/components/MdeEditor"),
+    //   "MdeEditor": path.resolve(__dirname, "src/components/MdeEditor"),
       vscode: require.resolve("monaco-languageclient/lib/vscode-compatibility")
     }
   },

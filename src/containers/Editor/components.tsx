@@ -27,7 +27,7 @@ import {
   InputBlock,
   Label,
 } from 'components/Arguments/SingleArgument/styles';
-import { Markdown } from "../../components/Markdown";
+import { Markdown } from "components/Markdown";
 
 const Header: React.FC = ({ children }) => {
   return (
