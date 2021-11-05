@@ -12,7 +12,7 @@ import Avatar from "components/Avatar";
 import styled from "@emotion/styled";
 import {ExportButton} from "components/ExportButton";
 import {ResourcesExplorerButton} from "components/ResourcesExplorerButton";
-import {getParams, isUUUID} from "../util/url";
+import {getParams, isUUUID} from "util/url";
 
 function getDeployedContracts(account: Account): string {
   const contracts = account.deployedContracts.map(

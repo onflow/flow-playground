@@ -6,7 +6,7 @@ import { Sidebar as SidebarRoot } from "layout/Sidebar";
 
 import { useProject } from "providers/Project/projectHooks";
 import { navigate } from "@reach/router";
-import { isUUUID } from "../util/url";
+import { isUUUID } from "util/url";
 
 const Sidebar: React.FC = () => {
   const {

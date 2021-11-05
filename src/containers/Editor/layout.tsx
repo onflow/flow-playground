@@ -4,7 +4,7 @@ import { Button, Flex, Text } from "theme-ui";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { FaCodeBranch, FaDiscord, FaTwitter, FaArrowAltCircleDown } from "react-icons/fa";
-import { getParams } from "../../util/url";
+import { getParams } from "util/url";
 
 import { Header as HeaderRoot } from "layout/Header";
 import { default as FlowButton } from "components/Button";
@@ -14,7 +14,7 @@ import ExportPopup from "components/ExportPopup";
 import Sidebar from "components/Sidebar";
 import { IconCadence } from "components/Icons";
 
-import Mixpanel from "../../util/mixpanel";
+import Mixpanel from "util/mixpanel";
 
 import {
   EditorContainer,

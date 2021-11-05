@@ -10,8 +10,8 @@ import { FeedbackActions } from 'layout/FeedbackActions';
 import { SidebarItemInsert } from 'layout/SidebarItemInsert';
 import { BottomBarItemInsert } from 'layout/BottomBarItemInsert';
 import styled from '@emotion/styled';
-import { storageMap } from '../util/accounts';
-import { getStorageData } from '../util/storage';
+import { storageMap } from 'util/accounts';
+import { getStorageData } from 'util/storage';
 import theme from '../theme';
 import { ResizeHeading } from 'layout/Heading';
 

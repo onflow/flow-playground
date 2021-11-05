@@ -12,8 +12,8 @@ import { EntityType, ActiveEditor } from "providers/Project";
 import { useProject } from "providers/Project/projectHooks";
 import { Project } from "api/apollo/generated/graphql";
 
-import debounce from "../../util/debounce";
-import Mixpanel from "../../util/mixpanel";
+import debounce from "util/debounce";
+import Mixpanel from "util/mixpanel";
 
 import { default as FlowButton } from "components/Button";
 import CadenceEditor from "components/CadenceEditor";

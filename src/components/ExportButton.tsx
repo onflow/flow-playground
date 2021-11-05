@@ -3,7 +3,7 @@ import useClipboard from 'react-use-clipboard';
 import { FaClipboard, FaClipboardCheck } from 'react-icons/fa';
 import { SidebarItemExport } from 'layout/SidebarItemExport';
 import { useProject } from 'providers/Project/projectHooks';
-import { generateCode } from '../util/generate-code';
+import { generateCode } from 'util/generate-code';
 
 type ExportButtonProps = {
   id: string;

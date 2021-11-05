@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/core';
-import configureCadence, { CADENCE_LANGUAGE_ID } from '../util/cadence';
+import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
 import {
   CadenceCheckCompleted,
   CadenceLanguageServer,
   Callbacks,
-} from '../util/language-server';
-import { createCadenceLanguageClient } from '../util/language-client';
+} from 'util/language-server';
+import { createCadenceLanguageClient } from 'util/language-client';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { EntityType } from 'providers/Project';
 import Arguments from 'components/Arguments';
@@ -18,7 +18,7 @@ import {
   goTo,
   Highlight,
   ProblemsList,
-} from '../util/language-syntax-errors';
+} from 'util/language-syntax-errors';
 import {
   MonacoLanguageClient,
   ExecuteCommandRequest,

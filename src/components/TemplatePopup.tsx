@@ -4,10 +4,10 @@ import { default as FlowButton } from 'components/Button';
 import theme from '../theme';
 import { Select, Spinner } from '@theme-ui/components';
 import { useProject } from 'providers/Project/projectHooks';
-import { isUUUID } from "../util/url";
-import { getInterpolatedTemplate } from '../util/templates';
-import { getStorageData } from "../util/storage";
-import { storageMap } from '../util/accounts';
+import { isUUUID } from "util/url";
+import { getInterpolatedTemplate } from 'util/templates';
+import { getStorageData } from "util/storage";
+import { storageMap } from 'util/accounts';
 
 import {
   FullScreenContainer,

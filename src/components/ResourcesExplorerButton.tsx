@@ -3,7 +3,7 @@ import {navigate, useLocation} from "@reach/router";
 import { FaDatabase } from 'react-icons/fa';
 import { SidebarItemToggleResources } from 'layout/SidebarItemToggleResources';
 import { useProject } from 'providers/Project/projectHooks';
-import {isUUUID, getParams} from "../util/url";
+import {isUUUID, getParams} from "util/url";
 
 type ResourcesExplorerButtonProps = {
   address: string;
