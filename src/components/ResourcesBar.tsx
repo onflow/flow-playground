@@ -61,7 +61,6 @@ interface StorageBadgeProps {
 const StorageBadge: React.FC<StorageBadgeProps> = ({
   type
 }) => {
-  console.log("STORAGE BADGE TYPE", type);
   
   return (
     <Badge
