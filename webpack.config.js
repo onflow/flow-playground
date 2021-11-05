@@ -25,6 +25,7 @@ module.exports = {
       "containers": path.resolve(__dirname, "src/containers"),
       "api": path.resolve(__dirname, "src/api"),
       "layout": path.resolve(__dirname, "src/layout"),
+      "util": path.resolve(__dirname, "src/util"),
       vscode: require.resolve("monaco-languageclient/lib/vscode-compatibility")
     }
   },

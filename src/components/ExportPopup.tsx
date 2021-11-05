@@ -10,7 +10,7 @@ import {
   SpaceBetween,
 } from 'components/Common';
 
-import { createZip } from '../util/generator';
+import { createZip } from 'util/generator';
 
 import {
   Input,

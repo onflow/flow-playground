@@ -6,7 +6,7 @@ import useGetProject from './projectHooks';
 
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
 import { Project, Account } from 'api/apollo/generated/graphql';
-import { getParams, scriptTypes } from '../../util/url';
+import { getParams, scriptTypes } from 'util/url';
 
 export enum EntityType {
   Account = 1,

@@ -4,7 +4,7 @@ import {SidebarSection as Root} from "layout/SidebarSection";
 import {SidebarItems as Items} from "layout/SidebarItems";
 import {ProjectItem as Item} from "layout/ProjectItem";
 import {useProject} from "providers/Project/projectHooks";
-import { isUUUID} from "../util/url";
+import { isUUUID} from "util/url";
 import { EntityType } from "providers/Project";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import { Text, Box } from "@theme-ui/components";

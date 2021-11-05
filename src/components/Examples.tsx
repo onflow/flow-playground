@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { IoMdClose } from "react-icons/io";
 import { WhiteOverlay } from "components/Common";
 
-import Mixpanel from "../util/mixpanel";
+import Mixpanel from "util/mixpanel";
 import ActionButton from 'components/ActionButton';
 
 const examples = [

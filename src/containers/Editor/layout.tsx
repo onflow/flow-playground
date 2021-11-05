@@ -13,7 +13,7 @@ import ExportPopup from "components/ExportPopup";
 import Sidebar from "components/Sidebar";
 import { IconCadence } from "components/Icons";
 
-import Mixpanel from "../../util/mixpanel";
+import Mixpanel from "util/mixpanel";
 
 import {
   EditorContainer,

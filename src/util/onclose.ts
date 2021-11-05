@@ -1,4 +1,4 @@
-import Mixpanel from "../util/mixpanel";
+import Mixpanel from "util/mixpanel";
 
 export const registerOnCloseSaveMessage = () => {
   window.onbeforeunload = () => {

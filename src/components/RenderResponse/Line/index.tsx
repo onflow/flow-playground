@@ -3,7 +3,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import {
   Line as LineType,
   Tag
-} from "../../../util/normalize-interaction-response";
+} from "util/normalize-interaction-response";
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 import theme from "../../../theme";
