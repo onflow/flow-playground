@@ -163,7 +163,7 @@ const ProjectHeading = styled.div`
   font-size: 2rem;
   font-weight: 700;
   margin-top: 0.25rem;
-  padding: 1rem 1rem 1rem 1rem;
+  padding: 1rem;
   `;
 
 const ProjectDescription = styled.div`
