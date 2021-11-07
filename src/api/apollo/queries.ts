@@ -21,6 +21,7 @@ export const GET_PROJECT = gql`
         id
         accountId
         script
+        deployedScript
         title
         index
       }
@@ -58,6 +59,7 @@ export const GET_LOCAL_PROJECT = gql`
       contracts {
         id
         script
+        deployedScript
         title
         index
       }      
