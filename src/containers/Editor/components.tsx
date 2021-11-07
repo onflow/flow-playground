@@ -8,6 +8,7 @@ import useClipboard from "react-use-clipboard";
 import { Main as MainRoot } from "layout/Main";
 import { Editor as EditorRoot } from "layout/Editor";
 import { Heading } from "layout/Heading";
+import { HeadingContainer } from "layout/HeadingContainer";
 import { EntityType, ActiveEditor } from "providers/Project";
 import { useProject } from "providers/Project/projectHooks";
 import { Project } from "api/apollo/generated/graphql";
@@ -223,11 +224,14 @@ const EditorTitle: React.FC<EditorTitleProps> = ({ type }) => {
   const projectPath = isUUUID(project.id) ? project.id : "local";
 
   return (
-    <Heading>
-      {type === EntityType.Account && "Contracts"}
-      {type === EntityType.TransactionTemplate && "Transaction Template"}
-      {type === EntityType.ScriptTemplate && "Script Template"}
+    <HeadingContainer>
+      <Heading>
+        {type === EntityType.Account && "Contracts"}
+        {type === EntityType.TransactionTemplate && "Transaction Template"}
+        {type === EntityType.ScriptTemplate && "Script Template"}
 
+        <Version/>
+      </Heading>
       {type === EntityType.Account && <ContractList
           title="Contracts"
 
@@ -253,9 +257,8 @@ const EditorTitle: React.FC<EditorTitleProps> = ({ type }) => {
             navigate(`/${projectPath}?type=account&id=${project.accounts[active.index].id}&contractId=${res.data?.createContract?.id}`)
           }}
       />}
-
-      <Version/>
-    </Heading>
+    </HeadingContainer>
+    
   );
 };
 

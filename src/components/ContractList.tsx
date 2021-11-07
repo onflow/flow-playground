@@ -7,7 +7,6 @@ import {TabItem} from "layout/TabItem";
 import {TabItemInsert} from "layout/TabItemInsert";
 import {TabItemDelete} from "layout/TabItemDelete";
 import useKeyPress from "../hooks/useKeyPress";
-import { ExportButton } from "components/ExportButton";
 import { getParams } from "../util/url";
 import { useProject } from "providers/Project/projectHooks";
 import { EntityType } from "providers/Project";
@@ -74,12 +73,6 @@ const ContractList: React.FC<ContractListProps> = ({
               }
             >
               {item.title}
-
-              {isActive && items.length > 99 && (
-                <>
-                  <ExportButton id={item.id} typeName={item.__typename}/>
-                </>
-              )}
 
               {!editing.includes(i) && isActive && items.length > 1 && (
                 <TabItemDelete

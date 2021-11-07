@@ -24,6 +24,10 @@ export const TabItem = styled.div<ItemProps>`
 
   background-color: rgba(225, 225, 225, 0.1);
 
+  border-top: 1px solid rgba(225, 225, 225, 0.2);
+  border-right: 1px solid rgba(225, 225, 225, 0.3);
+  box-shadow: rgba(0, 0, 0, 0.05) 1px 1px 1px 0px;
+
   &:after {
     content: "";
     display: block;
@@ -61,7 +65,6 @@ export const TabItem = styled.div<ItemProps>`
   text-decoration: none;
   display:inline-block;
   align-items: center;
-  font-weight: bold;
   color: ${theme.colors.muted};
 
   & .avatar {
