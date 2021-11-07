@@ -19,7 +19,6 @@ export const GET_PROJECT = gql`
       }
       contracts {
         id
-        accountId
         script
         deployedScript
         title

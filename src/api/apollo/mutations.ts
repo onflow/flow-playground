@@ -97,7 +97,6 @@ export const UPDATE_CONTRACT = gql`
       input: { projectId: $projectId, id: $contractId, script: $script, title: $title }
     ) {
       id
-      accountId
       script
       title
       index
@@ -133,7 +132,6 @@ export const CREATE_CONTRACT = gql`
       input: { projectId: $projectId, index: $index, script: $script, title: $title }
     ) {
       id
-      accountId
       script
       title
       index
