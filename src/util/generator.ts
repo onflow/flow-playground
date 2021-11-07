@@ -315,13 +315,14 @@ export const createZip = async (
   zip.file('test/jest.config.js', jestConfig);
   zip.file('test/index.test.js', testFile);
 
-  const { accounts, transactionTemplates, scriptTemplates } = project;
+  const { contracts, transactionTemplates, scriptTemplates } = project;
 
-  for (let i = 0; i < accounts.length; i++) {
-    const account = accounts[i];
-    const name = getContractName(account.draftCode);
-    const fileName = `cadence/contracts/${name}.cdc`;
-    zip.file(fileName, account.draftCode);
+  //soe update project export to loop through multiple contracts per account
+  for (let i = 0; i < contracts.length; i++) {
+    const contract = contracts[i];
+    const name = getContractName(contract.script);
+    const fileName = `cadence/contracts/0x0${contract.index+1}/${name}.cdc`;
+    zip.file(fileName, contract.script);
   }
 
   for (let i = 0; i < transactionTemplates.length; i++) {
