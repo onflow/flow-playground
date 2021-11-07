@@ -337,7 +337,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           type: active.type,
           index: active.index,
           contractIndex: active.contractIndex,
-          //onChange: (code: string) => updateAccountDraftCode(code),
+          //soe onChange: (code: string) => updateAccountDraftCode(code),
           onChange: (code: any, title: string) => updateActiveContract(code, title),
         };
       case EntityType.TransactionTemplate:
@@ -378,7 +378,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   if (type == '' || type === undefined || !scriptTypes.includes(type)) {
     console.log('first entry');
     //soe default redirect to first contract of the first account
-    //const firstContract = project.contracts.find(contract => contract.index === 0);
     //setActive({ type: EntityType.Account, index: 0, contractIndex: 0 });
     return (
       <Redirect to={`/${project.id}?type=account&id=${project.accounts[0].id}`} />
@@ -414,7 +413,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         firstItemId = project.accounts[0].id;
         break;
     }
-    console.log(`firstItemId: ${firstItemId}`); //soe
     return <Redirect to={`/${project.id}?type=${type}&id=${firstItemId}`} />;
   }
 
@@ -471,7 +469,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       }
       break;
     }
-    //soe redirect with accountid
     case 'account': {
       if (id && id !== '') {
         const foundIndex = project.accounts.findIndex(
@@ -481,8 +478,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           templateIndex = foundIndex;
         }
       }
-
-      if(contractId === '0') break;
 
       //soe contractId from url param
       var contractIndex = null;
@@ -507,11 +502,9 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         const templateId = project.accounts[templateIndex].id;
 
         //soe to-do: account with no contract fails, need fixing
-        //soe check if there is a contract
         if(contractIndex < 0) {
           console.log(`no contract!!! : ${contractIndex}`);
-          //return <Redirect to={`/${project.id}?type=account&id=${templateId}&contractId=0`} />;
-          return <Redirect to={`/${project.id}?type=account&id=${project.accounts[0].id}`} />;
+          return <Redirect to={`/${project.id}?type=account&id=${templateId}&contractId=-1`} />;
         } else {
           return <Redirect to={`/${project.id}?type=account&id=${templateId}&contractId=${project.contracts[contractIndex].id}`} />;
         }
