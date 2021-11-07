@@ -30,14 +30,11 @@ const ContractList: React.FC<ContractListProps> = ({
   onInsert,
   onDelete
 }) => {
-  const { active } = useProject()
+  const { project, active } = useProject()
   const isEditing = useRef<HTMLInputElement>();
   const [editing, setEditing] = useState([]);
   const enterPressed = useKeyPress("Enter");
   const escapePressed = useKeyPress("Escape");
-
-
-
 
   useEffect(() => {
     setEditing([]);
@@ -55,6 +52,7 @@ const ContractList: React.FC<ContractListProps> = ({
 
   var itemType = EntityType.Account;
   params.id = params.contractId;
+  if(!params.id && active.contractIndex != null) params.id = project.contracts[active.contractIndex].id;
 
   return (
     <TabSection>
