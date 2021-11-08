@@ -6,7 +6,7 @@ import { Router, Redirect, globalHistory } from '@reach/router';
 import { ApolloProvider } from '@apollo/react-hooks';
 import AppMobileWrapper from 'containers/AppMobileWrapper';
 import BrowserDetector from 'components/BrowserDetector';
-import * as GoogleAnalytics from './util/google-analytics';
+import * as GoogleAnalytics from 'util/google-analytics';
 import client from 'api/apollo/client';
 import globalStyles from './globalStyles';
 import theme from './theme';

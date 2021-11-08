@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { IoMdClose } from "react-icons/io";
 import { WhiteOverlay } from "components/Common";
 
-import Mixpanel from "../util/mixpanel";
+import Mixpanel from "util/mixpanel";
 import ActionButton from 'components/ActionButton';
 
 const examples = [
@@ -245,7 +245,6 @@ const Examples: React.FC<{
                         href={_example.docsLink}
                         target="_blank"
                         rel="noopener"
-                        key={index}
                         onClick={() => {
                           Mixpanel.track("Redirect to project documentation", {
                             link: _example.docsLink,
@@ -261,7 +260,6 @@ const Examples: React.FC<{
                         href={_example.projectLink}
                         target="_blank"
                         rel="noopener"
-                        key={index}
                         onClick={() => {
                           Mixpanel.track("Open example project", {
                             link: _example.projectLink,

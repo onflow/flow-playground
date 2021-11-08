@@ -1,5 +1,6 @@
 overwrite: true
 schema:
+  - "http://localhost:8080/query"
   - "https://playground.staging.flow.dapperlabs.com/query"
   - "src/api/apollo/local.graphql"
 documents: "src/api/apollo/**/*.ts"

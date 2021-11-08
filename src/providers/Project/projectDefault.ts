@@ -4,7 +4,7 @@ import {
   TransactionTemplate,
   ScriptTemplate
 } from "api/apollo/generated/graphql";
-import { strToSeed, uuid } from "../../util/rng";
+import { strToSeed, uuid } from "util/rng";
 
 const DEFAULT_ACCOUNT_1 = `// HelloWorld.cdc
 //
@@ -165,7 +165,7 @@ export function createLocalProject(
       draftCode: script,
       deployedCode: "",
       deployedContracts: [],
-      state: ""
+      state: "{}"
     };
   });
 

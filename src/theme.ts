@@ -1,10 +1,12 @@
 export default {
   colors: {
     primary: "#00ff76",
+    darkPrimary: "#2bb169",
     background: "#fff",
     text: "#222",
     muted: "#6a6a6a",
     grey: "#DDDDDD",
+    darkGrey: "#909090",
     greyBorder: "#D8D8D8",
     purple: "#f694ff",
     border: "rgb(240, 240, 240)",
@@ -12,7 +14,11 @@ export default {
     shadowColor: "rgb(222, 222, 222)",
     error: "#f44336",
     blue: "#0000ff",
-    heading: "#919191"
+    heading: "#919191",
+    badgeResource: "#0093AF",
+    badgeCapability: "#3DDC84",
+    badgeStruct: "#FA8C28",
+    badgeNull: "#8C92AC",
   },
   fonts: {
     body: "Interstate, system-ui, sans-serif",

@@ -4,7 +4,7 @@ import {
   CadenceProblem,
   Highlight,
   ProblemsList,
-} from '../../util/language-syntax-errors';
+} from 'util/language-syntax-errors';
 import { MonacoLanguageClient } from 'monaco-languageclient';
 
 export type InteractionButtonProps = {

@@ -1,6 +1,6 @@
 import React from "react";
-import { avataaar } from "../util/avataaar";
-import { mb32 } from "../util/rng";
+import { avataaar } from "util/avataaar";
+import { mb32 } from "util/rng";
 
 interface AvatarProps {
   seed: number

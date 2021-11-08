@@ -22,7 +22,8 @@
       "containers/*": ["src/containers/*"],
       "api/*": ["src/api/*"],
       "layout/*": ["src/layout/*"],
-      "types/*": ["types/*"]
+      "types/*": ["types/*"],
+      "util/*": ["src/util/*"]
     },
     "lib": ["dom", "es2015", "es2016", "es2020.string"]
   },
