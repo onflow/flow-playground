@@ -79,9 +79,19 @@ const MenuList: React.FC<MenuListProps> = ({
 
   var itemType = 0;
   switch (params.type) {
-    case 'account': {itemType = EntityType.Account; params.id = params.contractId; break;}
-    case 'tx': {itemType = EntityType.TransactionTemplate; break;}
-    case 'script': {itemType = EntityType.ScriptTemplate; break;}
+    case 'account': {
+        itemType = EntityType.Account
+        params.id = params.contractId
+        break
+    }
+    case 'tx': {
+        itemType = EntityType.TransactionTemplate
+        break
+    }
+    case 'script': {
+        itemType = EntityType.ScriptTemplate
+        break
+    }
   }
 
   return (
