@@ -142,8 +142,6 @@ function getActiveId(project: Project, active: ActiveEditor): string {
       return project.contracts[active.contractIndex]
         ? project.contracts[active.contractIndex].id
         : "";
-    /*case EntityType.Contract:
-      return project.contracts[active.index].id;*/
     case EntityType.TransactionTemplate:
       return project.transactionTemplates[active.index]
         ? project.transactionTemplates[active.index].id
@@ -226,6 +224,7 @@ const EditorTitle: React.FC<EditorTitleProps> = ({ type }) => {
   } = useProject();
 
   const projectPath = isUUUID(project.id) ? project.id : "local";
+  const activeAccountId = project.accounts[active.index].id;
 
   return (
     <HeadingContainer>
@@ -246,17 +245,17 @@ const EditorTitle: React.FC<EditorTitleProps> = ({ type }) => {
             active.type == EntityType.Account ? active.index : null
           }
           onSelect={(_, id) => {
-            navigate(`/${projectPath}?type=account&id=${project.accounts[active.index].id}&contractId=${id}`)
+            navigate(`/${projectPath}?type=account&id=${activeAccountId}&contractId=${id}`)
           }}
           onUpdate={(_: any) => {}}
           onDelete={async (templateId: string) => {
             await deleteContract(templateId);
-            navigate(`/${projectPath}?type=account&id=${project.accounts[active.index].id}`)
+            navigate(`/${projectPath}?type=account&id=${activeAccountId}`)
           }}
           onInsert={async () => {
             console.log(`createContract with index: ${active.index}`);
             const res = await mutator.createContract(active.index, `// draft contract`, `[DRAFT_CONTRACT]`)
-            navigate(`/${projectPath}?type=account&id=${project.accounts[active.index].id}&contractId=${res.data?.createContract?.id}`)
+            navigate(`/${projectPath}?type=account&id=${activeAccountId}&contractId=${res.data?.createContract?.id}`)
           }}
       />}
     </HeadingContainer>
