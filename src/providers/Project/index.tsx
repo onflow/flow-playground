@@ -332,12 +332,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const getActiveEditor = (): ActiveEditor => {
     switch (active.type) {
       case EntityType.Account:
-        //soe change onchange to update contract script
         return {
           type: active.type,
           index: active.index,
           contractIndex: active.contractIndex,
-          //soe onChange: (code: string) => updateAccountDraftCode(code),
           onChange: (code: any, title: string) => updateActiveContract(code, title),
         };
       case EntityType.TransactionTemplate:
@@ -376,9 +374,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   // TODO: check that active item have the same id
 
   if (type == '' || type === undefined || !scriptTypes.includes(type)) {
-    console.log('first entry');
-    //soe default redirect to first contract of the first account
-    //setActive({ type: EntityType.Account, index: 0, contractIndex: 0 });
     return (
       <Redirect to={`/${project.id}?type=account&id=${project.accounts[0].id}`} />
     );
@@ -479,12 +474,12 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         }
       }
 
-      //soe contractId from url param
+      // get contractId from url param
       var contractIndex = null;
       if (contractId && id !== '') {
         contractIndex = project.contracts.findIndex(contract => contract.id === contractId);
       } else {
-        //soe since contractId is not in url param, set to account's first contract index
+        // since contractId is not in url param, set to account's first contract index
         contractIndex = project.contracts.findIndex(contract => contract.index === templateIndex);
       }
 

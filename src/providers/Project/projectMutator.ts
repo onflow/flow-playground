@@ -155,7 +155,6 @@ export default class ProjectMutator {
         projectId: this.projectId,
         accountId: account.id,
         contractId: contractId,
-        //soe code is replaced with active contract's script
         code: script,
       },
       refetchQueries: [
@@ -210,7 +209,6 @@ export default class ProjectMutator {
         projectId: this.projectId,
         accountId: account.id,
         contractId: contractId,
-        //soe code is replaced with active contract's script
         code: script,
       },
       refetchQueries: [

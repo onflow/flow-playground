@@ -118,12 +118,8 @@ type EditorContainerProps = {
 };
 
 function getActiveCode(project: Project, active: ActiveEditor): string {
-  //soe logging type,index,contractIndex inside getActiveCode
-  console.log(`type,index,contractIndex: ${active.type},${active.index},${active.contractIndex}`);
   switch (active.type) {
     case EntityType.Account:
-      //return project.accounts[active.index].draftCode;
-      //soe now needs to get Account's active contract's script
       return project.contracts[active.contractIndex]
         ? project.contracts[active.contractIndex].script 
         : "";
@@ -143,8 +139,6 @@ function getActiveCode(project: Project, active: ActiveEditor): string {
 function getActiveId(project: Project, active: ActiveEditor): string {
   switch (active.type) {
     case EntityType.Account:
-      //return project.accounts[active.index].id;
-      //soe get id of active contract
       return project.contracts[active.contractIndex]
         ? project.contracts[active.contractIndex].id
         : "";
@@ -244,8 +238,7 @@ const EditorTitle: React.FC<EditorTitleProps> = ({ type }) => {
       </Heading>
       {type === EntityType.Account && <ContractList
           title="Contracts"
-
-          //soe          
+         
           items={
             project.contracts.filter(item => item.index === active.index)
           }
@@ -257,7 +250,6 @@ const EditorTitle: React.FC<EditorTitleProps> = ({ type }) => {
           }}
           onUpdate={(_: any) => {}}
           onDelete={async (templateId: string) => {
-            //soe delete contract and redirect to the account
             await deleteContract(templateId);
             navigate(`/${projectPath}?type=account&id=${project.accounts[active.index].id}`)
           }}

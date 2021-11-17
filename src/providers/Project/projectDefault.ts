@@ -58,7 +58,7 @@ export function createDefaultProject(): Project {
   return createLocalProject(
     null,
     strToSeed(uuid()),
-    //soe this needs to be updated when number of accounts are made flexible instead of fixed 5
+    //soe to-do: this needs to be updated when number of accounts are made flexible instead of fixed 5
     ['','','','',''],
     [
       { title: "[DRAFT]", code: makeContract(`HelloWorld`, `Hello`, `0x01`), index: 0}, 

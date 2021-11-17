@@ -159,8 +159,7 @@ interface IValue {
 const Arguments: React.FC<ArgumentsProps> = (props) => {
   const { type, list, signers } = props;
   const { goTo, hover, hideDecorations, problems } = props;
-  //soe const validCode = problems.error.length === 0;
-  const validCode = true;
+  const validCode = problems.error.length === 0;
 
   const needSigners = type == EntityType.TransactionTemplate && signers > 0;
   const [selected, updateSelectedAccounts] = useState([]);
@@ -273,8 +272,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
         case EntityType.Account: {
           // Ask if user wants to redeploy the contract
-          //soe now deploy contract's script instead
-          //if (accounts[active.index] && accounts[active.index].deployedCode) {
           if (accounts[active.index] && contracts[active.contractIndex].deployedScript) {
             const choiceMessage =
               'Redeploying will clear the state of all accounts. Proceed?';

@@ -317,7 +317,8 @@ export const createZip = async (
 
   const { contracts, transactionTemplates, scriptTemplates } = project;
 
-  //soe update project export to loop through multiple contracts per account
+  // loop through multiple contracts per account
+  // and put them in folders
   for (let i = 0; i < contracts.length; i++) {
     const contract = contracts[i];
     const name = getContractName(contract.script);
