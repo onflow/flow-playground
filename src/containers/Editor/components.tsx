@@ -187,7 +187,17 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
       if (index < 0 || index >= project.accounts.length) {
         return
       }
-      return project.accounts[index].draftCode
+
+      // combine the account's contracts as one string
+      // and return for cadence server check
+      var combinedCode = '';
+      for (let i = 0; i < project.contracts.length; i++) {
+        if(project.contracts[i].index == index) {
+          combinedCode += project.contracts[i].script;
+        }
+      }
+
+      return combinedCode;
     }
 
   return (
