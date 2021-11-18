@@ -114,7 +114,7 @@ export default class ProjectMutator {
       Mixpanel.track('Project saved', { projectId: this.projectId });
     }
 
-    navigate(`/${this.projectId}`, { replace: true });
+    navigate(`/${this.projectId}?type=account&id=0`, { replace: true });
   }
 
   async updateContract(contractId: string, script: string, title: string) {

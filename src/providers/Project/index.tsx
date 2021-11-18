@@ -438,8 +438,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         const foundIndex = project.accounts.findIndex(
           (template) => template.id === id,
         );
-        if (foundIndex > 0) {
+        if (foundIndex >= 0) {
           templateIndex = foundIndex;
+        } else {
+          // set account 0x01 (index 0) as default if invalid id
+          templateIndex = 0;
         }
       }
 

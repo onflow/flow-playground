@@ -125,8 +125,6 @@ export function createLocalProject(
   transactionTemplates: Array<ScriptDetails>,
   scriptTemplates: Array<ScriptDetails>
 ): Project {
-  console.log(contracts);
-  console.log(accounts);
   const accountEntities: Account[] = accounts.map((state, i) => {
     return {
       __typename: "Account",

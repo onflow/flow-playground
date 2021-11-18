@@ -190,7 +190,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
       return acc;
     }, {});
 
-    console.log({errors});
     setErrors(errors);
   };
 
