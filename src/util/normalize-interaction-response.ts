@@ -24,8 +24,8 @@ const makeLine = (tag: Tag, value: string): Line => ({
   value,
 });
 
-const respIsUpdateAccount = (response: any): boolean => {
-  return response?.data?.updateAccount != null;
+const respIsDeployContract = (response: any): boolean => {
+  return response?.data?.deployContract != null;
 };
 
 const respIsCreateTransactionExecution = (response: any): boolean => {
@@ -47,10 +47,10 @@ export const normalizeInteractionResponse = (response: any): Array<Line> => {
     return [makeLine(Tag.UNKNOWN, response)];
   }
 
-  if (respIsUpdateAccount(response)) {
-    const scoped = response.data.updateAccount;
+  if (respIsDeployContract(response)) {
+    const scoped = response.data.deployContract;
     return [
-      makeLine(Tag.LOG, `Deployed Contract To: 0x${scoped.address.slice(-2)}`),
+      makeLine(Tag.LOG, `Deployed Contract "${scoped.title}" To: 0x0${scoped.index + 1}`),
     ];
   }
 
