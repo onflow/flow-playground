@@ -258,10 +258,10 @@ export const generatePackageConfig = async (projectName: string) => {
 
 const generateTests = async (cadenceFolder: string, project: Project) => {
   const contractsUnitTests = [];
-  for (let i = 0; i < project.accounts.length; i++) {
-    const account = project.accounts[i];
-    const address = `0x0${account.address.slice(-1)}`;
-    const code = account.draftCode;
+  for (let i = 0; i < project.contracts.length; i++) {
+    const contract = project.contracts[i];
+    const address = `0x0${contract.index+1}`;
+    const code = contract.script;
     if (code.length > 0) {
       const unitTest = generateContractUnitTest(address, code);
       contractsUnitTests.push(unitTest);

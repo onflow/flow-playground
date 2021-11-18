@@ -6,8 +6,6 @@ import {
   CREATE_PROJECT,
   PERSIST_PROJECT,
   SET_ACTIVE_PROJECT,
-  UPDATE_ACCOUNT_DRAFT_CODE,
-  UPDATE_ACCOUNT_DEPLOYED_CODE,
   UPDATE_CONTRACT,
   DEPLOY_CONTRACT,
   CREATE_CONTRACT,
@@ -52,7 +50,8 @@ export default class ProjectMutator {
     });
 
     const parentId = localProject.parentId;
-    const accounts = localProject.accounts.map((acc: Account) => acc.draftCode);
+
+    const accounts = localProject.accounts.map((acc: Account) => acc.state);
     const seed = localProject.seed;
     const contracts = localProject.contracts.map(
       (con: any) => ({ script: con.script, title: con.title, index: con.index }),
@@ -118,57 +117,6 @@ export default class ProjectMutator {
     navigate(`/${this.projectId}`, { replace: true });
   }
 
-  async updateAccountDraftCode(account: Account, code: string) {
-    if (this.isLocal) {
-      this.client.writeData({
-        id: `Account:${account.id}`,
-        data: {
-          __typename: 'Account',
-          draftCode: code,
-        },
-      });
-      registerOnCloseSaveMessage();
-
-      return;
-    }
-
-    await this.client.mutate({
-      mutation: UPDATE_ACCOUNT_DRAFT_CODE,
-      variables: {
-        projectId: this.projectId,
-        accountId: account.id,
-        code,
-      },
-    });
-  }
-
-  async updateAccountDeployedCode(account: Account, index: number, contractId: string, script: string) {
-    if (this.isLocal) {
-      const project = await this.createProject();
-      account = project.accounts[index];
-      unregisterOnCloseSaveMessage();
-    }
-
-    const res = await this.client.mutate({
-      mutation: UPDATE_ACCOUNT_DEPLOYED_CODE,
-      variables: {
-        projectId: this.projectId,
-        accountId: account.id,
-        contractId: contractId,
-        code: script,
-      },
-      refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } },
-      ],
-    });
-    Mixpanel.track('Contract deployed', {
-      projectId: this.projectId,
-      accountId: account.id,
-      code: account.draftCode,
-    });
-    return res;
-  }
-
   async updateContract(contractId: string, script: string, title: string) {
     if (this.isLocal) {
       this.client.writeData({
@@ -209,7 +157,8 @@ export default class ProjectMutator {
         projectId: this.projectId,
         accountId: account.id,
         contractId: contractId,
-        code: script,
+        deployedScript: script,
+        script: script,
       },
       refetchQueries: [
         { query: GET_PROJECT, variables: { projectId: this.projectId } },

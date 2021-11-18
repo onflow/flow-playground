@@ -22,7 +22,7 @@ function cloneProject(client: any, project: Project) {
   const localProject = createLocalProject(
     project.id,
     project.seed,
-    project.accounts.map(acc => acc.draftCode),
+    project.accounts.map(acc => acc.state),
 
     project.contracts.map(con => ({
       code: con.script,

@@ -27,8 +27,6 @@ export const CREATE_PROJECT = gql`
       accounts {
         id
         address
-        draftCode
-        deployedCode
         state
       }
     }
@@ -50,42 +48,6 @@ export const SET_ACTIVE_PROJECT = gql`
   }
 `;
 
-export const UPDATE_ACCOUNT_DRAFT_CODE = gql`
-  mutation UpdateAccountDraftCode(
-    $projectId: UUID!
-    $accountId: UUID!
-    $code: String!
-  ) {
-    updateAccount(
-      input: { projectId: $projectId, id: $accountId, draftCode: $code }
-    ) {
-      id
-      address
-      draftCode
-      deployedCode
-    }
-  }
-`;
-
-export const UPDATE_ACCOUNT_DEPLOYED_CODE = gql`
-  mutation UpdateAccountDeployedCode(
-    $projectId: UUID!
-    $accountId: UUID!
-    $contractId: UUID!
-    $code: String!
-  ) {
-    updateAccount(
-      input: { projectId: $projectId, id: $accountId, contractId: $contractId, deployedCode: $code }
-    ) {
-      id
-      address
-      draftCode
-      deployedCode
-      deployedContracts
-    }
-  }
-`;
-
 export const UPDATE_CONTRACT = gql`
   mutation UpdateContract(
     $projectId: UUID!
@@ -98,6 +60,7 @@ export const UPDATE_CONTRACT = gql`
     ) {
       id
       script
+      deployedScript
       title
       index
     }
@@ -109,14 +72,16 @@ export const DEPLOY_CONTRACT = gql`
     $projectId: UUID!
     $accountId: UUID!
     $contractId: UUID!
-    $code: String!
+    $script: String!
   ) {
-    updateAccount(
-      input: { projectId: $projectId, id: $accountId, contractId: $contractId, deployedCode: $code }
+    deployContract(
+      input: { projectId: $projectId, id: $contractId, accountId: $accountId, deployedScript: $script }
     ) {
       id
-      address
-      deployedContracts
+      script
+      deployedScript
+      title
+      index
     }
   }
 `;

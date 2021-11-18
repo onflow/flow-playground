@@ -25,8 +25,6 @@ export interface ProjectContextValue {
   project: Project | null;
   isLoading: boolean;
   mutator: ProjectMutator;
-  updateAccountDeployedCode: () => Promise<any>;
-  updateAccountDraftCode: (value: string) => Promise<any>;
   updateSelectedContractAccount: (accountIndex: number) => void;
   updateSelectedTransactionAccounts: (accountIndexes: number[]) => void;
   updateActiveContract: (script: string, title: string) => Promise<any>;
@@ -118,35 +116,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const mutator = new ProjectMutator(client, projectID, isLocal);
 
   let timeout: any;
-
-  //soe to-do this need to be removed along with legacy code for draft and deploy code
-  const updateAccountDeployedCode: any = async () => {
-    clearTimeout(timeout);
-    const res = await mutator.updateAccountDeployedCode(
-      project.accounts[active.index],
-      active.index,
-      project.contracts[active.contractIndex].id,
-      project.contracts[active.contractIndex].script,
-    );
-    setIsSaving(true);
-    timeout = setTimeout(() => {
-      setIsSaving(false);
-    }, 1000);
-    return res;
-  };
-
-  const updateAccountDraftCode = async (value: string) => {
-    clearTimeout(timeout);
-    setIsSaving(true);
-    const res = await mutator.updateAccountDraftCode(
-      project.accounts[active.index],
-      value,
-    );
-    timeout = setTimeout(() => {
-      setIsSaving(false);
-    }, 1000);
-    return res;
-  };
 
   const updateContract = async (
     contractId: string,
@@ -518,8 +487,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         isLoading,
         mutator,
         isSavingCode,
-        updateAccountDeployedCode,
-        updateAccountDraftCode,
         updateContract,
         deployContract,
         updateScriptTemplate,

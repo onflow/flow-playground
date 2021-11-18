@@ -12,8 +12,6 @@ export const GET_PROJECT = gql`
       accounts {
         id
         address
-        draftCode
-        deployedCode
         deployedContracts
         state
       }
@@ -50,8 +48,6 @@ export const GET_LOCAL_PROJECT = gql`
       accounts {
         id
         address
-        draftCode
-        deployedCode
         deployedContracts
         state
       }

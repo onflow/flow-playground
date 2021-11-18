@@ -217,8 +217,6 @@ const getLabel = (type: EntityType) => {
 
   switch (true) {
     case type === EntityType.Account:
-      //return accounts[active.index].deployedCode ? 'Redeploy' : 'Deploy';
-      //soe deploy or redeploy active contract's script
       return contracts[active.contractIndex].deployedScript ? 'Redeploy' : 'Deploy';
     case type === EntityType.TransactionTemplate:
       return 'Send';

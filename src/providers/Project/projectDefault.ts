@@ -58,7 +58,6 @@ export function createDefaultProject(): Project {
   return createLocalProject(
     null,
     strToSeed(uuid()),
-    //soe to-do: this needs to be updated when number of accounts are made flexible instead of fixed 5
     ['','','','',''],
     [
       { title: "[DRAFT]", code: makeContract(`HelloWorld`, `Hello`, `0x01`), index: 0}, 
@@ -95,16 +94,16 @@ export function createLocalProject(
   transactionTemplates: Array<ScriptDetails>,
   scriptTemplates: Array<ScriptDetails>
 ): Project {
-  const accountEntities: Account[] = accounts.map((script, i) => {
+  console.log(contracts);
+  console.log(accounts);
+  const accountEntities: Account[] = accounts.map((state, i) => {
     return {
       __typename: "Account",
       id: `LOCAL-account-${i}`,
       address: `000000000000000000000000000000000000000${i + 1}`,
       title: "",
-      draftCode: script,
-      deployedCode: "",
       deployedContracts: [],
-      state: ""
+      state: state
     };
   });
 
