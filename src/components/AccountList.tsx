@@ -17,7 +17,7 @@ function getDeployedContracts(account: Account): string {
   const contracts = account.deployedContracts.map(
     contract => contract.split(".").slice(-1)[0]
   );
-  return contracts.join(", ");
+  return "("+ contracts.length +") contracts ... "+ contracts.join(", ");
 }
 
 export const AccountCard = styled.div`
