@@ -165,7 +165,6 @@ export default class ProjectMutator {
       ],
     });
 
-    console.log(`DEPLOY CONTRACT`);
     Mixpanel.track('Contract deployed', {
       projectId: this.projectId,
       accountId: account.id,
