@@ -438,18 +438,24 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         const foundIndex = project.accounts.findIndex(
           (template) => template.id === id,
         );
-        if (foundIndex >= 0) {
-          templateIndex = foundIndex;
-        } else {
+        if (foundIndex < 0) {
           // set account 0x01 (index 0) as default if invalid id
           templateIndex = 0;
+        } else {
+          templateIndex = foundIndex;
         }
       }
 
       // get contractId from url param
       var contractIndex = null;
-      if (contractId && id !== '') {
+      if (contractId && contractId !== '') {
         contractIndex = project.contracts.findIndex(contract => contract.id === contractId);
+
+        // when there is no valid contract passed, redirect to the first contract
+        if(contractIndex < 0) {
+          contractIndex = 0;
+          templateIndex = project.contracts[0].index;
+        }
       } else {
         // since contractId is not in url param, set to account's first contract index
         contractIndex = project.contracts.findIndex(contract => contract.index === templateIndex);
@@ -468,14 +474,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         });
         const templateId = project.accounts[templateIndex].id;
 
-        //soe to-do: account with no contract fails, need fixing
-        if(contractIndex < 0) {
-          console.log(`no contract!!! : ${contractIndex}`);
-          return <Redirect to={`/${project.id}?type=account&id=${templateId}&contractId=-1`} />;
-        } else {
-          return <Redirect to={`/${project.id}?type=account&id=${templateId}&contractId=${project.contracts[contractIndex].id}`} />;
-        }
-        
+        return <Redirect to={`/${project.id}?type=account&id=${templateId}&contractId=${project.contracts[contractIndex].id}`} />;
       }
       break;
     }
