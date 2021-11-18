@@ -21,7 +21,7 @@ const examples = [
     subtitle:
       "Write your first contract on Flow. This is the perfect place to start to get the hang of the fundamentals of Cadence.",
     emoji: "🌎",
-    projectLink: "https://play.onflow.org/83315e10-8a9d-40d1-9f4a-877ca93eb93c",
+    projectLink: "https://play.onflow.org/f51905e8-6030-4641-9324-11a3f1a6091c",
     docsLink: "https://docs.onflow.org/cadence/tutorial/02-hello-world/"
   },
   {
@@ -29,7 +29,7 @@ const examples = [
     subtitle:
       "Create and sell digital assets of your own in this tutorial! This tutorial will teach you the basics of creating, storing, and moving digital assets and tokens.",
     emoji: "💸",
-    projectLink: "https://play.onflow.org/7c60f681-40c7-4a18-82de-b81b3b6c7915",
+    projectLink: "https://play.onflow.org/50745fb6-77d5-4510-adfc-cf448fb043e1",
     docsLink: "https://docs.onflow.org/cadence/tutorial/03-fungible-tokens/"
   },
   {
@@ -37,7 +37,7 @@ const examples = [
     subtitle:
       "Create and shape your own unique digital objects. Here you’ll learn what really makes blockchains magic - the ability for unique items to be created, shared, and stored forever.",
     emoji: "😺",
-    projectLink: "https://play.onflow.org/b60aa97d-d030-476e-9490-24f3a6f90161",
+    projectLink: "https://play.onflow.org/524612f1-9921-4836-9b64-e7a7c8de81d6",
     docsLink: "https://docs.onflow.org/cadence/tutorial/04-non-fungible-tokens/"
   },
   {
@@ -45,7 +45,7 @@ const examples = [
     subtitle:
       "Put it all together in a marketplace! This tutorial will teach you how to turn all the concepts you’ve learned into a place for people to share their creations with the community.",
     emoji: "🤝",
-    projectLink: "https://play.onflow.org/46ad1d6d-3ee2-40d4-adef-bfbad33f9846",
+    projectLink: "https://play.onflow.org/af759188-6c0d-468a-9eda-50844f522261",
     docsLink: "https://docs.onflow.org/cadence/tutorial/05-marketplace-setup/"
   },
   {
@@ -53,7 +53,7 @@ const examples = [
     subtitle:
       "This tutorial is for the brave and the bold, an opportunity to discover what resources make possible - resources owning other resources. If you can imagine it, you can create it.",
     emoji: "🤠",
-    projectLink: "https://play.onflow.org/fb934880-ba3a-4d0d-8350-7bea017e6138",
+    projectLink: "https://play.onflow.org/dd33e2ba-098e-4033-a575-d56b8a3bf7b0",
     docsLink: "https://docs.onflow.org/cadence/tutorial/07-resources-compose/"
   },
   {
@@ -61,7 +61,7 @@ const examples = [
     subtitle:
       "With the advent of blockchain technology and smart contracts, it has become popular to try to create decentralized voting mechanisms that allow large groups of users to vote completely on chain",
     emoji: "🗳️",
-    projectLink: "https://play.onflow.org/a4db333e-0c7d-422f-b7bc-00fc3f341fd8?type=account&id=0",
+    projectLink: "https://play.onflow.org/5f9fabb2-b865-4b6e-8e1b-cad2ef43ae0f",
     docsLink: "https://docs.onflow.org/cadence/tutorial/08-voting/"
   }
 ];
