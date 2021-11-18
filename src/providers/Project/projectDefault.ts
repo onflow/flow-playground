@@ -37,7 +37,7 @@ export function makeContract(functionName: string, greeting: string, accountName
                           .replace(`{ACCOUNT}`, accountName);
 }
 
-const DEFAULT_TRANSACTION = `import HelloWorld from 0x01
+const ACC1_TRANSACTION = `import HelloWorld, HelloWorldA, HelloWorldB from 0x01
 
 transaction {
 
@@ -45,6 +45,33 @@ transaction {
 
   execute {
     log(HelloWorld.greet())
+    log(HelloWorldA.greet())
+    log(HelloWorldB.greet())
+  }
+}
+`;
+
+const ACC2_TRANSACTION = `import HiWorld, HiWorldA from 0x02
+
+transaction {
+
+  prepare(acct: AuthAccount) {}
+
+  execute {
+    log(HiWorld.greet())
+    log(HiWorldA.greet())
+  }
+}
+`;
+
+const ACC3_TRANSACTION = `import YoWorld from 0x03
+
+transaction {
+
+  prepare(acct: AuthAccount) {}
+
+  execute {
+    log(YoWorld.greet())
   }
 }
 `;
@@ -70,7 +97,11 @@ export function createDefaultProject(): Project {
       { title: "[DRAFT]", code: makeContract(`HejsanWorld`, `Hejsan`, `0x05`), index: 4},
       { title: "[DRAFT]", code: makeContract(`HejsanWorldA`, `HejsanA`, `0x05`), index: 4},
     ],
-    [{ title: "Transaction", code: DEFAULT_TRANSACTION }],
+    [
+      { title: "0x01 Transaction", code: ACC1_TRANSACTION },
+      { title: "0x02 Transaction", code: ACC2_TRANSACTION },
+      { title: "0x03 Transaction", code: ACC3_TRANSACTION }
+    ],
     [{ title: "Script" , code :DEFAULT_SCRIPT }]
   );
 }
