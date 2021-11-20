@@ -24,21 +24,11 @@ function cloneProject(client: any, project: Project) {
     project.seed,
     project.accounts.map(acc => acc.state),
 
-    project.contracts.map(con => ({
-      code: con.code,
-      title: con.title,
-      accountIndex: con.accountIndex
-    })),
+    project.contracts.map(({ code, title, accountIndex }) => ({ code, title, accountIndex })),
 
-    project.transactionTemplates.map(tpl => ({
-        code: tpl.script,
-        title: tpl.title
-      })),
+    project.transactionTemplates.map(({script, title}) => ({code: script, title})),
 
-    project.scriptTemplates.map(tpl => ({
-      code: tpl.script,
-      title: tpl.title
-    }))
+    project.scriptTemplates.map(({script, title}) => ({code: script, title}))
   );
 
   client.writeData({
