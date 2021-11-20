@@ -10,7 +10,6 @@ import {Stack} from "layout/Stack";
 import {useProject} from "providers/Project/projectHooks";
 import Avatar from "components/Avatar";
 import styled from "@emotion/styled";
-import {ExportButton} from "components/ExportButton";
 import {getParams, isUUUID} from "../util/url";
 
 function getDeployedContracts(account: Account): string {
@@ -65,8 +64,6 @@ const AccountList: React.FC = () => {
                   <strong>{accountAddress}</strong>
                   <small>{contractName || '--'}</small>
                 </Stack>
-
-                {isActive && <ExportButton id={account.id} typeName={typeName}/>}
               </AccountCard>
             </Item>
           );
