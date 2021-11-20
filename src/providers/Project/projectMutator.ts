@@ -54,7 +54,7 @@ export default class ProjectMutator {
     const accounts = localProject.accounts.map((acc: Account) => acc.state);
     const seed = localProject.seed;
     const contracts = localProject.contracts.map(
-      (con: any) => ({ script: con.script, title: con.title, index: con.index }),
+      (con: any) => ({ code: con.code, title: con.title, accountIndex: con.accountIndex }),
     );
     const transactionTemplates = localProject.transactionTemplates.map(
       (tpl: any) => ({ script: tpl.script, title: tpl.title }),
@@ -117,12 +117,12 @@ export default class ProjectMutator {
     navigate(`/${this.projectId}?type=account&id=0`, { replace: true });
   }
 
-  async updateContract(contractId: string, script: string, title: string) {
+  async updateContract(contractId: string, code: string, title: string) {
     if (this.isLocal) {
       this.client.writeData({
         id: `Contract:${contractId}`,
         data: {
-          script: script,
+          code: code,
           title: title,
         },
       });
@@ -135,7 +135,7 @@ export default class ProjectMutator {
       variables: {
         projectId: this.projectId,
         contractId: contractId,
-        script: script,
+        code: code,
         title: title,
       },
       refetchQueries: [
@@ -144,10 +144,10 @@ export default class ProjectMutator {
     });
   }
 
-  async deployContract(account: Account, index: number, contractId: string, script: string) {
+  async deployContract(account: Account, accountIndex: number, contractId: string, code: string) {
     if (this.isLocal) {
       const project = await this.createProject();
-      account = project.accounts[index];
+      account = project.accounts[accountIndex];
       unregisterOnCloseSaveMessage();
     }
 
@@ -157,8 +157,8 @@ export default class ProjectMutator {
         projectId: this.projectId,
         accountId: account.id,
         contractId: contractId,
-        deployedScript: script,
-        script: script,
+        deployedCode: code,
+        code: code,
       },
       refetchQueries: [
         { query: GET_PROJECT, variables: { projectId: this.projectId } },
@@ -169,12 +169,12 @@ export default class ProjectMutator {
       projectId: this.projectId,
       accountId: account.id,
       contractId: contractId,
-      deployedScript: script,
+      deployedCode: code,
     });
     return res;
   }
 
-  async createContract(index: number, script: string, title: string) {
+  async createContract(accountIndex: number, code: string, title: string) {
     if (this.isLocal) {
       await this.createProject();
     }
@@ -183,8 +183,8 @@ export default class ProjectMutator {
       mutation: CREATE_CONTRACT,
       variables: {
         projectId: this.projectId,
-        index,
-        script,
+        accountIndex,
+        code,
         title,
       },
       refetchQueries: [
@@ -195,7 +195,7 @@ export default class ProjectMutator {
 
     Mixpanel.track('Contract created', {
       projectId: this.projectId,
-      script,
+      code,
     });
 
     return res;

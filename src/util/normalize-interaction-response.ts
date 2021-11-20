@@ -50,7 +50,7 @@ export const normalizeInteractionResponse = (response: any): Array<Line> => {
   if (respIsDeployContract(response)) {
     const scoped = response.data.deployContract;
     return [
-      makeLine(Tag.LOG, `Deployed Contract "${scoped.title}" To: 0x0${scoped.index + 1}`),
+      makeLine(Tag.LOG, `Deployed Contract "${scoped.title}" To: 0x0${scoped.accountIndex + 1}`),
     ];
   }
 

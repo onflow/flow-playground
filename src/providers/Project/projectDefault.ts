@@ -87,15 +87,15 @@ export function createDefaultProject(): Project {
     strToSeed(uuid()),
     ['','','','',''],
     [
-      { title: "[DRAFT]", code: makeContract(`HelloWorld`, `Hello`, `0x01`), index: 0}, 
-      { title: "[DRAFT]", code: makeContract(`HelloWorldA`, `HelloA`, `0x01`), index: 0},
-      { title: "[DRAFT]", code: makeContract(`HelloWorldB`, `HelloB`, `0x01`), index: 0},
-      { title: "[DRAFT]", code: makeContract(`HiWorld`, `Hi`, `0x02`), index: 1},
-      { title: "[DRAFT]", code: makeContract(`HiWorldA`, `HiA`, `0x02`), index: 1},
-      { title: "[DRAFT]", code: makeContract(`YoWorld`, `Yo`, `0x03`), index: 2},
-      { title: "[DRAFT]", code: makeContract(`HolaWorld`, `Hola`, `0x04`), index: 3},
-      { title: "[DRAFT]", code: makeContract(`HejsanWorld`, `Hejsan`, `0x05`), index: 4},
-      { title: "[DRAFT]", code: makeContract(`HejsanWorldA`, `HejsanA`, `0x05`), index: 4},
+      { title: "[DRAFT]", code: makeContract(`HelloWorld`, `Hello`, `0x01`), accountIndex: 0}, 
+      { title: "[DRAFT]", code: makeContract(`HelloWorldA`, `HelloA`, `0x01`), accountIndex: 0},
+      { title: "[DRAFT]", code: makeContract(`HelloWorldB`, `HelloB`, `0x01`), accountIndex: 0},
+      { title: "[DRAFT]", code: makeContract(`HiWorld`, `Hi`, `0x02`), accountIndex: 1},
+      { title: "[DRAFT]", code: makeContract(`HiWorldA`, `HiA`, `0x02`), accountIndex: 1},
+      { title: "[DRAFT]", code: makeContract(`YoWorld`, `Yo`, `0x03`), accountIndex: 2},
+      { title: "[DRAFT]", code: makeContract(`HolaWorld`, `Hola`, `0x04`), accountIndex: 3},
+      { title: "[DRAFT]", code: makeContract(`HejsanWorld`, `Hejsan`, `0x05`), accountIndex: 4},
+      { title: "[DRAFT]", code: makeContract(`HejsanWorldA`, `HejsanA`, `0x05`), accountIndex: 4},
     ],
     [
       { title: "0x01 Transaction", code: ACC1_TRANSACTION },
@@ -114,7 +114,7 @@ type ScriptDetails = {
 type ContractDetails = {
   code: string,
   title: string,
-  index: integer
+  accountIndex: integer
 }
 
 export function createLocalProject(
@@ -137,15 +137,15 @@ export function createLocalProject(
   });
 
   const contractsEntities: Contract[] = contracts.map(
-    (script, i) => {
-      const { title, code, index } = script
+    (contract, i) => {
+      const { title, code, accountIndex } = contract
       return {
         __typename: "Contract",
         id: `LOCAL-con-temp-${i}`,
         title: title || `CONTRACT_${i + 1}`,
-        script: code,
-        deployedScript: "",
-        index: index,
+        code: code,
+        deployedCode: "",
+        accountIndex: accountIndex,
       };
     }
   );

@@ -121,7 +121,7 @@ function getActiveCode(project: Project, active: ActiveEditor): string {
   switch (active.type) {
     case EntityType.Account:
       return project.contracts[active.contractIndex]
-        ? project.contracts[active.contractIndex].script 
+        ? project.contracts[active.contractIndex].code
         : "";
     case EntityType.TransactionTemplate:
       return project.transactionTemplates[active.index]
@@ -184,8 +184,8 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
       // and return for cadence server check
       var combinedCode = '';
       for (let i = 0; i < project.contracts.length; i++) {
-        if(project.contracts[i].index == index) {
-          combinedCode += project.contracts[i].script;
+        if(project.contracts[i].accountIndex == index) {
+          combinedCode += project.contracts[i].code;
         }
       }
 
@@ -239,7 +239,7 @@ const EditorTitle: React.FC<EditorTitleProps> = ({ type }) => {
           title="Contracts"
          
           items={
-            project.contracts.filter(item => item.index === active.index)
+            project.contracts.filter(item => item.accountIndex === active.index)
           }
           active={
             active.type == EntityType.Account ? active.index : null

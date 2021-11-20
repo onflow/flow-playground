@@ -260,8 +260,8 @@ const generateTests = async (cadenceFolder: string, project: Project) => {
   const contractsUnitTests = [];
   for (let i = 0; i < project.contracts.length; i++) {
     const contract = project.contracts[i];
-    const address = `0x0${contract.index+1}`;
-    const code = contract.script;
+    const address = `0x0${contract.accountIndex+1}`;
+    const code = contract.code;
     if (code.length > 0) {
       const unitTest = generateContractUnitTest(address, code);
       contractsUnitTests.push(unitTest);
@@ -321,9 +321,9 @@ export const createZip = async (
   // and put them in folders
   for (let i = 0; i < contracts.length; i++) {
     const contract = contracts[i];
-    const name = getContractName(contract.script);
-    const fileName = `cadence/contracts/0x0${contract.index+1}/${name}.cdc`;
-    zip.file(fileName, contract.script);
+    const name = getContractName(contract.code);
+    const fileName = `cadence/contracts/0x0${contract.accountIndex+1}/${name}.cdc`;
+    zip.file(fileName, contract.code);
   }
 
   for (let i = 0; i < transactionTemplates.length; i++) {

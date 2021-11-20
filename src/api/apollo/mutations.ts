@@ -52,17 +52,17 @@ export const UPDATE_CONTRACT = gql`
   mutation UpdateContract(
     $projectId: UUID!
     $contractId: UUID!
-    $script: String!
+    $code: String!
     $title: String
   ) {
     updateContract(
-      input: { projectId: $projectId, id: $contractId, script: $script, title: $title }
+      input: { projectId: $projectId, id: $contractId, code: $code, title: $title }
     ) {
       id
-      script
-      deployedScript
+      code
+      deployedCode
       title
-      index
+      accountIndex
     }
   }
 `;
@@ -72,16 +72,16 @@ export const DEPLOY_CONTRACT = gql`
     $projectId: UUID!
     $accountId: UUID!
     $contractId: UUID!
-    $script: String!
+    $code: String!
   ) {
     deployContract(
-      input: { projectId: $projectId, id: $contractId, accountId: $accountId, deployedScript: $script }
+      input: { projectId: $projectId, id: $contractId, accountId: $accountId, deployedCode: $code }
     ) {
       id
-      script
-      deployedScript
+      code
+      deployedCode
       title
-      index
+      accountIndex
     }
   }
 `;
@@ -89,17 +89,17 @@ export const DEPLOY_CONTRACT = gql`
 export const CREATE_CONTRACT = gql`
   mutation CreateContract(
     $projectId: UUID!
-    $index: Int!
-    $script: String!
+    $accountIndex: Int!
+    $code: String!
     $title: String!
   ) {
     createContract(
-      input: { projectId: $projectId, index: $index, script: $script, title: $title }
+      input: { projectId: $projectId, accountIndex: $accountIndex, code: $code, title: $title }
     ) {
       id
-      script
+      code
       title
-      index
+      accountIndex
     }
   }
 `;

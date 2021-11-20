@@ -17,10 +17,10 @@ export const GET_PROJECT = gql`
       }
       contracts {
         id
-        script
-        deployedScript
+        code
+        deployedCode
         title
-        index
+        accountIndex
       }
       transactionTemplates {
         id
@@ -53,10 +53,10 @@ export const GET_LOCAL_PROJECT = gql`
       }
       contracts {
         id
-        script
-        deployedScript
+        code
+        deployedCode
         title
-        index
+        accountIndex
       }      
       transactionTemplates {
         id

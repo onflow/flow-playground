@@ -271,7 +271,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
         case EntityType.Account: {
           // Ask if user wants to redeploy the contract
-          if (accounts[active.index] && contracts[active.contractIndex].deployedScript) {
+          if (accounts[active.index] && contracts[active.contractIndex].deployedCode) {
             const choiceMessage =
               'Redeploying will clear the state of all accounts. Proceed?';
             if (!confirm(choiceMessage)) {

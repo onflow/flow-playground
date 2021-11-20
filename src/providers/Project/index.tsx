@@ -141,7 +141,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       project.accounts[active.index],
       active.index,
       project.contracts[active.contractIndex].id,
-      project.contracts[active.contractIndex].script,
+      project.contracts[active.contractIndex].code,
     );
     setIsSaving(true);
     timeout = setTimeout(() => {
@@ -372,7 +372,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         setActive({
           type: EntityType.Account,
           index: 0,
-          contractIndex: project.contracts.findIndex(contract => contract.index === 0),
+          contractIndex: project.contracts.findIndex(contract => contract.accountIndex === 0),
         });
         firstItemId = project.accounts[0].id;
         break;
@@ -434,6 +434,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       break;
     }
     case 'account': {
+      console.log(project);
       if (id && id !== '') {
         const foundIndex = project.accounts.findIndex(
           (template) => template.id === id,
@@ -454,11 +455,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         // when there is no valid contract passed, redirect to the first contract
         if(contractIndex < 0) {
           contractIndex = 0;
-          templateIndex = project.contracts[0].index;
+          templateIndex = project.contracts[0].accountIndex;
         }
       } else {
         // since contractId is not in url param, set to account's first contract index
-        contractIndex = project.contracts.findIndex(contract => contract.index === templateIndex);
+        contractIndex = project.contracts.findIndex(contract => contract.accountIndex === templateIndex);
       }
 
       const sameType = active.type == EntityType.Account;
