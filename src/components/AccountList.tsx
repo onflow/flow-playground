@@ -50,7 +50,6 @@ const AccountList: React.FC = () => {
           const title = contractName
             ? `${contractName} is deployed to this account`
             : `This account don't have any contracts`
-          const typeName = account.__typename
           return (
             <Item
               key={id}
