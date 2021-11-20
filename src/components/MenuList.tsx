@@ -71,9 +71,6 @@ const MenuList: React.FC<MenuListProps> = ({
     element?.select()
   };
 
-  //const isScript = title.toLowerCase().includes("script");
-  //const itemType = isScript ? EntityType.ScriptTemplate : EntityType.TransactionTemplate
-
   const location = useLocation();
   const params = getParams(location.search)
 
