@@ -344,7 +344,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   if (type == '' || type === undefined || !scriptTypes.includes(type)) {
     return (
-      <Redirect to={`/${project.id}?type=account&id=${project.accounts[0].id}`} />
+      <Redirect noThrow to={`/${project.id}?type=account&id=${project.accounts[0].id}`} />
     );
   }
 
@@ -377,7 +377,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         firstItemId = project.accounts[0].id;
         break;
     }
-    return <Redirect to={`/${project.id}?type=${type}&id=${firstItemId}`} />;
+    return <Redirect noThrow to={`/${project.id}?type=${type}&id=${firstItemId}`} />;
   }
 
   const activeType = type || 'account';
@@ -405,7 +405,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           contractIndex: null,
         });
         const templateId = project.transactionTemplates[templateIndex].id;
-        return <Redirect to={`/${project.id}?type=tx&id=${templateId}`} />;
+        return <Redirect noThrow to={`/${project.id}?type=tx&id=${templateId}`} />;
       }
       break;
     }
@@ -429,12 +429,37 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           contractIndex: null,
         });
         const templateId = project.scriptTemplates[templateIndex].id;
-        return <Redirect to={`/${project.id}?type=script&id=${templateId}`} />;
+        return <Redirect noThrow to={`/${project.id}?type=script&id=${templateId}`} />;
       }
       break;
     }
+    case 'contract': {
+      if (id && id !== '') {
+        const foundIndex = project.contracts.findIndex(
+          (template) => template.id === id,
+        );
+        if (foundIndex > 0) {
+          templateIndex = foundIndex;
+        }
+      }
+
+      if (initialLoad) {
+        const accountIndex = project.contracts[templateIndex].accountIndex;
+        const accountId = project.accounts[accountIndex].id;
+
+        setInitialLoad(false);
+        setActive({
+          type: EntityType.Account,
+          index: accountIndex,
+          contractIndex: templateIndex,
+        });
+
+        console.log(`accountId: ${accountId}, active.type: ${active.type}`);
+        return <Redirect noThrow to={`/${project.id}?type=account&id=${accountId}&contractId=${id}`} />;
+      } 
+      break;      
+    }
     case 'account': {
-      console.log(project);
       if (id && id !== '') {
         const foundIndex = project.accounts.findIndex(
           (template) => template.id === id,
@@ -475,7 +500,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         });
         const templateId = project.accounts[templateIndex].id;
 
-        return <Redirect to={`/${project.id}?type=account&id=${templateId}&contractId=${project.contracts[contractIndex].id}`} />;
+        return <Redirect noThrow to={`/${project.id}?type=account&id=${templateId}&contractId=${project.contracts[contractIndex].id}`} />;
       }
       break;
     }
