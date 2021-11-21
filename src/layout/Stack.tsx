@@ -19,9 +19,7 @@ export const Stack = styled.div`
   small {
     max-width: 9em;
     text-overflow: ellipsis;
-    overflow: hidden;
     font-size: 0.8em;
-    line-height: 0.9em;
-    height: 0.9em;
+    line-height: 1em;
   }
 `
