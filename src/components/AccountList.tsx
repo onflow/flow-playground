@@ -44,7 +44,7 @@ const AccountList: React.FC = () => {
       <Items>
         {project.accounts.map((account: Account, i: number) => {
           const { id } = account
-          const isActive = accountSelected && params.id === id
+          const isActive = accountSelected && (params.id === id || project.accounts[active.index].id === id)
           const accountAddress = `0x${account.address.slice(-2)}`
           const contracts = getDeployedContracts(account)
           const listContracts = contracts.map((contract) =>
