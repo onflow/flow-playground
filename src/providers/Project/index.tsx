@@ -454,7 +454,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           contractIndex: templateIndex,
         });
 
-        console.log(`accountId: ${accountId}, active.type: ${active.type}`);
         return <Redirect noThrow to={`/${project.id}?type=account&id=${accountId}&contractId=${id}`} />;
       } 
       break;      
