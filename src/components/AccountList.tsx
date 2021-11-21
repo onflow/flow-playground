@@ -12,11 +12,11 @@ import Avatar from "components/Avatar";
 import styled from "@emotion/styled";
 import {getParams, isUUUID} from "../util/url";
 
-function getDeployedContracts(account: Account): string {
+function getDeployedContracts(account: Account): string[] {
   const contracts = account.deployedContracts.map(
     contract => contract.split(".").slice(-1)[0]
   );
-  return "("+ contracts.length +") contracts ... "+ contracts.join(", ");
+  return contracts;
 }
 
 export const AccountCard = styled.div`
@@ -46,10 +46,13 @@ const AccountList: React.FC = () => {
           const { id } = account
           const isActive = accountSelected && params.id === id
           const accountAddress = `0x${account.address.slice(-2)}`
-          const contractName = getDeployedContracts(account)
-          const title = contractName
-            ? `${contractName} is deployed to this account`
-            : `This account don't have any contracts`
+          const contracts = getDeployedContracts(account)
+          const listContracts = contracts.map((contract) =>
+            <li>{contract}</li>
+          );
+          const title = contracts
+            ? `${contracts.join(", ")} are deployed to this account`
+            : `This account don't have any contract deployed yet`
           return (
             <Item
               key={id}
@@ -61,7 +64,7 @@ const AccountList: React.FC = () => {
                 <Avatar seed={project.seed} index={i} />
                 <Stack>
                   <strong>{accountAddress}</strong>
-                  <small>{contractName || '--'}</small>
+                  <small><ul>{listContracts || '--'}</ul></small>
                 </Stack>
               </AccountCard>
             </Item>
