@@ -1,4 +1,4 @@
-import React, {SyntheticEvent, useEffect, useRef, useState} from "react";
+import React, {SyntheticEvent} from "react";
 import {IoMdAddCircleOutline} from "react-icons/io";
 import {FaTimes} from "react-icons/fa";
 import {TabSection} from "layout/TabSection";
@@ -6,11 +6,11 @@ import {TabItems} from "layout/TabItems";
 import {TabItem} from "layout/TabItem";
 import {TabItemInsert} from "layout/TabItemInsert";
 import {TabItemDelete} from "layout/TabItemDelete";
-import useKeyPress from "../hooks/useKeyPress";
 import { getParams } from "../util/url";
 import { useProject } from "providers/Project/projectHooks";
 import { EntityType } from "providers/Project";
 import { useLocation } from "@reach/router";
+import {ExportButton} from "components/ExportButton";
 
 type ContractListProps = {
   active: number | null;
@@ -30,28 +30,12 @@ const ContractList: React.FC<ContractListProps> = ({
   onDelete
 }) => {
   const { project, active } = useProject()
-  const isEditing = useRef<HTMLInputElement>();
-  const [editing, setEditing] = useState([]);
-  const enterPressed = useKeyPress("Enter");
-  const escapePressed = useKeyPress("Escape");
-
-  useEffect(() => {
-    setEditing([]);
-  }, [items, active]);
-
-  useEffect(() => {
-    if (enterPressed || escapePressed) {
-      setEditing([]);
-      isEditing.current?.blur();
-    }
-  }, [enterPressed, escapePressed]);
 
   const location = useLocation();
   const params = getParams(location.search)
 
   var itemType = EntityType.Account;
-  params.id = params.contractId;
-  if(!params.id && active.contractIndex != null) params.id = project.contracts[active.contractIndex].id;
+  if(!params.contractId && active.contractIndex != null) params.contractId = project.contracts[active.contractIndex].id;
 
   return (
     <TabSection>
@@ -61,8 +45,9 @@ const ContractList: React.FC<ContractListProps> = ({
           </TabItemInsert>
         )}
       <TabItems>
-        {items.map((item, i) => {
-          const isActive = active.type === itemType && item.id === params.id
+        {items.map(item => {
+          const isActive = active.type === itemType && item.id === params.contractId
+          const typeName = item.__typename
           return (
             <TabItem
               title={item.title}
@@ -74,7 +59,9 @@ const ContractList: React.FC<ContractListProps> = ({
             >
               {item.title}
 
-              {!editing.includes(i) && isActive && items.length > 1 && (
+              {isActive && <ExportButton id={item.id} typeName={typeName}/>}
+
+              {isActive && items.length > 1 && (
                 <TabItemDelete
                   onClick={(e: any) => {
                     e.stopPropagation();

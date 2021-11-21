@@ -253,7 +253,6 @@ const EditorTitle: React.FC<EditorTitleProps> = ({ type }) => {
             navigate(`/${projectPath}?type=account&id=${activeAccountId}`)
           }}
           onInsert={async () => {
-            console.log(`createContract with index: ${active.index}`);
             const res = await mutator.createContract(active.index, `// draft contract`, `[DRAFT_CONTRACT]`)
             navigate(`/${projectPath}?type=account&id=${activeAccountId}&contractId=${res.data?.createContract?.id}`)
           }}

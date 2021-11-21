@@ -2,6 +2,7 @@ import React from 'react';
 import useClipboard from 'react-use-clipboard';
 import { FaClipboard, FaClipboardCheck } from 'react-icons/fa';
 import { SidebarItemExport } from 'layout/SidebarItemExport';
+import { TabItemExport } from 'layout/TabItemExport';
 import { useProject } from 'providers/Project/projectHooks';
 import { generateCode } from '../util/generate-code';
 
@@ -18,13 +19,26 @@ export const ExportButton = (props: ExportButtonProps) => {
     successDuration: 1000,
   });
 
-  return project.id === 'LOCAL-project' ? null : (
-    <SidebarItemExport
-      onClick={setCopied}
-      title={'Copy snippet to clipboard'}
-      active={isCopied}
-    >
-      {isCopied ? <FaClipboardCheck /> : <FaClipboard />}
-    </SidebarItemExport>
-  );
+  if(typeName == "Contract") {
+    return project.id === 'LOCAL-project' ? null : (
+      <TabItemExport
+        onClick={setCopied}
+        title={'Copy snippet to clipboard'}
+        active={isCopied}
+      >
+        {isCopied ? <FaClipboardCheck /> : <FaClipboard />}
+      </TabItemExport>
+    );
+  } else {
+    return project.id === 'LOCAL-project' ? null : (
+      <SidebarItemExport
+        onClick={setCopied}
+        title={'Copy snippet to clipboard'}
+        active={isCopied}
+      >
+        {isCopied ? <FaClipboardCheck /> : <FaClipboard />}
+      </SidebarItemExport>
+    );
+  }
+
 };
