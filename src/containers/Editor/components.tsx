@@ -12,15 +12,16 @@ import { EntityType, ActiveEditor } from "providers/Project";
 import { useProject } from "providers/Project/projectHooks";
 import { Project } from "api/apollo/generated/graphql";
 
-import debounce from "../../util/debounce";
-import Mixpanel from "../../util/mixpanel";
+import debounce from "util/debounce";
+import Mixpanel from "util/mixpanel";
 
 import { default as FlowButton } from "components/Button";
 import CadenceEditor from "components/CadenceEditor";
-import AccountBottomBar from "components/AccountBottomBar";
 import TransactionBottomBar from "components/TransactionBottomBar";
 import ScriptBottomBar from "components/ScriptBottomBar";
 import { Version } from "components/CadenceVersion";
+import DeploymentBottomBar from "components/DeploymentBottomBar";
+import ResourcesBar from "components/ResourcesBar";
 
 const Header: React.FC = ({ children }) => {
   return (
@@ -212,13 +213,29 @@ type BottomBarContainerProps = {
 };
 
 const BottomBarContainer: React.FC<BottomBarContainerProps> = ({ active }) => {
+  const [bottomBarHeight, setBottomBarHeight] = useState(140);
   switch (active.type) {
     case EntityType.Account:
-      return <AccountBottomBar />;
+      return (
+        <>
+          <ResourcesBar resultHeight={bottomBarHeight}/> 
+          <DeploymentBottomBar setBottomBarHeight={setBottomBarHeight}/>
+        </>
+      );
     case EntityType.TransactionTemplate:
-      return <TransactionBottomBar />;
+      return (
+        <>
+          <ResourcesBar resultHeight={bottomBarHeight}/> 
+          <TransactionBottomBar setBottomBarHeight={setBottomBarHeight}/>
+        </>
+      );
     case EntityType.ScriptTemplate:
-      return <ScriptBottomBar />;
+      return (
+        <>
+          <ResourcesBar resultHeight={bottomBarHeight}/> 
+          <ScriptBottomBar setBottomBarHeight={setBottomBarHeight}/>
+        </>
+      );
     default:
       return null;
   }

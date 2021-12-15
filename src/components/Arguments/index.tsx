@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
-import { motion } from 'framer-motion';
+import { AiFillCloseCircle } from 'react-icons/ai';
+import { motion, AnimatePresence } from "framer-motion";
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
+import { RemoveToastButton } from 'layout/RemoveToastButton';
+import { useThemeUI, Box, Text, Flex } from 'theme-ui';
 import {
   Account,
   ResultType,
@@ -12,7 +15,7 @@ import {
 import { ArgumentsProps } from 'components/Arguments/types';
 import { ExecuteCommandRequest } from 'monaco-languageclient';
 
-import { ControlContainer, HoverPanel, StatusMessage } from './styles';
+import { ControlContainer, ToastContainer, HoverPanel, StatusMessage } from './styles';
 
 import {
   ActionButton,
@@ -157,6 +160,7 @@ interface IValue {
 }
 
 const Arguments: React.FC<ArgumentsProps> = (props) => {
+  const { theme } = useThemeUI();
   const { type, list, signers } = props;
   const { goTo, hover, hideDecorations, problems } = props;
   const validCode = problems.error.length === 0;
@@ -168,7 +172,15 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const [values, setValue] = useState<IValue>({});
   const constraintsRef = useRef();
 
-  // const errors = validate(list, values);
+  const removeNotification = (set: any, id: number) => {
+    set((prev: any[]) => {
+      delete prev[id];
+      return {
+        ...prev
+      };
+    });
+  };
+
   const numberOfErrors = Object.keys(errors).length;
   const notEnoughSigners = needSigners && selected.length < signers;
   const haveErrors = numberOfErrors > 0 || notEnoughSigners;
@@ -206,7 +218,38 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     transactionFactory,
     contractDeployment,
   } = useTemplateType();
-  const { project, active, isSavingCode } = useProject();
+  const { 
+    project, 
+    active, 
+    isSavingCode, 
+    lastSigners 
+  } = useProject();
+
+  const [notifications, setNotifications] = useState< { [identifier: string]: string[] } >({});
+
+  // compare 'state' field for each account, set 'notifications' state for new data
+  // @ts-ignore: <- this state is only used to compare and render notifications
+  const [_, setProjectAccts] = useState(project.accounts);
+  const [counter, setCounter] = useState(0);
+  useEffect(() => {
+    setProjectAccts((prevAccounts) => {
+      const latestAccounts = project.accounts;
+      const updatedAccounts = latestAccounts.filter((latestAccount, index)=> latestAccount.state !== prevAccounts[index].state);
+
+      if (updatedAccounts.length > 0) {
+        setNotifications((prev) => {
+          return {
+            ...prev,
+            [counter]: updatedAccounts
+          };
+        });
+        setTimeout(() => removeNotification(setNotifications, counter), 5000);
+        setCounter((prev) => prev + 1);
+      };
+      return project.accounts;
+    });
+  },[project]);
+
   const { accounts } = project;
 
   const signersAccounts = selected.map((i) => accounts[i]);
@@ -371,6 +414,71 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           </ControlContainer>
         </HoverPanel>
       </motion.div>
+      <ToastContainer>
+        <ul>
+          <AnimatePresence initial={true}>
+            {Object.keys(notifications).map((id) => {
+              const updatedAccounts = notifications[id];
+
+              let updatedStorageAccts: string[] = [];
+              updatedAccounts.map((acct: any) => {
+                const addr = acct.address;
+                const acctNum = addr.charAt(addr.length-1);
+                const acctHex = `0x0${acctNum}`;
+                updatedStorageAccts.push(acctHex);
+              });
+
+              // render a new list item for each new id in 'notifications' state
+              return (
+                (lastSigners && updatedStorageAccts) && <motion.li
+                  key={id}
+                  layout
+                  initial={{ opacity: 0, y: 50, scale: 0.3 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+                >
+                  <Flex
+                    sx={{
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <RemoveToastButton
+                      onClick={() => removeNotification(setNotifications, parseInt(id))}
+                    >
+                      <AiFillCloseCircle color="grey" size="32"/>
+                    </RemoveToastButton>
+                  </Flex>
+                  <Box
+                    my={1}
+                    sx={{
+                      marginTop: "0.0rem",
+                      padding: "0.8rem 0.5rem",
+                      alignItems: "center",
+                      border: `1px solid ${theme.colors.borderDark}`,
+                      backgroundColor: theme.colors.background,
+                      borderRadius: "8px",
+                      maxWidth: "500px",
+                      boxShadow: "10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff"
+                    }}
+                  >
+                    <Text
+                      sx={{
+                        padding: "0.75rem"
+                      }}
+                    >
+                      {`Account${lastSigners?.length > 1 ? "s" : ""}
+                        ${lastSigners.join(", ")}
+                        updated the storage in
+                        account${updatedStorageAccts?.length > 1 ? "s" : ""}
+                        ${updatedStorageAccts.join(", ")}.`}
+                    </Text>
+                  </Box>
+                </motion.li>
+              )
+            })}
+          </AnimatePresence>
+        </ul>
+      </ToastContainer>
     </>
   );
 };

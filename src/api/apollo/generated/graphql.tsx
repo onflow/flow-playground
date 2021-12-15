@@ -10,157 +10,43 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  UUID: any;
   Version: any;
   Address: any;
+  UUID: any;
   ExecutionResultValue: any;
   RawExecutionResult: any;
 };
 
-export type Project = {
-  __typename?: 'Project';
-  id: Scalars['UUID'];
-  publicId: Scalars['UUID'];
-  parentId?: Maybe<Scalars['UUID']>;
-  title: Scalars['String'];
-  seed: Scalars['Int'];
-  version: Scalars['Version'];
-  persist?: Maybe<Scalars['Boolean']>;
-  mutable?: Maybe<Scalars['Boolean']>;
-  accounts?: Maybe<Array<Account>>;
-  transactionTemplates?: Maybe<Array<TransactionTemplate>>;
-  transactionExecutions?: Maybe<Array<TransactionExecution>>;
-  scriptTemplates?: Maybe<Array<ScriptTemplate>>;
-  scriptExecutions?: Maybe<Array<ScriptExecution>>;
-};
-
 export type NewProject = {
-  parentId?: Maybe<Scalars['UUID']>;
-  title: Scalars['String'];
-  seed: Scalars['Int'];
   accounts?: Maybe<Array<Scalars['String']>>;
-  transactionTemplates?: Maybe<Array<NewProjectTransactionTemplate>>;
+  parentId?: Maybe<Scalars['UUID']>;
   scriptTemplates?: Maybe<Array<NewProjectScriptTemplate>>;
+  seed: Scalars['Int'];
+  title: Scalars['String'];
+  transactionTemplates?: Maybe<Array<NewProjectTransactionTemplate>>;
 };
 
 export type NewProjectTransactionTemplate = {
-  title: Scalars['String'];
   script: Scalars['String'];
+  title: Scalars['String'];
+};
+
+export type UpdateProject = {
+  id: Scalars['UUID'];
+  persist?: Maybe<Scalars['Boolean']>;
+  title?: Maybe<Scalars['String']>;
+};
+
+export type NewScriptTemplate = {
+  projectId: Scalars['UUID'];
+  script: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export type NewScriptExecution = {
-  projectId: Scalars['UUID'];
-  script: Scalars['String'];
   arguments?: Maybe<Array<Scalars['String']>>;
-};
-
-export type ProgramPosition = {
-  __typename?: 'ProgramPosition';
-  offset: Scalars['Int'];
-  line: Scalars['Int'];
-  column: Scalars['Int'];
-};
-
-export type Query = {
-  __typename?: 'Query';
-  account: Account;
-  activeProject: Scalars['Boolean'];
-  activeProjectId?: Maybe<Scalars['Int']>;
-  cachedExecutionResults: Array<Maybe<ExecutionResults>>;
-  localProject?: Maybe<Project>;
-  playgroundInfo: PlaygroundInfo;
-  project: Project;
-  scriptTemplate: ScriptTemplate;
-  transactionTemplate: TransactionTemplate;
-};
-
-
-export type QueryAccountArgs = {
-  accountId?: Maybe<Scalars['String']>;
-  id: Scalars['UUID'];
   projectId: Scalars['UUID'];
-};
-
-
-export type QueryProjectArgs = {
-  id: Scalars['UUID'];
-};
-
-
-export type QueryScriptTemplateArgs = {
-  id: Scalars['UUID'];
-  projectId: Scalars['UUID'];
-};
-
-
-export type QueryTransactionTemplateArgs = {
-  id: Scalars['UUID'];
-  projectId: Scalars['UUID'];
-};
-
-export type TransactionTemplate = {
-  __typename?: 'TransactionTemplate';
-  id: Scalars['UUID'];
-  index: Scalars['Int'];
-  title: Scalars['String'];
   script: Scalars['String'];
-};
-
-export type TransactionExecution = {
-  __typename?: 'TransactionExecution';
-  id: Scalars['UUID'];
-  script: Scalars['String'];
-  arguments?: Maybe<Array<Scalars['String']>>;
-  signers: Array<Account>;
-  errors?: Maybe<Array<ProgramError>>;
-  events: Array<Maybe<Event>>;
-  logs: Array<Scalars['String']>;
-};
-
-export type NewTransactionTemplate = {
-  projectId: Scalars['UUID'];
-  title: Scalars['String'];
-  script: Scalars['String'];
-};
-
-export type UpdateTransactionTemplate = {
-  id: Scalars['UUID'];
-  title?: Maybe<Scalars['String']>;
-  projectId: Scalars['UUID'];
-  index?: Maybe<Scalars['Int']>;
-  script?: Maybe<Scalars['String']>;
-};
-
-
-
-export type ProgramError = {
-  __typename?: 'ProgramError';
-  message: Scalars['String'];
-  startPosition?: Maybe<ProgramPosition>;
-  endPosition?: Maybe<ProgramPosition>;
-};
-
-export type ScriptExecution = {
-  __typename?: 'ScriptExecution';
-  id: Scalars['UUID'];
-  script: Scalars['String'];
-  arguments?: Maybe<Array<Scalars['String']>>;
-  errors?: Maybe<Array<ProgramError>>;
-  value: Scalars['String'];
-  logs: Array<Scalars['String']>;
-};
-
-export type NewProjectScriptTemplate = {
-  title: Scalars['String'];
-  script: Scalars['String'];
-};
-
-export type UpdateScriptTemplate = {
-  id: Scalars['UUID'];
-  title?: Maybe<Scalars['String']>;
-  projectId: Scalars['UUID'];
-  index?: Maybe<Scalars['Int']>;
-  script?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -255,10 +141,101 @@ export type MutationUpdateTransactionTemplateArgs = {
   input: UpdateTransactionTemplate;
 };
 
+
+export type ProgramPosition = {
+  __typename?: 'ProgramPosition';
+  column: Scalars['Int'];
+  line: Scalars['Int'];
+  offset: Scalars['Int'];
+};
+
+export type UpdateTransactionTemplate = {
+  id: Scalars['UUID'];
+  index?: Maybe<Scalars['Int']>;
+  projectId: Scalars['UUID'];
+  script?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+};
+
+
+export type Project = {
+  __typename?: 'Project';
+  accounts?: Maybe<Array<Account>>;
+  id: Scalars['UUID'];
+  mutable?: Maybe<Scalars['Boolean']>;
+  parentId?: Maybe<Scalars['UUID']>;
+  persist?: Maybe<Scalars['Boolean']>;
+  publicId: Scalars['UUID'];
+  scriptExecutions?: Maybe<Array<ScriptExecution>>;
+  scriptTemplates?: Maybe<Array<ScriptTemplate>>;
+  seed: Scalars['Int'];
+  title: Scalars['String'];
+  transactionExecutions?: Maybe<Array<TransactionExecution>>;
+  transactionTemplates?: Maybe<Array<TransactionTemplate>>;
+  version: Scalars['Version'];
+};
+
+export type ProgramError = {
+  __typename?: 'ProgramError';
+  endPosition?: Maybe<ProgramPosition>;
+  message: Scalars['String'];
+  startPosition?: Maybe<ProgramPosition>;
+};
+
+export type NewTransactionExecution = {
+  arguments?: Maybe<Array<Scalars['String']>>;
+  projectId: Scalars['UUID'];
+  script: Scalars['String'];
+  signers?: Maybe<Array<Scalars['Address']>>;
+};
+
+export type NewTransactionTemplate = {
+  projectId: Scalars['UUID'];
+  script: Scalars['String'];
+  title: Scalars['String'];
+};
+
+export type UpdateScriptTemplate = {
+  id: Scalars['UUID'];
+  index?: Maybe<Scalars['Int']>;
+  projectId: Scalars['UUID'];
+  script?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+};
+
+export type ScriptTemplate = {
+  __typename?: 'ScriptTemplate';
+  id: Scalars['UUID'];
+  index: Scalars['Int'];
+  script: Scalars['String'];
+  title: Scalars['String'];
+};
+
+export type NewProjectScriptTemplate = {
+  script: Scalars['String'];
+  title: Scalars['String'];
+};
+
+export type UpdateAccount = {
+  deployedCode?: Maybe<Scalars['String']>;
+  draftCode?: Maybe<Scalars['String']>;
+  id: Scalars['UUID'];
+  projectId: Scalars['UUID'];
+};
+
+
 export type PlaygroundInfo = {
   __typename?: 'PlaygroundInfo';
   apiVersion: Scalars['Version'];
   cadenceVersion: Scalars['Version'];
+};
+
+export type TransactionTemplate = {
+  __typename?: 'TransactionTemplate';
+  id: Scalars['UUID'];
+  index: Scalars['Int'];
+  script: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export type Event = {
@@ -267,49 +244,72 @@ export type Event = {
   values: Array<Scalars['String']>;
 };
 
-export type ScriptTemplate = {
-  __typename?: 'ScriptTemplate';
-  id: Scalars['UUID'];
-  index: Scalars['Int'];
-  title: Scalars['String'];
-  script: Scalars['String'];
+export type Query = {
+  __typename?: 'Query';
+  account: Account;
+  activeProject: Scalars['Boolean'];
+  activeProjectId?: Maybe<Scalars['Int']>;
+  cachedExecutionResults: Array<Maybe<ExecutionResults>>;
+  localProject?: Maybe<Project>;
+  playgroundInfo: PlaygroundInfo;
+  project: Project;
+  scriptTemplate: ScriptTemplate;
+  transactionTemplate: TransactionTemplate;
 };
 
-export type UpdateProject = {
-  id: Scalars['UUID'];
-  title?: Maybe<Scalars['String']>;
-  persist?: Maybe<Scalars['Boolean']>;
-};
 
-export type UpdateAccount = {
+export type QueryAccountArgs = {
+  accountId?: Maybe<Scalars['String']>;
   id: Scalars['UUID'];
   projectId: Scalars['UUID'];
-  draftCode?: Maybe<Scalars['String']>;
-  deployedCode?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryProjectArgs = {
+  id: Scalars['UUID'];
+};
+
+
+export type QueryScriptTemplateArgs = {
+  id: Scalars['UUID'];
+  projectId: Scalars['UUID'];
+};
+
+
+export type QueryTransactionTemplateArgs = {
+  id: Scalars['UUID'];
+  projectId: Scalars['UUID'];
+};
+
+export type TransactionExecution = {
+  __typename?: 'TransactionExecution';
+  arguments?: Maybe<Array<Scalars['String']>>;
+  errors?: Maybe<Array<ProgramError>>;
+  events: Array<Maybe<Event>>;
+  id: Scalars['UUID'];
+  logs: Array<Scalars['String']>;
+  script: Scalars['String'];
+  signers: Array<Account>;
+};
+
+export type ScriptExecution = {
+  __typename?: 'ScriptExecution';
+  arguments?: Maybe<Array<Scalars['String']>>;
+  errors?: Maybe<Array<ProgramError>>;
+  id: Scalars['UUID'];
+  logs: Array<Scalars['String']>;
+  script: Scalars['String'];
+  value: Scalars['String'];
 };
 
 export type Account = {
   __typename?: 'Account';
-  id: Scalars['UUID'];
   address: Scalars['Address'];
-  draftCode: Scalars['String'];
   deployedCode: Scalars['String'];
   deployedContracts: Array<Scalars['String']>;
+  draftCode: Scalars['String'];
+  id: Scalars['UUID'];
   state: Scalars['String'];
-};
-
-
-export type NewTransactionExecution = {
-  projectId: Scalars['UUID'];
-  script: Scalars['String'];
-  signers?: Maybe<Array<Scalars['Address']>>;
-  arguments?: Maybe<Array<Scalars['String']>>;
-};
-
-export type NewScriptTemplate = {
-  projectId: Scalars['UUID'];
-  title: Scalars['String'];
-  script: Scalars['String'];
 };
 
 

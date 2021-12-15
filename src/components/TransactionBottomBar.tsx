@@ -62,7 +62,11 @@ export const ClearResults: React.FC<{ type: ResultType }> = ({ type }) => {
   );
 };
 
-const TransactionBottomBar: React.FC = () => {
+interface TransactionBottomBarProps {
+  setBottomBarHeight: (height: number) => void;
+}
+
+const TransactionBottomBar: React.FC<TransactionBottomBarProps> = ({ setBottomBarHeight }) => {
   const { x, y } = useMousePosition();
 
   const [resultHeight, setResultHeight] = useState(140);
@@ -83,6 +87,7 @@ const TransactionBottomBar: React.FC = () => {
       y < window.innerHeight - PLAYGROUND_HEADER_HEIGHT
     ) {
       setResultHeight(y);
+      setBottomBarHeight(y);
     }
   }, [x, y]);
 

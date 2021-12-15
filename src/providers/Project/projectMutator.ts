@@ -20,11 +20,11 @@ import {
 import { Project, Account } from 'api/apollo/generated/graphql';
 import { GET_LOCAL_PROJECT, GET_PROJECT } from 'api/apollo/queries';
 
-import Mixpanel from '../../util/mixpanel';
+import Mixpanel from 'util/mixpanel';
 import {
   registerOnCloseSaveMessage,
   unregisterOnCloseSaveMessage,
-} from '../../util/onclose';
+} from 'util/onclose';
 
 export default class ProjectMutator {
   client: ApolloClient<object>;

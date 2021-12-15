@@ -6,6 +6,7 @@ import useGetProject from './projectHooks';
 
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
 import { Project, Account } from 'api/apollo/generated/graphql';
+import { getParams, scriptTypes } from 'util/url';
 
 export enum EntityType {
   Account = 1,
@@ -50,8 +51,11 @@ export interface ProjectContextValue {
   ) => Promise<any>;
   createScriptExecution: (args?: string[]) => Promise<any>;
   active: ActiveEditor;
-
   setActive: (type: EntityType, index: number) => void;
+  selectedResourceAccount: string;
+  setSelectedResourceAccount: (account: string) => void;
+  lastSigners: string[];
+  setLastSigners: (signers: string[]) => void;
   transactionAccounts: number[];
   isSavingCode: boolean;
 }
@@ -99,7 +103,14 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const [transactionAccounts, setTransactionAccounts] = useState<number[]>([0]);
   const [isSavingCode, setIsSaving] = useState(false);
+  const [lastSigners, setLastSigners] = useState(null);
 
+  const [active, setActive] = useState<{ type: EntityType; index: number }>({
+    type: EntityType.Account,
+    index: 0,
+  });
+
+  const [selectedResourceAccount, setSelectedResourceAccount] = useState< string | null>(null)
   const projectID = project ? project.id : null;
 
   const mutator = new ProjectMutator(client, projectID, isLocal);
@@ -112,6 +123,13 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       project.accounts[active.index],
       active.index,
     );
+
+    const addr = project.accounts[active.index].address;
+    const acctNum = addr.charAt(addr.length - 1);
+    const acctHex = `0x0${acctNum}`;
+    const signer = [acctHex]
+    setLastSigners(signer);
+    
     setIsSaving(true);
     timeout = setTimeout(() => {
       setIsSaving(false);
@@ -206,6 +224,16 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       signingAccounts,
       args,
     );
+
+    let signers: string[] = [];
+    signingAccounts?.map((acct: any) => {
+      const addr = acct.address;
+      const acctNum = addr.charAt(addr.length - 1);
+      const acctHex = `0x0${acctNum}`;
+      signers.push(acctHex);
+    });
+    setLastSigners(signers);
+
     timeout = setTimeout(() => {
       setIsSaving(false);
     }, 1000);
@@ -281,10 +309,134 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const activeEditor = getActiveEditor();
 
+  const location = useLocation();
   if (isLoading) return null;
   if (!isLoading && !project) {
     navigate('/');
     return null;
+  }
+
+  const params = getParams(location.search || '');
+  const { type, id, storage: storageParam } = params;
+  const storage = storageParam || 'none';
+
+  // TODO: check if that project is local
+  // TODO: check that active item have the same id
+
+  if (type == '' || type === undefined || !scriptTypes.includes(type)) {
+    return (
+      <Redirect noThrow
+        to={`/${project.id}?type=account&id=${project.accounts[0].id}&storage=${storage}`}
+      />
+    );
+  }
+
+  if (id == '' || id === undefined) {
+    let firstItemId;
+    switch (type) {
+      case 'tx':
+        setActive({
+          type: EntityType.TransactionTemplate,
+          index: 0,
+        });
+        firstItemId = project.transactionTemplates[0].id;
+        break;
+      case 'script':
+        setActive({
+          type: EntityType.ScriptTemplate,
+          index: 0,
+        });
+        firstItemId = project.scriptTemplates[0].id;
+        break;
+      case 'account':
+      default:
+        setActive({
+          type: EntityType.Account,
+          index: 0,
+        });
+        firstItemId = project.accounts[0].id;
+        break;
+    }
+    return <Redirect noThrow to={`/${project.id}?type=${type}&id=${firstItemId}&storage=${storage}`} />;
+  }
+
+  const activeType = type || 'account';
+
+  let templateIndex = 0;
+  switch (activeType) {
+    case 'tx': {
+      if (id && id !== '') {
+        const foundIndex = project.transactionTemplates.findIndex(
+          (template) => template.id === id,
+        );
+        if (foundIndex > 0) {
+          templateIndex = foundIndex;
+        }
+      }
+
+      const sameType = active.type == EntityType.TransactionTemplate;
+      const sameIndex = active.index == templateIndex;
+
+      if (!sameIndex || !sameType || initialLoad) {
+        setInitialLoad(false);
+        setActive({
+          type: EntityType.TransactionTemplate,
+          index: templateIndex,
+        });
+        const templateId = project.transactionTemplates[templateIndex].id;
+        return <Redirect noThrow to={`/${project.id}?type=tx&id=${templateId}&storage=${storage}`} />;
+      }
+      break;
+    }
+    case 'script': {
+      if (id && id !== '') {
+        const foundIndex = project.scriptTemplates.findIndex(
+          (template) => template.id === id,
+        );
+        if (foundIndex > 0) {
+          templateIndex = foundIndex;
+        }
+      }
+      const sameType = active.type == EntityType.ScriptTemplate;
+      const sameIndex = active.index == templateIndex;
+
+      if (!sameIndex || !sameType || initialLoad) {
+        setInitialLoad(false);
+        setActive({
+          type: EntityType.ScriptTemplate,
+          index: templateIndex,
+        });
+        const templateId = project.scriptTemplates[templateIndex].id;
+        return <Redirect noThrow to={`/${project.id}?type=script&id=${templateId}&storage=${storage}`} />;
+      }
+      break;
+    }
+
+    case 'account': {
+      if (id && id !== '') {
+        const foundIndex = project.accounts.findIndex(
+          (template) => template.id === id,
+        );
+        if (foundIndex > 0) {
+          templateIndex = foundIndex;
+        }
+      }
+      const sameType = active.type == EntityType.Account;
+      const sameIndex = active.index == templateIndex;
+
+      if (!sameIndex || !sameType || initialLoad) {
+        setInitialLoad(false);
+        setActive({
+          type: EntityType.Account,
+          index: templateIndex,
+        });
+        const templateId = project.accounts[templateIndex].id;
+        return <Redirect noThrow to={`/${project.id}?type=account&id=${templateId}&storage=${storage}`} />;
+      }
+      break;
+    }
+    default:
+      return null;
   }
 
   return (
@@ -309,6 +461,14 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         active: activeEditor,
         setActive: (type: EntityType, index: number) => {
           setActive({ type, index });
+        },
+        selectedResourceAccount,
+        setSelectedResourceAccount: (account: string) => {
+          setSelectedResourceAccount(account)
+        },
+        lastSigners,
+        setLastSigners: (signers: string[]) => {
+          setLastSigners(signers)
         },
         transactionAccounts,
       }}

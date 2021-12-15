@@ -11,7 +11,7 @@ import {SidebarItemEdit} from "layout/SidebarItemEdit";
 import {SidebarItemDelete} from "layout/SidebarItemDelete";
 import useKeyPress from "../hooks/useKeyPress";
 import { ExportButton } from "components/ExportButton";
-import { getParams } from "../util/url";
+import { getParams } from "util/url";
 import { useProject } from "providers/Project/projectHooks";
 import { EntityType } from "providers/Project";
 import { useLocation } from "@reach/router";

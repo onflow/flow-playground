@@ -12,6 +12,7 @@ import Avatar from "components/Avatar";
 import styled from "@emotion/styled";
 import {ExportButton} from "components/ExportButton";
 import {getParams, isUUUID, LOCAL_PROJECT_ID} from "../util/url";
+import {ResourcesExplorerButton} from "components/ResourcesExplorerButton";
 
 function getDeployedContracts(account: Account): string {
   const contracts = account.deployedContracts.map(
@@ -22,7 +23,7 @@ function getDeployedContracts(account: Account): string {
 
 export const AccountCard = styled.div`
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   width: 100%;
@@ -32,6 +33,7 @@ const AccountList: React.FC = () => {
   const {
     project,
     active,
+    selectedResourceAccount
   } = useProject();
   const accountSelected = active.type === EntityType.Account
 
@@ -54,20 +56,21 @@ const AccountList: React.FC = () => {
           const typeName = account.__typename
           return (
             <Item
-              key={id}
               title={title}
               active={isActive}
-              onClick={() => navigate(`/${projectPath}?type=account&id=${id}`)}
+              key={account.address}
             >
-              <AccountCard>
+              <AccountCard
+                onClick={() => navigate(`/${projectPath}?type=account&id=${id}&storage=${selectedResourceAccount || 'none'}`)}
+              >
                 <Avatar seed={project.seed} index={i} />
                 <Stack>
                   <strong>{accountAddress}</strong>
                   <small>{contractName || '--'}</small>
                 </Stack>
-
                 {isActive && <ExportButton id={account.id} typeName={typeName}/>}
               </AccountCard>
+              <ResourcesExplorerButton address={accountAddress} />
             </Item>
           );
         })}

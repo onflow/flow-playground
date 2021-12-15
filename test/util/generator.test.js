@@ -9,7 +9,7 @@ import {
   getFullAccountList,
   filterExisting,
   generateContractUnitTest,
-} from '../../src/util/generator';
+} from 'src/util/generator';
 
 // TODO: Fix tests that utilize Handlebars to work properly
 
