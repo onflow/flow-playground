@@ -100,14 +100,14 @@ export default class ProjectMutator {
         projectId: this.projectId,
       },
     });
-
+    
     if (isFork) {
       Mixpanel.track('Project forked', { projectId: this.projectId });
     } else {
       Mixpanel.track('Project saved', { projectId: this.projectId });
     }
-
-    navigate(`/${this.projectId}`, { replace: true });
+    
+    navigate(`/${this.projectId}`, { replace: true});
   }
 
   async updateAccountDraftCode(account: Account, code: string) {

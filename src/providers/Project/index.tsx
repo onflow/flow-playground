@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
-import { navigate, Redirect, useLocation } from '@reach/router';
+import { navigate } from '@reach/router';
 import ProjectMutator from './projectMutator';
 import useGetProject from './projectHooks';
 
@@ -67,11 +67,15 @@ export const ProjectContext: React.Context<ProjectContextValue> = createContext(
 interface ProjectProviderProps {
   children: any;
   urlProjectId: string | null;
+  active: any;
+  setActive: any;
 }
 
 export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   children,
   urlProjectId,
+  active,
+  setActive
 }) => {
   const client = useApolloClient();
 
@@ -97,7 +101,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     navigate('/404');
   }
 
-  const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [transactionAccounts, setTransactionAccounts] = useState<number[]>([0]);
   const [isSavingCode, setIsSaving] = useState(false);
   const [lastSigners, setLastSigners] = useState(null);
@@ -108,7 +111,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   });
 
   const [selectedResourceAccount, setSelectedResourceAccount] = useState< string | null>(null)
-
   const projectID = project ? project.id : null;
 
   const mutator = new ProjectMutator(client, projectID, isLocal);
@@ -280,6 +282,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   };
 
   const getActiveEditor = (): ActiveEditor => {
+    
     switch (active.type) {
       case EntityType.Account:
         return {
@@ -309,7 +312,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const location = useLocation();
   if (isLoading) return null;
   if (!isLoading && !project) {
-    navigate('/404');
+    navigate('/');
     return null;
   }
 
