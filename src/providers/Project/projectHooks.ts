@@ -22,6 +22,9 @@ function cloneProject(client: any, project: Project) {
   const localProject = createLocalProject(
     project.id,
     project.seed,
+    project.title,
+    project.description,
+    project.readme,
     project.accounts.map(acc => acc.draftCode),
 
     project.transactionTemplates.map(tpl => ({

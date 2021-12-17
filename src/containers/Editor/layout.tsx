@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation} from "@reach/router";
 import { Button, Flex, Text } from "theme-ui";
 import { motion, AnimatePresence } from "framer-motion";
+import { Helmet } from 'react-helmet';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { FaCodeBranch, FaDiscord, FaTwitter, FaArrowAltCircleDown } from "react-icons/fa";
 import { getParams } from "util/url";
@@ -61,8 +62,27 @@ const EditorLayout: React.FC = () => {
     return <></>;
   }
 
+  const [helmetTitle, setHelmetTitle] = useState(project.title);
+  const [helmetDescription, setHelmetDescription] = useState(project.title);
+
+  useEffect(() => {
+    if (project.title) {
+      const titleDebounce = setTimeout(() => {setHelmetTitle(project.title)}, 3000);
+      const descriptionDebounce = setTimeout(() => {setHelmetDescription(project.description)}, 3000);
+      
+      return () => {
+        clearTimeout(titleDebounce);
+        clearTimeout(descriptionDebounce);
+      };
+    }
+  },[project.title]);
+
   return (
     <>
+      <Helmet>‍
+        <title>Flow - {helmetTitle} </title>‍
+        <meta name="description" content={helmetDescription}></meta>
+      </Helmet>
       <HeaderRoot>
         <Header>
           <Flex
@@ -187,7 +207,7 @@ const EditorLayout: React.FC = () => {
                   url={window.location.href}
                   saveText={project.parentId ? "Fork" : "Save"}
                   showShare={project.persist}
-                  onSave={() => mutator.saveProject(!!project.parentId)}
+                  onSave={() => mutator.saveProject(!!project.parentId, project.title, project.description, project.readme)}
                   icon={project.parentId ? FaCodeBranch : FaCloudUploadAlt}
                 />
               )}
@@ -217,7 +237,7 @@ const EditorLayout: React.FC = () => {
           toggleShowExamples(false);
         }}
       />
-      <ExportPopup visible={showExport} triggerClose={()=>{
+      <ExportPopup visible={showExport} projectTitle={project.title} triggerClose={()=>{
         toggleShowExport(false)
       }}/>
     </>

@@ -20,6 +20,10 @@ const Playground: any = (props: any) => {
   const isLocalProject = projectId === LOCAL_PROJECT_ID;
   const correctUUID = isUUUID(projectId);
   
+  const wrongProjectUUID = !correctUUID && !isLocalProject;
+  
+  const correctProject = !isLocalProject && correctUUID;
+  
   const { data } = useGetActiveProjectQuery();
   const isActiveProject = data.activeProject;
 
