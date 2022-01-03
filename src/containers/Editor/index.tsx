@@ -7,7 +7,7 @@ import useGetProject from '../../providers/Project/projectHooks';
 import { EntityType } from "providers/Project";
 
 import EditorLayout from "./layout";
-import { isUUUID, getParams, scriptTypes, LOCAL_PROJECT_ID } from "../../util/url";
+import { isUUUID, getParams, scriptTypes, LOCAL_PROJECT_ID } from "util/url";
 import { navigate } from "@reach/router";
 
 const Playground: any = (props: any) => {
@@ -20,9 +20,9 @@ const Playground: any = (props: any) => {
   const isLocalProject = projectId === LOCAL_PROJECT_ID;
   const correctUUID = isUUUID(projectId);
   
-  const wrongProjectUUID = !correctUUID && !isLocalProject;
+  // const wrongProjectUUID = !correctUUID && !isLocalProject;
   
-  const correctProject = !isLocalProject && correctUUID;
+  // const correctProject = !isLocalProject && correctUUID;
   
   const { data } = useGetActiveProjectQuery();
   const isActiveProject = data.activeProject;
@@ -47,7 +47,7 @@ const Playground: any = (props: any) => {
         activeType = 'account';
       } else {
         activeType = type;
-      };
+      }
       
       if (id == '' || id === undefined) {
         switch (activeType) {
