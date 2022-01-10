@@ -1,6 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { uniqueNamesGenerator, adjectives, colors, } from 'unique-names-generator';
-import { FaSyncAlt } from 'react-icons/fa';
 import { useProject } from 'providers/Project/projectHooks';
 import { default as FlowButton } from 'components/Button';
 
@@ -16,33 +14,18 @@ import { createZip } from 'util/generator';
 
 import {
   Input,
-  InputBlock, InputIcon,
+  InputBlock,
   Label,
 } from 'components/Arguments/SingleArgument/styles';
 
-const generateProjectName = () => {
-  const prefix: string = uniqueNamesGenerator({
-    dictionaries: [colors, adjectives],
-    separator: '-',
-    length: 2,
-  })
-
-  return `${prefix}-playground`
-}
-
 const ExportPopup: React.FC<{
   visible: boolean;
+  projectTitle: string;
   triggerClose?: (e: React.SyntheticEvent) => any;
-}> = ({ visible, triggerClose }) => {
+}> = ({ visible, projectTitle, triggerClose }) => {
   const { project } = useProject();
   const [processing, setProcessing] = useState(false);
-  const [projectName, setProjectName] = useState(generateProjectName());
   const [folderName, setFolderName] = useState('cadence');
-
-  const regenerateProjectName = () => {
-    const newName = generateProjectName()
-    setProjectName(newName)
-  }
 
   const firstInput = useRef<HTMLInputElement>(null!);
 
@@ -102,19 +85,11 @@ const ExportPopup: React.FC<{
         <PopupHeader mb="20px" color="#575E89" lineColor="#B4BEFC">
           Export Project
         </PopupHeader>
-        <InputBlock mb={'12px'}>
-          <Label>Project Name</Label>
-          <Input
-            ref={firstInput}
-            value={projectName}
-            onChange={event => setProjectName(event.target.value)}
-          />
-          <InputIcon icon={<FaSyncAlt/>} onClick={regenerateProjectName}/>
-        </InputBlock>
         <InputBlock mb={'30px'}>
           <Label>Cadence Folder</Label>
           <Input
-            value={folderName}
+            ref={firstInput}
+            defaultValue={folderName}
             onChange={event => setFolderName(event.target.value)}
           />
         </InputBlock>
@@ -129,7 +104,7 @@ const ExportPopup: React.FC<{
               className="violet modal"
               onClick={async () => {
                 setProcessing(true);
-                await createZip(folderName, projectName, project);
+                await createZip(folderName, projectTitle, project);
                 setProcessing(false);
                 triggerClose(null);
               }}

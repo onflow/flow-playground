@@ -11,42 +11,48 @@ export type Scalars = {
   Int: number;
   Float: number;
   Version: any;
+  UUID: any;
   Address: any;
   UUID: any;
   ExecutionResultValue: any;
   RawExecutionResult: any;
 };
 
-export type NewProject = {
-  accounts?: Maybe<Array<Scalars['String']>>;
-  parentId?: Maybe<Scalars['UUID']>;
-  scriptTemplates?: Maybe<Array<NewProjectScriptTemplate>>;
-  seed: Scalars['Int'];
-  title: Scalars['String'];
-  transactionTemplates?: Maybe<Array<NewProjectTransactionTemplate>>;
+export type UpdateProject = {
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['UUID'];
+  persist?: Maybe<Scalars['Boolean']>;
+  readme?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
 };
 
-export type NewProjectTransactionTemplate = {
+export type NewTransactionTemplate = {
+  projectId: Scalars['UUID'];
   script: Scalars['String'];
   title: Scalars['String'];
 };
 
-export type UpdateProject = {
+export type TransactionExecution = {
+  __typename?: 'TransactionExecution';
+  arguments?: Maybe<Array<Scalars['String']>>;
+  errors?: Maybe<Array<ProgramError>>;
+  events: Array<Maybe<Event>>;
   id: Scalars['UUID'];
-  persist?: Maybe<Scalars['Boolean']>;
-  title?: Maybe<Scalars['String']>;
+  logs: Array<Scalars['String']>;
+  script: Scalars['String'];
+  signers: Array<Account>;
+};
+
+export type Event = {
+  __typename?: 'Event';
+  type: Scalars['String'];
+  values: Array<Scalars['String']>;
 };
 
 export type NewScriptTemplate = {
   projectId: Scalars['UUID'];
   script: Scalars['String'];
   title: Scalars['String'];
-};
-
-export type NewScriptExecution = {
-  arguments?: Maybe<Array<Scalars['String']>>;
-  projectId: Scalars['UUID'];
-  script: Scalars['String'];
 };
 
 export type Mutation = {
@@ -230,18 +236,72 @@ export type PlaygroundInfo = {
   cadenceVersion: Scalars['Version'];
 };
 
-export type TransactionTemplate = {
-  __typename?: 'TransactionTemplate';
+export type ProgramPosition = {
+  __typename?: 'ProgramPosition';
+  column: Scalars['Int'];
+  line: Scalars['Int'];
+  offset: Scalars['Int'];
+};
+
+export type ScriptTemplate = {
+  __typename?: 'ScriptTemplate';
   id: Scalars['UUID'];
   index: Scalars['Int'];
   script: Scalars['String'];
   title: Scalars['String'];
 };
 
-export type Event = {
-  __typename?: 'Event';
-  type: Scalars['String'];
-  values: Array<Scalars['String']>;
+export type UpdateTransactionTemplate = {
+  id: Scalars['UUID'];
+  index?: Maybe<Scalars['Int']>;
+  projectId: Scalars['UUID'];
+  script?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+};
+
+export type NewTransactionExecution = {
+  arguments?: Maybe<Array<Scalars['String']>>;
+  projectId: Scalars['UUID'];
+  script: Scalars['String'];
+  signers?: Maybe<Array<Scalars['Address']>>;
+};
+
+export type UpdateScriptTemplate = {
+  id: Scalars['UUID'];
+  index?: Maybe<Scalars['Int']>;
+  projectId: Scalars['UUID'];
+  script?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+};
+
+
+export type Project = {
+  __typename?: 'Project';
+  accounts?: Maybe<Array<Account>>;
+  description: Scalars['String'];
+  id: Scalars['UUID'];
+  mutable?: Maybe<Scalars['Boolean']>;
+  parentId?: Maybe<Scalars['UUID']>;
+  persist?: Maybe<Scalars['Boolean']>;
+  publicId: Scalars['UUID'];
+  readme: Scalars['String'];
+  scriptExecutions?: Maybe<Array<ScriptExecution>>;
+  scriptTemplates?: Maybe<Array<ScriptTemplate>>;
+  seed: Scalars['Int'];
+  title: Scalars['String'];
+  transactionExecutions?: Maybe<Array<TransactionExecution>>;
+  transactionTemplates?: Maybe<Array<TransactionTemplate>>;
+  version: Scalars['Version'];
+};
+
+export type ScriptExecution = {
+  __typename?: 'ScriptExecution';
+  arguments?: Maybe<Array<Scalars['String']>>;
+  errors?: Maybe<Array<ProgramError>>;
+  id: Scalars['UUID'];
+  logs: Array<Scalars['String']>;
+  script: Scalars['String'];
+  value: Scalars['String'];
 };
 
 export type Query = {
@@ -281,27 +341,6 @@ export type QueryTransactionTemplateArgs = {
   projectId: Scalars['UUID'];
 };
 
-export type TransactionExecution = {
-  __typename?: 'TransactionExecution';
-  arguments?: Maybe<Array<Scalars['String']>>;
-  errors?: Maybe<Array<ProgramError>>;
-  events: Array<Maybe<Event>>;
-  id: Scalars['UUID'];
-  logs: Array<Scalars['String']>;
-  script: Scalars['String'];
-  signers: Array<Account>;
-};
-
-export type ScriptExecution = {
-  __typename?: 'ScriptExecution';
-  arguments?: Maybe<Array<Scalars['String']>>;
-  errors?: Maybe<Array<ProgramError>>;
-  id: Scalars['UUID'];
-  logs: Array<Scalars['String']>;
-  script: Scalars['String'];
-  value: Scalars['String'];
-};
-
 export type Account = {
   __typename?: 'Account';
   address: Scalars['Address'];
@@ -310,6 +349,57 @@ export type Account = {
   draftCode: Scalars['String'];
   id: Scalars['UUID'];
   state: Scalars['String'];
+};
+
+export type NewProjectScriptTemplate = {
+  script: Scalars['String'];
+  title: Scalars['String'];
+};
+
+export type NewScriptExecution = {
+  arguments?: Maybe<Array<Scalars['String']>>;
+  projectId: Scalars['UUID'];
+  script: Scalars['String'];
+};
+
+
+export type TransactionTemplate = {
+  __typename?: 'TransactionTemplate';
+  id: Scalars['UUID'];
+  index: Scalars['Int'];
+  script: Scalars['String'];
+  title: Scalars['String'];
+};
+
+
+export type ProgramError = {
+  __typename?: 'ProgramError';
+  endPosition?: Maybe<ProgramPosition>;
+  message: Scalars['String'];
+  startPosition?: Maybe<ProgramPosition>;
+};
+
+export type NewProject = {
+  accounts?: Maybe<Array<Scalars['String']>>;
+  description: Scalars['String'];
+  parentId?: Maybe<Scalars['UUID']>;
+  readme: Scalars['String'];
+  scriptTemplates?: Maybe<Array<NewProjectScriptTemplate>>;
+  seed: Scalars['Int'];
+  title: Scalars['String'];
+  transactionTemplates?: Maybe<Array<NewProjectTransactionTemplate>>;
+};
+
+export type NewProjectTransactionTemplate = {
+  script: Scalars['String'];
+  title: Scalars['String'];
+};
+
+export type UpdateAccount = {
+  deployedCode?: Maybe<Scalars['String']>;
+  draftCode?: Maybe<Scalars['String']>;
+  id: Scalars['UUID'];
+  projectId: Scalars['UUID'];
 };
 
 
@@ -344,6 +434,8 @@ export type CreateProjectMutationVariables = Exact<{
   accounts: Array<Scalars['String']>;
   seed: Scalars['Int'];
   title: Scalars['String'];
+  description: Scalars['String'];
+  readme: Scalars['String'];
   transactionTemplates: Array<NewProjectTransactionTemplate>;
   scriptTemplates: Array<NewProjectScriptTemplate>;
 }>;
@@ -361,16 +453,19 @@ export type CreateProjectMutation = (
   ) }
 );
 
-export type PersistProjectMutationVariables = Exact<{
+export type UpdateProjectMutationVariables = Exact<{
   projectId: Scalars['UUID'];
+  title: Scalars['String'];
+  description: Scalars['String'];
+  readme: Scalars['String'];
 }>;
 
 
-export type PersistProjectMutation = (
+export type UpdateProjectMutation = (
   { __typename?: 'Mutation' }
   & { updateProject: (
     { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'persist'>
+    & Pick<Project, 'id' | 'persist' | 'title' | 'description' | 'readme'>
   ) }
 );
 
@@ -585,7 +680,7 @@ export type GetProjectQuery = (
   { __typename?: 'Query' }
   & { project: (
     { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'persist' | 'mutable' | 'parentId' | 'seed' | 'title'>
+    & Pick<Project, 'id' | 'persist' | 'mutable' | 'parentId' | 'seed' | 'title' | 'description' | 'readme'>
     & { accounts?: Maybe<Array<(
       { __typename?: 'Account' }
       & Pick<Account, 'id' | 'address' | 'draftCode' | 'deployedCode' | 'deployedContracts' | 'state'>
@@ -606,7 +701,7 @@ export type GetLocalProjectQuery = (
   { __typename?: 'Query' }
   & { project?: Maybe<(
     { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'persist' | 'mutable' | 'parentId' | 'seed' | 'title'>
+    & Pick<Project, 'id' | 'persist' | 'mutable' | 'parentId' | 'seed' | 'title' | 'description' | 'readme'>
     & { accounts?: Maybe<Array<(
       { __typename?: 'Account' }
       & Pick<Account, 'id' | 'address' | 'draftCode' | 'deployedCode' | 'deployedContracts' | 'state'>
@@ -756,8 +851,8 @@ export const ContractResultsFragmentDoc = gql`
 }
     `;
 export const CreateProjectDocument = gql`
-    mutation CreateProject($parentId: UUID, $accounts: [String!]!, $seed: Int!, $title: String!, $transactionTemplates: [NewProjectTransactionTemplate!]!, $scriptTemplates: [NewProjectScriptTemplate!]!) {
-  project: createProject(input: {parentId: $parentId, accounts: $accounts, seed: $seed, title: $title, transactionTemplates: $transactionTemplates, scriptTemplates: $scriptTemplates}) {
+    mutation CreateProject($parentId: UUID, $accounts: [String!]!, $seed: Int!, $title: String!, $description: String!, $readme: String!, $transactionTemplates: [NewProjectTransactionTemplate!]!, $scriptTemplates: [NewProjectScriptTemplate!]!) {
+  project: createProject(input: {parentId: $parentId, accounts: $accounts, seed: $seed, title: $title, description: $description, readme: $readme, transactionTemplates: $transactionTemplates, scriptTemplates: $scriptTemplates}) {
     id
     parentId
     mutable
@@ -790,6 +885,8 @@ export type CreateProjectMutationFn = ApolloReactCommon.MutationFunction<CreateP
  *      accounts: // value for 'accounts'
  *      seed: // value for 'seed'
  *      title: // value for 'title'
+ *      description: // value for 'description'
+ *      readme: // value for 'readme'
  *      transactionTemplates: // value for 'transactionTemplates'
  *      scriptTemplates: // value for 'scriptTemplates'
  *   },
@@ -801,39 +898,45 @@ export function useCreateProjectMutation(baseOptions?: ApolloReactHooks.Mutation
 export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProjectMutation>;
 export type CreateProjectMutationResult = ApolloReactCommon.MutationResult<CreateProjectMutation>;
 export type CreateProjectMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
-export const PersistProjectDocument = gql`
-    mutation PersistProject($projectId: UUID!) {
-  updateProject(input: {id: $projectId, persist: true}) {
+export const UpdateProjectDocument = gql`
+    mutation UpdateProject($projectId: UUID!, $title: String!, $description: String!, $readme: String!) {
+  updateProject(input: {id: $projectId, persist: true, title: $title, description: $description, readme: $readme}) {
     id
     persist
+    title
+    description
+    readme
   }
 }
     `;
-export type PersistProjectMutationFn = ApolloReactCommon.MutationFunction<PersistProjectMutation, PersistProjectMutationVariables>;
+export type UpdateProjectMutationFn = ApolloReactCommon.MutationFunction<UpdateProjectMutation, UpdateProjectMutationVariables>;
 
 /**
- * __usePersistProjectMutation__
+ * __useUpdateProjectMutation__
  *
- * To run a mutation, you first call `usePersistProjectMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `usePersistProjectMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProjectMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [persistProjectMutation, { data, loading, error }] = usePersistProjectMutation({
+ * const [updateProjectMutation, { data, loading, error }] = useUpdateProjectMutation({
  *   variables: {
  *      projectId: // value for 'projectId'
+ *      title: // value for 'title'
+ *      description: // value for 'description'
+ *      readme: // value for 'readme'
  *   },
  * });
  */
-export function usePersistProjectMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PersistProjectMutation, PersistProjectMutationVariables>) {
-        return ApolloReactHooks.useMutation<PersistProjectMutation, PersistProjectMutationVariables>(PersistProjectDocument, baseOptions);
+export function useUpdateProjectMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateProjectMutation, UpdateProjectMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateProjectMutation, UpdateProjectMutationVariables>(UpdateProjectDocument, baseOptions);
       }
-export type PersistProjectMutationHookResult = ReturnType<typeof usePersistProjectMutation>;
-export type PersistProjectMutationResult = ApolloReactCommon.MutationResult<PersistProjectMutation>;
-export type PersistProjectMutationOptions = ApolloReactCommon.BaseMutationOptions<PersistProjectMutation, PersistProjectMutationVariables>;
+export type UpdateProjectMutationHookResult = ReturnType<typeof useUpdateProjectMutation>;
+export type UpdateProjectMutationResult = ApolloReactCommon.MutationResult<UpdateProjectMutation>;
+export type UpdateProjectMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateProjectMutation, UpdateProjectMutationVariables>;
 export const SetActiveProjectDocument = gql`
     mutation SetActiveProject($id: Int!) {
   setActiveProjectId(id: $id) @client
@@ -1324,6 +1427,8 @@ export const GetProjectDocument = gql`
     parentId
     seed
     title
+    description
+    readme
     accounts {
       id
       address
@@ -1380,6 +1485,8 @@ export const GetLocalProjectDocument = gql`
     parentId
     seed
     title
+    description
+    readme
     accounts {
       id
       address

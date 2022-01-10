@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-// import { Helmet } from 'react-helmet';
 import { Global } from '@emotion/core';
 import { ThemeProvider, Text } from 'theme-ui';
 import { Router, globalHistory } from '@reach/router';
@@ -47,7 +46,6 @@ const App: React.FC = () => {
 
   return (
     <>
-      {/* {headers} */}
       <BrowserDetector />
       <Global styles={globalStyles} />
       <ApolloProvider client={client}>
