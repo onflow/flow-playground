@@ -44,6 +44,8 @@ const EditorLayout: React.FC = () => {
 
   const { project, mutator, isSavingCode, isLoading, active, setSelectedResourceAccount } = useProject();
 
+  console.log({ project })
+
   useEffect(() => {
     if (project && project.id) {
       setIsPlayground(FDP.includes(project.id));

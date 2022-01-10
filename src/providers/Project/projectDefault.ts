@@ -5,6 +5,7 @@ import {
   ScriptTemplate
 } from "api/apollo/generated/graphql";
 import { strToSeed, uuid } from "util/rng";
+import { LOCAL_PROJECT_ID } from "util/url";
 
 const DEFAULT_ACCOUNT_1 = `// HelloWorld.cdc
 //

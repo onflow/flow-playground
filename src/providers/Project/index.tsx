@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
-import { navigate } from '@reach/router';
+import { navigate, useLocation, Redirect } from '@reach/router';
 import ProjectMutator from './projectMutator';
 import useGetProject from './projectHooks';
 
@@ -107,14 +107,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     navigate('/404');
   }
 
+  const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [transactionAccounts, setTransactionAccounts] = useState<number[]>([0]);
   const [isSavingCode, setIsSaving] = useState(false);
   const [lastSigners, setLastSigners] = useState(null);
-
-  const [active, setActive] = useState<{ type: EntityType; index: number }>({
-    type: EntityType.Account,
-    index: 0,
-  });
 
   const [selectedResourceAccount, setSelectedResourceAccount] = useState< string | null>(null)
   const projectID = project ? project.id : null;
@@ -344,6 +340,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   };
 
   const activeEditor = getActiveEditor();
+
 
   const location = useLocation();
   if (isLoading) return null;
