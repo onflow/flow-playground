@@ -1,12 +1,12 @@
 import React, { createContext, useState } from 'react';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
-import { navigate, useLocation, Redirect } from '@reach/router';
+import { navigate } from '@reach/router';
 import ProjectMutator from './projectMutator';
 import useGetProject from './projectHooks';
 
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
 import { Project, Account } from 'api/apollo/generated/graphql';
-import { getParams, scriptTypes } from 'util/url';
+// import { getParams } from 'util/url';
 
 export enum EntityType {
   Account = 1,
@@ -73,15 +73,11 @@ export const ProjectContext: React.Context<ProjectContextValue> = createContext(
 interface ProjectProviderProps {
   children: any;
   urlProjectId: string | null;
-  active: any;
-  setActive: any;
 }
 
 export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   children,
-  urlProjectId,
-  active,
-  setActive
+  urlProjectId
 }) => {
   const client = useApolloClient();
 
@@ -107,7 +103,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     navigate('/404');
   }
 
-  const [initialLoad, setInitialLoad] = useState<boolean>(true);
+  const [active, setActive] = useState<{ type: EntityType; index: number }>({
+    type: EntityType.Account,
+    index: 0,
+  });
+  // const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [transactionAccounts, setTransactionAccounts] = useState<number[]>([0]);
   const [isSavingCode, setIsSaving] = useState(false);
   const [lastSigners, setLastSigners] = useState(null);
@@ -342,20 +342,21 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const activeEditor = getActiveEditor();
 
 
-  const location = useLocation();
+  // const location = useLocation();
   if (isLoading) return null;
   if (!isLoading && !project) {
     navigate('/');
     return null;
   }
 
-  const params = getParams(location.search || '');
-  const { type, id, storage: storageParam } = params;
-  const storage = storageParam || 'none';
+  // const params = getParams(location.search || '');
+  // const { storage: storageParam } = params;
+  //  const storage = storageParam || 'none';
 
   // TODO: check if that project is local
   // TODO: check that active item have the same id
 
+  /*
   if (type == '' || type === undefined || !scriptTypes.includes(type)) {
     return (
       <Redirect noThrow
@@ -496,6 +497,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     default:
       return null;
   }
+   */
 
   return (
     <ProjectContext.Provider

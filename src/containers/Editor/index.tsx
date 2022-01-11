@@ -1,40 +1,48 @@
-import React, { useEffect, useState } from "react";
-import { useApolloClient } from '@apollo/react-hooks';
+import React from "react";
 import { ProjectProvider } from "providers/Project";
 import { Base } from "layout/Base"
+import EditorLayout from "./layout";
+import { LOCAL_PROJECT_ID } from "util/url";
+
+/*
+import { useApolloClient } from '@apollo/react-hooks';
 import { useGetActiveProjectQuery } from "api/apollo/generated/graphql";
 import useGetProject from '../../providers/Project/projectHooks';
 import { EntityType } from "providers/Project";
 
-import EditorLayout from "./layout";
 import { isUUUID, getParams, scriptTypes, LOCAL_PROJECT_ID } from "../../util/url";
 import { navigate } from "@reach/router";
+*/
 
 const Playground: any = (props: any) => {
 
   const { projectId } = props;
-  
-  const params = getParams(props.location.search);
-  const { type, id } = params;
-
   const isLocalProject = projectId === LOCAL_PROJECT_ID;
-  const correctUUID = isUUUID(projectId);
-  
-  const { data } = useGetActiveProjectQuery();
-  const isActiveProject = data.activeProject;
 
-  const client = useApolloClient();
-  const resolvedProjectId = correctUUID ? projectId : null
-  
-  const {
-    project
-  } = useGetProject(client, resolvedProjectId, isActiveProject);
-  
-  const [active, setActive] = useState<{ type: EntityType; index: number }>({
-    type: EntityType.Account,
-    index: 0,
-  });
+    /*
+      const params = getParams(props.location.search);
+      const { type, id } = params;
 
+      const isLocalProject = projectId === LOCAL_PROJECT_ID;
+      const correctUUID = isUUUID(projectId);
+
+      const { data } = useGetActiveProjectQuery();
+      const isActiveProject = data.activeProject;
+
+      const client = useApolloClient();
+      const resolvedProjectId = correctUUID ? projectId : null
+
+      const {
+        project
+      } = useGetProject(client, resolvedProjectId, isActiveProject);
+
+      const [active, setActive] = useState<{ type: EntityType; index: number }>({
+        type: EntityType.Account,
+        index: 0,
+      });
+
+     */
+/*
   useEffect(() => {
     if (project) {
 
@@ -127,13 +135,12 @@ const Playground: any = (props: any) => {
       }
     }
   },[project, type, id])
+  */
 
   return (
     <Base>
       <ProjectProvider 
         urlProjectId={isLocalProject ? null : projectId}
-        active={active}
-        setActive={setActive}
       >
         <EditorLayout />
       </ProjectProvider>
