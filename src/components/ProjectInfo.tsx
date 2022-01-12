@@ -4,7 +4,7 @@ import {SidebarSection as Root} from "layout/SidebarSection";
 import {SidebarItems as Items} from "layout/SidebarItems";
 import {ProjectItem as Item} from "layout/ProjectItem";
 import {useProject} from "providers/Project/projectHooks";
-import { isUUUID} from "util/url";
+import {isUUUID, LOCAL_PROJECT_ID} from "util/url";
 import { EntityType } from "providers/Project";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import { Text, Box } from "@theme-ui/components";
@@ -15,7 +15,7 @@ const ProjectInfo: React.FC = () => {
     active
   } = useProject();
 
-  const projectPath = isUUUID(project.id) ? project.id : "local"
+  const projectPath = isUUUID(project.id) ? project.id : LOCAL_PROJECT_ID
 
   return (
     <Root>
@@ -23,7 +23,7 @@ const ProjectInfo: React.FC = () => {
         <Item
           active={ active.type === EntityType.Readme }
           onClick={() => {
-            navigate(`/${projectPath}?type=readme&id=LOCAL-account-0`)
+            navigate(`/${projectPath}?type=readme`)
           }}
         >
           <Box sx={{ marginLeft: "0.25rem" }}>
