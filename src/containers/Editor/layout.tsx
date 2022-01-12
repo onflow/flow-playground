@@ -44,8 +44,6 @@ const EditorLayout: React.FC = () => {
 
   const { project, mutator, isSavingCode, isLoading, active, setSelectedResourceAccount } = useProject();
 
-  console.log({ project })
-
   useEffect(() => {
     if (project && project.id) {
       setIsPlayground(FDP.includes(project.id));
@@ -81,8 +79,8 @@ const EditorLayout: React.FC = () => {
 
   return (
     <>
-      <Helmet>‍
-        <title>Flow - {helmetTitle} </title>‍
+      <Helmet>
+        <title>Flow - {helmetTitle} </title>
         <meta name="description" content={helmetDescription}></meta>
       </Helmet>
       <HeaderRoot>
