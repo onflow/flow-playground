@@ -367,36 +367,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const { id, type, storage: storageParam } = params;
   const storage = storageParam || 'none';
 
-  /*
-  if (id == '' || id === undefined) {
-    let firstItemId;
-    switch (type) {
-      case 'tx':
-        firstItemId = project.transactionTemplates[0].id;
-        break;
-      case 'script':
-        firstItemId = project.scriptTemplates[0].id;
-        break;
-      case 'account':
-        firstItemId = project.accounts[0].id;
-        break;
-      default:
-        break;
-    }
-    if (project.id !== LOCAL_PROJECT_ID) {
-      console.log("here??")
-      let withParams = '';
-      withParams += storage !== 'none' ? `&storage=${storage}` : '';
-      withParams += type ? `&type=${type}` : '';
-      withParams += id ? `&id=${firstItemId}` : '';
-      withParams = withParams.replace('&', '?');
-      return <Redirect noThrow to={`/${project.id}${withParams}`}/>;
-    }
-  }
-
-   */
-
-
   let templateIndex = 0;
   switch (type) {
     case 'tx': {
