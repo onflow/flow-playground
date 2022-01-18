@@ -23,7 +23,7 @@ const ProjectInfo: React.FC = () => {
         <Item
           active={ active.type === EntityType.Readme }
           onClick={() => {
-            navigate(`/${projectPath}?type=readme`)
+            navigate(`/${projectPath}`)
           }}
         >
           <Box sx={{ marginLeft: "0.25rem" }}>
