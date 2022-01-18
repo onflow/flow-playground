@@ -228,7 +228,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     }
     return project.accounts[index].draftCode;
   }
-  console.log({active})
+
   const isReadmeEditor = active.type === 4;
   const isCodeEditor = !isReadmeEditor;
 

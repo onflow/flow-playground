@@ -92,8 +92,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const projectId = activeProjectId || urlProjectId;
 
-  console.log({projectId, activeProjectId, urlProjectId})
-
   let project: Project;
   let isLocal: boolean;
   let isLoading: boolean;
