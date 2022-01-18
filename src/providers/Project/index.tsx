@@ -6,7 +6,7 @@ import useGetProject from './projectHooks';
 
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
 import { Project, Account } from 'api/apollo/generated/graphql';
-import { getParams, scriptTypes } from 'util/url';
+import { getParams } from 'util/url';
 
 export enum EntityType {
   Account = 1,
@@ -91,6 +91,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   } = useQuery(GET_ACTIVE_PROJECT);
 
   const projectId = activeProjectId || urlProjectId;
+
+  console.log({projectId, activeProjectId, urlProjectId})
 
   let project: Project;
   let isLocal: boolean;
@@ -365,15 +367,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const { id, type, storage: storageParam } = params;
   const storage = storageParam || 'none';
 
-  if (type == '' || type === undefined || !scriptTypes.includes(type)) {
-    return (
-      <Redirect
-        noThrow
-        to={`/${project.id}?type=account&id=${project.accounts[0].id}&storage=${storage}`}
-      />
-    );
-  }
-
+  /*
   if (id == '' || id === undefined) {
     let firstItemId;
     switch (type) {
@@ -384,23 +378,27 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         firstItemId = project.scriptTemplates[0].id;
         break;
       case 'account':
-      case 'readme':
-      default:
         firstItemId = project.accounts[0].id;
         break;
+      default:
+        break;
     }
-    return (
-      <Redirect
-        noThrow
-        to={`/${project.id}?type=${type}&id=${firstItemId}&storage=${storage}`}
-      />
-    );
+    if (project.id !== LOCAL_PROJECT_ID) {
+      console.log("here??")
+      let withParams = '';
+      withParams += storage !== 'none' ? `&storage=${storage}` : '';
+      withParams += type ? `&type=${type}` : '';
+      withParams += id ? `&id=${firstItemId}` : '';
+      withParams = withParams.replace('&', '?');
+      return <Redirect noThrow to={`/${project.id}${withParams}`}/>;
+    }
   }
 
-  const activeType = type || 'account';
+   */
+
 
   let templateIndex = 0;
-  switch (activeType) {
+  switch (type) {
     case 'tx': {
       if (id && id !== '') {
         const foundIndex = project.transactionTemplates.findIndex(
@@ -486,15 +484,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       }
       break;
     }
-    case 'readme': {
-      if (id && id !== '') {
-        const foundIndex = project.accounts.findIndex(
-          (template) => template.id === id,
-        );
-        if (foundIndex > 0) {
-          templateIndex = foundIndex;
-        }
-      }
+    default:
       const sameType = active.type == EntityType.Readme;
       const sameIndex = active.index == templateIndex;
 
@@ -502,14 +492,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         setInitialLoad(false);
         setActive({
           type: EntityType.Readme,
-          index: templateIndex,
+          index: 0,
         });
-        return <Redirect noThrow to={`/${project.id}?type=readme`} />;
+        return <Redirect noThrow to={`/${project.id}`} />;
       }
-      break;
-    }
-    default:
-      return null;
   }
 
   return (
