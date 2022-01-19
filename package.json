@@ -21,7 +21,7 @@
     "apollo-link": "^1.2.14",
     "apollo-link-http": "^1.5.17",
     "detect-browser": "^5.1.1",
-    "easymde": "^2.15.0",
+    "easymde": "^2.16.1",
     "file-saver": "^2.0.5",
     "framer-motion": "^2.6.6",
     "graphql": "^15.3.0",
