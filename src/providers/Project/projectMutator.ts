@@ -4,7 +4,7 @@ import ApolloClient from 'apollo-client';
 
 import {
   CREATE_PROJECT,
-  PERSIST_PROJECT,
+  SAVE_PROJECT,
   SET_ACTIVE_PROJECT,
   UPDATE_ACCOUNT_DRAFT_CODE,
   UPDATE_ACCOUNT_DEPLOYED_CODE,
@@ -29,6 +29,9 @@ import {
 export default class ProjectMutator {
   client: ApolloClient<object>;
   projectId: string | null = null;
+  title: string;
+  description: string;
+  readme: string;
   isLocal: boolean;
   track: any;
 
@@ -36,10 +39,16 @@ export default class ProjectMutator {
     client: ApolloClient<object>,
     projectId: string | null,
     isLocal: boolean,
+    title: string,
+    description: string,
+    readme: string
   ) {
     this.client = client;
     this.projectId = projectId;
     this.isLocal = isLocal;
+    this.title = title;
+    this.description = description;
+    this.readme = readme;
   }
 
   async createProject(): Promise<Project> {
@@ -50,6 +59,9 @@ export default class ProjectMutator {
     const parentId = localProject.parentId;
     const accounts = localProject.accounts.map((acc: Account) => acc.draftCode);
     const seed = localProject.seed;
+    const title = localProject.title;
+    const description = localProject.description;
+    const readme = localProject.readme;
     const transactionTemplates = localProject.transactionTemplates.map(
       (tpl: any) => ({ script: tpl.script, title: tpl.title }),
     );
@@ -64,11 +76,14 @@ export default class ProjectMutator {
         parentId: parentId,
         accounts: accounts,
         seed: seed,
-        title: '',
+        title: title,
+        description: description,
+        readme: readme,
         transactionTemplates: transactionTemplates,
         scriptTemplates: scriptTemplates,
       },
     });
+    
 
     const project = data.project;
 
@@ -88,16 +103,19 @@ export default class ProjectMutator {
     return project;
   }
 
-  async saveProject(isFork: boolean) {
+  async saveProject(isFork: boolean, title: string, description: string, readme: string) {
     if (this.isLocal) {
       await this.createProject();
       unregisterOnCloseSaveMessage();
     }
 
     await this.client.mutate({
-      mutation: PERSIST_PROJECT,
+      mutation: SAVE_PROJECT,
       variables: {
         projectId: this.projectId,
+        title: title,
+        description: description,
+        readme: readme
       },
     });
     
@@ -106,8 +124,8 @@ export default class ProjectMutator {
     } else {
       Mixpanel.track('Project saved', { projectId: this.projectId });
     }
-    
-    navigate(`/${this.projectId}`, { replace: true});
+
+    navigate(`/${this.projectId}`, { replace: true });
   }
 
   async updateAccountDraftCode(account: Account, code: string) {

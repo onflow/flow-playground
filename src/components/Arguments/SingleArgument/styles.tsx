@@ -33,6 +33,7 @@ export const Type = styled.span`
 
 export const Input = styled.input`
   border: 1px solid #C4C4C4;
+  border-radius: 5px;
   font-size: 14px;
   color: #000;
   padding: 8px;
