@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/core';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+const { MonacoServices } = require('monaco-languageclient/lib/monaco-services');
+
 import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
 import {
   CadenceCheckCompleted,
@@ -8,7 +11,6 @@ import {
   Callbacks,
 } from 'util/language-server';
 import { createCadenceLanguageClient } from 'util/language-client';
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { EntityType } from 'providers/Project';
 import Arguments from 'components/Arguments';
 import { Argument } from 'components/Arguments/types';
@@ -23,8 +25,7 @@ import {
   MonacoLanguageClient,
   ExecuteCommandRequest,
 } from 'monaco-languageclient';
-
-const { MonacoServices } = require('monaco-languageclient/lib/monaco-services');
+import { WithShowProps } from "containers/Editor/components";
 
 const blink = keyframes`
   50% {
@@ -32,11 +33,13 @@ const blink = keyframes`
   }
 `;
 
-const EditorContainer = styled.div`
+const EditorContainer = styled.div<WithShowProps>`
   width: 100%;
   height: 100%;
   position: relative;
 
+  display: ${({ show }) => (show ? 'block' : 'none')};
+  
   .drag-box {
     width: fit-content;
     height: fit-content;
@@ -112,6 +115,7 @@ type CodeGetter = (index: number) => string | undefined;
 type CadenceEditorProps = {
   code: string;
   mount: string;
+  show: boolean;
   onChange: any;
   activeId: string;
   type: EntityType;
@@ -136,6 +140,7 @@ class CadenceEditor extends React.Component<
   constructor(props: {
     code: string;
     mount: string;
+    show: boolean;
     onChange: any;
     activeId: string;
     type: EntityType;
@@ -183,15 +188,12 @@ class CadenceEditor extends React.Component<
     this.editor.focus();
 
     if (this.props.activeId && !this.callbacks) {
-      const getCode = (index: number) =>
-        this.props.getCode(index)
+      const getCode = (index: number) => this.props.getCode(index);
       await this.loadLanguageServer(getCode);
     }
   }
 
-  private async loadLanguageServer(
-    getCode: CodeGetter,
-  ) {
+  private async loadLanguageServer(getCode: CodeGetter) {
     this.callbacks = {
       // The actual callback will be set as soon as the language server is initialized
       toServer: null,
@@ -439,7 +441,7 @@ class CadenceEditor extends React.Component<
   }
 
   render() {
-    const { type, code } = this.props;
+    const { type, code, show } = this.props;
 
     /// Get a list of args from language server
     const { activeId } = this.props;
@@ -455,7 +457,7 @@ class CadenceEditor extends React.Component<
       info: [],
     };
     return (
-      <EditorContainer id={this.props.mount}>
+      <EditorContainer id={this.props.mount} show={show}>
         <Arguments
           type={type}
           list={list}

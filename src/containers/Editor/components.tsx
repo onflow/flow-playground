@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Flex, Button, Box, Divider } from 'theme-ui';
+import { Flex, Button, Box /*Divider*/ } from 'theme-ui';
 import styled from '@emotion/styled';
 import { FaShareSquare } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import useClipboard from 'react-use-clipboard';
+import { Divider } from 'theme-ui';
 
 import { Main as MainRoot } from 'layout/Main';
 import { Editor as EditorRoot } from 'layout/Editor';
@@ -29,6 +30,10 @@ import {
   Label,
 } from 'components/Arguments/SingleArgument/styles';
 import { Markdown } from 'components/Markdown';
+
+export interface WithShowProps {
+  show: boolean;
+}
 
 const Header: React.FC = ({ children }) => {
   return (
@@ -154,7 +159,8 @@ function getActiveId(project: Project, active: ActiveEditor): string {
   }
 }
 
-const ProjectInfoContainer = styled.div`
+const ProjectInfoContainer = styled.div<WithShowProps>`
+  display: ${({ show }) => (show ? 'block' : 'none')};
   margin: 0.2rem 1rem 0rem 1rem;
   min-width: 500px;
   margin-top: 1rem;
@@ -230,15 +236,15 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   }
 
   const isReadmeEditor = active.type === 4;
-  const isCodeEditor = !isReadmeEditor;
 
   return (
     <MainRoot>
-      {isReadmeEditor &&
-        (project.parentId && !project.persist ? (
-          <EditorRoot>
-            <EditorTitle type={active.type} />
-            <ProjectInfoContainer>
+      <EditorRoot>
+        <EditorTitle type={active.type} />
+        {/* This is Project Info Block */}
+        <ProjectInfoContainer show={isReadmeEditor}>
+          {project.parentId && !project.persist ? (
+            <>
               <ProjectHeading>{title}</ProjectHeading>
               <Divider
                 sx={{ marginX: '1.0rem', marginY: '1.0rem', opacity: '0.3' }}
@@ -250,12 +256,9 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
               <ReadmeHtmlContainer>
                 <Markdown content={readme}></Markdown>
               </ReadmeHtmlContainer>
-            </ProjectInfoContainer>
-          </EditorRoot>
-        ) : (
-          <EditorRoot>
-            <EditorTitle type={active.type} />
-            <ProjectInfoContainer>
+            </>
+          ) : (
+            <>
               <InputBlock mb={'12px'}>
                 <Label>Title</Label>
                 <Input
@@ -284,25 +287,21 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
                   updateProject(title, description, readme);
                 }}
               />
-            </ProjectInfoContainer>
-          </EditorRoot>
-        ))}
-      {isCodeEditor && (
-        <>
-          <EditorTitle type={active.type} />
-          <EditorRoot>
-            <CadenceEditor
-              type={active.type}
-              activeId={activeId}
-              code={code}
-              mount="cadenceEditor"
-              onChange={(code: string, _: any) => onEditorChange(code)}
-              getCode={getCode}
-            />
-          </EditorRoot>
-          <BottomBarContainer active={active} />
-        </>
-      )}
+            </>
+          )}
+        </ProjectInfoContainer>
+        {/* This is Cadence Editor */}
+        <CadenceEditor
+          type={active.type}
+          activeId={activeId}
+          code={code}
+          mount="cadenceEditor"
+          onChange={(code: string, _: any) => onEditorChange(code)}
+          getCode={getCode}
+          show={!isReadmeEditor}
+        />
+      </EditorRoot>
+      <BottomBarContainer active={active} />
     </MainRoot>
   );
 };

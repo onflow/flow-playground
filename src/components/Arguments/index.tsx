@@ -288,7 +288,10 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     // Map values to strings that will be passed to backend
     const args:any = list.map((arg, index) => {
       const { type } = arg;
-      const value = fixed[index]
+      const fixedValue = fixed[index]
+
+      // We need to keep Bool values as boolean and not string
+      const value = type === "Bool" ? fixedValue === "true" : fixed[index]
 
       // If we have a complex type - return value formatted by language server
       if ( isComplexType(type)){
