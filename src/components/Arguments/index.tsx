@@ -265,41 +265,41 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
       const { name, type } = arg;
       let value = values[name];
 
+      if (type === `String`) {
+        value = `${value}`;
+      }
+
       // We probably better fix this on server side...
       if (type === 'UFix64') {
         if (value.indexOf('.') < 0) {
           value = `${value}.0`;
         }
       }
+
+      // Language server throws "input is not literal" without quotes
+      if (type === `String`) {
+        console.log({ value });
+        value = `\"${value.replace(/"/g, '\\"')}\"`;
+      }
+
       return value;
     });
 
-    const formatted = await props.languageClient.sendRequest(
-      ExecuteCommandRequest.type,
-      {
-        command: 'cadence.server.parseEntryPointArguments',
-        arguments: [
-          props.editor.getModel().uri.toString(),
-          fixed
-        ],
-      },
-    );
+    let formatted: any;
+    try {
+      formatted = await props.languageClient.sendRequest(
+        ExecuteCommandRequest.type,
+        {
+          command: 'cadence.server.parseEntryPointArguments',
+          arguments: [props.editor.getModel().uri.toString(), fixed],
+        },
+      );
+    } catch (e) {
+      console.log(e);
+    }
 
     // Map values to strings that will be passed to backend
-    const args:any = list.map((arg, index) => {
-      const { type } = arg;
-      const fixedValue = fixed[index]
-
-      // We need to keep Bool values as boolean and not string
-      const value = type === "Bool" ? fixedValue === "true" : fixed[index]
-
-      // If we have a complex type - return value formatted by language server
-      if ( isComplexType(type)){
-        return JSON.stringify(formatted[index])
-      }
-
-      return JSON.stringify({ value, type });
-    });
+    const args: any = list.map((_, index) => JSON.stringify(formatted[index]))
 
     let rawResult, resultType;
     try {
