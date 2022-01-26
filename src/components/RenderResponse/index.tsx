@@ -12,7 +12,6 @@ const Root = styled.div<{ resultType: ResultType }>`
   padding: 8px;
   overflow-y: scroll;
   min-height: 40px;
-  max-height: ${p => (p.resultType === ResultType.Contract ? "80px" : "140px")};
 `;
 
 export const RenderResponse: React.FC<{
