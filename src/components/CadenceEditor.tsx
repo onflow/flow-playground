@@ -2,7 +2,6 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/core';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-const { MonacoServices } = require('monaco-languageclient/lib/monaco-services');
 
 import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
 import {
@@ -108,18 +107,15 @@ type EditorState = {
   viewState: any;
 };
 
-let monacoServicesInstalled = false;
-
-type CodeGetter = (index: number) => string | undefined;
-
 type CadenceEditorProps = {
+  type: EntityType;
   code: string;
   mount: string;
   show: boolean;
   onChange: any;
   activeId: string;
-  type: EntityType;
-  getCode: CodeGetter;
+  languageServer: CadenceLanguageServer
+  callbacks: Callbacks
 };
 
 type CadenceEditorState = {
@@ -144,7 +140,8 @@ class CadenceEditor extends React.Component<
     onChange: any;
     activeId: string;
     type: EntityType;
-    getCode: CodeGetter;
+    languageServer: any;
+    callbacks: Callbacks;
   }) {
     super(props);
 
@@ -164,7 +161,8 @@ class CadenceEditor extends React.Component<
   }
 
   async componentDidMount() {
-    const editor = monaco.editor.create(
+    console.log("editor mounted!")
+    this.editor = monaco.editor.create(
       document.getElementById(this.props.mount),
       {
         theme: 'vs-light',
@@ -174,8 +172,6 @@ class CadenceEditor extends React.Component<
         },
       },
     );
-    this.editor = editor;
-
     this._subscription = this.editor.onDidChangeModelContent((event: any) => {
       this.props.onChange(this.editor.getValue(), event);
     });
@@ -187,54 +183,27 @@ class CadenceEditor extends React.Component<
     this.editor.setModel(state.model);
     this.editor.focus();
 
-    if (this.props.activeId && !this.callbacks) {
-      const getCode = (index: number) => this.props.getCode(index);
-      await this.loadLanguageServer(getCode);
-    }
-  }
-
-  private async loadLanguageServer(getCode: CodeGetter) {
-    this.callbacks = {
-      // The actual callback will be set as soon as the language server is initialized
-      toServer: null,
-
-      // The actual callback will be set as soon as the language server is initialized
-      onClientClose: null,
-
-      // The actual callback will be set as soon as the language client is initialized
-      onServerClose: null,
-
-      // The actual callback will be set as soon as the language client is initialized
-      toClient: null,
-
-      getAddressCode(address: string): string | undefined {
-        const number = parseInt(address, 16);
-        if (!number) {
-          return;
-        }
-        return getCode(number - 1);
-      },
-    };
-
-    // The Monaco Language Client services have to be installed globally, once.
-    // An editor must be passed, which is only used for commands.
-    // As the Cadence language server is not providing any commands this is OK
-
-    if (!monacoServicesInstalled) {
-      monacoServicesInstalled = true;
-      MonacoServices.install(monaco);
-    }
-
     // Start one language server per editor.
     // Even though one language server can handle multiple documents,
     // this demonstrates this is possible and is more resilient:
     // if the server for one editor crashes, it does not break the other editors
 
-    await CadenceLanguageServer.create(this.callbacks);
+    if (this.props.activeId && this.props.callbacks.toServer) {
+      console.log("we can start language client now")
+      console.log(this.props.callbacks)
+      this.callbacks = this.props.callbacks;
+      await this.loadLanguageClient()
+    }
+  }
 
+  private async loadLanguageClient() {
+    console.log('-----------------')
+    console.log("init language client")
+    console.log({callbacks: this.callbacks})
     this.languageClient = createCadenceLanguageClient(this.callbacks);
     this.languageClient.start();
     this.languageClient.onReady().then(() => {
+      console.log("language client ready")
       this.languageClient.onNotification(
         CadenceCheckCompleted.methodName,
         async (result: CadenceCheckCompleted.Params) => {
@@ -344,14 +313,23 @@ class CadenceEditor extends React.Component<
   }
 
   async componentDidUpdate(prevProps: any) {
+    console.log({current: this.props, prev: prevProps})
     if (this.props.activeId !== prevProps.activeId) {
       this.switchEditor(prevProps.activeId, this.props.activeId);
       this.destroyMonaco();
+      console.log("=========== CALL MOUNT PROCEDURE =============")
       await this.componentDidMount();
+    }
+
+    if (this.props.languageServer) {
+      console.log("we can start language client now")
+      console.log(this.props.callbacks)
+      this.callbacks = this.props.callbacks;
+      await this.loadLanguageClient()
     }
   }
 
-  destroyMonaco() {
+  destroyMonaco(){
     if (this.editor) {
       this.editor.dispose();
       const model = this.editor.getModel();

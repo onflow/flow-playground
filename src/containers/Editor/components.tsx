@@ -30,6 +30,9 @@ import {
   Label,
 } from 'components/Arguments/SingleArgument/styles';
 import { Markdown } from 'components/Markdown';
+import { CadenceLanguageServer, Callbacks } from "util/language-server";
+import { MonacoServices } from "monaco-languageclient/lib/monaco-services";
+import * as monaco from "monaco-editor";
 
 export interface WithShowProps {
   show: boolean;
@@ -187,6 +190,9 @@ const ReadmeHtmlContainer = styled.div`
   margin-top: 0rem;
 `;
 
+
+let monacoServicesInstalled = false;
+
 const EditorContainer: React.FC<EditorContainerProps> = ({
   isLoading,
   project,
@@ -216,6 +222,55 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     }
   }, [isLoading, active, project]);
 
+  function getCode(index: number): string | undefined {
+    if (index < 0 || index >= project.accounts.length) {
+      return;
+    }
+    return project.accounts[index].draftCode;
+  }
+
+  // The Monaco Language Client services have to be installed globally, once.
+  // An editor must be passed, which is only used for commands.
+  // As the Cadence language server is not providing any commands this is OK
+
+  if (!monacoServicesInstalled) {
+    monacoServicesInstalled = true;
+    MonacoServices.install(monaco);
+  }
+
+  // We will move callbacks out
+  let callbacks : Callbacks = {
+    // The actual callback will be set as soon as the language server is initialized
+    toServer: null,
+
+    // The actual callback will be set as soon as the language server is initialized
+    onClientClose: null,
+
+    // The actual callback will be set as soon as the language client is initialized
+    onServerClose: null,
+
+    // The actual callback will be set as soon as the language client is initialized
+    toClient: null,
+
+    getAddressCode(address: string): string | undefined {
+      const number = parseInt(address, 16);
+      if (!number) {
+        return;
+      }
+      return getCode(number - 1);
+    },
+  };
+
+  const [languageServer, setLanguageServer] = useState(null)
+  const initLanguageServer = async ()=>{
+    const server = await CadenceLanguageServer.create(callbacks)
+    setLanguageServer(server)
+  }
+  useEffect(()=>{
+    // Init language server
+    initLanguageServer()
+  },[])
+
   const onEditorChange = debounce(active.onChange);
   const updateProject = (
     title: string,
@@ -227,13 +282,6 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     project.readme = readme;
     onEditorChange(title, description, readme);
   };
-
-  function getCode(index: number): string | undefined {
-    if (index < 0 || index >= project.accounts.length) {
-      return;
-    }
-    return project.accounts[index].draftCode;
-  }
 
   const isReadmeEditor = active.type === 4;
 
@@ -297,8 +345,9 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
           code={code}
           mount="cadenceEditor"
           onChange={(code: string, _: any) => onEditorChange(code)}
-          getCode={getCode}
           show={!isReadmeEditor}
+          languageServer={languageServer}
+          callbacks={callbacks}
         />
       </EditorRoot>
       <BottomBarContainer active={active} />
