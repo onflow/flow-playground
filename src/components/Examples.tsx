@@ -45,7 +45,7 @@ const examples = [
     subtitle:
       "Put it all together in a marketplace! This tutorial will teach you how to turn all the concepts you’ve learned into a place for people to share their creations with the community.",
     emoji: "🤝",
-    projectLink: "https://play.onflow.org/af759188-6c0d-468a-9eda-50844f522261",
+    projectLink: "https://play.onflow.org/45ae690e-c527-409c-970e-57f03df92790",
     docsLink: "https://docs.onflow.org/cadence/tutorial/05-marketplace-setup/"
   },
   {
@@ -53,7 +53,7 @@ const examples = [
     subtitle:
       "This tutorial is for the brave and the bold, an opportunity to discover what resources make possible - resources owning other resources. If you can imagine it, you can create it.",
     emoji: "🤠",
-    projectLink: "https://play.onflow.org/dd33e2ba-098e-4033-a575-d56b8a3bf7b0",
+    projectLink: "https://play.onflow.org/cda4d057-5898-4a7f-be34-fd47ec75085f",
     docsLink: "https://docs.onflow.org/cadence/tutorial/07-resources-compose/"
   },
   {
@@ -61,7 +61,7 @@ const examples = [
     subtitle:
       "With the advent of blockchain technology and smart contracts, it has become popular to try to create decentralized voting mechanisms that allow large groups of users to vote completely on chain",
     emoji: "🗳️",
-    projectLink: "https://play.onflow.org/5f9fabb2-b865-4b6e-8e1b-cad2ef43ae0f",
+    projectLink: "https://play.onflow.org/75a6ce58-74bb-468f-b7bd-425716c93c3e",
     docsLink: "https://docs.onflow.org/cadence/tutorial/08-voting/"
   }
 ];
