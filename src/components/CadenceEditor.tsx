@@ -163,15 +163,23 @@ class CadenceEditor extends React.Component<
   }
 
   async componentDidMount() {
+    await this.initEditor()
+
+    if (this.props.serverReady) {
+      await this.loadLanguageClient()
+    }
+  }
+
+  async initEditor(){
     this.editor = monaco.editor.create(
-      document.getElementById(this.props.mount),
-      {
-        theme: 'vs-light',
-        language: CADENCE_LANGUAGE_ID,
-        minimap: {
-          enabled: false,
+        document.getElementById(this.props.mount),
+        {
+          theme: 'vs-light',
+          language: CADENCE_LANGUAGE_ID,
+          minimap: {
+            enabled: false,
+          },
         },
-      },
     );
     this._subscription = this.editor.onDidChangeModelContent((event: any) => {
       this.props.onChange(this.editor.getValue(), event);
@@ -183,10 +191,6 @@ class CadenceEditor extends React.Component<
     );
     this.editor.setModel(state.model);
     this.editor.focus();
-
-    if (this.props.serverReady) {
-      await this.loadLanguageClient()
-    }
   }
 
   private async loadLanguageClient() {
@@ -324,6 +328,7 @@ class CadenceEditor extends React.Component<
     this._subscription = this.editor.onDidChangeModelContent((event: any) => {
       this.props.onChange(this.editor.getValue(), event);
     });
+    await this.initEditor();
   }
 
   destroyMonaco(){
