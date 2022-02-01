@@ -264,6 +264,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   };
 
   const [serverReady, setServerReady] = useState(false)
+  const [serverCallbacks, setServerCallbacks] = useState(callbacks)
   const [languageServer, setLanguageServer] = useState(null)
   const initLanguageServer = async ()=>{
     const server = await CadenceLanguageServer.create(callbacks)
@@ -278,6 +279,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
         clearInterval(checkInterval);
         console.log("Language server is ready")
         setServerReady(true)
+        setServerCallbacks(callbacks)
       }
     }, 300)
   },[])
@@ -358,7 +360,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
           onChange={(code: string, _: any) => onEditorChange(code)}
           show={!isReadmeEditor}
           languageServer={languageServer}
-          callbacks={callbacks}
+          callbacks={serverCallbacks}
           serverReady={serverReady}
         />
       </EditorRoot>

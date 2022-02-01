@@ -163,6 +163,7 @@ class CadenceEditor extends React.Component<
   }
 
   async componentDidMount() {
+    console.log("Mount", this.props.activeId)
     await this.initEditor()
 
     if (this.props.serverReady) {
@@ -312,7 +313,6 @@ class CadenceEditor extends React.Component<
   }
 
   async componentDidUpdate(prevProps: any) {
-    console.log({current: this.props, prev: prevProps})
     if (this.props.activeId !== prevProps.activeId) {
       await this.swapMonacoEditor(prevProps.activeId, this.props.activeId)
       // console.log("=========== Active ID changed =============")
@@ -320,15 +320,24 @@ class CadenceEditor extends React.Component<
       // this.destroyMonaco();
       // await this.mountMonacoEditor();
     }
+
+    if(this.props.serverReady !== prevProps.serverReady){
+      console.log({serverReady: this.props.serverReady})
+      console.log({serverReadyOld: prevProps.serverReady})
+      console.log({callbacks: this.props.callbacks})
+      console.log({server: this.props.languageServer})
+      console.log({oldServer: prevProps.languageServer})
+      console.log("------- Start Language Client -------")
+      if(this.props.callbacks.toServer !== null){
+        await this.loadLanguageClient()
+      }
+    }
   }
 
   async swapMonacoEditor(prev: any, current: any){
     await this.destroyMonaco();
-    this.switchEditor(prev, current);
-    this._subscription = this.editor.onDidChangeModelContent((event: any) => {
-      this.props.onChange(this.editor.getValue(), event);
-    });
     await this.initEditor();
+    this.switchEditor(prev, current);
   }
 
   destroyMonaco(){
