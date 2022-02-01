@@ -116,6 +116,7 @@ type CadenceEditorProps = {
   activeId: string;
   languageServer: CadenceLanguageServer
   callbacks: Callbacks
+  serverReady: boolean
 };
 
 type CadenceEditorState = {
@@ -142,6 +143,7 @@ class CadenceEditor extends React.Component<
     type: EntityType;
     languageServer: any;
     callbacks: Callbacks;
+    serverReady: boolean;
   }) {
     super(props);
 
@@ -161,7 +163,6 @@ class CadenceEditor extends React.Component<
   }
 
   async componentDidMount() {
-    console.log("editor mounted!")
     this.editor = monaco.editor.create(
       document.getElementById(this.props.mount),
       {
@@ -177,26 +178,20 @@ class CadenceEditor extends React.Component<
     });
 
     const state = this.getOrCreateEditorState(
-      this.props.activeId,
-      this.props.code,
+        this.props.activeId,
+        this.props.code,
     );
     this.editor.setModel(state.model);
     this.editor.focus();
 
-    // Start one language server per editor.
-    // Even though one language server can handle multiple documents,
-    // this demonstrates this is possible and is more resilient:
-    // if the server for one editor crashes, it does not break the other editors
-
-    if (this.props.activeId && this.props.callbacks.toServer) {
-      console.log("we can start language client now")
-      console.log(this.props.callbacks)
-      this.callbacks = this.props.callbacks;
+    if (this.props.serverReady) {
       await this.loadLanguageClient()
     }
   }
 
   private async loadLanguageClient() {
+    this.callbacks = this.props.callbacks;
+
     console.log('-----------------')
     console.log("init language client")
     console.log({callbacks: this.callbacks})
@@ -315,18 +310,20 @@ class CadenceEditor extends React.Component<
   async componentDidUpdate(prevProps: any) {
     console.log({current: this.props, prev: prevProps})
     if (this.props.activeId !== prevProps.activeId) {
-      this.switchEditor(prevProps.activeId, this.props.activeId);
-      this.destroyMonaco();
-      console.log("=========== CALL MOUNT PROCEDURE =============")
-      await this.componentDidMount();
+      await this.swapMonacoEditor(prevProps.activeId, this.props.activeId)
+      // console.log("=========== Active ID changed =============")
+      // this.switchEditor(prevProps.activeId, this.props.activeId);
+      // this.destroyMonaco();
+      // await this.mountMonacoEditor();
     }
+  }
 
-    if (this.props.languageServer) {
-      console.log("we can start language client now")
-      console.log(this.props.callbacks)
-      this.callbacks = this.props.callbacks;
-      await this.loadLanguageClient()
-    }
+  async swapMonacoEditor(prev: any, current: any){
+    await this.destroyMonaco();
+    this.switchEditor(prev, current);
+    this._subscription = this.editor.onDidChangeModelContent((event: any) => {
+      this.props.onChange(this.editor.getValue(), event);
+    });
   }
 
   destroyMonaco(){

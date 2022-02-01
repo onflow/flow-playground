@@ -226,6 +226,8 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     if (index < 0 || index >= project.accounts.length) {
       return;
     }
+    console.log("FROM GET CODE")
+    console.log({account: project.accounts[index]})
     return project.accounts[index].draftCode;
   }
 
@@ -261,6 +263,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     },
   };
 
+  const [serverReady, setServerReady] = useState(false)
   const [languageServer, setLanguageServer] = useState(null)
   const initLanguageServer = async ()=>{
     const server = await CadenceLanguageServer.create(callbacks)
@@ -269,6 +272,14 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   useEffect(()=>{
     // Init language server
     initLanguageServer()
+
+    let checkInterval =setInterval(()=>{
+      if (callbacks.toServer !== null){
+        clearInterval(checkInterval);
+        console.log("Language server is ready")
+        setServerReady(true)
+      }
+    }, 300)
   },[])
 
   const onEditorChange = debounce(active.onChange);
@@ -348,6 +359,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
           show={!isReadmeEditor}
           languageServer={languageServer}
           callbacks={callbacks}
+          serverReady={serverReady}
         />
       </EditorRoot>
       <BottomBarContainer active={active} />
