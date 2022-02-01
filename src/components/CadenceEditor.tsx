@@ -321,14 +321,13 @@ class CadenceEditor extends React.Component<
       // await this.mountMonacoEditor();
     }
 
-    if(this.props.serverReady !== prevProps.serverReady){
-      console.log({serverReady: this.props.serverReady})
-      console.log({serverReadyOld: prevProps.serverReady})
-      console.log({callbacks: this.props.callbacks})
-      console.log({server: this.props.languageServer})
-      console.log({oldServer: prevProps.languageServer})
-      console.log("------- Start Language Client -------")
+    const serverStatusChanged = this.props.serverReady !== prevProps.serverReady
+    const activeIdChanged = this.props.activeId !== prevProps.activeId
+    const typeChanged = this.props.type !== prevProps.type
+    if(serverStatusChanged || activeIdChanged || typeChanged){
+      console.log("----------------> Changes!")
       if(this.props.callbacks.toServer !== null){
+        // await this.swapMonacoEditor(prevProps.activeId, this.props.activeId)
         await this.loadLanguageClient()
       }
     }

@@ -207,6 +207,12 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   const [code, setCode] = useState('');
   const [activeId, setActiveId] = useState(null);
 
+  const projectAccess = useProject()
+/*  console.log({
+    active: projectAccess.active,
+    account: projectAccess.project.accounts[active.index]
+  })*/
+
   useEffect(() => {
     if (isLoading) {
       setCode('');
@@ -220,16 +226,19 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
       setReadme(readme);
       setActiveId(getActiveId(project, active));
     }
-  }, [isLoading, active, project]);
+  }, [isLoading, active, projectAccess.project]);
 
-  function getCode(index: number): string | undefined {
+
+  console.log("---> Editor +++> Project:", projectAccess.project)
+
+/*  function getCode(index: number): string | undefined {
     if (index < 0 || index >= project.accounts.length) {
       return;
     }
-    console.log("FROM GET CODE")
-    console.log({account: project.accounts[index]})
-    return project.accounts[index].draftCode;
-  }
+    let code = projectAccess.project.accounts[index].deployedCode;
+    console.log("---> From getCode:", code)
+    return code
+  }*/
 
   // The Monaco Language Client services have to be installed globally, once.
   // An editor must be passed, which is only used for commands.
@@ -254,14 +263,26 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     // The actual callback will be set as soon as the language client is initialized
     toClient: null,
 
+    //@ts-ignore
     getAddressCode(address: string): string | undefined {
+      // we will set it once it is instantiated
+    }
+  };
+
+  const getCode = (project: any) => (address: string) =>{
       const number = parseInt(address, 16);
       if (!number) {
         return;
       }
-      return getCode(number - 1);
-    },
-  };
+
+      const index = number - 1
+      if (index < 0 || index >= project.accounts.length) {
+        return;
+      }
+      let code = project.accounts[index].deployedCode;
+      console.log("---> From getCode:", { code, index, account: projectAccess.project.accounts})
+      return code
+  }
 
   const [serverReady, setServerReady] = useState(false)
   const [serverCallbacks, setServerCallbacks] = useState(callbacks)
@@ -274,15 +295,23 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     // Init language server
     initLanguageServer()
 
-    let checkInterval =setInterval(()=>{
+    let checkInterval = setInterval(()=>{
       if (callbacks.toServer !== null){
         clearInterval(checkInterval);
         console.log("Language server is ready")
         setServerReady(true)
+        callbacks.getAddressCode = getCode(project)
         setServerCallbacks(callbacks)
       }
     }, 300)
+    // TODO: Check if we can reinstantiate language server after accounts has been changed
   },[])
+
+  useEffect(()=>{
+    serverCallbacks.getAddressCode = getCode(project)
+    setServerCallbacks(serverCallbacks)
+    console.log("Project updated")
+  }, [project])
 
   const onEditorChange = debounce(active.onChange);
   const updateProject = (

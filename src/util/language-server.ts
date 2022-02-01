@@ -139,7 +139,6 @@ export class CadenceLanguageServer {
       if (!callbacks.getAddressCode) {
         return undefined
       }
-
       return callbacks.getAddressCode(address)
     }
 
