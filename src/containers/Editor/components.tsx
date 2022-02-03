@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Flex, Button, Box /*Divider*/ } from 'theme-ui';
 import styled from '@emotion/styled';
 import { FaShareSquare } from 'react-icons/fa';
@@ -190,6 +190,27 @@ const ReadmeHtmlContainer = styled.div`
   margin-top: 0rem;
 `;
 
+const usePrevious = (value: any) => {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value; //assign the value of ref to the argument
+  },[value]); //this code will run when the value of 'value' changes
+  return ref.current; //in the end, return the current ref value.
+}
+
+const compareContracts = (prev: any, current: any) => {
+  console.log("Check Changes ============================>")
+  for (let i = 0; i < prev.length; i++) {
+    if (prev[i].deployedCode !== current[i].deployedCode){
+      console.log(prev[i].deployedCode)
+      console.log(current[i].deployedCode)
+      console.log("Check Changes ============================> DONE")
+      return false
+    }
+  }
+  console.log("Check Changes ============================> DONE")
+  return true
+}
 
 let monacoServicesInstalled = false;
 
@@ -291,6 +312,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     const server = await CadenceLanguageServer.create(callbacks)
     setLanguageServer(server)
   }
+
   useEffect(()=>{
     // Init language server
     initLanguageServer()
@@ -307,10 +329,31 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     // TODO: Check if we can reinstantiate language server after accounts has been changed
   },[])
 
-  useEffect(()=>{
+  const reloadServer = async ()=>{
+    console.log("reload server!")
     serverCallbacks.getAddressCode = getCode(project)
+    const server = await CadenceLanguageServer.create(serverCallbacks)
     setServerCallbacks(serverCallbacks)
+    setLanguageServer(server)
     console.log("Project updated")
+  }
+
+  const previousProjectState = usePrevious(project)
+
+  useEffect(()=>{
+    if (previousProjectState !== undefined){
+      // @ts-ignore
+      const previousAccounts = previousProjectState.accounts || []
+      const equal = compareContracts(previousAccounts, project.accounts)
+      console.log("++++++++++++++++++++++++++++")
+      console.log("++++++++++++++++++++++++++++")
+      console.log({ equal })
+      console.log("++++++++++++++++++++++++++++")
+      console.log("++++++++++++++++++++++++++++")
+      if (!equal){
+        reloadServer()
+      }
+    }
   }, [project])
 
   const onEditorChange = debounce(active.onChange);
