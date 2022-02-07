@@ -104,7 +104,7 @@ const renderMessage = (message: string) => {
   let spanClass = getSpanClass(message);
 
   const { items } = message.split(' ').reduce(
-    (acc, item) => {
+    (acc, item,i) => {
       let current = acc.items[acc.items.length - 1];
       if (acc.startNew) {
         acc.startNew = false;
@@ -115,7 +115,7 @@ const renderMessage = (message: string) => {
       if (item.startsWith('`')) {
         acc.startNew = true;
         const span = (
-          <span className={spanClass}>{item.replace(/`/g, '')}</span>
+          <span className={spanClass} key={`${item}-${i}`}>{item.replace(/`/g, '')}</span>
         );
         acc.items.push(span);
         acc.startNew = true;
@@ -148,7 +148,7 @@ export const ErrorsList: React.FC<ErrorListProps> = (props) => {
           const message = renderMessage(item.message);
           return (
             <SingleError
-              key={`${i}-${item.message}`}
+              key={`error-${item.message}`}
               onClick={() => goTo(item.position)}
               onMouseOver={() => hover(item.highlight)}
               onMouseOut={() => hideDecorations()}
