@@ -163,7 +163,6 @@ class CadenceEditor extends React.Component<
   }
 
   async componentDidMount() {
-    console.log("Mount", this.props.activeId)
     await this.initEditor()
 
     if (this.props.serverReady) {
@@ -197,13 +196,9 @@ class CadenceEditor extends React.Component<
   private async loadLanguageClient() {
     this.callbacks = this.props.callbacks;
 
-    console.log('-----------------')
-    console.log("init language client")
-    console.log({callbacks: this.callbacks})
     this.languageClient = createCadenceLanguageClient(this.callbacks);
     this.languageClient.start();
     this.languageClient.onReady().then(() => {
-      console.log("language client ready")
       this.languageClient.onNotification(
         CadenceCheckCompleted.methodName,
         async (result: CadenceCheckCompleted.Params) => {
@@ -307,27 +302,21 @@ class CadenceEditor extends React.Component<
   componentWillUnmount() {
     this.destroyMonaco();
     window.removeEventListener('resize', this.handleResize);
-    if (this.callbacks && this.callbacks.onClientClose) {
+/*    if (this.callbacks && this.callbacks.onClientClose) {
       this.callbacks.onClientClose();
-    }
+    }*/
   }
 
   async componentDidUpdate(prevProps: any) {
     if (this.props.activeId !== prevProps.activeId) {
       await this.swapMonacoEditor(prevProps.activeId, this.props.activeId)
-      // console.log("=========== Active ID changed =============")
-      // this.switchEditor(prevProps.activeId, this.props.activeId);
-      // this.destroyMonaco();
-      // await this.mountMonacoEditor();
     }
 
     const serverStatusChanged = this.props.serverReady !== prevProps.serverReady
     const activeIdChanged = this.props.activeId !== prevProps.activeId
     const typeChanged = this.props.type !== prevProps.type
     if(serverStatusChanged || activeIdChanged || typeChanged){
-      console.log("----------------> Changes!")
       if(this.props.callbacks.toServer !== null){
-        // await this.swapMonacoEditor(prevProps.activeId, this.props.activeId)
         await this.loadLanguageClient()
       }
     }

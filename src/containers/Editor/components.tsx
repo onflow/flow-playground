@@ -11,7 +11,7 @@ import { Editor as EditorRoot } from 'layout/Editor';
 import { Heading } from 'layout/Heading';
 import { EntityType, ActiveEditor } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import { Project } from 'api/apollo/generated/graphql';
+import {Account, Project} from 'api/apollo/generated/graphql';
 
 import debounce from 'util/debounce';
 import Mixpanel from 'util/mixpanel';
@@ -198,17 +198,13 @@ const usePrevious = (value: any) => {
   return ref.current; //in the end, return the current ref value.
 }
 
-const compareContracts = (prev: any, current: any) => {
-  console.log("Check Changes ============================>")
+// This method
+const compareContracts = (prev: Account[], current: Account[]) => {
   for (let i = 0; i < prev.length; i++) {
     if (prev[i].deployedCode !== current[i].deployedCode){
-      console.log(prev[i].deployedCode)
-      console.log(current[i].deployedCode)
-      console.log("Check Changes ============================> DONE")
       return false
     }
   }
-  console.log("Check Changes ============================> DONE")
   return true
 }
 
@@ -250,17 +246,6 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   }, [isLoading, active, projectAccess.project]);
 
 
-  console.log("---> Editor +++> Project:", projectAccess.project)
-
-/*  function getCode(index: number): string | undefined {
-    if (index < 0 || index >= project.accounts.length) {
-      return;
-    }
-    let code = projectAccess.project.accounts[index].deployedCode;
-    console.log("---> From getCode:", code)
-    return code
-  }*/
-
   // The Monaco Language Client services have to be installed globally, once.
   // An editor must be passed, which is only used for commands.
   // As the Cadence language server is not providing any commands this is OK
@@ -301,7 +286,6 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
         return;
       }
       let code = project.accounts[index].deployedCode;
-      console.log("---> From getCode:", { code, index, account: projectAccess.project.accounts})
       return code
   }
 
@@ -318,9 +302,10 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     initLanguageServer()
 
     let checkInterval = setInterval(()=>{
+      // .toServer() method is populated by language server
+      // if it was not properly started or in progress it will be "null"
       if (callbacks.toServer !== null){
         clearInterval(checkInterval);
-        console.log("Language server is ready")
         setServerReady(true)
         callbacks.getAddressCode = getCode(project)
         setServerCallbacks(callbacks)
@@ -330,26 +315,21 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   },[])
 
   const reloadServer = async ()=>{
-    console.log("reload server!")
     serverCallbacks.getAddressCode = getCode(project)
     const server = await CadenceLanguageServer.create(serverCallbacks)
     setServerCallbacks(serverCallbacks)
     setLanguageServer(server)
-    console.log("Project updated")
   }
 
   const previousProjectState = usePrevious(project)
 
+  // This hook will listen for project updates and if one of the contracts has been changed,
+  // it will reload language server
   useEffect(()=>{
     if (previousProjectState !== undefined){
       // @ts-ignore
       const previousAccounts = previousProjectState.accounts || []
       const equal = compareContracts(previousAccounts, project.accounts)
-      console.log("++++++++++++++++++++++++++++")
-      console.log("++++++++++++++++++++++++++++")
-      console.log({ equal })
-      console.log("++++++++++++++++++++++++++++")
-      console.log("++++++++++++++++++++++++++++")
       if (!equal){
         reloadServer()
       }

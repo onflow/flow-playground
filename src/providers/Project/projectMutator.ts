@@ -159,10 +159,6 @@ export default class ProjectMutator {
       unregisterOnCloseSaveMessage();
     }
 
-    console.log({id: account.id});
-    console.log({draft: account.draftCode})
-    console.log({deployed: account.deployedCode})
-
     const res = await this.client.mutate({
       mutation: UPDATE_ACCOUNT_DEPLOYED_CODE,
       variables: {
@@ -174,8 +170,6 @@ export default class ProjectMutator {
         { query: GET_PROJECT, variables: { projectId: this.projectId } },
       ],
     });
-
-    console.log({res})
 
     Mixpanel.track('Contract deployed', {
       projectId: this.projectId,
