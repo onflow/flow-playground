@@ -213,6 +213,12 @@ const compareContracts = (prev: Account[], current: Account[]) => {
 
 let monacoServicesInstalled = false;
 
+const MAX_DESCRIPTION_SIZE = Math.pow(1024, 2) // 1mb of storage can be saved into readme field
+const calculateSize = (readme: string) => {
+  const { size } = new Blob([readme])
+  return size >= MAX_DESCRIPTION_SIZE
+}
+
 const EditorContainer: React.FC<EditorContainerProps> = ({
   isLoading,
   project,
@@ -230,6 +236,8 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   const [activeId, setActiveId] = useState(null);
 
   const projectAccess = useProject()
+
+  const [descriptionOverflow, setDescriptionOverflow] = useState(false)
 
   useEffect(() => {
     if (isLoading) {
@@ -350,7 +358,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   };
 
   const isReadmeEditor = active.type === 4;
-
+  console.log({descriptionOverflow})
   return (
     <MainRoot>
       <EditorRoot>
@@ -399,8 +407,12 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
               <MdeEditor
                 value={readme}
                 onChange={(readme: string) => {
-                  setReadme(readme);
-                  updateProject(title, description, readme);
+                  const overflow = calculateSize(readme)
+                  setDescriptionOverflow(overflow)
+                  if(!overflow){
+                    setReadme(readme);
+                    updateProject(title, description, readme);
+                  }
                 }}
               />
             </>
