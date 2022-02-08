@@ -302,9 +302,9 @@ class CadenceEditor extends React.Component<
   componentWillUnmount() {
     this.destroyMonaco();
     window.removeEventListener('resize', this.handleResize);
-/*    if (this.callbacks && this.callbacks.onClientClose) {
+    if (this.callbacks && this.callbacks.onClientClose) {
       this.callbacks.onClientClose();
-    }*/
+    }
   }
 
   async componentDidUpdate(prevProps: any) {

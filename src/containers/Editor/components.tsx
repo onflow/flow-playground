@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Flex, Button, Box /*Divider*/ } from 'theme-ui';
+import { Flex, Button, Box, Divider } from 'theme-ui';
 import styled from '@emotion/styled';
 import { FaShareSquare } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import useClipboard from 'react-use-clipboard';
-import { Divider } from 'theme-ui';
 
 import { Main as MainRoot } from 'layout/Main';
 import { Editor as EditorRoot } from 'layout/Editor';
@@ -225,10 +224,6 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   const [activeId, setActiveId] = useState(null);
 
   const projectAccess = useProject()
-/*  console.log({
-    active: projectAccess.active,
-    account: projectAccess.project.accounts[active.index]
-  })*/
 
   useEffect(() => {
     if (isLoading) {

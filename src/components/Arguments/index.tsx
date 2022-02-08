@@ -329,7 +329,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           }
           resultType = ResultType.Contract;
           rawResult = await contractDeployment();
-          // await updateAccountDeployedCode();
           break;
         }
         default:
