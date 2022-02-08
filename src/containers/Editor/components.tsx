@@ -30,6 +30,7 @@ import {
   Label,
 } from 'components/Arguments/SingleArgument/styles';
 import { Markdown } from 'components/Markdown';
+import { decodeText } from "util/readme";
 
 export interface WithShowProps {
   show: boolean;
@@ -192,9 +193,11 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   project,
   active,
 }) => {
-  const [title, setTitle] = useState<string | undefined>(project.title);
+  const [title, setTitle] = useState<string | undefined>(
+      decodeText(project.title)
+  );
   const [description, setDescription] = useState<string | undefined>(
-    project.description,
+      decodeText(project.description)
   );
   const [readme, setReadme] = useState<string | undefined>(project.readme);
 
