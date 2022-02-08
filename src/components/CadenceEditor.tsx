@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { keyframes } from '@emotion/core';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 const { MonacoServices } = require('monaco-languageclient/lib/monaco-services');
+import { extractSigners } from "util/parser";
 
 import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
 import {
@@ -380,10 +381,6 @@ class CadenceEditor extends React.Component<
     return [];
   }
 
-  extractSigners(code: string): number {
-    return this.extract(code, 'prepare').filter((item) => !!item).length;
-  }
-
   hover(highlight: Highlight): void {
     const { startLine, startColumn, endLine, endColumn, color } = highlight;
     const model = this.editor.getModel();
@@ -449,7 +446,7 @@ class CadenceEditor extends React.Component<
     const list = args[activeId] || [];
 
     /// Extract number of signers from code
-    const signers = this.extractSigners(code);
+    const signers = extractSigners(code).length
     const problemsList: ProblemsList = problems[activeId] || {
       error: [],
       warning: [],
