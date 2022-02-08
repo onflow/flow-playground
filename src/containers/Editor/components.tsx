@@ -11,6 +11,7 @@ import { Editor as EditorRoot } from 'layout/Editor';
 import { Heading } from 'layout/Heading';
 import { EntityType, ActiveEditor } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
+import { PLACEHOLDER_DESCRIPTION, PLACEHOLDER_TITLE } from "providers/Project/projectDefault";
 import { Project } from 'api/apollo/generated/graphql';
 
 import debounce from 'util/debounce';
@@ -266,6 +267,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
                 <Label>Title</Label>
                 <Input
                   value={title}
+                  placeholder={PLACEHOLDER_TITLE}
                   onChange={(event) => {
                     setTitle(event.target.value);
                     updateProject(event.target.value, description, readme);
@@ -276,6 +278,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
                 <Label>Description</Label>
                 <Input
                   value={description}
+                  placeholder={PLACEHOLDER_DESCRIPTION}
                   onChange={(event) => {
                     setDescription(event.target.value);
                     updateProject(title, event.target.value, readme);
