@@ -44,6 +44,10 @@ export const Input = styled.input`
     margin-bottom: 0;
   }
   box-sizing: border-box;
+
+  ::placeholder {
+    color: #999;
+  }
 `;
 
 export const Error = styled.p`
