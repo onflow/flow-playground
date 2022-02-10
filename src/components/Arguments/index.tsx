@@ -278,7 +278,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
       // Language server throws "input is not literal" without quotes
       if (type === `String`) {
-        console.log({ value });
         value = `\"${value.replace(/"/g, '\\"')}\"`;
       }
 

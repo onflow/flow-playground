@@ -16,8 +16,6 @@ export const extract = (code: string, keyWord: string) => {
     const noComments = stripComments(code);
     const target = collapseSpaces(noComments.replace(/[\n\r]/g, ""));
 
-    console.log({ noComments })
-
     if (target) {
         const regexp = new RegExp(keyWord, "g");
         const match = regexp.exec(target);
