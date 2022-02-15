@@ -222,7 +222,8 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     project, 
     active, 
     isSavingCode, 
-    lastSigners 
+    lastSigners,
+    // updateAccountDeployedCode
   } = useProject();
 
   const [notifications, setNotifications] = useState< { [identifier: string]: string[] } >({});
