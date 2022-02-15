@@ -141,7 +141,7 @@ export const SEED_README = ""
 
 export const PLACEHOLDER_TITLE = "Name of your project"
 export const PLACEHOLDER_DESCRIPTION = "Single sentence describing this project"
-export const PLACEHOLDER_README = `Here you can put detailed explanation how to use this playground.
+export const PLACEHOLDER_README = `Here you can provide a detailed explanation to help others understand how to use your Playground project.
 Editor supports Markdown. Please, consult https://www.markdownguide.org/cheat-sheet/ for examples and tips.`
 
 export function createDefaultProject(): Project {
