@@ -170,6 +170,7 @@ export default class ProjectMutator {
         { query: GET_PROJECT, variables: { projectId: this.projectId } },
       ],
     });
+
     Mixpanel.track('Contract deployed', {
       projectId: this.projectId,
       accountId: account.id,

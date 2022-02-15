@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Flex, Button, Box /*Divider*/ } from 'theme-ui';
+import React, { useState, useEffect, useRef } from 'react';
+import { Flex, Button, Box, Divider } from 'theme-ui';
 import styled from '@emotion/styled';
 import { FaShareSquare } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import useClipboard from 'react-use-clipboard';
-import { Divider } from 'theme-ui';
 
 import { Main as MainRoot } from 'layout/Main';
 import { Editor as EditorRoot } from 'layout/Editor';
@@ -12,7 +11,8 @@ import { Heading } from 'layout/Heading';
 import { EntityType, ActiveEditor } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import { PLACEHOLDER_DESCRIPTION, PLACEHOLDER_TITLE } from "providers/Project/projectDefault";
-import { Project } from 'api/apollo/generated/graphql';
+import {Account, Project} from 'api/apollo/generated/graphql';
+
 
 import debounce from 'util/debounce';
 import Mixpanel from 'util/mixpanel';
@@ -31,7 +31,11 @@ import {
   Label,
 } from 'components/Arguments/SingleArgument/styles';
 import { Markdown } from 'components/Markdown';
+
 import { decodeText } from "util/readme";
+import { CadenceLanguageServer, Callbacks } from "util/language-server";
+import { MonacoServices } from "monaco-languageclient/lib/monaco-services";
+import * as monaco from "monaco-editor";
 
 export interface WithShowProps {
   show: boolean;
@@ -189,6 +193,26 @@ const ReadmeHtmlContainer = styled.div`
   margin-top: 0rem;
 `;
 
+const usePrevious = (value: any) => {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value; //assign the value of ref to the argument
+  },[value]); //this code will run when the value of 'value' changes
+  return ref.current; //in the end, return the current ref value.
+}
+
+// This method
+const compareContracts = (prev: Account[], current: Account[]) => {
+  for (let i = 0; i < prev.length; i++) {
+    if (prev[i].deployedCode !== current[i].deployedCode){
+      return false
+    }
+  }
+  return true
+}
+
+let monacoServicesInstalled = false;
+
 const EditorContainer: React.FC<EditorContainerProps> = ({
   isLoading,
   project,
@@ -205,6 +229,8 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   const [code, setCode] = useState('');
   const [activeId, setActiveId] = useState(null);
 
+  const projectAccess = useProject()
+
   useEffect(() => {
     if (isLoading) {
       setCode('');
@@ -218,7 +244,98 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
       setReadme(readme);
       setActiveId(getActiveId(project, active));
     }
-  }, [isLoading, active, project]);
+  }, [isLoading, active, projectAccess.project]);
+
+
+  // The Monaco Language Client services have to be installed globally, once.
+  // An editor must be passed, which is only used for commands.
+  // As the Cadence language server is not providing any commands this is OK
+
+  if (!monacoServicesInstalled) {
+    monacoServicesInstalled = true;
+    MonacoServices.install(monaco);
+  }
+
+  // We will move callbacks out
+  let callbacks : Callbacks = {
+    // The actual callback will be set as soon as the language server is initialized
+    toServer: null,
+
+    // The actual callback will be set as soon as the language server is initialized
+    onClientClose: null,
+
+    // The actual callback will be set as soon as the language client is initialized
+    onServerClose: null,
+
+    // The actual callback will be set as soon as the language client is initialized
+    toClient: null,
+
+    //@ts-ignore
+    getAddressCode(address: string): string | undefined {
+      // we will set it once it is instantiated
+    }
+  };
+
+  const getCode = (project: any) => (address: string) =>{
+      const number = parseInt(address, 16);
+      if (!number) {
+        return;
+      }
+
+      const index = number - 1
+      if (index < 0 || index >= project.accounts.length) {
+        return;
+      }
+      let code = project.accounts[index].deployedCode;
+      return code
+  }
+
+  const [serverReady, setServerReady] = useState(false)
+  const [serverCallbacks, setServerCallbacks] = useState(callbacks)
+  const [languageServer, setLanguageServer] = useState(null)
+  const initLanguageServer = async ()=>{
+    const server = await CadenceLanguageServer.create(callbacks)
+    setLanguageServer(server)
+  }
+
+  useEffect(()=>{
+    // Init language server
+    initLanguageServer()
+
+    let checkInterval = setInterval(()=>{
+      // .toServer() method is populated by language server
+      // if it was not properly started or in progress it will be "null"
+      if (callbacks.toServer !== null){
+        clearInterval(checkInterval);
+        setServerReady(true)
+        callbacks.getAddressCode = getCode(project)
+        setServerCallbacks(callbacks)
+      }
+    }, 300)
+    // TODO: Check if we can reinstantiate language server after accounts has been changed
+  },[])
+
+  const reloadServer = async ()=>{
+    serverCallbacks.getAddressCode = getCode(project)
+    const server = await CadenceLanguageServer.create(serverCallbacks)
+    setServerCallbacks(serverCallbacks)
+    setLanguageServer(server)
+  }
+
+  const previousProjectState = usePrevious(project)
+
+  // This hook will listen for project updates and if one of the contracts has been changed,
+  // it will reload language server
+  useEffect(()=>{
+    if (previousProjectState !== undefined){
+      // @ts-ignore
+      const previousAccounts = previousProjectState.accounts || []
+      const equal = compareContracts(previousAccounts, project.accounts)
+      if (!equal){
+        reloadServer()
+      }
+    }
+  }, [project])
 
   const onEditorChange = debounce(active.onChange);
   const updateProject = (
@@ -231,13 +348,6 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     project.readme = readme;
     onEditorChange(title, description, readme);
   };
-
-  function getCode(index: number): string | undefined {
-    if (index < 0 || index >= project.accounts.length) {
-      return;
-    }
-    return project.accounts[index].draftCode;
-  }
 
   const isReadmeEditor = active.type === 4;
 
@@ -303,8 +413,10 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
           code={code}
           mount="cadenceEditor"
           onChange={(code: string, _: any) => onEditorChange(code)}
-          getCode={getCode}
           show={!isReadmeEditor}
+          languageServer={languageServer}
+          callbacks={serverCallbacks}
+          serverReady={serverReady}
         />
       </EditorRoot>
       <BottomBarContainer active={active} />
