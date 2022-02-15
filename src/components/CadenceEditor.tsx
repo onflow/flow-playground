@@ -2,7 +2,6 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/core';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-const { MonacoServices } = require('monaco-languageclient/lib/monaco-services');
 import { extractSigners } from "util/parser";
 
 
@@ -173,24 +172,24 @@ class CadenceEditor extends React.Component<
     }
   }
 
-  async initEditor(){
+  async initEditor() {
     this.editor = monaco.editor.create(
-        document.getElementById(this.props.mount),
-        {
-          theme: 'vs-light',
-          language: CADENCE_LANGUAGE_ID,
-          minimap: {
-            enabled: false,
-          },
+      document.getElementById(this.props.mount),
+      {
+        theme: 'vs-light',
+        language: CADENCE_LANGUAGE_ID,
+        minimap: {
+          enabled: false,
         },
+      },
     );
     this._subscription = this.editor.onDidChangeModelContent((event: any) => {
       this.props.onChange(this.editor.getValue(), event);
     });
 
     const state = this.getOrCreateEditorState(
-        this.props.activeId,
-        this.props.code,
+      this.props.activeId,
+      this.props.code,
     );
     this.editor.setModel(state.model);
     this.editor.focus();
@@ -318,20 +317,20 @@ class CadenceEditor extends React.Component<
     const serverStatusChanged = this.props.serverReady !== prevProps.serverReady
     const activeIdChanged = this.props.activeId !== prevProps.activeId
     const typeChanged = this.props.type !== prevProps.type
-    if(serverStatusChanged || activeIdChanged || typeChanged){
-      if(this.props.callbacks.toServer !== null){
+    if (serverStatusChanged || activeIdChanged || typeChanged) {
+      if (this.props.callbacks.toServer !== null) {
         await this.loadLanguageClient()
       }
     }
   }
 
-  async swapMonacoEditor(prev: any, current: any){
+  async swapMonacoEditor(prev: any, current: any) {
     await this.destroyMonaco();
     await this.initEditor();
     this.switchEditor(prev, current);
   }
 
-  destroyMonaco(){
+  destroyMonaco() {
     if (this.editor) {
       this.editor.dispose();
       const model = this.editor.getModel();
