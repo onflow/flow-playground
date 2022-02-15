@@ -135,60 +135,22 @@ const DEFAULT_SCRIPT = `pub fun main(): Int {
 }
 `;
 
+export const SEED_TITLE = "Cadence Playground"
+export const SEED_DESCRIPTION = "Showcase Cadence interactions"
+export const SEED_README = ""
+
+export const PLACEHOLDER_TITLE = "Name of your project"
+export const PLACEHOLDER_DESCRIPTION = "Single sentence describing this project"
+export const PLACEHOLDER_README = `Here you can provide a detailed explanation to help others understand how to use your Playground project.
+Editor supports Markdown. Please, consult https://www.markdownguide.org/cheat-sheet/ for examples and tips.`
+
 export function createDefaultProject(): Project {
   return createLocalProject(
     null,
     strToSeed(uuid()),
-    "Default project title ~ Hello World!",
-    "Default project description ~ This project demonstrates...",
-`# My Project README!
-
-[![](https://avatars.githubusercontent.com/u/1680273?s=80&v=4)](https://avatars.githubusercontent.com/u/1680273?v=4)
-
-**This** is an *example* ~~text~~.
-
-Unordered list example:
-
-* hi
-* hello
-* howdy
-
-> This is a famous quote
-
-[Now try a link](https://www.onflow.org/)
-
-
-And some code:
-
-\`\`\`
-// HelloWorld.cdc
-//
-// Welcome to Cadence! This is one of the simplest programs you can deploy on Flow.
-//
-// The HelloWorld contract contains a single string field and a public getter function.
-//
-// Follow the "Hello, World!" tutorial to learn more:
-// https://docs.onflow.org/cadence/tutorial/02-hello-world/
-
-access(all) contract HelloWorld {
-
-    // Declare a public field of type String.
-    //
-    // All fields must be initialized in the init() function.
-    access(all) let greeting: String
-
-    // The init() function is required if the contract contains any fields.
-    init() {
-        self.greeting = "Hello, World!"
-    }
-
-    // Public function that returns our friendly greeting!
-    access(all) fun hello(): String {
-        return self.greeting
-    }
-}
-\`\`\`
-`,
+    SEED_TITLE,
+    SEED_DESCRIPTION,
+    SEED_README,
     DEFAULT_ACCOUNTS,
     [{ title: "Transaction", code: DEFAULT_TRANSACTION }],
     [{ title: "Script" , code :DEFAULT_SCRIPT }]

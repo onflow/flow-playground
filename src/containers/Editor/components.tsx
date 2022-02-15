@@ -10,7 +10,9 @@ import { Editor as EditorRoot } from 'layout/Editor';
 import { Heading } from 'layout/Heading';
 import { EntityType, ActiveEditor } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
+import { PLACEHOLDER_DESCRIPTION, PLACEHOLDER_TITLE } from "providers/Project/projectDefault";
 import {Account, Project} from 'api/apollo/generated/graphql';
+
 
 import debounce from 'util/debounce';
 import Mixpanel from 'util/mixpanel';
@@ -29,6 +31,8 @@ import {
   Label,
 } from 'components/Arguments/SingleArgument/styles';
 import { Markdown } from 'components/Markdown';
+
+import { decodeText } from "util/readme";
 import { CadenceLanguageServer, Callbacks } from "util/language-server";
 import { MonacoServices } from "monaco-languageclient/lib/monaco-services";
 import * as monaco from "monaco-editor";
@@ -214,9 +218,11 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   project,
   active,
 }) => {
-  const [title, setTitle] = useState<string | undefined>(project.title);
+  const [title, setTitle] = useState<string | undefined>(
+      decodeText(project.title)
+  );
   const [description, setDescription] = useState<string | undefined>(
-    project.description,
+      decodeText(project.description)
   );
   const [readme, setReadme] = useState<string | undefined>(project.readme);
 
@@ -371,6 +377,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
                 <Label>Title</Label>
                 <Input
                   value={title}
+                  placeholder={PLACEHOLDER_TITLE}
                   onChange={(event) => {
                     setTitle(event.target.value);
                     updateProject(event.target.value, description, readme);
@@ -381,6 +388,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
                 <Label>Description</Label>
                 <Input
                   value={description}
+                  placeholder={PLACEHOLDER_DESCRIPTION}
                   onChange={(event) => {
                     setDescription(event.target.value);
                     updateProject(title, event.target.value, readme);

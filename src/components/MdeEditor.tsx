@@ -1,5 +1,6 @@
 import React from 'react';
 import SimpleMDE from "react-simplemde-editor";
+import { PLACEHOLDER_README } from "providers/Project/projectDefault";
 import "easymde/dist/easymde.min.css";
 import "unreset-css/dist/unreset.min.css"; // restore browser default element styles
 
@@ -14,6 +15,9 @@ export const MdeEditor: React.FC<{
       className="unreset"
       value={value}
       onChange={v => onChange(v)}
+      options={{
+        placeholder: PLACEHOLDER_README
+      }}
     />
   )
 }
