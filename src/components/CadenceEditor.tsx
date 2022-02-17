@@ -198,12 +198,9 @@ class CadenceEditor extends React.Component<
   }
 
   private async loadLanguageClient() {
-    console.log(this.props.callbacks)
     this.callbacks = this.props.callbacks;
     const clientId = this.props.activeId;
-    console.log({clientId})
     if(!this.clients[clientId]){
-      console.log("create new client!")
       this.languageClient = createCadenceLanguageClient(this.callbacks);
       this.languageClient.start();
       await this.languageClient.onReady()
@@ -355,8 +352,6 @@ class CadenceEditor extends React.Component<
   }
 
   extract(code: string, keyWord: string): string[] {
-    // TODO: add different processors for contract, scripts and transactions
-
     const target = code
       .split(/\r\n|\n|\r/)
       .find((line) => line.includes(keyWord));
