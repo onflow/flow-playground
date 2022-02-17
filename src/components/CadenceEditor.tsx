@@ -134,6 +134,7 @@ class CadenceEditor extends React.Component<
   languageClient?: MonacoLanguageClient;
   _subscription: any;
   editorStates: { [key: string]: EditorState };
+  clients: { [key: string]: MonacoLanguageClient }
   private callbacks: Callbacks;
 
   constructor(props: {
@@ -150,6 +151,7 @@ class CadenceEditor extends React.Component<
     super(props);
 
     this.editorStates = {};
+    this.clients = {};
     this.handleResize = this.handleResize.bind(this);
     window.addEventListener('resize', this.handleResize);
     configureCadence();
@@ -197,21 +199,26 @@ class CadenceEditor extends React.Component<
 
   private async loadLanguageClient() {
     this.callbacks = this.props.callbacks;
-
-    this.languageClient = createCadenceLanguageClient(this.callbacks);
-    this.languageClient.start();
-    this.languageClient.onReady().then(() => {
+    const clientId = this.props.activeId;
+    if(!this.clients[clientId]){
+      this.languageClient = createCadenceLanguageClient(this.callbacks);
+      this.languageClient.start();
+      await this.languageClient.onReady()
       this.languageClient.onNotification(
-        CadenceCheckCompleted.methodName,
-        async (result: CadenceCheckCompleted.Params) => {
-          if (result.valid) {
-            const params = await this.getParameters();
-            this.setExecutionArguments(params);
-          }
-          this.processMarkers();
-        },
+          CadenceCheckCompleted.methodName,
+          async (result: CadenceCheckCompleted.Params) => {
+            if (result.valid) {
+              const params = await this.getParameters();
+              this.setExecutionArguments(params);
+            }
+            this.processMarkers();
+          },
       );
-    });
+      this.clients[clientId] = this.languageClient;
+    } else {
+      this.languageClient = this.clients[clientId]
+    }
+
   }
 
   private async getParameters() {
@@ -317,6 +324,7 @@ class CadenceEditor extends React.Component<
     const serverStatusChanged = this.props.serverReady !== prevProps.serverReady
     const activeIdChanged = this.props.activeId !== prevProps.activeId
     const typeChanged = this.props.type !== prevProps.type
+
     if (serverStatusChanged || activeIdChanged || typeChanged) {
       if (this.props.callbacks.toServer !== null) {
         await this.loadLanguageClient()
@@ -344,8 +352,6 @@ class CadenceEditor extends React.Component<
   }
 
   extract(code: string, keyWord: string): string[] {
-    // TODO: add different processors for contract, scripts and transactions
-
     const target = code
       .split(/\r\n|\n|\r/)
       .find((line) => line.includes(keyWord));
