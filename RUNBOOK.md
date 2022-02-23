@@ -36,7 +36,7 @@ _The Playground will not function in browsers where cookies or localStorage are 
 The Playground determines what content to load into the UI based on a url query param named `projectId`.
 - When a user first visits the Playground, the `projectId` param is set to `local-project`, indicating that this is a new project and has not been persisted.
   - https://github.dev/onflow/flow-playground/blob/2e3323aba9504e6a07fc13d1b2cec0e703edce43/src/util/url.ts#L16-L17
-- At this point, a representation pf the Project _model_ has been boostrapped and persisted to the browser's localStorage using Apollo
+- At this point, a representation of the `Project` _model_ has been boostrapped and persisted to the browser's localStorage using Apollo
   - https://github.dev/onflow/flow-playground/blob/2e3323aba9504e6a07fc13d1b2cec0e703edce43/src/providers/Project/projectDefault.ts#L216
   - https://github.dev/onflow/flow-playground/blob/2e3323aba9504e6a07fc13d1b2cec0e703edce43/src/providers/Project/projectHooks.ts#L10-L11
 - When a user performs some action that updates any field in the project, or clicks the save button, the project is read from localStorage, and sent to the API to be persisted. 
