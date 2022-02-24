@@ -3,6 +3,8 @@
 The Flow Playground is an web-based interactive IDE for running Cadence code.
 It also provides code for the tutorial projects found here: https://docs.onflow.org/cadence/tutorial/01-first-steps
 
+The overall project consists of the Web app (this) and an API backend: https://github.com/onflow/flow-playground-api
+
 The Playground Web App is implemented in React. The major components are as follows:
 
 - GraphQL / Apollo Client
@@ -26,6 +28,34 @@ The Playground Web App is implemented in React. The major components are as foll
       - https://github.com/onflow/flow-playground/blob/master/src/util/language-server.ts
       - https://github.com/onflow/flow-playground/blob/master/src/util/language-client.ts
 
+## Deployment
+
+### Access
+
+To create a Playground deployment, your user must: 
+- Be added to the Flow/Dapper Labs Teamcity account
+- Have write access to this repository for triggering Teamcity deploys (details below): https://github.com/dapperlabs/flow-playground
+- Be connected to the Office VPN
+
+A request for these should be filed here: https://dapperlabs.happyfox.com/
+
+### Deployment Workflow
+
+**Staging Deployment**
+
+Once your PR contribution has been successfully merged into the `master` branch, you must take the following steps: 
+1) Tag your commit, following [semver](https://semver.org/) conventions eg `git tag v0.42.0`
+    - To find the current tag use: `git fetch --all && git tag` to display a list of tags.
+2) Push your tag to the main branch: `git push origin --tags`
+3) To trigger a staging deployment, update the version number here: https://github.com/dapperlabs/flow-playground/blob/master/Makefile#L3
+    - Make sure the version number here, matches your new tag, if you want your changes to be deployed. 
+4) Once updated visit: https://ci.eng.dapperlabs.com/buildConfiguration/Flow_FlowPlayground_FlowTestNetwork_BuildCiCdPlaygroundStaging#all-projects
+    - Here, you will see your deployment in the queue, and the build log output.
+5) If the Teamcity build succeeds your chnges will be available to preview here: https://play.staging.onflow.org
+
+**Production Deployment**
+
+// TODO
 
 ### Important Gotcha: User Sessions & Project "Forking"
 
