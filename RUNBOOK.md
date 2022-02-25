@@ -55,7 +55,9 @@ Once your PR contribution has been successfully merged into the `master` branch,
 
 **Production Deployment**
 
-// TODO
+Once a staging deployment has been verified. To move the changes into produciton, navigate to the production pipeline in Teamcity here: https://ci.eng.dapperlabs.com/buildConfiguration/Flow_FlowPlayground_FlowTestNetwork_BuildCiCdPlaygroundProduction#all-projects and click the "Deploy" button in the top right of the table. 
+
+Procuction deployment progress can be viewed here: 
 
 ### Important Gotcha: User Sessions & Project "Forking"
 
