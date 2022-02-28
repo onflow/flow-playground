@@ -12,11 +12,16 @@ export const InputBlock = styled.div<InpubBlockProps>`
   position: relative;
 `
 
-export const Label = styled.p`
+
+interface LabelProps {
+  error?: boolean
+}
+
+export const Label = styled.p<LabelProps>`
   margin: 0;
   font-size: 14px;
   margin-bottom: 5px;
-  color: #000;
+  color: ${({error})=> error ? "#EE431E" : "#000"};
 `;
 
 export const Type = styled.span`
