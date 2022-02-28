@@ -213,7 +213,7 @@ const compareContracts = (prev: Account[], current: Account[]) => {
 
 let monacoServicesInstalled = false;
 
-const MAX_DESCRIPTION_SIZE = Math.pow(3, 2) // 1mb of storage can be saved into readme field
+const MAX_DESCRIPTION_SIZE = Math.pow(1024, 2) // 1mb of storage can be saved into readme field
 const calculateSize = (readme: string) => {
   const { size } = new Blob([readme])
   return size >= MAX_DESCRIPTION_SIZE
