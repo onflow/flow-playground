@@ -1,0 +1,5 @@
+.ease-md-red-border .editor-toolbar,
+.ease-md-red-border .CodeMirror-wrap{
+    border-color: #EE431E;
+    transition: border 0.5s ease-in-out;
+}
