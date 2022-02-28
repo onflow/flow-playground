@@ -247,7 +247,7 @@
 					},
 
 					// func walltime() (sec int64, nsec int32)
-					"runtime.walltime": (sp) => {
+					"runtime.walltime1": (sp) => {
 						sp >>>= 0;
 						const msec = (new Date).getTime();
 						setInt64(sp + 8, msec / 1000);
