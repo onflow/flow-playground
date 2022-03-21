@@ -116,9 +116,6 @@ type CadenceEditorProps = {
   show: boolean;
   onChange: any;
   activeId: string;
-  languageServer: CadenceLanguageServer
-  callbacks: Callbacks
-  serverReady: boolean
 };
 
 type CadenceEditorState = {
@@ -169,9 +166,10 @@ class CadenceEditor extends React.Component<
   async componentDidMount() {
     await this.initEditor()
 
-    if (this.props.serverReady) {
+      // TODO: refactor
+/*    if (this.props.serverReady) {
       await this.loadLanguageClient()
-    }
+    }*/
   }
 
   async initEditor() {
@@ -197,7 +195,7 @@ class CadenceEditor extends React.Component<
     this.editor.focus();
   }
 
-  private async loadLanguageClient() {
+/*  private async loadLanguageClient() {
     this.callbacks = this.props.callbacks;
     const clientId = this.props.activeId;
     if(!this.clients[clientId]){
@@ -218,8 +216,7 @@ class CadenceEditor extends React.Component<
     } else {
       this.languageClient = this.clients[clientId]
     }
-
-  }
+  }*/
 
   private async getParameters() {
     await this.languageClient.onReady();
@@ -321,6 +318,9 @@ class CadenceEditor extends React.Component<
       await this.swapMonacoEditor(prevProps.activeId, this.props.activeId)
     }
 
+
+    // TODO: refactor
+    /*
     const serverStatusChanged = this.props.serverReady !== prevProps.serverReady
     const activeIdChanged = this.props.activeId !== prevProps.activeId
     const typeChanged = this.props.type !== prevProps.type
@@ -329,7 +329,7 @@ class CadenceEditor extends React.Component<
       if (this.props.callbacks.toServer !== null) {
         await this.loadLanguageClient()
       }
-    }
+    }*/
   }
 
   async swapMonacoEditor(prev: any, current: any) {

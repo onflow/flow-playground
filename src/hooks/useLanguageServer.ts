@@ -20,7 +20,6 @@ async function startLanguageServer(serverProps: any, setServer: any) {
       }
     }, 100);
   });
-  setServer(server);
 }
 
 export default function useLanguageServer(props: any) {
@@ -54,6 +53,7 @@ export default function useLanguageServer(props: any) {
     // TODO: Clean global variables, so we could ensure there is no duplication of events and messages
     startLanguageServer({ callbacks, getCode }, setLanguageServer);
   };
+
   useEffect(() => {
     // The Monaco Language Client services have to be installed globally, once.
     // An editor must be passed, which is only used for commands.
@@ -68,5 +68,13 @@ export default function useLanguageServer(props: any) {
     restartServer();
   }, []);
 
-  return [languageClient, languageServer, initialized, restartServer];
+  useEffect(()=>{
+    if(!languageServer){
+      console.log("language server is not ready. waiting...")
+    } else {
+      console.log('language server is up. initiate client!')
+    }
+  },[languageServer])
+
+  return {languageClient, languageServer, initialized, restartServer};
 }

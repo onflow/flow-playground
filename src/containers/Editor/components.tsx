@@ -17,7 +17,7 @@ import debounce from 'util/debounce';
 import Mixpanel from 'util/mixpanel';
 
 import { default as FlowButton } from 'components/Button';
-import CadenceEditor from 'components/CadenceEditor';
+// import CadenceEditor from 'components/CadenceEditor';
 import TransactionBottomBar from 'components/TransactionBottomBar';
 import ScriptBottomBar from 'components/ScriptBottomBar';
 import { Version } from 'components/CadenceVersion';
@@ -38,8 +38,7 @@ import {
 } from './layout-components'
 
 import { decodeText } from "util/readme";
-import * as monaco from "monaco-editor";
-import useLanguageServer from "../../hooks/useLanguageServer"
+import EnhancedEditor from "components/MonacoEditor"
 
 export interface WithShowProps {
   show: boolean;
@@ -243,10 +242,6 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
       return code
   }
 
-  const [languageClient, languageServer, initialized, reloadServer] = useLanguageServer({
-    getCode
-  });
-
   const previousProjectState = usePrevious(project)
 
   // This hook will listen for project updates and if one of the contracts has been changed,
@@ -257,7 +252,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
       const previousAccounts = previousProjectState.accounts || []
       const equal = compareContracts(previousAccounts, project.accounts)
       if (!equal){
-        reloadServer()
+        // reloadServer()
       }
     }
   }, [project])
@@ -341,16 +336,16 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
           )}
         </ProjectInfoContainer>
         {/* This is Cadence Editor */}
-        <CadenceEditor
+{/*        <CadenceEditor
           type={active.type}
           activeId={activeId}
           code={code}
           mount="cadenceEditor"
           onChange={(code: string, _: any) => onEditorChange(code)}
           show={!isReadmeEditor}
-          languageServer={languageServer}
-          callbacks={serverCallbacks}
-          serverReady={serverReady}
+        />*/}
+        <EnhancedEditor
+
         />
       </EditorRoot>
       <BottomBarContainer active={active} />
