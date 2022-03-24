@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import * as monaco from 'monaco-editor';
 import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
 import { EditorContainer } from './components';
 import { useProject } from 'providers/Project/projectHooks';
-import useLanguageServer from '../../hooks/useLanguageServer';
 
 const MONACO_CONTAINER_ID = 'monaco-container';
 
@@ -16,13 +15,7 @@ const EnhancedEditor = (props: any) => {
   const project = useProject();
 
   const cadenceInitiated = useRef(false);
-  const [editor, setEditor] = useState(null);
-
-  const { languageClient } = useLanguageServer({
-    getCode: (index) => {
-      console.log('Requesting code for: ', { index });
-    },
-  });
+  const editor = useRef(null);
 
   const [editorStates, setEditorStates] = useState({});
 
@@ -45,7 +38,6 @@ const EnhancedEditor = (props: any) => {
 
     return newState;
   };
-
   const getActiveCode = () => {
     const { active } = project;
     const { accounts, scriptTemplates, transactionTemplates } = project.project;
@@ -59,16 +51,24 @@ const EnhancedEditor = (props: any) => {
         break;
       case 2:
         code = transactionTemplates[index].script;
-        id = transactionTemplates[index].id
+        id = transactionTemplates[index].id;
         break;
       case 3:
         code = scriptTemplates[index].script;
-        id = scriptTemplates[index].id
+        id = scriptTemplates[index].id;
         break;
       default:
         code = 'not support type';
     }
     return [code, id];
+  };
+  const updateActiveCode = (event) => {
+    if (editor) {
+      // TODO: delay updates a bit...
+      const currentValue = editor.current.getValue();
+      const { updateAccountDraftCode } = project;
+      updateAccountDraftCode(currentValue).then();
+    }
   };
 
   // TODO: tie-in Monaco with project updates
@@ -88,23 +88,23 @@ const EnhancedEditor = (props: any) => {
   }, []);
 
   useEffect(() => {
-    if(editor){
+    if (editor.current) {
       const [code, newId] = getActiveCode();
       const newState = getOrCreateEditorState(newId, code);
 
-      editor.setModel(newState.model);
-      editor.restoreViewState(newState.viewState);
-      editor.focus();
+      editor.current.setModel(newState.model);
+      editor.current.restoreViewState(newState.viewState);
+      editor.current.focus();
     }
   }, [project.active]);
 
   const destroyEditor = () => {
-    editor.dispose();
+    editor.current.dispose();
   };
 
   const initEditor = async () => {
     const container = document.getElementById(MONACO_CONTAINER_ID);
-    const editor = monaco.editor.create(container, {
+    editor.current = monaco.editor.create(container, {
       theme: 'vs-light',
       language: CADENCE_LANGUAGE_ID,
       minimap: {
@@ -112,11 +112,10 @@ const EnhancedEditor = (props: any) => {
       },
     });
 
-    setEditor(editor);
-
-    editor.onDidChangeModelContent((event: any) => {
-      console.log(editor.getValue());
-      console.log({ event });
+    // Setup even listener when code is updated
+    editor.current.onDidChangeModelContent((event) => {
+      console.log('update', event);
+      updateActiveCode(event);
     });
 
     const model = monaco.editor.createModel(
@@ -127,13 +126,13 @@ const EnhancedEditor = (props: any) => {
       model,
       viewState: null,
     };
-    editor.setModel(state.model);
-    editor.restoreViewState(state.viewState);
-    editor.focus();
+    editor.current.setModel(state.model);
+    editor.current.restoreViewState(state.viewState);
+    editor.current.focus();
 
     window.addEventListener('resize', () => {
       console.log('update');
-      editor && editor.layout();
+      editor && editor.current.layout();
     });
   };
 
