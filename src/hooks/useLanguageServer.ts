@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { CadenceLanguageServer, Callbacks } from 'util/language-server';
 import { MonacoServices } from 'monaco-languageclient/lib/monaco-services';
 import * as monaco from 'monaco-editor';
+import { createCadenceLanguageClient } from 'util/language-client';
 
 let monacoServicesInstalled = false;
 
-async function startLanguageServer(serverProps: any, setServer: any) {
-  const { callbacks, getCode } = serverProps;
+async function startLanguageServer(callbacks: any, getCode: any, ops) {
+  const { setLanguageServer, setCallbacks } = ops;
   const server = await CadenceLanguageServer.create(callbacks);
 
   new Promise((resolve, reject) => {
@@ -14,17 +15,37 @@ async function startLanguageServer(serverProps: any, setServer: any) {
       // .toServer() method is populated by language server
       // if it was not properly started or in progress it will be "null"
       if (callbacks.toServer !== null) {
+        console.log(callbacks.toServer);
         clearInterval(checkInterval);
         callbacks.getAddressCode = getCode;
-        setServer(server);
+        setCallbacks(callbacks);
+        setLanguageServer(server);
       }
     }, 100);
   });
 }
 
+const launchLanguageClient = async (
+  callbacks,
+  languageServer,
+  setLanguageClient,
+) => {
+  if (!languageServer) {
+    console.log('language server is not ready. waiting...');
+  } else {
+    console.log('language server is up. initiate client!');
+    console.log(callbacks);
+    const newClient = createCadenceLanguageClient(callbacks);
+    newClient.start();
+    await newClient.onReady();
+    console.log('language client is up!');
+    setLanguageClient(newClient);
+  }
+};
+
 export default function useLanguageServer(props: any) {
   // Language Server Callbacks
-  let callbacks: Callbacks = {
+  let initialCallbacks: Callbacks = {
     // The actual callback will be set as soon as the language server is initialized
     toServer: null,
 
@@ -45,13 +66,21 @@ export default function useLanguageServer(props: any) {
 
   // Base state handler
   const [languageServer, setLanguageServer] = useState(null);
+  const [languageServerOpen, setLanguageServerOpen] = useState(false);
+
   const [languageClient, setLanguageClient] = useState(null);
+  const [languageClientOpen, setLanguageClientOpen] = useState(false);
+
   const [initialized, setInitialized] = useState(false);
+  const [callbacks, setCallbacks] = useState(initialCallbacks);
 
   const { getCode } = props;
   const restartServer = () => {
     // TODO: Clean global variables, so we could ensure there is no duplication of events and messages
-    startLanguageServer({ callbacks, getCode }, setLanguageServer);
+    startLanguageServer(callbacks, getCode, {
+      setLanguageServer,
+      setCallbacks,
+    });
   };
 
   useEffect(() => {
@@ -68,13 +97,16 @@ export default function useLanguageServer(props: any) {
     restartServer();
   }, []);
 
-  useEffect(()=>{
-    if(!languageServer){
-      console.log("language server is not ready. waiting...")
-    } else {
-      console.log('language server is up. initiate client!')
-    }
-  },[languageServer])
+  useEffect(() => {
+    launchLanguageClient(callbacks, languageServer, setLanguageClient).then();
+  }, [languageServer]);
 
-  return {languageClient, languageServer, initialized, restartServer};
+  return {
+    languageClient,
+    languageClientOpen,
+    languageServer,
+    languageServerOpen,
+    initialized,
+    restartServer,
+  };
 }
