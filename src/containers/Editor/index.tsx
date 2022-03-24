@@ -1,9 +1,12 @@
 import React from 'react';
+import { Redirect } from '@reach/router';
+
 import { ProjectProvider } from 'providers/Project';
+import CadenceChecker from 'providers/CadenceChecker';
+
 import EditorLayout from './layout';
 import { Base } from 'layout/Base';
 import { LOCAL_PROJECT_ID } from 'util/url';
-import { Redirect} from '@reach/router';
 
 const Playground: any = (props: any) => {
   const { projectId } = props;
@@ -16,7 +19,9 @@ const Playground: any = (props: any) => {
   return (
     <Base>
       <ProjectProvider urlProjectId={isLocalProject ? null : projectId}>
-        <EditorLayout />
+        <CadenceChecker>
+          <EditorLayout />
+        </CadenceChecker>
       </ProjectProvider>
     </Base>
   );
