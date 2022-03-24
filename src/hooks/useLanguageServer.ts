@@ -3,6 +3,7 @@ import { CadenceLanguageServer, Callbacks } from 'util/language-server';
 import { MonacoServices } from 'monaco-languageclient/lib/monaco-services';
 import * as monaco from 'monaco-editor';
 import { createCadenceLanguageClient } from 'util/language-client';
+import {useProject} from "providers/Project/projectHooks";
 
 let monacoServicesInstalled = false;
 
@@ -43,7 +44,10 @@ const launchLanguageClient = async (
   }
 };
 
-export default function useLanguageServer(props: any) {
+export default function useLanguageServer() {
+  const project = useProject();
+  const accountUpdates = useRef(1)
+
   // Language Server Callbacks
   let initialCallbacks: Callbacks = {
     // The actual callback will be set as soon as the language server is initialized
@@ -74,7 +78,25 @@ export default function useLanguageServer(props: any) {
   const [initialized, setInitialized] = useState(false);
   const [callbacks, setCallbacks] = useState(initialCallbacks);
 
-  const { getCode } = props;
+  const getCode = (address) => {
+    console.log(`Version ${accountUpdates.current}`)
+    const { accounts } = project.project;
+
+    const number = parseInt(address, 16);
+    if (!number) {
+      return;
+    }
+
+    const index = number - 1;
+    if (index < 0 || index >= accounts.length) {
+      return;
+    }
+    let code = accounts[index].draftCode;
+    
+    console.log(code)
+    return code;
+  };
+
   const restartServer = () => {
     // TODO: Clean global variables, so we could ensure there is no duplication of events and messages
     startLanguageServer(callbacks, getCode, {
@@ -82,6 +104,12 @@ export default function useLanguageServer(props: any) {
       setCallbacks,
     });
   };
+
+  useEffect(()=>{
+    accountUpdates.current += 1;
+    console.log(accountUpdates.current)
+    callbacks.getAddressCode = getCode;
+  },[project.project.accounts])
 
   useEffect(() => {
     // The Monaco Language Client services have to be installed globally, once.
