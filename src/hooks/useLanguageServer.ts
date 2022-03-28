@@ -16,7 +16,7 @@ async function startLanguageServer(callbacks: any, getCode: any, ops) {
       // .toServer() method is populated by language server
       // if it was not properly started or in progress it will be "null"
       if (callbacks.toServer !== null) {
-        console.log(callbacks.toServer);
+//         console.log(callbacks.toServer);
         clearInterval(checkInterval);
         callbacks.getAddressCode = getCode;
         setCallbacks(callbacks);
@@ -99,6 +99,7 @@ export default function useLanguageServer() {
   };
 
   const restartServer = () => {
+    console.log("%c LS: Restarting",'color: #9727e9')
     // TODO: Clean global variables, so we could ensure there is no duplication of events and messages
     startLanguageServer(callbacks, getCode, {
       setLanguageServer,
@@ -109,10 +110,15 @@ export default function useLanguageServer() {
   useEffect(() => {
     accountUpdates.current += 1;
     console.log(accountUpdates.current);
-    setCallbacks({
+/*    setCallbacks({
       ...callbacks,
       getAddressCode: getCode,
-    });
+    });*/
+/*    if(languageClient){
+      languageClient.stop()
+    }*/
+    // launchLanguageClient(callbacks, languageServer, setLanguageClient).then();
+    restartServer()
   }, [project.project.accounts]);
 
   useEffect(() => {
@@ -130,7 +136,8 @@ export default function useLanguageServer() {
   }, []);
 
   useEffect(() => {
-    launchLanguageClient(callbacks, languageServer, setLanguageClient).then();
+    // TODO: postpone with this update
+    // launchLanguageClient(callbacks, languageServer, setLanguageClient).then();
   }, [languageServer]);
 
   return {
