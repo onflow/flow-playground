@@ -99,7 +99,7 @@ export default function useLanguageServer() {
   };
 
   const restartServer = () => {
-    console.log("%c LS: Restarting",'color: #9727e9')
+    console.log("%c LS: Starting...",'color: #9727e9')
     // TODO: Clean global variables, so we could ensure there is no duplication of events and messages
     startLanguageServer(callbacks, getCode, {
       setLanguageServer,
@@ -118,7 +118,7 @@ export default function useLanguageServer() {
       languageClient.stop()
     }*/
     // launchLanguageClient(callbacks, languageServer, setLanguageClient).then();
-    restartServer()
+    // restartServer()
   }, [project.project.accounts]);
 
   useEffect(() => {
@@ -137,7 +137,7 @@ export default function useLanguageServer() {
 
   useEffect(() => {
     // TODO: postpone with this update
-    // launchLanguageClient(callbacks, languageServer, setLanguageClient).then();
+    launchLanguageClient(callbacks, languageServer, setLanguageClient).then();
   }, [languageServer]);
 
   return {

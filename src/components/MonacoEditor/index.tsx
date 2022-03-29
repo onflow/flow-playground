@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as monaco from 'monaco-editor';
 import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
 import { EditorContainer } from './components';
 import { useProject } from 'providers/Project/projectHooks';
+import { EntityType } from 'providers/Project';
 
 const MONACO_CONTAINER_ID = 'monaco-container';
 
@@ -11,8 +12,38 @@ type EditorState = {
   viewState: any;
 };
 
+const updateActiveCode = (editor, project, event) => {
+  console.log(project.active);
+
+  if (editor) {
+    // TODO: delay updates a bit...
+    const currentValue = editor.getValue();
+    const { active } = project;
+
+    console.log('+++++++++++++++++++++++++', project.active);
+
+    // TODO: finish transactions
+    switch (active.type) {
+      case EntityType.Account:
+        console.log('Update account');
+        const { updateAccountDraftCode } = project;
+        updateAccountDraftCode(currentValue).then();
+        break;
+      case EntityType.ScriptTemplate:
+        console.log('Update script');
+        const { updateScriptTemplate } = project;
+        const { id } = project.project.scriptTemplates[active.index];
+        updateScriptTemplate(id, currentValue, '---').then();
+        break;
+      default:
+        break;
+    }
+  }
+};
+
 const EnhancedEditor = (props: any) => {
   const project = useProject();
+  console.log('------------------------>', project.active);
 
   const cadenceInitiated = useRef(false);
   const editor = useRef(null);
@@ -62,14 +93,6 @@ const EnhancedEditor = (props: any) => {
     }
     return [code, id];
   };
-  const updateActiveCode = (event) => {
-    if (editor) {
-      // TODO: delay updates a bit...
-      const currentValue = editor.current.getValue();
-      const { updateAccountDraftCode } = project;
-      updateAccountDraftCode(currentValue).then();
-    }
-  };
 
   // TODO: tie-in Monaco with project updates
   // TODO: tie-in language-client server with project updates
@@ -115,7 +138,7 @@ const EnhancedEditor = (props: any) => {
     // Setup even listener when code is updated
     editor.current.onDidChangeModelContent((event) => {
       console.log('update', event);
-      updateActiveCode(event);
+      updateActiveCode(editor.current, project, event);
     });
 
     const model = monaco.editor.createModel(

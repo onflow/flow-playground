@@ -344,9 +344,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
           onChange={(code: string, _: any) => onEditorChange(code)}
           show={!isReadmeEditor}
         />*/}
-        <EnhancedEditor
-
-        />
+        <EnhancedEditor />
       </EditorRoot>
       <BottomBarContainer active={active} />
     </MainRoot>
