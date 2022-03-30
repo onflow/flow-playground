@@ -110,7 +110,7 @@ export default function useLanguageServer() {
   )
 
   // Restart server, when accounts are changed
-  useEffect(debouncedServerRestart, [project.project.accounts]);
+  useEffect(debouncedServerRestart, [project.project.accounts, project.active]);
 
 
   useEffect(()=>{

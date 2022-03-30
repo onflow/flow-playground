@@ -16,7 +16,12 @@ const EnhancedEditor = (props: any) => {
   const project = useProject();
   const cadenceInitiated = useRef(false);
   const editor = useRef(null);
-  const editorOnChange = useRef(null)
+  const editorOnChange = useRef(null);
+
+  const lastEdit = useRef({
+    type: 8,
+    index: 8,
+  });
 
   const [editorStates, setEditorStates] = useState({});
 
@@ -72,7 +77,7 @@ const EnhancedEditor = (props: any) => {
   // Method to use, when model was changed
   const onChange = debounce((event) => {
     // TODO: figure out, why title for transactions and scripts is empty here...
-    project.active.onChange(editor.current.getValue(), "", "","")
+    project.active.onChange(editor.current.getValue(), '-----', '', '');
   }, 150);
 
   useEffect(() => {
@@ -85,22 +90,61 @@ const EnhancedEditor = (props: any) => {
       console.log('No need :)');
     }
   }, []);
-  useEffect(() => {
-    if (editor.current) {
 
-      if(editorOnChange.current){
-        editorOnChange.current.dispose()
-        editorOnChange.current = editor.current.onDidChangeModelContent(onChange);
+  useEffect(() => {
+    console.log('Active item updated!');
+    if (editor.current) {
+      // Remove tracking of model updates to prevent re-rendering
+      if (editorOnChange.current) {
+        editorOnChange.current.dispose();
       }
 
       const [code, newId] = getActiveCode();
       const newState = getOrCreateEditorState(newId, code);
 
-      editor.current.setModel(newState.model);
-      editor.current.restoreViewState(newState.viewState);
-      editor.current.focus();
+      console.log({ lastEdit: lastEdit.current });
+
+      // Active editor changed
+      // - Check if last changed is different from current
+      console.log({
+        lastT: lastEdit.current.type,
+        lastI: lastEdit.current.index,
+        activeT: project.active.type,
+        activeI: project.active.index,
+      });
+      if (
+        lastEdit.current.type == project.active.type &&
+        lastEdit.current.index == project.active.index
+      ) {
+        editor.current.setModel(newState.model);
+        editor.current.restoreViewState(newState.viewState);
+        editor.current.focus();
+        console.log('Same stuff, do nothing for now...');
+      } else {
+        console.log('-------------------->', 'Add new line at the end');
+        // - Add new line at the end of the model
+        newState.model.setValue(code + '\n');
+        lastEdit.current = {
+          type: project.active.type,
+          index: project.active.index,
+        };
+
+        // - Mark last edited as type, index, edited = true
+        editor.current.setModel(newState.model);
+        editor.current.restoreViewState(newState.viewState);
+        editor.current.focus();
+
+        setTimeout(() => {
+          newState.model.setValue(code);
+          editor.current.setModel(newState.model);
+          editor.current.restoreViewState(newState.viewState);
+          editor.current.focus();
+        }, 120);
+      }
+
+      editorOnChange.current = editor.current.onDidChangeModelContent(onChange);
     }
-  }, [project.active]);
+  }, [project.active, project.project.accounts]);
 
   const destroyEditor = () => {
     editor.current.dispose();
