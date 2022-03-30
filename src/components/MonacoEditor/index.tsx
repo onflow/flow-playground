@@ -12,41 +12,11 @@ type EditorState = {
   viewState: any;
 };
 
-const updateActiveCode = (editor, project, event) => {
-  console.log(project.active);
-
-  if (editor) {
-    // TODO: delay updates a bit...
-    const currentValue = editor.getValue();
-    const { active } = project;
-
-    console.log('+++++++++++++++++++++++++', project.active);
-
-    // TODO: finish transactions
-    switch (active.type) {
-      case EntityType.Account:
-        console.log('Update account');
-        const { updateAccountDraftCode } = project;
-        updateAccountDraftCode(currentValue).then();
-        break;
-      case EntityType.ScriptTemplate:
-        console.log('Update script');
-        const { updateScriptTemplate } = project;
-        const { id } = project.project.scriptTemplates[active.index];
-        updateScriptTemplate(id, currentValue, '---').then();
-        break;
-      default:
-        break;
-    }
-  }
-};
-
 const EnhancedEditor = (props: any) => {
   const project = useProject();
-  console.log('------------------------>', project.active);
-
   const cadenceInitiated = useRef(false);
   const editor = useRef(null);
+  const editorOnChange = useRef(null)
 
   const [editorStates, setEditorStates] = useState({});
 
@@ -99,6 +69,12 @@ const EnhancedEditor = (props: any) => {
   // TODO: delay language client checks
   // TODO: add manual request to trigger check
 
+  // Method to use, when model was changed
+  const onChange = debounce((event) => {
+    // TODO: figure out, why title for transactions and scripts is empty here...
+    project.active.onChange(editor.current.getValue(), "", "","")
+  }, 150);
+
   useEffect(() => {
     if (cadenceInitiated.current === false) {
       console.log('Init Cadence');
@@ -109,9 +85,14 @@ const EnhancedEditor = (props: any) => {
       console.log('No need :)');
     }
   }, []);
-
   useEffect(() => {
     if (editor.current) {
+
+      if(editorOnChange.current){
+        editorOnChange.current.dispose()
+        editorOnChange.current = editor.current.onDidChangeModelContent(onChange);
+      }
+
       const [code, newId] = getActiveCode();
       const newState = getOrCreateEditorState(newId, code);
 
@@ -136,10 +117,7 @@ const EnhancedEditor = (props: any) => {
     });
 
     // Setup even listener when code is updated
-    editor.current.onDidChangeModelContent((event) => {
-      console.log('update', event);
-      updateActiveCode(editor.current, project, event);
-    });
+    editorOnChange.current = editor.current.onDidChangeModelContent(onChange);
 
     const model = monaco.editor.createModel(
       'hello, world',
@@ -154,7 +132,7 @@ const EnhancedEditor = (props: any) => {
     editor.current.focus();
 
     window.addEventListener('resize', () => {
-      console.log('update');
+      console.log('Resize Editor Layout');
       editor && editor.current.layout();
     });
   };

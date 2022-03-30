@@ -21,6 +21,8 @@ async function startLanguageServer(callbacks: any, getCode: any, ops) {
         callbacks.getAddressCode = getCode;
         setCallbacks(callbacks);
         setLanguageServer(server);
+        console.log(server)
+        console.log("%c LS: Is Up!",'color: #00FF00')
       }
     }, 100);
   });
@@ -31,15 +33,10 @@ const launchLanguageClient = async (
   languageServer,
   setLanguageClient,
 ) => {
-  if (!languageServer) {
-    console.log('language server is not ready. waiting...');
-  } else {
-    console.log('language server is up. initiate client!');
-    console.log(callbacks);
+  if (languageServer) {
     const newClient = createCadenceLanguageClient(callbacks);
     newClient.start();
     await newClient.onReady();
-    console.log('language client is up!');
     setLanguageClient(newClient);
   }
 };
@@ -99,27 +96,32 @@ export default function useLanguageServer() {
   };
 
   const restartServer = () => {
-    console.log("%c LS: Starting...",'color: #9727e9')
-    // TODO: Clean global variables, so we could ensure there is no duplication of events and messages
+    console.log("Restarting server...")
+
     startLanguageServer(callbacks, getCode, {
       setLanguageServer,
       setCallbacks,
     });
   };
 
-  useEffect(() => {
+  const debouncedServerRestart = useMemo(
+      () => debounce(restartServer, 150),
+      [languageServer]
+  )
+
+  // Restart server, when accounts are changed
+  useEffect(debouncedServerRestart, [project.project.accounts]);
+
+
+  useEffect(()=>{
     accountUpdates.current += 1;
-    console.log(accountUpdates.current);
-/*    setCallbacks({
-      ...callbacks,
-      getAddressCode: getCode,
-    });*/
-/*    if(languageClient){
-      languageClient.stop()
-    }*/
-    // launchLanguageClient(callbacks, languageServer, setLanguageClient).then();
-    // restartServer()
+    console.log({accountUpdates})
+    if(languageServer){
+      console.log("Update code getter")
+      languageServer.updateCodeGetter(getCode)
+    }
   }, [project.project.accounts]);
+
 
   useEffect(() => {
     // The Monaco Language Client services have to be installed globally, once.
@@ -128,16 +130,17 @@ export default function useLanguageServer() {
 
     console.log('Installing monaco services');
     if (!monacoServicesInstalled) {
-      monacoServicesInstalled = true;
       MonacoServices.install(monaco);
+      monacoServicesInstalled = true;
     }
 
     restartServer();
   }, []);
 
   useEffect(() => {
-    // TODO: postpone with this update
-    launchLanguageClient(callbacks, languageServer, setLanguageClient).then();
+    if(!languageClient){
+      launchLanguageClient(callbacks, languageServer, setLanguageClient).then();
+    }
   }, [languageServer]);
 
   return {
