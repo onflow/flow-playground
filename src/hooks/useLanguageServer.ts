@@ -1,16 +1,16 @@
-import { useEffect, useState, useRef } from 'react';
+import {useEffect, useState, useRef, useMemo} from 'react';
 import { CadenceLanguageServer, Callbacks } from 'util/language-server';
 import { MonacoServices } from 'monaco-languageclient/lib/monaco-services';
-import * as monaco from 'monaco-editor';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { createCadenceLanguageClient } from 'util/language-client';
 import { useProject } from 'providers/Project/projectHooks';
+import debounce from "util/debounce";
 
 let monacoServicesInstalled = false;
 
 async function startLanguageServer(callbacks: any, getCode: any, ops) {
   const { setLanguageServer, setCallbacks } = ops;
   const server = await CadenceLanguageServer.create(callbacks);
-
   new Promise((resolve, reject) => {
     let checkInterval = setInterval(() => {
       // .toServer() method is populated by language server

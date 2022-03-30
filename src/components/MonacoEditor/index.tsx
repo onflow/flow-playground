@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as monaco from 'monaco-editor';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
 import { EditorContainer } from './components';
 import { useProject } from 'providers/Project/projectHooks';
-import { EntityType } from 'providers/Project';
+import debounce from 'util/debounce';
 
 const MONACO_CONTAINER_ID = 'monaco-container';
 
