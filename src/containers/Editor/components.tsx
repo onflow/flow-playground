@@ -327,6 +327,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
                   setDescriptionOverflow(overflow)
                   setReadme(readme);
                   if(!overflow){
+                    console.log({title, description, readme})
                     updateProject(title, description, readme);
                   }
                 }}
@@ -344,7 +345,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
           onChange={(code: string, _: any) => onEditorChange(code)}
           show={!isReadmeEditor}
         />*/}
-        <EnhancedEditor />
+        <EnhancedEditor show={!isReadmeEditor}/>
       </EditorRoot>
       <BottomBarContainer active={active} />
     </MainRoot>

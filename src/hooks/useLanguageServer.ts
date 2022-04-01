@@ -68,16 +68,10 @@ export default function useLanguageServer() {
 
   // Base state handler
   const [languageServer, setLanguageServer] = useState(null);
-  const [languageServerOpen, setLanguageServerOpen] = useState(false);
-
   const [languageClient, setLanguageClient] = useState(null);
-  const [languageClientOpen, setLanguageClientOpen] = useState(false);
-
-  const [initialized, setInitialized] = useState(false);
   const [callbacks, setCallbacks] = useState(initialCallbacks);
 
   const getCode = (address) => {
-    console.log(`Version ${accountUpdates.current}`);
     const { accounts } = project.project;
 
     const number = parseInt(address, 16);
@@ -91,7 +85,6 @@ export default function useLanguageServer() {
     }
     let code = accounts[index].draftCode;
 
-    console.log(code);
     return code;
   };
 
@@ -109,18 +102,15 @@ export default function useLanguageServer() {
       [languageServer]
   )
 
-  // Restart server, when accounts are changed
+  // Restart server, when active item or accounts are changed
   useEffect(debouncedServerRestart, [project.project.accounts, project.active]);
 
-
-  useEffect(()=>{
-    accountUpdates.current += 1;
-    console.log({accountUpdates})
+  // TODO: ensure we need this one...
+/*  useEffect(()=>{
     if(languageServer){
-      console.log("Update code getter")
       languageServer.updateCodeGetter(getCode)
     }
-  }, [project.project.accounts]);
+  }, [project.project.accounts]);*/
 
 
   useEffect(() => {
@@ -145,10 +135,7 @@ export default function useLanguageServer() {
 
   return {
     languageClient,
-    languageClientOpen,
     languageServer,
-    languageServerOpen,
-    initialized,
     restartServer,
   };
 }

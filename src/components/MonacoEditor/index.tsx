@@ -64,20 +64,16 @@ const EnhancedEditor = (props: any) => {
         id = scriptTemplates[index].id;
         break;
       default:
-        code = 'not support type';
+        code = '';
     }
     return [code, id];
   };
 
-  // TODO: tie-in Monaco with project updates
-  // TODO: tie-in language-client server with project updates
-  // TODO: delay language client checks
-  // TODO: add manual request to trigger check
-
   // Method to use, when model was changed
   const onChange = debounce((event) => {
     // TODO: figure out, why title for transactions and scripts is empty here...
-    project.active.onChange(editor.current.getValue(), '-----', '', '');
+    // @ts-ignore
+    project.active.onChange(editor.current.getValue());
   }, 150);
 
   useEffect(() => {
@@ -92,7 +88,6 @@ const EnhancedEditor = (props: any) => {
   }, []);
 
   useEffect(() => {
-    console.log('Active item updated!');
     if (editor.current) {
       // Remove tracking of model updates to prevent re-rendering
       if (editorOnChange.current) {
@@ -101,17 +96,6 @@ const EnhancedEditor = (props: any) => {
 
       const [code, newId] = getActiveCode();
       const newState = getOrCreateEditorState(newId, code);
-
-      console.log({ lastEdit: lastEdit.current });
-
-      // Active editor changed
-      // - Check if last changed is different from current
-      console.log({
-        lastT: lastEdit.current.type,
-        lastI: lastEdit.current.index,
-        activeT: project.active.type,
-        activeI: project.active.index,
-      });
       if (
         lastEdit.current.type == project.active.type &&
         lastEdit.current.index == project.active.index
@@ -119,9 +103,7 @@ const EnhancedEditor = (props: any) => {
         editor.current.setModel(newState.model);
         editor.current.restoreViewState(newState.viewState);
         editor.current.focus();
-        console.log('Same stuff, do nothing for now...');
       } else {
-        console.log('-------------------->', 'Add new line at the end');
         // - Add new line at the end of the model
         newState.model.setValue(code + '\n');
         lastEdit.current = {
@@ -161,10 +143,11 @@ const EnhancedEditor = (props: any) => {
     });
 
     // Setup even listener when code is updated
-    editorOnChange.current = editor.current.onDidChangeModelContent(onChange);
+    // editorOnChange.current = editor.current.onDidChangeModelContent(onChange);
 
+    const [code] = getActiveCode();
     const model = monaco.editor.createModel(
-      'hello, world',
+      code,
       CADENCE_LANGUAGE_ID,
     );
     const state: EditorState = {
@@ -192,7 +175,7 @@ const EnhancedEditor = (props: any) => {
     };
   }, []);
 
-  return <EditorContainer id={MONACO_CONTAINER_ID} />;
+  return <EditorContainer id={MONACO_CONTAINER_ID} show={props.show} />;
 };
 
 export default EnhancedEditor;
