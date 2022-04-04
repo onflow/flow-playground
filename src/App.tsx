@@ -50,7 +50,7 @@ const App: React.FC = () => {
       <Global styles={globalStyles} />
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
-          <AppMobileWrapper>
+{/*          <AppMobileWrapper>*/}
             <Router>
                 <Base path="/">
                   <FourOhFour path="404" />
@@ -58,8 +58,7 @@ const App: React.FC = () => {
                   <Playground path="/:projectId" />
                 </Base>
             </Router>
-            {version}
-          </AppMobileWrapper>
+{/*          </AppMobileWrapper>*/}
         </ThemeProvider>
       </ApolloProvider>
     </>
