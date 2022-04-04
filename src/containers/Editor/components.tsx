@@ -38,7 +38,7 @@ import {
 } from './layout-components'
 
 import { decodeText } from "util/readme";
-import EnhancedEditor from "components/MonacoEditor"
+import CadenceEditor from "components/CadenceEditor"
 
 export interface WithShowProps {
   show: boolean;
@@ -327,7 +327,6 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
                   setDescriptionOverflow(overflow)
                   setReadme(readme);
                   if(!overflow){
-                    console.log({title, description, readme})
                     updateProject(title, description, readme);
                   }
                 }}
@@ -345,7 +344,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
           onChange={(code: string, _: any) => onEditorChange(code)}
           show={!isReadmeEditor}
         />*/}
-        <EnhancedEditor show={!isReadmeEditor}/>
+        <CadenceEditor show={!isReadmeEditor}/>
       </EditorRoot>
       <BottomBarContainer active={active} />
     </MainRoot>

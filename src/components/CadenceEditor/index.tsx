@@ -4,20 +4,20 @@ import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
 import { EditorContainer } from './components';
 import { useProject } from 'providers/Project/projectHooks';
 import debounce from 'util/debounce';
+import { EntityType } from 'providers/Project';
+import ControlPanel from './ControlPanel';
 
 const MONACO_CONTAINER_ID = 'monaco-container';
 
-type EditorState = {
-  model: any;
-  viewState: any;
-};
+type EditorState = { model: any; viewState: any };
 
-const EnhancedEditor = (props: any) => {
+const CadenceEditor = (props: any) => {
   const project = useProject();
   const cadenceInitiated = useRef(false);
   const editor = useRef(null);
   const editorOnChange = useRef(null);
 
+  // We will specify type as index as non-existent numbers to prevent collision with existing enums
   const lastEdit = useRef({
     type: 8,
     index: 8,
@@ -25,6 +25,14 @@ const EnhancedEditor = (props: any) => {
 
   const [editorStates, setEditorStates] = useState({});
 
+  const saveEditorState = (id: string, viewState: any) => {
+    setEditorStates({
+      ...editorStates,
+      [id]: viewState,
+    });
+  };
+
+  // This method is used to retrieve previous MonacoEditor state
   const getOrCreateEditorState = (id: string, code: string): EditorState => {
     const existingState = editorStates[id];
 
@@ -44,6 +52,8 @@ const EnhancedEditor = (props: any) => {
 
     return newState;
   };
+
+  // "getActiveCode" is used to read Cadence code from active(selected) item
   const getActiveCode = () => {
     const { active } = project;
     const { accounts, scriptTemplates, transactionTemplates } = project.project;
@@ -51,49 +61,46 @@ const EnhancedEditor = (props: any) => {
     const { type, index } = active;
     let code, id;
     switch (type) {
-      case 1:
-        code = accounts[index].draftCode;
+      case EntityType.Account:
+        code = accounts[index].draftCode; // TODO: replace this to ".deployedCode", when UI is in place
         id = accounts[index].id;
         break;
-      case 2:
+      case EntityType.TransactionTemplate:
         code = transactionTemplates[index].script;
         id = transactionTemplates[index].id;
         break;
-      case 3:
+      case EntityType.ScriptTemplate:
         code = scriptTemplates[index].script;
         id = scriptTemplates[index].id;
         break;
       default:
         code = '';
+        id = 8;
     }
     return [code, id];
   };
 
   // Method to use, when model was changed
-  const onChange = debounce((event) => {
-    // TODO: figure out, why title for transactions and scripts is empty here...
+  const debouncedModelChange = debounce((event) => {
+    // we will ignore text line, cause onChange is different for readme and other scripts
     // @ts-ignore
     project.active.onChange(editor.current.getValue());
   }, 150);
 
+  useEffect(configureCadence, []);
   useEffect(() => {
-    if (cadenceInitiated.current === false) {
-      console.log('Init Cadence');
-      // Step1 - Configure global monaco to support Cadence
-      configureCadence();
-      cadenceInitiated.current = true;
-    } else {
-      console.log('No need :)');
-    }
-  }, []);
-
-  useEffect(() => {
+    // TODO: save/restore view state with:
+    //  - use ref to track current active id
+    //  - const oldState = editor.current.saveViewState();
     if (editor.current) {
       // Remove tracking of model updates to prevent re-rendering
       if (editorOnChange.current) {
         editorOnChange.current.dispose();
       }
 
+      // To pick up new changes in accounts, we will track project's active item and then add and remove
+      // new line at EOF to trick Language Client to send code changes and reimport the latest changes,
+      // clearing errors and warning about missing fields.
       const [code, newId] = getActiveCode();
       const newState = getOrCreateEditorState(newId, code);
       if (
@@ -116,22 +123,15 @@ const EnhancedEditor = (props: any) => {
         editor.current.restoreViewState(newState.viewState);
         editor.current.focus();
 
-        setTimeout(() => {
-          newState.model.setValue(code);
-          editor.current.setModel(newState.model);
-          editor.current.restoreViewState(newState.viewState);
-          editor.current.focus();
-        }, 120);
+        editor.current.layout();
       }
 
-      editorOnChange.current = editor.current.onDidChangeModelContent(onChange);
+      editorOnChange.current =
+        editor.current.onDidChangeModelContent(debouncedModelChange);
     }
   }, [project.active, project.project.accounts]);
 
-  const destroyEditor = () => {
-    editor.current.dispose();
-  };
-
+  // "initEditor" will create new instance of Monaco Editor and set it up
   const initEditor = async () => {
     const container = document.getElementById(MONACO_CONTAINER_ID);
     editor.current = monaco.editor.create(container, {
@@ -142,14 +142,8 @@ const EnhancedEditor = (props: any) => {
       },
     });
 
-    // Setup even listener when code is updated
-    // editorOnChange.current = editor.current.onDidChangeModelContent(onChange);
-
     const [code] = getActiveCode();
-    const model = monaco.editor.createModel(
-      code,
-      CADENCE_LANGUAGE_ID,
-    );
+    const model = monaco.editor.createModel(code, CADENCE_LANGUAGE_ID);
     const state: EditorState = {
       model,
       viewState: null,
@@ -157,25 +151,30 @@ const EnhancedEditor = (props: any) => {
     editor.current.setModel(state.model);
     editor.current.restoreViewState(state.viewState);
     editor.current.focus();
+    editor.current.layout();
 
     window.addEventListener('resize', () => {
-      console.log('Resize Editor Layout');
       editor && editor.current.layout();
     });
   };
+  // "destroyEditor" is used to dispose of Monaco Editor instance, when the component is unmounted (for any reasons)
+  const destroyEditor = () => {
+    editor.current.dispose();
+  };
 
+  // Do it once, when CadenceEditor component is instantiated
   useEffect(() => {
-    // Drop returned Promise
-    initEditor().then();
-
+    initEditor().then(); // drop returned Promise as we not going to use it
     return () => {
-      if (editor) {
-        destroyEditor();
-      }
+      editor && destroyEditor();
     };
   }, []);
 
-  return <EditorContainer id={MONACO_CONTAINER_ID} show={props.show} />;
+  return (
+    <EditorContainer id={MONACO_CONTAINER_ID} show={props.show}>
+      <ControlPanel editor={editor.current}/>
+    </EditorContainer>
+  );
 };
 
-export default EnhancedEditor;
+export default CadenceEditor;
