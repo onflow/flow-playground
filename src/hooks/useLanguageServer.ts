@@ -84,7 +84,6 @@ export default function useLanguageServer() {
       return;
     }
     let code = accounts[index].draftCode;
-
     return code;
   };
 
@@ -102,15 +101,14 @@ export default function useLanguageServer() {
       [languageServer]
   )
 
-  // Restart server, when active item or accounts are changed
-  useEffect(debouncedServerRestart, [project.project.accounts, project.active]);
-
-  // TODO: ensure we need this one...
-/*  useEffect(()=>{
+  useEffect(()=>{
     if(languageServer){
       languageServer.updateCodeGetter(getCode)
     }
-  }, [project.project.accounts]);*/
+  },[project.project.accounts])
+
+  // TODO: Disable this, once the cadence language server package is updated
+  // useEffect(debouncedServerRestart, [project.project.accounts, project.active]);
 
 
   useEffect(() => {
