@@ -7,16 +7,16 @@ const blink = keyframes`
   }
 `;
 
-interface EditorContainerProps{
-    show: boolean;
+interface EditorContainerProps {
+  show: boolean;
 }
 
 export const EditorContainer = styled.div<EditorContainerProps>`
   width: 100%;
   height: 100%;
   position: relative;
-  
-  display: ${({show = true}) => show ? "block" : "none"};
+
+  display: ${({ show = true }) => (show ? 'block' : 'none')};
 
   .drag-box {
     width: fit-content;

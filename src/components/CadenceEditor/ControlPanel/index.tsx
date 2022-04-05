@@ -4,15 +4,19 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExecuteCommandRequest } from 'monaco-languageclient';
 import { useThemeUI, Box, Text, Flex } from 'theme-ui';
+import { IPosition, Range } from 'monaco-editor/esm/vs/editor/editor.api';
 
 import {
   ResultType,
   useSetExecutionResultsMutation,
 } from 'api/apollo/generated/graphql';
 
+import { CadenceCheckerContext } from 'providers/CadenceChecker';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import { RemoveToastButton } from 'layout/RemoveToastButton';
+import { goTo, Highlight } from 'util/language-syntax-errors';
+import { extractSigners } from 'util/parser';
 
 import {
   ActionButton,
@@ -32,10 +36,8 @@ import {
 
 import { getLabel, validateByType, useTemplateType } from './utils';
 import { ControlPanelProps, IValue } from './types';
-import { Highlight } from 'util/language-syntax-errors';
-import * as monaco from 'monaco-editor';
-import { extractSigners } from 'util/parser';
-import { CadenceCheckerContext } from 'providers/CadenceChecker';
+import { MotionBox } from 'components/CadenceEditor/ControlPanel/components';
+import { CadenceCheckCompleted } from 'util/language-server';
 
 const hover =
   (editor: any) =>
@@ -59,14 +61,14 @@ const hover =
 
     const highlightLine = [
       {
-        range: new monaco.Range(startLine, startColumn, endLine, endColumn),
+        range: new Range(startLine, startColumn, endLine, endColumn),
         options: {
           isWholeLine: true,
           className: `playground-syntax-${color}-hover`,
         },
       },
       {
-        range: new monaco.Range(
+        range: new Range(
           startLine,
           startColumn,
           selectionEndLine,
@@ -83,6 +85,13 @@ const hover =
   };
 
 const ControlPanel: React.FC<ControlPanelProps> = (props) => {
+  // Props
+  const { editor } = props;
+
+  if (!editor) {
+    return null;
+  }
+
   // Hooks
   const { languageClient } = useContext(CadenceCheckerContext);
   const {
@@ -96,7 +105,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
 
   // Destructuring
   const { type } = active;
-  const { editor } = props;
 
   // Collect problems with the code
   const [problems, setProblems] = useState({
@@ -108,7 +116,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
 
   const [list, setList] = useState([]);
 
-  const code = editor.model.getValue();
+  const code = '';
   const signers = extractSigners(code).length;
 
   const validCode = problems.error.length === 0;
@@ -196,7 +204,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   }, [project]);
   */
   const { accounts } = project;
-
   const signersAccounts = selected.map((i) => accounts[i]);
 
   const send = async () => {
@@ -303,19 +310,74 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   }
 
   const actions = {
-    goTo: () => {},
+    goTo: (position: IPosition) => goTo(editor, position),
     hideDecorations: () => {},
-    hover: hover(editor),
+    hover: () => {},
   };
+
+  // ===========================================================================
+  // Connect LanguageClient to ControlPanel
+  // HOOKS  -------------------------------------------------------------------
+  const clientOnNotification = useRef(null);
+  const [executionArguments, setExecutionArguments] = useState({});
+
+  // METHODS  ------------------------------------------------------------------
+  const getParameters = () => {
+    if (!languageClient) {
+      return [];
+    }
+    try {
+      const args = await languageClient.sendRequest(
+        ExecuteCommandRequest.type,
+        {
+          command: 'cadence.server.getEntryPointParameters',
+          arguments: [editor.getModel().uri.toString()],
+        },
+      );
+      return args || [];
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
+
+  const processMarkers = () => {
+    console.log('%c NOT IMPLEMENTED: Process Markers', { color: 'orange' });
+  };
+
+  // EFFECTS ------------------------------------------------------------------
+  useEffect(() => {
+    if (languageClient) {
+      if (clientOnNotification.current) {
+        clientOnNotification.current.dispose();
+      }
+
+      clientOnNotification.current = languageClient.onNotification(
+        CadenceCheckCompleted.methodName,
+        async (result: CadenceCheckCompleted.Params) => {
+          if (result.valid) {
+            const params = await getParameters();
+            // TODO: Get id of active editor from project
+            const key = `${active.type}-${active.index}`;
+
+            // Update state
+            setExecutionArguments({
+              ...executionArguments,
+              [key]: params,
+            });
+          }
+          processMarkers();
+        },
+      );
+    }
+  }, [languageClient]);
+
+  // ===========================================================================
+  // RENDER
   return (
     <>
       <div ref={constraintsRef} className="constraints" />
-      <motion.div
-        className="drag-box"
-        drag={true}
-        dragConstraints={constraintsRef}
-        dragElastic={1}
-      >
+      <MotionBox dragConstraints={constraintsRef}>
         <HoverPanel>
           {validCode && (
             <>
@@ -360,7 +422,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             <ActionButton active={isOk} type={type} onClick={send} />
           </ControlContainer>
         </HoverPanel>
-      </motion.div>
+      </MotionBox>
       <ToastContainer>
         <ul>
           <AnimatePresence initial={true}>

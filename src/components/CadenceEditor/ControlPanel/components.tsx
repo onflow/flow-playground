@@ -3,19 +3,19 @@ import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import theme from '../../../theme';
 
-export const MotionBox = forwardRef((props: any, ref: any) => {
-  const { children } = props;
+export const MotionBox = (props: any) => {
+  const { children, dragConstraints } = props;
   return (
     <motion.div
       className="drag-box"
       drag={true}
-      dragConstraints={ref}
+      dragConstraints={dragConstraints}
       dragElastic={1}
     >
       {children}
     </motion.div>
   );
-});
+};
 
 interface HoverPanelProps {
   width?: string;

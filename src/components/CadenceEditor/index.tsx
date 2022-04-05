@@ -13,10 +13,8 @@ type EditorState = { model: any; viewState: any };
 
 const CadenceEditor = (props: any) => {
   const project = useProject();
-  const cadenceInitiated = useRef(false);
-  const editor = useRef(null);
+  const [editor, setEditor] = useState(null);
   const editorOnChange = useRef(null);
-
   // We will specify type as index as non-existent numbers to prevent collision with existing enums
   const lastEdit = useRef({
     type: 8,
@@ -84,15 +82,15 @@ const CadenceEditor = (props: any) => {
   const debouncedModelChange = debounce((event) => {
     // we will ignore text line, cause onChange is different for readme and other scripts
     // @ts-ignore
-    project.active.onChange(editor.current.getValue());
+    project.active.onChange(editor.getValue());
   }, 150);
 
   useEffect(configureCadence, []);
   useEffect(() => {
     // TODO: save/restore view state with:
     //  - use ref to track current active id
-    //  - const oldState = editor.current.saveViewState();
-    if (editor.current) {
+    //  - const oldState = editor.saveViewState();
+    if (editor) {
       // Remove tracking of model updates to prevent re-rendering
       if (editorOnChange.current) {
         editorOnChange.current.dispose();
@@ -107,9 +105,9 @@ const CadenceEditor = (props: any) => {
         lastEdit.current.type == project.active.type &&
         lastEdit.current.index == project.active.index
       ) {
-        editor.current.setModel(newState.model);
-        editor.current.restoreViewState(newState.viewState);
-        editor.current.focus();
+        editor.setModel(newState.model);
+        editor.restoreViewState(newState.viewState);
+        editor.focus();
       } else {
         // - Add new line at the end of the model
         newState.model.setValue(code + '\n');
@@ -119,22 +117,22 @@ const CadenceEditor = (props: any) => {
         };
 
         // - Mark last edited as type, index, edited = true
-        editor.current.setModel(newState.model);
-        editor.current.restoreViewState(newState.viewState);
-        editor.current.focus();
+        editor.setModel(newState.model);
+        editor.restoreViewState(newState.viewState);
+        editor.focus();
 
-        editor.current.layout();
+        editor.layout();
       }
 
       editorOnChange.current =
-        editor.current.onDidChangeModelContent(debouncedModelChange);
+        editor.onDidChangeModelContent(debouncedModelChange);
     }
   }, [project.active, project.project.accounts]);
 
   // "initEditor" will create new instance of Monaco Editor and set it up
   const initEditor = async () => {
     const container = document.getElementById(MONACO_CONTAINER_ID);
-    editor.current = monaco.editor.create(container, {
+    const editor = monaco.editor.create(container, {
       theme: 'vs-light',
       language: CADENCE_LANGUAGE_ID,
       minimap: {
@@ -148,18 +146,22 @@ const CadenceEditor = (props: any) => {
       model,
       viewState: null,
     };
-    editor.current.setModel(state.model);
-    editor.current.restoreViewState(state.viewState);
-    editor.current.focus();
-    editor.current.layout();
+    editor.setModel(state.model);
+    editor.restoreViewState(state.viewState);
+    editor.focus();
+    editor.layout();
 
     window.addEventListener('resize', () => {
-      editor && editor.current.layout();
+      editor && editor.layout();
     });
+
+    // Save editor in component state
+    setEditor(editor);
   };
+
   // "destroyEditor" is used to dispose of Monaco Editor instance, when the component is unmounted (for any reasons)
   const destroyEditor = () => {
-    editor.current.dispose();
+    editor.dispose();
   };
 
   // Do it once, when CadenceEditor component is instantiated
@@ -172,7 +174,7 @@ const CadenceEditor = (props: any) => {
 
   return (
     <EditorContainer id={MONACO_CONTAINER_ID} show={props.show}>
-      <ControlPanel editor={editor.current} />
+      <ControlPanel editor={editor} />
     </EditorContainer>
   );
 };
