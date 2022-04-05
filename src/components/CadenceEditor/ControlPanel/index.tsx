@@ -322,7 +322,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const [executionArguments, setExecutionArguments] = useState({});
 
   // METHODS  ------------------------------------------------------------------
-  const getParameters = () => {
+  const getParameters = async () => {
     if (!languageClient) {
       return [];
     }
