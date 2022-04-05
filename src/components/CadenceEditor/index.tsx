@@ -164,7 +164,7 @@ const CadenceEditor = (props: any) => {
 
   // Do it once, when CadenceEditor component is instantiated
   useEffect(() => {
-    initEditor().then(); // drop returned Promise as we not going to use it
+    initEditor().then(); // drop returned Promise as we are not going to use it
     return () => {
       editor && destroyEditor();
     };
@@ -172,7 +172,7 @@ const CadenceEditor = (props: any) => {
 
   return (
     <EditorContainer id={MONACO_CONTAINER_ID} show={props.show}>
-      <ControlPanel editor={editor.current}/>
+      <ControlPanel editor={editor.current} />
     </EditorContainer>
   );
 };
