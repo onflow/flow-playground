@@ -4,7 +4,11 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExecuteCommandRequest } from 'monaco-languageclient';
 import { useThemeUI, Box, Text, Flex } from 'theme-ui';
-import { IPosition, Range } from 'monaco-editor/esm/vs/editor/editor.api';
+import {
+  IPosition,
+  Range,
+  editor as monacoEditor,
+} from 'monaco-editor/esm/vs/editor/editor.api';
 
 import {
   ResultType,
@@ -15,7 +19,13 @@ import { CadenceCheckerContext } from 'providers/CadenceChecker';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import { RemoveToastButton } from 'layout/RemoveToastButton';
-import { goTo, Highlight } from 'util/language-syntax-errors';
+import {
+  CadenceProblem,
+  formatMarker,
+  goTo,
+  Highlight,
+  ProblemsList,
+} from 'util/language-syntax-errors';
 import { extractSigners } from 'util/parser';
 
 import {
@@ -103,22 +113,32 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   } = useProject();
   const { theme } = useThemeUI();
 
+  const getActiveKey = () => `${active.type}-${active.index}`;
+
   // Destructuring
   const { type } = active;
 
   // Collect problems with the code
-  const [problems, setProblems] = useState({
-    error: [],
-    warning: [],
-    hint: [],
-    info: [],
-  });
+  const [problemsList, setProblemsList] = useState({});
+
+  const getProblems = (): ProblemsList => {
+    const key = getActiveKey();
+    return (
+      problemsList[key] || {
+        error: [],
+        warning: [],
+        hint: [],
+        info: [],
+      }
+    );
+  };
 
   const [list, setList] = useState([]);
 
   const code = '';
   const signers = extractSigners(code).length;
 
+  const problems = getProblems();
   const validCode = problems.error.length === 0;
 
   const needSigners = type == EntityType.TransactionTemplate && signers > 0;
@@ -162,10 +182,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     setErrors(errors);
   };
 
-  useEffect(() => {
-    validate(list, values);
-  }, [list, values]);
-
   const [processingStatus, setProcessingStatus] = useState(false);
 
   const [setResult] = useSetExecutionResultsMutation();
@@ -176,33 +192,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     [identifier: string]: string[];
   }>({});
 
-  // compare 'state' field for each account, set 'notifications' state for new data
-  // @ts-ignore: <- this state is only used to compare and render notifications
-  /*
-  const [_, setProjectAccts] = useState(project.accounts);
-  const [counter, setCounter] = useState(0);
-  useEffect(() => {
-    setProjectAccts((prevAccounts) => {
-      const latestAccounts = project.accounts;
-      const updatedAccounts = latestAccounts.filter(
-        (latestAccount, index) =>
-          latestAccount.state !== prevAccounts[index].state,
-      );
-
-      if (updatedAccounts.length > 0) {
-        setNotifications((prev) => {
-          return {
-            ...prev,
-            [counter]: updatedAccounts,
-          };
-        });
-        setTimeout(() => removeNotification(setNotifications, counter), 5000);
-        setCounter((prev) => prev + 1);
-      }
-      return project.accounts;
-    });
-  }, [project]);
-  */
   const { accounts } = project;
   const signersAccounts = selected.map((i) => accounts[i]);
 
@@ -341,36 +330,67 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     }
   };
 
+  // Pay attention, that we are passing "processMarkers" into the callback function of
+  // language server. This will create closure around methods  - like "getActiveKey"
+  // and their returned values, which would be able to pick up changes in component state.
   const processMarkers = () => {
-    console.log('%c NOT IMPLEMENTED: Process Markers', { color: 'orange' });
+    const model = editor.getModel();
+    const modelMarkers = monacoEditor.getModelMarkers({ resource: model.uri });
+    const errors = modelMarkers.reduce(
+      (acc: { [key: string]: CadenceProblem[] }, marker) => {
+        const mappedMarker: CadenceProblem = formatMarker(marker);
+        acc[mappedMarker.type].push(mappedMarker);
+        return acc;
+      },
+      {
+        error: [],
+        warning: [],
+        info: [],
+        hint: [],
+      },
+    );
+
+    const key = getActiveKey(); // <- this value will be from static closure
+
+    setProblemsList({
+      ...problemsList,
+      [key]: errors,
+    });
+  };
+
+  const setupLanguageClientListener = () => {
+    if (clientOnNotification.current) {
+      clientOnNotification.current.dispose();
+    }
+    clientOnNotification.current = languageClient.onNotification(
+      CadenceCheckCompleted.methodName,
+      async (result: CadenceCheckCompleted.Params) => {
+        console.log('%cCheck completed', { color: 'green' });
+        if (result.valid) {
+          const params = await getParameters();
+          const key = getActiveKey();
+
+          // Update state
+          setExecutionArguments({
+            ...executionArguments,
+            [key]: params,
+          });
+        }
+        processMarkers();
+      },
+    );
   };
 
   // EFFECTS ------------------------------------------------------------------
   useEffect(() => {
     if (languageClient) {
-      if (clientOnNotification.current) {
-        clientOnNotification.current.dispose();
-      }
-
-      clientOnNotification.current = languageClient.onNotification(
-        CadenceCheckCompleted.methodName,
-        async (result: CadenceCheckCompleted.Params) => {
-          if (result.valid) {
-            const params = await getParameters();
-            // TODO: Get id of active editor from project
-            const key = `${active.type}-${active.index}`;
-
-            // Update state
-            setExecutionArguments({
-              ...executionArguments,
-              [key]: params,
-            });
-          }
-          processMarkers();
-        },
-      );
+      setupLanguageClientListener();
     }
-  }, [languageClient]);
+  }, [languageClient, active]);
+
+  useEffect(() => {
+    validate(list, values);
+  }, [list, values]);
 
   // ===========================================================================
   // RENDER
