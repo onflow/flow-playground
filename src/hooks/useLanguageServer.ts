@@ -83,7 +83,7 @@ export default function useLanguageServer() {
     if (index < 0 || index >= accounts.length) {
       return;
     }
-    let code = accounts[index].draftCode;
+    let code = accounts[index].deployedCode;
     return code;
   };
 
