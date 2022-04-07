@@ -134,7 +134,8 @@ const renderMessage = (message: string) => {
 };
 
 export const ErrorsList: React.FC<ErrorListProps> = (props) => {
-  const { list, goTo, hideDecorations, hover } = props;
+  const { list, actions } = props;
+  const {goTo, hideDecorations, hover} = actions
   if (list.length === 0) {
     return null;
   }
@@ -167,8 +168,8 @@ export const ErrorsList: React.FC<ErrorListProps> = (props) => {
 
 export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
   const [ expanded, setExpanded ] = useState(true);
-  const { problems, goTo, hideDecorations, hover } = props;
-
+  const { problems, actions } = props;
+  const { goTo, hideDecorations, hover } = actions
   const toggle = () => {
     setExpanded(!expanded);
   };

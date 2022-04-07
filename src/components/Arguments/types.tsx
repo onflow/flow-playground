@@ -44,18 +44,20 @@ export type ArgumentsListProps = {
   errors: any;
 };
 
-export type ErrorListProps = {
-  list: CadenceProblem[];
+export type Actions = {
   goTo: (position: monaco.IPosition) => void;
   hover: (highlight: Highlight) => void;
   hideDecorations: () => void;
+}
+
+export type ErrorListProps = {
+  list: CadenceProblem[];
+  actions: Actions
 };
 
 export type HintsProps = {
   problems: ProblemsList;
-  goTo: (position: monaco.IPosition) => void;
-  hover: (highlight: Highlight) => void;
-  hideDecorations: () => void;
+  actions: Actions
 };
 
 export type HintsState = {
