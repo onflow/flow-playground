@@ -1,3 +1,4 @@
+// External Modules
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
 import { AiFillCloseCircle } from 'react-icons/ai';
@@ -6,15 +7,10 @@ import { ExecuteCommandRequest } from 'monaco-languageclient';
 import { useThemeUI, Box, Text, Flex } from 'theme-ui';
 import {
   IPosition,
-  Range,
   editor as monacoEditor,
 } from 'monaco-editor/esm/vs/editor/editor.api';
 
-import {
-  ResultType,
-  useSetExecutionResultsMutation,
-} from 'api/apollo/generated/graphql';
-
+// Project Modules
 import { CadenceCheckerContext } from 'providers/CadenceChecker';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
@@ -23,11 +19,26 @@ import {
   CadenceProblem,
   formatMarker,
   goTo,
+  hideDecorations,
   Highlight,
+  hover,
   ProblemsList,
 } from 'util/language-syntax-errors';
 import { extractSigners } from 'util/parser';
+import { CadenceCheckCompleted } from 'util/language-server';
 
+// Local Generated Modules
+import {
+  ResultType,
+  useSetExecutionResultsMutation,
+} from 'api/apollo/generated/graphql';
+
+// Component Scoped Files
+import { getLabel, validateByType, useTemplateType } from './utils';
+import { ControlPanelProps, IValue } from './types';
+import { MotionBox } from './components';
+
+// Other
 import {
   ActionButton,
   ArgumentsList,
@@ -44,83 +55,64 @@ import {
   StatusMessage,
 } from '../../Arguments/styles';
 
-import { getLabel, validateByType, useTemplateType } from './utils';
-import { ControlPanelProps, IValue } from './types';
-import { MotionBox } from 'components/CadenceEditor/ControlPanel/components';
-import { CadenceCheckCompleted } from 'util/language-server';
-
-const hover =
-  (editor: any) =>
-  (highlight: Highlight): void => {
-    const { startLine, startColumn, endLine, endColumn, color } = highlight;
-    const model = editor.getModel();
-
-    const selection = model.getAllDecorations().find((item: any) => {
-      return (
-        item.range.startLineNumber === startLine &&
-        item.range.startColumn === startColumn
-      );
-    });
-
-    const selectionEndLine = selection
-      ? selection.range.endLineNumber
-      : endLine;
-    const selectionEndColumn = selection
-      ? selection.range.endColumn
-      : endColumn;
-
-    const highlightLine = [
-      {
-        range: new Range(startLine, startColumn, endLine, endColumn),
-        options: {
-          isWholeLine: true,
-          className: `playground-syntax-${color}-hover`,
-        },
-      },
-      {
-        range: new Range(
-          startLine,
-          startColumn,
-          selectionEndLine,
-          selectionEndColumn,
-        ),
-        options: {
-          isWholeLine: false,
-          className: `playground-syntax-${color}-hover-selection`,
-        },
-      },
-    ];
-    editor.getModel().deltaDecorations([], highlightLine);
-    editor.revealLineInCenter(startLine);
-  };
-
 const ControlPanel: React.FC<ControlPanelProps> = (props) => {
-  // Props
-  const { editor } = props;
-
-  if (!editor) {
+  // We should not render this component if editor is non existent
+  if (!props.editor) {
     return null;
   }
 
-  // Hooks
+  // ============================================================================
+  // NOTIFICATION BITS -----------------------------------------------------------
+  // TODO: Refactor this one
+  const clientOnNotification = useRef(null);
+
+  const [notifications, setNotifications] = useState<{
+    [identifier: string]: string[];
+  }>({});
+
+  const removeNotification = (set: any, id: number) => {
+    set((prev: any[]) => {
+      delete prev[id];
+      return {
+        ...prev,
+      };
+    });
+  };
+
+  // ===========================================================================
+  // GLOBAL HOOKS
   const { languageClient } = useContext(CadenceCheckerContext);
-  const {
-    project,
-    active,
-    isSavingCode,
-    lastSigners,
-    // updateAccountDeployedCode
-  } = useProject();
+  const { project, active, isSavingCode, lastSigners } = useProject();
   const { theme } = useThemeUI();
 
-  const getActiveKey = () => `${active.type}-${active.index}`;
+  // HOOKS  -------------------------------------------------------------------
+  const [executionArguments, setExecutionArguments] = useState({});
+  const [processingStatus, setProcessingStatus] = useState(false);
+  const [setResult] = useSetExecutionResultsMutation();
+  const { scriptFactory, transactionFactory, contractDeployment } =
+    useTemplateType();
+  const [selected, updateSelectedAccounts] = useState([]);
+  const [expanded, setExpanded] = useState(true);
 
-  // Destructuring
-  const { type } = active;
-
-  // Collect problems with the code
+  const [values, setValue] = useState<IValue>({});
+  // Handles errors with arguments
+  const [errors, setErrors] = useState({});
+  // Handles problems, hints and info for checked code
   const [problemsList, setProblemsList] = useState({});
 
+  // Holds reference to constraining div for floating window
+  const constraintsRef = useRef();
+
+  // ===========================================================================
+  // METHODS  ------------------------------------------------------------------
+  /**
+   * Make active key out of active project item type and index
+   */
+  const getActiveKey = () => `${active.type}-${active.index}`;
+
+  /**
+   * Returns a list of problems, hints and info for active code
+   */
   const getProblems = (): ProblemsList => {
     const key = getActiveKey();
     return (
@@ -133,34 +125,100 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     );
   };
 
-  const [list, setList] = useState([]);
+  /**
+   * Sends request to langugeClient to get entry point parameters.
+   * @return Promise which resolved to a list of arguments
+   */
+  const getParameters = async (): Promise<[any?]> => {
+    if (!languageClient) {
+      return [];
+    }
+    try {
+      const args = await languageClient.sendRequest(
+        ExecuteCommandRequest.type,
+        {
+          command: 'cadence.server.getEntryPointParameters',
+          arguments: [editor.getModel().uri.toString()],
+        },
+      );
+      return args || [];
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
 
-  const code = '';
-  const signers = extractSigners(code).length;
+  /**
+   * Process model markers and collect them into respective groups for rendering
+   * Pay attention, that we are passing "processMarkers" into the callback function of
+   * language server. This will create closure around methods  - like "getActiveKey"
+   * and their returned values, which would be able to pick up changes in component state.
+   */
+  const processMarkers = () => {
+    const model = editor.getModel();
+    const modelMarkers = monacoEditor.getModelMarkers({ resource: model.uri });
+    const errors = modelMarkers.reduce(
+      (acc: { [key: string]: CadenceProblem[] }, marker) => {
+        const mappedMarker: CadenceProblem = formatMarker(marker);
+        acc[mappedMarker.type].push(mappedMarker);
+        return acc;
+      },
+      {
+        error: [],
+        warning: [],
+        info: [],
+        hint: [],
+      },
+    );
 
-  const problems = getProblems();
-  const validCode = problems.error.length === 0;
+    const key = getActiveKey(); // <- this value will be from static closure
 
-  const needSigners = type == EntityType.TransactionTemplate && signers > 0;
-  const [selected, updateSelectedAccounts] = useState([]);
-  const [errors, setErrors] = useState({});
-  const [expanded, setExpanded] = useState(true);
-  const [values, setValue] = useState<IValue>({});
-  const constraintsRef = useRef();
-
-  const removeNotification = (set: any, id: number) => {
-    set((prev: any[]) => {
-      delete prev[id];
-      return {
-        ...prev,
-      };
+    setProblemsList({
+      ...problemsList,
+      [key]: errors,
     });
   };
 
-  const numberOfErrors = Object.keys(errors).length;
-  const notEnoughSigners = needSigners && selected.length < signers;
-  const haveErrors = numberOfErrors > 0 || notEnoughSigners;
+  /**
+   * Get list of arguments from this component's state
+   */
+  const getArguments = (): any => {
+    const key = getActiveKey();
+    return executionArguments[key] || [];
+  };
 
+  /**
+   * Disposes old languageClient callback and attached new one to create proper closure for all local methods.
+   * Otherwise, they will refer to old value of "project" prop and provide de-synced values
+   */
+  const setupLanguageClientListener = () => {
+    if (clientOnNotification.current) {
+      clientOnNotification.current.dispose();
+    }
+    clientOnNotification.current = languageClient.onNotification(
+      CadenceCheckCompleted.methodName,
+      async (result: CadenceCheckCompleted.Params) => {
+        console.log('%cCheck completed', { color: 'green' });
+        if (result.valid) {
+          const params = await getParameters();
+          const key = getActiveKey();
+
+          // Update state
+          setExecutionArguments({
+            ...executionArguments,
+            [key]: params,
+          });
+        }
+        processMarkers();
+      },
+    );
+  };
+
+  /**
+   * Validates that list of arguments conforms to their respective types
+   * @param list - list of argument types
+   * @param values - list of argument values
+   */
   const validate = (list: any, values: any) => {
     const errors = list.reduce((acc: any, item: any) => {
       const { name, type } = item;
@@ -178,23 +236,12 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       return acc;
     }, {});
 
-    console.log({ errors });
     setErrors(errors);
   };
 
-  const [processingStatus, setProcessingStatus] = useState(false);
-
-  const [setResult] = useSetExecutionResultsMutation();
-  const { scriptFactory, transactionFactory, contractDeployment } =
-    useTemplateType();
-
-  const [notifications, setNotifications] = useState<{
-    [identifier: string]: string[];
-  }>({});
-
-  const { accounts } = project;
-  const signersAccounts = selected.map((i) => accounts[i]);
-
+  /**
+   * Processes arguments and send scripts and transaction for execution or contracts for deployment
+   */
   const send = async () => {
     if (!processingStatus) {
       setProcessingStatus(true);
@@ -284,7 +331,31 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
         resultType,
         rawResult,
       },
-    });
+    }).then();
+  };
+
+  // VARIABLES AND CONSTANTS  -------------------------------------------------
+  const { editor } = props;
+  const { type } = active;
+  const code = editor.getModel().getValue();
+  const problems = getProblems();
+  const validCode = problems.error.length === 0;
+
+  const signers = extractSigners(code).length;
+  const needSigners = type == EntityType.TransactionTemplate && signers > 0;
+
+  const numberOfErrors = Object.keys(errors).length;
+  const notEnoughSigners = needSigners && selected.length < signers;
+  const haveErrors = numberOfErrors > 0 || notEnoughSigners;
+
+  const { accounts } = project;
+  const signersAccounts = selected.map((i) => accounts[i]);
+
+  const list = getArguments();
+  const actions = {
+    goTo: (position: IPosition) => goTo(editor, position),
+    hideDecorations: () => hideDecorations(editor),
+    hover: (highlight: Highlight) => hover(editor, highlight),
   };
 
   const isOk = !haveErrors && validCode !== undefined && !!validCode;
@@ -292,94 +363,10 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   let statusMessage = isOk ? 'Ready' : 'Fix errors';
 
   const progress = isSavingCode || processingStatus;
-
   if (progress) {
     statusIcon = <FaSpinner className="spin" />;
     statusMessage = 'Please, wait...';
   }
-
-  const actions = {
-    goTo: (position: IPosition) => goTo(editor, position),
-    hideDecorations: () => {},
-    hover: () => {},
-  };
-
-  // ===========================================================================
-  // Connect LanguageClient to ControlPanel
-  // HOOKS  -------------------------------------------------------------------
-  const clientOnNotification = useRef(null);
-  const [executionArguments, setExecutionArguments] = useState({});
-
-  // METHODS  ------------------------------------------------------------------
-  const getParameters = async () => {
-    if (!languageClient) {
-      return [];
-    }
-    try {
-      const args = await languageClient.sendRequest(
-        ExecuteCommandRequest.type,
-        {
-          command: 'cadence.server.getEntryPointParameters',
-          arguments: [editor.getModel().uri.toString()],
-        },
-      );
-      return args || [];
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
-  };
-
-  // Pay attention, that we are passing "processMarkers" into the callback function of
-  // language server. This will create closure around methods  - like "getActiveKey"
-  // and their returned values, which would be able to pick up changes in component state.
-  const processMarkers = () => {
-    const model = editor.getModel();
-    const modelMarkers = monacoEditor.getModelMarkers({ resource: model.uri });
-    const errors = modelMarkers.reduce(
-      (acc: { [key: string]: CadenceProblem[] }, marker) => {
-        const mappedMarker: CadenceProblem = formatMarker(marker);
-        acc[mappedMarker.type].push(mappedMarker);
-        return acc;
-      },
-      {
-        error: [],
-        warning: [],
-        info: [],
-        hint: [],
-      },
-    );
-
-    const key = getActiveKey(); // <- this value will be from static closure
-
-    setProblemsList({
-      ...problemsList,
-      [key]: errors,
-    });
-  };
-
-  const setupLanguageClientListener = () => {
-    if (clientOnNotification.current) {
-      clientOnNotification.current.dispose();
-    }
-    clientOnNotification.current = languageClient.onNotification(
-      CadenceCheckCompleted.methodName,
-      async (result: CadenceCheckCompleted.Params) => {
-        console.log('%cCheck completed', { color: 'green' });
-        if (result.valid) {
-          const params = await getParameters();
-          const key = getActiveKey();
-
-          // Update state
-          setExecutionArguments({
-            ...executionArguments,
-            [key]: params,
-          });
-        }
-        processMarkers();
-      },
-    );
-  };
 
   // EFFECTS ------------------------------------------------------------------
   useEffect(() => {
@@ -431,8 +418,8 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             </>
           )}
 
-          <ErrorsList list={problems.error} {...actions} />
-          <Hints problems={problems} {...actions} />
+          <ErrorsList list={problems.error} actions={actions} />
+          <Hints problems={problems} actions={actions} />
 
           <ControlContainer isOk={isOk} progress={progress}>
             <StatusMessage>
