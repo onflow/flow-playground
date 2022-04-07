@@ -1,24 +1,16 @@
 import { EntityType } from 'providers/Project';
 import { Highlight, ProblemsList } from 'util/language-syntax-errors';
-import * as monaco from 'monaco-editor';
 import { MonacoLanguageClient } from 'monaco-languageclient';
 import { Argument } from 'components/Arguments/types';
 import { Account } from 'api/apollo/generated/graphql';
+import { editor as monacoEditor } from 'monaco-editor/esm/vs/editor/editor.api';
 
 export interface IValue {
   [key: string]: string;
 }
 
 export type ControlPanelProps = {
-  editor: any;
-  /*  type: EntityType;
-  list: Argument[];
-  signers: number;
-  problems: ProblemsList;
-  goTo: (position: monaco.IPosition) => void;
-  hover: (highlight: Highlight) => void;
-  hideDecorations: () => void;
-  languageClient: MonacoLanguageClient;*/
+  editor: monacoEditor.ICodeEditor;
 };
 
 export type ScriptExecution = (args?: string[]) => Promise<any>;
