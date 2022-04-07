@@ -60,7 +60,7 @@ const CadenceEditor = (props: any) => {
     let code, id;
     switch (type) {
       case EntityType.Account:
-        code = accounts[index].deployedCode;
+        code = accounts[index].draftCode;
         id = accounts[index].id;
         break;
       case EntityType.TransactionTemplate:
