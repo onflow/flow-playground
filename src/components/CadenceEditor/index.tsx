@@ -1,15 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
-import { EditorContainer } from './components';
+
 import { useProject } from 'providers/Project/projectHooks';
-import debounce from 'util/debounce';
 import { EntityType } from 'providers/Project';
+import debounce from 'util/debounce';
+import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
+
+import Notifications from './Notifications';
 import ControlPanel from './ControlPanel';
+import { EditorContainer } from './components';
+
+import { EditorState } from './types';
 
 const MONACO_CONTAINER_ID = 'monaco-container';
-
-type EditorState = { model: any; viewState: any };
 
 const CadenceEditor = (props: any) => {
   const project = useProject();
@@ -175,6 +178,7 @@ const CadenceEditor = (props: any) => {
   return (
     <EditorContainer id={MONACO_CONTAINER_ID} show={props.show}>
       <ControlPanel editor={editor} />
+      <Notifications />
     </EditorContainer>
   );
 };
