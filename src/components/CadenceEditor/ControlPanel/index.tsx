@@ -1,5 +1,5 @@
 // External Modules
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
 import { ExecuteCommandRequest } from 'monaco-languageclient';
 import {
@@ -177,7 +177,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     clientOnNotification.current = languageClient.onNotification(
       CadenceCheckCompleted.methodName,
       async (result: CadenceCheckCompleted.Params) => {
-        console.log('%cCheck completed', { color: 'green' });
         if (result.valid) {
           const params = await getParameters();
           const key = getActiveKey();
@@ -225,8 +224,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     if (!processingStatus) {
       setProcessingStatus(true);
     }
-
-    // TODO: implement algorithm for drilling down dictionaries
 
     const fixed = list.map((arg) => {
       const { name, type } = arg;
@@ -313,6 +310,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     }).then();
   };
 
+  // MEMOIZED -----------------------------------------------------------------
+  // we need to wrap it in useMemo, cause otherwise it might push component into infinite rerender
+  // as "getArguments" will return new empty array on each render
+  const list = useMemo(getArguments, [active]);
+
   // VARIABLES AND CONSTANTS  -------------------------------------------------
   const { editor } = props;
   const { type } = active;
@@ -330,7 +332,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const { accounts } = project;
   const signersAccounts = selected.map((i) => accounts[i]);
 
-  const list = getArguments();
   const actions = {
     goTo: (position: IPosition) => goTo(editor, position),
     hideDecorations: () => hideDecorations(editor),
@@ -355,6 +356,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   }, [languageClient, active]);
 
   useEffect(() => {
+    console.log('Call again!');
     validate(list, values);
   }, [list, values]);
 
