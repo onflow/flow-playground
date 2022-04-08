@@ -61,29 +61,10 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     return null;
   }
 
-  // ============================================================================
-  // NOTIFICATION BITS -----------------------------------------------------------
-  // TODO: Refactor this one
-  const clientOnNotification = useRef(null);
-
-  const [notifications, setNotifications] = useState<{
-    [identifier: string]: string[];
-  }>({});
-
-  const removeNotification = (set: any, id: number) => {
-    set((prev: any[]) => {
-      delete prev[id];
-      return {
-        ...prev,
-      };
-    });
-  };
-
   // ===========================================================================
   // GLOBAL HOOKS
   const { languageClient } = useContext(CadenceCheckerContext);
   const { project, active, isSavingCode, lastSigners } = useProject();
-  const { theme } = useThemeUI();
 
   // HOOKS  -------------------------------------------------------------------
   const [executionArguments, setExecutionArguments] = useState({});
@@ -100,8 +81,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // Handles problems, hints and info for checked code
   const [problemsList, setProblemsList] = useState({});
 
+  // REFS  -------------------------------------------------------------------
   // Holds reference to constraining div for floating window
   const constraintsRef = useRef();
+  // Holds reference to Disposable callback for languageClient
+  const clientOnNotification = useRef(null);
 
   // ===========================================================================
   // METHODS  ------------------------------------------------------------------
@@ -430,81 +414,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
           </ControlContainer>
         </HoverPanel>
       </MotionBox>
-      <ToastContainer>
-        <ul>
-          <AnimatePresence initial={true}>
-            {Object.keys(notifications).map((id) => {
-              const updatedAccounts = notifications[id];
-
-              let updatedStorageAccts: string[] = [];
-              updatedAccounts.map((acct: any) => {
-                const addr = acct.address;
-                const acctNum = addr.charAt(addr.length - 1);
-                const acctHex = `0x0${acctNum}`;
-                updatedStorageAccts.push(acctHex);
-              });
-
-              // render a new list item for each new id in 'notifications' state
-              return (
-                lastSigners &&
-                updatedStorageAccts && (
-                  <motion.li
-                    key={id}
-                    layout
-                    initial={{ opacity: 0, y: 50, scale: 0.3 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{
-                      opacity: 0,
-                      scale: 0.5,
-                      transition: { duration: 0.2 },
-                    }}
-                  >
-                    <Flex
-                      sx={{
-                        justifyContent: 'flex-end',
-                      }}
-                    >
-                      <RemoveToastButton
-                        onClick={() =>
-                          removeNotification(setNotifications, parseInt(id))
-                        }
-                      >
-                        <AiFillCloseCircle color="grey" size="32" />
-                      </RemoveToastButton>
-                    </Flex>
-                    <Box
-                      my={1}
-                      sx={{
-                        marginTop: '0.0rem',
-                        padding: '0.8rem 0.5rem',
-                        alignItems: 'center',
-                        border: `1px solid ${theme.colors.borderDark}`,
-                        backgroundColor: theme.colors.background,
-                        borderRadius: '8px',
-                        maxWidth: '500px',
-                        boxShadow:
-                          '10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff',
-                      }}
-                    >
-                      <Text
-                        sx={{
-                          padding: '0.75rem',
-                        }}
-                      >
-                        {`Account${lastSigners?.length > 1 ? 's' : ''}
-                        ${lastSigners.join(', ')}
-                        updated the storage in
-                        account${updatedStorageAccts?.length > 1 ? 's' : ''}
-                        ${updatedStorageAccts.join(', ')}.`}
-                      </Text>
-                    </Box>
-                  </motion.li>
-                )
-              );
-            })}
-          </AnimatePresence>
-        </ul>
-      </ToastContainer>
     </>
   );
 };
