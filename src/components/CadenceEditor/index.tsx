@@ -89,7 +89,7 @@ const CadenceEditor = (props: any) => {
     // we will ignore text line, cause onChange is different for readme and other scripts
     // @ts-ignore
     project.active.onChange(editor.getValue());
-  }, 150);
+  }, 50);
 
   useEffect(configureCadence, []);
   useEffect(() => {
