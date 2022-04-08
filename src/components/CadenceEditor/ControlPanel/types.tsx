@@ -1,7 +1,3 @@
-import { EntityType } from 'providers/Project';
-import { Highlight, ProblemsList } from 'util/language-syntax-errors';
-import { MonacoLanguageClient } from 'monaco-languageclient';
-import { Argument } from 'components/Arguments/types';
 import { Account } from 'api/apollo/generated/graphql';
 import { editor as monacoEditor } from 'monaco-editor/esm/vs/editor/editor.api';
 

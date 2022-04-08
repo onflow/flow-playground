@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { Box, Flex, Text, useThemeUI } from 'theme-ui';
+import { Box, Flex, Text } from 'theme-ui';
 
 import theme from '../../../theme';
 

@@ -1,10 +1,7 @@
 // External Modules
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
-import { AiFillCloseCircle } from 'react-icons/ai';
-import { motion, AnimatePresence } from 'framer-motion';
 import { ExecuteCommandRequest } from 'monaco-languageclient';
-import { useThemeUI, Box, Text, Flex } from 'theme-ui';
 import {
   IPosition,
   editor as monacoEditor,
@@ -14,7 +11,6 @@ import {
 import { CadenceCheckerContext } from 'providers/CadenceChecker';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import { RemoveToastButton } from 'layout/RemoveToastButton';
 import {
   CadenceProblem,
   formatMarker,
@@ -50,13 +46,12 @@ import {
 
 import {
   ControlContainer,
-  ToastContainer,
   HoverPanel,
   StatusMessage,
 } from '../../Arguments/styles';
 
 const ControlPanel: React.FC<ControlPanelProps> = (props) => {
-  // We should not render this component if editor is non existent
+  // We should not render this component if editor is non-existent
   if (!props.editor) {
     return null;
   }
@@ -64,7 +59,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // ===========================================================================
   // GLOBAL HOOKS
   const { languageClient } = useContext(CadenceCheckerContext);
-  const { project, active, isSavingCode, lastSigners } = useProject();
+  const { project, active, isSavingCode } = useProject();
 
   // HOOKS  -------------------------------------------------------------------
   const [executionArguments, setExecutionArguments] = useState({});

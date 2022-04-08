@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React  from 'react';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import theme from '../../../theme';

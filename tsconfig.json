@@ -7,10 +7,10 @@
     "allowJs": false,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-/*
-    "noImplicitAny": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+/*
+    "noImplicitAny": false,
 */
     "removeComments": false,
     "preserveConstEnums": true,

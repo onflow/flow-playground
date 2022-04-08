@@ -26,12 +26,15 @@ const CadenceEditor = (props: any) => {
 
   const [editorStates, setEditorStates] = useState({});
 
+  // TODO: restore view state in next implementation
+  /*
   const saveEditorState = (id: string, viewState: any) => {
     setEditorStates({
       ...editorStates,
       [id]: viewState,
     });
   };
+   */
 
   // This method is used to retrieve previous MonacoEditor state
   const getOrCreateEditorState = (id: string, code: string): EditorState => {
@@ -82,7 +85,7 @@ const CadenceEditor = (props: any) => {
   };
 
   // Method to use, when model was changed
-  const debouncedModelChange = debounce((event) => {
+  const debouncedModelChange = debounce(() => {
     // we will ignore text line, cause onChange is different for readme and other scripts
     // @ts-ignore
     project.active.onChange(editor.getValue());

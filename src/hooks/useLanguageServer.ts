@@ -1,4 +1,4 @@
-import {useEffect, useState, useRef, useMemo} from 'react';
+import {useEffect, useState, useMemo} from 'react';
 import { CadenceLanguageServer, Callbacks } from 'util/language-server';
 import { MonacoServices } from 'monaco-languageclient/lib/monaco-services';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
@@ -11,17 +11,15 @@ let monacoServicesInstalled = false;
 async function startLanguageServer(callbacks: any, getCode: any, ops) {
   const { setLanguageServer, setCallbacks } = ops;
   const server = await CadenceLanguageServer.create(callbacks);
-  new Promise((resolve, reject) => {
+  new Promise(() => {
     let checkInterval = setInterval(() => {
       // .toServer() method is populated by language server
       // if it was not properly started or in progress it will be "null"
       if (callbacks.toServer !== null) {
-//         console.log(callbacks.toServer);
         clearInterval(checkInterval);
         callbacks.getAddressCode = getCode;
         setCallbacks(callbacks);
         setLanguageServer(server);
-        console.log(server)
         console.log("%c LS: Is Up!",'color: #00FF00')
       }
     }, 100);
@@ -43,8 +41,6 @@ const launchLanguageClient = async (
 
 export default function useLanguageServer() {
   const project = useProject();
-  window.project = project
-  const accountUpdates = useRef(1);
 
   // Language Server Callbacks
   let initialCallbacks: Callbacks = {
@@ -108,7 +104,7 @@ export default function useLanguageServer() {
   },[project.project.accounts])
 
   // TODO: Disable this, once the cadence language server package is updated
-  // useEffect(debouncedServerRestart, [project.project.accounts, project.active]);
+  useEffect(debouncedServerRestart, [project.project.accounts, project.active]);
 
 
   useEffect(() => {

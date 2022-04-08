@@ -1,4 +1,4 @@
-import React, {createContext, useState, useRef, useMemo} from 'react';
+import React, {createContext, useState, useMemo} from 'react';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { navigate, useLocation, Redirect } from '@reach/router';
 import ProjectMutator from './projectMutator';

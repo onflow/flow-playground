@@ -10,8 +10,11 @@ import { Editor as EditorRoot } from 'layout/Editor';
 import { Heading } from 'layout/Heading';
 import { EntityType, ActiveEditor } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import { PLACEHOLDER_DESCRIPTION, PLACEHOLDER_TITLE } from "providers/Project/projectDefault";
-import {Account, Project} from 'api/apollo/generated/graphql'
+import {
+  PLACEHOLDER_DESCRIPTION,
+  PLACEHOLDER_TITLE,
+} from 'providers/Project/projectDefault';
+import { Account, Project } from 'api/apollo/generated/graphql';
 
 import debounce from 'util/debounce';
 import Mixpanel from 'util/mixpanel';
@@ -34,11 +37,11 @@ import {
   ProjectInfoContainer,
   ProjectDescription,
   ProjectHeading,
-  ReadmeHtmlContainer
-} from './layout-components'
+  ReadmeHtmlContainer,
+} from './layout-components';
 
-import { decodeText } from "util/readme";
-import CadenceEditor from "components/CadenceEditor"
+import { decodeText } from 'util/readme';
+import CadenceEditor from 'components/CadenceEditor';
 
 export interface WithShowProps {
   show: boolean;
@@ -168,30 +171,29 @@ function getActiveId(project: Project, active: ActiveEditor): string {
   }
 }
 
-
 const usePrevious = (value: any) => {
   const ref = useRef();
   useEffect(() => {
     ref.current = value; //assign the value of ref to the argument
-  },[value]); //this code will run when the value of 'value' changes
+  }, [value]); //this code will run when the value of 'value' changes
   return ref.current; //in the end, return the current ref value.
-}
+};
 
 // This method
 const compareContracts = (prev: Account[], current: Account[]) => {
   for (let i = 0; i < prev.length; i++) {
-    if (prev[i].deployedCode !== current[i].deployedCode){
-      return false
+    if (prev[i].deployedCode !== current[i].deployedCode) {
+      return false;
     }
   }
-  return true
-}
+  return true;
+};
 
-const MAX_DESCRIPTION_SIZE = Math.pow(1024, 2) // 1mb of storage can be saved into readme field
+const MAX_DESCRIPTION_SIZE = Math.pow(1024, 2); // 1mb of storage can be saved into readme field
 const calculateSize = (readme: string) => {
-  const { size } = new Blob([readme])
-  return size >= MAX_DESCRIPTION_SIZE
-}
+  const { size } = new Blob([readme]);
+  return size >= MAX_DESCRIPTION_SIZE;
+};
 
 const EditorContainer: React.FC<EditorContainerProps> = ({
   isLoading,
@@ -199,19 +201,23 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   active,
 }) => {
   const [title, setTitle] = useState<string | undefined>(
-      decodeText(project.title)
+    decodeText(project.title),
   );
   const [description, setDescription] = useState<string | undefined>(
-      decodeText(project.description)
+    decodeText(project.description),
   );
   const [readme, setReadme] = useState<string | undefined>(project.readme);
 
+  //@ts-ignore
   const [code, setCode] = useState('');
+  //@ts-ignore
   const [activeId, setActiveId] = useState(null);
 
-  const projectAccess = useProject()
+  const projectAccess = useProject();
 
-  const [descriptionOverflow, setDescriptionOverflow] = useState(calculateSize(project.readme))
+  const [descriptionOverflow, setDescriptionOverflow] = useState(
+    calculateSize(project.readme),
+  );
 
   useEffect(() => {
     if (isLoading) {
@@ -228,34 +234,20 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     }
   }, [isLoading, active, projectAccess.project]);
 
-  const getCode = (project: any) => (address: string) =>{
-      const number = parseInt(address, 16);
-      if (!number) {
-        return;
-      }
-
-      const index = number - 1
-      if (index < 0 || index >= project.accounts.length) {
-        return;
-      }
-      let code = project.accounts[index].deployedCode;
-      return code
-  }
-
-  const previousProjectState = usePrevious(project)
+  const previousProjectState = usePrevious(project);
 
   // This hook will listen for project updates and if one of the contracts has been changed,
   // it will reload language server
-  useEffect(()=>{
-    if (previousProjectState !== undefined){
+  useEffect(() => {
+    if (previousProjectState !== undefined) {
       // @ts-ignore
-      const previousAccounts = previousProjectState.accounts || []
-      const equal = compareContracts(previousAccounts, project.accounts)
-      if (!equal){
+      const previousAccounts = previousProjectState.accounts || [];
+      const equal = compareContracts(previousAccounts, project.accounts);
+      if (!equal) {
         // reloadServer()
       }
     }
-  }, [project])
+  }, [project]);
 
   const onEditorChange = debounce(active.onChange);
   const updateProject = (
@@ -270,10 +262,9 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   };
 
   const isReadmeEditor = active.type === 4;
-  const readmeLabel =  `README.md${descriptionOverflow
-          ? " - Content can't be more than 1Mb in size"
-          : ""
-  }`
+  const readmeLabel = `README.md${
+    descriptionOverflow ? " - Content can't be more than 1Mb in size" : ''
+  }`;
 
   return (
     <MainRoot>
@@ -323,10 +314,10 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
               <MdeEditor
                 value={readme}
                 onChange={(readme: string) => {
-                  const overflow = calculateSize(readme)
-                  setDescriptionOverflow(overflow)
+                  const overflow = calculateSize(readme);
+                  setDescriptionOverflow(overflow);
                   setReadme(readme);
-                  if(!overflow){
+                  if (!overflow) {
                     updateProject(title, description, readme);
                   }
                 }}
@@ -336,7 +327,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
           )}
         </ProjectInfoContainer>
         {/* This is Cadence Editor */}
-{/*        <CadenceEditor
+        {/*        <CadenceEditor
           type={active.type}
           activeId={activeId}
           code={code}
@@ -344,7 +335,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
           onChange={(code: string, _: any) => onEditorChange(code)}
           show={!isReadmeEditor}
         />*/}
-        <CadenceEditor show={!isReadmeEditor}/>
+        <CadenceEditor show={!isReadmeEditor} />
       </EditorRoot>
       <BottomBarContainer active={active} />
     </MainRoot>

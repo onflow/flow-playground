@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useProject } from 'providers/Project/projectHooks';
-import { useThemeUI } from 'theme-ui';
 
 import {
   SingleToast,
@@ -12,14 +11,13 @@ import {
 } from './components';
 import { AiFillCloseCircle } from 'react-icons/ai';
 
-const Notifications = (props: any) => {
+const Notifications = () => {
   // ===========================================================================
   // GLOBAL HOOKS
   const { project, lastSigners } = useProject();
-  const { theme } = useThemeUI();
 
   // HOOKS  -------------------------------------------------------------------
-  const [_, setProjectAccts] = useState(project.accounts);
+  const [_, setProjectAccounts] = useState(project.accounts);
   const [counter, setCounter] = useState(0);
   const [notifications, setNotifications] = useState<{
     [identifier: string]: string[];
@@ -37,7 +35,7 @@ const Notifications = (props: any) => {
 
   // EFFECTS  -------------------------------------------------------------------
   useEffect(() => {
-    setProjectAccts((prevAccounts) => {
+    setProjectAccounts((prevAccounts) => {
       const latestAccounts = project.accounts;
       const updatedAccounts = latestAccounts.filter(
         (latestAccount, index) =>
