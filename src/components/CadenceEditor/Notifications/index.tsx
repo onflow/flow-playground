@@ -97,7 +97,7 @@ const Notifications = () => {
           const { id, toastText, onClick } = toast;
 
           return (
-            <SingleToast id={id}>
+            <SingleToast key={id}>
               <ButtonContainer>
                 <RemoveToastButton onClick={onClick}>
                   <AiFillCloseCircle color="grey" size="32" />

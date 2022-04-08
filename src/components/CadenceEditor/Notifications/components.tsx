@@ -64,9 +64,8 @@ export const Content = ({ children }) => {
 };
 
 export const SingleToast = (props: any) => {
-  const { id, children } = props;
+  const { children } = props;
   const toastProps = {
-    key: id,
     layout: true,
     initial: { opacity: 0, y: 50, scale: 0.3 },
     animate: { opacity: 1, y: 0, scale: 1 },
