@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { FaArrowCircleRight, FaExclamationTriangle, FaCaretSquareUp, FaCaretSquareDown } from 'react-icons/fa';
+import {
+  FaArrowCircleRight,
+  FaExclamationTriangle,
+  FaCaretSquareUp,
+  FaCaretSquareDown,
+} from 'react-icons/fa';
 import { EntityType } from 'providers/Project';
 import Button from 'components/Button';
 import { useProject } from 'providers/Project/projectHooks';
@@ -46,19 +51,11 @@ export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
             <span>{errors}</span>
           </Badge>
         )}
-        {expanded ?
-          <FaCaretSquareUp
-            cursor="pointer"
-            opacity="0.2"
-            size="18"
-          />
-            :
-          <FaCaretSquareDown
-            cursor="pointer"
-            opacity="0.2"
-            size="18"
-          />
-        }
+        {expanded ? (
+          <FaCaretSquareUp cursor="pointer" opacity="0.2" size="18" />
+        ) : (
+          <FaCaretSquareDown cursor="pointer" opacity="0.2" size="18" />
+        )}
       </Controls>
     </Heading>
   );
@@ -104,7 +101,7 @@ const renderMessage = (message: string) => {
   let spanClass = getSpanClass(message);
 
   const { items } = message.split(' ').reduce(
-    (acc, item,i) => {
+    (acc, item, i) => {
       let current = acc.items[acc.items.length - 1];
       if (acc.startNew) {
         acc.startNew = false;
@@ -115,7 +112,9 @@ const renderMessage = (message: string) => {
       if (item.startsWith('`')) {
         acc.startNew = true;
         const span = (
-          <span className={spanClass} key={`${item}-${i}`}>{item.replace(/`/g, '')}</span>
+          <span className={spanClass} key={`${item}-${i}`}>
+            {item.replace(/`/g, '')}
+          </span>
         );
         acc.items.push(span);
         acc.startNew = true;
@@ -135,10 +134,12 @@ const renderMessage = (message: string) => {
 
 export const ErrorsList: React.FC<ErrorListProps> = (props) => {
   const { list, actions } = props;
-  const {goTo, hideDecorations, hover} = actions
+  const { goTo, hideDecorations, hover } = actions;
   if (list.length === 0) {
+    hideDecorations()
     return null;
   }
+
   return (
     <Stack>
       <Heading>
@@ -167,9 +168,9 @@ export const ErrorsList: React.FC<ErrorListProps> = (props) => {
 };
 
 export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
-  const [ expanded, setExpanded ] = useState(true);
+  const [expanded, setExpanded] = useState(true);
   const { problems, actions } = props;
-  const { goTo, hideDecorations, hover } = actions
+  const { goTo, hideDecorations, hover } = actions;
   const toggle = () => {
     setExpanded(!expanded);
   };
@@ -178,7 +179,7 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
     return null;
   }
   const fullList = [...problems.warning, ...problems.info];
-  const hintsAmount = fullList.length
+  const hintsAmount = fullList.length;
   return (
     <Stack>
       <Heading>
@@ -189,17 +190,11 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
               <span>{hintsAmount}</span>
             </Badge>
           )}
-          {expanded ?
-            <FaCaretSquareUp
-              cursor="pointer"
-              opacity="0.2"
-            />
-              :
-            <FaCaretSquareDown
-              cursor="pointer"
-              opacity="0.2"
-            />
-          }
+          {expanded ? (
+            <FaCaretSquareUp cursor="pointer" opacity="0.2" />
+          ) : (
+            <FaCaretSquareDown cursor="pointer" opacity="0.2" />
+          )}
         </Controls>
       </Heading>
       {expanded && (
@@ -230,7 +225,7 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
 const getLabel = (type: EntityType) => {
   const { project, active } = useProject();
   const { accounts } = project;
-  
+
   switch (true) {
     case type === EntityType.Account:
       return accounts[active.index].deployedCode ? 'Redeploy' : 'Deploy';
