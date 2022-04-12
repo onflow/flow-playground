@@ -47,6 +47,7 @@ import {
 import {
   ControlContainer,
   HoverPanel,
+  Hidable,
   StatusMessage,
 } from '../../Arguments/styles';
 
@@ -65,8 +66,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const [executionArguments, setExecutionArguments] = useState({});
   const [processingStatus, setProcessingStatus] = useState(false);
   const [setResult] = useSetExecutionResultsMutation();
-  const { scriptFactory, transactionFactory, contractDeployment } =
-    useTemplateType();
+  const {
+    scriptFactory,
+    transactionFactory,
+    contractDeployment,
+  } = useTemplateType();
   const [selected, updateSelectedAccounts] = useState([]);
   const [expanded, setExpanded] = useState(true);
 
@@ -366,37 +370,35 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       <div ref={constraintsRef} className="constraints" />
       <MotionBox dragConstraints={constraintsRef}>
         <HoverPanel>
-          {validCode && (
-            <>
-              {list.length > 0 && (
-                <>
-                  <ArgumentsTitle
-                    type={type}
-                    errors={numberOfErrors}
-                    expanded={expanded}
-                    setExpanded={setExpanded}
-                  />
-                  <ArgumentsList
-                    list={list}
-                    errors={errors}
-                    hidden={!expanded}
-                    onChange={(name, value) => {
-                      let key = name.toString();
-                      let newValue = { ...values, [key]: value };
-                      setValue(newValue);
-                    }}
-                  />
-                </>
-              )}
-              {needSigners && (
-                <Signers
-                  maxSelection={signers}
-                  selected={selected}
-                  updateSelectedAccounts={updateSelectedAccounts}
+          <Hidable hidden={!validCode}>
+            {list.length > 0 && (
+              <>
+                <ArgumentsTitle
+                  type={type}
+                  errors={numberOfErrors}
+                  expanded={expanded}
+                  setExpanded={setExpanded}
                 />
-              )}
-            </>
-          )}
+                <ArgumentsList
+                  list={list}
+                  errors={errors}
+                  hidden={!expanded}
+                  onChange={(name, value) => {
+                    let key = name.toString();
+                    let newValue = { ...values, [key]: value };
+                    setValue(newValue);
+                  }}
+                />
+              </>
+            )}
+            {needSigners && (
+              <Signers
+                maxSelection={signers}
+                selected={selected}
+                updateSelectedAccounts={updateSelectedAccounts}
+              />
+            )}
+          </Hidable>
 
           <ErrorsList list={problems.error} actions={actions} />
           <Hints problems={problems} actions={actions} />

@@ -14,6 +14,13 @@ export const HoverPanel = styled.div<HoverPanelProps>`
   box-shadow: 10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff;
 `;
 
+interface HidableProps {
+  hidden: Boolean
+}
+export const Hidable = styled.div<HidableProps>`
+  display: ${({hidden = false}) => hidden ? "none" : "block"};
+`
+
 export const Heading = styled.div`
   display: flex;
   align-items: center;
