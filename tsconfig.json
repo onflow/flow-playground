@@ -9,9 +9,7 @@
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-/*
     "noImplicitAny": false,
-*/
     "removeComments": false,
     "preserveConstEnums": true,
     "sourceMap": true,
