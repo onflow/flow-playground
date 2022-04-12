@@ -132,7 +132,7 @@ const CadenceEditor = (props: any) => {
         setTimeout(()=>{
           console.log("Restore back!")
           newState.model.setValue(code);
-        }, 100)
+        }, 150)
       }
 
       editorOnChange.current =
