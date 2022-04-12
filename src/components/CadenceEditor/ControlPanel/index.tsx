@@ -313,7 +313,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // MEMOIZED -----------------------------------------------------------------
   // we need to wrap it in useMemo, cause otherwise it might push component into infinite rerender
   // as "getArguments" will return new empty array on each render
-  const list = useMemo(getArguments, [active]);
+  const list = useMemo(getArguments, [active, executionArguments]);
 
   // VARIABLES AND CONSTANTS  -------------------------------------------------
   const { editor } = props;
@@ -356,7 +356,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   }, [languageClient, active]);
 
   useEffect(() => {
-    console.log('Call again!');
     validate(list, values);
   }, [list, values]);
 
