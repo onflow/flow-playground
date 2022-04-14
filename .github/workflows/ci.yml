@@ -1,10 +1,11 @@
-name: Tests
+name: Continuous Integration
 
 on:
   push:
 
 jobs:
   test:
+    name: "Tests"
     runs-on: ubuntu-latest
     strategy:
       matrix:
