@@ -1,20 +1,20 @@
 ## Overview 
 
-The Flow Playground is an web-based interactive IDE for running Cadence code.
+The Flow Playground is a web-based interactive IDE for running Cadence code.
 It also provides code for the tutorial projects found here: https://docs.onflow.org/cadence/tutorial/01-first-steps
 
-The overall project consists of the Web app (this) and an API backend: https://github.com/onflow/flow-playground-api
+The overall project consists of the web app (this) and an [API backend](https://github.com/onflow/flow-playground-api).
 
 The Playground Web App is implemented in React. The major components are as follows:
 
 - GraphQL / Apollo Client
-  - All HTTP communication with the Playground API is donce via `GraphQL` using the `Apollo` client. 
-  - The GrpahQL schema is defined by the Playground API here: https://github.com/onflow/flow-playground-api/blob/master/schema.graphql
-    - This project uses the Apollo clients localStorage interface as well. 
+  - All HTTP communication with the Playground API is done via `GraphQL` using the `Apollo` client. 
+  - The GraphQL schema is defined by the Playground API here: https://github.com/onflow/flow-playground-api/blob/master/schema.graphql
+    - This project uses Apollo Client's `localStorage` interface as well. 
     - You can view the _local_ GraphQL schema here: https://github.com/onflow/flow-playground/blob/master/src/api/apollo/local.graphql
   - CRUD methods (wrapped Apollo client) are implemented here: https://github.com/onflow/flow-playground/blob/master/src/providers/Project/projectMutator.ts 
-  - Typescript typings, and CRUD methods for Apollo are auto-generated using: https://www.graphql-code-generator.com/
-  - After making changes to the `schema.local` you'll need to run `npm run graphql:codegen` to auto-generate new typings and methods for Apollo client.
+  - TypeScript typings and CRUD methods for Apollo are auto-generated using: https://www.graphql-code-generator.com/
+  - After making changes to the `schema.local` you will need to run `npm run graphql:codegen` to auto-generate new typings and methods for Apollo Client.
 
 - Monaco Editor
   - The editor interface itself is implemented using https://microsoft.github.io/monaco-editor/
