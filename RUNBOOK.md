@@ -1,74 +1,77 @@
 ## Overview 
 
 The Flow Playground is a web-based interactive IDE for running Cadence code.
-It also provides code for the tutorial projects found here: https://docs.onflow.org/cadence/tutorial/01-first-steps
+It also provides an environment for the [Cadence intro tutorials](https://docs.onflow.org/cadence/tutorial/01-first-steps). 
 
 The overall project consists of the web app (this) and an [API backend](https://github.com/onflow/flow-playground-api).
 
 The Playground Web App is implemented in React. The major components are as follows:
 
-- GraphQL / Apollo Client
-  - All HTTP communication with the Playground API is done via `GraphQL` using the `Apollo` client. 
-  - The GraphQL schema is defined by the Playground API here: https://github.com/onflow/flow-playground-api/blob/master/schema.graphql
-    - This project uses Apollo Client's `localStorage` interface as well. 
-    - You can view the _local_ GraphQL schema here: https://github.com/onflow/flow-playground/blob/master/src/api/apollo/local.graphql
-  - CRUD methods (wrapped Apollo client) are implemented here: https://github.com/onflow/flow-playground/blob/master/src/providers/Project/projectMutator.ts 
-  - TypeScript typings and CRUD methods for Apollo are auto-generated using: https://www.graphql-code-generator.com/
-  - After making changes to the `schema.local` you will need to run `npm run graphql:codegen` to auto-generate new typings and methods for Apollo Client.
+### GraphQL / Apollo Client
 
-- Monaco Editor
-  - The editor interface itself is implemented using https://microsoft.github.io/monaco-editor/
-  - The editor component can be found here: https://github.com/onflow/flow-playground/tree/master/src/containers/Editor
-  - The Cadence language definition (for linting and syntax highlighting) for Monaco can be found here: https://github.com/onflow/flow-playground/blob/master/src/util/cadence.ts
+- All HTTP communication with the Playground API is done via `GraphQL` using the `Apollo` client. 
+- The GraphQL schema is defined by the Playground API in [schemal.graphql](https://github.com/onflow/flow-playground-api/blob/master/schema.graphql)
+  - This project uses Apollo Client's `localStorage` interface as well. 
+  - You can view the _local_ GraphQL schema in [local.graphql](src/api/apollo/local.graphql).
+- CRUD methods (wrapped Apollo client) are implemented in [projectMutator.ts](src/providers/Project/projectMutator.ts).
+- TypeScript typings and CRUD methods for Apollo are auto-generated using [GraphQL Code Generator](https://www.graphql-code-generator.com/).
+- After making changes to the `schema.local` you will need to run `npm run graphql:codegen` to auto-generate new typings and methods for Apollo Client.
 
-- Cadence Language Server
-  - The Cadence Language Server (protocol for Monaco) is implemented in WASM. 
-    - You can read about it here: https://github.com/onflow/cadence/blob/master/languageserver/README.md 
-  - The integration can be found here: 
-      - https://github.com/onflow/flow-playground/blob/master/src/util/language-server.ts
-      - https://github.com/onflow/flow-playground/blob/master/src/util/language-client.ts
+### Monaco Editor
+
+- The editor interface itself is implemented using [Monaco Editor](https://microsoft.github.io/monaco-editor/).
+- The editor component can be found here: https://github.com/onflow/flow-playground/tree/master/src/containers/Editor
+- The Cadence language definition (for linting and syntax highlighting) for Monaco can be found here: https://github.com/onflow/flow-playground/blob/master/src/util/cadence.ts
+
+### Cadence Language Server
+
+- The Cadence Language Server (protocol for Monaco) is implemented in Goland and compiled to WASM. 
+  - The WASM bundle is built from [source files in the Cadence repository](https://github.com/onflow/cadence/tree/master/npm-packages/cadence-language-server) and [published on npm](https://www.npmjs.com/package/@onflow/cadence-language-server).
+- You can read more about the Cadence Language Server in the [Cadence repository](https://github.com/onflow/cadence/blob/master/languageserver/README.md).
+- The Playground integration can be found here: 
+  - Server: https://github.com/onflow/flow-playground/blob/master/src/util/language-server.ts
+  - Client: https://github.com/onflow/flow-playground/blob/master/src/util/language-client.ts
 
 ## Deployment
 
-### Access
+The Playground Web App is deployed to [Vercel](https://vercel.com). You will see a link to join the Flow Vercel team when you open your first PR. You must be a member of the team to trigger deployments.
 
-To create a Playground deployment, your user must: 
-- Be added to the Flow/Dapper Labs Teamcity account
-- Have write access to this repository for triggering Teamcity deploys (details below): https://github.com/dapperlabs/flow-playground
-- Be connected to the Office VPN
+### Staging Deployment
 
-A request for these should be filed here: https://dapperlabs.happyfox.com/
+URL: https://play.staging.onflow.org
 
-### Deployment Workflow
+The Playground Web App is deployed to https://play.staging.onflow.org each time a new commit is pushed to the `staging` branch on this repository.
 
-**Staging Deployment**
+1. Open a new pull request and select `staging` as the base branch. Vercel will trigger a new deployment once the PR is approved and merged.
 
-Once your PR contribution has been successfully merged into the `master` branch, you must take the following steps: 
-1) Tag your commit, following [semver](https://semver.org/) conventions eg `git tag v0.42.0`
-    - To find the current tag use: `git fetch --all && git tag` to display a list of tags.
-2) Push your tag to the main branch: `git push origin --tags`
-3) To trigger a staging deployment, update the version number here: https://github.com/dapperlabs/flow-playground/blob/master/Makefile#L3
-    - Make sure the version number here, matches your new tag, if you want your changes to be deployed. 
-4) Once updated visit: https://ci.eng.dapperlabs.com/buildConfiguration/Flow_FlowPlayground_FlowTestNetwork_BuildCiCdPlaygroundStaging#all-projects
-    - Here, you will see your deployment in the queue, and the build log output.
-5) If the Teamcity build succeeds your chnges will be available to preview here: https://play.staging.onflow.org
+2. Vercel will then report the deployment status on the `staging` branch:
 
-**Production Deployment**
+![vercel-deployment](vercel-deployment.png)
 
-Once a staging deployment has been verified. To move the changes into produciton, navigate to the production pipeline in Teamcity here: https://ci.eng.dapperlabs.com/buildConfiguration/Flow_FlowPlayground_FlowTestNetwork_BuildCiCdPlaygroundProduction#all-projects and click the "Deploy" button in the top right of the table. 
+### Production Deployment
 
-Procuction deployment progress can be viewed here: https://ci.eng.dapperlabs.com/buildConfiguration/Flow_FlowPlayground_FlowTestNetwork_BuildCiCdPlaygroundProduction#all-projects
+URL: https://play.onflow.org
 
-**Deployment Guide Notion Doc**: 
+Once a staging deployment has been verified, you can promote the changes to production.
 
-More details and screenshots regarding the deployment process can be found here.
-https://www.notion.so/dapperlabs/Flow-Playground-Deployment-Process-6ca452adb63a4b41bbe5f3b56eda7021
+The Playground Web App is deployed to https://play.onflow.org each time a new commit is pushed to the `production` branch on this repository.
 
-### Important Gotcha: User Sessions & Project "Forking"
+1. Open a new pull request and select `production` as the base branch and `staging` as the source branch. Production deployments should always deploy the same code that is already live in staging. Vercel will trigger a new deployment once the PR is approved and merged.
+
+2. Vercel will then report the deployment status on the `production` branch:
+
+![vercel-deployment](vercel-deployment.png)
+
+## Additional Details
+
+More details and screenshots regarding the deployment process [can be found on Notion](
+https://www.notion.so/dapperlabs/Flow-Playground-Deployment-Process-6ca452adb63a4b41bbe5f3b56eda7021).
+
+## Important Gotcha: User Sessions & Project "Forking"
 
 _The Playground will not function in browsers where cookies or localStorage are disabled._
 
-#### How It Works
+### How It Works
 
 The Playground determines what content to load into the UI based on a url query param named `projectId`.
 - When a user first visits the Playground, the `projectId` param is set to `local-project`, indicating that this is a new project and has not been persisted.
@@ -83,6 +86,3 @@ The Playground determines what content to load into the UI based on a url query 
 - The server response also sets a cookie **that links the current browser session with the new project ID** 
   - This is done so that if a user _shares_ a link to their new project (eg. https://play.onflow.org/46c7136f-803c-4166-9d46-25d8e927114c), to someone without the session cookie linking the ID and browser session, the UI will recognise (the save button becomes "fork") that this is the case, and on subsequent saves of the shared project, _will send a mutation to generate a new project based on the existing contents of the editor, preventing users from overwriting eachothers projects!_
  - The name of the cookie is `flow-playground`
-
-
-
