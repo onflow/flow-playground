@@ -25,7 +25,7 @@ The Playground Web App is implemented in React. The major components are as foll
 
 ### Cadence Language Server
 
-- The Cadence Language Server (protocol for Monaco) is implemented in Goland and compiled to WASM. 
+- The Cadence Language Server (used by Monaco) is implemented in Golang and compiled to WASM. 
   - The WASM bundle is built from [source files in the Cadence repository](https://github.com/onflow/cadence/tree/master/npm-packages/cadence-language-server) and [published on npm](https://www.npmjs.com/package/@onflow/cadence-language-server).
 - You can read more about the Cadence Language Server in the [Cadence repository](https://github.com/onflow/cadence/blob/master/languageserver/README.md).
 - The Playground integration can be found here: 
@@ -61,11 +61,6 @@ The Playground Web App is deployed to https://play.onflow.org each time a new co
 2. Vercel will then report the deployment status on the `production` branch:
 
 ![vercel-deployment](vercel-deployment.png)
-
-## Additional Details
-
-More details and screenshots regarding the deployment process [can be found on Notion](
-https://www.notion.so/dapperlabs/Flow-Playground-Deployment-Process-6ca452adb63a4b41bbe5f3b56eda7021).
 
 ## Important Gotcha: User Sessions & Project "Forking"
 
