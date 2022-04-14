@@ -10,15 +10,17 @@ import { Editor as EditorRoot } from 'layout/Editor';
 import { Heading } from 'layout/Heading';
 import { EntityType, ActiveEditor } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import { PLACEHOLDER_DESCRIPTION, PLACEHOLDER_TITLE } from "providers/Project/projectDefault";
-import {Account, Project} from 'api/apollo/generated/graphql';
-
+import {
+  PLACEHOLDER_DESCRIPTION,
+  PLACEHOLDER_TITLE,
+} from 'providers/Project/projectDefault';
+import { Account, Project } from 'api/apollo/generated/graphql';
 
 import debounce from 'util/debounce';
 import Mixpanel from 'util/mixpanel';
 
 import { default as FlowButton } from 'components/Button';
-import CadenceEditor from 'components/CadenceEditor';
+// import CadenceEditor from 'components/CadenceEditor';
 import TransactionBottomBar from 'components/TransactionBottomBar';
 import ScriptBottomBar from 'components/ScriptBottomBar';
 import { Version } from 'components/CadenceVersion';
@@ -31,11 +33,15 @@ import {
   Label,
 } from 'components/Arguments/SingleArgument/styles';
 import { Markdown } from 'components/Markdown';
+import {
+  ProjectInfoContainer,
+  ProjectDescription,
+  ProjectHeading,
+  ReadmeHtmlContainer,
+} from './layout-components';
 
-import { decodeText } from "util/readme";
-import { CadenceLanguageServer, Callbacks } from "util/language-server";
-import { MonacoServices } from "monaco-languageclient/lib/monaco-services";
-import * as monaco from "monaco-editor";
+import { decodeText } from 'util/readme';
+import CadenceEditor from 'components/CadenceEditor';
 
 export interface WithShowProps {
   show: boolean;
@@ -165,59 +171,29 @@ function getActiveId(project: Project, active: ActiveEditor): string {
   }
 }
 
-const ProjectInfoContainer = styled.div<WithShowProps>`
-  display: ${({ show }) => (show ? 'block' : 'none')};
-  margin: 0.2rem 1rem 0rem 1rem;
-  min-width: 500px;
-  margin-top: 1rem;
-`;
-
-const ProjectHeading = styled.div`
-  font-size: 2rem;
-  font-weight: 700;
-  margin-top: 0.25rem;
-  padding: 1rem;
-`;
-
-const ProjectDescription = styled.div`
-  font-size: 1.2rem;
-  margin: 1rem;
-  margin-top: 2rem;
-  padding: 0.5rem;
-  border-radius: 2px;
-  font-style: italic;
-`;
-
-const ReadmeHtmlContainer = styled.div`
-  margin: 1rem;
-  margin-top: 0rem;
-`;
-
 const usePrevious = (value: any) => {
   const ref = useRef();
   useEffect(() => {
     ref.current = value; //assign the value of ref to the argument
-  },[value]); //this code will run when the value of 'value' changes
+  }, [value]); //this code will run when the value of 'value' changes
   return ref.current; //in the end, return the current ref value.
-}
+};
 
 // This method
 const compareContracts = (prev: Account[], current: Account[]) => {
   for (let i = 0; i < prev.length; i++) {
-    if (prev[i].deployedCode !== current[i].deployedCode){
-      return false
+    if (prev[i].deployedCode !== current[i].deployedCode) {
+      return false;
     }
   }
-  return true
-}
+  return true;
+};
 
-let monacoServicesInstalled = false;
-
-const MAX_DESCRIPTION_SIZE = Math.pow(1024, 2) // 1mb of storage can be saved into readme field
+const MAX_DESCRIPTION_SIZE = Math.pow(1024, 2); // 1mb of storage can be saved into readme field
 const calculateSize = (readme: string) => {
-  const { size } = new Blob([readme])
-  return size >= MAX_DESCRIPTION_SIZE
-}
+  const { size } = new Blob([readme]);
+  return size >= MAX_DESCRIPTION_SIZE;
+};
 
 const EditorContainer: React.FC<EditorContainerProps> = ({
   isLoading,
@@ -225,19 +201,23 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   active,
 }) => {
   const [title, setTitle] = useState<string | undefined>(
-      decodeText(project.title)
+    decodeText(project.title),
   );
   const [description, setDescription] = useState<string | undefined>(
-      decodeText(project.description)
+    decodeText(project.description),
   );
   const [readme, setReadme] = useState<string | undefined>(project.readme);
 
+  //@ts-ignore
   const [code, setCode] = useState('');
+  //@ts-ignore
   const [activeId, setActiveId] = useState(null);
 
-  const projectAccess = useProject()
+  const projectAccess = useProject();
 
-  const [descriptionOverflow, setDescriptionOverflow] = useState(calculateSize(project.readme))
+  const [descriptionOverflow, setDescriptionOverflow] = useState(
+    calculateSize(project.readme),
+  );
 
   useEffect(() => {
     if (isLoading) {
@@ -254,96 +234,20 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     }
   }, [isLoading, active, projectAccess.project]);
 
-
-  // The Monaco Language Client services have to be installed globally, once.
-  // An editor must be passed, which is only used for commands.
-  // As the Cadence language server is not providing any commands this is OK
-
-  if (!monacoServicesInstalled) {
-    monacoServicesInstalled = true;
-    MonacoServices.install(monaco);
-  }
-
-  // We will move callbacks out
-  let callbacks : Callbacks = {
-    // The actual callback will be set as soon as the language server is initialized
-    toServer: null,
-
-    // The actual callback will be set as soon as the language server is initialized
-    onClientClose: null,
-
-    // The actual callback will be set as soon as the language client is initialized
-    onServerClose: null,
-
-    // The actual callback will be set as soon as the language client is initialized
-    toClient: null,
-
-    //@ts-ignore
-    getAddressCode(address: string): string | undefined {
-      // we will set it once it is instantiated
-    }
-  };
-
-  const getCode = (project: any) => (address: string) =>{
-      const number = parseInt(address, 16);
-      if (!number) {
-        return;
-      }
-
-      const index = number - 1
-      if (index < 0 || index >= project.accounts.length) {
-        return;
-      }
-      let code = project.accounts[index].deployedCode;
-      return code
-  }
-
-  const [serverReady, setServerReady] = useState(false)
-  const [serverCallbacks, setServerCallbacks] = useState(callbacks)
-  const [languageServer, setLanguageServer] = useState(null)
-  const initLanguageServer = async ()=>{
-    const server = await CadenceLanguageServer.create(callbacks)
-    setLanguageServer(server)
-  }
-
-  useEffect(()=>{
-    // Init language server
-    initLanguageServer()
-
-    let checkInterval = setInterval(()=>{
-      // .toServer() method is populated by language server
-      // if it was not properly started or in progress it will be "null"
-      if (callbacks.toServer !== null){
-        clearInterval(checkInterval);
-        setServerReady(true)
-        callbacks.getAddressCode = getCode(project)
-        setServerCallbacks(callbacks)
-      }
-    }, 300)
-    // TODO: Check if we can reinstantiate language server after accounts has been changed
-  },[])
-
-  const reloadServer = async ()=>{
-    serverCallbacks.getAddressCode = getCode(project)
-    const server = await CadenceLanguageServer.create(serverCallbacks)
-    setServerCallbacks(serverCallbacks)
-    setLanguageServer(server)
-  }
-
-  const previousProjectState = usePrevious(project)
+  const previousProjectState = usePrevious(project);
 
   // This hook will listen for project updates and if one of the contracts has been changed,
   // it will reload language server
-  useEffect(()=>{
-    if (previousProjectState !== undefined){
+  useEffect(() => {
+    if (previousProjectState !== undefined) {
       // @ts-ignore
-      const previousAccounts = previousProjectState.accounts || []
-      const equal = compareContracts(previousAccounts, project.accounts)
-      if (!equal){
-        reloadServer()
+      const previousAccounts = previousProjectState.accounts || [];
+      const equal = compareContracts(previousAccounts, project.accounts);
+      if (!equal) {
+        // reloadServer()
       }
     }
-  }, [project])
+  }, [project]);
 
   const onEditorChange = debounce(active.onChange);
   const updateProject = (
@@ -358,10 +262,9 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   };
 
   const isReadmeEditor = active.type === 4;
-  const readmeLabel =  `README.md${descriptionOverflow
-          ? " - Content can't be more than 1Mb in size"
-          : ""
-  }`
+  const readmeLabel = `README.md${
+    descriptionOverflow ? " - Content can't be more than 1Mb in size" : ''
+  }`;
 
   return (
     <MainRoot>
@@ -411,10 +314,10 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
               <MdeEditor
                 value={readme}
                 onChange={(readme: string) => {
-                  const overflow = calculateSize(readme)
-                  setDescriptionOverflow(overflow)
+                  const overflow = calculateSize(readme);
+                  setDescriptionOverflow(overflow);
                   setReadme(readme);
-                  if(!overflow){
+                  if (!overflow) {
                     updateProject(title, description, readme);
                   }
                 }}
@@ -424,17 +327,15 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
           )}
         </ProjectInfoContainer>
         {/* This is Cadence Editor */}
-        <CadenceEditor
+        {/*        <CadenceEditor
           type={active.type}
           activeId={activeId}
           code={code}
           mount="cadenceEditor"
           onChange={(code: string, _: any) => onEditorChange(code)}
           show={!isReadmeEditor}
-          languageServer={languageServer}
-          callbacks={serverCallbacks}
-          serverReady={serverReady}
-        />
+        />*/}
+        <CadenceEditor show={!isReadmeEditor} />
       </EditorRoot>
       <BottomBarContainer active={active} />
     </MainRoot>

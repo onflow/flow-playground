@@ -1,37 +1,26 @@
 import React, { useEffect } from 'react';
 import { Global } from '@emotion/core';
-import { ThemeProvider, Text } from 'theme-ui';
+import { ThemeProvider } from 'theme-ui';
 import { Router, globalHistory } from '@reach/router';
 import { ApolloProvider } from '@apollo/react-hooks';
-import AppMobileWrapper from 'containers/AppMobileWrapper';
-import BrowserDetector from 'components/BrowserDetector';
-import * as GoogleAnalytics from 'util/google-analytics';
-import client from 'api/apollo/client';
-import globalStyles from './globalStyles';
-import theme from './theme';
 import 'reset-css';
 
+import * as GoogleAnalytics from 'util/google-analytics';
+import client from 'api/apollo/client';
+
 import Playground from 'containers/Editor';
+import AppMobileWrapper from 'containers/AppMobileWrapper';
+import BrowserDetector from 'components/BrowserDetector';
+
 import FourOhFour from './pages/404';
+import globalStyles from './globalStyles';
+import theme from './theme';
 
 GoogleAnalytics.initialize(process.env.GA_TRACKING_CODE);
 
 const Base = (props: any) => {
   return <div>{props.children}</div>;
 };
-
-const version = (
-  <Text
-    sx={{
-      color: 'lightgrey',
-      position: 'absolute',
-      bottom: '1rem',
-      right: '1rem',
-    }}
-  >
-    v0.3.5
-  </Text>
-);
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -52,13 +41,12 @@ const App: React.FC = () => {
         <ThemeProvider theme={theme}>
           <AppMobileWrapper>
             <Router>
-                <Base path="/">
-                  <FourOhFour path="404" />
-                  <Playground path="/" />
-                  <Playground path="/:projectId" />
-                </Base>
+              <Base path="/">
+                <FourOhFour path="404" />
+                <Playground path="/" />
+                <Playground path="/:projectId" />
+              </Base>
             </Router>
-            {version}
           </AppMobileWrapper>
         </ThemeProvider>
       </ApolloProvider>

@@ -161,4 +161,13 @@ export class CadenceLanguageServer {
       window[this.functionName('onClientClose')]()
     }
   }
+
+  updateCodeGetter(newMethod){
+    window[this.functionName('getAddressCode')] = (address: string): string | undefined => {
+      if (!newMethod) {
+        return undefined
+      }
+      return newMethod(address)
+    }
+  }
 }
