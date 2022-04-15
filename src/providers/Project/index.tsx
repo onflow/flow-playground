@@ -351,7 +351,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const activeEditor = useMemo(
       getActiveEditor,
-      [active.type, active.index]
+      [active.type, active.index, project]
   )
 
   const location = useLocation();
