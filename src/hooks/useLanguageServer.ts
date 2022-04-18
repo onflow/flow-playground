@@ -1,10 +1,9 @@
-import {useEffect, useState, useMemo} from 'react';
+import { useEffect, useState } from 'react';
 import { CadenceLanguageServer, Callbacks } from 'util/language-server';
 import { MonacoServices } from 'monaco-languageclient/lib/monaco-services';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { createCadenceLanguageClient } from 'util/language-client';
 import { useProject } from 'providers/Project/projectHooks';
-import debounce from "util/debounce";
 
 let monacoServicesInstalled = false;
 
@@ -20,17 +19,13 @@ async function startLanguageServer(callbacks: any, getCode: any, ops) {
         callbacks.getAddressCode = getCode;
         setCallbacks(callbacks);
         setLanguageServer(server);
-        console.log("%c LS: Is Up!",'color: #00FF00')
+        console.log('%c LS: Is Up!', 'color: #00FF00');
       }
     }, 100);
   });
 }
 
-const launchLanguageClient = async (
-  callbacks,
-  languageServer,
-  setLanguageClient,
-) => {
+const launchLanguageClient = async (callbacks, languageServer, setLanguageClient) => {
   if (languageServer) {
     const newClient = createCadenceLanguageClient(callbacks);
     newClient.start();
@@ -84,7 +79,7 @@ export default function useLanguageServer() {
   };
 
   const restartServer = () => {
-    console.log("Restarting server...")
+    console.log('Restarting server...');
 
     startLanguageServer(callbacks, getCode, {
       setLanguageServer,
@@ -92,20 +87,11 @@ export default function useLanguageServer() {
     });
   };
 
-  const debouncedServerRestart = useMemo(
-      () => debounce(restartServer, 150),
-      [languageServer]
-  )
-
-  useEffect(()=>{
-    if(languageServer){
-      languageServer.updateCodeGetter(getCode)
+  useEffect(() => {
+    if (languageServer) {
+      languageServer.updateCodeGetter(getCode);
     }
-  },[project.project.accounts])
-
-  // TODO: Disable this, once the cadence language server package is updated
-  useEffect(debouncedServerRestart, [project.project.accounts, project.active]);
-
+  }, [project.project.accounts]);
 
   useEffect(() => {
     // The Monaco Language Client services have to be installed globally, once.
@@ -122,7 +108,7 @@ export default function useLanguageServer() {
   }, []);
 
   useEffect(() => {
-    if(!languageClient){
+    if (!languageClient) {
       launchLanguageClient(callbacks, languageServer, setLanguageClient).then();
     }
   }, [languageServer]);

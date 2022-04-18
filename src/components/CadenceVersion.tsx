@@ -28,7 +28,7 @@ export const Dot = styled.div<DotType>`
   height: var(--size);
   border-radius: var(--size);
   background-color: ${({ active = false }) => {
-    return active === 'OFF' ? '#ff006f' : '#00ff76';
+    return active === 'OFF' ? '#ee431e' : '#00ff76';
   }};
 `;
 

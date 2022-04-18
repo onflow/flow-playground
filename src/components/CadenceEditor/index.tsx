@@ -3,8 +3,8 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 import { useProject } from 'providers/Project/projectHooks';
 import { EntityType } from 'providers/Project';
-import debounce from 'util/debounce';
 import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
+import debounce from 'util/debounce';
 
 import Notifications from './Notifications';
 import ControlPanel from './ControlPanel';
@@ -86,18 +86,17 @@ const CadenceEditor = (props: any) => {
 
   // Method to use, when model was changed
   const debouncedModelChange = debounce(() => {
-    // we will ignore text line, cause onChange is different for readme and other scripts
-    // @ts-ignore
-    project.active.onChange(editor.getValue());
-  }, 50);
+    if (project.project?.accounts) {
+      // we will ignore text line, cause onChange is based on active type
+      // @ts-ignore
+      project.active.onChange(editor.getValue());
+    }
+  }, 100);
 
-  useEffect(configureCadence, []);
-  useEffect(() => {
-    // TODO: save/restore view state with:
-    //  - use ref to track current active id
-    //  - const oldState = editor.saveViewState();
-    if (editor) {
-      // Remove tracking of model updates to prevent re-rendering
+  //@ts-ignore
+  const setupEditor = () => {
+    const projectExist = project && project.project.accounts;
+    if (editor && projectExist) {
       if (editorOnChange.current) {
         editorOnChange.current.dispose();
       }
@@ -116,6 +115,11 @@ const CadenceEditor = (props: any) => {
         editor.focus();
       } else {
         // - Add new line at the end of the model
+        // Remove tracking of model updates to prevent re-rendering
+        if (editorOnChange.current) {
+          editorOnChange.current.dispose();
+        }
+
         newState.model.setValue(code + '\n');
         lastEdit.current = {
           type: project.active.type,
@@ -126,19 +130,27 @@ const CadenceEditor = (props: any) => {
         editor.setModel(newState.model);
         editor.restoreViewState(newState.viewState);
         editor.focus();
-
         editor.layout();
 
-        setTimeout(()=>{
-          console.log("Restore back!")
+        setTimeout(() => {
           newState.model.setValue(code);
-        }, 150)
+        }, 150);
       }
-
-      editorOnChange.current =
-        editor.onDidChangeModelContent(debouncedModelChange);
+      editorOnChange.current = editor.onDidChangeModelContent(
+        debouncedModelChange,
+      );
     }
-  }, [project.active, project.project.accounts]);
+  };
+
+  useEffect(() => {
+    configureCadence();
+  }, []);
+
+  useEffect(() => {
+    if (editor) {
+      setupEditor();
+    }
+  }, [editor, project.active.index, project.active.type]);
 
   // "initEditor" will create new instance of Monaco Editor and set it up
   const initEditor = async () => {
@@ -168,6 +180,7 @@ const CadenceEditor = (props: any) => {
 
     // Save editor in component state
     setEditor(editor);
+    setupEditor();
   };
 
   // "destroyEditor" is used to dispose of Monaco Editor instance, when the component is unmounted (for any reasons)
