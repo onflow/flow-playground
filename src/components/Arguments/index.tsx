@@ -405,8 +405,8 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
             </>
           )}
 
-          <ErrorsList list={problems.error} {...actions} />
-          <Hints problems={problems} {...actions} />
+          <ErrorsList list={problems.error} actions={actions} />
+          <Hints problems={problems} actions={actions} />
 
           <ControlContainer isOk={isOk} progress={progress}>
             <StatusMessage>

@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, {createContext, useState, useMemo} from 'react';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { navigate, useLocation, Redirect } from '@reach/router';
 import ProjectMutator from './projectMutator';
@@ -220,13 +220,13 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
-  const updateActiveScriptTemplate = async (script: string, title: string) => {
+  const updateActiveScriptTemplate = async (script: string) => {
     clearTimeout(timeout);
     setIsSaving(true);
     const res = await mutator.updateScriptTemplate(
       project.scriptTemplates[active.index].id,
       script,
-      title,
+      project.scriptTemplates[active.index].title,
     );
     timeout = setTimeout(() => {
       setIsSaving(false);
@@ -234,16 +234,13 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
-  const updateActiveTransactionTemplate = async (
-    script: string,
-    title: string,
-  ) => {
+  const updateActiveTransactionTemplate = async (script: string) => {
     clearTimeout(timeout);
     setIsSaving(true);
     const res = await mutator.updateTransactionTemplate(
       project.transactionTemplates[active.index].id,
       script,
-      title,
+      project.transactionTemplates[active.index].title,
     );
     timeout = setTimeout(() => {
       setIsSaving(false);
@@ -331,15 +328,15 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         return {
           type: active.type,
           index: active.index,
-          onChange: (code: any, title: string) =>
-            updateActiveTransactionTemplate(code, title),
+          onChange: (code: any) =>
+            updateActiveTransactionTemplate(code),
         };
       case EntityType.ScriptTemplate:
         return {
           type: active.type,
           index: active.index,
-          onChange: (code: any, title: string) =>
-            updateActiveScriptTemplate(code, title),
+          onChange: (code: any) =>
+            updateActiveScriptTemplate(code),
         };
       case EntityType.Readme:
         return {
@@ -352,7 +349,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     }
   };
 
-  const activeEditor = getActiveEditor();
+  const activeEditor = useMemo(
+      getActiveEditor,
+      [active.type, active.index, project]
+  )
 
   const location = useLocation();
   if (isLoading) return null;

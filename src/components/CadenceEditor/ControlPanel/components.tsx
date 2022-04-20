@@ -1,5 +1,21 @@
+import React  from 'react';
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
-import theme from '../../theme';
+import theme from '../../../theme';
+
+export const MotionBox = (props: any) => {
+  const { children, dragConstraints } = props;
+  return (
+    <motion.div
+      className="drag-box"
+      drag={true}
+      dragConstraints={dragConstraints}
+      dragElastic={1}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 interface HoverPanelProps {
   width?: string;
@@ -14,13 +30,6 @@ export const HoverPanel = styled.div<HoverPanelProps>`
   box-shadow: 10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff;
 `;
 
-interface HidableProps {
-  hidden: Boolean
-}
-export const Hidable = styled.div<HidableProps>`
-  display: ${({hidden = false}) => hidden ? "none" : "block"};
-`
-
 export const Heading = styled.div`
   display: flex;
   align-items: center;
@@ -29,7 +38,7 @@ export const Heading = styled.div`
 `;
 
 interface TitleProps {
-  lineColor?: string
+  lineColor?: string;
 }
 
 export const Title = styled.div<TitleProps>`
@@ -87,7 +96,7 @@ export const Badge = styled.div`
 `;
 
 interface ListProps {
-  hidden?: boolean
+  hidden?: boolean;
 }
 export const List = styled.div<ListProps>`
   display: ${({ hidden }) => (hidden ? 'none' : 'grid')};
@@ -170,23 +179,23 @@ export const SingleError = styled.div`
   padding: 10px;
   border-radius: 4px;
   font-size: 14px;
-  &:hover{
+  &:hover {
     background-color: rgba(244, 57, 64, 0.15);
-    
-    &.hint-warning{
+
+    &.hint-warning {
       background-color: rgb(238, 169, 30, 0.15);
     }
 
-    &.hint-info{
+    &.hint-info {
       background-color: rgb(85, 238, 30, 0.15);
     }
   }
-`
+`;
 
 export const ErrorIndex = styled.div`
   width: 20px;
   height: 20px;
-  background-color: rgba(0,0,0,0.15);
+  background-color: rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -199,13 +208,13 @@ export const ErrorMessage = styled.p`
   line-height: 1.2;
   word-break: break-word;
   span {
-    background-color: rgba(0,0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.05);
     padding: 2px 6px;
     border-radius: 3px;
     margin: 3px 3px 3px 5px;
     line-height: 20px;
-    .suggestion{
-      background-color: ${theme.colors.primary}
+    .suggestion {
+      background-color: ${theme.colors.primary};
     }
   }
 `;
@@ -217,7 +226,7 @@ export const SignersError = styled.p`
   box-sizing: border-box;
   margin: 10px 0;
   color: ${theme.colors.error};
-  svg{
+  svg {
     margin-right: 0.5em;
   }
 `;
