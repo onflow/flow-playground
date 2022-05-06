@@ -233,5 +233,21 @@ export const SignersError = styled.p`
 `;
 
 export const Confirm = styled(Button)`
+  background-color: ${theme.colors.error};
+  color: #fff;
   margin-right: 0.5rem;
+
+  &:active {
+    background-color: #cf3529;
+  }
+`
+
+export const Cancel = styled(Button)`
+  background-color: ${theme.colors.background};
+  color: ${theme.colors.text};
+  border: 1px solid ${theme.colors.greyBorder};
+
+  &:active {
+    background-color: #dedede;
+  }
 `

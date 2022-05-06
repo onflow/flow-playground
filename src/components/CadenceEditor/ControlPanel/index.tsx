@@ -1,6 +1,11 @@
 // External Modules
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { FaExclamationTriangle, FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
+import {
+  FaExclamationTriangle,
+  FaRegCheckCircle,
+  FaRegTimesCircle,
+  FaSpinner,
+} from 'react-icons/fa';
 import { ExecuteCommandRequest } from 'monaco-languageclient';
 import {
   IPosition,
@@ -32,7 +37,7 @@ import {
 // Component Scoped Files
 import { getLabel, validateByType, useTemplateType } from './utils';
 import { ControlPanelProps, IValue } from './types';
-import { MotionBox, Confirm } from './components';
+import { MotionBox, Confirm, Cancel } from './components';
 
 // Other
 import {
@@ -43,14 +48,13 @@ import {
   Hints,
   Signers,
 } from '../../Arguments/components';
-
+import theme from '../../../theme';
 import {
   ControlContainer,
   HoverPanel,
   Hidable,
   StatusMessage,
 } from '../../Arguments/styles';
-import Button from 'components/Button';
 
 const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // We should not render this component if editor is non-existent
@@ -351,17 +355,20 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   let statusMessage;
   switch (true) {
     case isOk && showPrompt:
-      statusIcon = <FaExclamationTriangle />
-      statusMessage = 'Redeploying will clear the state of all accounts. Proceed?';
+      statusIcon = (
+        <FaExclamationTriangle style={{ color: theme.colors.warning }} />
+      );
+      statusMessage =
+        'Redeploying will clear the state of all accounts. Proceed?';
       break;
     case isOk:
-      statusIcon = <FaRegCheckCircle />
+      statusIcon = <FaRegCheckCircle />;
       statusMessage = 'Ready';
       break;
     default:
-      statusIcon = <FaRegTimesCircle />
+      statusIcon = <FaRegTimesCircle />;
       statusMessage = 'Fix errors';
-      break
+      break;
   }
 
   const progress = isSavingCode || processingStatus;
@@ -434,7 +441,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             {showPrompt ? (
               <>
                 <Confirm onClick={send}>Confirm</Confirm>
-                <Button onClick={() => setShowPrompt(false)}>Cancel</Button>
+                <Cancel onClick={() => setShowPrompt(false)}>Cancel</Cancel>
               </>
             ) : (
               <ActionButton active={isOk} type={type} onClick={send} />
