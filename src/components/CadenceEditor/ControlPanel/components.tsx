@@ -2,6 +2,7 @@ import React  from 'react';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import theme from '../../../theme';
+import Button from 'components/Button';
 
 export const MotionBox = (props: any) => {
   const { children, dragConstraints } = props;
@@ -230,3 +231,7 @@ export const SignersError = styled.p`
     margin-right: 0.5em;
   }
 `;
+
+export const Confirm = styled(Button)`
+  margin-right: 0.5rem;
+`

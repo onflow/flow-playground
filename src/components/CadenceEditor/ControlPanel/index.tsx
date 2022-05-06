@@ -1,6 +1,6 @@
 // External Modules
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
+import { FaExclamationTriangle, FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
 import { ExecuteCommandRequest } from 'monaco-languageclient';
 import {
   IPosition,
@@ -32,7 +32,7 @@ import {
 // Component Scoped Files
 import { getLabel, validateByType, useTemplateType } from './utils';
 import { ControlPanelProps, IValue } from './types';
-import { MotionBox } from './components';
+import { MotionBox, Confirm } from './components';
 
 // Other
 import {
@@ -50,6 +50,7 @@ import {
   Hidable,
   StatusMessage,
 } from '../../Arguments/styles';
+import Button from 'components/Button';
 
 const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // We should not render this component if editor is non-existent
@@ -79,6 +80,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const [errors, setErrors] = useState({});
   // Handles problems, hints and info for checked code
   const [problemsList, setProblemsList] = useState({});
+  const [showPrompt, setShowPrompt] = useState(false);
 
   // REFS  -------------------------------------------------------------------
   // Holds reference to constraining div for floating window
@@ -282,13 +284,14 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
 
         case EntityType.Account: {
           // Ask if user wants to redeploy the contract
-          if (accounts[active.index] && accounts[active.index].deployedCode) {
-            const choiceMessage =
-              'Redeploying will clear the state of all accounts. Proceed?';
-            if (!confirm(choiceMessage)) {
-              setProcessingStatus(false);
-              return;
-            }
+          if (
+            accounts[active.index] &&
+            accounts[active.index].deployedCode &&
+            !showPrompt
+          ) {
+            setProcessingStatus(false);
+            setShowPrompt(true);
+            return;
           }
           resultType = ResultType.Contract;
           rawResult = await contractDeployment();
@@ -302,6 +305,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       rawResult = e.toString();
     }
 
+    setShowPrompt(false);
     setProcessingStatus(false);
 
     // Display result in the bottom area
@@ -343,8 +347,22 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   };
 
   const isOk = !haveErrors && validCode !== undefined && !!validCode;
-  let statusIcon = isOk ? <FaRegCheckCircle /> : <FaRegTimesCircle />;
-  let statusMessage = isOk ? 'Ready' : 'Fix errors';
+  let statusIcon;
+  let statusMessage;
+  switch (true) {
+    case isOk && showPrompt:
+      statusIcon = <FaExclamationTriangle />
+      statusMessage = 'Redeploying will clear the state of all accounts. Proceed?';
+      break;
+    case isOk:
+      statusIcon = <FaRegCheckCircle />
+      statusMessage = 'Ready';
+      break;
+    default:
+      statusIcon = <FaRegTimesCircle />
+      statusMessage = 'Fix errors';
+      break
+  }
 
   const progress = isSavingCode || processingStatus;
   if (progress) {
@@ -358,6 +376,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       setupLanguageClientListener();
     }
   }, [languageClient, active]);
+
+  useEffect(() => {
+    // don't carry state of prompt between active editors
+    setShowPrompt(false);
+  }, [active]);
 
   useEffect(() => {
     validate(list, values);
@@ -408,7 +431,14 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
               {statusIcon}
               <p>{statusMessage}</p>
             </StatusMessage>
-            <ActionButton active={isOk} type={type} onClick={send} />
+            {showPrompt ? (
+              <>
+                <Confirm onClick={send}>Confirm</Confirm>
+                <Button onClick={() => setShowPrompt(false)}>Cancel</Button>
+              </>
+            ) : (
+              <ActionButton active={isOk} type={type} onClick={send} />
+            )}
           </ControlContainer>
         </HoverPanel>
       </MotionBox>
