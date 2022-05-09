@@ -251,3 +251,29 @@ export const Cancel = styled(Button)`
     background-color: #dedede;
   }
 `
+
+export const PromptActionsContainer = styled.div`
+  padding-top: 1rem;
+  display: flex;
+  justify-content: end;
+`;
+
+interface StatusIconProps {
+  isOk: boolean;
+  progress: boolean;
+  showPrompt: boolean;
+}
+export const StatusIcon = styled.div<StatusIconProps>`
+  color: ${({ isOk, progress, showPrompt }) => {
+    switch (true) {
+      case progress:
+        return '#a2a2a2';
+      case isOk && showPrompt:
+        return theme.colors.warning;
+      case isOk:
+        return '#2bb169';
+      default:
+        return '#EE431E';
+    }
+  }};
+`;

@@ -37,7 +37,7 @@ import {
 // Component Scoped Files
 import { getLabel, validateByType, useTemplateType } from './utils';
 import { ControlPanelProps, IValue } from './types';
-import { MotionBox, Confirm, Cancel } from './components';
+import { MotionBox, Confirm, Cancel, PromptActionsContainer, StatusIcon } from './components';
 
 // Other
 import {
@@ -48,7 +48,6 @@ import {
   Hints,
   Signers,
 } from '../../Arguments/components';
-import theme from '../../../theme';
 import {
   ControlContainer,
   HoverPanel,
@@ -356,7 +355,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   switch (true) {
     case isOk && showPrompt:
       statusIcon = (
-        <FaExclamationTriangle style={{ color: theme.colors.warning }} />
+        <FaExclamationTriangle />
       );
       statusMessage =
         'Redeploying will clear the state of all accounts. Proceed?';
@@ -433,16 +432,18 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
           <ErrorsList list={problems.error} actions={actions} />
           <Hints problems={problems} actions={actions} />
 
-          <ControlContainer isOk={isOk} progress={progress}>
+          <ControlContainer isOk={isOk} progress={progress} showPrompt={showPrompt}>
             <StatusMessage>
-              {statusIcon}
+              <StatusIcon isOk={isOk} progress={progress} showPrompt={showPrompt}>
+                {statusIcon}
+              </StatusIcon>
               <p>{statusMessage}</p>
             </StatusMessage>
             {showPrompt ? (
-              <>
+              <PromptActionsContainer>
                 <Confirm onClick={send}>Confirm</Confirm>
                 <Cancel onClick={() => setShowPrompt(false)}>Cancel</Cancel>
-              </>
+              </PromptActionsContainer>
             ) : (
               <ActionButton active={isOk} type={type} onClick={send} />
             )}

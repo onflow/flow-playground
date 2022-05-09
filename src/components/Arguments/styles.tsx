@@ -105,15 +105,18 @@ export const SignersContainer = styled.div`
 interface ControlContainerProps {
   isOk: boolean;
   progress: boolean;
+  showPrompt?: boolean;
 }
 export const ControlContainer = styled.div<ControlContainerProps>`
-  display: flex;
+  display: ${({ showPrompt }) => showPrompt ? 'block' : 'flex'};
   align-items: center;
   justify-content: space-between;
-  color: ${({ isOk, progress }) => {
+  color: ${({ isOk, progress, showPrompt }) => {
     switch (true) {
       case progress:
         return '#a2a2a2';
+      case isOk && showPrompt:
+        return theme.colors.error;
       case isOk:
         return '#2bb169';
       default:
