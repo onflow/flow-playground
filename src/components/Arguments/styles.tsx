@@ -2,11 +2,11 @@ import styled from 'styled-components';
 import theme from '../../theme';
 
 interface HoverPanelProps {
-  width?: string;
+  minWidth?: string;
 }
 
 export const HoverPanel = styled.div<HoverPanelProps>`
-  min-width: 300px;
+  min-width: ${({minWidth}) => minWidth};
   max-width: 500px;
   padding: 20px;
   border-radius: 4px;
@@ -109,6 +109,7 @@ interface ControlContainerProps {
 }
 export const ControlContainer = styled.div<ControlContainerProps>`
   display: ${({ showPrompt }) => showPrompt ? 'block' : 'flex'};
+  max-width: ${({ showPrompt }) => showPrompt ? 'min-content' : 'none'};
   align-items: center;
   justify-content: space-between;
   color: ${({ isOk, progress, showPrompt }) => {

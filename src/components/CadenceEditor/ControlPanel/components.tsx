@@ -255,7 +255,7 @@ export const Cancel = styled(Button)`
 export const PromptActionsContainer = styled.div`
   padding-top: 1rem;
   display: flex;
-  justify-content: end;
+  justify-content: center;
 `;
 
 interface StatusIconProps {
