@@ -4,7 +4,6 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { useProject } from 'providers/Project/projectHooks';
 import { EntityType } from 'providers/Project';
 import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
-import debounce from 'util/debounce';
 
 import Notifications from './Notifications';
 import ControlPanel from './ControlPanel';
@@ -84,15 +83,6 @@ const CadenceEditor = (props: any) => {
     return [code, id];
   };
 
-  // Method to use, when model was changed
-  const debouncedModelChange = debounce(() => {
-    if (project.project?.accounts) {
-      // we will ignore text line, cause onChange is based on active type
-      // @ts-ignore
-      project.active.onChange(editor.getValue());
-    }
-  }, 100);
-
   //@ts-ignore
   const setupEditor = () => {
     const projectExist = project && project.project.accounts;
@@ -134,11 +124,15 @@ const CadenceEditor = (props: any) => {
 
         setTimeout(() => {
           newState.model.setValue(code);
-        }, 150);
+        }, 100);
       }
-      editorOnChange.current = editor.onDidChangeModelContent(
-        debouncedModelChange,
-      );
+      editorOnChange.current = editor.onDidChangeModelContent(() => {
+        if (project.project?.accounts) {
+          // we will ignore text line, cause onChange is based on active type
+          // @ts-ignore
+          project.active.onChange(editor.getValue());
+        }
+      });
     }
   };
 

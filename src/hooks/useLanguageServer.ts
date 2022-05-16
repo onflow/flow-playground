@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { CadenceLanguageServer, Callbacks } from 'util/language-server';
 import { MonacoServices } from 'monaco-languageclient/lib/monaco-services';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { createCadenceLanguageClient } from 'util/language-client';
 import { useProject } from 'providers/Project/projectHooks';
+import debounce from "util/debounce";
 
 let monacoServicesInstalled = false;
 
@@ -87,11 +88,20 @@ export default function useLanguageServer() {
     });
   };
 
+  const debouncedServerRestart = useMemo(
+      () => debounce(restartServer, 150),
+      [languageServer]
+  )
+
   useEffect(() => {
     if (languageServer) {
       languageServer.updateCodeGetter(getCode);
     }
   }, [project.project.accounts]);
+
+  // TODO: Disable this, once the cadence language server package is updated
+  useEffect(debouncedServerRestart, [project.project.accounts, project.active]);
+
 
   useEffect(() => {
     // The Monaco Language Client services have to be installed globally, once.
@@ -107,11 +117,15 @@ export default function useLanguageServer() {
     restartServer();
   }, []);
 
+
+
   useEffect(() => {
     if (!languageClient) {
       launchLanguageClient(callbacks, languageServer, setLanguageClient).then();
     }
   }, [languageServer]);
+
+
 
   return {
     languageClient,
