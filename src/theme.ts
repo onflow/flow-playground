@@ -12,6 +12,7 @@ export default {
     border: "rgb(240, 240, 240)",
     borderDark: "rgb(222, 222, 222)",
     shadowColor: "rgb(222, 222, 222)",
+    warning: "#ffcc00",
     error: "#f44336",
     blue: "#0000ff",
     heading: "#919191",

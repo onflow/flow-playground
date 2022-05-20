@@ -1,6 +1,11 @@
 // External Modules
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
+import {
+  FaExclamationTriangle,
+  FaRegCheckCircle,
+  FaRegTimesCircle,
+  FaSpinner,
+} from 'react-icons/fa';
 import { ExecuteCommandRequest } from 'monaco-languageclient';
 import {
   IPosition,
@@ -32,7 +37,7 @@ import {
 // Component Scoped Files
 import { getLabel, validateByType, useTemplateType } from './utils';
 import { ControlPanelProps, IValue } from './types';
-import { MotionBox } from './components';
+import { MotionBox, Confirm, Cancel, PromptActionsContainer, StatusIcon } from './components';
 
 // Other
 import {
@@ -43,7 +48,6 @@ import {
   Hints,
   Signers,
 } from '../../Arguments/components';
-
 import {
   ControlContainer,
   HoverPanel,
@@ -79,6 +83,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const [errors, setErrors] = useState({});
   // Handles problems, hints and info for checked code
   const [problemsList, setProblemsList] = useState({});
+  const [showPrompt, setShowPrompt] = useState(false);
 
   // REFS  -------------------------------------------------------------------
   // Holds reference to constraining div for floating window
@@ -282,13 +287,14 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
 
         case EntityType.Account: {
           // Ask if user wants to redeploy the contract
-          if (accounts[active.index] && accounts[active.index].deployedCode) {
-            const choiceMessage =
-              'Redeploying will clear the state of all accounts. Proceed?';
-            if (!confirm(choiceMessage)) {
-              setProcessingStatus(false);
-              return;
-            }
+          if (
+            accounts[active.index] &&
+            accounts[active.index].deployedCode &&
+            !showPrompt
+          ) {
+            setProcessingStatus(false);
+            setShowPrompt(true);
+            return;
           }
           resultType = ResultType.Contract;
           rawResult = await contractDeployment();
@@ -302,6 +308,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       rawResult = e.toString();
     }
 
+    setShowPrompt(false);
     setProcessingStatus(false);
 
     // Display result in the bottom area
@@ -343,8 +350,25 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   };
 
   const isOk = !haveErrors && validCode !== undefined && !!validCode;
-  let statusIcon = isOk ? <FaRegCheckCircle /> : <FaRegTimesCircle />;
-  let statusMessage = isOk ? 'Ready' : 'Fix errors';
+  let statusIcon;
+  let statusMessage;
+  switch (true) {
+    case isOk && showPrompt:
+      statusIcon = (
+        <FaExclamationTriangle />
+      );
+      statusMessage =
+        'Redeploying will clear the state of all accounts. Proceed?';
+      break;
+    case isOk:
+      statusIcon = <FaRegCheckCircle />;
+      statusMessage = 'Ready';
+      break;
+    default:
+      statusIcon = <FaRegTimesCircle />;
+      statusMessage = 'Fix errors';
+      break;
+  }
 
   const progress = isSavingCode || processingStatus;
   if (progress) {
@@ -360,6 +384,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   }, [languageClient, active]);
 
   useEffect(() => {
+    // don't carry state of prompt between active editors
+    setShowPrompt(false);
+  }, [active]);
+
+  useEffect(() => {
     validate(list, values);
   }, [list, values]);
 
@@ -369,7 +398,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     <>
       <div ref={constraintsRef} className="constraints" />
       <MotionBox dragConstraints={constraintsRef}>
-        <HoverPanel>
+        <HoverPanel minWidth={showPrompt ? 'min-content' : '300px'}>
           <Hidable hidden={!validCode}>
             {list.length > 0 && (
               <>
@@ -403,12 +432,21 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
           <ErrorsList list={problems.error} actions={actions} />
           <Hints problems={problems} actions={actions} />
 
-          <ControlContainer isOk={isOk} progress={progress}>
+          <ControlContainer isOk={isOk} progress={progress} showPrompt={showPrompt}>
             <StatusMessage>
-              {statusIcon}
+              <StatusIcon isOk={isOk} progress={progress} showPrompt={showPrompt}>
+                {statusIcon}
+              </StatusIcon>
               <p>{statusMessage}</p>
             </StatusMessage>
-            <ActionButton active={isOk} type={type} onClick={send} />
+            {showPrompt ? (
+              <PromptActionsContainer>
+                <Confirm onClick={send}>Confirm</Confirm>
+                <Cancel onClick={() => setShowPrompt(false)}>Cancel</Cancel>
+              </PromptActionsContainer>
+            ) : (
+              <ActionButton active={isOk} type={type} onClick={send} />
+            )}
           </ControlContainer>
         </HoverPanel>
       </MotionBox>
