@@ -47,7 +47,8 @@ const examples = [
       'Put it all together in a marketplace! This tutorial will teach you how to turn all the concepts you’ve learned into a place for people to share their creations with the community.',
     emoji: '🤝',
     projectLink: 'https://play.onflow.org/45ae690e-c527-409c-970e-57f03df92790',
-    docsLink: 'https://docs.onflow.org/cadence/tutorial/08-marketplace-setup/',
+    docsLink:
+      'https://docs.onflow.org/cadence/tutorial/08-marketplace-compose/',
   },
   {
     title: 'Expand Non-Fungible Tokens',
