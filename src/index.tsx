@@ -1,18 +1,20 @@
-import * as React from "react"
-import * as ReactDOM from "react-dom"
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
-import * as Sentry from "@sentry/react";
-import { BrowserTracing } from "@sentry/tracing";
-import { CaptureConsole as CaptureConsoleIntegration } from "@sentry/integrations";
+import * as Sentry from '@sentry/react';
+import { BrowserTracing } from '@sentry/tracing';
+import { CaptureConsole as CaptureConsoleIntegration } from '@sentry/integrations';
 
-
-import App from "./App"
+import App from './App';
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
-  integrations: [new BrowserTracing(), new CaptureConsoleIntegration({levels: ['error']})],
+  integrations: [
+    new BrowserTracing(),
+    new CaptureConsoleIntegration({ levels: ['error'] }),
+  ],
   tracesSampleRate: 1.0,
 });
 
-const root = document.getElementById("root")
-ReactDOM.render(<App />, root)
+const root = document.getElementById('root');
+ReactDOM.render(<App />, root);
