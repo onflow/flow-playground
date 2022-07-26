@@ -86,6 +86,7 @@ module.exports = {
       'MIXPANEL_TOKEN',
       'DEFAULT_SEO_IMAGE',
       'AVATAAR_URL',
+      'SENTRY_DSN'
 		]),
 ],
   node: {
