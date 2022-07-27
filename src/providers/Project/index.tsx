@@ -1,4 +1,4 @@
-import React, {createContext, useState, useMemo} from 'react';
+import React, {createContext, useState} from 'react';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { navigate, useLocation, Redirect } from '@reach/router';
 import ProjectMutator from './projectMutator';
@@ -349,10 +349,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     }
   };
 
-  const activeEditor = useMemo(
-      getActiveEditor,
-      [active.type, active.index, project]
-  )
+  const activeEditor = getActiveEditor()
 
   const location = useLocation();
   if (isLoading) return null;
