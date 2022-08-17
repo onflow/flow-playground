@@ -1,31 +1,22 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "extends": [
-    "react-app",
-    "prettier",
-    "prettier/react",
-    "prettier/standard",
-    "prettier/@typescript-eslint",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
     "plugin:jsx-a11y/recommended"
   ],
-  "plugins": ["prettier", "react", "jsx-a11y", "cypress", "graphql"],
-  "parserOptions": {
-    "ecmaVersion": 7,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
-  },
+  "plugins": ["react", "jsx-a11y"],
   "env": {
     "browser": true,
     "node": true,
     "jest": true,
     "webextensions": true,
-    "es6": true,
-    "cypress/globals": true
+    "es6": true
   },
   "globals": {
-    "Raven": true
+    "Raven": true,
+    "globalThis": true
   },
   "rules": {
     "no-undef": 2,
@@ -35,7 +26,6 @@
         "ignoreRestSiblings": true
       }
     ],
-    "prettier/prettier": 2,
     "react/button-has-type": 2,
     "react/default-props-match-prop-types": 2,
     "react/no-access-state-in-setstate": 2,
@@ -81,7 +71,6 @@
       "parser": "@typescript-eslint/parser",
       "plugins": ["@typescript-eslint"],
       "rules": {
-        "prettier/prettier": 1,
         "no-undef": 0,
         "no-unused-vars": 0,
         "@typescript-eslint/no-unused-vars": 2,
