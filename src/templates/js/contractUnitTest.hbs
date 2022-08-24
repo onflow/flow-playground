@@ -2,18 +2,15 @@ test("Deploy {{contractName}} contract", async () => {
     const name = "{{contractName}}"
     const to = await getAccountAddress("{{getNameByAddress accountAddress}}")
 
+    {{>deployContracts contracts=imports}}
+
     {{>addressMap imports=imports}}
 
-    let result;
-    try {
-        result = await deployContractByName({
-        name,
-        to,
-        {{#if imports}}addressMap{{/if}}
-    });
-    } catch (e) {
-        console.log(e);
-    }
-
-    expect(result.errorMessage).toBe("");
+    await shallPass(
+        await deployContractByName({
+            name,
+            to,
+            {{#if imports}}addressMap{{/if}}
+        })
+    );
 })

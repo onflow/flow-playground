@@ -7,7 +7,7 @@ import { Project } from 'api/apollo/generated/graphql';
 import contractUnitTestTemplate from '../templates/js/contractUnitTest.hbs';
 import transactionUnitTestTemplate from '../templates/js/transactionUnitTest.hbs';
 import scriptUnitTestTemplate from '../templates/js/scriptUnitTest.hbs';
-import testSuit from '../templates/js/testSuit.hbs';
+import testSuite from '../templates/js/testSuite.hbs';
 
 import readmeTemplate from '../templates/js/config/README.md.hbs';
 import babelConfigTemplate from '../templates/js/config/babel.config.hbs';
@@ -24,9 +24,16 @@ export const getNameByAddress = (address: string) => {
     '0x02': 'Bob',
     '0x03': 'Charlie',
     '0x04': 'Dave',
+    '0x05': 'Eve',
   };
 
-  return addressBook[address];
+  const stripAddress = (addr) => addr.replace(/^(0x)?0+/, '');
+
+  const match = Object.keys(addressBook).find(
+    (addr) => stripAddress(addr) === stripAddress(address),
+  );
+
+  return addressBook[match];
 };
 
 export const getImports = (
@@ -282,7 +289,7 @@ const generateTests = async (cadenceFolder: string, project: Project) => {
     scriptsUnitTests.push(unitTest);
   }
 
-  const code = testSuit({
+  const code = testSuite({
     cadenceFolder,
     contractsUnitTests,
     transactionsUnitTests,
@@ -324,6 +331,10 @@ export const createZip = async (
     const account = accounts[i];
     const name = getContractName(account.draftCode);
     const fileName = `cadence/contracts/${name}.cdc`;
+    if (Object.keys(zip.files).includes(fileName)) {
+      alert(`Cannot export ZIP with duplicate contract names "${name}"`);
+      return;
+    }
     zip.file(fileName, account.draftCode);
   }
 
@@ -331,6 +342,10 @@ export const createZip = async (
     const template = transactionTemplates[i];
     const name = template.title;
     const fileName = `cadence/transactions/${name}.cdc`;
+    if (Object.keys(zip.files).includes(fileName)) {
+      alert(`Cannot export ZIP with duplicate transaction names "${name}"`);
+      return;
+    }
     zip.file(fileName, template.script);
   }
 
@@ -338,6 +353,10 @@ export const createZip = async (
     const template = scriptTemplates[i];
     const name = template.title;
     const fileName = `cadence/scripts/${name}.cdc`;
+    if (Object.keys(zip.files).includes(fileName)) {
+      alert(`Cannot export ZIP with duplicate script names "${name}"`);
+      return;
+    }
     zip.file(fileName, template.script);
   }
 

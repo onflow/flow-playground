@@ -1,0 +1,7 @@
+{{#if imports ~}}
+    // Deploy imported contracts
+    {{#each imports ~}}
+        await deployContractByName("{{name}}")
+    {{/each}}
+{{/if}}
+

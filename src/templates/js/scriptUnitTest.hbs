@@ -1,6 +1,8 @@
 test("test script template {{name}}", async () => {
     const name = "{{name}}"
 
+    {{>deployContracts contracts=imports}}
+
     {{>getAccounts accounts=accounts}}
 
     {{>addressMap imports=imports}}
@@ -14,10 +16,12 @@ test("test script template {{name}}", async () => {
 
     {{>defineArguments arguments=arguments}}
 
-    const result = await executeScript({
-        code,
-        {{#if arguments}}args{{/if}}
-    });
+    const [result] = await shallResolve(
+        executeScript({
+            code,
+            {{#if arguments}}args{{/if}}
+        });
+    )
 
     // Add your expectations here
     expect().toBe();

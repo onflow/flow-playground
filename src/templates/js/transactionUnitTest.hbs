@@ -1,6 +1,8 @@
 test("test transaction template {{name}}", async () => {
     const name = "{{name}}"
 
+    {{>deployContracts contracts=imports}}
+
     {{>getAccounts accounts=accounts}}
 
     {{>addSigners signers=signers}}
@@ -16,14 +18,12 @@ test("test transaction template {{name}}", async () => {
 
     {{>codeReplacement accounts=accountCalls}}
 
-    let txResult;
-    try {
-        txResult = await sendTransaction({
+    let [txResult] = await shallPass(
+        sendTransaction({
             code,{{#if arguments ~}}args,{{/if}}{{#if signers ~}}signers{{/if}}
-        });
-    } catch (e) {
-        console.log(e);
-    }
+        })
+    );
+
 
     expect(txResult.errorMessage).toBe("");
 });
