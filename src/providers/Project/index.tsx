@@ -18,12 +18,8 @@ export enum EntityType {
 export type ActiveEditor = {
   type: EntityType;
   index: number;
-  onChange: (
-    code: string,
-    title: string,
-    description: string,
-    readme: string,
-  ) => void;
+  // TODO: Type onChange functions for each EntityType
+  onChange: any;
 };
 
 export interface ProjectContextValue {
