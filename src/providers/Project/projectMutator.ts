@@ -214,8 +214,8 @@ export default class ProjectMutator {
     this.client.writeData({
       id: `TransactionTemplate:${templateId}`,
       data: {
-        script: script,
-        title: title,
+        script,
+        title,
       },
     });
 
@@ -231,8 +231,8 @@ export default class ProjectMutator {
       variables: {
         projectId: this.projectId,
         templateId: templateId,
-        script: script,
-        title: title,
+        script,
+        title,
       },
       context: {
         debounceKey: key,

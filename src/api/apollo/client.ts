@@ -9,7 +9,7 @@ import { ResultType } from './generated/graphql';
 import localResolvers from './resolvers';
 
 const PLAYGROUND_API = process.env.PLAYGROUND_API;
-const DEFAULT_DEBOUNCE_TIMEOUT = 500;
+const DEFAULT_DEBOUNCE_TIMEOUT = 1200; // Debounce time in ms
 
 const cache = new InMemoryCache();
 
