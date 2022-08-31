@@ -16,7 +16,6 @@ import {
 } from 'providers/Project/projectDefault';
 import { Account, Project } from 'api/apollo/generated/graphql';
 
-import debounce from 'util/debounce';
 import Mixpanel from 'util/mixpanel';
 
 import { default as FlowButton } from 'components/Button';
@@ -249,7 +248,6 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     }
   }, [project]);
 
-  const onEditorChange = debounce(active.onChange);
   const updateProject = (
     title: string,
     description: string,
@@ -258,7 +256,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     project.title = title;
     project.description = description;
     project.readme = readme;
-    onEditorChange(title, description, readme);
+    active.onChange(title, description, readme)
   };
 
   const isReadmeEditor = active.type === 4;

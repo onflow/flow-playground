@@ -2,22 +2,22 @@ import { navigate } from '@reach/router';
 
 import ApolloClient from 'apollo-client';
 
+import { Account, Project } from 'api/apollo/generated/graphql';
 import {
   CREATE_PROJECT,
-  SAVE_PROJECT,
-  SET_ACTIVE_PROJECT,
-  UPDATE_ACCOUNT_DRAFT_CODE,
-  UPDATE_ACCOUNT_DEPLOYED_CODE,
-  UPDATE_TRANSACTION_TEMPLATE,
+  CREATE_SCRIPT_EXECUTION,
+  CREATE_SCRIPT_TEMPLATE,
   CREATE_TRANSACTION_EXECUTION,
   CREATE_TRANSACTION_TEMPLATE,
-  CREATE_SCRIPT_EXECUTION,
-  UPDATE_SCRIPT_TEMPLATE,
-  CREATE_SCRIPT_TEMPLATE,
   DELETE_SCRIPT_TEMPLATE,
   DELETE_TRANSACTION_TEMPLATE,
+  SAVE_PROJECT,
+  SET_ACTIVE_PROJECT,
+  UPDATE_ACCOUNT_DEPLOYED_CODE,
+  UPDATE_ACCOUNT_DRAFT_CODE,
+  UPDATE_SCRIPT_TEMPLATE,
+  UPDATE_TRANSACTION_TEMPLATE,
 } from 'api/apollo/mutations';
-import { Project, Account } from 'api/apollo/generated/graphql';
 import { GET_LOCAL_PROJECT, GET_PROJECT } from 'api/apollo/queries';
 
 import Mixpanel from 'util/mixpanel';
@@ -41,7 +41,7 @@ export default class ProjectMutator {
     isLocal: boolean,
     title: string,
     description: string,
-    readme: string
+    readme: string,
   ) {
     this.client = client;
     this.projectId = projectId;
@@ -83,7 +83,6 @@ export default class ProjectMutator {
         scriptTemplates: scriptTemplates,
       },
     });
-    
 
     const project = data.project;
 
@@ -103,22 +102,43 @@ export default class ProjectMutator {
     return project;
   }
 
-  async saveProject(isFork: boolean, title: string, description: string, readme: string) {
+  async saveProject(
+    isFork: boolean,
+    title: string,
+    description: string,
+    readme: string,
+  ) {
     if (this.isLocal) {
       await this.createProject();
       unregisterOnCloseSaveMessage();
     }
 
+    const key = ['SAVE_PROJECT', this.projectId];
+
+    this.client.writeData({
+      id: `Project:${this.projectId}`,
+      data: {
+        title,
+        description,
+        readme,
+        persist: true,
+      },
+    });
+
     await this.client.mutate({
       mutation: SAVE_PROJECT,
       variables: {
         projectId: this.projectId,
-        title: title,
-        description: description,
-        readme: readme
+        title,
+        description,
+        readme,
+      },
+      context: {
+        debounceKey: key,
+        serializationKey: key,
       },
     });
-    
+
     if (isFork) {
       Mixpanel.track('Project forked', { projectId: this.projectId });
     } else {
@@ -129,18 +149,20 @@ export default class ProjectMutator {
   }
 
   async updateAccountDraftCode(account: Account, code: string) {
-    if (this.isLocal) {
-      this.client.writeData({
-        id: `Account:${account.id}`,
-        data: {
-          __typename: 'Account',
-          draftCode: code,
-        },
-      });
-      registerOnCloseSaveMessage();
+    this.client.writeData({
+      id: `Account:${account.id}`,
+      data: {
+        __typename: 'Account',
+        draftCode: code,
+      },
+    });
 
+    if (this.isLocal) {
+      registerOnCloseSaveMessage();
       return;
     }
+
+    const key = ['UPDATE_ACCOUNT_DRAFT_CODE', this.projectId, account.id];
 
     await this.client.mutate({
       mutation: UPDATE_ACCOUNT_DRAFT_CODE,
@@ -149,6 +171,11 @@ export default class ProjectMutator {
         accountId: account.id,
         code,
       },
+      context: {
+        debounceKey: key,
+        serializationKey: key,
+      },
+      fetchPolicy: 'no-cache',
     });
   }
 
@@ -184,29 +211,34 @@ export default class ProjectMutator {
     script: string,
     title: string,
   ) {
+    this.client.writeData({
+      id: `TransactionTemplate:${templateId}`,
+      data: {
+        script,
+        title,
+      },
+    });
+
     if (this.isLocal) {
-      this.client.writeData({
-        id: `TransactionTemplate:${templateId}`,
-        data: {
-          script: script,
-          title: title,
-        },
-      });
       registerOnCloseSaveMessage();
       return;
     }
+
+    const key = ['UPDATE_TRANSACTION_TEMPLATE', this.projectId, templateId];
 
     await this.client.mutate({
       mutation: UPDATE_TRANSACTION_TEMPLATE,
       variables: {
         projectId: this.projectId,
         templateId: templateId,
-        script: script,
-        title: title,
+        script,
+        title,
       },
-      refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } },
-      ],
+      context: {
+        debounceKey: key,
+        serializationKey: key,
+      },
+      fetchPolicy: 'no-cache',
     });
   }
 
@@ -274,17 +306,20 @@ export default class ProjectMutator {
     script: string,
     title: string,
   ) {
+    this.client.writeData({
+      id: `ScriptTemplate:${templateId}`,
+      data: {
+        script: script,
+        title: title,
+      },
+    });
+
     if (this.isLocal) {
-      this.client.writeData({
-        id: `ScriptTemplate:${templateId}`,
-        data: {
-          script: script,
-          title: title,
-        },
-      });
       registerOnCloseSaveMessage();
       return;
     }
+
+    const key = ['UPDATE_SCRIPT_TEMPLATE', this.projectId, templateId];
 
     await this.client.mutate({
       mutation: UPDATE_SCRIPT_TEMPLATE,
@@ -294,9 +329,11 @@ export default class ProjectMutator {
         script: script,
         title: title,
       },
-      refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } },
-      ],
+      context: {
+        debounceKey: key,
+        serializationKey: key,
+      },
+      fetchPolicy: 'no-cache',
     });
   }
 
