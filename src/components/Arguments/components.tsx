@@ -1,36 +1,38 @@
+import { Project } from 'api/apollo/generated/graphql';
+import AccountPicker from 'components/AccountPicker';
+import Button from 'components/Button';
+import { Stack } from 'layout/Stack';
+import { ActiveEditor, EntityType } from 'providers/Project';
+import { useProject } from 'providers/Project/projectHooks';
 import React, { useState } from 'react';
 import {
   FaArrowCircleRight,
-  FaExclamationTriangle,
-  FaCaretSquareUp,
   FaCaretSquareDown,
+  FaCaretSquareUp,
+  FaExclamationTriangle,
 } from 'react-icons/fa';
-import { EntityType } from 'providers/Project';
-import Button from 'components/Button';
-import { useProject } from 'providers/Project/projectHooks';
-import AccountPicker from 'components/AccountPicker';
+import { CadenceProblem } from 'util/language-syntax-errors';
+import theme from '../../theme';
+import SingleArgument from './SingleArgument';
 import {
   Badge,
   Controls,
+  ErrorIndex,
+  ErrorMessage,
   Heading,
   List,
-  Title,
   SignersContainer,
   SignersError,
   SingleError,
-  ErrorIndex,
-  ErrorMessage,
+  Title,
 } from './styles';
 import {
   ArgumentsListProps,
   ArgumentsTitleProps,
+  ErrorListProps,
+  HintsProps,
   InteractionButtonProps,
 } from './types';
-import SingleArgument from './SingleArgument';
-import theme from '../../theme';
-import { Stack } from 'layout/Stack';
-import { CadenceProblem } from 'util/language-syntax-errors';
-import { ErrorListProps, HintsProps } from './types';
 
 export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
   const { type, errors, expanded, setExpanded } = props;
@@ -136,7 +138,7 @@ export const ErrorsList: React.FC<ErrorListProps> = (props) => {
   const { list, actions } = props;
   const { goTo, hideDecorations, hover } = actions;
   if (list.length === 0) {
-    hideDecorations()
+    hideDecorations();
     return null;
   }
 
@@ -150,7 +152,7 @@ export const ErrorsList: React.FC<ErrorListProps> = (props) => {
           const message = renderMessage(item.message);
           return (
             <SingleError
-              key={`error-${item.message}`}
+              key={i}
               onClick={() => goTo(item.position)}
               onMouseOver={() => hover(item.highlight)}
               onMouseOut={() => hideDecorations()}
@@ -204,7 +206,7 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
             return (
               <SingleError
                 className={`hint-${item.type}`}
-                key={`${i}-${item.message}`}
+                key={i}
                 onClick={() => goTo(item.position)}
                 onMouseOver={() => hover(item.highlight)}
                 onMouseOut={() => hideDecorations()}
@@ -222,8 +224,7 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
   );
 };
 
-const getLabel = (type: EntityType) => {
-  const { project, active } = useProject();
+const getLabel = (type: EntityType, project: Project, active: ActiveEditor) => {
   const { accounts } = project;
 
   switch (true) {
@@ -243,7 +244,8 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
   active = true,
   onClick,
 }) => {
-  const label = getLabel(type);
+  const { project, active: activeEditor } = useProject();
+  const label = getLabel(type, project, activeEditor);
   const { isSavingCode } = useProject();
   const sendingTransaction = false;
 
