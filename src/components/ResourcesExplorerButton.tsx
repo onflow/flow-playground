@@ -1,15 +1,17 @@
 import React from 'react';
-import {navigate, useLocation} from "@reach/router";
+import { navigate, useLocation } from '@reach/router';
 import { FaDatabase } from 'react-icons/fa';
 import { SidebarItemToggleResources } from 'layout/SidebarItemToggleResources';
 import { useProject } from 'providers/Project/projectHooks';
-import { isUUUID, getParams, LOCAL_PROJECT_ID } from "util/url";
+import { isUUUID, getParams, LOCAL_PROJECT_ID } from 'util/url';
 
 type ResourcesExplorerButtonProps = {
   address: string;
 };
 
-export const ResourcesExplorerButton = (props: ResourcesExplorerButtonProps) => {
+export const ResourcesExplorerButton = (
+  props: ResourcesExplorerButtonProps,
+) => {
   const { project, setSelectedResourceAccount } = useProject();
   const { address } = props;
 
@@ -17,15 +19,16 @@ export const ResourcesExplorerButton = (props: ResourcesExplorerButtonProps) => 
 
   const location = useLocation();
   const params = getParams(location.search);
-  const { type, id, storage } = params;  
+  const { type, id, storage } = params;
 
-  let queryParams = type ? `&type=${type}`: "";
-  queryParams += id ? `&id=${id}`: "";
-    if (storage){
-        queryParams += storage === address ? "&storage=none" : `&storage=${address}`;
-    }
+  let queryParams = type ? `&type=${type}` : '';
+  queryParams += id ? `&id=${id}` : '';
+  if (storage) {
+    queryParams +=
+      storage === address ? '&storage=none' : `&storage=${address}`;
+  }
 
-  queryParams = queryParams.replace("&","?")
+  queryParams = queryParams.replace('&', '?');
 
   return (
     <SidebarItemToggleResources

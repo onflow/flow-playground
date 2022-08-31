@@ -1,5 +1,5 @@
-import React from "react";
-import { Flex } from "theme-ui";
+import React from 'react';
+import { Flex } from 'theme-ui';
 
 import {
   TemplatesContainer,
@@ -7,13 +7,13 @@ import {
   PanelContainer,
   PanelFooter,
   EditorHeader,
-  EditorPanelMenu
-} from "./components";
+  EditorPanelMenu,
+} from './components';
 
 const EditorPanel: React.FC = ({ children }) => {
   return (
     <Flex
-      sx={{ flexDirection: "column", height: "100%", width: "100%" }}
+      sx={{ flexDirection: 'column', height: '100%', width: '100%' }}
       variant="boxes.borderBox"
     >
       {children}
@@ -28,5 +28,5 @@ export {
   PanelContainer,
   PanelFooter,
   EditorHeader,
-  EditorPanelMenu
+  EditorPanelMenu,
 };

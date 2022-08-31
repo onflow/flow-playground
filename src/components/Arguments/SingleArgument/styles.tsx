@@ -1,43 +1,42 @@
-import React from 'react'
-import styled from "styled-components"
+import React from 'react';
+import styled from 'styled-components';
 
 interface InpubBlockProps {
-  mb?: string
+  mb?: string;
 }
 
 export const InputBlock = styled.div<InpubBlockProps>`
   display: flex;
   flex-direction: column;
-  margin-bottom: ${({mb = "0"}) => mb};
+  margin-bottom: ${({ mb = '0' }) => mb};
   position: relative;
-`
-
+`;
 
 interface LabelProps {
-  error?: boolean
+  error?: boolean;
 }
 
 export const Label = styled.p<LabelProps>`
   margin: 0;
   font-size: 14px;
   margin-bottom: 5px;
-  color: ${({error})=> error ? "#EE431E" : "#000"};
+  color: ${({ error }) => (error ? '#EE431E' : '#000')};
 `;
 
 export const Type = styled.span`
   font-weight: normal;
-  color: #3E98EB;
+  color: #3e98eb;
   margin-left: 4px;
-  &:before{
-    content: "(";
+  &:before {
+    content: '(';
   }
-  &:after{
-    content: ")";
+  &:after {
+    content: ')';
   }
-`
+`;
 
 export const Input = styled.input`
-  border: 1px solid #C4C4C4;
+  border: 1px solid #c4c4c4;
   border-radius: 5px;
   font-size: 14px;
   color: #000;
@@ -45,7 +44,7 @@ export const Input = styled.input`
   width: 100%;
   font-weight: bold;
   margin-bottom: 5px;
-  &:last-child{
+  &:last-child {
     margin-bottom: 0;
   }
   box-sizing: border-box;
@@ -71,23 +70,18 @@ export const InputIconContainer = styled.div`
   cursor: pointer;
   color: #888;
   user-select: none;
-  
-  &:hover{
+
+  &:hover {
     color: #333;
   }
 `;
 
-
 type InputIconProps = {
-  onClick?: any,
-  icon: JSX.Element
-}
+  onClick?: any;
+  icon: JSX.Element;
+};
 
 export const InputIcon = (props: InputIconProps) => {
-  const { onClick, icon } = props
-  return (
-    <InputIconContainer onClick={onClick}>
-      {icon}
-    </InputIconContainer>
-  )
-}
+  const { onClick, icon } = props;
+  return <InputIconContainer onClick={onClick}>{icon}</InputIconContainer>;
+};

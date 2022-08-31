@@ -1636,4 +1636,3 @@ export type GetResultsQueryResult = ApolloReactCommon.QueryResult<GetResultsQuer
   }
 };
       export default result;
-    

@@ -256,7 +256,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     project.title = title;
     project.description = description;
     project.readme = readme;
-    active.onChange(title, description, readme)
+    active.onChange(title, description, readme);
   };
 
   const isReadmeEditor = active.type === 4;

@@ -6,7 +6,7 @@ interface HoverPanelProps {
 }
 
 export const HoverPanel = styled.div<HoverPanelProps>`
-  min-width: ${({minWidth}) => minWidth};
+  min-width: ${({ minWidth }) => minWidth};
   max-width: 500px;
   padding: 20px;
   border-radius: 4px;
@@ -15,11 +15,11 @@ export const HoverPanel = styled.div<HoverPanelProps>`
 `;
 
 interface HidableProps {
-  hidden: Boolean
+  hidden: Boolean;
 }
 export const Hidable = styled.div<HidableProps>`
-  display: ${({hidden = false}) => hidden ? "none" : "block"};
-`
+  display: ${({ hidden = false }) => (hidden ? 'none' : 'block')};
+`;
 
 export const Heading = styled.div`
   display: flex;
@@ -29,7 +29,7 @@ export const Heading = styled.div`
 `;
 
 interface TitleProps {
-  lineColor?: string
+  lineColor?: string;
 }
 
 export const Title = styled.div<TitleProps>`
@@ -87,7 +87,7 @@ export const Badge = styled.div`
 `;
 
 interface ListProps {
-  hidden?: boolean
+  hidden?: boolean;
 }
 export const List = styled.div<ListProps>`
   display: ${({ hidden }) => (hidden ? 'none' : 'grid')};
@@ -108,8 +108,8 @@ interface ControlContainerProps {
   showPrompt?: boolean;
 }
 export const ControlContainer = styled.div<ControlContainerProps>`
-  display: ${({ showPrompt }) => showPrompt ? 'block' : 'flex'};
-  max-width: ${({ showPrompt }) => showPrompt ? 'min-content' : 'none'};
+  display: ${({ showPrompt }) => (showPrompt ? 'block' : 'flex')};
+  max-width: ${({ showPrompt }) => (showPrompt ? 'min-content' : 'none')};
   align-items: center;
   justify-content: space-between;
   color: ${({ isOk, progress, showPrompt }) => {
@@ -174,23 +174,23 @@ export const SingleError = styled.div`
   padding: 10px;
   border-radius: 4px;
   font-size: 14px;
-  &:hover{
+  &:hover {
     background-color: rgba(244, 57, 64, 0.15);
-    
-    &.hint-warning{
+
+    &.hint-warning {
       background-color: rgb(238, 169, 30, 0.15);
     }
 
-    &.hint-info{
+    &.hint-info {
       background-color: rgb(85, 238, 30, 0.15);
     }
   }
-`
+`;
 
 export const ErrorIndex = styled.div`
   width: 20px;
   height: 20px;
-  background-color: rgba(0,0,0,0.15);
+  background-color: rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -203,13 +203,13 @@ export const ErrorMessage = styled.p`
   line-height: 1.2;
   word-break: break-word;
   span {
-    background-color: rgba(0,0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.05);
     padding: 2px 6px;
     border-radius: 3px;
     margin: 3px 3px 3px 5px;
     line-height: 20px;
-    .suggestion{
-      background-color: ${theme.colors.primary}
+    .suggestion {
+      background-color: ${theme.colors.primary};
     }
   }
 `;
@@ -221,7 +221,7 @@ export const SignersError = styled.p`
   box-sizing: border-box;
   margin: 10px 0;
   color: ${theme.colors.error};
-  svg{
+  svg {
     margin-right: 0.5em;
   }
 `;

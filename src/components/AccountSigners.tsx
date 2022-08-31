@@ -1,9 +1,9 @@
-import React from "react";
-import { useThemeUI, Flex, Badge, Text } from "theme-ui";
-import { motion } from "framer-motion";
-import { Account, Project } from "src/api/apollo/generated/graphql";
-import Avatar from "components/Avatar";
-import { AccountAvatar, AvatarList } from "components/AccountAvatars";
+import React from 'react';
+import { useThemeUI, Flex, Badge, Text } from 'theme-ui';
+import { motion } from 'framer-motion';
+import { Account, Project } from 'src/api/apollo/generated/graphql';
+import Avatar from 'components/Avatar';
+import { AccountAvatar, AvatarList } from 'components/AccountAvatars';
 
 export const Outline: React.FC = ({ children }) => {
   const { theme } = useThemeUI();
@@ -11,14 +11,14 @@ export const Outline: React.FC = ({ children }) => {
   return (
     <motion.div>
       <Flex
-        mx={"0.5rem"}
+        mx={'0.5rem'}
         sx={{
-          justifyContent: "center",
-          alignItems: "center",
-          height: "35px",
-          width: "35px",
-          borderRadius: "50%",
-          border: `2px dashed ${theme.colors.greyBorder}`
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '35px',
+          width: '35px',
+          borderRadius: '50%',
+          border: `2px dashed ${theme.colors.greyBorder}`,
         }}
       >
         {children}
@@ -33,15 +33,22 @@ const AccountSigners: React.FC<{
   onChange: (selected: number) => void;
   project: Project;
   accounts: Account[];
-  maxSelection?: number
+  maxSelection?: number;
 }> = (props) => {
-  const { multi, selectedAccounts, accounts, project, onChange, maxSelection} = props;
+  const {
+    multi,
+    selectedAccounts,
+    accounts,
+    project,
+    onChange,
+    maxSelection,
+  } = props;
   if (!multi) {
-    throw new Error("Must include multi prop.");
+    throw new Error('Must include multi prop.');
   }
 
   const { theme } = useThemeUI();
-  const amount = maxSelection || project.accounts.length
+  const amount = maxSelection || project.accounts.length;
   const renderOutlines = () => {
     const outlines = [];
     for (let i = selectedAccounts.length; i < amount; i++) {
@@ -50,12 +57,12 @@ const AccountSigners: React.FC<{
           <Text
             sx={{
               fontSize: 4,
-              color: theme.colors.greyBorder
+              color: theme.colors.greyBorder,
             }}
           >
             {i + 1}
           </Text>
-        </Outline>
+        </Outline>,
       );
     }
     return outlines;
@@ -76,29 +83,30 @@ const AccountSigners: React.FC<{
             >
               <motion.div
                 style={{
-                  cursor: "pointer",
-                  borderRadius: "50%",
-                  boxShadow: `0px 0px 0px 3px ${theme.colors.primary}`
+                  cursor: 'pointer',
+                  borderRadius: '50%',
+                  boxShadow: `0px 0px 0px 3px ${theme.colors.primary}`,
                 }}
                 whileHover={{ scale: 1.05 }}
               >
-                <Avatar 
+                <Avatar
                   seed={project.seed}
-                  index={i} 
+                  index={i}
                   style={{
-                    width: "35px",
-                    height: "35px",
-                    display: "block",
-                    borderRadius: "0 0 20px 20px"
-                  }} />
+                    width: '35px',
+                    height: '35px',
+                    display: 'block',
+                    borderRadius: '0 0 20px 20px',
+                  }}
+                />
                 <Badge
-                  px={"5px"}
+                  px={'5px'}
                   sx={{
                     fontSize: 3,
                     backgroundColor: theme.colors.primary,
-                    position: "absolute",
-                    left: "-2px",
-                    bottom: "-1px"
+                    position: 'absolute',
+                    left: '-2px',
+                    bottom: '-1px',
                   }}
                 >
                   0x{account.address.slice(-2)}

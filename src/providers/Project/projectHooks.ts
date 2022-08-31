@@ -1,11 +1,11 @@
-import { useContext } from "react";
-import { useQuery } from "@apollo/react-hooks";
+import { useContext } from 'react';
+import { useQuery } from '@apollo/react-hooks';
 
-import { GET_PROJECT, GET_LOCAL_PROJECT } from "api/apollo/queries";
+import { GET_PROJECT, GET_LOCAL_PROJECT } from 'api/apollo/queries';
 
-import { Project } from "api/apollo/generated/graphql";
-import { ProjectContext, ProjectContextValue } from "./index";
-import { createDefaultProject, createLocalProject } from "./projectDefault";
+import { Project } from 'api/apollo/generated/graphql';
+import { ProjectContext, ProjectContextValue } from './index';
+import { createDefaultProject, createLocalProject } from './projectDefault';
 
 function writeDefaultProject(client: any) {
   const defaultProject = createDefaultProject();
@@ -13,8 +13,8 @@ function writeDefaultProject(client: any) {
   client.writeData({
     data: {
       activeProject: true,
-      localProject: defaultProject
-    }
+      localProject: defaultProject,
+    },
   });
 }
 
@@ -25,31 +25,31 @@ function cloneProject(client: any, project: Project) {
     project.title,
     project.description,
     project.readme,
-    project.accounts.map(acc => acc.draftCode),
+    project.accounts.map((acc) => acc.draftCode),
 
-    project.transactionTemplates.map(tpl => ({
-        code: tpl.script,
-        title: tpl.title
-      })),
-
-    project.scriptTemplates.map(tpl => ({
+    project.transactionTemplates.map((tpl) => ({
       code: tpl.script,
-      title: tpl.title
-    }))
+      title: tpl.title,
+    })),
+
+    project.scriptTemplates.map((tpl) => ({
+      code: tpl.script,
+      title: tpl.title,
+    })),
   );
 
   client.writeData({
     data: {
       activeProject: true,
-      localProject: localProject
-    }
+      localProject: localProject,
+    },
   });
 }
 
 export default function useGetProject(
   client: any,
   projectId: string | null,
-  isActiveProject: boolean
+  isActiveProject: boolean,
 ): {
   project: any | null;
   isLocal: boolean;
@@ -61,7 +61,7 @@ export default function useGetProject(
   const { loading, data: remoteData } = useQuery(GET_PROJECT, {
     variables: { projectId: projectId },
     // skip remote query if this is a new project
-    skip: isNewProject
+    skip: isNewProject,
   });
 
   if (isNewProject) {
@@ -73,7 +73,7 @@ export default function useGetProject(
       project: readLocalProject(client),
       isLocal: true,
       isClone: false,
-      isLoading: false
+      isLoading: false,
     };
   }
 
@@ -83,7 +83,7 @@ export default function useGetProject(
         project: readLocalProject(client),
         isLocal: false,
         isClone: false,
-        isLoading: false
+        isLoading: false,
       };
     }
 
@@ -102,7 +102,7 @@ export default function useGetProject(
       project: readLocalProject(client),
       isLocal: true,
       isClone: true,
-      isLoading: false
+      isLoading: false,
     };
   }
 
@@ -110,7 +110,7 @@ export default function useGetProject(
     project: remoteData.project,
     isLocal: false,
     isClone: false,
-    isLoading: false
+    isLoading: false,
   };
 }
 

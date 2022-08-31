@@ -66,7 +66,9 @@ interface TransactionBottomBarProps {
   setBottomBarHeight: (height: number) => void;
 }
 
-const TransactionBottomBar: React.FC<TransactionBottomBarProps> = ({ setBottomBarHeight }) => {
+const TransactionBottomBar: React.FC<TransactionBottomBarProps> = ({
+  setBottomBarHeight,
+}) => {
   const { x, y } = useMousePosition();
 
   const [resultHeight, setResultHeight] = useState(140);

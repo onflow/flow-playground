@@ -1,9 +1,9 @@
-const CHARS = "0123456789ABCDEF".split("");
+const CHARS = '0123456789ABCDEF'.split('');
 const randChar = (): string => CHARS[~~(Math.random() * CHARS.length)];
 const group = (length: number): string =>
-  Array.from({ length }, () => randChar()).join("");
+  Array.from({ length }, () => randChar()).join('');
 export const uuid = (): string =>
-  [group(8), group(4), group(4), group(4), group(12)].join("-");
+  [group(8), group(4), group(4), group(4), group(12)].join('-');
 
 export const mb32 = (a: number) => {
   let t;
@@ -19,7 +19,7 @@ export const mb32 = (a: number) => {
 };
 
 export const strToSeed = (seed: string): number => {
-  if (typeof TextEncoder == "undefined") return Math.random() * 32;
+  if (typeof TextEncoder == 'undefined') return Math.random() * 32;
   const td = new TextEncoder();
   return td.encode(seed).reduce((a, b) => a + b);
 };

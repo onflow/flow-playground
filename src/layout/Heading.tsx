@@ -1,15 +1,15 @@
-import styled from "@emotion/styled";
-import theme from "../theme";
+import styled from '@emotion/styled';
+import theme from '../theme';
 
 type HeadingProps = {
   textTransform?: string;
-}
+};
 
 export const Heading = styled.div<HeadingProps>`
   padding: 1rem;
   font-size: 10px;
   font-weight: bold;
-  text-transform: ${({ textTransform = "uppercase" }) => (textTransform)};
+  text-transform: ${({ textTransform = 'uppercase' }) => textTransform};
   letter-spacing: 0.1em;
   color: ${theme.colors.heading};
   padding-bottom: calc(1rem - 3px);
@@ -22,7 +22,7 @@ export const Heading = styled.div<HeadingProps>`
 
   &:after {
     opacity: 0.5;
-    content: "";
+    content: '';
     display: block;
     position: absolute;
     left: 1rem;
@@ -34,9 +34,8 @@ export const Heading = styled.div<HeadingProps>`
   }
 `;
 
-
 export const ResizeHeading = styled(Heading)`
-	&:hover {
-		cursor: ns-resize;
-	}
-`
+  &:hover {
+    cursor: ns-resize;
+  }
+`;

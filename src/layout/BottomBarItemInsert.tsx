@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "@emotion/styled";
-import theme from "../theme";
+import React from 'react';
+import styled from '@emotion/styled';
+import theme from '../theme';
 
 type BottomBarItemInsertProps = {
   onClick?: (e: React.SyntheticEvent<Element, Event>) => any | void;
@@ -15,9 +15,9 @@ export const BottomBarItemInsert = styled.button<BottomBarItemInsertProps>`
   color: ${theme.colors.darkGrey};
   &:hover {
     color: ${theme.colors.heading};
-    cursor: ${p => (p.grab ? "grab" : "pointer")};
+    cursor: ${(p) => (p.grab ? 'grab' : 'pointer')};
   }
   &:active {
-    cursor: ${p => (p.grab ? "grabbing" : "pointer")};
+    cursor: ${(p) => (p.grab ? 'grabbing' : 'pointer')};
   }
 `;
