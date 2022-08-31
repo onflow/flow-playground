@@ -69,7 +69,7 @@ const ExportPopup: React.FC<{
       opacity: 0,
       y: -200,
       transition: {
-        ease: [1, 0.5, 0, 0]
+        ease: [1, 0.5, 0, 0],
       },
     },
   };
@@ -90,7 +90,7 @@ const ExportPopup: React.FC<{
           <Input
             ref={firstInput}
             defaultValue={folderName}
-            onChange={event => setFolderName(event.target.value)}
+            onChange={(event) => setFolderName(event.target.value)}
           />
         </InputBlock>
         {processing ? (

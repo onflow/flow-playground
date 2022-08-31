@@ -1,4 +1,4 @@
-import React, {createContext, useState} from 'react';
+import React, { createContext, useState } from 'react';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { navigate, useLocation, Redirect } from '@reach/router';
 import ProjectMutator from './projectMutator';
@@ -324,15 +324,13 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         return {
           type: active.type,
           index: active.index,
-          onChange: (code: any) =>
-            updateActiveTransactionTemplate(code),
+          onChange: (code: any) => updateActiveTransactionTemplate(code),
         };
       case EntityType.ScriptTemplate:
         return {
           type: active.type,
           index: active.index,
-          onChange: (code: any) =>
-            updateActiveScriptTemplate(code),
+          onChange: (code: any) => updateActiveScriptTemplate(code),
         };
       case EntityType.Readme:
         return {
@@ -345,7 +343,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     }
   };
 
-  const activeEditor = getActiveEditor()
+  const activeEditor = getActiveEditor();
 
   const location = useLocation();
   if (isLoading) return null;

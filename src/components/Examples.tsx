@@ -1,11 +1,11 @@
-import React from "react";
-import { Text } from "theme-ui";
-import styled from "@emotion/styled";
-import { motion } from "framer-motion";
-import { IoMdClose } from "react-icons/io";
-import { WhiteOverlay } from "components/Common";
+import React from 'react';
+import { Text } from 'theme-ui';
+import styled from '@emotion/styled';
+import { motion } from 'framer-motion';
+import { IoMdClose } from 'react-icons/io';
+import { WhiteOverlay } from 'components/Common';
 
-import Mixpanel from "util/mixpanel";
+import Mixpanel from 'util/mixpanel';
 import ActionButton from 'components/ActionButton';
 
 const examples = [
@@ -99,7 +99,7 @@ const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
-  
+
   & h3 {
     font-size: 1.5rem;
   }
@@ -113,10 +113,10 @@ const ExampleContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, minmax(100px, 320px));
   grid-gap: 1rem;
-  a, .full-height{
+  a,
+  .full-height {
     height: 100%;
   }
-  
 `;
 
 const Buttons = styled.div`
@@ -124,14 +124,13 @@ const Buttons = styled.div`
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 10px;
   width: 100%;
-  
+
   align-items: flex-start;
-  
-  button{
+
+  button {
     width: 100%;
   }
-`
-
+`;
 
 const Example = styled.div`
   display: grid;
@@ -186,22 +185,22 @@ const Examples: React.FC<{
 }> = ({ visible, triggerClose }) => {
   const ExampleContainers = {
     visible: {
-      display: "flex",
+      display: 'flex',
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
+        staggerChildren: 0.1,
       },
-      zIndex: 99
+      zIndex: 99,
     },
     hidden: {
       opacity: 0,
       transition: {
-        when: "afterChildren",
+        when: 'afterChildren',
         staggerChildren: 0.1,
-        staggerDirection: -1
+        staggerDirection: -1,
       },
-      zIndex: -1
-    }
+      zIndex: -1,
+    },
   };
 
   const exampleItem = {
@@ -209,22 +208,22 @@ const Examples: React.FC<{
       opacity: 1,
       x: 0,
       transition: {
-        ease: [1, 0.5, 0, 0]
-      }
+        ease: [1, 0.5, 0, 0],
+      },
     },
     hidden: {
       opacity: 0,
       x: 200,
       transition: {
-        ease: [1, 0.5, 0, 0]
-      }
-    }
+        ease: [1, 0.5, 0, 0],
+      },
+    },
   };
 
   return (
     <ExamplesContainer
       initial="hidden"
-      animate={visible ? "visible" : "hidden"}
+      animate={visible ? 'visible' : 'hidden'}
       variants={ExampleContainers}
     >
       <WhiteOverlay onClick={triggerClose} />
@@ -236,45 +235,49 @@ const Examples: React.FC<{
         <ExampleContainer>
           {examples.map((_example: any, index: number) => {
             return (
-                <motion.div variants={exampleItem} key={index} className={"full-height"}>
-                  <Example>
-                    <Text className="emoji">{_example.emoji}</Text>
-                    <Text className="title">{_example.title}</Text>
-                    <Text className="subtitle">{_example.subtitle}</Text>
-                    <Buttons>
-                      <a
-                        title={`Go to documentation for "${_example.title}"`}
-                        href={_example.docsLink}
-                        target="_blank"
-                        rel="noopener"
-                        onClick={() => {
-                          Mixpanel.track("Redirect to project documentation", {
-                            link: _example.docsLink,
-                            title: _example.title
-                          });
-                        }}
-                      >
-                        <ActionButton className="violet">Read More</ActionButton>
-                      </a>
-                      {_example.projectLink &&
+              <motion.div
+                variants={exampleItem}
+                key={index}
+                className={'full-height'}
+              >
+                <Example>
+                  <Text className="emoji">{_example.emoji}</Text>
+                  <Text className="title">{_example.title}</Text>
+                  <Text className="subtitle">{_example.subtitle}</Text>
+                  <Buttons>
+                    <a
+                      title={`Go to documentation for "${_example.title}"`}
+                      href={_example.docsLink}
+                      target="_blank"
+                      rel="noopener"
+                      onClick={() => {
+                        Mixpanel.track('Redirect to project documentation', {
+                          link: _example.docsLink,
+                          title: _example.title,
+                        });
+                      }}
+                    >
+                      <ActionButton className="violet">Read More</ActionButton>
+                    </a>
+                    {_example.projectLink && (
                       <a
                         title={`Open "${_example.title}" project in Playground`}
                         href={_example.projectLink}
                         target="_blank"
                         rel="noopener"
                         onClick={() => {
-                          Mixpanel.track("Open example project", {
+                          Mixpanel.track('Open example project', {
                             link: _example.projectLink,
-                            title: _example.title
+                            title: _example.title,
                           });
                         }}
                       >
                         <ActionButton>Open Project</ActionButton>
                       </a>
-                      }
-                    </Buttons>
-                  </Example>
-                </motion.div>
+                    )}
+                  </Buttons>
+                </Example>
+              </motion.div>
             );
           })}
         </ExampleContainer>

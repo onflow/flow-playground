@@ -4,7 +4,7 @@ import { FaClipboard, FaClipboardCheck } from 'react-icons/fa';
 import { SidebarItemExport } from 'layout/SidebarItemExport';
 import { useProject } from 'providers/Project/projectHooks';
 import { generateCode } from '../util/generate-code';
-import { LOCAL_PROJECT_ID } from '../util/url'
+import { LOCAL_PROJECT_ID } from '../util/url';
 
 type ExportButtonProps = {
   id: string;

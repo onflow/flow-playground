@@ -1,9 +1,9 @@
-import React from "react";
-import { Button as ThemedButton } from "theme-ui";
-import styled from "@emotion/styled";
-import { motion } from "framer-motion";
-import { FaSpinner } from "react-icons/fa";
-import { CSSProperties } from "styled-components";
+import React from 'react';
+import { Button as ThemedButton } from 'theme-ui';
+import styled from '@emotion/styled';
+import { motion } from 'framer-motion';
+import { FaSpinner } from 'react-icons/fa';
+import { CSSProperties } from 'styled-components';
 
 interface StyledButtonProps {
   style?: CSSProperties;
@@ -13,11 +13,10 @@ interface StyledButtonProps {
 }
 
 const StyledButton: React.FC<StyledButtonProps> = styled(ThemedButton)`
-  
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   @keyframes rotating {
     from {
       transform: rotate(0deg);
@@ -34,27 +33,28 @@ const StyledButton: React.FC<StyledButtonProps> = styled(ThemedButton)`
   .loading {
     animation: rotating 0.5s linear infinite;
   }
-  
-  &.violet{
-    background-color: #BDC4F4;
-    color: #575E89;
+
+  &.violet {
+    background-color: #bdc4f4;
+    color: #575e89;
   }
 
-  &.grey{
-    background-color: #EDEDED;
+  &.grey {
+    background-color: #ededed;
     color: #696969;
   }
 
-  &.modal{
+  &.modal {
     width: 100px;
     font-size: 16px;
     font-weight: bold;
   }
-  
+
   display: flex;
   align-items: center;
-  
-  cursor: ${({variant}) => variant === "buttons.disabled" ? "not-allowed !important" : "pointer"};
+
+  cursor: ${({ variant }) =>
+    variant === 'buttons.disabled' ? 'not-allowed !important' : 'pointer'};
 `;
 
 interface ButtonProps {
@@ -78,17 +78,15 @@ const Button: React.FC<ButtonProps> = ({
   Icon,
   isLoading,
   isActive,
-  disabled
+  disabled,
 }) => {
   return (
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-    >
+    <motion.div whileHover={{ scale: 1.05 }}>
       <StyledButton
         style={style}
         className={className}
         onClick={disabled ? noop : onClick}
-        variant={isActive && !disabled ? "buttons.primary" : "buttons.disabled"}
+        variant={isActive && !disabled ? 'buttons.primary' : 'buttons.disabled'}
       >
         {children}
         {isLoading ? (
@@ -104,10 +102,10 @@ const Button: React.FC<ButtonProps> = ({
 Button.defaultProps = {
   onClick: () => {},
   style: {},
-  className: "",
+  className: '',
   Icon: null,
   isLoading: false,
-  isActive: true
+  isActive: true,
 };
 
 export default Button;

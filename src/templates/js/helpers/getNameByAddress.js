@@ -7,4 +7,4 @@ module.exports = (address) => {
   };
 
   return addressBook[address];
-}
+};

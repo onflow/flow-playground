@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "@emotion/styled";
-import theme from "../theme";
+import React from 'react';
+import styled from '@emotion/styled';
+import theme from '../theme';
 
 type SidebarItemInsertProps = {
   onClick?: (e: React.SyntheticEvent<Element, Event>) => any | void;
@@ -19,9 +19,9 @@ export const SidebarItemInsert = styled.button<SidebarItemInsertProps>`
   color: ${theme.colors.grey};
   &:hover {
     color: ${theme.colors.heading};
-    cursor: ${p => (p.grab ? "grab" : "pointer")};
+    cursor: ${(p) => (p.grab ? 'grab' : 'pointer')};
   }
   &:active {
-    cursor: ${p => (p.grab ? "grabbing" : "pointer")};
+    cursor: ${(p) => (p.grab ? 'grabbing' : 'pointer')};
   }
 `;

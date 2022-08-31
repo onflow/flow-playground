@@ -1,20 +1,20 @@
-import React, {SyntheticEvent, useEffect, useRef, useState} from "react";
-import {IoMdAddCircleOutline} from "react-icons/io";
-import {FaPen, FaTimes} from "react-icons/fa";
-import {SidebarSection} from "layout/SidebarSection";
-import {SidebarHeader} from "layout/SidebarHeader";
-import {SidebarItems} from "layout/SidebarItems";
-import {SidebarItem} from "layout/SidebarItem";
-import {SidebarItemInsert} from "layout/SidebarItemInsert";
-import {SidebarItemInput} from "layout/SidebarItemInput";
-import {SidebarItemEdit} from "layout/SidebarItemEdit";
-import {SidebarItemDelete} from "layout/SidebarItemDelete";
-import useKeyPress from "../hooks/useKeyPress";
-import { ExportButton } from "components/ExportButton";
-import { getParams } from "util/url";
-import { useProject } from "providers/Project/projectHooks";
-import { EntityType } from "providers/Project";
-import { useLocation } from "@reach/router";
+import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { IoMdAddCircleOutline } from 'react-icons/io';
+import { FaPen, FaTimes } from 'react-icons/fa';
+import { SidebarSection } from 'layout/SidebarSection';
+import { SidebarHeader } from 'layout/SidebarHeader';
+import { SidebarItems } from 'layout/SidebarItems';
+import { SidebarItem } from 'layout/SidebarItem';
+import { SidebarItemInsert } from 'layout/SidebarItemInsert';
+import { SidebarItemInput } from 'layout/SidebarItemInput';
+import { SidebarItemEdit } from 'layout/SidebarItemEdit';
+import { SidebarItemDelete } from 'layout/SidebarItemDelete';
+import useKeyPress from '../hooks/useKeyPress';
+import { ExportButton } from 'components/ExportButton';
+import { getParams } from 'util/url';
+import { useProject } from 'providers/Project/projectHooks';
+import { EntityType } from 'providers/Project';
+import { useLocation } from '@reach/router';
 
 type MenuListProps = {
   active: number | null;
@@ -34,13 +34,13 @@ const MenuList: React.FC<MenuListProps> = ({
   onSelect,
   onUpdate,
   onInsert,
-  onDelete
+  onDelete,
 }) => {
-  const { active } = useProject()
+  const { active } = useProject();
   const isEditing = useRef<HTMLInputElement>();
   const [editing, setEditing] = useState([]);
-  const enterPressed = useKeyPress("Enter");
-  const escapePressed = useKeyPress("Escape");
+  const enterPressed = useKeyPress('Enter');
+  const escapePressed = useKeyPress('Escape');
 
   const toggleEditing = (i: number, newTitle: string) => {
     if (editing.includes(i)) {
@@ -52,7 +52,6 @@ const MenuList: React.FC<MenuListProps> = ({
     }
     return setEditing([...editing, i]);
   };
-
 
   useEffect(() => {
     setEditing([]);
@@ -68,14 +67,16 @@ const MenuList: React.FC<MenuListProps> = ({
   const setEditingRef = (element: HTMLInputElement | undefined) => {
     isEditing.current = element;
     element?.focus();
-    element?.select()
+    element?.select();
   };
 
-  const isScript = title.toLowerCase().includes("script");
-  const itemType = isScript ? EntityType.ScriptTemplate : EntityType.TransactionTemplate
+  const isScript = title.toLowerCase().includes('script');
+  const itemType = isScript
+    ? EntityType.ScriptTemplate
+    : EntityType.TransactionTemplate;
 
   const location = useLocation();
-  const params = getParams(location.search)
+  const params = getParams(location.search);
 
   return (
     <SidebarSection>
@@ -89,7 +90,7 @@ const MenuList: React.FC<MenuListProps> = ({
       </SidebarHeader>
       <SidebarItems>
         {items.map((item, i) => {
-          const isActive = active.type === itemType && item.id === params.id
+          const isActive = active.type === itemType && item.id === params.id;
           return (
             <SidebarItem
               title={item.title}
@@ -112,11 +113,11 @@ const MenuList: React.FC<MenuListProps> = ({
                 }}
                 defaultValue={item.title}
                 readonly={!editing.includes(i)}
-                onChange={e => {
+                onChange={(e) => {
                   if (e.target.value.length > NAME_MAX_CHARS) {
                     isEditing.current.value = e.target.value.substr(
                       0,
-                      NAME_MAX_CHARS - 1
+                      NAME_MAX_CHARS - 1,
                     );
                   }
                 }}
@@ -127,7 +128,7 @@ const MenuList: React.FC<MenuListProps> = ({
                     <FaPen />
                   </SidebarItemEdit>
 
-                  <ExportButton id={item.id} typeName={item.__typename}/>
+                  <ExportButton id={item.id} typeName={item.__typename} />
                 </>
               )}
 
@@ -136,7 +137,8 @@ const MenuList: React.FC<MenuListProps> = ({
                   onClick={(e: any) => {
                     e.stopPropagation();
                     onDelete(item.id);
-                  }}>
+                  }}
+                >
                   <FaTimes />
                 </SidebarItemDelete>
               )}

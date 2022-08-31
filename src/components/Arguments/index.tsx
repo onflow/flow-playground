@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
 import { AiFillCloseCircle } from 'react-icons/ai';
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from 'framer-motion';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import { RemoveToastButton } from 'layout/RemoveToastButton';
@@ -15,7 +15,12 @@ import {
 import { ArgumentsProps } from 'components/Arguments/types';
 import { ExecuteCommandRequest } from 'monaco-languageclient';
 
-import { ControlContainer, ToastContainer, HoverPanel, StatusMessage } from './styles';
+import {
+  ControlContainer,
+  ToastContainer,
+  HoverPanel,
+  StatusMessage,
+} from './styles';
 
 import {
   ActionButton,
@@ -26,30 +31,26 @@ import {
   Signers,
 } from './components';
 
-const isDictionaary = (type:string) => type.includes("{")
-const isArray = (type:string) => type.includes("[")
-const isImportedType = (type:string) => type.includes(".")
-const isComplexType = (type:string)=> isDictionaary(type)
-  || isArray(type)
-  || isImportedType(type)
+const isDictionaary = (type: string) => type.includes('{');
+const isArray = (type: string) => type.includes('[');
+const isImportedType = (type: string) => type.includes('.');
+const isComplexType = (type: string) =>
+  isDictionaary(type) || isArray(type) || isImportedType(type);
 
-const startsWith = (value : string, prefix: string) => {
-  return value.startsWith(prefix) || value.startsWith("U"+prefix)
-}
+const startsWith = (value: string, prefix: string) => {
+  return value.startsWith(prefix) || value.startsWith('U' + prefix);
+};
 
 const checkJSON = (value: any, type: string) => {
-  try{
-    JSON.parse(value)
-    return null
-  } catch (e){
-    return `Not a valid argument of type ${type}`
+  try {
+    JSON.parse(value);
+    return null;
+  } catch (e) {
+    return `Not a valid argument of type ${type}`;
   }
-}
+};
 
-const validateByType = (
-  value: any,
-  type: string,
-) => {
+const validateByType = (value: any, type: string) => {
   if (value.length === 0) {
     return "Value can't be empty";
   }
@@ -61,7 +62,7 @@ const validateByType = (
     }
 
     // Integers
-    case startsWith(type,'Int'): {
+    case startsWith(type, 'Int'): {
       if (isNaN(value) || value === '') {
         return 'Should be a valid Integer number';
       }
@@ -69,7 +70,7 @@ const validateByType = (
     }
 
     // Words
-    case startsWith(type,'Word'): {
+    case startsWith(type, 'Word'): {
       if (isNaN(value) || value === '') {
         return 'Should be a valid Word number';
       }
@@ -110,7 +111,6 @@ const validateByType = (
     }
   }
 };
-
 
 const getLabel = (
   resultType: ResultType,
@@ -167,7 +167,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
   const needSigners = type == EntityType.TransactionTemplate && signers > 0;
   const [selected, updateSelectedAccounts] = useState([]);
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({});
   const [expanded, setExpanded] = useState(true);
   const [values, setValue] = useState<IValue>({});
   const constraintsRef = useRef();
@@ -176,7 +176,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     set((prev: any[]) => {
       delete prev[id];
       return {
-        ...prev
+        ...prev,
       };
     });
   };
@@ -202,12 +202,12 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
       return acc;
     }, {});
 
-    console.log({errors});
+    console.log({ errors });
     setErrors(errors);
   };
 
-  useEffect(()=>{
-    validate(list, values)
+  useEffect(() => {
+    validate(list, values);
   }, [list, values]);
 
   const [processingStatus, setProcessingStatus] = useState(false);
@@ -218,15 +218,17 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     transactionFactory,
     contractDeployment,
   } = useTemplateType();
-  const { 
-    project, 
-    active, 
-    isSavingCode, 
+  const {
+    project,
+    active,
+    isSavingCode,
     lastSigners,
     // updateAccountDeployedCode
   } = useProject();
 
-  const [notifications, setNotifications] = useState< { [identifier: string]: string[] } >({});
+  const [notifications, setNotifications] = useState<{
+    [identifier: string]: string[];
+  }>({});
 
   // compare 'state' field for each account, set 'notifications' state for new data
   // @ts-ignore: <- this state is only used to compare and render notifications
@@ -235,21 +237,24 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   useEffect(() => {
     setProjectAccts((prevAccounts) => {
       const latestAccounts = project.accounts;
-      const updatedAccounts = latestAccounts.filter((latestAccount, index)=> latestAccount.state !== prevAccounts[index].state);
+      const updatedAccounts = latestAccounts.filter(
+        (latestAccount, index) =>
+          latestAccount.state !== prevAccounts[index].state,
+      );
 
       if (updatedAccounts.length > 0) {
         setNotifications((prev) => {
           return {
             ...prev,
-            [counter]: updatedAccounts
+            [counter]: updatedAccounts,
           };
         });
         setTimeout(() => removeNotification(setNotifications, counter), 5000);
         setCounter((prev) => prev + 1);
-      };
+      }
       return project.accounts;
     });
-  },[project]);
+  }, [project]);
 
   const { accounts } = project;
 
@@ -299,7 +304,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     }
 
     // Map values to strings that will be passed to backend
-    const args: any = list.map((_, index) => JSON.stringify(formatted[index]))
+    const args: any = list.map((_, index) => JSON.stringify(formatted[index]));
 
     let rawResult, resultType;
     try {
@@ -426,58 +431,68 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
               let updatedStorageAccts: string[] = [];
               updatedAccounts.map((acct: any) => {
                 const addr = acct.address;
-                const acctNum = addr.charAt(addr.length-1);
+                const acctNum = addr.charAt(addr.length - 1);
                 const acctHex = `0x0${acctNum}`;
                 updatedStorageAccts.push(acctHex);
               });
 
               // render a new list item for each new id in 'notifications' state
               return (
-                (lastSigners && updatedStorageAccts) && <motion.li
-                  key={id}
-                  layout
-                  initial={{ opacity: 0, y: 50, scale: 0.3 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
-                >
-                  <Flex
-                    sx={{
-                      justifyContent: "flex-end",
+                lastSigners &&
+                updatedStorageAccts && (
+                  <motion.li
+                    key={id}
+                    layout
+                    initial={{ opacity: 0, y: 50, scale: 0.3 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{
+                      opacity: 0,
+                      scale: 0.5,
+                      transition: { duration: 0.2 },
                     }}
                   >
-                    <RemoveToastButton
-                      onClick={() => removeNotification(setNotifications, parseInt(id))}
-                    >
-                      <AiFillCloseCircle color="grey" size="32"/>
-                    </RemoveToastButton>
-                  </Flex>
-                  <Box
-                    my={1}
-                    sx={{
-                      marginTop: "0.0rem",
-                      padding: "0.8rem 0.5rem",
-                      alignItems: "center",
-                      border: `1px solid ${theme.colors.borderDark}`,
-                      backgroundColor: theme.colors.background,
-                      borderRadius: "8px",
-                      maxWidth: "500px",
-                      boxShadow: "10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff"
-                    }}
-                  >
-                    <Text
+                    <Flex
                       sx={{
-                        padding: "0.75rem"
+                        justifyContent: 'flex-end',
                       }}
                     >
-                      {`Account${lastSigners?.length > 1 ? "s" : ""}
-                        ${lastSigners.join(", ")}
+                      <RemoveToastButton
+                        onClick={() =>
+                          removeNotification(setNotifications, parseInt(id))
+                        }
+                      >
+                        <AiFillCloseCircle color="grey" size="32" />
+                      </RemoveToastButton>
+                    </Flex>
+                    <Box
+                      my={1}
+                      sx={{
+                        marginTop: '0.0rem',
+                        padding: '0.8rem 0.5rem',
+                        alignItems: 'center',
+                        border: `1px solid ${theme.colors.borderDark}`,
+                        backgroundColor: theme.colors.background,
+                        borderRadius: '8px',
+                        maxWidth: '500px',
+                        boxShadow:
+                          '10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff',
+                      }}
+                    >
+                      <Text
+                        sx={{
+                          padding: '0.75rem',
+                        }}
+                      >
+                        {`Account${lastSigners?.length > 1 ? 's' : ''}
+                        ${lastSigners.join(', ')}
                         updated the storage in
-                        account${updatedStorageAccts?.length > 1 ? "s" : ""}
-                        ${updatedStorageAccts.join(", ")}.`}
-                    </Text>
-                  </Box>
-                </motion.li>
-              )
+                        account${updatedStorageAccts?.length > 1 ? 's' : ''}
+                        ${updatedStorageAccts.join(', ')}.`}
+                      </Text>
+                    </Box>
+                  </motion.li>
+                )
+              );
             })}
           </AnimatePresence>
         </ul>

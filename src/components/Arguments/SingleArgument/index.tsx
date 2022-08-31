@@ -1,15 +1,19 @@
-import React from "react";
-import { Argument } from "components/Arguments/types";
-import { InputBlock, Input, Label, Type, Error } from "./styles";
+import React from 'react';
+import { Argument } from 'components/Arguments/types';
+import { InputBlock, Input, Label, Type, Error } from './styles';
 
 type SingleArgumentProps = {
-  argument: Argument,
-  error: String,
-  onChange: (name: String, value:any) => void
-}
+  argument: Argument;
+  error: String;
+  onChange: (name: String, value: any) => void;
+};
 
-const SingleArgument: React.FC<SingleArgumentProps> = ({ argument, error, onChange }) => {
-  const {name, type} = argument
+const SingleArgument: React.FC<SingleArgumentProps> = ({
+  argument,
+  error,
+  onChange,
+}) => {
+  const { name, type } = argument;
   return (
     <InputBlock>
       <Label>
@@ -18,13 +22,14 @@ const SingleArgument: React.FC<SingleArgumentProps> = ({ argument, error, onChan
       </Label>
       <Input
         name={`${name}-${type}`}
-        onChange={(event)=>{
-        const {value} = event.target
-        onChange(name,value)
-      }}/>
+        onChange={(event) => {
+          const { value } = event.target;
+          onChange(name, value);
+        }}
+      />
       {error && <Error>{error}</Error>}
     </InputBlock>
-  )
-}
+  );
+};
 
-export default SingleArgument
+export default SingleArgument;

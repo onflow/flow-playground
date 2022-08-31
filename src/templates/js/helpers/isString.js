@@ -1,3 +1,3 @@
 module.exports = function (item) {
-  return (typeof item === 'string' || item instanceof String)
+  return typeof item === 'string' || item instanceof String;
 };

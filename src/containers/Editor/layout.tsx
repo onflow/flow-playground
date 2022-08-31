@@ -32,7 +32,7 @@ import {
 } from './components';
 
 import { useProject } from 'providers/Project/projectHooks';
-import { decodeText } from "util/readme";
+import { decodeText } from 'util/readme';
 
 const FDP = [
   'f1383d67-6f0a-4be7-8e61-f6141ebdd92c',
@@ -74,7 +74,9 @@ const EditorLayout: React.FC = () => {
   }
 
   const [helmetTitle, setHelmetTitle] = useState(decodeText(project.title));
-  const [helmetDescription, setHelmetDescription] = useState(decodeText(project.title));
+  const [helmetDescription, setHelmetDescription] = useState(
+    decodeText(project.title),
+  );
 
   useEffect(() => {
     if (project.title) {
