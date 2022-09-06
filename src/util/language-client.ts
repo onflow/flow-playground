@@ -62,7 +62,8 @@ export function createCadenceLanguageClient(callbacks: Callbacks) {
       return Disposable.create(() => {});
     },
     listen(dataCallback: DataCallback): Disposable {
-      callbacks.toClient = (message) => dataCallback(message);
+      callbacks.toClient = (message) => { 
+        return dataCallback(message)};
       return Disposable.create(() => {});
     },
     dispose() {

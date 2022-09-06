@@ -87,13 +87,13 @@ module.exports = {
         concurrency: 100,
       },
     }),
-    new webpack.EnvironmentPlugin([
-      'PLAYGROUND_API',
-      'GA_TRACKING_CODE',
-      'MIXPANEL_TOKEN',
-      'DEFAULT_SEO_IMAGE',
-      'AVATAAR_URL',
-      'SENTRY_DSN',
-    ]),
+    // new webpack.EnvironmentPlugin([
+    //   'PLAYGROUND_API',
+    //   'GA_TRACKING_CODE',
+    //   'MIXPANEL_TOKEN',
+    //   'DEFAULT_SEO_IMAGE',
+    //   'AVATAAR_URL',
+    //   'SENTRY_DSN',
+    // ]),
   ],
 };
