@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { CadenceCheckerContext } from 'providers/CadenceChecker';
 import styled from 'styled-components';
-
 import theme from '../theme';
+import * as Sentry from  "@sentry/react";
 
 export const StatusContainer = styled.div`
   display: grid;
@@ -91,7 +91,8 @@ const CadenceVersion = styled.div`
 const API = process.env.PLAYGROUND_API;
 
 export const Version = () => {
-  const [version, setVersion] = useState('--');
+  const versionPlaceholder = '--'
+  const [version, setVersion] = useState(versionPlaceholder);
   const { languageClient, languageServer } = useContext(CadenceCheckerContext);
 
   useEffect(() => {
@@ -100,7 +101,14 @@ export const Version = () => {
 
   const url = `${API}/utils/version`;
   const getCadenceVersion = async () => {
-    const response = await fetch(url);
+    let response;
+    try {
+      response = await fetch(url);
+    } catch (err) {
+      Sentry.captureException(err);
+      setVersion(versionPlaceholder);
+      return;
+    }
     const { version } = await response.json();
     setVersion(version);
   };

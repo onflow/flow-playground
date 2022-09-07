@@ -13,6 +13,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
   },
+  stats: {errorDetails: true},
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
     alias: {
@@ -87,13 +88,13 @@ module.exports = {
         concurrency: 100,
       },
     }),
-    // new webpack.EnvironmentPlugin([
-    //   'PLAYGROUND_API',
-    //   'GA_TRACKING_CODE',
-    //   'MIXPANEL_TOKEN',
-    //   'DEFAULT_SEO_IMAGE',
-    //   'AVATAAR_URL',
-    //   'SENTRY_DSN',
-    // ]),
+    new webpack.EnvironmentPlugin([
+      'PLAYGROUND_API',
+      'GA_TRACKING_CODE',
+      'MIXPANEL_TOKEN',
+      'DEFAULT_SEO_IMAGE',
+      'AVATAAR_URL',
+      'SENTRY_DSN',
+    ]),
   ],
 };
