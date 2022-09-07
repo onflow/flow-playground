@@ -10,26 +10,8 @@ Sentry.init({
   integrations: [
     new BrowserTracing()
   ],
+  ignoreErrors: [/GraphQL/i, /Failed to fetch/i],
   tracesSampleRate: 1.0,
-  beforeSend(event, hint) {
-    const error = hint.originalException;
-
-    const ignoreErrors = [
-      /GraphQL/i, // filter out graphql errors
-      /Failed to fetch/i // filter out failed to fetch network errors
-    ]
-
-    // filter out blacklisted errors
-    if (error && error.message) {
-      for (const filter of ignoreErrors) {
-        if (error.message.match(filter)) {
-          return null
-        }
-      }
-    }
-
-    return event;
-  },
 });
 
 const root = document.getElementById('root');
