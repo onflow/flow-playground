@@ -21,11 +21,8 @@ Sentry.init({
 
     // filter out blacklisted errors
     if (error && error.message) {
-      console.log("SENTRY ERR")
       for (const filter of ignoreErrors) {
-        console.log("SENTRY FILTER", filter)
         if (error.message.match(filter)) {
-          console.log("SENTRY MATCH", filter)
           return null
         }
       }
