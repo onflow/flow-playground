@@ -105,7 +105,10 @@ export const Version = () => {
     try {
       response = await fetch(url);
     } catch (err) {
-      Sentry.captureException(err);
+      Sentry.withScope(function(scope) {
+        scope.setFingerprint(['LanguageClient']);
+        Sentry.captureException(err);
+      })
       setVersion(versionPlaceholder);
       return;
     }
