@@ -18,11 +18,14 @@ Sentry.init({
       /GraphQL/i, // filter out graphql errors
       /Failed to fetch/i // filter out failed to fetch network errors
     ]
-    
+
     // filter out blacklisted errors
     if (error && error.message) {
-      for (const filter in ignoreErrors) {
+      console.log("SENTRY ERR")
+      for (const filter of ignoreErrors) {
+        console.log("SENTRY FILTER", filter)
         if (error.message.match(filter)) {
+          console.log("SENTRY MATCH", filter)
           return null
         }
       }
