@@ -11,6 +11,7 @@ import {
   IPosition,
   editor as monacoEditor,
 } from 'monaco-editor/esm/vs/editor/editor.api';
+import * as Sentry from '@sentry/react';
 
 // Project Modules
 import { CadenceCheckerContext } from 'providers/CadenceChecker';
@@ -97,6 +98,12 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // Holds reference to Disposable callback for languageClient
   const clientOnNotification = useRef(null);
 
+
+  // CLASS VARS ---------------------------------------------------------------
+  // Sentry fingerprint to identify language client errors
+  const languageClientFingerprint = 'LanguageClient';
+  const graphqlFingerprint = 'PlaygroundGraphQL';
+
   // ===========================================================================
   // METHODS  ------------------------------------------------------------------
   /**
@@ -137,6 +144,10 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       );
       return args || [];
     } catch (error) {
+      Sentry.withScope(function(scope) {
+        scope.setFingerprint([languageClientFingerprint]);
+        Sentry.captureException(error);
+      })
       console.error(error);
       return [];
     }
@@ -264,12 +275,17 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     });
 
     let formatted: any;
+
     try {
       formatted = await languageClient.sendRequest(ExecuteCommandRequest.type, {
         command: 'cadence.server.parseEntryPointArguments',
         arguments: [editor.getModel().uri.toString(), fixed],
       });
     } catch (e) {
+      Sentry.withScope(function(scope) {
+        scope.setFingerprint([languageClientFingerprint]);
+        Sentry.captureException(e);
+      })
       console.log(e);
     }
 
@@ -310,6 +326,10 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
           break;
       }
     } catch (e) {
+      Sentry.withScope(function(scope) {
+        scope.setFingerprint([graphqlFingerprint]);
+        Sentry.captureException(e);
+      })
       console.error(e);
       rawResult = e.toString();
     }

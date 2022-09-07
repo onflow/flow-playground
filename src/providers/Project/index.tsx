@@ -3,7 +3,7 @@ import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { navigate, useLocation, Redirect } from '@reach/router';
 import ProjectMutator from './projectMutator';
 import useGetProject from './projectHooks';
-
+import * as Sentry from '@sentry/react';
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
 import { Project, Account } from 'api/apollo/generated/graphql';
 import { getParams } from 'util/url';
@@ -101,6 +101,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     isLocal = _isLocal;
     isLoading = _isLoading;
   } catch (e) {
+    Sentry.withScope(function(scope) {
+      scope.setFingerprint(['ApolloClientGetProject']);
+      Sentry.captureException(e);
+    })
     navigate('/404');
   }
 

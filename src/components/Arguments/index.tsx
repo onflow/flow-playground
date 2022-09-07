@@ -6,6 +6,7 @@ import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import { RemoveToastButton } from 'layout/RemoveToastButton';
 import { useThemeUI, Box, Text, Flex } from 'theme-ui';
+import * as Sentry from '@sentry/react';
 import {
   Account,
   ResultType,
@@ -291,6 +292,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
     });
 
     let formatted: any;
+    const languageClientFingerprint = 'LanguageClient';
     try {
       formatted = await props.languageClient.sendRequest(
         ExecuteCommandRequest.type,
@@ -300,13 +302,24 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
         },
       );
     } catch (e) {
+      Sentry.withScope(function(scope) {
+        scope.setFingerprint([languageClientFingerprint]);
+        Sentry.captureException(e);
+      })
       console.log(e);
     }
+    
+    let args: any;
+    if (formatted && formatted.length > 0) {
+      // Map values to strings that will be passed to backend
+      args = list.map((_, index) => JSON.stringify(formatted[index]));
+    } else {
+      args = []
+    }
 
-    // Map values to strings that will be passed to backend
-    const args: any = list.map((_, index) => JSON.stringify(formatted[index]));
 
     let rawResult, resultType;
+    const graphqlFingerprint = 'PlaygroundGraphQL';
     try {
       switch (type) {
         case EntityType.ScriptTemplate: {
@@ -339,6 +352,10 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           break;
       }
     } catch (e) {
+      Sentry.withScope(function(scope) {
+        scope.setFingerprint([graphqlFingerprint]);
+        Sentry.captureException(e);
+      })
       console.error(e);
       rawResult = e.toString();
     }
