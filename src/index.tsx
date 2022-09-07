@@ -1,18 +1,16 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-
 import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
-import { CaptureConsole as CaptureConsoleIntegration } from '@sentry/integrations';
 
 import App from './App';
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   integrations: [
-    new BrowserTracing(),
-    new CaptureConsoleIntegration({ levels: ['error'] }),
+    new BrowserTracing()
   ],
+  ignoreErrors: [/GraphQL/i, /Failed to fetch/i],
   tracesSampleRate: 1.0,
 });
 
