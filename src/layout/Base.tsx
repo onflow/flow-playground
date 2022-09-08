@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import theme from "../theme";
+import styled from '@emotion/styled';
+import theme from '../theme';
 
 export const Base = styled.div`
   --gap: 1px;
@@ -15,8 +15,8 @@ export const Base = styled.div`
   display: grid;
   grid-gap: var(--gap) var(--gap);
   grid-template-areas:
-    "header header"
-    "sidebar main";
+    'header header'
+    'sidebar main';
   grid-template-columns: 244px auto;
   grid-template-rows: 72px auto;
   background: var(--key);

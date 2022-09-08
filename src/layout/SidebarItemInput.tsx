@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "@emotion/styled";
-import { css } from "@emotion/core";
-import theme from "../theme";
+import React from 'react';
+import styled from '@emotion/styled';
+import { css } from '@emotion/core';
+import theme from '../theme';
 
 type SidebarItemInputProps = {
   type: string;
@@ -25,9 +25,10 @@ export const SidebarItemInput = styled.input<SidebarItemInputProps>`
   font-weight: 600;
   background: var(--bg);
   text-overflow: ellipsis;
-  border: ${p => (p.readonly ? "1px solid transparent" : `1px solid #dedede`)};
-  pointer-events: ${p => (p.readonly ? "none" : "initial")};
-  background: ${p => (p.readonly ? "none" : "#ffffff")};
+  border: ${(p) =>
+    p.readonly ? '1px solid transparent' : `1px solid #dedede`};
+  pointer-events: ${(p) => (p.readonly ? 'none' : 'initial')};
+  background: ${(p) => (p.readonly ? 'none' : '#ffffff')};
   padding: 4px;
   border-radius: 4px;
   margin-left: -5px;
@@ -40,7 +41,7 @@ export const SidebarItemInput = styled.input<SidebarItemInputProps>`
   &:hover + .editIcon {
     opacity: 1;
   }
-  ${p =>
+  ${(p) =>
     p.onClick &&
     css`
       cursor: pointer;

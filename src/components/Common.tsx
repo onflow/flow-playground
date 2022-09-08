@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 
 interface FullScreenContainerProps {
   elevation?: number;
@@ -43,7 +43,7 @@ export const PopupContainer = styled(motion.div)<PopupContainerProps>`
   padding: 20px;
   border-radius: 6px;
   background-color: white;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1), 0 0 3px 1px rgba(0,0,0,0.05);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1), 0 0 3px 1px rgba(0, 0, 0, 0.05);
   z-index: 2;
   box-sizing: border-box;
 `;
@@ -60,12 +60,12 @@ export const PopupHeader = styled.h3<CommonProps>`
   text-transform: uppercase;
   color: ${({ color = 'inherit' }) => color};
   margin-bottom: ${({ mb = '0' }) => mb};
-  :after{
-    content: "";
+  :after {
+    content: '';
     display: block;
     height: 3px;
     width: 16px;
-    background-color: ${({lineColor = "currentColor"}) => lineColor};
+    background-color: ${({ lineColor = 'currentColor' }) => lineColor};
     margin-top: 4px;
   }
 `;

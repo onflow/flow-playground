@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import { Flex, useThemeUI } from "theme-ui";
-import { Account, Project } from "api/apollo/generated/graphql";
-import AccountAvatars from "components/AccountAvatars";
-import AccountSigners from "components/AccountSigners";
+import React, { useEffect } from 'react';
+import { Flex, useThemeUI } from 'theme-ui';
+import { Account, Project } from 'api/apollo/generated/graphql';
+import AccountAvatars from 'components/AccountAvatars';
+import AccountSigners from 'components/AccountSigners';
 
 type AccountPickerProps = {
   project: Project;
@@ -18,7 +18,7 @@ const AccountPicker: React.FC<AccountPickerProps> = ({
   selected,
   onChange,
   maxSelection = 4,
-  children
+  children,
 }) => {
   const { theme } = useThemeUI();
   const handleOnChange = (i: number) => {
@@ -33,25 +33,25 @@ const AccountPicker: React.FC<AccountPickerProps> = ({
     if (!selected.length) {
       onChange([0]);
     }
-    if (selected.length > maxSelection){
-      onChange(selected.slice(0,maxSelection))
+    if (selected.length > maxSelection) {
+      onChange(selected.slice(0, maxSelection));
     }
   }, [maxSelection]);
 
   return (
     <Flex
       sx={{
-        flexDirection: "column"
+        flexDirection: 'column',
       }}
     >
       <Flex
         my={1}
         sx={{
-          padding: "0.8rem 0.5rem",
-          alignItems: "center",
+          padding: '0.8rem 0.5rem',
+          alignItems: 'center',
           border: `1px solid ${theme.colors.borderDark}`,
           backgroundColor: theme.colors.background,
-          borderRadius: "50px",
+          borderRadius: '50px',
         }}
       >
         <AccountAvatars
@@ -65,14 +65,14 @@ const AccountPicker: React.FC<AccountPickerProps> = ({
       </Flex>
       <Flex
         sx={{
-          padding: "0.8rem 0.5rem",
-          alignItems: "center",
+          padding: '0.8rem 0.5rem',
+          alignItems: 'center',
           border: `1px solid ${theme.colors.borderDark}`,
           backgroundColor: theme.colors.background,
-          borderRadius: "8px"
+          borderRadius: '8px',
         }}
       >
-        <AccountSigners 
+        <AccountSigners
           multi={true}
           project={project}
           accounts={accounts}
@@ -81,9 +81,9 @@ const AccountPicker: React.FC<AccountPickerProps> = ({
           maxSelection={maxSelection}
         />
         <Flex
-          px={"0.5rem"}
+          px={'0.5rem'}
           sx={{
-            alignItems: "center"
+            alignItems: 'center',
           }}
         >
           {children}

@@ -25,6 +25,11 @@ install:
 	$(info Task: install)
 	$(EXEC) sh -c 'npm install || exit 255'
 
+.PHONY: format
+format:
+	$(info Task: format:check)
+	$(EXEC) sh -c 'npm run format:check:app || exit 255'
+
 .PHONY: build
 build:
 	$(info Task: build production)
@@ -36,4 +41,4 @@ test:
 	$(EXEC) sh -c 'npm run test || exit 255'
 
 .PHONY: ci
-ci: clean install build test
+ci: clean install format build test

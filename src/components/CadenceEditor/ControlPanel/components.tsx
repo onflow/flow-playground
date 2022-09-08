@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import theme from '../../../theme';
@@ -240,7 +240,7 @@ export const Confirm = styled(Button)`
   &:active {
     background-color: #cf3529;
   }
-`
+`;
 
 export const Cancel = styled(Button)`
   background-color: ${theme.colors.background};
@@ -250,7 +250,7 @@ export const Cancel = styled(Button)`
   &:active {
     background-color: #dedede;
   }
-`
+`;
 
 export const PromptActionsContainer = styled.div`
   padding-top: 1rem;

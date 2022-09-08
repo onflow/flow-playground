@@ -37,7 +37,13 @@ import {
 // Component Scoped Files
 import { getLabel, validateByType, useTemplateType } from './utils';
 import { ControlPanelProps, IValue } from './types';
-import { MotionBox, Confirm, Cancel, PromptActionsContainer, StatusIcon } from './components';
+import {
+  MotionBox,
+  Confirm,
+  Cancel,
+  PromptActionsContainer,
+  StatusIcon,
+} from './components';
 
 // Other
 import {
@@ -354,9 +360,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   let statusMessage;
   switch (true) {
     case isOk && showPrompt:
-      statusIcon = (
-        <FaExclamationTriangle />
-      );
+      statusIcon = <FaExclamationTriangle />;
       statusMessage =
         'Redeploying will clear the state of all accounts. Proceed?';
       break;
@@ -432,9 +436,17 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
           <ErrorsList list={problems.error} actions={actions} />
           <Hints problems={problems} actions={actions} />
 
-          <ControlContainer isOk={isOk} progress={progress} showPrompt={showPrompt}>
+          <ControlContainer
+            isOk={isOk}
+            progress={progress}
+            showPrompt={showPrompt}
+          >
             <StatusMessage>
-              <StatusIcon isOk={isOk} progress={progress} showPrompt={showPrompt}>
+              <StatusIcon
+                isOk={isOk}
+                progress={progress}
+                showPrompt={showPrompt}
+              >
                 {statusIcon}
               </StatusIcon>
               <p>{statusMessage}</p>

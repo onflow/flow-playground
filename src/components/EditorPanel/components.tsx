@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Flex, Box, Text } from "theme-ui";
-import { motion, AnimatePresence } from "framer-motion";
-import styled from "@emotion/styled";
-import { IoIosArrowUp } from "react-icons/io";
+import React, { useState } from 'react';
+import { Flex, Box, Text } from 'theme-ui';
+import { motion, AnimatePresence } from 'framer-motion';
+import styled from '@emotion/styled';
+import { IoIosArrowUp } from 'react-icons/io';
 
 export const SavedTemplateContainer = styled(motion.div)`
   position: absolute;
@@ -38,8 +38,8 @@ export const Template = styled(motion.div)`
       props.isSelected
         ? props.theme.colors.primary
         : props.theme.colors.border};
-  background: ${props =>
-    props.isSelected ? "white" : props.theme.colors.border};
+  background: ${(props) =>
+    props.isSelected ? 'white' : props.theme.colors.border};
   border-right: none;
   border-top-left-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
@@ -59,70 +59,70 @@ export const PanelContainer = styled(motion.div)`
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 20fr;
-  grid-template-areas: "templates editor";
+  grid-template-areas: 'templates editor';
 `;
 
 export const PanelFooter: React.FC<{ dismiss: () => void }> = ({
   children,
-  dismiss
+  dismiss,
 }) => {
   const [open, setOpen] = useState(false);
   return children ? (
     <motion.div
       style={{
-        position: "absolute",
-        bottom: "-4px",
-        width: "100%"
+        position: 'absolute',
+        bottom: '-4px',
+        width: '100%',
       }}
       variants={{
-        open: { height: "50%" },
-        closed: { height: "auto" }
+        open: { height: '50%' },
+        closed: { height: 'auto' },
       }}
       initial="closed"
-      animate={open && children ? "open" : "closed"}
+      animate={open && children ? 'open' : 'closed'}
     >
       <Flex
-        py={"0.5rem"}
+        py={'0.5rem'}
         px={1}
         sx={{
-          backgroundColor: "border",
-          height: "100%",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          position: "relative"
+          backgroundColor: 'border',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          position: 'relative',
         }}
         onClick={() => setOpen(!open)}
       >
         <motion.div
           style={{
-            height: "1rem",
-            cursor: "pointer",
-            position: "absolute",
-            left: "21px;"
+            height: '1rem',
+            cursor: 'pointer',
+            position: 'absolute',
+            left: '21px;',
           }}
           variants={{
-            open: { transform: "rotate(-180deg)", top: "10px" },
-            closed: { transform: "rotate(0deg)", top: "5px" }
+            open: { transform: 'rotate(-180deg)', top: '10px' },
+            closed: { transform: 'rotate(0deg)', top: '5px' },
           }}
           initial="closed"
-          animate={open && children ? "open" : "closed"}
+          animate={open && children ? 'open' : 'closed'}
         >
           {children && <IoIosArrowUp />}
         </motion.div>
         <Box
           sx={{
-            overflowY: open && children ? "scroll" : "hidden",
-            display: "flex",
-            maxWidth: "80%",
-            marginLeft: "2rem"
+            overflowY: open && children ? 'scroll' : 'hidden',
+            display: 'flex',
+            maxWidth: '80%',
+            marginLeft: '2rem',
           }}
         >
           <AnimatePresence>{children}</AnimatePresence>
         </Box>
         <Box
-          onClick={e => {
+          onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             setOpen(false);
@@ -133,10 +133,10 @@ export const PanelFooter: React.FC<{ dismiss: () => void }> = ({
           <Text
             sx={{
               fontSize: 3,
-              color: "purple",
-              "&:hover": {
-                cursor: "pointer"
-              }
+              color: 'purple',
+              '&:hover': {
+                cursor: 'pointer',
+              },
             }}
           >
             Dismiss
@@ -154,9 +154,9 @@ export const EditorHeader: React.FC = ({ children }) => {
       pr={2}
       pt={0}
       sx={{
-        alignItems: "center",
-        justifyContent: "flex-end",
-        width: "100%"
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        width: '100%',
       }}
     >
       {children}
@@ -169,7 +169,7 @@ export const EditorPanelMenu: React.FC = ({ children }) => {
     <Flex
       p={1}
       sx={{
-        alignItems: "center"
+        alignItems: 'center',
       }}
     >
       {children}

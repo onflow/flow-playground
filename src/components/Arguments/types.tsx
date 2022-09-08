@@ -48,16 +48,16 @@ export type Actions = {
   goTo: (position: monaco.IPosition) => void;
   hover: (highlight: Highlight) => void;
   hideDecorations: () => void;
-}
+};
 
 export type ErrorListProps = {
   list: CadenceProblem[];
-  actions: Actions
+  actions: Actions;
 };
 
 export type HintsProps = {
   problems: ProblemsList;
-  actions: Actions
+  actions: Actions;
 };
 
 export type HintsState = {

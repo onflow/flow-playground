@@ -25,7 +25,11 @@ async function startLanguageServer(callbacks: any, getCode: any, ops) {
   });
 }
 
-const launchLanguageClient = async (callbacks, languageServer, setLanguageClient) => {
+const launchLanguageClient = async (
+  callbacks,
+  languageServer,
+  setLanguageClient,
+) => {
   if (languageServer) {
     const newClient = createCadenceLanguageClient(callbacks);
     newClient.start();

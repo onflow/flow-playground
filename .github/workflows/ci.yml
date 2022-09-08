@@ -3,9 +3,17 @@ name: Continuous Integration
 on:
   push:
 
+env:
+  PLAYGROUND_API: ''
+  AVATAAR_URL: ''
+  GA_TRACKING_CODE: ''
+  MIXPANEL_TOKEN: ''
+  DEFAULT_SEO_IMAGE: ''
+  SENTRY_DSN: ''
+
 jobs:
   test:
-    name: "Tests"
+    name: 'Tests'
     runs-on: ubuntu-latest
     strategy:
       matrix:

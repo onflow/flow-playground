@@ -144,7 +144,12 @@ const CadenceEditor = (props: any) => {
     if (editor) {
       setupEditor();
     }
-  }, [editor, project.active.index, project.active.type, project.project.accounts]);
+  }, [
+    editor,
+    project.active.index,
+    project.active.type,
+    project.project.accounts,
+  ]);
 
   // "initEditor" will create new instance of Monaco Editor and set it up
   const initEditor = async () => {

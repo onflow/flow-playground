@@ -29,7 +29,9 @@ interface ScriptBottomBarProps {
   setBottomBarHeight: (height: number) => void;
 }
 
-const ScriptBottomBar: React.FC<ScriptBottomBarProps> = ({ setBottomBarHeight }) => {
+const ScriptBottomBar: React.FC<ScriptBottomBarProps> = ({
+  setBottomBarHeight,
+}) => {
   const { x, y } = useMousePosition();
 
   const [resultHeight, setResultHeight] = useState(140);

@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "@emotion/styled";
-import { css } from "@emotion/core";
-import theme from "../theme";
+import React from 'react';
+import styled from '@emotion/styled';
+import { css } from '@emotion/core';
+import theme from '../theme';
 
 type ItemProps = {
   active?: boolean;
@@ -19,13 +19,13 @@ export const SidebarItem = styled.div<ItemProps>`
   background: var(--bg);
   position: relative;
 
-  ${p =>
+  ${(p) =>
     p.active &&
     css`
       background: rgba(255, 255, 255, 0.75);
 
       &:after {
-        content: "";
+        content: '';
         display: block;
         position: absolute;
         left: 0;
@@ -43,7 +43,7 @@ export const SidebarItem = styled.div<ItemProps>`
     background: rgba(255, 255, 255, 0.75);
   }
   text-decoration: none;
-  display:flex;
+  display: flex;
   align-items: center;
   font-weight: bold;
   color: ${theme.colors.muted};

@@ -1,6 +1,12 @@
-export const getInterpolatedTemplate = (type: string, contractOwner: string, path: string, contractResource: string, interfaces: string): any => {
+export const getInterpolatedTemplate = (
+  type: string,
+  contractOwner: string,
+  path: string,
+  contractResource: string,
+  interfaces: string,
+): any => {
   if (type === 'tx') {
-  return `// TEMPLATE TRANSACTION
+    return `// TEMPLATE TRANSACTION
 
 // Below, the 'borrowedCapability' constant borrows a capability from a public path
 // for a given account. The capability is scoped to a given contract and the implemented
@@ -15,10 +21,9 @@ let borrowedCapability = getAccount(address)
     .getCapability(${path})
     .borrow<&${contractResource}{${interfaces}}>()
     ?? panic("Could not borrow the capability")
-*/`
-
+*/`;
   } else if (type === 'script') {
-  return `// TEMPLATE SCRIPT
+    return `// TEMPLATE SCRIPT
 
 // Below, the 'borrowedCapability' constant borrows a capability from a public path
 // for a given account. The capability is scoped to a given contract and the implemented
@@ -51,6 +56,6 @@ import ExampleToken from 0x01
           ?? panic("Could not borrow Balance capability")
 
       return vaultRef.balance
-  }`
-  };
+  }`;
+  }
 };

@@ -108,7 +108,7 @@ export const Version = () => {
   const lsStatus = languageServer ? 'ON' : 'OFF';
   const lcStatus = languageClient ? 'ON' : 'OFF';
 
-  const cadenceIsOutdated = false
+  const cadenceIsOutdated = false;
 
   return (
     <StatusContainer>
@@ -121,13 +121,12 @@ export const Version = () => {
         <span>Cadence: {version}</span>
         {cadenceIsOutdated ? <WarningIcon /> : undefined}
       </CadenceVersion>
-      {cadenceIsOutdated
-          ? <CadenceVersionMessage>
-            The playground is currently running an older version of Cadence and will
-            be updated shortly
-          </CadenceVersionMessage>
-          : undefined
-      }
-     </StatusContainer>
+      {cadenceIsOutdated ? (
+        <CadenceVersionMessage>
+          The playground is currently running an older version of Cadence and
+          will be updated shortly
+        </CadenceVersionMessage>
+      ) : undefined}
+    </StatusContainer>
   );
 };

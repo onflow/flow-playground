@@ -29,7 +29,9 @@ interface DeploymentBottomBarProps {
   setBottomBarHeight: (height: number) => void;
 }
 
-const DeploymentBottomBar: React.FC<DeploymentBottomBarProps> = ({ setBottomBarHeight }) => {
+const DeploymentBottomBar: React.FC<DeploymentBottomBarProps> = ({
+  setBottomBarHeight,
+}) => {
   const { x, y } = useMousePosition();
 
   const [resultHeight, setResultHeight] = useState(140);

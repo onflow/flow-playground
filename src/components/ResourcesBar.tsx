@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Badge, Flex, Box, Divider } from 'theme-ui';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
-import { IoMdAddCircleOutline } from "react-icons/io";
+import { IoMdAddCircleOutline } from 'react-icons/io';
 import { useProject } from 'providers/Project/projectHooks';
 import useMousePosition from '../hooks/useMousePosition';
-import TemplatePopup from "components/TemplatePopup";
+import TemplatePopup from 'components/TemplatePopup';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 import { FeedbackActions } from 'layout/FeedbackActions';
 import { SidebarItemInsert } from 'layout/SidebarItemInsert';
@@ -58,27 +58,24 @@ interface StorageBadgeProps {
   type: string;
 }
 
-const StorageBadge: React.FC<StorageBadgeProps> = ({
-  type
-}) => {
-  
+const StorageBadge: React.FC<StorageBadgeProps> = ({ type }) => {
   return (
     <Badge
       variant="outline"
-      px={"5px"}
+      px={'5px'}
       sx={{
         fontSize: 3,
-        fontStyle: "normal",
-        paddingX: "5px",
-        paddingY: "2px",
-        marginX: "0.5rem",
+        fontStyle: 'normal',
+        paddingX: '5px',
+        paddingY: '2px',
+        marginX: '0.5rem',
         backgroundColor: () => {
           switch (type) {
-            case "Struct":
+            case 'Struct':
               return theme.colors.badgeStruct;
-            case "Resource":
+            case 'Resource':
               return theme.colors.badgeResource;
-            case "Link":
+            case 'Link':
               return theme.colors.badgeCapability;
             case null:
               return theme.colors.badgeNull;
@@ -86,8 +83,8 @@ const StorageBadge: React.FC<StorageBadgeProps> = ({
         },
       }}
     >
-      {type === "Link" ? "Capability" : type}
-      {type === null && "null"}
+      {type === 'Link' ? 'Capability' : type}
+      {type === null && 'null'}
     </Badge>
   );
 };
@@ -107,18 +104,14 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
   controls,
   resize,
 }) => {
-
   const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false);
 
   const { selectedResourceAccount } = useProject();
-  
+
   return (
     <>
       <StorageListContainer>
-        <ResizeHeading 
-          onMouseDown={resize}
-          textTransform="none"
-        > 
+        <ResizeHeading onMouseDown={resize} textTransform="none">
           ACCOUNT {selectedResourceAccount} STORAGE {controls()}
         </ResizeHeading>
         <div
@@ -130,7 +123,7 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
           <ul>
             {Object.keys(types).map((key) => {
               const identifierType = types[key];
-              return(
+              return (
                 <TypeListItem
                   key={key}
                   active={key == selected}
@@ -138,42 +131,42 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
                 >
                   <Flex
                     sx={{
-                      flex: "1 1 auto"
+                      flex: '1 1 auto',
                     }}
                   >
                     {key}
-                    <StorageBadge
-                      type={identifierType}
-                    />
+                    <StorageBadge type={identifierType} />
                   </Flex>
                   <Flex>
-                    {identifierType == "Link" &&
-                      <BottomBarItemInsert onClick={async () => {
-                        toggleShowTemplatePopup(true)
-                      }}>
+                    {identifierType == 'Link' && (
+                      <BottomBarItemInsert
+                        onClick={async () => {
+                          toggleShowTemplatePopup(true);
+                        }}
+                      >
                         <IoMdAddCircleOutline size="20px" />
                       </BottomBarItemInsert>
-                    }
+                    )}
                   </Flex>
                 </TypeListItem>
-              )
+              );
             })}
           </ul>
         </div>
       </StorageListContainer>
-      <TemplatePopup 
-        visible={showTemplatePopup} 
+      <TemplatePopup
+        visible={showTemplatePopup}
         triggerClose={() => {
-          toggleShowTemplatePopup(false)
+          toggleShowTemplatePopup(false);
         }}
       />
     </>
   );
 };
 
-const StateContainer: React.FC<{ 
-  value?: any 
-  path?: any
+const StateContainer: React.FC<{
+  value?: any;
+  path?: any;
 }> = ({ value, path }) => (
   <div
     style={{
@@ -185,68 +178,62 @@ const StateContainer: React.FC<{
       overflow: 'scroll',
     }}
   >
-    {value ?
+    {value ? (
       <>
-        <Flex
-          sx={{
-          }}
-        >
+        <Flex sx={{}}>
           <Box
             sx={{
-              padding: "0.25rem",
-              minWidth: "75px",
+              padding: '0.25rem',
+              minWidth: '75px',
               font: theme.fonts.body,
-              fontSize: theme.fontSizes[4]
+              fontSize: theme.fontSizes[4],
             }}
           >
             Path:
           </Box>
           <Box
             sx={{
-              padding: "0.25rem",
+              padding: '0.25rem',
               fontFamily: theme.fonts.monospace,
-              fontSize: theme.fontSizes[4]
+              fontSize: theme.fontSizes[4],
             }}
           >
             {path}
           </Box>
         </Flex>
-        <Divider 
+        <Divider
           sx={{
             color: theme.colors.grey,
-            opacity: "0.7",
-            marginX: "2rem",
-            marginY: "0.5rem"
+            opacity: '0.7',
+            marginX: '2rem',
+            marginY: '0.5rem',
           }}
         />
-        <Flex
-          sx={{
-          }}
-        >
+        <Flex sx={{}}>
           <Box
             sx={{
-              padding: "0.25rem",
-              minWidth: "75px",
+              padding: '0.25rem',
+              minWidth: '75px',
               font: theme.fonts.body,
-              fontSize: theme.fontSizes[4]
+              fontSize: theme.fontSizes[4],
             }}
           >
             Object:
           </Box>
           <Box
             sx={{
-              padding: "0.25rem",
+              padding: '0.25rem',
               fontFamily: theme.fonts.monospace,
-              fontSize: theme.fontSizes[4]
+              fontSize: theme.fontSizes[4],
             }}
           >
             <pre>{JSON.stringify(value, null, 2)}</pre>
           </Box>
         </Flex>
       </>
-      :
+    ) : (
       '(account storage is empty)'
-    }
+    )}
   </div>
 );
 
@@ -256,11 +243,10 @@ const AccountState: React.FC<{
   renderDeployButton: () => JSX.Element;
   resultHeight: number;
 }> = ({ state, selectedResourcesAccount, resultHeight }) => {
-
   const { storage, paths, types } = getStorageData(state);
 
   const identifiers = Object.keys(storage);
- 
+
   // @ts-ignore
   const [selected, setSelected] = useState(
     identifiers.length > 0 ? identifiers[0] : null,
@@ -298,37 +284,37 @@ const AccountState: React.FC<{
   return (
     <>
       {selectedResourcesAccount !== 'none' && (
-          <AccountStateContainer height={storageHeight + resultHeight}>
-            <IdentifierTypeList
-              types={types}
-              selected={selected}
-              onSelect={setSelected}
-              resize={() => toggleResizingStorage(true)}
-              controls={() => {
-                return (
-                  <SidebarItemInsert grab={false}>
-                    {storageHeight > 40 ? (
-                      <GoChevronDown
-                        size="16px"
-                        onClick={() => setStorageHeight(40)}
-                      />
-                    ) : (
-                      <GoChevronUp
-                        size="16px"
-                        onClick={() =>
-                          setStorageHeight(STORAGE_PANEL_MIN_HEIGHT * 2)
-                        }
-                      />
-                    )}
-                  </SidebarItemInsert>
-                );
-              }}
-            />
-            <StateContainer 
-              value={storage[selected] || storage[identifiers[0]]} 
-              path={paths[selected] || paths[identifiers[0]]} 
-            />
-          </AccountStateContainer>
+        <AccountStateContainer height={storageHeight + resultHeight}>
+          <IdentifierTypeList
+            types={types}
+            selected={selected}
+            onSelect={setSelected}
+            resize={() => toggleResizingStorage(true)}
+            controls={() => {
+              return (
+                <SidebarItemInsert grab={false}>
+                  {storageHeight > 40 ? (
+                    <GoChevronDown
+                      size="16px"
+                      onClick={() => setStorageHeight(40)}
+                    />
+                  ) : (
+                    <GoChevronUp
+                      size="16px"
+                      onClick={() =>
+                        setStorageHeight(STORAGE_PANEL_MIN_HEIGHT * 2)
+                      }
+                    />
+                  )}
+                </SidebarItemInsert>
+              );
+            }}
+          />
+          <StateContainer
+            value={storage[selected] || storage[identifiers[0]]}
+            path={paths[selected] || paths[identifiers[0]]}
+          />
+        </AccountStateContainer>
       )}
     </>
   );
@@ -346,14 +332,18 @@ const ResourcesBar: React.FC<ResourcesBarProps> = ({ resultHeight }) => {
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        selectedResourceAccount && <AccountState
-          state={project.accounts[storageMap[selectedResourceAccount] || 0].state}
-          selectedResourcesAccount={selectedResourceAccount}
-          renderDeployButton={() => {
-            return <FeedbackActions />;
-          }}
-          resultHeight={resultHeight}
-        />
+        selectedResourceAccount && (
+          <AccountState
+            state={
+              project.accounts[storageMap[selectedResourceAccount] || 0].state
+            }
+            selectedResourcesAccount={selectedResourceAccount}
+            renderDeployButton={() => {
+              return <FeedbackActions />;
+            }}
+            resultHeight={resultHeight}
+          />
+        )
       )}
     </FeedbackRoot>
   );

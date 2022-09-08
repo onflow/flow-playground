@@ -1,13 +1,13 @@
-import React from "react";
-import { EntityType } from "providers/Project";
-import AccountList from "components/AccountList";
-import ProjectInfo from "components/ProjectInfo";
-import MenuList from "components/MenuList";
-import { Sidebar as SidebarRoot } from "layout/Sidebar";
+import React from 'react';
+import { EntityType } from 'providers/Project';
+import AccountList from 'components/AccountList';
+import ProjectInfo from 'components/ProjectInfo';
+import MenuList from 'components/MenuList';
+import { Sidebar as SidebarRoot } from 'layout/Sidebar';
 
-import { useProject } from "providers/Project/projectHooks";
-import { navigate } from "@reach/router";
-import { isUUUID, LOCAL_PROJECT_ID } from "../util/url";
+import { useProject } from 'providers/Project/projectHooks';
+import { navigate } from '@reach/router';
+import { isUUUID, LOCAL_PROJECT_ID } from '../util/url';
 
 const Sidebar: React.FC = () => {
   const {
@@ -19,14 +19,14 @@ const Sidebar: React.FC = () => {
     deleteScriptTemplate,
     updateTransactionTemplate,
     updateScriptTemplate,
-    selectedResourceAccount
+    selectedResourceAccount,
   } = useProject();
 
   if (isLoading) return <p>Loading...</p>;
 
-  const projectPath = isUUUID(project.id) ? project.id : LOCAL_PROJECT_ID
+  const projectPath = isUUUID(project.id) ? project.id : LOCAL_PROJECT_ID;
 
-  const storageAcct = selectedResourceAccount || 'none'
+  const storageAcct = selectedResourceAccount || 'none';
 
   return (
     <SidebarRoot>
@@ -39,7 +39,7 @@ const Sidebar: React.FC = () => {
           active.type == EntityType.TransactionTemplate ? active.index : null
         }
         onSelect={(_, id) => {
-          navigate(`/${projectPath}?type=tx&id=${id}&storage=${storageAcct}`)
+          navigate(`/${projectPath}?type=tx&id=${id}&storage=${storageAcct}`);
         }}
         onUpdate={(templateId: string, script: string, title: string) => {
           updateTransactionTemplate(templateId, script, title);
@@ -47,11 +47,16 @@ const Sidebar: React.FC = () => {
         onDelete={async (templateId: string) => {
           await deleteTransactionTemplate(templateId);
           const id = project.transactionTemplates[0].id;
-          navigate(`/${projectPath}?type=tx&id=${id}&storage=${storageAcct}`)
+          navigate(`/${projectPath}?type=tx&id=${id}&storage=${storageAcct}`);
         }}
         onInsert={async () => {
-          const res = await mutator.createTransactionTemplate("", `New Transaction`)
-          navigate(`/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${storageAcct}`)
+          const res = await mutator.createTransactionTemplate(
+            '',
+            `New Transaction`,
+          );
+          navigate(
+            `/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}&storage=${storageAcct}`,
+          );
         }}
       />
       <MenuList
@@ -59,7 +64,9 @@ const Sidebar: React.FC = () => {
         items={project.scriptTemplates}
         active={active.type == EntityType.ScriptTemplate ? active.index : null}
         onSelect={(_, id) => {
-          navigate(`/${projectPath}?type=script&id=${id}&storage=${storageAcct}`)
+          navigate(
+            `/${projectPath}?type=script&id=${id}&storage=${storageAcct}`,
+          );
         }}
         onUpdate={(templateId: string, script: string, title: string) => {
           updateScriptTemplate(templateId, script, title);
@@ -67,11 +74,15 @@ const Sidebar: React.FC = () => {
         onDelete={async (templateId: string) => {
           await deleteScriptTemplate(templateId);
           const id = project.scriptTemplates[0].id;
-          navigate(`/${projectPath}?type=script&id=${id}&storage=${storageAcct}`)
+          navigate(
+            `/${projectPath}?type=script&id=${id}&storage=${storageAcct}`,
+          );
         }}
         onInsert={async () => {
-          const res = await mutator.createScriptTemplate("", `New Script`);
-          navigate(`/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${storageAcct}`)
+          const res = await mutator.createScriptTemplate('', `New Script`);
+          navigate(
+            `/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}&storage=${storageAcct}`,
+          );
         }}
       />
     </SidebarRoot>
