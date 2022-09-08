@@ -213,8 +213,11 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const [processingStatus, setProcessingStatus] = useState(false);
 
   const [setResult] = useSetExecutionResultsMutation();
-  const { scriptFactory, transactionFactory, contractDeployment } =
-    useTemplateType();
+  const {
+    scriptFactory,
+    transactionFactory,
+    contractDeployment,
+  } = useTemplateType();
   const {
     project,
     active,

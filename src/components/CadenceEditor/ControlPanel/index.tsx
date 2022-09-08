@@ -77,8 +77,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const [executionArguments, setExecutionArguments] = useState({});
   const [processingStatus, setProcessingStatus] = useState(false);
   const [setResult] = useSetExecutionResultsMutation();
-  const { scriptFactory, transactionFactory, contractDeployment } =
-    useTemplateType();
+  const {
+    scriptFactory,
+    transactionFactory,
+    contractDeployment,
+  } = useTemplateType();
   const [selected, updateSelectedAccounts] = useState([]);
   const [expanded, setExpanded] = useState(true);
 
