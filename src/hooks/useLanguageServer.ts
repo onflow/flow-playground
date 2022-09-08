@@ -33,6 +33,7 @@ const launchLanguageClient = async (
   if (languageServer) {
     const newClient = createCadenceLanguageClient(callbacks);
     newClient.start();
+    //@ts-ignore
     await newClient.onReady();
     setLanguageClient(newClient);
   }
@@ -105,6 +106,7 @@ export default function useLanguageServer() {
 
     console.log('Installing monaco services');
     if (!monacoServicesInstalled) {
+      //@ts-ignore
       MonacoServices.install(monaco);
       monacoServicesInstalled = true;
     }

@@ -6,6 +6,7 @@ import Avatar from 'components/Avatar';
 
 export const AccountAvatar: React.FC<{
   onClick: (e: any, i: number) => void;
+  active: boolean;
 }> = ({ children, onClick }) => {
   return (
     <motion.div>

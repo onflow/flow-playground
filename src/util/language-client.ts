@@ -10,10 +10,13 @@ import {
   MessageWriter,
   PartialMessageInfo,
 } from 'vscode-jsonrpc';
+//@ts-ignore
 import { ConnectionErrorHandler } from 'monaco-languageclient/src/connection';
 import {
+  //@ts-ignore
   ConnectionCloseHandler,
   CloseAction,
+  //@ts-ignore
   createConnection,
   ErrorAction,
   MonacoLanguageClient,
@@ -83,12 +86,15 @@ export function createCadenceLanguageClient(callbacks: Callbacks) {
     clientOptions: {
       documentSelector: [CADENCE_LANGUAGE_ID],
       errorHandler: {
+        //@ts-ignore
         error: () => ErrorAction.Continue,
+        //@ts-ignore
         closed: () => CloseAction.DoNotRestart,
       },
     },
     // Create a language client connection from the JSON-RPC connection on demand
     connectionProvider: {
+      //@ts-ignore
       get: (
         errorHandler: ConnectionErrorHandler,
         closeHandler: ConnectionCloseHandler,
