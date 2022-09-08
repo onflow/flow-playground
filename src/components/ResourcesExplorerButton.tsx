@@ -1,9 +1,9 @@
-import React from 'react';
 import { navigate, useLocation } from '@reach/router';
-import { FaDatabase } from 'react-icons/fa';
 import { SidebarItemToggleResources } from 'layout/SidebarItemToggleResources';
 import { useProject } from 'providers/Project/projectHooks';
-import { isUUUID, getParams, LOCAL_PROJECT_ID } from 'util/url';
+import React from 'react';
+import { FaDatabase } from 'react-icons/fa';
+import { getParams, isUUUID, LOCAL_PROJECT_ID } from 'util/url';
 
 type ResourcesExplorerButtonProps = {
   address: string;
@@ -40,7 +40,7 @@ export const ResourcesExplorerButton = (
         }
         navigate(`/${projectPath}${queryParams}`);
       }}
-      title={'Open the resources explorer'}
+      title="Open the resources explorer"
       active={address === storage}
     >
       <FaDatabase />

@@ -1,4 +1,9 @@
 // External Modules
+import {
+  editor as monacoEditor,
+  IPosition,
+} from 'monaco-editor/esm/vs/editor/editor.api';
+import { ExecuteCommandRequest } from 'monaco-languageclient';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FaExclamationTriangle,
@@ -6,16 +11,12 @@ import {
   FaRegTimesCircle,
   FaSpinner,
 } from 'react-icons/fa';
-import { ExecuteCommandRequest } from 'monaco-languageclient';
-import {
-  IPosition,
-  editor as monacoEditor,
-} from 'monaco-editor/esm/vs/editor/editor.api';
 
 // Project Modules
 import { CadenceCheckerContext } from 'providers/CadenceChecker';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
+import { CadenceCheckCompleted } from 'util/language-server';
 import {
   CadenceProblem,
   formatMarker,
@@ -26,7 +27,6 @@ import {
   ProblemsList,
 } from 'util/language-syntax-errors';
 import { extractSigners } from 'util/parser';
-import { CadenceCheckCompleted } from 'util/language-server';
 
 // Local Generated Modules
 import {
@@ -35,15 +35,15 @@ import {
 } from 'api/apollo/generated/graphql';
 
 // Component Scoped Files
-import { getLabel, validateByType, useTemplateType } from './utils';
-import { ControlPanelProps, IValue } from './types';
 import {
-  MotionBox,
-  Confirm,
   Cancel,
+  Confirm,
+  MotionBox,
   PromptActionsContainer,
   StatusIcon,
 } from './components';
+import { ControlPanelProps, IValue } from './types';
+import { getLabel, useTemplateType, validateByType } from './utils';
 
 // Other
 import {
@@ -56,13 +56,12 @@ import {
 } from '../../Arguments/components';
 import {
   ControlContainer,
-  HoverPanel,
   Hidable,
+  HoverPanel,
   StatusMessage,
 } from '../../Arguments/styles';
 
 const ControlPanel: React.FC<ControlPanelProps> = (props) => {
-  /* eslint-disable */
   // We should not render this component if editor is non-existent
   if (!props.editor) {
     return null;
@@ -258,7 +257,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
 
       // Language server throws "input is not literal" without quotes
       if (type === `String`) {
-        value = `\"${value.replace(/"/g, '\\"')}\"`;
+        value = `"${value.replace(/"/g, '\\"')}"`;
       }
 
       return value;

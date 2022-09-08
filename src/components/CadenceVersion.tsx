@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
 import { CadenceCheckerContext } from 'providers/CadenceChecker';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import theme from '../theme';
@@ -52,7 +52,7 @@ const TwoToneWarningIcon = () => (
   <svg
     stroke="currentColor"
     fill="currentColor"
-    stroke-width="0"
+    strokeWidth="0"
     viewBox="0 0 1024 1024"
     width="1.125rem"
     height="1.125rem"

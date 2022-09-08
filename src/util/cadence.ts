@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { languages } from 'monaco-editor/esm/vs/editor/editor.api';
 import IMonarchLanguage = languages.IMonarchLanguage;
@@ -5,7 +7,6 @@ import IMonarchLanguage = languages.IMonarchLanguage;
 export const CADENCE_LANGUAGE_ID = 'cadence';
 
 export default function configureCadence() {
-  /* eslint-disable */
   monaco.languages.register({
     id: CADENCE_LANGUAGE_ID,
     extensions: ['.cdc'],

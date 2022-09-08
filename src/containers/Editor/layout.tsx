@@ -1,34 +1,34 @@
-import React, { useState, useEffect } from 'react';
 import { useLocation } from '@reach/router';
-import { Button, Flex, Text } from 'theme-ui';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { FaCloudUploadAlt } from 'react-icons/fa';
 import {
+  FaArrowAltCircleDown,
+  FaCloudUploadAlt,
   FaCodeBranch,
   FaDiscord,
   FaTwitter,
-  FaArrowAltCircleDown,
 } from 'react-icons/fa';
+import { Button, Flex, Text } from 'theme-ui';
 import { getParams } from 'util/url';
 
-import { Header as HeaderRoot } from 'layout/Header';
 import { default as FlowButton } from 'components/Button';
 import { Separator } from 'components/Common';
 import Examples from 'components/Examples';
 import ExportPopup from 'components/ExportPopup';
-import Sidebar from 'components/Sidebar';
 import { IconCadence } from 'components/Icons';
+import Sidebar from 'components/Sidebar';
+import { Header as HeaderRoot } from 'layout/Header';
 
 import Mixpanel from 'util/mixpanel';
 
 import {
+  AnimatedText,
   EditorContainer,
   Header,
-  NavButton,
   Nav,
+  NavButton,
   ShareSaveButton,
-  AnimatedText,
 } from './components';
 
 import { useProject } from 'providers/Project/projectHooks';
@@ -64,8 +64,7 @@ const EditorLayout: React.FC = () => {
   const location = useLocation();
   const params = getParams(location.search);
   useEffect(() => {
-    /* eslint-disable */
-    params.storage && setSelectedResourceAccount(params.storage);
+    if (params.storage) setSelectedResourceAccount(params.storage);
   }, [params]);
 
   const [helmetTitle, setHelmetTitle] = useState(decodeText(project.title));
@@ -99,7 +98,7 @@ const EditorLayout: React.FC = () => {
     <>
       <Helmet>
         <title>Flow - {helmetTitle} </title>
-        <meta name="description" content={helmetDescription}></meta>
+        <meta name="description" content={helmetDescription} />
       </Helmet>
       <HeaderRoot>
         <Header>
@@ -149,31 +148,31 @@ const EditorLayout: React.FC = () => {
                 >
                   <NavButton>
                     <IconCadence
-                      size={'22px'}
-                      title={'Cadence Language Reference'}
+                      size="22px"
+                      title="Cadence Language Reference"
                     />
                   </NavButton>
                 </a>
                 <a
                   style={{ display: 'flex' }}
-                  title={'Flow on Twitter'}
+                  title="Flow on Twitter"
                   href="https://twitter.com/flow_blockchain"
                   target="_blank"
                   rel="noreferrer"
                 >
                   <NavButton>
-                    <FaTwitter size={'20px'} />
+                    <FaTwitter size="20px" />
                   </NavButton>
                 </a>
                 <a
                   style={{ display: 'flex' }}
-                  title={'Flow on Discord'}
+                  title="Flow on Discord"
                   href="https://discord.gg/2h6hgBF"
                   target="_blank"
                   rel="noreferrer"
                 >
                   <NavButton>
-                    <FaDiscord size={'20px'} />
+                    <FaDiscord size="20px" />
                   </NavButton>
                 </a>
               </>

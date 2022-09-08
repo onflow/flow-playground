@@ -1,5 +1,11 @@
-import { CADENCE_LANGUAGE_ID } from './cadence';
-import { Callbacks } from './language-server';
+import {
+  CloseAction,
+  ConnectionCloseHandler,
+  createConnection,
+  ErrorAction,
+  MonacoLanguageClient,
+} from 'monaco-languageclient';
+import { ConnectionErrorHandler } from 'monaco-languageclient/src/connection';
 import {
   createMessageConnection,
   DataCallback,
@@ -10,17 +16,8 @@ import {
   MessageWriter,
   PartialMessageInfo,
 } from 'vscode-jsonrpc';
-//@ts-ignore
-import { ConnectionErrorHandler } from 'monaco-languageclient/src/connection';
-import {
-  //@ts-ignore
-  ConnectionCloseHandler,
-  CloseAction,
-  //@ts-ignore
-  createConnection,
-  ErrorAction,
-  MonacoLanguageClient,
-} from 'monaco-languageclient';
+import { CADENCE_LANGUAGE_ID } from './cadence';
+import { Callbacks } from './language-server';
 
 export function createCadenceLanguageClient(callbacks: Callbacks) {
   const logger: Logger = {
@@ -39,7 +36,6 @@ export function createCadenceLanguageClient(callbacks: Callbacks) {
   };
 
   const writer: MessageWriter = {
-    /* eslint-disable */
     onClose(_: (_: void) => void): Disposable {
       return Disposable.create(() => {});
     },
@@ -56,7 +52,6 @@ export function createCadenceLanguageClient(callbacks: Callbacks) {
   };
 
   const reader: MessageReader = {
-    /* eslint-disable */
     onError(_: (error: Error) => void): Disposable {
       return Disposable.create(() => {});
     },
@@ -86,15 +81,12 @@ export function createCadenceLanguageClient(callbacks: Callbacks) {
     clientOptions: {
       documentSelector: [CADENCE_LANGUAGE_ID],
       errorHandler: {
-        //@ts-ignore
         error: () => ErrorAction.Continue,
-        //@ts-ignore
         closed: () => CloseAction.DoNotRestart,
       },
     },
     // Create a language client connection from the JSON-RPC connection on demand
     connectionProvider: {
-      //@ts-ignore
       get: (
         errorHandler: ConnectionErrorHandler,
         closeHandler: ConnectionCloseHandler,

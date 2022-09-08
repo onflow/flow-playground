@@ -1,12 +1,12 @@
-import React from 'react';
-import { Text } from 'theme-ui';
 import styled from '@emotion/styled';
-import { motion } from 'framer-motion';
-import { IoMdClose } from 'react-icons/io';
 import { WhiteOverlay } from 'components/Common';
+import { motion } from 'framer-motion';
+import React from 'react';
+import { IoMdClose } from 'react-icons/io';
+import { Text } from 'theme-ui';
 
-import Mixpanel from 'util/mixpanel';
 import ActionButton from 'components/ActionButton';
+import Mixpanel from 'util/mixpanel';
 
 const examples = [
   {
@@ -238,7 +238,7 @@ const Examples: React.FC<{
               <motion.div
                 variants={exampleItem}
                 key={index}
-                className={'full-height'}
+                className="full-height"
               >
                 <Example>
                   <Text className="emoji">{_example.emoji}</Text>

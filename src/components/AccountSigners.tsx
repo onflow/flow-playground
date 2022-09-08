@@ -1,9 +1,9 @@
-import React from 'react';
-import { useThemeUI, Flex, Badge, Text } from 'theme-ui';
-import { motion } from 'framer-motion';
-import { Account, Project } from 'src/api/apollo/generated/graphql';
-import Avatar from 'components/Avatar';
 import { AccountAvatar, AvatarList } from 'components/AccountAvatars';
+import Avatar from 'components/Avatar';
+import { motion } from 'framer-motion';
+import React from 'react';
+import { Account, Project } from 'src/api/apollo/generated/graphql';
+import { Badge, Flex, Text, useThemeUI } from 'theme-ui';
 
 export const Outline: React.FC = ({ children }) => {
   const { theme } = useThemeUI();
@@ -11,7 +11,7 @@ export const Outline: React.FC = ({ children }) => {
   return (
     <motion.div>
       <Flex
-        mx={'0.5rem'}
+        mx="0.5rem"
         sx={{
           justifyContent: 'center',
           alignItems: 'center',
@@ -100,7 +100,7 @@ const AccountSigners: React.FC<{
                   }}
                 />
                 <Badge
-                  px={'5px'}
+                  px="5px"
                   sx={{
                     fontSize: 3,
                     backgroundColor: theme.colors.primary,

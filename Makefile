@@ -30,6 +30,16 @@ format:
 	$(info Task: format:check)
 	$(EXEC) sh -c 'npm run format:check:app || exit 255'
 
+.PHONY: types
+format:
+	$(info Task: types)
+	$(EXEC) sh -c 'npm run types || exit 255'
+
+.PHONY: lint
+format:
+	$(info Task: lint)
+	$(EXEC) sh -c 'npm run lint || exit 255'
+
 .PHONY: build
 build:
 	$(info Task: build production)
