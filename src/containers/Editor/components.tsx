@@ -199,6 +199,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   project,
   active,
 }) => {
+  /* eslint-disable */
   const [title, setTitle] = useState<string | undefined>(
     decodeText(project.title),
   );

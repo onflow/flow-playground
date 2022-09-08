@@ -249,7 +249,7 @@ const Examples: React.FC<{
                       title={`Go to documentation for "${_example.title}"`}
                       href={_example.docsLink}
                       target="_blank"
-                      rel="noopener"
+                      rel="noreferrer"
                       onClick={() => {
                         Mixpanel.track('Redirect to project documentation', {
                           link: _example.docsLink,
@@ -264,7 +264,7 @@ const Examples: React.FC<{
                         title={`Open "${_example.title}" project in Playground`}
                         href={_example.projectLink}
                         target="_blank"
-                        rel="noopener"
+                        rel="noreferrer"
                         onClick={() => {
                           Mixpanel.track('Open example project', {
                             link: _example.projectLink,

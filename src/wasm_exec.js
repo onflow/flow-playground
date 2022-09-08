@@ -306,6 +306,7 @@
 
           // func wasmWrite(fd uintptr, p unsafe.Pointer, n int32)
           'runtime.wasmWrite': (sp) => {
+            /* eslint-disable */
             sp >>>= 0;
             const fd = getInt64(sp + 8);
             const p = getInt64(sp + 16);

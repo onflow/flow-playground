@@ -5,6 +5,7 @@ import IMonarchLanguage = languages.IMonarchLanguage;
 export const CADENCE_LANGUAGE_ID = 'cadence';
 
 export default function configureCadence() {
+  /* eslint-disable */
   monaco.languages.register({
     id: CADENCE_LANGUAGE_ID,
     extensions: ['.cdc'],
@@ -113,7 +114,8 @@ export default function configureCadence() {
 
     // we include these common regular expressions
     symbols: /[=><!~?:&|+\-*\/\^%]+/,
-    escapes: /\\(?:[abfnrtv\\"]|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
+    escapes:
+      /\\(?:[abfnrtv\\"]|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
     digits: /\d+(_+\d+)*/,
     octaldigits: /[0-7]+(_+[0-7]+)*/,
     binarydigits: /[0-1]+(_+[0-1]+)*/,

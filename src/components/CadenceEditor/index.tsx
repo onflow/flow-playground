@@ -174,6 +174,7 @@ const CadenceEditor = (props: any) => {
     editor.layout();
 
     window.addEventListener('resize', () => {
+      /* eslint-disable */
       editor && editor.layout();
     });
 
@@ -189,6 +190,7 @@ const CadenceEditor = (props: any) => {
 
   // Do it once, when CadenceEditor component is instantiated
   useEffect(() => {
+    /* eslint-disable */
     initEditor().then(); // drop returned Promise as we are not going to use it
     return () => {
       editor && destroyEditor();

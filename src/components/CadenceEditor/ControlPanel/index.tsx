@@ -62,6 +62,7 @@ import {
 } from '../../Arguments/styles';
 
 const ControlPanel: React.FC<ControlPanelProps> = (props) => {
+  /* eslint-disable */
   // We should not render this component if editor is non-existent
   if (!props.editor) {
     return null;
@@ -76,11 +77,8 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const [executionArguments, setExecutionArguments] = useState({});
   const [processingStatus, setProcessingStatus] = useState(false);
   const [setResult] = useSetExecutionResultsMutation();
-  const {
-    scriptFactory,
-    transactionFactory,
-    contractDeployment,
-  } = useTemplateType();
+  const { scriptFactory, transactionFactory, contractDeployment } =
+    useTemplateType();
   const [selected, updateSelectedAccounts] = useState([]);
   const [expanded, setExpanded] = useState(true);
 

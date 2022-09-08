@@ -56,7 +56,7 @@ const AppMobileWrapper: React.FC<AppMobileWrapperProps> = ({ children }) => {
               window.location.href = 'https://www.onflow.org';
             }}
           >
-            Visit Flow's Website
+            Visit Flow&apos;s Website
           </Button>
         </Box>
       </AppMobileWrapperMessageDiv>

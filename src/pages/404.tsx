@@ -25,7 +25,7 @@ const FourOhFour: React.FC<ProjectProps> = () => {
           textAlign: 'center',
         }}
       >
-        Floh No! We couldn't find that project.
+        Floh No! We couldn&apos;t find that project.
       </Text>
       <Text
         sx={{
@@ -36,8 +36,8 @@ const FourOhFour: React.FC<ProjectProps> = () => {
         }}
       >
         (If you were expecting a project here, you may be experiencing a 🐛.
-        Please clear your browser's cookies and browser cache. This is a known
-        issue. Thanks for your patience! 🙏)
+        Please clear your browser&apos;s cookies and browser cache. This is a
+        known issue. Thanks for your patience! 🙏)
       </Text>
       <Button
         sx={{

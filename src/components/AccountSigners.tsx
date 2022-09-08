@@ -35,14 +35,8 @@ const AccountSigners: React.FC<{
   accounts: Account[];
   maxSelection?: number;
 }> = (props) => {
-  const {
-    multi,
-    selectedAccounts,
-    accounts,
-    project,
-    onChange,
-    maxSelection,
-  } = props;
+  const { multi, selectedAccounts, accounts, project, onChange, maxSelection } =
+    props;
   if (!multi) {
     throw new Error('Must include multi prop.');
   }

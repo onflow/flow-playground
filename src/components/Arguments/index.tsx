@@ -213,11 +213,8 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const [processingStatus, setProcessingStatus] = useState(false);
 
   const [setResult] = useSetExecutionResultsMutation();
-  const {
-    scriptFactory,
-    transactionFactory,
-    contractDeployment,
-  } = useTemplateType();
+  const { scriptFactory, transactionFactory, contractDeployment } =
+    useTemplateType();
   const {
     project,
     active,
@@ -229,7 +226,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const [notifications, setNotifications] = useState<{
     [identifier: string]: string[];
   }>({});
-
+  /* eslint-disable */
   // compare 'state' field for each account, set 'notifications' state for new data
   // @ts-ignore: <- this state is only used to compare and render notifications
   const [_, setProjectAccts] = useState(project.accounts);
@@ -284,7 +281,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
       // Language server throws "input is not literal" without quotes
       if (type === `String`) {
-        value = `\"${value.replace(/"/g, '\\"')}\"`;
+        value = `"${value.replace(/"/g, '\\"')}"`;
       }
 
       return value;

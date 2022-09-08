@@ -67,9 +67,8 @@ export interface ProjectContextValue {
   isSavingCode: boolean;
 }
 
-export const ProjectContext: React.Context<ProjectContextValue> = createContext(
-  null,
-);
+export const ProjectContext: React.Context<ProjectContextValue> =
+  createContext(null);
 
 interface ProjectProviderProps {
   children: any;
@@ -80,6 +79,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   children,
   urlProjectId,
 }) => {
+  /* eslint-disable */
   const client = useApolloClient();
 
   const {
@@ -443,7 +443,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       }
       break;
     }
-    default:
+    default: {
       const sameType = active.type == EntityType.Readme;
       const sameIndex = active.index == templateIndex;
 
@@ -455,6 +455,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         });
         return <Redirect noThrow to={`/${project.id}`} />;
       }
+    }
   }
 
   return (

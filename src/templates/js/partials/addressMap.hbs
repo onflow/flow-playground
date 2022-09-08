@@ -1,13 +1,14 @@
-{{#if imports ~}}
-    // Generate addressMap from import statements
-    {{#each imports ~}}
-        const {{name}} = await getContractAddress("{{name}}")
-    {{/each}}
+{{#if imports~}}
+  // Generate addressMap from import statements
+  {{#each imports~}}
+    const
+    {{name}}
+    = await getContractAddress("{{name}}")
+  {{/each}}
 
-    const addressMap = {
-        {{#each imports ~}}
-            {{name}},
-        {{/each}}
-    }
+  const addressMap = {
+  {{#each imports~}}
+    {{name}},
+  {{/each}}
+  }
 {{/if}}
-

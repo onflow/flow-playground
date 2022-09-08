@@ -12,6 +12,7 @@ import {
 import { AiFillCloseCircle } from 'react-icons/ai';
 
 const Notifications = () => {
+  /* eslint-disable */
   // ===========================================================================
   // GLOBAL HOOKS
   const { project, lastSigners } = useProject();

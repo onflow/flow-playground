@@ -26,7 +26,7 @@ export const RemoveToastButton = styled.button`
   }
 `;
 
-export const ButtonContainer = ({ children }) => {
+export const ButtonContainer = ({ children }: any) => {
   return (
     <Flex
       sx={{
@@ -38,7 +38,7 @@ export const ButtonContainer = ({ children }) => {
   );
 };
 
-export const ContentBox = ({ children }) => {
+export const ContentBox = ({ children }: any) => {
   const sx = {
     marginTop: '0.0rem',
     padding: '0.8rem 0.5rem',
@@ -56,7 +56,7 @@ export const ContentBox = ({ children }) => {
   );
 };
 
-export const Content = ({ children }) => {
+export const Content = ({ children }: any) => {
   const sx = {
     padding: '0.75rem',
   };

@@ -39,6 +39,7 @@ const launchLanguageClient = async (
 };
 
 export default function useLanguageServer() {
+  /* eslint-disable */
   const project = useProject();
 
   // Language Server Callbacks

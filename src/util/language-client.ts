@@ -36,6 +36,7 @@ export function createCadenceLanguageClient(callbacks: Callbacks) {
   };
 
   const writer: MessageWriter = {
+    /* eslint-disable */
     onClose(_: (_: void) => void): Disposable {
       return Disposable.create(() => {});
     },
@@ -52,6 +53,7 @@ export function createCadenceLanguageClient(callbacks: Callbacks) {
   };
 
   const reader: MessageReader = {
+    /* eslint-disable */
     onError(_: (error: Error) => void): Disposable {
       return Disposable.create(() => {});
     },

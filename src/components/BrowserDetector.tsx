@@ -52,7 +52,7 @@ const BrowserDetector: React.FC = () => {
     case browser && browser.name === 'safari':
       return (
         <UnsupportedMessage>
-          You're currently using an unsupported browser to access the Flow
+          You&apos;re currently using an unsupported browser to access the Flow
           Playground. We hope to support your browser in the future, but for now
           some features may not function as intended. In order to have the best
           experience, we recommend you use either Chrome or Firefox to access
@@ -65,9 +65,10 @@ const BrowserDetector: React.FC = () => {
           <CookieWarningModal>
             <h2>🍪 Please enable cookies</h2>
             <p>
-              The Playground uses cookies to manage projects. You'll need to
-              enable cookies in your browser to use the Playground. We don't use
-              cookies to track you, or collect your personal information.
+              The Playground uses cookies to manage projects. You&apos;ll need
+              to enable cookies in your browser to use the Playground. We
+              don&apos;t use cookies to track you, or collect your personal
+              information.
             </p>
           </CookieWarningModal>
         </CookieWarning>

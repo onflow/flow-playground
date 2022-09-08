@@ -64,14 +64,9 @@ const EditorLayout: React.FC = () => {
   const location = useLocation();
   const params = getParams(location.search);
   useEffect(() => {
+    /* eslint-disable */
     params.storage && setSelectedResourceAccount(params.storage);
   }, [params]);
-
-  if (!isLoading && !project) {
-    // NOTE: Leave this. 404 redirect is handled in
-    // projectHooks.tsx. Show nothing before navigating.
-    return <></>;
-  }
 
   const [helmetTitle, setHelmetTitle] = useState(decodeText(project.title));
   const [helmetDescription, setHelmetDescription] = useState(
@@ -93,6 +88,12 @@ const EditorLayout: React.FC = () => {
       };
     }
   }, [project.title]);
+
+  if (!isLoading && !project) {
+    // NOTE: Leave this. 404 redirect is handled in
+    // projectHooks.tsx. Show nothing before navigating.
+    return <></>;
+  }
 
   return (
     <>
@@ -136,7 +137,7 @@ const EditorLayout: React.FC = () => {
                   style={{ display: 'flex', textDecoration: 'none' }}
                   href="https://docs.onflow.org"
                   target="_blank"
-                  rel="noopener"
+                  rel="noreferrer"
                 >
                   <NavButton>Flow Docs</NavButton>
                 </a>
@@ -144,7 +145,7 @@ const EditorLayout: React.FC = () => {
                   style={{ display: 'flex' }}
                   href="https://docs.onflow.org/cadence/language"
                   target="_blank"
-                  rel="noopener"
+                  rel="noreferrer"
                 >
                   <NavButton>
                     <IconCadence
@@ -158,7 +159,7 @@ const EditorLayout: React.FC = () => {
                   title={'Flow on Twitter'}
                   href="https://twitter.com/flow_blockchain"
                   target="_blank"
-                  rel="noopener"
+                  rel="noreferrer"
                 >
                   <NavButton>
                     <FaTwitter size={'20px'} />
@@ -169,7 +170,7 @@ const EditorLayout: React.FC = () => {
                   title={'Flow on Discord'}
                   href="https://discord.gg/2h6hgBF"
                   target="_blank"
-                  rel="noopener"
+                  rel="noreferrer"
                 >
                   <NavButton>
                     <FaDiscord size={'20px'} />
