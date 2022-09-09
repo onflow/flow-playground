@@ -20,8 +20,8 @@ test("test script template {{name}}", async () => {
         executeScript({
             code,
             {{#if arguments}}args{{/if}}
-        });
-    )
+        })
+    );
 
     // Add your expectations here
     expect().toBe();
