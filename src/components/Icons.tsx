@@ -56,7 +56,7 @@ export const IconCadence = (props: IconSVGProps) => {
         <g id="Cadence">
           <circle
             id="cadence-icon-circle"
-            className={'withGradient'}
+            className="withGradient"
             cx="57"
             cy="57"
             r="57"

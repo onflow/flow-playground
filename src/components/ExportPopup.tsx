@@ -1,13 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useProject } from 'providers/Project/projectHooks';
 import { default as FlowButton } from 'components/Button';
+import { useProject } from 'providers/Project/projectHooks';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
   FullScreenContainer,
   PopupContainer,
   PopupHeader,
-  WhiteOverlay,
   SpaceBetween,
+  WhiteOverlay,
 } from 'components/Common';
 
 import { createZip } from 'util/generator';
@@ -31,7 +31,7 @@ const ExportPopup: React.FC<{
 
   useEffect(() => {
     firstInput.current.focus();
-  }, [firstInput.current]);
+  }, []);
 
   const containerFrames = {
     visible: {
@@ -85,7 +85,7 @@ const ExportPopup: React.FC<{
         <PopupHeader mb="20px" color="#575E89" lineColor="#B4BEFC">
           Export Project
         </PopupHeader>
-        <InputBlock mb={'30px'}>
+        <InputBlock mb="30px">
           <Label>Cadence Folder</Label>
           <Input
             ref={firstInput}

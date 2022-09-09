@@ -4,6 +4,7 @@
     "target": "es6",
     "module": "esnext",
     "jsx": "react",
+    "noEmit": true,
     "allowJs": false,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,

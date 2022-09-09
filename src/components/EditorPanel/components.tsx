@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Flex, Box, Text } from 'theme-ui';
-import { motion, AnimatePresence } from 'framer-motion';
 import styled from '@emotion/styled';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useState } from 'react';
 import { IoIosArrowUp } from 'react-icons/io';
+import { Box, Flex, Text } from 'theme-ui';
 
 export const SavedTemplateContainer = styled(motion.div)`
   position: absolute;
@@ -82,7 +82,7 @@ export const PanelFooter: React.FC<{ dismiss: () => void }> = ({
       animate={open && children ? 'open' : 'closed'}
     >
       <Flex
-        py={'0.5rem'}
+        py="0.5rem"
         px={1}
         sx={{
           backgroundColor: 'border',

@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Badge, Flex, Box, Divider } from 'theme-ui';
-import { GoChevronDown, GoChevronUp } from 'react-icons/go';
-import { IoMdAddCircleOutline } from 'react-icons/io';
-import { useProject } from 'providers/Project/projectHooks';
-import useMousePosition from '../hooks/useMousePosition';
+import styled from '@emotion/styled';
 import TemplatePopup from 'components/TemplatePopup';
+import { BottomBarItemInsert } from 'layout/BottomBarItemInsert';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 import { FeedbackActions } from 'layout/FeedbackActions';
+import { ResizeHeading } from 'layout/Heading';
 import { SidebarItemInsert } from 'layout/SidebarItemInsert';
-import { BottomBarItemInsert } from 'layout/BottomBarItemInsert';
-import styled from '@emotion/styled';
+import { useProject } from 'providers/Project/projectHooks';
+import React, { useEffect, useState } from 'react';
+import { GoChevronDown, GoChevronUp } from 'react-icons/go';
+import { IoMdAddCircleOutline } from 'react-icons/io';
+import { Badge, Box, Divider, Flex } from 'theme-ui';
 import { storageMap } from 'util/accounts';
 import { getStorageData } from 'util/storage';
+import useMousePosition from '../hooks/useMousePosition';
 import theme from '../theme';
-import { ResizeHeading } from 'layout/Heading';
 
 const RESULT_PANEL_MIN_HEIGHT = 80;
 const STORAGE_PANEL_MIN_HEIGHT = 80 + RESULT_PANEL_MIN_HEIGHT;
@@ -62,7 +62,7 @@ const StorageBadge: React.FC<StorageBadgeProps> = ({ type }) => {
   return (
     <Badge
       variant="outline"
-      px={'5px'}
+      px="5px"
       sx={{
         fontSize: 3,
         fontStyle: 'normal',
@@ -96,7 +96,6 @@ interface IdentifierTypeListProps {
   controls: () => any;
   resize: () => any;
 }
-// @ts-ignore
 const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
   types,
   selected,
@@ -247,7 +246,6 @@ const AccountState: React.FC<{
 
   const identifiers = Object.keys(storage);
 
-  // @ts-ignore
   const [selected, setSelected] = useState(
     identifiers.length > 0 ? identifiers[0] : null,
   );

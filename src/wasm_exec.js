@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // Copyright 2018 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
@@ -306,7 +308,6 @@
 
           // func wasmWrite(fd uintptr, p unsafe.Pointer, n int32)
           'runtime.wasmWrite': (sp) => {
-            /* eslint-disable */
             sp >>>= 0;
             const fd = getInt64(sp + 8);
             const p = getInt64(sp + 16);

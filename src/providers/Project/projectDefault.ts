@@ -188,8 +188,8 @@ export function createLocalProject(
     };
   });
 
-  const transactionTemplatesEntities: TransactionTemplate[] =
-    transactionTemplates.map((script, i) => {
+  const transactionTemplatesEntities: TransactionTemplate[] = transactionTemplates.map(
+    (script, i) => {
       const { title, code } = script;
       return {
         __typename: 'TransactionTemplate',
@@ -198,7 +198,8 @@ export function createLocalProject(
         script: code,
         index: i,
       };
-    });
+    },
+  );
 
   const scriptsTemplatesEntities: ScriptTemplate[] = scriptTemplates.map(
     (script, i) => {

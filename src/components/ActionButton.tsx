@@ -1,10 +1,10 @@
-import React from 'react';
 import { motion } from 'framer-motion';
+import React from 'react';
 import { CSSProperties } from 'styled-components';
 import Button from './Button';
 
 interface ActionButtonProps {
-  children?: any;
+  children?: React.ReactNode;
   onClick?: any;
   className?: string;
   style?: CSSProperties;

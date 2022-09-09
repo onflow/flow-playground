@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from 'react';
 import { useProject } from 'providers/Project/projectHooks';
+import React, { useEffect, useState } from 'react';
 
+import { AiFillCloseCircle } from 'react-icons/ai';
 import {
+  ButtonContainer,
+  Content,
+  ContentBox,
+  RemoveToastButton,
   SingleToast,
   ToastContainer,
-  RemoveToastButton,
-  ButtonContainer,
-  ContentBox,
-  Content,
 } from './components';
-import { AiFillCloseCircle } from 'react-icons/ai';
 
 const Notifications = () => {
-  /* eslint-disable */
   // ===========================================================================
   // GLOBAL HOOKS
   const { project, lastSigners } = useProject();
 
   // HOOKS  -------------------------------------------------------------------
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setProjectAccounts] = useState(project.accounts);
   const [counter, setCounter] = useState(0);
   const [notifications, setNotifications] = useState<{

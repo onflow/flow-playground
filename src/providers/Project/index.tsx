@@ -1,11 +1,11 @@
-import React, { createContext, useState } from 'react';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
-import { navigate, useLocation, Redirect } from '@reach/router';
-import ProjectMutator from './projectMutator';
+import { navigate, Redirect, useLocation } from '@reach/router';
+import React, { createContext, useState } from 'react';
 import useGetProject from './projectHooks';
+import ProjectMutator from './projectMutator';
 
+import { Account, Project } from 'api/apollo/generated/graphql';
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
-import { Project, Account } from 'api/apollo/generated/graphql';
 import { getParams } from 'util/url';
 
 export enum EntityType {
@@ -67,11 +67,12 @@ export interface ProjectContextValue {
   isSavingCode: boolean;
 }
 
-export const ProjectContext: React.Context<ProjectContextValue> =
-  createContext(null);
+export const ProjectContext: React.Context<ProjectContextValue> = createContext(
+  null,
+);
 
 interface ProjectProviderProps {
-  children: any;
+  children: React.ReactNode;
   urlProjectId: string | null;
 }
 
@@ -79,7 +80,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   children,
   urlProjectId,
 }) => {
-  /* eslint-disable */
   const client = useApolloClient();
 
   const {

@@ -1,8 +1,8 @@
-import React from 'react';
-import { useThemeUI, Flex, Box, Badge } from 'theme-ui';
-import { motion } from 'framer-motion';
-import { Account, Project } from 'src/api/apollo/generated/graphql';
 import Avatar from 'components/Avatar';
+import { motion } from 'framer-motion';
+import React from 'react';
+import { Account, Project } from 'src/api/apollo/generated/graphql';
+import { Badge, Box, Flex, useThemeUI } from 'theme-ui';
 
 export const AccountAvatar: React.FC<{
   onClick: (e: any, i: number) => void;
@@ -11,7 +11,7 @@ export const AccountAvatar: React.FC<{
   return (
     <motion.div>
       <Box
-        //@ts-ignore
+        // @ts-expect-error #TODO: switch to button
         onClick={onClick}
         mx="0.5rem"
         sx={{
@@ -105,7 +105,7 @@ const AccountAvatars: React.FC<{
                   }}
                 />
                 <Badge
-                  px={'5px'}
+                  px="5px"
                   sx={{
                     fontSize: 3,
                     backgroundColor: isSelected
@@ -128,5 +128,3 @@ const AccountAvatars: React.FC<{
 };
 
 export default AccountAvatars;
-
-// @ts-ignore-end

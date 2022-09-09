@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import { Flex, useThemeUI } from 'theme-ui';
 import { Account, Project } from 'api/apollo/generated/graphql';
 import AccountAvatars from 'components/AccountAvatars';
 import AccountSigners from 'components/AccountSigners';
+import React, { useEffect } from 'react';
+import { Flex, useThemeUI } from 'theme-ui';
 
 type AccountPickerProps = {
   project: Project;
@@ -81,7 +81,7 @@ const AccountPicker: React.FC<AccountPickerProps> = ({
           maxSelection={maxSelection}
         />
         <Flex
-          px={'0.5rem'}
+          px="0.5rem"
           sx={{
             alignItems: 'center',
           }}
