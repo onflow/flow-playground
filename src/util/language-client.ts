@@ -1,5 +1,11 @@
-import { CADENCE_LANGUAGE_ID } from './cadence';
-import { Callbacks } from './language-server';
+import {
+  CloseAction,
+  ConnectionCloseHandler,
+  createConnection,
+  ErrorAction,
+  MonacoLanguageClient,
+} from 'monaco-languageclient';
+import { ConnectionErrorHandler } from 'monaco-languageclient/src/connection';
 import {
   createMessageConnection,
   DataCallback,
@@ -10,14 +16,8 @@ import {
   MessageWriter,
   PartialMessageInfo,
 } from 'vscode-jsonrpc';
-import { ConnectionErrorHandler } from 'monaco-languageclient/src/connection';
-import {
-  ConnectionCloseHandler,
-  CloseAction,
-  createConnection,
-  ErrorAction,
-  MonacoLanguageClient,
-} from 'monaco-languageclient';
+import { CADENCE_LANGUAGE_ID } from './cadence';
+import { Callbacks } from './language-server';
 
 export function createCadenceLanguageClient(callbacks: Callbacks) {
   const logger: Logger = {

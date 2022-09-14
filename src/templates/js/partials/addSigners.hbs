@@ -1,8 +1,7 @@
-{{#if signers ~}}
-    // Set transaction signers
-    const signers = [
-        {{#each signers ~}}
-            {{this}},
-        {{/each}}
-    ]
+{{#if signers~}}
+  // Set transaction signers const signers = [
+  {{#each signers~}}
+    {{this}},
+  {{/each}}
+  ]
 {{/if}}

@@ -1,20 +1,20 @@
-import React, { useState, useRef, useEffect } from 'react';
 import { navigate } from '@reach/router';
-import { default as FlowButton } from 'components/Button';
-import theme from '../theme';
 import { Select, Spinner } from '@theme-ui/components';
+import { default as FlowButton } from 'components/Button';
 import { useProject } from 'providers/Project/projectHooks';
-import { isUUUID } from 'util/url';
-import { getInterpolatedTemplate } from 'util/templates';
-import { getStorageData } from 'util/storage';
+import React, { useEffect, useRef, useState } from 'react';
 import { storageMap } from 'util/accounts';
+import { getStorageData } from 'util/storage';
+import { getInterpolatedTemplate } from 'util/templates';
+import { isUUUID } from 'util/url';
+import theme from '../theme';
 
 import {
   FullScreenContainer,
   PopupContainer,
   PopupHeader,
-  WhiteOverlay,
   SpaceBetween,
+  WhiteOverlay,
 } from 'components/Common';
 
 import {
@@ -54,7 +54,7 @@ const TemplatePopup: React.FC<{
 
   useEffect(() => {
     firstInput.current.focus();
-  }, [firstInput.current]);
+  }, []);
 
   const containerFrames = {
     visible: {
@@ -115,7 +115,7 @@ const TemplatePopup: React.FC<{
         >
           {`Create a ${templateType} from a template`}
         </PopupHeader>
-        <InputBlock mb={'12px'}>
+        <InputBlock mb="12px">
           <Label>Type</Label>
           <Select
             onChange={(event) => {
@@ -137,7 +137,7 @@ const TemplatePopup: React.FC<{
             <option>Transaction</option>
           </Select>
         </InputBlock>
-        <InputBlock mb={'12px'}>
+        <InputBlock mb="12px">
           <Label>Capability</Label>
           <Select
             onChange={(event) => {
@@ -165,7 +165,7 @@ const TemplatePopup: React.FC<{
             )}
           </Select>
         </InputBlock>
-        <InputBlock mb={'24px'}>
+        <InputBlock mb="24px">
           <Label>Name</Label>
           <Input
             ref={firstInput}

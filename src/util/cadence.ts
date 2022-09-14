@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { languages } from 'monaco-editor/esm/vs/editor/editor.api';
 import IMonarchLanguage = languages.IMonarchLanguage;

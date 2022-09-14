@@ -1,25 +1,25 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
-import { AiFillCloseCircle } from 'react-icons/ai';
-import { motion, AnimatePresence } from 'framer-motion';
-import { EntityType } from 'providers/Project';
-import { useProject } from 'providers/Project/projectHooks';
-import { RemoveToastButton } from 'layout/RemoveToastButton';
-import { useThemeUI, Box, Text, Flex } from 'theme-ui';
 import {
   Account,
   ResultType,
   useSetExecutionResultsMutation,
 } from 'api/apollo/generated/graphql';
+import { AnimatePresence, motion } from 'framer-motion';
+import { RemoveToastButton } from 'layout/RemoveToastButton';
+import { EntityType } from 'providers/Project';
+import { useProject } from 'providers/Project/projectHooks';
+import React, { useEffect, useRef, useState } from 'react';
+import { AiFillCloseCircle } from 'react-icons/ai';
+import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
+import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 
 import { ArgumentsProps } from 'components/Arguments/types';
 import { ExecuteCommandRequest } from 'monaco-languageclient';
 
 import {
   ControlContainer,
-  ToastContainer,
   HoverPanel,
   StatusMessage,
+  ToastContainer,
 } from './styles';
 
 import {
@@ -229,9 +229,9 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const [notifications, setNotifications] = useState<{
     [identifier: string]: string[];
   }>({});
-
   // compare 'state' field for each account, set 'notifications' state for new data
-  // @ts-ignore: <- this state is only used to compare and render notifications
+  // <- this state is only used to compare and render notifications
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setProjectAccts] = useState(project.accounts);
   const [counter, setCounter] = useState(0);
   useEffect(() => {
@@ -284,7 +284,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
       // Language server throws "input is not literal" without quotes
       if (type === `String`) {
-        value = `\"${value.replace(/"/g, '\\"')}\"`;
+        value = `"${value.replace(/"/g, '\\"')}"`;
       }
 
       return value;

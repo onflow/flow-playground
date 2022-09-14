@@ -1,9 +1,9 @@
-import React from 'react';
-import { Button as ThemedButton } from 'theme-ui';
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
+import React from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { CSSProperties } from 'styled-components';
+import { Button as ThemedButton } from 'theme-ui';
 
 interface StyledButtonProps {
   style?: CSSProperties;
@@ -58,7 +58,7 @@ const StyledButton: React.FC<StyledButtonProps> = styled(ThemedButton)`
 `;
 
 interface ButtonProps {
-  children?: any;
+  children?: React.ReactNode;
   onClick?: any;
   className?: string;
   style?: CSSProperties;

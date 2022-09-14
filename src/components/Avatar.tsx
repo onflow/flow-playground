@@ -16,7 +16,12 @@ const Avatar: React.FC<AvatarProps> = ({ seed, index, style }) => {
   }
 
   return (
-    <img className="avatar" src={avataaar(rng().toString())} style={style} />
+    <img
+      className="avatar"
+      src={avataaar(rng().toString())}
+      style={style}
+      alt="Avatar"
+    />
   );
 };
 

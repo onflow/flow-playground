@@ -1,6 +1,6 @@
+import { motion } from 'framer-motion';
 import React from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
 import { Box, Flex, Text } from 'theme-ui';
 
 import theme from '../../../theme';
@@ -26,7 +26,11 @@ export const RemoveToastButton = styled.button`
   }
 `;
 
-export const ButtonContainer = ({ children }) => {
+export const ButtonContainer = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   return (
     <Flex
       sx={{
@@ -38,7 +42,7 @@ export const ButtonContainer = ({ children }) => {
   );
 };
 
-export const ContentBox = ({ children }) => {
+export const ContentBox = ({ children }: { children: React.ReactNode }) => {
   const sx = {
     marginTop: '0.0rem',
     padding: '0.8rem 0.5rem',
@@ -56,14 +60,14 @@ export const ContentBox = ({ children }) => {
   );
 };
 
-export const Content = ({ children }) => {
+export const Content = ({ children }: { children: React.ReactNode }) => {
   const sx = {
     padding: '0.75rem',
   };
   return <Text sx={sx}>{children}</Text>;
 };
 
-export const SingleToast = (props: any) => {
+export const SingleToast = (props: { children: React.ReactNode }) => {
   const { children } = props;
   const toastProps = {
     layout: true,

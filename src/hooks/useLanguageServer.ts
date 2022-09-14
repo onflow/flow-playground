@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { CadenceLanguageServer, Callbacks } from 'util/language-server';
-import { MonacoServices } from 'monaco-languageclient/lib/monaco-services';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import { createCadenceLanguageClient } from 'util/language-client';
+import { MonacoServices } from 'monaco-languageclient/lib/monaco-services';
 import { useProject } from 'providers/Project/projectHooks';
+import { useEffect, useState } from 'react';
+import { createCadenceLanguageClient } from 'util/language-client';
+import { CadenceLanguageServer, Callbacks } from 'util/language-server';
 
 let monacoServicesInstalled = false;
 
@@ -55,9 +55,9 @@ export default function useLanguageServer() {
     // The actual callback will be set as soon as the language client is initialized
     toClient: null,
 
-    //@ts-ignore
-    getAddressCode(address: string): string | undefined {
+    getAddressCode(_address: string): string | undefined {
       // we will set it once it is instantiated
+      return undefined;
     },
   };
 

@@ -12,6 +12,7 @@ export const getStorageData = (state: string = ''): any => {
   const parsed = JSON.parse(state);
 
   for (let key in parsed) {
+    // eslint-disable-next-line no-prototype-builtins
     if (!parsed.hasOwnProperty(key)) {
       continue;
     }

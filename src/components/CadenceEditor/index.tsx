@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { useProject } from 'providers/Project/projectHooks';
 import { EntityType } from 'providers/Project';
+import { useProject } from 'providers/Project/projectHooks';
 import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
 
-import Notifications from './Notifications';
-import ControlPanel from './ControlPanel';
 import { EditorContainer } from './components';
+import ControlPanel from './ControlPanel';
+import Notifications from './Notifications';
 
 import { EditorState } from './types';
 
@@ -83,7 +83,6 @@ const CadenceEditor = (props: any) => {
     return [code, id];
   };
 
-  //@ts-ignore
   const setupEditor = () => {
     const projectExist = project && project.project.accounts;
     if (editor && projectExist) {
@@ -128,8 +127,6 @@ const CadenceEditor = (props: any) => {
       }
       editorOnChange.current = editor.onDidChangeModelContent(() => {
         if (project.project?.accounts) {
-          // we will ignore text line, cause onChange is based on active type
-          // @ts-ignore
           project.active.onChange(editor.getValue());
         }
       });
@@ -174,7 +171,7 @@ const CadenceEditor = (props: any) => {
     editor.layout();
 
     window.addEventListener('resize', () => {
-      editor && editor.layout();
+      if (editor) editor.layout();
     });
 
     // Save editor in component state
@@ -191,7 +188,7 @@ const CadenceEditor = (props: any) => {
   useEffect(() => {
     initEditor().then(); // drop returned Promise as we are not going to use it
     return () => {
-      editor && destroyEditor();
+      if (editor) destroyEditor();
     };
   }, []);
 

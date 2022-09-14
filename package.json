@@ -11,8 +11,8 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
     "start-docker": "docker run -e FLOW_DEBUG=true -e FLOW_SESSIONCOOKIESSECURE=false -p 8080:8080 gcr.io/dl-flow/playground-api:latest ?",
     "snyk-protect": "snyk protect",
-    "tsc": "tsc",
-    "ci:check": "npm run format:check:app && npm run lint && npm run tsc"
+    "types": "tsc",
+    "ci:check": "npm run format:check:app && npm run lint && npm run types"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",

@@ -1,11 +1,11 @@
-import React, { createContext, useState } from 'react';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
-import { navigate, useLocation, Redirect } from '@reach/router';
-import ProjectMutator from './projectMutator';
+import { navigate, Redirect, useLocation } from '@reach/router';
+import React, { createContext, useState } from 'react';
 import useGetProject from './projectHooks';
+import ProjectMutator from './projectMutator';
 
+import { Account, Project } from 'api/apollo/generated/graphql';
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
-import { Project, Account } from 'api/apollo/generated/graphql';
 import { getParams } from 'util/url';
 
 export enum EntityType {
@@ -72,7 +72,7 @@ export const ProjectContext: React.Context<ProjectContextValue> = createContext(
 );
 
 interface ProjectProviderProps {
-  children: any;
+  children: React.ReactNode;
   urlProjectId: string | null;
 }
 
@@ -443,7 +443,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       }
       break;
     }
-    default:
+    default: {
       const sameType = active.type == EntityType.Readme;
       const sameIndex = active.index == templateIndex;
 
@@ -455,6 +455,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         });
         return <Redirect noThrow to={`/${project.id}`} />;
       }
+    }
   }
 
   return (
