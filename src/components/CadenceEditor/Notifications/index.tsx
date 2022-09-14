@@ -59,37 +59,39 @@ const Notifications = () => {
   }, [project]);
 
   // VARIABLES AND CONSTANTS  ---------------------------------------------------
-  const toasts = Object.keys(notifications).map((id) => {
-    const updatedAccounts = notifications[id];
-    let updatedStorageAccounts: string[] = [];
+  const toasts = Object.keys(notifications)
+    .map((id) => {
+      const updatedAccounts = notifications[id];
+      let updatedStorageAccounts: string[] = [];
 
-    updatedAccounts.forEach((acct: any) => {
-      const { address } = acct;
-      const accountIndex = address.charAt(address.length - 1);
-      const accountHex = `0x0${accountIndex}`;
-      updatedStorageAccounts.push(accountHex);
-    });
+      updatedAccounts.forEach((acct: any) => {
+        const { address } = acct;
+        const accountIndex = address.charAt(address.length - 1);
+        const accountHex = `0x0${accountIndex}`;
+        updatedStorageAccounts.push(accountHex);
+      });
 
-    const shallRender = lastSigners && updatedStorageAccounts;
-    if (!shallRender) {
-      return null;
-    }
+      const shallRender = lastSigners && updatedStorageAccounts;
+      if (!shallRender) {
+        return null;
+      }
 
-    const pluralSigners = lastSigners?.length > 1 ? 'Accounts' : 'Account';
-    const pluralUpdated =
-      updatedStorageAccounts?.length > 1 ? 'accounts' : 'account';
-    const signers = lastSigners.join(', ');
-    const updated = updatedStorageAccounts.join(', ');
-    const toastText = `${pluralSigners} ${signers} updated the storage in ${pluralUpdated} ${updated}.`;
+      const pluralSigners = lastSigners?.length > 1 ? 'Accounts' : 'Account';
+      const pluralUpdated =
+        updatedStorageAccounts?.length > 1 ? 'accounts' : 'account';
+      const signers = lastSigners.join(', ');
+      const updated = updatedStorageAccounts.join(', ');
+      const toastText = `${pluralSigners} ${signers} updated the storage in ${pluralUpdated} ${updated}.`;
 
-    const onClick = () => removeNotification(setNotifications, parseInt(id));
+      const onClick = () => removeNotification(setNotifications, parseInt(id));
 
-    return {
-      id,
-      toastText,
-      onClick,
-    };
-  });
+      return {
+        id,
+        toastText,
+        onClick,
+      };
+    })
+    .filter(Boolean);
 
   // RENDER
   return (
