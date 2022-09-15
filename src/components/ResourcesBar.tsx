@@ -1,6 +1,4 @@
 import styled from '@emotion/styled';
-import TemplatePopup from 'components/TemplatePopup';
-import { BottomBarItemInsert } from 'layout/BottomBarItemInsert';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 import { FeedbackActions } from 'layout/FeedbackActions';
 import { ResizeHeading } from 'layout/Heading';
@@ -8,7 +6,6 @@ import { SidebarItemInsert } from 'layout/SidebarItemInsert';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useState } from 'react';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
-import { IoMdAddCircleOutline } from 'react-icons/io';
 import { Badge, Box, Divider, Flex } from 'theme-ui';
 import { storageMap } from 'util/accounts';
 import { getStorageData } from 'util/storage';
@@ -58,7 +55,13 @@ interface StorageBadgeProps {
   type: string;
 }
 
-const StorageBadge: React.FC<StorageBadgeProps> = ({ type }) => {
+const GeneralBadge = ({
+  backgroundColor,
+  children,
+}: {
+  backgroundColor: string;
+  children: React.ReactNode;
+}) => {
   return (
     <Badge
       variant="outline"
@@ -68,29 +71,38 @@ const StorageBadge: React.FC<StorageBadgeProps> = ({ type }) => {
         fontStyle: 'normal',
         paddingX: '5px',
         paddingY: '2px',
-        marginX: '0.5rem',
-        backgroundColor: () => {
-          switch (type) {
-            case 'Struct':
-              return theme.colors.badgeStruct;
-            case 'Resource':
-              return theme.colors.badgeResource;
-            case 'Link':
-              return theme.colors.badgeCapability;
-            case null:
-              return theme.colors.badgeNull;
-          }
-        },
+        marginLeft: '0.5rem',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        backgroundColor,
       }}
     >
-      {type === 'Link' ? 'Capability' : type}
-      {type === null && 'null'}
+      {children}
     </Badge>
+  );
+};
+
+const StorageBadge = ({ type }: StorageBadgeProps) => {
+  const backgroundColor =
+    type === 'Resource'
+      ? theme.colors.badgeResource
+      : theme.colors.badgeCapability;
+
+  return <GeneralBadge backgroundColor={backgroundColor}>{type}</GeneralBadge>;
+};
+
+const DomainBadge = ({ domain }: { domain: string }) => {
+  return (
+    <GeneralBadge backgroundColor={theme.colors.badgeNull}>
+      {domain}
+    </GeneralBadge>
   );
 };
 
 interface IdentifierTypeListProps {
   types: { [identifier: string]: string };
+  paths: { [identifier: string]: string };
   selected: string;
   onSelect: (type: string) => void;
   controls: () => any;
@@ -98,13 +110,12 @@ interface IdentifierTypeListProps {
 }
 const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
   types,
+  paths,
   selected,
   onSelect,
   controls,
   resize,
 }) => {
-  const [showTemplatePopup, toggleShowTemplatePopup] = useState<boolean>(false);
-
   const { selectedResourceAccount } = useProject();
 
   return (
@@ -115,13 +126,14 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
         </ResizeHeading>
         <div
           style={{
-            width: '288px',
+            width: '340px',
             overflow: 'auto',
           }}
         >
           <ul>
             {Object.keys(types).map((key) => {
               const identifierType = types[key];
+              const domain = (paths[key] || '').split('/')[1];
               return (
                 <TypeListItem
                   key={key}
@@ -135,17 +147,7 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
                   >
                     {key}
                     <StorageBadge type={identifierType} />
-                  </Flex>
-                  <Flex>
-                    {identifierType == 'Link' && (
-                      <BottomBarItemInsert
-                        onClick={async () => {
-                          toggleShowTemplatePopup(true);
-                        }}
-                      >
-                        <IoMdAddCircleOutline size="20px" />
-                      </BottomBarItemInsert>
-                    )}
+                    {!!domain && <DomainBadge domain={domain} />}
                   </Flex>
                 </TypeListItem>
               );
@@ -153,12 +155,6 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
           </ul>
         </div>
       </StorageListContainer>
-      <TemplatePopup
-        visible={showTemplatePopup}
-        triggerClose={() => {
-          toggleShowTemplatePopup(false);
-        }}
-      />
     </>
   );
 };
@@ -285,6 +281,7 @@ const AccountState: React.FC<{
         <AccountStateContainer height={storageHeight + resultHeight}>
           <IdentifierTypeList
             types={types}
+            paths={paths}
             selected={selected}
             onSelect={setSelected}
             resize={() => toggleResizingStorage(true)}
