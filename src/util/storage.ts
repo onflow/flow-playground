@@ -1,4 +1,4 @@
-const RESOURCE_TYPES = ['Public', 'Private'];
+const CAPABILITY_TYPES = ['public', 'private'];
 
 // take in the state for an account, return data for resources explorer
 export const getStorageData = (state: string = ''): any => {
@@ -25,9 +25,9 @@ export const getStorageData = (state: string = ''): any => {
 
         const path = `/${domain}/${identifier}`;
         paths[identifier] = path;
-        types[identifier] = RESOURCE_TYPES.includes(identifier)
-          ? 'Resource'
-          : 'Capability';
+        types[identifier] = CAPABILITY_TYPES.includes(domain)
+          ? 'Capability'
+          : 'Resource';
       });
     }
   }
