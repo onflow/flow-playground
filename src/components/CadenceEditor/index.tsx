@@ -121,9 +121,7 @@ const CadenceEditor = (props: any) => {
         editor.focus();
         editor.layout();
 
-        setTimeout(() => {
-          newState.model.setValue(code);
-        }, 100);
+        newState.model.setValue(code);
       }
       editorOnChange.current = editor.onDidChangeModelContent(() => {
         if (project.project?.accounts) {
