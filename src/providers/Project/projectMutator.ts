@@ -89,7 +89,7 @@ export default class ProjectMutator {
     this.projectId = project.id;
     this.isLocal = false;
 
-    this.client.mutate({
+    await this.client.mutate({
       mutation: SET_ACTIVE_PROJECT,
       variables: {
         id: this.projectId,
@@ -193,9 +193,17 @@ export default class ProjectMutator {
         accountId: account.id,
         code: account.draftCode,
       },
-      refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } },
-      ],
+    });
+    const newAccount = res.data.updateAccount;
+
+    this.client.writeData({
+      id: `Account:${account.id}`,
+      data: {
+        __typename: 'Account',
+        state: newAccount.state,
+        deployedCode: newAccount.deployedCode,
+        deployedContracts: newAccount.deployedContracts,
+      },
     });
 
     Mixpanel.track('Contract deployed', {
@@ -358,7 +366,7 @@ export default class ProjectMutator {
 
   async deleteScriptTemplate(templateId: string) {
     if (this.isLocal) {
-      this.createProject();
+      await this.createProject();
     }
 
     const res = await this.client.mutate({

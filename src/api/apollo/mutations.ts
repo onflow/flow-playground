@@ -99,6 +99,7 @@ export const UPDATE_ACCOUNT_DEPLOYED_CODE = gql`
       draftCode
       deployedCode
       deployedContracts
+      state
     }
   }
 `;
