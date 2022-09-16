@@ -153,6 +153,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const updateAccountDeployedCode: any = async () => {
     clearTimeout(timeout);
+    setIsSaving(true);
     const res = await mutator.updateAccountDeployedCode(
       project.accounts[active.index],
       active.index,
@@ -164,7 +165,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     const signer = [acctHex];
     setLastSigners(signer);
 
-    setIsSaving(true);
     timeout = setTimeout(() => {
       setIsSaving(false);
     }, 1000);

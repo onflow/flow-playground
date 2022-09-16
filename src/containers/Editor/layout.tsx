@@ -48,7 +48,7 @@ const EditorLayout: React.FC = () => {
   const [projectIsPlayground, setIsPlayground] = useState(false);
   const {
     project,
-    mutator,
+    updateProject,
     isSavingCode,
     isLoading,
     active,
@@ -229,8 +229,7 @@ const EditorLayout: React.FC = () => {
                   saveText={project.parentId ? 'Fork' : 'Save'}
                   showShare={project.persist}
                   onSave={() =>
-                    mutator.saveProject(
-                      !!project.parentId,
+                    updateProject(
                       project.title,
                       project.description,
                       project.readme,
