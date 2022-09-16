@@ -320,25 +320,22 @@ interface ResourcesBarProps {
 }
 
 const ResourcesBar: React.FC<ResourcesBarProps> = ({ resultHeight }) => {
-  const { project, isLoading, selectedResourceAccount } = useProject();
-
+  const { project, selectedResourceAccount } = useProject();
+  const accountState =
+    project?.accounts?.[storageMap[selectedResourceAccount] || 0]?.state;
   return (
     <FeedbackRoot>
-      {isLoading ? (
-        <p>Loading...</p>
+      {selectedResourceAccount && !!accountState ? (
+        <AccountState
+          state={accountState}
+          selectedResourcesAccount={selectedResourceAccount}
+          renderDeployButton={() => {
+            return <FeedbackActions />;
+          }}
+          resultHeight={resultHeight}
+        />
       ) : (
-        selectedResourceAccount && (
-          <AccountState
-            state={
-              project.accounts[storageMap[selectedResourceAccount] || 0].state
-            }
-            selectedResourcesAccount={selectedResourceAccount}
-            renderDeployButton={() => {
-              return <FeedbackActions />;
-            }}
-            resultHeight={resultHeight}
-          />
-        )
+        <p>Loading...</p>
       )}
     </FeedbackRoot>
   );
