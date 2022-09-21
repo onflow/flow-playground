@@ -56,7 +56,8 @@ const examples = [
       'This tutorial is for the brave and the bold, an opportunity to discover what resources make possible - resources owning other resources. If you can imagine it, you can create it.',
     emoji: '🤠',
     projectLink: 'https://play.onflow.org/01f812d7-799a-42fd-b9cb-9ffe556e02ad',
-    docsLink: 'https://developers.flow.com/cadence/tutorial/10-resources-compose',
+    docsLink:
+      'https://developers.flow.com/cadence/tutorial/10-resources-compose',
   },
   {
     title: 'Voting Contract',
@@ -92,6 +93,14 @@ const Stack = styled.div`
   display: flex;
   flex-direction: column;
   padding: 2rem;
+  max-height: 100%;
+  overflow-y: auto;
+  width: 100%;
+`;
+
+const StackContent = styled.div`
+  max-width: 1330px;
+  margin: 0 auto;
 `;
 
 const Header = styled.div`
@@ -228,59 +237,63 @@ const Examples: React.FC<{
     >
       <WhiteOverlay onClick={triggerClose} />
       <Stack>
-        <Header>
-          <h3>Playground Tutorials</h3>
-          <IoMdClose size={34} onClick={triggerClose} />
-        </Header>
-        <ExampleContainer>
-          {examples.map((_example: any, index: number) => {
-            return (
-              <motion.div
-                variants={exampleItem}
-                key={index}
-                className="full-height"
-              >
-                <Example>
-                  <Text className="emoji">{_example.emoji}</Text>
-                  <Text className="title">{_example.title}</Text>
-                  <Text className="subtitle">{_example.subtitle}</Text>
-                  <Buttons>
-                    <a
-                      title={`Go to documentation for "${_example.title}"`}
-                      href={_example.docsLink}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={() => {
-                        Mixpanel.track('Redirect to project documentation', {
-                          link: _example.docsLink,
-                          title: _example.title,
-                        });
-                      }}
-                    >
-                      <ActionButton className="violet">Read More</ActionButton>
-                    </a>
-                    {_example.projectLink && (
+        <StackContent>
+          <Header>
+            <h3>Playground Tutorials</h3>
+            <IoMdClose size={34} onClick={triggerClose} />
+          </Header>
+          <ExampleContainer>
+            {examples.map((_example: any, index: number) => {
+              return (
+                <motion.div
+                  variants={exampleItem}
+                  key={index}
+                  className="full-height"
+                >
+                  <Example>
+                    <Text className="emoji">{_example.emoji}</Text>
+                    <Text className="title">{_example.title}</Text>
+                    <Text className="subtitle">{_example.subtitle}</Text>
+                    <Buttons>
                       <a
-                        title={`Open "${_example.title}" project in Playground`}
-                        href={_example.projectLink}
+                        title={`Go to documentation for "${_example.title}"`}
+                        href={_example.docsLink}
                         target="_blank"
                         rel="noreferrer"
                         onClick={() => {
-                          Mixpanel.track('Open example project', {
-                            link: _example.projectLink,
+                          Mixpanel.track('Redirect to project documentation', {
+                            link: _example.docsLink,
                             title: _example.title,
                           });
                         }}
                       >
-                        <ActionButton>Open Project</ActionButton>
+                        <ActionButton className="violet">
+                          Read More
+                        </ActionButton>
                       </a>
-                    )}
-                  </Buttons>
-                </Example>
-              </motion.div>
-            );
-          })}
-        </ExampleContainer>
+                      {_example.projectLink && (
+                        <a
+                          title={`Open "${_example.title}" project in Playground`}
+                          href={_example.projectLink}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            Mixpanel.track('Open example project', {
+                              link: _example.projectLink,
+                              title: _example.title,
+                            });
+                          }}
+                        >
+                          <ActionButton>Open Project</ActionButton>
+                        </a>
+                      )}
+                    </Buttons>
+                  </Example>
+                </motion.div>
+              );
+            })}
+          </ExampleContainer>
+        </StackContent>
       </Stack>
     </ExamplesContainer>
   );
