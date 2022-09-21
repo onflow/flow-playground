@@ -3,9 +3,10 @@ import Avatar from 'components/Avatar';
 import { motion } from 'framer-motion';
 import React from 'react';
 import { Account, Project } from 'src/api/apollo/generated/graphql';
+import { ChildProps } from 'src/types';
 import { Badge, Flex, Text, useThemeUI } from 'theme-ui';
 
-export const Outline = ({ children }: { children: React.ReactNode }) => {
+export const Outline = ({ children }: ChildProps) => {
   const { theme } = useThemeUI();
 
   return (
@@ -74,7 +75,6 @@ const AccountSigners: React.FC<{
                 onClick={() => {
                   onChange(i);
                 }}
-                active={true}
               >
                 <motion.div
                   style={{

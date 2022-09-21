@@ -6,6 +6,7 @@ import ProjectMutator from './projectMutator';
 
 import { Account, Project } from 'api/apollo/generated/graphql';
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
+import { ChildProps } from 'src/types';
 import { getParams } from 'util/url';
 
 export enum EntityType {
@@ -70,8 +71,7 @@ export interface ProjectContextValue {
 export const ProjectContext: React.Context<ProjectContextValue> =
   createContext(null);
 
-interface ProjectProviderProps {
-  children: React.ReactNode;
+interface ProjectProviderProps extends ChildProps {
   urlProjectId: string | null;
 }
 

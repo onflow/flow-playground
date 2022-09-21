@@ -2,16 +2,16 @@ import { Account, Project } from 'api/apollo/generated/graphql';
 import AccountAvatars from 'components/AccountAvatars';
 import AccountSigners from 'components/AccountSigners';
 import React, { useEffect } from 'react';
+import { ChildPropsOptional } from 'src/types';
 import { Flex, useThemeUI } from 'theme-ui';
 
-type AccountPickerProps = {
+interface AccountPickerProps extends ChildPropsOptional {
   project: Project;
   accounts: Account[];
   selected: number[];
   onChange: (selected: number[]) => void;
   maxSelection?: number;
-  children?: React.ReactNode;
-};
+}
 
 const AccountPicker = ({
   project,

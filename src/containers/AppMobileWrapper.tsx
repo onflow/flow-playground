@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import React from 'react';
+import { ChildProps } from 'src/types';
 import { Box, Button, Text } from 'theme-ui';
 
 const AppMobileWrapperDiv = styled.div`
@@ -25,11 +26,7 @@ const AppMobileWrapperMessageDiv = styled.div`
   }
 `;
 
-interface AppMobileWrapperProps {
-  children: React.ReactNode;
-}
-
-const AppMobileWrapper: React.FC<AppMobileWrapperProps> = ({ children }) => {
+const AppMobileWrapper = ({ children }: ChildProps) => {
   return (
     <>
       <AppMobileWrapperDiv>{children}</AppMobileWrapperDiv>

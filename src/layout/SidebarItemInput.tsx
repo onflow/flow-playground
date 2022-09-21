@@ -1,17 +1,17 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import React from 'react';
+import { ChildPropsOptional } from 'src/types';
 import theme from '../theme';
 
-type SidebarItemInputProps = {
+interface SidebarItemInputProps extends ChildPropsOptional {
   type: string;
   defaultValue: string;
   active?: boolean;
   onClick?: (e: React.SyntheticEvent<Element, Event>) => any | void;
   onBlur?: (e: React.SyntheticEvent<Element, Event>) => any | void;
-  children?: React.ReactNode;
   readonly?: boolean;
-};
+}
 
 export const SidebarItemInput = styled.input<SidebarItemInputProps>`
   font-family: Overpass, sans-serif;

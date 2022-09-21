@@ -2,7 +2,7 @@
   "name": "flow-playground",
   "private": true,
   "scripts": {
-    "start": "webpack-dev-server -d source-map --mode=development --config webpack.config.js",
+    "start": "webpack-dev-server -d source-map --config webpack.config.js",
     "build": "webpack --mode=production",
     "graphql:codegen": "npx graphql-codegen --config codegen.yml",
     "test": "echo Tests command not implemented.",

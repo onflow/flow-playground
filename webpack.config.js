@@ -7,6 +7,7 @@ const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
+  mode: 'development',
   entry: ['./src/index.tsx', './src/wasm_exec.js'],
   output: {
     filename: 'main.js',

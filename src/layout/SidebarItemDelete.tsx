@@ -1,11 +1,11 @@
-import React from 'react';
 import styled from '@emotion/styled';
+import React from 'react';
+import { ChildPropsOptional } from 'src/types';
 
-type SidebarItemDeleteProps = {
+interface SidebarItemDeleteProps extends ChildPropsOptional {
   active?: boolean;
   onClick?: (e: React.SyntheticEvent<Element, Event>) => any | void;
-  children?: React.ReactNode;
-};
+}
 
 export const SidebarItemDelete = styled.div<SidebarItemDeleteProps>`
   -moz-appearance: none;

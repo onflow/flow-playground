@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { IoIosArrowUp } from 'react-icons/io';
+import { ChildProps } from 'src/types';
 import { Box, Flex, Text } from 'theme-ui';
 
 export const SavedTemplateContainer = styled(motion.div)`
@@ -62,13 +63,11 @@ export const PanelContainer = styled(motion.div)`
   grid-template-areas: 'templates editor';
 `;
 
-export const PanelFooter = ({
-  children,
-  dismiss,
-}: {
+interface PanelFooterProps extends ChildProps {
   dismiss: () => void;
-  children: React.ReactNode;
-}) => {
+}
+
+export const PanelFooter = ({ children, dismiss }: PanelFooterProps) => {
   const [open, setOpen] = useState(false);
   return children ? (
     <motion.div
@@ -150,7 +149,7 @@ export const PanelFooter = ({
   ) : null;
 };
 
-export const EditorHeader = ({ children }: { children: React.ReactNode }) => {
+export const EditorHeader = ({ children }: ChildProps) => {
   return (
     <Flex
       py={1}
@@ -167,11 +166,7 @@ export const EditorHeader = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const EditorPanelMenu = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const EditorPanelMenu = ({ children }: ChildProps) => {
   return (
     <Flex
       p={1}

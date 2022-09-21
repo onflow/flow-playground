@@ -2,16 +2,14 @@ import Avatar from 'components/Avatar';
 import { motion } from 'framer-motion';
 import React from 'react';
 import { Account, Project } from 'src/api/apollo/generated/graphql';
+import { ChildProps } from 'src/types';
 import { Badge, Box, Flex, useThemeUI } from 'theme-ui';
 
-export const AccountAvatar = ({
-  children,
-  onClick,
-}: {
+interface AccountAvatarProps extends ChildProps {
   onClick: (e: any, i: number) => void;
-  active: boolean;
-  children: React.ReactNode;
-}) => {
+}
+
+export const AccountAvatar = ({ children, onClick }: AccountAvatarProps) => {
   return (
     <motion.div>
       <Box
@@ -33,7 +31,7 @@ export const AccountAvatar = ({
   );
 };
 
-export const AvatarList = ({ children }: { children: React.ReactNode }) => {
+export const AvatarList = ({ children }: ChildProps) => {
   return (
     <Flex
       sx={{
@@ -87,7 +85,6 @@ const AccountAvatars: React.FC<{
                       onChange(i);
                     }
               }
-              active={isSelected}
             >
               <motion.div
                 style={{

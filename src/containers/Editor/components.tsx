@@ -40,13 +40,14 @@ import {
 } from './layout-components';
 
 import CadenceEditor from 'components/CadenceEditor';
+import { ChildProps } from 'src/types';
 import { decodeText } from 'util/readme';
 
 export interface WithShowProps {
   show: boolean;
 }
 
-const Header = ({ children }: { children: React.ReactNode }) => {
+const Header = ({ children }: ChildProps) => {
   return (
     <motion.div>
       <Flex
@@ -66,7 +67,7 @@ const Header = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const NavButton = ({ children }: { children: React.ReactNode }) => {
+const NavButton = ({ children }: ChildProps) => {
   return (
     <Button
       variant="secondary"
@@ -80,7 +81,7 @@ const NavButton = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const Nav = ({ children }: { children: React.ReactNode }) => {
+const Nav = ({ children }: ChildProps) => {
   return <Flex>{children}</Flex>;
 };
 
@@ -105,19 +106,21 @@ const ShareButton = ({ url }: { url: string }) => {
   );
 };
 
+type ShareSaveButtonProps = {
+  url: string;
+  saveText: string;
+  showShare: boolean;
+  onSave: () => void;
+  icon: any;
+};
+
 const ShareSaveButton = ({
   url,
   saveText,
   showShare,
   onSave,
   icon,
-}: {
-  url: string;
-  saveText: string;
-  showShare: boolean;
-  onSave: () => void;
-  icon: any;
-}) => {
+}: ShareSaveButtonProps) => {
   const { isSavingCode } = useProject();
   return (
     <Box sx={{ marginRight: '0.5rem' }}>

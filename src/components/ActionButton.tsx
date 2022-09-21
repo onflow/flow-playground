@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
 import React from 'react';
+import { ChildPropsOptional } from 'src/types';
 import { CSSProperties } from 'styled-components';
 import Button from './Button';
 
-interface ActionButtonProps {
-  children?: React.ReactNode;
+interface ActionButtonProps extends ChildPropsOptional {
   onClick?: any;
   className?: string;
   style?: CSSProperties;

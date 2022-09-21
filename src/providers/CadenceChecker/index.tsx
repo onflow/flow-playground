@@ -1,9 +1,10 @@
 import React, { createContext } from 'react';
+import { ChildProps } from 'src/types';
 import useLanguageServer from '../../hooks/useLanguageServer';
 
 export const CadenceCheckerContext: React.Context<any> = createContext(null);
-type Prop = { children: React.ReactNode };
-export default function CadenceChecker(props: Prop) {
+
+export default function CadenceChecker(props: ChildProps) {
   // Connect project to cadence checker hook
   const cadenceChecker = useLanguageServer();
 
