@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react';
-import { Global } from '@emotion/core';
-import { ThemeProvider } from 'theme-ui';
-import { Router, globalHistory } from '@reach/router';
 import { ApolloProvider } from '@apollo/react-hooks';
+import { Global } from '@emotion/react';
+import { globalHistory, Router } from '@reach/router';
+import React, { useEffect } from 'react';
 import 'reset-css';
+import { ThemeProvider } from 'theme-ui';
 
-import * as GoogleAnalytics from 'util/google-analytics';
 import client from 'api/apollo/client';
+import * as GoogleAnalytics from 'util/google-analytics';
 
-import Playground from 'containers/Editor';
-import AppMobileWrapper from 'containers/AppMobileWrapper';
 import BrowserDetector from 'components/BrowserDetector';
+import AppMobileWrapper from 'containers/AppMobileWrapper';
+import Playground from 'containers/Editor';
 
-import FourOhFour from './pages/404';
 import globalStyles from './globalStyles';
+import FourOhFour from './pages/404';
 import theme from './theme';
 
 GoogleAnalytics.initialize(process.env.GA_TRACKING_CODE);

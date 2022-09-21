@@ -4,10 +4,14 @@ import React from 'react';
 import { Account, Project } from 'src/api/apollo/generated/graphql';
 import { Badge, Box, Flex, useThemeUI } from 'theme-ui';
 
-export const AccountAvatar: React.FC<{
+export const AccountAvatar = ({
+  children,
+  onClick,
+}: {
   onClick: (e: any, i: number) => void;
   active: boolean;
-}> = ({ children, onClick }) => {
+  children: React.ReactNode;
+}) => {
   return (
     <motion.div>
       <Box
@@ -29,7 +33,7 @@ export const AccountAvatar: React.FC<{
   );
 };
 
-export const AvatarList: React.FC = ({ children }) => {
+export const AvatarList = ({ children }: { children: React.ReactNode }) => {
   return (
     <Flex
       sx={{

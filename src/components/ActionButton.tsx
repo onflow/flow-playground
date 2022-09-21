@@ -16,7 +16,11 @@ interface ActionButtonProps {
 const ActionButton: React.FC<ActionButtonProps> = (props) => {
   return (
     <motion.div
-      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
       whileTap={{ scale: 0.95 }}
     >
       <Button {...props}>{props.children}</Button>

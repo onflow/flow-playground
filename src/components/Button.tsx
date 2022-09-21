@@ -10,6 +10,7 @@ interface StyledButtonProps {
   className?: string;
   onClick?: any;
   variant: string;
+  children: React.ReactNode;
 }
 
 const StyledButton: React.FC<StyledButtonProps> = styled(ThemedButton)`

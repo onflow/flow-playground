@@ -1,6 +1,6 @@
+import { navigate, RouteComponentProps } from '@reach/router';
 import React from 'react';
-import { Box, Text, Button } from 'theme-ui';
-import { RouteComponentProps, navigate } from '@reach/router';
+import { Box, Button, Text } from 'theme-ui';
 
 interface ProjectProps extends RouteComponentProps {
   '*'?: string;

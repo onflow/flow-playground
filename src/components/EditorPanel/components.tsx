@@ -38,7 +38,7 @@ export const Template = styled(motion.div)`
       props.isSelected
         ? props.theme.colors.primary
         : props.theme.colors.border};
-  background: ${(props) =>
+  background: ${(props: any) =>
     props.isSelected ? 'white' : props.theme.colors.border};
   border-right: none;
   border-top-left-radius: 0.5rem;
@@ -62,9 +62,12 @@ export const PanelContainer = styled(motion.div)`
   grid-template-areas: 'templates editor';
 `;
 
-export const PanelFooter: React.FC<{ dismiss: () => void }> = ({
+export const PanelFooter = ({
   children,
   dismiss,
+}: {
+  dismiss: () => void;
+  children: React.ReactNode;
 }) => {
   const [open, setOpen] = useState(false);
   return children ? (
@@ -147,7 +150,7 @@ export const PanelFooter: React.FC<{ dismiss: () => void }> = ({
   ) : null;
 };
 
-export const EditorHeader: React.FC = ({ children }) => {
+export const EditorHeader = ({ children }: { children: React.ReactNode }) => {
   return (
     <Flex
       py={1}
@@ -164,7 +167,11 @@ export const EditorHeader: React.FC = ({ children }) => {
   );
 };
 
-export const EditorPanelMenu: React.FC = ({ children }) => {
+export const EditorPanelMenu = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   return (
     <Flex
       p={1}

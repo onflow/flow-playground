@@ -64,11 +64,13 @@ module.exports = {
     ],
   },
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    disableHostCheck: true,
+    static: './dist',
+    allowedHosts: 'all',
     historyApiFallback: true,
-    writeToDisk: true,
     port: 3000,
+    devMiddleware: {
+      writeToDisk: true,
+    },
   },
   plugins: [
     new CleanWebpackPlugin(),

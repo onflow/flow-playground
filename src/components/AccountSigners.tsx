@@ -5,7 +5,7 @@ import React from 'react';
 import { Account, Project } from 'src/api/apollo/generated/graphql';
 import { Badge, Flex, Text, useThemeUI } from 'theme-ui';
 
-export const Outline: React.FC = ({ children }) => {
+export const Outline = ({ children }: { children: React.ReactNode }) => {
   const { theme } = useThemeUI();
 
   return (
@@ -35,14 +35,8 @@ const AccountSigners: React.FC<{
   accounts: Account[];
   maxSelection?: number;
 }> = (props) => {
-  const {
-    multi,
-    selectedAccounts,
-    accounts,
-    project,
-    onChange,
-    maxSelection,
-  } = props;
+  const { multi, selectedAccounts, accounts, project, onChange, maxSelection } =
+    props;
   if (!multi) {
     throw new Error('Must include multi prop.');
   }
@@ -70,53 +64,55 @@ const AccountSigners: React.FC<{
 
   return (
     <AvatarList>
-      {selectedAccounts.map((i: number) => {
-        const account = accounts[i];
-        return (
-          <motion.div key={account.address}>
-            <AccountAvatar
-              key={account.id}
-              onClick={() => {
-                onChange(i);
-              }}
-              active={true}
-            >
-              <motion.div
-                style={{
-                  cursor: 'pointer',
-                  borderRadius: '50%',
-                  boxShadow: `0px 0px 0px 3px ${theme.colors.primary}`,
+      <>
+        {selectedAccounts.map((i: number) => {
+          const account = accounts[i];
+          return (
+            <motion.div key={account.address}>
+              <AccountAvatar
+                key={account.id}
+                onClick={() => {
+                  onChange(i);
                 }}
-                whileHover={{ scale: 1.05 }}
+                active={true}
               >
-                <Avatar
-                  seed={project.seed}
-                  index={i}
+                <motion.div
                   style={{
-                    width: '35px',
-                    height: '35px',
-                    display: 'block',
-                    borderRadius: '0 0 20px 20px',
+                    cursor: 'pointer',
+                    borderRadius: '50%',
+                    boxShadow: `0px 0px 0px 3px ${theme.colors.primary}`,
                   }}
-                />
-                <Badge
-                  px="5px"
-                  sx={{
-                    fontSize: 3,
-                    backgroundColor: theme.colors.primary,
-                    position: 'absolute',
-                    left: '-2px',
-                    bottom: '-1px',
-                  }}
+                  whileHover={{ scale: 1.05 }}
                 >
-                  0x{account.address.slice(-2)}
-                </Badge>
-              </motion.div>
-            </AccountAvatar>
-          </motion.div>
-        );
-      })}
-      {renderOutlines()}
+                  <Avatar
+                    seed={project.seed}
+                    index={i}
+                    style={{
+                      width: '35px',
+                      height: '35px',
+                      display: 'block',
+                      borderRadius: '0 0 20px 20px',
+                    }}
+                  />
+                  <Badge
+                    px="5px"
+                    sx={{
+                      fontSize: 3,
+                      backgroundColor: theme.colors.primary,
+                      position: 'absolute',
+                      left: '-2px',
+                      bottom: '-1px',
+                    }}
+                  >
+                    0x{account.address.slice(-2)}
+                  </Badge>
+                </motion.div>
+              </AccountAvatar>
+            </motion.div>
+          );
+        })}
+        {renderOutlines()}
+      </>
     </AvatarList>
   );
 };

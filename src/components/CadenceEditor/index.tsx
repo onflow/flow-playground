@@ -192,7 +192,7 @@ const CadenceEditor = (props: any) => {
 
   return (
     <EditorContainer id={MONACO_CONTAINER_ID} show={props.show}>
-      <ControlPanel editor={editor} />
+      {!!editor && <ControlPanel editor={editor} />}
       <Notifications />
     </EditorContainer>
   );

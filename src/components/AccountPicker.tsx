@@ -10,16 +10,17 @@ type AccountPickerProps = {
   selected: number[];
   onChange: (selected: number[]) => void;
   maxSelection?: number;
+  children?: React.ReactNode;
 };
 
-const AccountPicker: React.FC<AccountPickerProps> = ({
+const AccountPicker = ({
   project,
   accounts,
   selected,
   onChange,
   maxSelection = 4,
   children,
-}) => {
+}: AccountPickerProps) => {
   const { theme } = useThemeUI();
   const handleOnChange = (i: number) => {
     if (selected.includes(i)) {

@@ -67,9 +67,8 @@ export interface ProjectContextValue {
   isSavingCode: boolean;
 }
 
-export const ProjectContext: React.Context<ProjectContextValue> = createContext(
-  null,
-);
+export const ProjectContext: React.Context<ProjectContextValue> =
+  createContext(null);
 
 interface ProjectProviderProps {
   children: React.ReactNode;

@@ -56,7 +56,8 @@ const examples = [
       'This tutorial is for the brave and the bold, an opportunity to discover what resources make possible - resources owning other resources. If you can imagine it, you can create it.',
     emoji: '🤠',
     projectLink: 'https://play.onflow.org/01f812d7-799a-42fd-b9cb-9ffe556e02ad',
-    docsLink: 'https://developers.flow.com/cadence/tutorial/10-resources-compose',
+    docsLink:
+      'https://developers.flow.com/cadence/tutorial/10-resources-compose',
   },
   {
     title: 'Voting Contract',
