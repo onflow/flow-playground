@@ -54,10 +54,6 @@ const MenuList: React.FC<MenuListProps> = ({
   };
 
   useEffect(() => {
-    setEditing([]);
-  }, [items, active]);
-
-  useEffect(() => {
     if (enterPressed || escapePressed) {
       setEditing([]);
       isEditing.current?.blur();
