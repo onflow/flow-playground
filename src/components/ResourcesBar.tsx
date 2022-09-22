@@ -6,6 +6,7 @@ import { SidebarItemInsert } from 'layout/SidebarItemInsert';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useState } from 'react';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
+import { ChildProps } from 'src/types';
 import { Badge, Box, Divider, Flex } from 'theme-ui';
 import { storageMap } from 'util/accounts';
 import { getStorageData } from 'util/storage';
@@ -55,13 +56,11 @@ interface StorageBadgeProps {
   type: string;
 }
 
-const GeneralBadge = ({
-  backgroundColor,
-  children,
-}: {
+interface GeneralBadgeProps extends ChildProps {
   backgroundColor: string;
-  children: React.ReactNode;
-}) => {
+}
+
+const GeneralBadge = ({ backgroundColor, children }: GeneralBadgeProps) => {
   return (
     <Badge
       variant="outline"

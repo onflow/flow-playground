@@ -40,13 +40,14 @@ import {
 } from './layout-components';
 
 import CadenceEditor from 'components/CadenceEditor';
+import { ChildProps } from 'src/types';
 import { decodeText } from 'util/readme';
 
 export interface WithShowProps {
   show: boolean;
 }
 
-const Header: React.FC = ({ children }) => {
+const Header = ({ children }: ChildProps) => {
   return (
     <motion.div>
       <Flex
@@ -66,7 +67,7 @@ const Header: React.FC = ({ children }) => {
   );
 };
 
-const NavButton: React.FC = ({ children }) => {
+const NavButton = ({ children }: ChildProps) => {
   return (
     <Button
       variant="secondary"
@@ -80,11 +81,11 @@ const NavButton: React.FC = ({ children }) => {
   );
 };
 
-const Nav: React.FC = ({ children }) => {
+const Nav = ({ children }: ChildProps) => {
   return <Flex>{children}</Flex>;
 };
 
-const ShareButton: React.FC<{ url: string }> = ({ url }) => {
+const ShareButton = ({ url }: { url: string }) => {
   const [isCopied, setCopied] = useClipboard(url, { successDuration: 2000 });
   return (
     <Flex
@@ -105,13 +106,21 @@ const ShareButton: React.FC<{ url: string }> = ({ url }) => {
   );
 };
 
-const ShareSaveButton: React.FC<{
+type ShareSaveButtonProps = {
   url: string;
   saveText: string;
   showShare: boolean;
   onSave: () => void;
   icon: any;
-}> = ({ url, saveText, showShare, onSave, icon }) => {
+};
+
+const ShareSaveButton = ({
+  url,
+  saveText,
+  showShare,
+  onSave,
+  icon,
+}: ShareSaveButtonProps) => {
   const { isSavingCode } = useProject();
   return (
     <Box sx={{ marginRight: '0.5rem' }}>
@@ -160,11 +169,11 @@ const calculateSize = (readme: string) => {
   return size >= MAX_DESCRIPTION_SIZE;
 };
 
-const EditorContainer: React.FC<EditorContainerProps> = ({
+const EditorContainer = ({
   isLoading,
   project,
   active,
-}) => {
+}: EditorContainerProps) => {
   const [title, setTitle] = useState<string | undefined>(
     decodeText(project.title),
   );
@@ -301,7 +310,7 @@ type EditorTitleProps = {
   type: EntityType;
 };
 
-const EditorTitle: React.FC<EditorTitleProps> = ({ type }) => {
+const EditorTitle = ({ type }: EditorTitleProps) => {
   return (
     <Heading>
       {type === EntityType.Account && 'Contract'}

@@ -80,7 +80,8 @@ export const getFullAccountList = (
 };
 
 export const getArgumentsFromTemplate = (template: string) => {
-  const pattern = /(?:transaction\s*\()(.*)(?:\).*)|(?:fun main\()(.*)(?:\).*)/g;
+  const pattern =
+    /(?:transaction\s*\()(.*)(?:\).*)|(?:fun main\()(.*)(?:\).*)/g;
   const result = pattern.exec(template);
 
   if (result) {

@@ -12,7 +12,10 @@ export type Line = {
   label?: string;
 };
 
-export const is = (tag: Tag) => (line: Line): Boolean => line.tag === tag;
+export const is =
+  (tag: Tag) =>
+  (line: Line): Boolean =>
+    line.tag === tag;
 export const isError = is(Tag.ERROR);
 export const isLog = is(Tag.LOG);
 export const isValue = is(Tag.VALUE);

@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
 import React from 'react';
+import { ChildPropsOptional } from 'src/types';
 import { CSSProperties } from 'styled-components';
 import Button from './Button';
 
-interface ActionButtonProps {
-  children?: React.ReactNode;
+interface ActionButtonProps extends ChildPropsOptional {
   onClick?: any;
   className?: string;
   style?: CSSProperties;
@@ -16,7 +16,11 @@ interface ActionButtonProps {
 const ActionButton: React.FC<ActionButtonProps> = (props) => {
   return (
     <motion.div
-      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
       whileTap={{ scale: 0.95 }}
     >
       <Button {...props}>{props.children}</Button>

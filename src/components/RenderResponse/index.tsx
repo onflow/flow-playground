@@ -22,9 +22,9 @@ export const RenderResponse: React.FC<{
     <Root resultType={resultType}>
       {!loading &&
         !error &&
-        data.cachedExecutionResults[
-          resultType
-        ].map((line: LineType, n: number) => <Line {...line} key={n} />)}
+        data.cachedExecutionResults[resultType].map(
+          (line: LineType, n: number) => <Line {...line} key={n} />,
+        )}
     </Root>
   );
 };

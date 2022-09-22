@@ -1,16 +1,17 @@
 import React from 'react';
+import { ChildProps } from 'src/types';
 import { Flex } from 'theme-ui';
 
 import {
-  TemplatesContainer,
-  Template,
-  PanelContainer,
-  PanelFooter,
   EditorHeader,
   EditorPanelMenu,
+  PanelContainer,
+  PanelFooter,
+  Template,
+  TemplatesContainer,
 } from './components';
 
-const EditorPanel: React.FC = ({ children }) => {
+const EditorPanel = ({ children }: ChildProps) => {
   return (
     <Flex
       sx={{ flexDirection: 'column', height: '100%', width: '100%' }}

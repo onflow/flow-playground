@@ -2,10 +2,11 @@ import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 import React from 'react';
 import { FaSpinner } from 'react-icons/fa';
+import { ChildProps, ChildPropsOptional } from 'src/types';
 import { CSSProperties } from 'styled-components';
 import { Button as ThemedButton } from 'theme-ui';
 
-interface StyledButtonProps {
+interface StyledButtonProps extends ChildProps {
   style?: CSSProperties;
   className?: string;
   onClick?: any;
@@ -57,8 +58,7 @@ const StyledButton: React.FC<StyledButtonProps> = styled(ThemedButton)`
     variant === 'buttons.disabled' ? 'not-allowed !important' : 'pointer'};
 `;
 
-interface ButtonProps {
-  children?: React.ReactNode;
+interface ButtonProps extends ChildPropsOptional {
   onClick?: any;
   className?: string;
   style?: CSSProperties;
