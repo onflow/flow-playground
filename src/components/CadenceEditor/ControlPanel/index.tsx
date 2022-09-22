@@ -65,7 +65,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // ===========================================================================
   // GLOBAL HOOKS
   const { languageClient } = useContext(CadenceCheckerContext);
-  const { project, active, isSavingCode } = useProject();
+  const { project, active, showSavingMessage } = useProject();
 
   // HOOKS  -------------------------------------------------------------------
   const [executionArguments, setExecutionArguments] = useState({});
@@ -366,7 +366,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       break;
   }
 
-  const progress = isSavingCode || processingStatus;
+  const progress = showSavingMessage || processingStatus;
   if (progress) {
     statusIcon = <FaSpinner className="spin" />;
     statusMessage = 'Please, wait...';
