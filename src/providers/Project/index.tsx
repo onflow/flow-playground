@@ -60,6 +60,7 @@ export interface ProjectContextValue {
   createScriptExecution: (args?: string[]) => Promise<any>;
   active: ActiveEditor;
   setActive: (type: EntityType, index: number) => void;
+  getActiveCode: () => [string, number];
   selectedResourceAccount: string;
   setSelectedResourceAccount: (account: string) => void;
   lastSigners: string[];
@@ -342,6 +343,32 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     }
   };
 
+  // "getActiveCode" is used to read Cadence code from active(selected) item
+  const getActiveCode: () => [string, number] = () => {
+    const { accounts, scriptTemplates, transactionTemplates } = project;
+
+    const { type, index } = active;
+    let code: string, id: number;
+    switch (type) {
+      case EntityType.Account:
+        code = accounts[index].draftCode;
+        id = accounts[index].id;
+        break;
+      case EntityType.TransactionTemplate:
+        code = transactionTemplates[index].script;
+        id = transactionTemplates[index].id;
+        break;
+      case EntityType.ScriptTemplate:
+        code = scriptTemplates[index].script;
+        id = scriptTemplates[index].id;
+        break;
+      default:
+        code = '';
+        id = 8;
+    }
+    return [code, id];
+  };
+
   const activeEditor = getActiveEditor();
 
   const location = useLocation();
@@ -481,6 +508,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         setActive: (type: EntityType, index: number) => {
           setActive({ type, index });
         },
+        getActiveCode,
         selectedResourceAccount,
         setSelectedResourceAccount: (account: string) => {
           setSelectedResourceAccount(account);
