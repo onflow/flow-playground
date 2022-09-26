@@ -112,7 +112,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [transactionAccounts, setTransactionAccounts] = useState<number[]>([0]);
   const [isSavingCode, setIsSaving] = useState(false);
-  const showSavingMessageTimeoutRef = useRef<number>(null);
+  const showSavingMessageTimeoutRef = useRef<NodeJS.Timeout>(null);
   const [showSavingMessage, setShowSavingMessage] = useState(false);
   const [lastSigners, setLastSigners] = useState(null);
 
@@ -420,11 +420,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         code = scriptTemplates[index].script;
         id = scriptTemplates[index].id;
         break;
-      default:
-        code = '';
-        id = 8;
     }
-    return [code, id];
+    return [code || '', id || 8];
   };
 
   const activeEditor = getActiveEditor();

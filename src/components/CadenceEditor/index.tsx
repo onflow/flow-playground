@@ -35,7 +35,7 @@ const CadenceEditor = (props: any) => {
    */
 
   // This method is used to retrieve previous MonacoEditor state
-  const getOrCreateEditorState = (id: string, code: string): EditorState => {
+  const getOrCreateEditorState = (id: number, code: string): EditorState => {
     const existingState = editorStates[id];
 
     if (existingState !== undefined) {
