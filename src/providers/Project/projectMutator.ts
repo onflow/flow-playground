@@ -193,17 +193,11 @@ export default class ProjectMutator {
         accountId: account.id,
         code: account.draftCode,
       },
-    });
-    const newAccount = res.data.updateAccount;
-
-    this.client.writeData({
-      id: `Account:${account.id}`,
-      data: {
-        __typename: 'Account',
-        state: newAccount.state,
-        deployedCode: newAccount.deployedCode,
-        deployedContracts: newAccount.deployedContracts,
-      },
+      // Redeploying code affects all accounts and requires a project refetch
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
+      awaitRefetchQueries: true,
     });
 
     Mixpanel.track('Contract deployed', {
