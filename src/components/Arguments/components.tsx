@@ -244,18 +244,20 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
   active = true,
   onClick,
 }) => {
-  const { project, active: activeEditor } = useProject();
+  const {
+    project,
+    active: activeEditor,
+    getActiveCode,
+    showSavingMessage,
+  } = useProject();
   const label = getLabel(type, project, activeEditor);
-  const { isSavingCode } = useProject();
-  const sendingTransaction = false;
-
+  const code = getActiveCode()[0].trim();
   return (
     <Controls>
       <Button
         onClick={onClick}
         Icon={FaArrowCircleRight}
-        disabled={isSavingCode || !active}
-        isLoading={sendingTransaction}
+        disabled={showSavingMessage || !active || code.length === 0}
       >
         {label}
       </Button>

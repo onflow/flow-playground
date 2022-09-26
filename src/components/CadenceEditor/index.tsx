@@ -1,7 +1,6 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
 
@@ -36,7 +35,7 @@ const CadenceEditor = (props: any) => {
    */
 
   // This method is used to retrieve previous MonacoEditor state
-  const getOrCreateEditorState = (id: string, code: string): EditorState => {
+  const getOrCreateEditorState = (id: number, code: string): EditorState => {
     const existingState = editorStates[id];
 
     if (existingState !== undefined) {
@@ -56,33 +55,6 @@ const CadenceEditor = (props: any) => {
     return newState;
   };
 
-  // "getActiveCode" is used to read Cadence code from active(selected) item
-  const getActiveCode = () => {
-    const { active } = project;
-    const { accounts, scriptTemplates, transactionTemplates } = project.project;
-
-    const { type, index } = active;
-    let code, id;
-    switch (type) {
-      case EntityType.Account:
-        code = accounts[index].draftCode;
-        id = accounts[index].id;
-        break;
-      case EntityType.TransactionTemplate:
-        code = transactionTemplates[index].script;
-        id = transactionTemplates[index].id;
-        break;
-      case EntityType.ScriptTemplate:
-        code = scriptTemplates[index].script;
-        id = scriptTemplates[index].id;
-        break;
-      default:
-        code = '';
-        id = 8;
-    }
-    return [code, id];
-  };
-
   const setupEditor = () => {
     const projectExist = project && project.project.accounts;
     if (editor && projectExist) {
@@ -93,7 +65,7 @@ const CadenceEditor = (props: any) => {
       // To pick up new changes in accounts, we will track project's active item and then add and remove
       // new line at EOF to trick Language Client to send code changes and reimport the latest changes,
       // clearing errors and warning about missing fields.
-      const [code, newId] = getActiveCode();
+      const [code, newId] = project.getActiveCode();
       const newState = getOrCreateEditorState(newId, code);
       if (
         lastEdit.current.type == project.active.type &&
@@ -157,7 +129,7 @@ const CadenceEditor = (props: any) => {
       },
     });
 
-    const [code] = getActiveCode();
+    const [code] = project.getActiveCode();
     const model = monaco.editor.createModel(code, CADENCE_LANGUAGE_ID);
     const state: EditorState = {
       model,

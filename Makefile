@@ -31,12 +31,12 @@ format:
 	$(EXEC) sh -c 'npm run format:check:app || exit 255'
 
 .PHONY: types
-format:
+types:
 	$(info Task: types)
 	$(EXEC) sh -c 'npm run types || exit 255'
 
 .PHONY: lint
-format:
+lint:
 	$(info Task: lint)
 	$(EXEC) sh -c 'npm run lint || exit 255'
 
@@ -51,4 +51,4 @@ test:
 	$(EXEC) sh -c 'npm run test || exit 255'
 
 .PHONY: ci
-ci: clean install format build test
+ci: clean install format types build test
