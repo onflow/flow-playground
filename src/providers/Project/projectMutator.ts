@@ -26,6 +26,9 @@ import {
   unregisterOnCloseSaveMessage,
 } from 'util/onclose';
 
+// TODO: Switch to directives for serialization keys after upgrading to the newest Apollo/apollo-link-serialize
+export const PROJECT_SERIALIZATION_KEY = 'PROJECT_SERIALIZATION_KEY';
+
 export default class ProjectMutator {
   client: ApolloClient<object>;
   projectId: string | null = null;
@@ -82,6 +85,9 @@ export default class ProjectMutator {
         transactionTemplates: transactionTemplates,
         scriptTemplates: scriptTemplates,
       },
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
     });
 
     const project = data.project;
@@ -92,9 +98,10 @@ export default class ProjectMutator {
     await this.client.mutate({
       mutation: SET_ACTIVE_PROJECT,
       variables: {
-        id: this.projectId,
+        id: project.id,
       },
     });
+
     Mixpanel.people.set({
       projectId: project.id,
     });
@@ -135,7 +142,7 @@ export default class ProjectMutator {
       },
       context: {
         debounceKey: key,
-        serializationKey: key,
+        serializationKey: PROJECT_SERIALIZATION_KEY,
       },
     });
 
@@ -173,7 +180,7 @@ export default class ProjectMutator {
       },
       context: {
         debounceKey: key,
-        serializationKey: key,
+        serializationKey: PROJECT_SERIALIZATION_KEY,
       },
       fetchPolicy: 'no-cache',
     });
@@ -198,6 +205,9 @@ export default class ProjectMutator {
         { query: GET_PROJECT, variables: { projectId: this.projectId } },
       ],
       awaitRefetchQueries: true,
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
     });
 
     Mixpanel.track('Contract deployed', {
@@ -205,6 +215,7 @@ export default class ProjectMutator {
       accountId: account.id,
       code: account.draftCode,
     });
+
     return res;
   }
 
@@ -238,7 +249,7 @@ export default class ProjectMutator {
       },
       context: {
         debounceKey: key,
-        serializationKey: key,
+        serializationKey: PROJECT_SERIALIZATION_KEY,
       },
       fetchPolicy: 'no-cache',
     });
@@ -268,6 +279,10 @@ export default class ProjectMutator {
       refetchQueries: [
         { query: GET_PROJECT, variables: { projectId: this.projectId } },
       ],
+      awaitRefetchQueries: true,
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
     });
     Mixpanel.track('Transaction template executed', {
       projectId: this.projectId,
@@ -293,6 +308,9 @@ export default class ProjectMutator {
         { query: GET_PROJECT, variables: { projectId: this.projectId } },
       ],
       awaitRefetchQueries: true,
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
     });
 
     Mixpanel.track('Transaction template created', {
@@ -333,7 +351,7 @@ export default class ProjectMutator {
       },
       context: {
         debounceKey: key,
-        serializationKey: key,
+        serializationKey: PROJECT_SERIALIZATION_KEY,
       },
       fetchPolicy: 'no-cache',
     });
@@ -341,7 +359,7 @@ export default class ProjectMutator {
 
   async deleteTransactionTemplate(templateId: string) {
     if (this.isLocal) {
-      this.createProject();
+      await this.createProject();
     }
 
     const res = await this.client.mutate({
@@ -353,6 +371,10 @@ export default class ProjectMutator {
       refetchQueries: [
         { query: GET_PROJECT, variables: { projectId: this.projectId } },
       ],
+      awaitRefetchQueries: true,
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
     });
 
     return res;
@@ -372,6 +394,10 @@ export default class ProjectMutator {
       refetchQueries: [
         { query: GET_PROJECT, variables: { projectId: this.projectId } },
       ],
+      awaitRefetchQueries: true,
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
     });
 
     return res;
@@ -389,11 +415,15 @@ export default class ProjectMutator {
         script,
         arguments: args,
       },
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
     });
     Mixpanel.track('Script template executed', {
       projectId: this.projectId,
       script,
     });
+
     return res;
   }
 
@@ -413,6 +443,9 @@ export default class ProjectMutator {
         { query: GET_PROJECT, variables: { projectId: this.projectId } },
       ],
       awaitRefetchQueries: true,
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
     });
 
     Mixpanel.track('Script template created', {

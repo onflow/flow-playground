@@ -2,7 +2,7 @@ import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { navigate, Redirect, useLocation } from '@reach/router';
 import React, { createContext, useEffect, useRef, useState } from 'react';
 import useGetProject from './projectHooks';
-import ProjectMutator from './projectMutator';
+import ProjectMutator, { PROJECT_SERIALIZATION_KEY } from './projectMutator';
 
 import { Account, Project } from 'api/apollo/generated/graphql';
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
@@ -85,7 +85,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const {
     data: { activeProject, activeProjectId },
-  } = useQuery(GET_ACTIVE_PROJECT);
+  } = useQuery(GET_ACTIVE_PROJECT, {
+    context: {
+      serializationKey: PROJECT_SERIALIZATION_KEY,
+    },
+  });
 
   const projectId = activeProjectId || urlProjectId;
 

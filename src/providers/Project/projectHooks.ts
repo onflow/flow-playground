@@ -1,11 +1,12 @@
-import { useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
+import { useContext } from 'react';
 
-import { GET_PROJECT, GET_LOCAL_PROJECT } from 'api/apollo/queries';
+import { GET_LOCAL_PROJECT, GET_PROJECT } from 'api/apollo/queries';
 
 import { Project } from 'api/apollo/generated/graphql';
 import { ProjectContext, ProjectContextValue } from './index';
 import { createDefaultProject, createLocalProject } from './projectDefault';
+import { PROJECT_SERIALIZATION_KEY } from './projectMutator';
 
 function writeDefaultProject(client: any) {
   const defaultProject = createDefaultProject();
@@ -62,6 +63,9 @@ export default function useGetProject(
     variables: { projectId: projectId },
     // skip remote query if this is a new project
     skip: isNewProject,
+    context: {
+      serializationKey: PROJECT_SERIALIZATION_KEY,
+    },
   });
 
   if (isNewProject) {
