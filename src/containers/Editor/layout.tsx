@@ -49,7 +49,7 @@ const EditorLayout: React.FC = () => {
   const {
     project,
     updateProject,
-    showSavingMessage,
+    isSavingCode,
     isLoading,
     active,
     setSelectedResourceAccount,
@@ -197,7 +197,7 @@ const EditorLayout: React.FC = () => {
                 }}
               >
                 <AnimatePresence exitBeforeEnter>
-                  {project && project.persist && showSavingMessage && (
+                  {project && project.persist && isSavingCode && (
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -209,7 +209,7 @@ const EditorLayout: React.FC = () => {
                       Autosaving...
                     </motion.div>
                   )}
-                  {project && project.persist && !showSavingMessage && (
+                  {project && project.persist && !isSavingCode && (
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}

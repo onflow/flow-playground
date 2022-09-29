@@ -98,7 +98,7 @@ export const getLabel = (
 };
 
 export const useTemplateType = (): ProcessingArgs => {
-  const { showSavingMessage } = useProject();
+  const { isSavingCode } = useProject();
   const {
     createScriptExecution,
     createTransactionExecution,
@@ -106,7 +106,7 @@ export const useTemplateType = (): ProcessingArgs => {
   } = useProject();
 
   return {
-    disabled: showSavingMessage,
+    disabled: isSavingCode,
     scriptFactory: createScriptExecution,
     transactionFactory: createTransactionExecution,
     contractDeployment: updateAccountDeployedCode,
