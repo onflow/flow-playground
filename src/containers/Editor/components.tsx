@@ -121,7 +121,7 @@ const ShareSaveButton = ({
   onSave,
   icon,
 }: ShareSaveButtonProps) => {
-  const { showSavingMessage } = useProject();
+  const { isSavingCode } = useProject();
   return (
     <Box sx={{ marginRight: '0.5rem' }}>
       {showShare ? (
@@ -129,7 +129,7 @@ const ShareSaveButton = ({
       ) : (
         <FlowButton
           onClick={() => onSave()}
-          disabled={showSavingMessage}
+          disabled={isSavingCode}
           Icon={icon}
         >
           {saveText}

@@ -1,6 +1,6 @@
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { navigate, Redirect, useLocation } from '@reach/router';
-import React, { createContext, useEffect, useRef, useState } from 'react';
+import React, { createContext, useState } from 'react';
 import useGetProject from './projectHooks';
 import ProjectMutator, { PROJECT_SERIALIZATION_KEY } from './projectMutator';
 
@@ -67,7 +67,6 @@ export interface ProjectContextValue {
   setLastSigners: (signers: string[]) => void;
   transactionAccounts: number[];
   isSavingCode: boolean;
-  showSavingMessage: boolean;
 }
 
 export const ProjectContext: React.Context<ProjectContextValue> =
@@ -116,8 +115,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [transactionAccounts, setTransactionAccounts] = useState<number[]>([0]);
   const [isSavingCode, setIsSaving] = useState(false);
-  const showSavingMessageTimeoutRef = useRef<NodeJS.Timeout>(null);
-  const [showSavingMessage, setShowSavingMessage] = useState(false);
   const [lastSigners, setLastSigners] = useState(null);
 
   const [selectedResourceAccount, setSelectedResourceAccount] = useState<
@@ -138,23 +135,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   );
 
   const showError = () => alert('Something went wrong, please try again');
-
-  // Update showSavingMessage based on isSavingCode. Delay the switch to false by 1 second
-  useEffect(() => {
-    clearTimeout(showSavingMessageTimeoutRef.current);
-
-    if (isSavingCode === true) {
-      setShowSavingMessage(true);
-    } else {
-      showSavingMessageTimeoutRef.current = setTimeout(() => {
-        setShowSavingMessage(false);
-      }, 1000);
-    }
-
-    return () => {
-      clearTimeout(showSavingMessageTimeoutRef.current);
-    };
-  }, [isSavingCode]);
 
   const updateProject: any = async (
     title: string,
@@ -549,7 +529,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         project,
         isLoading,
         mutator,
-        showSavingMessage,
         isSavingCode,
         updateProject,
         updateAccountDeployedCode,

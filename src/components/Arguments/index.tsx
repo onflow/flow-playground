@@ -141,7 +141,7 @@ type ProcessingArgs = {
 };
 
 const useTemplateType = (): ProcessingArgs => {
-  const { showSavingMessage } = useProject();
+  const { isSavingCode } = useProject();
   const {
     createScriptExecution,
     createTransactionExecution,
@@ -149,7 +149,7 @@ const useTemplateType = (): ProcessingArgs => {
   } = useProject();
 
   return {
-    disabled: showSavingMessage,
+    disabled: isSavingCode,
     scriptFactory: createScriptExecution,
     transactionFactory: createTransactionExecution,
     contractDeployment: updateAccountDeployedCode,
@@ -218,7 +218,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const {
     project,
     active,
-    showSavingMessage,
+    isSavingCode,
     lastSigners,
     // updateAccountDeployedCode
   } = useProject();
@@ -356,7 +356,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   let statusIcon = isOk ? <FaRegCheckCircle /> : <FaRegTimesCircle />;
   let statusMessage = isOk ? 'Ready' : 'Fix errors';
 
-  const progress = showSavingMessage || processingStatus;
+  const progress = isSavingCode || processingStatus;
 
   if (progress) {
     statusIcon = <FaSpinner className="spin" />;

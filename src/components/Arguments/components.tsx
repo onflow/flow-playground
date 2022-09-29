@@ -248,7 +248,7 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
     project,
     active: activeEditor,
     getActiveCode,
-    showSavingMessage,
+    isSavingCode,
   } = useProject();
   const label = getLabel(type, project, activeEditor);
   const code = getActiveCode()[0].trim();
@@ -257,7 +257,7 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
       <Button
         onClick={onClick}
         Icon={FaArrowCircleRight}
-        disabled={showSavingMessage || !active || code.length === 0}
+        disabled={isSavingCode || !active || code.length === 0}
       >
         {label}
       </Button>
