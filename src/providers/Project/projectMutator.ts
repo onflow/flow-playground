@@ -25,6 +25,7 @@ import {
   registerOnCloseSaveMessage,
   unregisterOnCloseSaveMessage,
 } from 'util/onclose';
+import { DEFAULT_ACCOUNT_STATE } from './projectDefault';
 
 // TODO: Switch to directives for serialization keys after upgrading to the newest Apollo/apollo-link-serialize
 export const PROJECT_SERIALIZATION_KEY = 'PROJECT_SERIALIZATION_KEY';
@@ -94,6 +95,15 @@ export default class ProjectMutator {
 
     this.projectId = project.id;
     this.isLocal = false;
+
+    // TODO: this writeQuery is required to avoid having the active GET_PROJECT hook refetch unnecessarily. Investigate further after switching to Apollo 3
+    this.client.writeQuery({
+      query: GET_PROJECT,
+      variables: {
+        projectId: project.id,
+      },
+      data,
+    });
 
     await this.client.mutate({
       mutation: SET_ACTIVE_PROJECT,
@@ -186,7 +196,41 @@ export default class ProjectMutator {
     });
   }
 
+  clearProjectAccountsOnReDeploy(accountId) {
+    const { project: cachedProject } = this.client.readQuery({
+      query: GET_PROJECT,
+      variables: {
+        projectId: this.projectId,
+      },
+    });
+
+    const newProject = {
+      ...cachedProject,
+      accounts: cachedProject.accounts.map((cachedAccount) => {
+        if (cachedAccount.id === accountId) return cachedAccount;
+        return {
+          ...cachedAccount,
+          deployedCode: '',
+          deployedContracts: [],
+          state: DEFAULT_ACCOUNT_STATE,
+        };
+      }),
+    };
+
+    this.client.writeQuery({
+      query: GET_PROJECT,
+      variables: {
+        projectId: this.projectId,
+      },
+      data: {
+        project: newProject,
+      },
+    });
+  }
+
   async updateAccountDeployedCode(account: Account, index: number) {
+    const hasDeployedCode = !!account.deployedCode?.length;
+
     if (this.isLocal) {
       const project = await this.createProject();
       account = project.accounts[index];
@@ -200,15 +244,12 @@ export default class ProjectMutator {
         accountId: account.id,
         code: account.draftCode,
       },
-      // Redeploying code affects all accounts and requires a project refetch
-      refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } },
-      ],
-      awaitRefetchQueries: true,
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
     });
+
+    if (hasDeployedCode) this.clearProjectAccountsOnReDeploy(account.id);
 
     Mixpanel.track('Contract deployed', {
       projectId: this.projectId,
@@ -276,10 +317,6 @@ export default class ProjectMutator {
         arguments: args,
         script,
       },
-      refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } },
-      ],
-      awaitRefetchQueries: true,
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
@@ -304,10 +341,6 @@ export default class ProjectMutator {
         script,
         title,
       },
-      refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } },
-      ],
-      awaitRefetchQueries: true,
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
@@ -368,10 +401,6 @@ export default class ProjectMutator {
         projectId: this.projectId,
         templateId,
       },
-      refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } },
-      ],
-      awaitRefetchQueries: true,
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
@@ -391,10 +420,6 @@ export default class ProjectMutator {
         projectId: this.projectId,
         templateId,
       },
-      refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } },
-      ],
-      awaitRefetchQueries: true,
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
@@ -439,10 +464,6 @@ export default class ProjectMutator {
         script,
         title,
       },
-      refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } },
-      ],
-      awaitRefetchQueries: true,
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },

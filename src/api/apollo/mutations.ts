@@ -24,14 +24,30 @@ export const CREATE_PROJECT = gql`
       }
     ) {
       id
-      parentId
+      persist
       mutable
+      parentId
+      seed
+      title
+      description
+      readme
       accounts {
         id
         address
         draftCode
         deployedCode
+        deployedContracts
         state
+      }
+      transactionTemplates {
+        id
+        script
+        title
+      }
+      scriptTemplates {
+        id
+        script
+        title
       }
     }
   }
