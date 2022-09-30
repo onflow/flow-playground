@@ -2,7 +2,11 @@ import { navigate } from '@reach/router';
 
 import ApolloClient from 'apollo-client';
 
-import { Account, Project } from 'api/apollo/generated/graphql';
+import {
+  Account,
+  GetProjectQuery,
+  Project,
+} from 'api/apollo/generated/graphql';
 import {
   CREATE_PROJECT,
   CREATE_SCRIPT_EXECUTION,
@@ -197,16 +201,11 @@ export default class ProjectMutator {
   }
 
   clearProjectAccountsOnReDeploy(accountId) {
-    const { project: cachedProject } = this.client.readQuery({
-      query: GET_PROJECT,
-      variables: {
-        projectId: this.projectId,
-      },
-    });
+    const project = this.getProject();
 
     const newProject = {
-      ...cachedProject,
-      accounts: cachedProject.accounts.map((cachedAccount) => {
+      ...project,
+      accounts: project.accounts.map((cachedAccount) => {
         if (cachedAccount.id === accountId) return cachedAccount;
         return {
           ...cachedAccount,
@@ -317,6 +316,10 @@ export default class ProjectMutator {
         arguments: args,
         script,
       },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
+      awaitRefetchQueries: true,
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
@@ -343,6 +346,24 @@ export default class ProjectMutator {
       },
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
+    });
+
+    const project = this.getProject();
+
+    this.client.writeQuery({
+      query: GET_PROJECT,
+      variables: {
+        projectId: project.id,
+      },
+      data: {
+        project: {
+          ...project,
+          transactionTemplates: [
+            ...project.transactionTemplates,
+            res.data.createTransactionTemplate,
+          ],
+        },
       },
     });
 
@@ -406,6 +427,23 @@ export default class ProjectMutator {
       },
     });
 
+    const project = this.getProject();
+
+    this.client.writeQuery({
+      query: GET_PROJECT,
+      variables: {
+        projectId: project.id,
+      },
+      data: {
+        project: {
+          ...project,
+          transactionTemplates: project.transactionTemplates.filter(
+            (template) => template.id !== templateId,
+          ),
+        },
+      },
+    });
+
     return res;
   }
 
@@ -422,6 +460,23 @@ export default class ProjectMutator {
       },
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
+    });
+
+    const project = this.getProject();
+
+    this.client.writeQuery({
+      query: GET_PROJECT,
+      variables: {
+        projectId: project.id,
+      },
+      data: {
+        project: {
+          ...project,
+          scriptTemplates: project.scriptTemplates.filter(
+            (template) => template.id !== templateId,
+          ),
+        },
       },
     });
 
@@ -469,11 +524,39 @@ export default class ProjectMutator {
       },
     });
 
+    const project = this.getProject();
+
+    this.client.writeQuery({
+      query: GET_PROJECT,
+      variables: {
+        projectId: project.id,
+      },
+      data: {
+        project: {
+          ...project,
+          scriptTemplates: [
+            ...project.scriptTemplates,
+            res.data.createScriptTemplate,
+          ],
+        },
+      },
+    });
+
     Mixpanel.track('Script template created', {
       projectId: this.projectId,
       script,
     });
 
     return res;
+  }
+
+  getProject() {
+    const { project } = this.client.readQuery<GetProjectQuery>({
+      query: GET_PROJECT,
+      variables: {
+        projectId: this.projectId,
+      },
+    });
+    return project;
   }
 }
