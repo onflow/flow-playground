@@ -350,7 +350,6 @@ export default class ProjectMutator {
     });
 
     const project = this.getProject();
-
     this.client.writeQuery({
       query: GET_PROJECT,
       variables: {
