@@ -33,7 +33,7 @@ describe('Flow-Playground frontend tests', () => {
         cy.react('ActionButton', {props: {type: 1}}).click()
         cy.wait(5000)
 
-        // open transaction template and confirm action button is active
+        // open transaction template and successfully send transaction
         cy.get('div[title=Transaction]').click()
         cy.react('ActionButton', {props: {type: 2, active: true}}).contains('Send').click()
         cy.wait(1000)
@@ -48,7 +48,7 @@ describe('Flow-Playground frontend tests', () => {
         cy.react('Line', {props: {label: 'Script', tag: 2}}).should('exist')
     })
 
-    it('reflects changes to imported contract after contract has been redeployed', () => {
+    it.skip('reflects changes to imported contract after contract has been redeployed', () => {
 
         // deploy contract
         cy.react('AccountList').children().last().children().first().click()
@@ -61,13 +61,26 @@ describe('Flow-Playground frontend tests', () => {
         cy.wait(1000)
         cy.react('Line', {props: {label: 'Transaction', tag: 1}}).should('exist')
 
-        // edit contract
+
         cy.react('AccountList').children().last().children().first().click()
+        // select monaco editor
+        cy.get('div[id=monaco-container]')
 
-        // 4x click to select all
-        cy.get('div[id=monaco-container]').dblclick()
-        cy.get('div[id=monaco-container]').dblclick()
+        // edit contract
 
+        // select transaction and confirm disabled action button
+        cy.get('div[title=Transaction]').click()
+        cy.react('ActionButton', {props: {type: 2, active: false}}).contains('Send')
+
+        // select monaco editor
+        cy.get('div[id=monaco-container]')
+
+        // edit transaction to reflect contract updates
+
+        // successfully send transaction
+        cy.react('ActionButton', {props: {type: 2, active: true}}).contains('Send').click()
+        cy.wait(1000)
+        cy.react('Line', {props: {label: 'Transaction', tag: 1}}).should('exist')
 
     })
 
