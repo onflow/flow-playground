@@ -12,6 +12,8 @@ import { EditorState } from './types';
 
 const MONACO_CONTAINER_ID = 'monaco-container';
 
+type EditorStates = Record<number, EditorState>;
+
 const CadenceEditor = (props: any) => {
   const project = useProject();
   const [editor, setEditor] = useState(null);
@@ -22,7 +24,7 @@ const CadenceEditor = (props: any) => {
     index: 8,
   });
 
-  const [editorStates, setEditorStates] = useState({});
+  const [editorStates, setEditorStates] = useState<EditorStates>({});
 
   // TODO: restore view state in next implementation
   /*
@@ -42,7 +44,7 @@ const CadenceEditor = (props: any) => {
       return existingState;
     }
 
-    const newState = {
+    const newState: EditorState = {
       model: monaco.editor.createModel(code, CADENCE_LANGUAGE_ID),
       viewState: null,
     };
