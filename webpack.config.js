@@ -69,6 +69,7 @@ module.exports = {
     allowedHosts: 'all',
     historyApiFallback: true,
     port: 3000,
+    client: {overlay: {warnings: false, errors: false}},
     devMiddleware: {
       writeToDisk: true,
     },

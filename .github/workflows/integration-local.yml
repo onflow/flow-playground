@@ -1,0 +1,19 @@
+name: Flow-Playground Integration Tests
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  cypress:
+    name: Flow-Playground Cypress tests
+    timeout-minutes: 10
+          runs-on: ubuntu-latest
+          container: cypress/browsers:node16.14.2-slim-chrome103-ff102 #use arm64 arch on Apple M1 chips when running locally
+          steps:
+            name: Cypress run emulator
+            
