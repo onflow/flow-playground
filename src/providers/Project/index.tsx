@@ -67,6 +67,7 @@ export interface ProjectContextValue {
   setLastSigners: (signers: string[]) => void;
   transactionAccounts: number[];
   isSavingCode: boolean;
+  isExecutingAction: boolean;
 }
 
 export const ProjectContext: React.Context<ProjectContextValue> =
@@ -115,6 +116,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [transactionAccounts, setTransactionAccounts] = useState<number[]>([0]);
   const [isSavingCode, setIsSaving] = useState(false);
+  const [isExecutingAction, setIsExecutingAction] = useState(false);
   const [lastSigners, setLastSigners] = useState(null);
 
   const [selectedResourceAccount, setSelectedResourceAccount] = useState<
@@ -161,6 +163,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const updateAccountDeployedCode: any = async () => {
     setIsSaving(true);
+    setIsExecutingAction(true);
     let res;
     try {
       res = await mutator.updateAccountDeployedCode(
@@ -176,9 +179,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
+      setIsExecutingAction(false);
       showError();
     }
     setIsSaving(false);
+    setIsExecutingAction(false);
     return res;
   };
 
@@ -276,6 +281,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     args?: [string],
   ) => {
     setIsSaving(true);
+    setIsExecutingAction(true);
     let res;
     try {
       res = await mutator.createTransactionExecution(
@@ -295,14 +301,17 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
+      setIsExecutingAction(false);
       showError();
     }
     setIsSaving(false);
+    setIsExecutingAction(false);
     return res;
   };
 
   const createScriptExecution = async (args?: string[]) => {
     setIsSaving(true);
+    setIsExecutingAction(true);
     let res;
     try {
       res = await mutator.createScriptExecution(
@@ -312,9 +321,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
+      setIsExecutingAction(false);
       showError();
     }
     setIsSaving(false);
+    setIsExecutingAction(false);
     return res;
   };
 
@@ -530,6 +541,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         isLoading,
         mutator,
         isSavingCode,
+        isExecutingAction,
         updateProject,
         updateAccountDeployedCode,
         updateAccountDraftCode,
