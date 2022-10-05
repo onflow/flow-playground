@@ -1,15 +1,8 @@
-const getIframeBody = () => {
-    return cy
-      .get('iframe[id="FCL_IFRAME"]')
-      .its('0.contentDocument.body').should('not.be.empty')
-      .then(cy.wrap)
-  }
-  
 describe('Flow-Playground frontend tests', () => {
 
     beforeEach(() => {
         cy.viewport('macbook-16')
-        cy.visit('http://localhost:3000/')
+        cy.visit('/')
         cy.waitForReact(1000, '#root')
         
     })
@@ -18,7 +11,7 @@ describe('Flow-Playground frontend tests', () => {
         cy.react('AccountList').children().last().children().should('have.length', 5).first().click()
         cy.react('ActionButton', {props: {type: 1}}).contains('Deploy').click()
         cy.react('ActionButton', {props: {type: 1}}).contains('Redeploy')
-        cy.react('RenderResponse', {props: {resultType: 'CONTRACT'}}).should('exist')
+        cy.react('Line', {props: {label: 'Contract', tag: 0}}).should('exist')
     })
 
     it('sends a transaction', () =>{
