@@ -1,10 +1,12 @@
-{{#if accounts~}}
-  // pass corrected addressed to getAccount calls code =
-  code.replace(/(?:getAccount\(\s*)(0x.*)(?:\s*\))/g, (_, match) => { const
-  accounts = {
-  {{#each accounts}}
-    "{{this}}" :
-    {{getNameByAddress this}},
-  {{/each}}
-  } const name = accounts[match] return `getAccount(${name})`; });
+{{#if accounts ~}}
+    // pass corrected addressed to getAccount calls
+    code = code.replace(/(?:getAccount\(\s*)(0x.*)(?:\s*\))/g, (_, match) => {
+        const accounts = {
+            {{#each accounts}}
+                "{{this}}" : {{getNameByAddress this}},
+            {{/each}}
+        }
+        const name = accounts[match]
+        return `getAccount(${name})`;
+    });
 {{/if}}
