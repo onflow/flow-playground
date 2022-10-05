@@ -166,7 +166,7 @@ export class CadenceLanguageServer {
     };
   }
 
-  updateCodeGetter(newMethod) {
+  updateCodeGetter(newMethod: (address: string) => string | undefined) {
     window[this.functionName('getAddressCode')] = (
       address: string,
     ): string | undefined => {

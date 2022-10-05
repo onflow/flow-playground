@@ -1,10 +1,10 @@
 // import { FaUnlink, FaRandom } from 'react-icons/fa';
-import { FaExclamationTriangle } from 'react-icons/fa';
 import {
-  Range,
-  IPosition,
   editor as monacoEditor,
+  IPosition,
+  Range,
 } from 'monaco-editor/esm/vs/editor/editor.api';
+import { FaExclamationTriangle } from 'react-icons/fa';
 
 export enum ProblemType {
   Error = 'error',
