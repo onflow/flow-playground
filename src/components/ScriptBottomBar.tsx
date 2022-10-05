@@ -64,7 +64,7 @@ const ScriptBottomBar: React.FC<ScriptBottomBarProps> = ({
   }, []);
 
   return (
-    <FeedbackContainer height={resultHeight}>
+    <FeedbackContainer data-test="script-result" height={resultHeight}>
       <FeedbackRoot>
         <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
           Script Results <ClearResults type={ResultType.Script} />

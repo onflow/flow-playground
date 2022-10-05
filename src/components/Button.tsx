@@ -87,6 +87,7 @@ const Button: React.FC<ButtonProps> = ({
         className={className}
         onClick={disabled ? noop : onClick}
         variant={isActive && !disabled ? 'buttons.primary' : 'buttons.disabled'}
+        data-test="action-button"
       >
         {children}
         {isLoading ? (

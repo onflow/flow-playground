@@ -3,77 +3,86 @@ describe('Flow-Playground frontend tests', () => {
     beforeEach(() => {
         cy.viewport('macbook-16')
         cy.visit('/')
-        cy.waitForReact(1000, '#root')
-        
     })
 
     it('deploys a contract', () => {
-        cy.react('AccountList').children().last().children().should('have.length', 5).first().click()
-        cy.react('ActionButton', {props: {type: 1}}).contains('Deploy').click()
-        cy.react('ActionButton', {props: {type: 1}}).contains('Redeploy')
-        cy.react('Line', {props: {label: 'Contract', tag: 0}}).should('exist')
+        cy.get('[data-test="account-list"]').children().should('have.length', 5).first().click()
+        cy.get('[data-test="action-button"]').contains('Deploy').click()
+        cy.get('[data-test="control-panel-status-message"]').should(
+        'have.text',
+        'Please, wait...',
+        );
+        cy.get('[data-test="action-button"]').contains('Redeploy')
+        cy.get('[data-test="deployment-result"]').contains('Deployed Contract To: 0x01')
     })
 
     it('sends a transaction', () =>{
-        cy.react('MenuList', {props: {title: 'Transaction Templates'}}).children().first().contains('Transaction')
         cy.get('div[title=Transaction]').click()
-        cy.react('EditorTitle', {props: {type: 2}}).contains('Transaction Template')
+        cy.get('[data-test="editor-heading"]').contains('Transaction Template')
         // Ensure action button is disabled when contract not deployed yet
-        cy.react('ActionButton', {props: {type: 2, active: false}}).contains('Send')
+        cy.get('[data-test="action-button"]').contains('Send')
 
         // deploy contract
-        cy.react('AccountList').children().last().children().first().click()
-        cy.react('ActionButton', {props: {type: 1}}).click()
-        cy.wait(5000)
+        cy.get('[data-test="account-list"]').children().first().click()
+        cy.get('[data-test="action-button"]').contains('Deploy').click()
+        cy.get('[data-test="action-button"]').contains('Redeploy')
 
         // open transaction template and successfully send transaction
         cy.get('div[title=Transaction]').click()
-        cy.react('ActionButton', {props: {type: 2, active: true}}).contains('Send').click()
-        cy.wait(1000)
-        cy.react('Line', {props: {label: 'Transaction', tag: 1}}).should('exist')
+        cy.get('[data-test="action-button"]').contains('Send').click()
+        cy.get('[data-test="transaction-result"]').contains('Hello, World!')
     })
 
     it('executes a script', () => {
-        cy.react('MenuList', {props: {title: 'Script Templates'}}).children().first().contains('Script')
         cy.get('div[title=Script]').click()
-        cy.react('EditorTitle', {props: {type: 3}}).contains('Script Template')
-        cy.react('ActionButton', {props: {type: 3, active: true}}).contains('Execute').click()
-        cy.react('Line', {props: {label: 'Script', tag: 2}}).should('exist')
+        cy.get('[data-test="editor-heading"]').contains('Script Template')
+        cy.get('[data-test="action-button"]').contains('Execute').click()
+        cy.get('[data-test="script-result"]').contains('{"type":"Int","value":"1"}')
     })
 
-    it.skip('reflects changes to imported contract after contract has been redeployed', () => {
+    it('reflects changes to imported contract after contract has been redeployed', () => {
 
         // deploy contract
-        cy.react('AccountList').children().last().children().first().click()
-        cy.react('ActionButton', {props: {type: 1}}).click()
-        cy.wait(5000)
+        cy.get('[data-test="account-list"]').children().first().click()
+        cy.get('[data-test="action-button"]').contains('Deploy').click()
+        cy.get('[data-test="control-panel-status-message"]').should(
+        'have.text',
+        'Please, wait...',
+        );
+        cy.get('[data-test="action-button"]').contains('Redeploy')
 
         // send transaction
         cy.get('div[title=Transaction]').click()
-        cy.react('ActionButton', {props: {type: 2, active: true}}).click()
-        cy.wait(1000)
-        cy.react('Line', {props: {label: 'Transaction', tag: 1}}).should('exist')
-
-
-        cy.react('AccountList').children().last().children().first().click()
-        // select monaco editor
-        cy.get('div[id=monaco-container]')
+        cy.get('[data-test="action-button"]').contains('Send').click()
+        cy.get('[data-test="transaction-result"]').contains('Hello, World!')
 
         // edit contract
+        cy.get('[data-test="account-list"]').children().first().click()
+        cy.get( '.monaco-editor textarea:first' ).click().focused().type('{cmd}a').clear()
+        cy.get( '.monaco-editor textarea:first' ).should('have.value', '')
+        cy.get( '.monaco-editor textarea:first' ).click().focused().type('access(all) contract HelloWorld { access(all) let greeting: String init() { self.greeting = "Hello, Other World!"} access(all) fun other_hello(): String {return self.greeting}}', {parseSpecialCharSequences: false});
+        cy.get('[data-test="action-button"]').contains('Redeploy').click()
+        cy.get('[data-test="control-panel-status-message"]').should(
+        'have.text',
+        'Please, wait...',
+        );
+        cy.get('[data-test="control-panel-status-message"]').should(
+            'not.have.text',
+            'Please, wait...',
+            );
+        cy.get('[data-test="action-button"]').contains('Redeploy')
 
         // select transaction and confirm disabled action button
         cy.get('div[title=Transaction]').click()
-        cy.react('ActionButton', {props: {type: 2, active: false}}).contains('Send')
-
-        // select monaco editor
-        cy.get('div[id=monaco-container]')
+        cy.get('[data-test="action-button"]').contains('Send').should('be.disabled')
 
         // edit transaction to reflect contract updates
+        cy.get( '.monaco-editor textarea:first' ).click().focused().type( '{cmd}a' ).type('import HelloWorld from 0x01 transaction { prepare(acct: AuthAccount) {} execute { log(HelloWorld.other_hello())}}', {parseSpecialCharSequences: false})
+        cy.get('[data-test="action-button"]').contains('Send').click()
 
         // successfully send transaction
-        cy.react('ActionButton', {props: {type: 2, active: true}}).contains('Send').click()
-        cy.wait(1000)
-        cy.react('Line', {props: {label: 'Transaction', tag: 1}}).should('exist')
+        cy.get('[data-test="action-button"]').contains('Send').click()
+        cy.get('[data-test="transaction-result"]').contains('Hello, Other World!')
 
     })
 

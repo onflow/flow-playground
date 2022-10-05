@@ -312,7 +312,7 @@ type EditorTitleProps = {
 
 const EditorTitle = ({ type }: EditorTitleProps) => {
   return (
-    <Heading>
+    <Heading data-test="editor-heading">
       {type === EntityType.Account && 'Contract'}
       {type === EntityType.TransactionTemplate && 'Transaction Template'}
       {type === EntityType.ScriptTemplate && 'Script Template'}
