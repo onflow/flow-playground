@@ -30,7 +30,6 @@
     "apollo-link-debounce": "^2.1.0",
     "apollo-link-http": "^1.5.17",
     "apollo-link-serialize": "^2.1.0",
-    "cypress-react-selector": "^3.0.0",
     "detect-browser": "^5.3.0",
     "easymde": "^2.18.0",
     "file-saver": "^2.0.5",
