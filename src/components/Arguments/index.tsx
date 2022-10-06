@@ -364,7 +364,16 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   }
 
   const actions = { goTo, hover, hideDecorations };
-
+  const testTag = (type) => {
+    switch(type){
+      case 1:
+        return "deploy-button";
+      case 2:
+        return "send-button";
+      default:
+        return "execute-button";
+    }
+  }
   return (
     <>
       <div ref={constraintsRef} className="constraints" />
@@ -418,7 +427,8 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
             <ActionButton 
               active={isOk} 
               type={type} 
-              onClick={send} 
+              onClick={send}
+              data-tag={testTag}
             />
           </ControlContainer>
         </HoverPanel>

@@ -1,8 +1,15 @@
 name: Continuous Integration
 
 on:
+  pull_request:
+    branches:
+      -master
+      -staging
   push:
-
+    branches:
+      -master
+      -staging
+      -setup_cypress_tests_for_flow_playground
 env:
   PLAYGROUND_API: ''
   AVATAAR_URL: ''
@@ -26,3 +33,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: make ci
+
+  cypress-e2e:
+    name: Cypress Emulator Tests for Flow-Playground
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    container: cypress/browsers:node16.14.2-slim-chrome103-ff102
+    steps:
+      - name: Spin up Docker Container
+        run: 

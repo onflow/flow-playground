@@ -252,23 +252,13 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
   } = useProject();
   const label = getLabel(type, project, activeEditor);
   const code = getActiveCode()[0].trim();
+
   return (
     <Controls>
       <Button
         onClick={onClick}
         Icon={FaArrowCircleRight}
         disabled={isSavingCode || !active || code.length === 0}
-        data-test={(type) => {
-          switch(type){
-            case 1:
-              return "'deploy-button";
-            case 2:
-              return "send-button";
-            default:
-              return "execute-button";
-          }
-        }
-      }
       >
         {label}
       </Button>
