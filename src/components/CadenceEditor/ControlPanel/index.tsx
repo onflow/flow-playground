@@ -372,17 +372,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     statusMessage = 'Please, wait...';
   }
 
-  const testTag = (type) => {
-    switch(type){
-      case 1:
-        return "deploy-button";
-      case 2:
-        return "send-button";
-      default:
-        return "execute-button";
-    }
-  }
-
   // EFFECTS ------------------------------------------------------------------
   useEffect(() => {
     if (languageClient) {
@@ -460,7 +449,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
                 <Cancel onClick={() => setShowPrompt(false)}>Cancel</Cancel>
               </PromptActionsContainer>
             ) : (
-              <ActionButton data-test={testTag} active={isOk} type={type} onClick={send} />
+              <ActionButton active={isOk} type={type} onClick={send} />
             )}
           </ControlContainer>
         </HoverPanel>
