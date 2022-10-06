@@ -11,6 +11,7 @@ interface ActionButtonProps extends ChildPropsOptional {
   Icon?: any;
   isLoading?: boolean;
   isActive?: boolean;
+  'data-test'?: string;
 }
 
 const ActionButton: React.FC<ActionButtonProps> = (props) => {

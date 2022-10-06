@@ -15,7 +15,7 @@ describe('Flow-Playground frontend tests', () => {
         cy.get(DEPLOY_BUTTON).should('have.text', 'Deploy').click();
         cy.get(STATUS_MESSAGE).should('have.text', 'Please, wait...');
         cy.get(DEPLOY_BUTTON).should('have.text', 'Redeploy');
-        cy.get('[data-test="deployment-result"]').should('have.text', 'Deployed Contract To: 0x01');
+        cy.get('[data-test="CONTRACT-response"]').children().first().children().last().should('have.text', 'Deployed Contract To: 0x01');
     })
 
     it('sends a transaction', () =>{
