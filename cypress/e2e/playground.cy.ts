@@ -7,13 +7,12 @@ describe('Flow-Playground frontend tests', () => {
     let STATUS_MESSAGE = '[data-test="control-panel-status-message"]';
 
     beforeEach(() => {
-        cy.viewport('macbook-16')
         cy.visit('/')
     })
 
     it('deploys a contract', () => {
         cy.get(ACCOUNTS_LIST).children().should('have.length', 5).first().click();
-        cy.get(DEPLOY_BUTTON).should.('Deploy').click();
+        cy.get(DEPLOY_BUTTON).should('have.text', 'Deploy').click();
         cy.get(STATUS_MESSAGE).should('have.text', 'Please, wait...');
         cy.get(DEPLOY_BUTTON).should('have.text', 'Redeploy');
         cy.get('[data-test="deployment-result"]').should('have.text', 'Deployed Contract To: 0x01');

@@ -258,6 +258,17 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
         onClick={onClick}
         Icon={FaArrowCircleRight}
         disabled={isSavingCode || !active || code.length === 0}
+        data-test={(type) => {
+          switch(type){
+            case 1:
+              return "'deploy-button";
+            case 2:
+              return "send-button";
+            default:
+              return "execute-button";
+          }
+        }
+      }
       >
         {label}
       </Button>

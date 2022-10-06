@@ -415,7 +415,11 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
               {statusIcon}
               <p>{statusMessage}</p>
             </StatusMessage>
-            <ActionButton data-test="send-button" active={isOk} type={type} onClick={send} />
+            <ActionButton 
+              active={isOk} 
+              type={type} 
+              onClick={send} 
+            />
           </ControlContainer>
         </HoverPanel>
       </motion.div>
