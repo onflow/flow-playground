@@ -3,12 +3,8 @@ import { defineConfig } from "cypress";
 export default defineConfig({
   projectId: "h1jieb",
   video: false,
-  screenshotOnRunFailure: true,
-  env: {
-    'cypress-react-selector': {
-      root: '#root',
-    },
-  },
+  defaultCommandTimeout: 6000,
+  screenshotOnRunFailure: false,
   e2e: {
     setupNodeEvents() {},
     baseUrl: 'http://localhost:3000/',

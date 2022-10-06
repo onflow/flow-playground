@@ -96,6 +96,7 @@ const MenuList: React.FC<MenuListProps> = ({
               onClick={(e: React.SyntheticEvent<Element, Event>) =>
                 onSelect(e, item.id)
               }
+              data-test='sidebar-item'
             >
               {/* NOTE: Optimize this to a controlled input! */}
               <SidebarItemInput

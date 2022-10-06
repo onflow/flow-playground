@@ -449,7 +449,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
                 <Cancel onClick={() => setShowPrompt(false)}>Cancel</Cancel>
               </PromptActionsContainer>
             ) : (
-              <ActionButton active={isOk} type={type} onClick={send} />
+              <ActionButton data-test="deploy-button" active={isOk} type={type} onClick={send} />
             )}
           </ControlContainer>
         </HoverPanel>
