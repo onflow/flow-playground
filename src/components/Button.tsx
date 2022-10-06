@@ -66,6 +66,7 @@ interface ButtonProps extends ChildPropsOptional {
   isLoading?: boolean;
   isActive?: boolean;
   disabled?: boolean;
+  dataTag?: string
 }
 
 const noop = (): void => {};
@@ -79,6 +80,7 @@ const Button: React.FC<ButtonProps> = ({
   isLoading,
   isActive,
   disabled,
+  dataTag,
 }) => {
   return (
     <motion.div whileHover={{ scale: 1.05 }}>
@@ -87,6 +89,7 @@ const Button: React.FC<ButtonProps> = ({
         className={className}
         onClick={disabled ? noop : onClick}
         variant={isActive && !disabled ? 'buttons.primary' : 'buttons.disabled'}
+        data-test={dataTag}
       >
         {children}
         {isLoading ? (
