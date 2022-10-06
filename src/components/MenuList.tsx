@@ -24,7 +24,6 @@ type MenuListProps = {
   onUpdate: any;
   onInsert: (e: SyntheticEvent) => void;
   onDelete: any;
-  dataTest: string;
 };
 
 const NAME_MAX_CHARS = 50;

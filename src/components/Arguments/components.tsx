@@ -239,16 +239,16 @@ const getLabel = (type: EntityType, project: Project, active: ActiveEditor) => {
   }
 };
 
-const getDataTag = (type) => {
-  switch(type){
+const getActionButtonTestTag = (type: EntityType) => {
+  switch (type) {
     case 1:
-      return "deploy-button";
+      return 'deploy-button';
     case 2:
-      return "send-button";
+      return 'send-button';
     default:
-      return "execute-button";
+      return 'execute-button';
   }
-}
+};
 
 export const ActionButton: React.FC<InteractionButtonProps> = ({
   type,
@@ -263,14 +263,13 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
   } = useProject();
   const label = getLabel(type, project, activeEditor);
   const code = getActiveCode()[0].trim();
-  const dataTag = getDataTag(type);
   return (
     <Controls>
       <Button
         onClick={onClick}
         Icon={FaArrowCircleRight}
         disabled={isSavingCode || !active || code.length === 0}
-        data-test={dataTag}
+        data-test={getActionButtonTestTag(type)}
       >
         {label}
       </Button>

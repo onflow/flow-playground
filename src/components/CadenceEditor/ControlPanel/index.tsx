@@ -433,7 +433,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             progress={progress}
             showPrompt={showPrompt}
           >
-            <StatusMessage data-test="control-panel-status-message" >
+            <StatusMessage data-test="control-panel-status-message">
               <StatusIcon
                 isOk={isOk}
                 progress={progress}

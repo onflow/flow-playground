@@ -364,7 +364,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   }
 
   const actions = { goTo, hover, hideDecorations };
-
   return (
     <>
       <div ref={constraintsRef} className="constraints" />
@@ -415,12 +414,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
               {statusIcon}
               <p>{statusMessage}</p>
             </StatusMessage>
-            <ActionButton 
-              active={isOk} 
-              type={type} 
-              onClick={send}
-              data-tag={testTag}
-            />
+            <ActionButton active={isOk} type={type} onClick={send} />
           </ControlContainer>
         </HoverPanel>
       </motion.div>
