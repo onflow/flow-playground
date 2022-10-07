@@ -14,7 +14,7 @@ describe('Flow-Playground frontend tests', () => {
     it('deploys a contract', () => {
         cy.get(ACCOUNTS_LIST).children().should('have.length', 5).first().click();
         cy.get(DEPLOY_BUTTON).should('have.text', 'Deploy').click();
-        cy.get(STATUS_MESSAGE).should('have.text', 'Please, wait...');
+        cy.get(STATUS_MESSAGE).should('have.text', 'Please wait...');
         cy.get(DEPLOY_BUTTON).should('have.text', 'Redeploy');
         cy.get('[data-test="CONTRACT-response"]').should('include.text', 'Deployed Contract To: 0x01');
     })
@@ -48,7 +48,7 @@ describe('Flow-Playground frontend tests', () => {
         // deploy contract
         cy.get(ACCOUNTS_LIST).children().first().click();
         cy.get(DEPLOY_BUTTON).should('have.text', 'Deploy').click();
-        cy.get(STATUS_MESSAGE).should('have.text', 'Please, wait...');
+        cy.get(STATUS_MESSAGE).should('have.text', 'Please wait...');
         cy.get(DEPLOY_BUTTON).should('have.text', 'Redeploy');
         cy.get('[data-test="CONTRACT-response"]').should('include.text', 'Deployed Contract To: 0x01');
 
@@ -66,7 +66,7 @@ describe('Flow-Playground frontend tests', () => {
         cy.get(DEPLOY_BUTTON).should('be.enabled');
         cy.get(DEPLOY_BUTTON).should('have.text', 'Redeploy').click();
         cy.get('[data-test="redeploy-confirm-button"]').should('exist').click();
-        cy.get(STATUS_MESSAGE).should('have.text', 'Please, wait...');
+        cy.get(STATUS_MESSAGE).should('have.text', 'Please wait...');
         cy.get(DEPLOY_BUTTON).should('have.text', 'Redeploy');
         cy.get(DEPLOY_BUTTON).should('be.enabled')
 
