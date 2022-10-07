@@ -1,5 +1,5 @@
-import React from 'react';
 import styled from '@emotion/styled';
+import React from 'react';
 import theme from '../theme';
 
 type SidebarItemInsertProps = {
@@ -15,13 +15,21 @@ export const SidebarItemInsert = styled.button<SidebarItemInsertProps>`
   right: 0.75rem;
   top: 56%;
   transform: translateY(-50%);
-
   color: ${theme.colors.grey};
+
   &:hover {
     color: ${theme.colors.heading};
     cursor: ${(p) => (p.grab ? 'grab' : 'pointer')};
   }
   &:active {
     cursor: ${(p) => (p.grab ? 'grabbing' : 'pointer')};
+  }
+  &:disabled {
+    opacity: 0.8;
+
+    &:hover {
+      opacity: 0.7;
+      cursor: 'default';
+    }
   }
 `;

@@ -11,6 +11,7 @@ interface StyledButtonProps extends ChildProps {
   className?: string;
   onClick?: any;
   variant: string;
+  disabled?: boolean;
 }
 
 const StyledButton: React.FC<StyledButtonProps> = styled(ThemedButton)`
@@ -56,6 +57,10 @@ const StyledButton: React.FC<StyledButtonProps> = styled(ThemedButton)`
 
   cursor: ${({ variant }) =>
     variant === 'buttons.disabled' ? 'not-allowed !important' : 'pointer'};
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
 
 interface ButtonProps extends ChildPropsOptional {
@@ -67,9 +72,8 @@ interface ButtonProps extends ChildPropsOptional {
   isActive?: boolean;
   disabled?: boolean;
   'data-test'?: string;
+  hideDisabledState?: boolean;
 }
-
-const noop = (): void => {};
 
 const Button: React.FC<ButtonProps> = ({
   children,
@@ -81,15 +85,21 @@ const Button: React.FC<ButtonProps> = ({
   isActive,
   disabled,
   'data-test': dataTest,
+  hideDisabledState,
 }) => {
+  const showDisabledState = disabled && !hideDisabledState;
   return (
     <motion.div whileHover={{ scale: 1.05 }}>
       <StyledButton
         style={style}
         className={className}
-        onClick={disabled ? noop : onClick}
-        variant={isActive && !disabled ? 'buttons.primary' : 'buttons.disabled'}
         data-test={dataTest}
+        onClick={onClick}
+        variant={
+          isActive && !showDisabledState
+            ? 'buttons.primary'
+            : 'buttons.disabled'
+        }
         disabled={disabled}
       >
         {children}

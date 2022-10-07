@@ -1,1 +1,2 @@
 **/src/api/apollo/generated
+*.hbs

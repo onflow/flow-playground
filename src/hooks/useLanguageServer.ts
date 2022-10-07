@@ -1,4 +1,5 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import { MonacoLanguageClient } from 'monaco-languageclient';
 import { MonacoServices } from 'monaco-languageclient/lib/monaco-services';
 import { useProject } from 'providers/Project/projectHooks';
 import { useEffect, useState } from 'react';
@@ -7,7 +8,7 @@ import { CadenceLanguageServer, Callbacks } from 'util/language-server';
 
 let monacoServicesInstalled = false;
 
-async function startLanguageServer(callbacks: any, getCode: any, ops) {
+async function startLanguageServer(callbacks: any, getCode: any, ops: any) {
   const { setLanguageServer, setCallbacks } = ops;
   const server = await CadenceLanguageServer.create(callbacks);
   new Promise(() => {
@@ -26,9 +27,9 @@ async function startLanguageServer(callbacks: any, getCode: any, ops) {
 }
 
 const launchLanguageClient = async (
-  callbacks,
-  languageServer,
-  setLanguageClient,
+  callbacks: Callbacks,
+  languageServer: CadenceLanguageServer,
+  setLanguageClient: (languageClient: MonacoLanguageClient) => void,
 ) => {
   if (languageServer) {
     const newClient = createCadenceLanguageClient(callbacks);
@@ -62,11 +63,13 @@ export default function useLanguageServer() {
   };
 
   // Base state handler
-  const [languageServer, setLanguageServer] = useState(null);
-  const [languageClient, setLanguageClient] = useState(null);
+  const [languageServer, setLanguageServer] =
+    useState<CadenceLanguageServer | null>(null);
+  const [languageClient, setLanguageClient] =
+    useState<MonacoLanguageClient | null>(null);
   const [callbacks, setCallbacks] = useState(initialCallbacks);
 
-  const getCode = (address) => {
+  const getCode = (address: string) => {
     const { accounts } = project.project;
 
     const number = parseInt(address, 16);

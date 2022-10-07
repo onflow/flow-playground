@@ -200,12 +200,12 @@ export default class ProjectMutator {
     });
   }
 
-  clearProjectAccountsOnReDeploy(accountId) {
+  clearProjectAccountsOnReDeploy(accountId: string) {
     const project = this.getProject();
 
     const newProject = {
       ...project,
-      accounts: project.accounts.map((cachedAccount) => {
+      accounts: project.accounts.map((cachedAccount: Account) => {
         if (cachedAccount.id === accountId) return cachedAccount;
         return {
           ...cachedAccount,
@@ -350,7 +350,6 @@ export default class ProjectMutator {
     });
 
     const project = this.getProject();
-
     this.client.writeQuery({
       query: GET_PROJECT,
       variables: {

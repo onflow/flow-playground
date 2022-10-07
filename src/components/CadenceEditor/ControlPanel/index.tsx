@@ -65,10 +65,10 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // ===========================================================================
   // GLOBAL HOOKS
   const { languageClient } = useContext(CadenceCheckerContext);
-  const { project, active, isSavingCode } = useProject();
+  const { project, active, isExecutingAction } = useProject();
 
   // HOOKS  -------------------------------------------------------------------
-  const [executionArguments, setExecutionArguments] = useState({});
+  const [executionArguments, setExecutionArguments] = useState<any>({});
   const [processingStatus, setProcessingStatus] = useState(false);
   const [setResult] = useSetExecutionResultsMutation();
   const { scriptFactory, transactionFactory, contractDeployment } =
@@ -80,7 +80,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // Handles errors with arguments
   const [errors, setErrors] = useState({});
   // Handles problems, hints and info for checked code
-  const [problemsList, setProblemsList] = useState({});
+  const [problemsList, setProblemsList] = useState<any>({});
   const [showPrompt, setShowPrompt] = useState(false);
 
   // REFS  -------------------------------------------------------------------
@@ -232,7 +232,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       setProcessingStatus(true);
     }
 
-    const fixed = list.map((arg) => {
+    const fixed = list.map((arg: any) => {
       const { name, type } = arg;
       let value = values[name];
 
@@ -266,7 +266,9 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     }
 
     // Map values to strings that will be passed to backend
-    const args: any = list.map((_, index) => JSON.stringify(formatted[index]));
+    const args: any = list.map((_: any, index: number) =>
+      JSON.stringify(formatted[index]),
+    );
 
     let rawResult, resultType;
     try {
@@ -366,10 +368,10 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       break;
   }
 
-  const progress = isSavingCode || processingStatus;
+  const progress = isExecutingAction || processingStatus;
   if (progress) {
     statusIcon = <FaSpinner className="spin" />;
-    statusMessage = 'Please, wait...';
+    statusMessage = 'Please wait...';
   }
 
   // EFFECTS ------------------------------------------------------------------

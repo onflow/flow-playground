@@ -11,7 +11,7 @@
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "removeComments": false,
     "preserveConstEnums": true,
     "sourceMap": true,
