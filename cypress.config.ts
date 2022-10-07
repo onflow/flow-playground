@@ -3,12 +3,9 @@ import { defineConfig } from "cypress";
 export default defineConfig({
   projectId: "h1jieb",
   defaultCommandTimeout: 6000,
-  screenshotOnRunFailure: false,
   viewportWidth: 1536,
   viewportHeight: 960,
-  video: true,
-  videoCompression: 32,
-  videoUploadOnPasses: false,
+  chromeWebSecurity: false,
   e2e: {
     setupNodeEvents() {},
     baseUrl: 'http://localhost:3000/',

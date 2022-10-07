@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [15.x]
+        node-version: [16.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -41,4 +41,25 @@ jobs:
     container: cypress/browsers:node16.14.2-slim-chrome103-ff102
     steps:
       - name: Spin up Docker Container
-        run: 
+        uses: cypress-io/github-action@v4
+        with:
+          start: npm run start-docker
+          wait-on: http://localhost:3000
+          spec: cypress/e2e/playground.cy.js
+          record: true
+          browser: chrome
+        env:
+          CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+      # Test run video was always captured, so this action uses "always()" condition
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos
