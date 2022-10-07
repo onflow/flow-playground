@@ -63,11 +63,12 @@ describe('Flow-Playground frontend tests', () => {
         cy.get(MONACO_EDITOR).should('have.value', '')
         cy.get(DEPLOY_BUTTON).should('be.disabled');
         cy.get(MONACO_EDITOR).click().focused().type('access(all) contract HelloWorld { access(all) let greeting: String init() { self.greeting = "Hello, Other World!"} access(all) fun other_hello(): String {return self.greeting}}', {parseSpecialCharSequences: false});
-        cy.get(DEPLOY_BUTTON).should('not.be.disabled');
+        cy.get(DEPLOY_BUTTON).should('be.enabled');
         cy.get(DEPLOY_BUTTON).should('have.text', 'Redeploy').click();
         cy.get('[data-test="redeploy-confirm-button"]').should('exist').click();
         cy.get(STATUS_MESSAGE).should('have.text', 'Please, wait...');
         cy.get(DEPLOY_BUTTON).should('have.text', 'Redeploy');
+        cy.get(DEPLOY_BUTTON).should('be.enabled')
 
         // select and edit transaction
         cy.get('[data-test="sidebar-Transaction"]').click();
