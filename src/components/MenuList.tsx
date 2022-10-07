@@ -87,6 +87,7 @@ const MenuList: React.FC<MenuListProps> = ({
       <SidebarItems>
         {items.map((item, i) => {
           const isActive = active.type === itemType && item.id === params.id;
+          const dataTest = `sidebar-${item.title}`;
           return (
             <SidebarItem
               title={item.title}
@@ -95,7 +96,7 @@ const MenuList: React.FC<MenuListProps> = ({
               onClick={(e: React.SyntheticEvent<Element, Event>) =>
                 onSelect(e, item.id)
               }
-              data-test='sidebar-item'
+              data-test={dataTest}
             >
               {/* NOTE: Optimize this to a controlled input! */}
               <SidebarItemInput

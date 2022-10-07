@@ -90,6 +90,7 @@ const Button: React.FC<ButtonProps> = ({
         onClick={disabled ? noop : onClick}
         variant={isActive && !disabled ? 'buttons.primary' : 'buttons.disabled'}
         data-test={dataTest}
+        disabled={disabled}
       >
         {children}
         {isLoading ? (

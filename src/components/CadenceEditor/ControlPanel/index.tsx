@@ -445,7 +445,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             </StatusMessage>
             {showPrompt ? (
               <PromptActionsContainer>
-                <Confirm onClick={send}>Confirm</Confirm>
+                <Confirm data-test="redeploy-confirm-button" onClick={send}>Confirm</Confirm>
                 <Cancel onClick={() => setShowPrompt(false)}>Cancel</Cancel>
               </PromptActionsContainer>
             ) : (
