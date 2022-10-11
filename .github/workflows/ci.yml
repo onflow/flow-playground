@@ -36,7 +36,9 @@ jobs:
 
   docker-api:
     name: Playground backend docker image
-    run: npm run start-docker
+    steps:
+      - name: Spin up backend docker container
+        run: npm run start-docker
 
   cypress-e2e:
     name: Cypress Emulator Tests for Flow-Playground
