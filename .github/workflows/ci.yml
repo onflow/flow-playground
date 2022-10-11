@@ -57,7 +57,7 @@ jobs:
           start: npm run start
           wait-on: http://localhost:3000
           spec: cypress/e2e/playground.cy.ts
-          record: true
+          record: false
           browser: chrome
         env:
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
