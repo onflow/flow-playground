@@ -57,6 +57,7 @@ jobs:
         uses: cypress-io/github-action@v4
         with:
           start: npm run start
+          wait-on: http://localhost:8080
           wait-on: http://localhost:3000
           spec: cypress/e2e/playground.cy.ts
           record: false
