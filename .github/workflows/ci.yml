@@ -11,7 +11,7 @@ on:
       - staging
       - setup_cypress_tests_for_flow_playground
 env:
-  PLAYGROUND_API: 'htpp://localhost:8080'
+  PLAYGROUND_API: 'http://localhost:8080'
   AVATAAR_URL: ''
   GA_TRACKING_CODE: ''
   MIXPANEL_TOKEN: ''
@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [15.x]
+        node-version: [16.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -59,7 +59,7 @@ jobs:
           start: npm run start
           wait-on: http://localhost:3000
           spec: cypress/e2e/playground.cy.ts
-          record: false
+          record: true
           browser: chrome
         env:
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
