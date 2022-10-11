@@ -23,7 +23,7 @@ describe('Flow-Playground frontend tests', () => {
         cy.get('[data-test="sidebar-Transaction"]').click();
         cy.get('[data-test="editor-heading"]').should('include.text', 'Transaction Template');
         // Ensure action button is disabled when contract not deployed yet
-        cy.get(SEND_BUTTON).should('have.text', 'Send');
+        cy.get(SEND_BUTTON).should('be.disabled');
 
         // deploy contract
         cy.get(ACCOUNTS_LIST).children().first().click();
@@ -32,7 +32,7 @@ describe('Flow-Playground frontend tests', () => {
 
         // open transaction template and successfully send transaction
         cy.get('[data-test="sidebar-Transaction"]').click();
-        cy.get(SEND_BUTTON).should('have.text', 'Send').click();
+        cy.get(SEND_BUTTON).should('have.text', 'Send').should('be.enabled').click();
         cy.get('[data-test="TRANSACTION-response"]').should('include.text', 'Hello, World!');
     })
 
@@ -54,7 +54,7 @@ describe('Flow-Playground frontend tests', () => {
 
         // open transaction template and successfully send transaction
         cy.get('[data-test="sidebar-Transaction"]').click();
-        cy.get(SEND_BUTTON).should('have.text', 'Send').click();
+        cy.get(SEND_BUTTON).should('have.text', 'Send').should('be.enabled').click();
         cy.get('[data-test="TRANSACTION-response"]').should('include.text', 'Hello, World!');
 
         // edit contract
