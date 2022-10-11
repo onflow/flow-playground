@@ -36,6 +36,7 @@ jobs:
 
   docker-api:
     name: Playground backend docker image
+    runs-on: ubuntu-latest
     steps:
       - name: Spin up backend docker container
         run: npm run start-docker
