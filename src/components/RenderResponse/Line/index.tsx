@@ -89,7 +89,6 @@ const ObjectValue = styled.pre`
 `;
 
 export const Line: React.FC<LineType> = ({
-  'data-test': dataTest,
   timestamp,
   tag,
   value,
@@ -105,7 +104,7 @@ export const Line: React.FC<LineType> = ({
       {typeof value === 'string' ? (
         <StringValue tag={tag}>{value}</StringValue>
       ) : (
-        <ObjectValue data-test={dataTest}>
+        <ObjectValue>
           {JSON.stringify(value, null, 2)}
         </ObjectValue>
       )}

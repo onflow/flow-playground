@@ -30,7 +30,7 @@ export const RenderResponse: React.FC<{
         !error &&
         data.cachedExecutionResults[resultType].map(
           (line: LineType, n: number) => (
-            <Line data-test={dataTest} {...line} key={n} />
+            <Line {...line} key={n} />
           ),
         )}
     </Root>

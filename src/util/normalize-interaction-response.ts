@@ -10,7 +10,6 @@ export type Line = {
   value: string | object;
   timestamp: string;
   label?: string;
-  'data-test'?: string;
 };
 
 export const is =
