@@ -34,18 +34,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: make ci
 
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-
   cypress-e2e:
     needs: build
     name: Cypress Emulator Tests for Flow-Playground
