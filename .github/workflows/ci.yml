@@ -31,9 +31,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - run: npm ci:check
+      - run: npm run ci:check
       - run: npm run lint
-    
+
   build:
     name: Build
     runs-on: ubuntu-latest
