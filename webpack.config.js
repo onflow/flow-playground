@@ -80,7 +80,7 @@ module.exports = {
       languages: [],
     }),
     new Dotenv({
-      path: path.resolve(__dirname, '.env')
+      systemvars: true
     }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
