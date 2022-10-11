@@ -10,14 +10,6 @@ on:
       - master
       - staging
       - setup_cypress_tests_for_flow_playground
-env:
-  PLAYGROUND_API: 'http://localhost:8080'
-  AVATAAR_URL: ''
-  GA_TRACKING_CODE: ''
-  MIXPANEL_TOKEN: ''
-  DEFAULT_SEO_IMAGE: ''
-  SENTRY_DSN: ''
-  CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
 jobs:
   tests:
@@ -63,8 +55,13 @@ jobs:
           record: true
           browser: chrome
         env:
+          PLAYGROUND_API: 'http://localhost:8080'
+          AVATAAR_URL: ''
+          GA_TRACKING_CODE: ''
+          MIXPANEL_TOKEN: ''
+          DEFAULT_SEO_IMAGE: ''
+          SENTRY_DSN: ''
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - uses: actions/upload-artifact@v3
         if: always()
