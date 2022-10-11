@@ -29,7 +29,9 @@ export const RenderResponse: React.FC<{
       {!loading &&
         !error &&
         data.cachedExecutionResults[resultType].map(
-          (line: LineType, n: number) => <Line data-test={dataTest} {...line} key={n} />,
+          (line: LineType, n: number) => (
+            <Line data-test={dataTest} {...line} key={n} />
+          ),
         )}
     </Root>
   );

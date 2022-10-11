@@ -40,9 +40,7 @@ const AccountList: React.FC = () => {
   return (
     <Root>
       <Header>Accounts</Header>
-      <Items
-        data-test="account-list"
-      >
+      <Items data-test="account-list">
         {project.accounts.map((account: Account, i: number) => {
           const { id } = account;
           const isActive = accountSelected && params.id === id;

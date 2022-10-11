@@ -64,7 +64,7 @@ const DeploymentBottomBar: React.FC<DeploymentBottomBarProps> = ({
   }, []);
 
   return (
-    <DeploymentResultContainer  height={resultHeight}>
+    <DeploymentResultContainer height={resultHeight}>
       <FeedbackRoot>
         <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
           Deployment Result
