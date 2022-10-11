@@ -88,12 +88,7 @@ const ObjectValue = styled.pre`
   font-size: var(--font-size);
 `;
 
-export const Line: React.FC<LineType> = ({
-  timestamp,
-  tag,
-  value,
-  label,
-}) => {
+export const Line: React.FC<LineType> = ({ timestamp, tag, value, label }) => {
   return (
     <Root>
       {timestamp}&nbsp;
@@ -104,9 +99,7 @@ export const Line: React.FC<LineType> = ({
       {typeof value === 'string' ? (
         <StringValue tag={tag}>{value}</StringValue>
       ) : (
-        <ObjectValue>
-          {JSON.stringify(value, null, 2)}
-        </ObjectValue>
+        <ObjectValue>{JSON.stringify(value, null, 2)}</ObjectValue>
       )}
     </Root>
   );
