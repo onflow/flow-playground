@@ -38,7 +38,7 @@ jobs:
     name: Cypress Emulator Tests for Flow-Playground
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    container: cypress/browsers:node12.18.3-chrome87-ff82
+    container: cypress/browsers:node16.17.1-chrome105-ff104-edge
     steps:
       - name: Checkout
         uses: actions/checkout@v2
