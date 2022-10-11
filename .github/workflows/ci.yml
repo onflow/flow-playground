@@ -40,15 +40,8 @@ jobs:
     runs-on: ubuntu-latest
     container: cypress/browsers:node12.18.3-chrome87-ff82
     steps:
-      - name: Spin up Docker Container
-        uses: cypress-io/github-action@v4
-        with:
-          start: npm run start-docker
-
-
-
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
       
       - name: Cypress run emulator
         uses: cypress-io/github-action@v4
