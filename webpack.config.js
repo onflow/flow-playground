@@ -79,7 +79,9 @@ module.exports = {
     new MonacoWebpackPlugin({
       languages: [],
     }),
-    new Dotenv(),
+    new Dotenv({
+      path: path.resolve(__dirname, '.env')
+    }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
     }),
