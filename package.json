@@ -10,7 +10,7 @@
     "graphql:codegen": "npx graphql-codegen --config codegen.yml",
     "test": "echo Tests command not implemented.",
     "format:app": "prettier --write src",
-    "format:check:app": "prettier --check 'src/**/*.{js,jsx,ts,tsx,css}'",
+    "format:check:app": "prettier --check 'src/**/*.{js,jsx,ts,tsx,css,cy.ts}'",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
     "start-docker": "docker run -e FLOW_DEBUG=true -e FLOW_SESSIONCOOKIESSECURE=false -p 8080:8080 gcr.io/dl-flow/playground-api:latest ?",
     "snyk-protect": "snyk protect",
