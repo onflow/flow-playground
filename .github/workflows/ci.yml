@@ -17,6 +17,7 @@ env:
   MIXPANEL_TOKEN: ''
   DEFAULT_SEO_IMAGE: ''
   SENTRY_DSN: ''
+  CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
 jobs:
   tests:
