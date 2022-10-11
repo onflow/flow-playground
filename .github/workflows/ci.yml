@@ -19,6 +19,21 @@ env:
   SENTRY_DSN: ''
 
 jobs:
+  tests:
+    name: 'Linter and Unit Tests'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [15.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: make ci
+
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -30,34 +45,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: Formatting and ts linter
-        run: make ci
-
-      - name: Build
-        run: npm run build
-
-  test:
-    needs: build
-    name: Unit Tests
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Check formatting and ts linter
-        run: make ci
-
-      - name: Unit Tests
-        run: npm run test
 
   cypress-e2e:
     needs: build
