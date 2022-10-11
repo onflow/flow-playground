@@ -34,8 +34,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: make ci
 
+  docker-api:
+    name: Playground backend docker image
+    run: npm run start-docker
+
   cypress-e2e:
     name: Cypress Emulator Tests for Flow-Playground
+    needs: docker-api
     timeout-minutes: 10
     runs-on: ubuntu-latest
     container: cypress/browsers:node16.17.1-chrome105-ff104-edge
