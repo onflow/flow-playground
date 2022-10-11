@@ -19,52 +19,92 @@ env:
   SENTRY_DSN: ''
 
 jobs:
-  test:
-    name: 'Tests'
+  linter:
+    name: Prettier check
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - run: npm ci:check
+      - run: npm run lint
+    
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - run: make ci
+
+      - name: Install dependencies
+        run: make ci
+
+      - name: Build
+        run: npm run build
+
+  test:
+    needs: build
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: make ci
+
+      - name: Unit Tests
+        run: npm run test
 
   cypress-e2e:
+    needs: build
     name: Cypress Emulator Tests for Flow-Playground
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    container: cypress/browsers:node16.14.2-slim-chrome103-ff102
     steps:
-      - name: Spin up Docker Container
-        uses: cypress-io/github-action@v4
-        with:
-          start: npm run start-docker
-
       - name: Checkout
         uses: actions/checkout@v3
-      
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: make ci
+
+      - name: Start Playground Docker Container
+        run: npm run start-docker
+
       - name: Cypress run emulator
         uses: cypress-io/github-action@v4
         with:
           start: npm run start
           wait-on: http://localhost:3000
-          spec: cypress/e2e/playground.cy.js
+          spec: cypress/e2e/playground.cy.ts
           record: true
           browser: chrome
         env:
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
       
       - uses: actions/upload-artifact@v3
         if: always()
