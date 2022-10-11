@@ -35,7 +35,6 @@ jobs:
       - run: make ci
 
   cypress-e2e:
-    needs: build
     name: Cypress Emulator Tests for Flow-Playground
     timeout-minutes: 10
     runs-on: ubuntu-latest
