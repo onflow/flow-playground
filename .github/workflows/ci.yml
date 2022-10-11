@@ -12,7 +12,6 @@ on:
       - setup_cypress_tests_for_flow_playground
 env:
   PLAYGROUND_API: 'http://localhost:8080'
-  CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
   AVATAAR_URL: ''
   GA_TRACKING_CODE: ''
   MIXPANEL_TOKEN: ''
@@ -62,6 +61,9 @@ jobs:
           spec: cypress/e2e/playground.cy.ts
           record: true
           browser: chrome
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - uses: actions/upload-artifact@v3
         if: always()
