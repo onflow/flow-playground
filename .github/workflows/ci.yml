@@ -50,6 +50,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Spin up docker backend
+        run: npm run start-docker
+
       - name: Cypress run emulator
         uses: cypress-io/github-action@v4
         with:
