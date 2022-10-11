@@ -3,13 +3,13 @@ name: Continuous Integration
 on:
   pull_request:
     branches:
-      -master
-      -staging
+      - master
+      - staging
   push:
     branches:
-      -master
-      -staging
-      -setup_cypress_tests_for_flow_playground
+      - master
+      - staging
+      - setup_cypress_tests_for_flow_playground
 env:
   PLAYGROUND_API: ''
   AVATAAR_URL: ''
@@ -38,12 +38,22 @@ jobs:
     name: Cypress Emulator Tests for Flow-Playground
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    container: cypress/browsers:node16.14.2-slim-chrome103-ff102
+    container: cypress/browsers:node12.18.3-chrome87-ff82
     steps:
       - name: Spin up Docker Container
         uses: cypress-io/github-action@v4
         with:
           start: npm run start-docker
+
+
+
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Cypress run emulator
+        uses: cypress-io/github-action@4
+        with:
+          start: npm run start
           wait-on: http://localhost:3000
           spec: cypress/e2e/playground.cy.js
           record: true
@@ -57,7 +67,7 @@ jobs:
         with:
           name: cypress-screenshots
           path: cypress/screenshots
-      # Test run video was always captured, so this action uses "always()" condition
+      
       - uses: actions/upload-artifact@v3
         if: always()
         with:
