@@ -11,7 +11,7 @@ on:
       - staging
       - setup_cypress_tests_for_flow_playground
 env:
-  PLAYGROUND_API: ''
+  PLAYGROUND_API: 'htpp://localhost:8080'
   AVATAAR_URL: ''
   GA_TRACKING_CODE: ''
   MIXPANEL_TOKEN: ''
@@ -57,14 +57,12 @@ jobs:
         uses: cypress-io/github-action@v4
         with:
           start: npm run start
-          wait-on: http://localhost:8080
           wait-on: http://localhost:3000
           spec: cypress/e2e/playground.cy.ts
           record: false
           browser: chrome
         env:
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       
       - uses: actions/upload-artifact@v3
         if: always()
