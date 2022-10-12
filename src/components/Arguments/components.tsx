@@ -259,7 +259,7 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
     project,
     active: activeEditor,
     getActiveCode,
-    isSavingCode,
+    isSaving,
     isExecutingAction,
   } = useProject();
   const label = getLabel(type, project, activeEditor);
@@ -269,9 +269,9 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
       <Button
         onClick={onClick}
         Icon={FaArrowCircleRight}
-        disabled={isSavingCode || !active || code.length === 0}
+        disabled={isSaving || !active || code.length === 0}
+        hideDisabledState={isSaving && !isExecutingAction}
         data-test={getActionButtonTestTag(type)}
-        hideDisabledState={isSavingCode && !isExecutingAction}
       >
         {label}
       </Button>

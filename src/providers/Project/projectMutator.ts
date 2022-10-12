@@ -6,6 +6,7 @@ import {
   Account,
   GetProjectQuery,
   Project,
+  Scalars,
 } from 'api/apollo/generated/graphql';
 import {
   CREATE_PROJECT,
@@ -29,7 +30,7 @@ import {
   registerOnCloseSaveMessage,
   unregisterOnCloseSaveMessage,
 } from 'util/onclose';
-import { DEFAULT_ACCOUNT_STATE } from './projectDefault';
+import { createDefaultProject, DEFAULT_ACCOUNT_STATE } from './projectDefault';
 
 // TODO: Switch to directives for serialization keys after upgrading to the newest Apollo/apollo-link-serialize
 export const PROJECT_SERIALIZATION_KEY = 'PROJECT_SERIALIZATION_KEY';
@@ -42,6 +43,7 @@ export default class ProjectMutator {
   readme: string;
   isLocal: boolean;
   track: any;
+  persistToLocalStorage: (id: Scalars['UUID']) => void;
 
   constructor(
     client: ApolloClient<object>,
@@ -50,6 +52,7 @@ export default class ProjectMutator {
     title: string,
     description: string,
     readme: string,
+    persistToLocalStorage?: (id: Scalars['UUID']) => void,
   ) {
     this.client = client;
     this.projectId = projectId;
@@ -57,23 +60,26 @@ export default class ProjectMutator {
     this.title = title;
     this.description = description;
     this.readme = readme;
+    this.persistToLocalStorage = persistToLocalStorage;
   }
 
-  async createProject(): Promise<Project> {
-    const { project: localProject } = this.client.readQuery({
-      query: GET_LOCAL_PROJECT,
-    });
+  async createProject(blank = false): Promise<Project> {
+    const newProject = blank
+      ? createDefaultProject()
+      : this.client.readQuery({
+          query: GET_LOCAL_PROJECT,
+        }).project;
 
-    const parentId = localProject.parentId;
-    const accounts = localProject.accounts.map((acc: Account) => acc.draftCode);
-    const seed = localProject.seed;
-    const title = localProject.title;
-    const description = localProject.description;
-    const readme = localProject.readme;
-    const transactionTemplates = localProject.transactionTemplates.map(
+    const parentId = newProject.parentId;
+    const accounts = newProject.accounts.map((acc: Account) => acc.draftCode);
+    const seed = newProject.seed;
+    const title = newProject.title;
+    const description = newProject.description;
+    const readme = newProject.readme;
+    const transactionTemplates = newProject.transactionTemplates.map(
       (tpl: any) => ({ script: tpl.script, title: tpl.title }),
     );
-    const scriptTemplates = localProject.scriptTemplates.map((tpl: any) => ({
+    const scriptTemplates = newProject.scriptTemplates.map((tpl: any) => ({
       script: tpl.script,
       title: tpl.title,
     }));
@@ -160,6 +166,8 @@ export default class ProjectMutator {
       },
     });
 
+    this.persistToLocalStorage(this.projectId);
+
     if (isFork) {
       Mixpanel.track('Project forked', { projectId: this.projectId });
     } else {
@@ -167,6 +175,31 @@ export default class ProjectMutator {
     }
 
     navigate(`/${this.projectId}`, { replace: true });
+  }
+
+  // TODO: This is a temporary function. The v2 api will change how projects are created and persisted
+  async persistProject() {
+    this.client.writeData({
+      id: `Project:${this.projectId}`,
+      data: {
+        persist: true,
+      },
+    });
+
+    await this.client.mutate({
+      mutation: SAVE_PROJECT,
+      variables: {
+        projectId: this.projectId,
+        title: this.title,
+        description: this.description,
+        readme: this.readme,
+      },
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
+    });
+
+    this.persistToLocalStorage(this.projectId);
   }
 
   async updateAccountDraftCode(account: Account, code: string) {

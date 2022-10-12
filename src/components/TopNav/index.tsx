@@ -2,13 +2,15 @@ import Button from 'components/Button';
 import { Separator } from 'components/Common';
 import Examples from 'components/Examples';
 import ExportPopup from 'components/ExportPopup';
-import { AnimatedText, ShareSaveButton } from 'containers/Editor/components';
+import PlusIcon from 'components/Icons/PlusIcon';
+import { AnimatedText } from 'containers/Editor/components';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useState } from 'react';
 import { FaArrowAltCircleDown } from 'react-icons/fa';
 import { SXStyles } from 'src/types';
 import { Flex } from 'theme-ui';
 import Mixpanel from 'util/mixpanel';
+import ShareSaveButton from './ShareSaveButton';
 import ExternalNavLinks from './TopNavButton';
 
 const styles: SXStyles = {
@@ -42,7 +44,7 @@ const styles: SXStyles = {
 };
 
 const TopNav = () => {
-  const { project, updateProject } = useProject();
+  const { project, createBlankProject, isSaving } = useProject();
   const [showExport, setShowExport] = useState(false);
   const [showExamples, setShowExamples] = useState(false);
 
@@ -51,12 +53,18 @@ const TopNav = () => {
     Mixpanel.track('Show examples', { meta: 'none' });
   };
 
-  const onSaveButtonClick = () =>
-    updateProject(project.title, project.description, project.readme);
-
   return (
     <Flex sx={styles.root}>
-      <Flex sx={styles.topNavSection} />
+      <Flex sx={styles.topNavSection}>
+        <Button
+          onClick={createBlankProject}
+          variant="alternate"
+          size="sm"
+          disabled={isSaving}
+        >
+          <PlusIcon />
+        </Button>
+      </Flex>
       <Flex sx={styles.topNavSection}>
         <Button variant="secondary" onClick={onStartButtonClick}>
           <AnimatedText>Click here to start a tutorial</AnimatedText>
@@ -75,12 +83,7 @@ const TopNav = () => {
               Export
               <FaArrowAltCircleDown />
             </Button>
-            <ShareSaveButton
-              url={window.location.href}
-              hasParent={!!project.parentId}
-              showShare={project.persist}
-              onSave={onSaveButtonClick}
-            />
+            <ShareSaveButton />
           </>
         )}
       </Flex>

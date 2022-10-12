@@ -4,10 +4,10 @@ function AnchorIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="14"
-      height="14"
+      width="16"
+      height="16"
       fill="none"
-      viewBox="0 0 14 14"
+      viewBox="0 0 16 16"
     >
       <path
         fill="#000"
