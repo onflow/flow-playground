@@ -1,6 +1,6 @@
 import { Project } from 'api/apollo/generated/graphql';
 import AccountPicker from 'components/AccountPicker';
-import Button from 'components/Button';
+import Button from 'components/LegacyButton';
 import { Stack } from 'layout/Stack';
 import { ActiveEditor, EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
