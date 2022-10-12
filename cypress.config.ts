@@ -2,7 +2,7 @@ import { defineConfig } from "cypress";
 
 export default defineConfig({
   projectId: "h1jieb",
-  defaultCommandTimeout: 6000,
+  defaultCommandTimeout: 10000,
   viewportWidth: 1536,
   viewportHeight: 960,
   chromeWebSecurity: false,
