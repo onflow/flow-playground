@@ -23,8 +23,9 @@ export const RenderResponse: React.FC<{
       serializationKey: PROJECT_SERIALIZATION_KEY,
     },
   });
+  const dataTest = `${resultType}-response`;
   return (
-    <Root resultType={resultType}>
+    <Root resultType={resultType} data-test={dataTest}>
       {!loading &&
         !error &&
         data.cachedExecutionResults[resultType].map(

@@ -71,6 +71,7 @@ interface ButtonProps extends ChildPropsOptional {
   isLoading?: boolean;
   isActive?: boolean;
   disabled?: boolean;
+  'data-test'?: string;
   hideDisabledState?: boolean;
 }
 
@@ -83,6 +84,7 @@ const Button: React.FC<ButtonProps> = ({
   isLoading,
   isActive,
   disabled,
+  'data-test': dataTest,
   hideDisabledState,
 }) => {
   const showDisabledState = disabled && !hideDisabledState;
@@ -91,6 +93,7 @@ const Button: React.FC<ButtonProps> = ({
       <StyledButton
         style={style}
         className={className}
+        data-test={dataTest}
         onClick={onClick}
         variant={
           isActive && !showDisabledState

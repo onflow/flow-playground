@@ -101,7 +101,7 @@ const TransactionBottomBar: React.FC<TransactionBottomBarProps> = ({
   }, []);
 
   return (
-    <FeedbackContainer height={resultHeight}>
+    <FeedbackContainer data-test="transaction-result" height={resultHeight}>
       <FeedbackRoot>
         <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
           Transaction Results

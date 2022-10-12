@@ -239,6 +239,17 @@ const getLabel = (type: EntityType, project: Project, active: ActiveEditor) => {
   }
 };
 
+const getActionButtonTestTag = (type: EntityType) => {
+  switch (type) {
+    case 1:
+      return 'deploy-button';
+    case 2:
+      return 'send-button';
+    default:
+      return 'execute-button';
+  }
+};
+
 export const ActionButton: React.FC<InteractionButtonProps> = ({
   type,
   active = true,
@@ -259,6 +270,7 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
         onClick={onClick}
         Icon={FaArrowCircleRight}
         disabled={isSavingCode || !active || code.length === 0}
+        data-test={getActionButtonTestTag(type)}
         hideDisabledState={isSavingCode && !isExecutingAction}
       >
         {label}

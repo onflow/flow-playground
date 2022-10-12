@@ -1,11 +1,11 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import { MonacoLanguageClient } from 'monaco-languageclient';
 import { EntityType } from 'providers/Project';
 import {
   CadenceProblem,
   Highlight,
   ProblemsList,
 } from 'util/language-syntax-errors';
-import { MonacoLanguageClient } from 'monaco-languageclient';
 
 export type InteractionButtonProps = {
   onClick: () => void;

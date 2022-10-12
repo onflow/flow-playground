@@ -364,7 +364,6 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   }
 
   const actions = { goTo, hover, hideDecorations };
-
   return (
     <>
       <div ref={constraintsRef} className="constraints" />

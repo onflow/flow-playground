@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "types": ["node", "cypress"],
     "target": "es6",
     "module": "esnext",
     "jsx": "react",
