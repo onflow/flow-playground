@@ -59,8 +59,8 @@ describe('Flow-Playground frontend tests', () => {
 
         // edit contract
         cy.get(ACCOUNTS_LIST).children().first().click();
-        cy.get(MONACO_EDITOR).click().focused().type('{cmd}a').clear()
-        cy.get(MONACO_EDITOR).should('have.value', '')
+        cy.get(MONACO_EDITOR).click().focused().type('{cmd}a').clear();
+        cy.get(MONACO_EDITOR).should('be.empty');
         cy.get(DEPLOY_BUTTON).should('be.disabled');
         cy.get(MONACO_EDITOR).click().focused().type('access(all) contract HelloWorld { access(all) let greeting: String init() { self.greeting = "Hello, Other World!" } access(all) fun other_hello(): String {return self.greeting}}', {parseSpecialCharSequences: false});
         cy.get(DEPLOY_BUTTON).should('be.enabled');
@@ -68,12 +68,12 @@ describe('Flow-Playground frontend tests', () => {
         cy.get('[data-test="redeploy-confirm-button"]').should('exist').click();
         cy.get(STATUS_MESSAGE).should('have.text', 'Please wait...');
         cy.get(DEPLOY_BUTTON).should('have.text', 'Redeploy');
-        cy.get(DEPLOY_BUTTON).should('be.enabled')
+        cy.get(DEPLOY_BUTTON).should('be.enabled');
 
         // select and edit transaction
         cy.get('[data-test="sidebar-Transaction"]').click();
         cy.get(SEND_BUTTON).should('have.text', 'Send').should('be.disabled');
-        cy.get(MONACO_EDITOR).click().focused().type( '{cmd}a' ).type('import HelloWorld from 0x01 transaction { prepare(acct: AuthAccount) {} execute { log(HelloWorld.other_hello())}}', {parseSpecialCharSequences: false})
+        cy.get(MONACO_EDITOR).click().focused().type( '{cmd}a' ).type('import HelloWorld from 0x01 transaction { prepare(acct: AuthAccount) {} execute { log(HelloWorld.other_hello())}}', {parseSpecialCharSequences: false});
 
 
         // successfully send transaction

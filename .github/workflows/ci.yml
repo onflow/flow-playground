@@ -56,11 +56,6 @@ jobs:
           browser: chrome
         env:
           PLAYGROUND_API: 'http://localhost:8080'
-          AVATAAR_URL: ''
-          GA_TRACKING_CODE: ''
-          MIXPANEL_TOKEN: ''
-          DEFAULT_SEO_IMAGE: ''
-          SENTRY_DSN: ''
       
       - uses: actions/upload-artifact@v3
         if: always()
