@@ -14,17 +14,22 @@ interface ButtonProps extends ChildProps {
   sx?: ThemeUICSSObject;
 }
 
-const styles = {
+const getStyles = (disabled: boolean) => ({
   root: {
     display: 'flex',
     alignItems: 'center',
     gap: 4,
+    '&:hover': {
+      cursor: disabled ? 'default' : 'pointer',
+    },
   },
-};
+});
 
 const sizeStyles: Record<ButtonSizes, ThemeUICSSObject> = {
   sm: {
-    p: 4,
+    height: 34,
+    py: 2,
+    px: 4,
     fontSize: 1,
     color: 'text',
     borderRadius: '4px',
@@ -42,6 +47,7 @@ const Button = ({
   disabled,
   sx = {},
 }: ButtonProps) => {
+  const styles = getStyles(disabled);
   const mergedSx = { ...styles.root, ...sizeStyles[size], ...sx };
   return (
     <ThemeUiButton

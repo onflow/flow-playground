@@ -57,6 +57,7 @@
     "theme-ui": "^0.14.7",
     "unique-names-generator": "^4.7.1",
     "unreset-css": "^1.0.1",
+    "use-persisted-state": "^0.3.3",
     "vscode-jsonrpc": "^6.0.0"
   },
   "devDependencies": {
@@ -81,6 +82,7 @@
     "@types/react-helmet": "^6.1.5",
     "@types/react-icons": "^3.0.0",
     "@types/styled-components": "^5.1.26",
+    "@types/use-persisted-state": "^0.3.1",
     "@types/vscode": "^1.71.0",
     "@typescript-eslint/eslint-plugin": "^5.38.0",
     "@typescript-eslint/parser": "^5.38.0",

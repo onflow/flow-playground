@@ -4,9 +4,10 @@ import React, { createContext, useState } from 'react';
 import useGetProject from './projectHooks';
 import ProjectMutator, { PROJECT_SERIALIZATION_KEY } from './projectMutator';
 
-import { Account, Project } from 'api/apollo/generated/graphql';
+import { Account, Project, Scalars } from 'api/apollo/generated/graphql';
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
 import { ChildProps } from 'src/types';
+import createPersistedState from 'use-persisted-state';
 import { getParams } from 'util/url';
 
 export enum EntityType {
@@ -26,7 +27,9 @@ export type ActiveEditor = {
 export interface ProjectContextValue {
   project: Project | null;
   isLoading: boolean;
+  persistedProjectIds: string[];
   mutator: ProjectMutator;
+  createBlankProject: () => Promise<Project>;
   updateProject: (
     title: string,
     description: string,
@@ -66,7 +69,7 @@ export interface ProjectContextValue {
   lastSigners: string[];
   setLastSigners: (signers: string[]) => void;
   transactionAccounts: number[];
-  isSavingCode: boolean;
+  isSaving: boolean;
   isExecutingAction: boolean;
 }
 
@@ -76,6 +79,10 @@ export const ProjectContext: React.Context<ProjectContextValue> =
 interface ProjectProviderProps extends ChildProps {
   urlProjectId: string | null;
 }
+
+const usePersistedProjectIdsState = createPersistedState<string[]>(
+  'persistedProjectIds',
+);
 
 export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   children,
@@ -115,7 +122,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   });
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [transactionAccounts, setTransactionAccounts] = useState<number[]>([0]);
-  const [isSavingCode, setIsSaving] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [isExecutingAction, setIsExecutingAction] = useState(false);
   const [lastSigners, setLastSigners] = useState(null);
 
@@ -126,6 +133,12 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const title = project ? project.title : null;
   const description = project ? project.description : null;
   const readme = project ? project.readme : null;
+  const [persistedProjectIds, setPersistedProjectIds] =
+    usePersistedProjectIdsState([]);
+  console.log(persistedProjectIds);
+  const persistProject = (id: Scalars['UUID']) => {
+    setPersistedProjectIds((prev: string[]) => [...prev, id]);
+  };
 
   const mutator = new ProjectMutator(
     client,
@@ -134,9 +147,27 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     title,
     description,
     readme,
+    persistProject,
   );
 
   const showError = () => alert('Something went wrong, please try again');
+
+  const createBlankProject = async () => {
+    setIsSaving(true);
+    let res;
+    try {
+      project = await mutator.createProject(true);
+      navigate(`/${project.id}`, { replace: true });
+      await mutator.persistProject();
+    } catch (e) {
+      console.error(e);
+      setIsSaving(false);
+      showError();
+    }
+
+    setIsSaving(false);
+    return res;
+  };
 
   const updateProject: any = async (
     title: string,
@@ -539,9 +570,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       value={{
         project,
         isLoading,
+        persistedProjectIds,
         mutator,
-        isSavingCode,
+        isSaving,
         isExecutingAction,
+        createBlankProject,
         updateProject,
         updateAccountDeployedCode,
         updateAccountDraftCode,

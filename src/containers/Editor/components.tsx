@@ -11,11 +11,7 @@ import {
 } from 'providers/Project/projectDefault';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useRef, useState } from 'react';
-import { FaCloudUploadAlt, FaCodeBranch } from 'react-icons/fa';
-import useClipboard from 'react-use-clipboard';
 import { Divider, Flex } from 'theme-ui';
-
-import Mixpanel from 'util/mixpanel';
 
 // import CadenceEditor from 'components/CadenceEditor';
 import {
@@ -37,9 +33,7 @@ import {
   ReadmeHtmlContainer,
 } from './layout-components';
 
-import Button from 'components/Button';
 import CadenceEditor from 'components/CadenceEditor';
-import AnchorIcon from 'components/Icons/AnchorIcon';
 import { ChildProps } from 'src/types';
 import { decodeText } from 'util/readme';
 
@@ -64,51 +58,6 @@ const Header = ({ children }: ChildProps) => {
         {children}
       </Flex>
     </motion.div>
-  );
-};
-
-const ShareButton = ({ url }: { url: string }) => {
-  const [isCopied, setCopied] = useClipboard(url, { successDuration: 2000 });
-  const onClick = () => {
-    setCopied();
-    Mixpanel.track('Share link copied', { url });
-  };
-  return (
-    <Button onClick={onClick} variant="alternate" size="sm">
-      {!isCopied ? 'Share' : 'Link Copied!'}
-      <AnchorIcon />
-    </Button>
-  );
-};
-
-type ShareSaveButtonProps = {
-  url: string;
-  hasParent: boolean;
-  showShare: boolean;
-  onSave: () => void;
-};
-
-const ShareSaveButton = ({
-  url,
-  hasParent,
-  showShare,
-  onSave,
-}: ShareSaveButtonProps) => {
-  const { isSavingCode } = useProject();
-  const text = hasParent ? 'Fork' : 'Save';
-
-  if (showShare) return <ShareButton url={url} />;
-
-  return (
-    <Button
-      onClick={onSave}
-      variant="alternate"
-      disabled={isSavingCode}
-      size="sm"
-    >
-      {text}
-      {hasParent ? <FaCodeBranch /> : <FaCloudUploadAlt />}
-    </Button>
   );
 };
 
@@ -352,4 +301,4 @@ const AnimatedText = styled.div`
   }
 `;
 
-export { EditorContainer, Header, ShareSaveButton, AnimatedText };
+export { EditorContainer, Header, AnimatedText };
