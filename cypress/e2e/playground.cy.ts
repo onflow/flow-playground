@@ -11,38 +11,6 @@ describe('Flow-Playground frontend tests', () => {
         cy.visit('/')
     })
 
-    it('deploys a contract', () => {
-        cy.get(ACCOUNTS_LIST).children().should('have.length', 5).first().click();
-        cy.get(DEPLOY_BUTTON).should('have.text', 'Deploy').click();
-        cy.get(STATUS_MESSAGE).should('have.text', 'Please wait...');
-        cy.get(DEPLOY_BUTTON).should('have.text', 'Redeploy');
-        cy.get('[data-test="CONTRACT-response"]').should('include.text', 'Deployed Contract To: 0x01');
-    })
-
-    it('sends a transaction', () =>{
-        cy.get('[data-test="sidebar-Transaction"]').click();
-        cy.get('[data-test="editor-heading"]').should('include.text', 'Transaction Template');
-        // Ensure action button is disabled when contract not deployed yet
-        cy.get(SEND_BUTTON).should('be.disabled');
-
-        // deploy contract
-        cy.get(ACCOUNTS_LIST).children().first().click();
-        cy.get(DEPLOY_BUTTON).should('have.text', 'Deploy').click();
-        cy.get(DEPLOY_BUTTON).should('have.text', 'Redeploy');
-
-        // open transaction template and successfully send transaction
-        cy.get('[data-test="sidebar-Transaction"]').click();
-        cy.get(SEND_BUTTON).should('have.text', 'Send').should('be.enabled').click();
-        cy.get('[data-test="TRANSACTION-response"]').should('include.text', 'Hello, World!');
-    })
-
-    it('executes a script', () => {
-        cy.get('[data-test="sidebar-Script"]').click();
-        cy.get('[data-test="editor-heading"]').should('include.text', 'Script Template');
-        cy.get(EXECUTE).should('have.text', 'Execute').click();
-        cy.get('[data-test="SCRIPT-response"]').should('include.text', '{"type":"Int","value":"1"}');
-    })
-
     it('reflects changes to imported contract after contract has been redeployed', () => {
 
         // deploy contract
@@ -80,6 +48,38 @@ describe('Flow-Playground frontend tests', () => {
         cy.get(SEND_BUTTON).should('have.text', 'Send').should('be.enabled').click();
         cy.get('[data-test="transaction-result"]').should('include.text', 'Hello, Other World!');
 
+    })
+
+    it('deploys a contract', () => {
+        cy.get(ACCOUNTS_LIST).children().should('have.length', 5).first().click();
+        cy.get(DEPLOY_BUTTON).should('have.text', 'Deploy').click();
+        cy.get(STATUS_MESSAGE).should('have.text', 'Please wait...');
+        cy.get(DEPLOY_BUTTON).should('have.text', 'Redeploy');
+        cy.get('[data-test="CONTRACT-response"]').should('include.text', 'Deployed Contract To: 0x01');
+    })
+
+    it('executes a script', () => {
+        cy.get('[data-test="sidebar-Script"]').click();
+        cy.get('[data-test="editor-heading"]').should('include.text', 'Script Template');
+        cy.get(EXECUTE).should('have.text', 'Execute').click();
+        cy.get('[data-test="SCRIPT-response"]').should('include.text', '{"type":"Int","value":"1"}');
+    })
+    
+    it('sends a transaction', () =>{
+        cy.get('[data-test="sidebar-Transaction"]').click();
+        cy.get('[data-test="editor-heading"]').should('include.text', 'Transaction Template');
+        // Ensure action button is disabled when contract not deployed yet
+        cy.get(SEND_BUTTON).should('be.disabled');
+
+        // deploy contract
+        cy.get(ACCOUNTS_LIST).children().first().click();
+        cy.get(DEPLOY_BUTTON).should('have.text', 'Deploy').click();
+        cy.get(DEPLOY_BUTTON).should('have.text', 'Redeploy');
+
+        // open transaction template and successfully send transaction
+        cy.get('[data-test="sidebar-Transaction"]').click();
+        cy.get(SEND_BUTTON).should('have.text', 'Send').should('be.enabled').click();
+        cy.get('[data-test="TRANSACTION-response"]').should('include.text', 'Hello, World!');
     })
 
 })

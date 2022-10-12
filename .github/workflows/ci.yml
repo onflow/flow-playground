@@ -9,7 +9,6 @@ on:
     branches:
       - master
       - staging
-      - setup_cypress_tests_for_flow_playground
 
 jobs:
   tests:
