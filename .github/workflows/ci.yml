@@ -52,10 +52,12 @@ jobs:
           start: npm run start
           wait-on: http://localhost:3000
           spec: cypress/e2e/playground.cy.ts
-          record: false
+          record: true
           browser: chrome
         env:
           PLAYGROUND_API: 'http://localhost:8080'
+          CYPRESS_RECORD_KEY: '${{ secrets.CYPRESS_RECORD_KEY }}'
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
       
       - uses: actions/upload-artifact@v3
         if: always()
