@@ -1,12 +1,12 @@
-import React from 'react';
 import { Redirect } from '@reach/router';
+import React from 'react';
 
-import { ProjectProvider } from 'providers/Project';
 import CadenceChecker from 'providers/CadenceChecker';
+import { ProjectProvider } from 'providers/Project';
 
-import EditorLayout from './layout';
 import { Base } from 'layout/Base';
 import { LOCAL_PROJECT_ID } from 'util/url';
+import EditorLayout from './layout';
 
 const Playground: any = (props: any) => {
   const { projectId } = props;

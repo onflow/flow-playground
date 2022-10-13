@@ -1,11 +1,6 @@
 import styled from '@emotion/styled';
-import { motion } from 'framer-motion';
-import React, { useEffect, useRef, useState } from 'react';
-import { FaShareSquare } from 'react-icons/fa';
-import useClipboard from 'react-use-clipboard';
-import { Box, Button, Divider, Flex } from 'theme-ui';
-
 import { Account, Project } from 'api/apollo/generated/graphql';
+import { motion } from 'framer-motion';
 import { Editor as EditorRoot } from 'layout/Editor';
 import { Heading } from 'layout/Heading';
 import { Main as MainRoot } from 'layout/Main';
@@ -15,10 +10,13 @@ import {
   PLACEHOLDER_TITLE,
 } from 'providers/Project/projectDefault';
 import { useProject } from 'providers/Project/projectHooks';
+import React, { useEffect, useRef, useState } from 'react';
+import { FaCloudUploadAlt, FaCodeBranch } from 'react-icons/fa';
+import useClipboard from 'react-use-clipboard';
+import { Divider, Flex } from 'theme-ui';
 
 import Mixpanel from 'util/mixpanel';
 
-import { default as FlowButton } from 'components/Button';
 // import CadenceEditor from 'components/CadenceEditor';
 import {
   Input,
@@ -39,7 +37,9 @@ import {
   ReadmeHtmlContainer,
 } from './layout-components';
 
+import Button from 'components/Button';
 import CadenceEditor from 'components/CadenceEditor';
+import AnchorIcon from 'components/Icons/AnchorIcon';
 import { ChildProps } from 'src/types';
 import { decodeText } from 'util/readme';
 
@@ -67,75 +67,48 @@ const Header = ({ children }: ChildProps) => {
   );
 };
 
-const NavButton = ({ children }: ChildProps) => {
-  return (
-    <Button
-      variant="secondary"
-      sx={{
-        marginLeft: '0.25rem',
-        textDecoration: 'none',
-      }}
-    >
-      {children}
-    </Button>
-  );
-};
-
-const Nav = ({ children }: ChildProps) => {
-  return <Flex>{children}</Flex>;
-};
-
 const ShareButton = ({ url }: { url: string }) => {
   const [isCopied, setCopied] = useClipboard(url, { successDuration: 2000 });
+  const onClick = () => {
+    setCopied();
+    Mixpanel.track('Share link copied', { url });
+  };
   return (
-    <Flex
-      sx={{
-        alignItems: 'center',
-      }}
-    >
-      <FlowButton
-        onClick={() => {
-          setCopied();
-          Mixpanel.track('Share link copied', { url });
-        }}
-        Icon={FaShareSquare}
-      >
-        {!isCopied ? 'Share' : 'Link Copied!'}
-      </FlowButton>
-    </Flex>
+    <Button onClick={onClick} variant="alternate" size="sm">
+      {!isCopied ? 'Share' : 'Link Copied!'}
+      <AnchorIcon />
+    </Button>
   );
 };
 
 type ShareSaveButtonProps = {
   url: string;
-  saveText: string;
+  hasParent: boolean;
   showShare: boolean;
   onSave: () => void;
-  icon: any;
 };
 
 const ShareSaveButton = ({
   url,
-  saveText,
+  hasParent,
   showShare,
   onSave,
-  icon,
 }: ShareSaveButtonProps) => {
   const { isSavingCode } = useProject();
+  const text = hasParent ? 'Fork' : 'Save';
+
+  if (showShare) return <ShareButton url={url} />;
+
   return (
-    <Box sx={{ marginRight: '0.5rem' }}>
-      {showShare ? (
-        <ShareButton url={url} />
-      ) : (
-        <FlowButton
-          onClick={() => onSave()}
-          disabled={isSavingCode}
-          Icon={icon}
-        >
-          {saveText}
-        </FlowButton>
-      )}
-    </Box>
+    <Button
+      onClick={onSave}
+      variant="alternate"
+      disabled={isSavingCode}
+      size="sm"
+    >
+      {text}
+      {hasParent ? <FaCodeBranch /> : <FaCloudUploadAlt />}
+    </Button>
   );
 };
 
@@ -379,11 +352,4 @@ const AnimatedText = styled.div`
   }
 `;
 
-export {
-  EditorContainer,
-  Header,
-  NavButton,
-  Nav,
-  ShareSaveButton,
-  AnimatedText,
-};
+export { EditorContainer, Header, ShareSaveButton, AnimatedText };

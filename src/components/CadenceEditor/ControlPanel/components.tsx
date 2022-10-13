@@ -1,8 +1,8 @@
-import React from 'react';
+import LegacyButton from 'components/LegacyButton';
 import { motion } from 'framer-motion';
+import React from 'react';
 import styled from 'styled-components';
 import theme from '../../../theme';
-import Button from 'components/Button';
 
 export const MotionBox = (props: any) => {
   const { children, dragConstraints } = props;
@@ -232,7 +232,7 @@ export const SignersError = styled.p`
   }
 `;
 
-export const Confirm = styled(Button)`
+export const Confirm = styled(LegacyButton)`
   background-color: ${theme.colors.error};
   color: #fff;
   margin-right: 0.5rem;
@@ -242,7 +242,7 @@ export const Confirm = styled(Button)`
   }
 `;
 
-export const Cancel = styled(Button)`
+export const Cancel = styled(LegacyButton)`
   background-color: ${theme.colors.background};
   color: ${theme.colors.text};
   border: 1px solid ${theme.colors.greyBorder};
