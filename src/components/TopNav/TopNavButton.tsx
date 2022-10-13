@@ -35,7 +35,7 @@ const NavButton = ({ href, title, children }: NavButtonProps) => {
   );
 };
 
-// These nav links are temporary, and will be removed in v2
+// Nav links will be moved to the tutorial sidebar in v2
 const ExternalNavLinks = () => {
   return (
     <>
