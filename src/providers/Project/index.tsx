@@ -135,8 +135,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const readme = project ? project.readme : null;
   const [persistedProjectIds, setPersistedProjectIds] =
     usePersistedProjectIdsState([]);
-  console.log(persistedProjectIds);
-  const persistProject = (id: Scalars['UUID']) => {
+
+  const persistToLocalStorage = (id: Scalars['UUID']) => {
     setPersistedProjectIds((prev: string[]) => [...prev, id]);
   };
 
@@ -147,7 +147,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     title,
     description,
     readme,
-    persistProject,
+    persistToLocalStorage,
   );
 
   const showError = () => alert('Something went wrong, please try again');
