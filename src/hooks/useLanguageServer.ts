@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
-import { CadenceLanguageServer, Callbacks } from 'util/language-server';
-import { MonacoServices } from 'monaco-languageclient/lib/monaco-services';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import { createCadenceLanguageClient } from 'util/language-client';
+import { MonacoLanguageClient } from 'monaco-languageclient';
+import { MonacoServices } from 'monaco-languageclient/lib/monaco-services';
 import { useProject } from 'providers/Project/projectHooks';
+import { useEffect, useState } from 'react';
+import { createCadenceLanguageClient } from 'util/language-client';
+import { CadenceLanguageServer, Callbacks } from 'util/language-server';
 
 let monacoServicesInstalled = false;
 
-async function startLanguageServer(callbacks: any, getCode: any, ops) {
+async function startLanguageServer(callbacks: any, getCode: any, ops: any) {
   const { setLanguageServer, setCallbacks } = ops;
   const server = await CadenceLanguageServer.create(callbacks);
   new Promise(() => {
@@ -26,9 +27,9 @@ async function startLanguageServer(callbacks: any, getCode: any, ops) {
 }
 
 const launchLanguageClient = async (
-  callbacks,
-  languageServer,
-  setLanguageClient,
+  callbacks: Callbacks,
+  languageServer: CadenceLanguageServer,
+  setLanguageClient: (languageClient: MonacoLanguageClient) => void,
 ) => {
   if (languageServer) {
     const newClient = createCadenceLanguageClient(callbacks);
@@ -55,18 +56,20 @@ export default function useLanguageServer() {
     // The actual callback will be set as soon as the language client is initialized
     toClient: null,
 
-    //@ts-ignore
-    getAddressCode(address: string): string | undefined {
+    getAddressCode(_address: string): string | undefined {
       // we will set it once it is instantiated
+      return undefined;
     },
   };
 
   // Base state handler
-  const [languageServer, setLanguageServer] = useState(null);
-  const [languageClient, setLanguageClient] = useState(null);
+  const [languageServer, setLanguageServer] =
+    useState<CadenceLanguageServer | null>(null);
+  const [languageClient, setLanguageClient] =
+    useState<MonacoLanguageClient | null>(null);
   const [callbacks, setCallbacks] = useState(initialCallbacks);
 
-  const getCode = (address) => {
+  const getCode = (address: string) => {
     const { accounts } = project.project;
 
     const number = parseInt(address, 16);

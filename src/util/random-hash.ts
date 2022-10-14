@@ -1,4 +1,4 @@
-const mb32 = (a) => (t) =>
+const mb32 = (a: number) => (t: number) =>
   // @ts-ignore
   ((a + 1831565813) | 0,
   (t = Math.imul(a ^ (a >>> 15), 1 | a)),

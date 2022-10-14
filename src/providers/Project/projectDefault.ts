@@ -1,8 +1,8 @@
 import {
-  Project,
   Account,
-  TransactionTemplate,
+  Project,
   ScriptTemplate,
+  TransactionTemplate,
 } from 'api/apollo/generated/graphql';
 import { strToSeed, uuid } from 'util/rng';
 import { LOCAL_PROJECT_ID } from 'util/url';
@@ -110,6 +110,8 @@ const DEFAULT_ACCOUNT_5 = `access(all) contract HelloWorld {
 }
 `;
 
+export const DEFAULT_ACCOUNT_STATE = '{}';
+
 const DEFAULT_ACCOUNTS = [
   DEFAULT_ACCOUNT_1,
   DEFAULT_ACCOUNT_2,
@@ -184,12 +186,12 @@ export function createLocalProject(
       draftCode: script,
       deployedCode: '',
       deployedContracts: [],
-      state: '{}',
+      state: DEFAULT_ACCOUNT_STATE,
     };
   });
 
-  const transactionTemplatesEntities: TransactionTemplate[] = transactionTemplates.map(
-    (script, i) => {
+  const transactionTemplatesEntities: TransactionTemplate[] =
+    transactionTemplates.map((script, i) => {
       const { title, code } = script;
       return {
         __typename: 'TransactionTemplate',
@@ -198,8 +200,7 @@ export function createLocalProject(
         script: code,
         index: i,
       };
-    },
-  );
+    });
 
   const scriptsTemplatesEntities: ScriptTemplate[] = scriptTemplates.map(
     (script, i) => {

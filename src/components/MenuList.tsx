@@ -1,20 +1,20 @@
-import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
-import { IoMdAddCircleOutline } from 'react-icons/io';
-import { FaPen, FaTimes } from 'react-icons/fa';
-import { SidebarSection } from 'layout/SidebarSection';
-import { SidebarHeader } from 'layout/SidebarHeader';
-import { SidebarItems } from 'layout/SidebarItems';
-import { SidebarItem } from 'layout/SidebarItem';
-import { SidebarItemInsert } from 'layout/SidebarItemInsert';
-import { SidebarItemInput } from 'layout/SidebarItemInput';
-import { SidebarItemEdit } from 'layout/SidebarItemEdit';
-import { SidebarItemDelete } from 'layout/SidebarItemDelete';
-import useKeyPress from '../hooks/useKeyPress';
-import { ExportButton } from 'components/ExportButton';
-import { getParams } from 'util/url';
-import { useProject } from 'providers/Project/projectHooks';
-import { EntityType } from 'providers/Project';
 import { useLocation } from '@reach/router';
+import { ExportButton } from 'components/ExportButton';
+import { SidebarHeader } from 'layout/SidebarHeader';
+import { SidebarItem } from 'layout/SidebarItem';
+import { SidebarItemDelete } from 'layout/SidebarItemDelete';
+import { SidebarItemEdit } from 'layout/SidebarItemEdit';
+import { SidebarItemInput } from 'layout/SidebarItemInput';
+import { SidebarItemInsert } from 'layout/SidebarItemInsert';
+import { SidebarItems } from 'layout/SidebarItems';
+import { SidebarSection } from 'layout/SidebarSection';
+import { EntityType } from 'providers/Project';
+import { useProject } from 'providers/Project/projectHooks';
+import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { FaPen, FaTimes } from 'react-icons/fa';
+import { IoMdAddCircleOutline } from 'react-icons/io';
+import { getParams } from 'util/url';
+import useKeyPress from '../hooks/useKeyPress';
 
 type MenuListProps = {
   active: number | null;
@@ -22,7 +22,7 @@ type MenuListProps = {
   items: any[];
   onSelect: (e: SyntheticEvent, id: string) => void;
   onUpdate: any;
-  onInsert: (e: SyntheticEvent) => void;
+  onInsert: () => Promise<void>;
   onDelete: any;
 };
 
@@ -41,6 +41,7 @@ const MenuList: React.FC<MenuListProps> = ({
   const [editing, setEditing] = useState([]);
   const enterPressed = useKeyPress('Enter');
   const escapePressed = useKeyPress('Escape');
+  const [isInserting, setIsInserting] = useState(false);
 
   const toggleEditing = (i: number, newTitle: string) => {
     if (editing.includes(i)) {
@@ -52,10 +53,6 @@ const MenuList: React.FC<MenuListProps> = ({
     }
     return setEditing([...editing, i]);
   };
-
-  useEffect(() => {
-    setEditing([]);
-  }, [items, active]);
 
   useEffect(() => {
     if (enterPressed || escapePressed) {
@@ -82,8 +79,19 @@ const MenuList: React.FC<MenuListProps> = ({
     <SidebarSection>
       <SidebarHeader>
         {title}
-        {onInsert && (
-          <SidebarItemInsert onClick={(e: React.SyntheticEvent) => onInsert(e)}>
+        {!!onInsert && (
+          <SidebarItemInsert
+            disabled={isInserting}
+            onClick={async () => {
+              setIsInserting(true);
+              try {
+                await onInsert();
+              } catch {
+                setIsInserting(false);
+              }
+              setIsInserting(false);
+            }}
+          >
             <IoMdAddCircleOutline size="20px" />
           </SidebarItemInsert>
         )}
@@ -91,6 +99,7 @@ const MenuList: React.FC<MenuListProps> = ({
       <SidebarItems>
         {items.map((item, i) => {
           const isActive = active.type === itemType && item.id === params.id;
+          const dataTest = `sidebar-${item.title}`;
           return (
             <SidebarItem
               title={item.title}
@@ -99,6 +108,7 @@ const MenuList: React.FC<MenuListProps> = ({
               onClick={(e: React.SyntheticEvent<Element, Event>) =>
                 onSelect(e, item.id)
               }
+              data-test={dataTest}
             >
               {/* NOTE: Optimize this to a controlled input! */}
               <SidebarItemInput

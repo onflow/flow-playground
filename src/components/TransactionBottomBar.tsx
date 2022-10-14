@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
 import {
-  useClearExecutionResultsMutation,
   ResultType,
+  useClearExecutionResultsMutation,
 } from 'api/apollo/generated/graphql';
-import useMousePosition from '../hooks/useMousePosition';
-import { FaEraser } from 'react-icons/fa';
-import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { RenderResponse } from 'components/RenderResponse';
 import { Feedback as FeedbackRoot } from 'layout/Feedback';
 import { ResizeHeading } from 'layout/Heading';
+import React, { useEffect, useState } from 'react';
+import { FaEraser } from 'react-icons/fa';
+import { GoChevronDown, GoChevronUp } from 'react-icons/go';
+import useMousePosition from '../hooks/useMousePosition';
 
 import styled from '@emotion/styled';
 import theme from '../theme';
@@ -57,7 +57,7 @@ export const ClearResults: React.FC<{ type: ResultType }> = ({ type }) => {
         })
       }
     >
-      <span>clear</span> <FaEraser></FaEraser>
+      <span>clear</span> <FaEraser />
     </Clear>
   );
 };
@@ -101,7 +101,7 @@ const TransactionBottomBar: React.FC<TransactionBottomBarProps> = ({
   }, []);
 
   return (
-    <FeedbackContainer height={resultHeight}>
+    <FeedbackContainer data-test="transaction-result" height={resultHeight}>
       <FeedbackRoot>
         <ResizeHeading onMouseDown={() => toggleResizingResult(true)}>
           Transaction Results

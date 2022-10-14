@@ -1,52 +1,53 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Flex, Button, Box, Divider } from 'theme-ui';
 import styled from '@emotion/styled';
-import { FaShareSquare } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
+import { FaShareSquare } from 'react-icons/fa';
 import useClipboard from 'react-use-clipboard';
+import { Box, Button, Divider, Flex } from 'theme-ui';
 
-import { Main as MainRoot } from 'layout/Main';
+import { Account, Project } from 'api/apollo/generated/graphql';
 import { Editor as EditorRoot } from 'layout/Editor';
 import { Heading } from 'layout/Heading';
-import { EntityType, ActiveEditor } from 'providers/Project';
-import { useProject } from 'providers/Project/projectHooks';
+import { Main as MainRoot } from 'layout/Main';
+import { ActiveEditor, EntityType } from 'providers/Project';
 import {
   PLACEHOLDER_DESCRIPTION,
   PLACEHOLDER_TITLE,
 } from 'providers/Project/projectDefault';
-import { Account, Project } from 'api/apollo/generated/graphql';
+import { useProject } from 'providers/Project/projectHooks';
 
 import Mixpanel from 'util/mixpanel';
 
 import { default as FlowButton } from 'components/Button';
 // import CadenceEditor from 'components/CadenceEditor';
-import TransactionBottomBar from 'components/TransactionBottomBar';
-import ScriptBottomBar from 'components/ScriptBottomBar';
-import { Version } from 'components/CadenceVersion';
-import DeploymentBottomBar from 'components/DeploymentBottomBar';
-import ResourcesBar from 'components/ResourcesBar';
-import { MdeEditor } from 'components/MdeEditor';
 import {
   Input,
   InputBlock,
   Label,
 } from 'components/Arguments/SingleArgument/styles';
+import { Version } from 'components/CadenceVersion';
+import DeploymentBottomBar from 'components/DeploymentBottomBar';
 import { Markdown } from 'components/Markdown';
+import { MdeEditor } from 'components/MdeEditor';
+import ResourcesBar from 'components/ResourcesBar';
+import ScriptBottomBar from 'components/ScriptBottomBar';
+import TransactionBottomBar from 'components/TransactionBottomBar';
 import {
-  ProjectInfoContainer,
   ProjectDescription,
   ProjectHeading,
+  ProjectInfoContainer,
   ReadmeHtmlContainer,
 } from './layout-components';
 
-import { decodeText } from 'util/readme';
 import CadenceEditor from 'components/CadenceEditor';
+import { ChildProps } from 'src/types';
+import { decodeText } from 'util/readme';
 
 export interface WithShowProps {
   show: boolean;
 }
 
-const Header: React.FC = ({ children }) => {
+const Header = ({ children }: ChildProps) => {
   return (
     <motion.div>
       <Flex
@@ -66,7 +67,7 @@ const Header: React.FC = ({ children }) => {
   );
 };
 
-const NavButton: React.FC = ({ children }) => {
+const NavButton = ({ children }: ChildProps) => {
   return (
     <Button
       variant="secondary"
@@ -80,11 +81,11 @@ const NavButton: React.FC = ({ children }) => {
   );
 };
 
-const Nav: React.FC = ({ children }) => {
+const Nav = ({ children }: ChildProps) => {
   return <Flex>{children}</Flex>;
 };
 
-const ShareButton: React.FC<{ url: string }> = ({ url }) => {
+const ShareButton = ({ url }: { url: string }) => {
   const [isCopied, setCopied] = useClipboard(url, { successDuration: 2000 });
   return (
     <Flex
@@ -105,13 +106,21 @@ const ShareButton: React.FC<{ url: string }> = ({ url }) => {
   );
 };
 
-const ShareSaveButton: React.FC<{
+type ShareSaveButtonProps = {
   url: string;
   saveText: string;
   showShare: boolean;
   onSave: () => void;
   icon: any;
-}> = ({ url, saveText, showShare, onSave, icon }) => {
+};
+
+const ShareSaveButton = ({
+  url,
+  saveText,
+  showShare,
+  onSave,
+  icon,
+}: ShareSaveButtonProps) => {
   const { isSavingCode } = useProject();
   return (
     <Box sx={{ marginRight: '0.5rem' }}>
@@ -135,40 +144,6 @@ type EditorContainerProps = {
   project: Project;
   active: ActiveEditor;
 };
-
-function getActiveCode(project: Project, active: ActiveEditor): string {
-  switch (active.type) {
-    case EntityType.Account:
-      return project.accounts[active.index].draftCode;
-    case EntityType.TransactionTemplate:
-      return project.transactionTemplates[active.index]
-        ? project.transactionTemplates[active.index].script
-        : '';
-    case EntityType.ScriptTemplate:
-      return project.scriptTemplates[active.index]
-        ? project.scriptTemplates[active.index].script
-        : '';
-    default:
-      return '';
-  }
-}
-
-function getActiveId(project: Project, active: ActiveEditor): string {
-  switch (active.type) {
-    case EntityType.Account:
-      return project.accounts[active.index].id;
-    case EntityType.TransactionTemplate:
-      return project.transactionTemplates[active.index]
-        ? project.transactionTemplates[active.index].id
-        : '';
-    case EntityType.ScriptTemplate:
-      return project.scriptTemplates[active.index]
-        ? project.scriptTemplates[active.index].id
-        : '';
-    default:
-      return '';
-  }
-}
 
 const usePrevious = (value: any) => {
   const ref = useRef();
@@ -194,11 +169,11 @@ const calculateSize = (readme: string) => {
   return size >= MAX_DESCRIPTION_SIZE;
 };
 
-const EditorContainer: React.FC<EditorContainerProps> = ({
+const EditorContainer = ({
   isLoading,
   project,
   active,
-}) => {
+}: EditorContainerProps) => {
   const [title, setTitle] = useState<string | undefined>(
     decodeText(project.title),
   );
@@ -206,11 +181,6 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
     decodeText(project.description),
   );
   const [readme, setReadme] = useState<string | undefined>(project.readme);
-
-  //@ts-ignore
-  const [code, setCode] = useState('');
-  //@ts-ignore
-  const [activeId, setActiveId] = useState(null);
 
   const projectAccess = useProject();
 
@@ -220,16 +190,12 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
 
   useEffect(() => {
     if (isLoading) {
-      setCode('');
       setTitle('');
       setDescription('');
-      setActiveId(null);
     } else {
-      setCode(getActiveCode(project, active));
       setTitle(title);
       setDescription(description);
       setReadme(readme);
-      setActiveId(getActiveId(project, active));
     }
   }, [isLoading, active, projectAccess.project]);
 
@@ -239,7 +205,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   // it will reload language server
   useEffect(() => {
     if (previousProjectState !== undefined) {
-      // @ts-ignore
+      // @ts-expect-error TODO: add typing
       const previousAccounts = previousProjectState.accounts || [];
       const equal = compareContracts(previousAccounts, project.accounts);
       if (!equal) {
@@ -281,12 +247,12 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
                 sx={{ marginX: '1.0rem', marginY: '2.25rem', opacity: '0.3' }}
               />
               <ReadmeHtmlContainer>
-                <Markdown content={readme}></Markdown>
+                <Markdown content={readme} />
               </ReadmeHtmlContainer>
             </>
           ) : (
             <>
-              <InputBlock mb={'12px'}>
+              <InputBlock mb="12px">
                 <Label>Title</Label>
                 <Input
                   value={title}
@@ -297,7 +263,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
                   }}
                 />
               </InputBlock>
-              <InputBlock mb={'12px'}>
+              <InputBlock mb="12px">
                 <Label>Description</Label>
                 <Input
                   value={description}
@@ -344,9 +310,9 @@ type EditorTitleProps = {
   type: EntityType;
 };
 
-const EditorTitle: React.FC<EditorTitleProps> = ({ type }) => {
+const EditorTitle = ({ type }: EditorTitleProps) => {
   return (
-    <Heading>
+    <Heading data-test="editor-heading">
       {type === EntityType.Account && 'Contract'}
       {type === EntityType.TransactionTemplate && 'Transaction Template'}
       {type === EntityType.ScriptTemplate && 'Script Template'}

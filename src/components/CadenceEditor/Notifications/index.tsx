@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
 import { useProject } from 'providers/Project/projectHooks';
+import React, { useEffect, useState } from 'react';
 
+import { AiFillCloseCircle } from 'react-icons/ai';
 import {
+  ButtonContainer,
+  Content,
+  ContentBox,
+  RemoveToastButton,
   SingleToast,
   ToastContainer,
-  RemoveToastButton,
-  ButtonContainer,
-  ContentBox,
-  Content,
 } from './components';
-import { AiFillCloseCircle } from 'react-icons/ai';
 
 const Notifications = () => {
   // ===========================================================================
@@ -17,6 +17,8 @@ const Notifications = () => {
   const { project, lastSigners } = useProject();
 
   // HOOKS  -------------------------------------------------------------------
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setProjectAccounts] = useState(project.accounts);
   const [counter, setCounter] = useState(0);
   const [notifications, setNotifications] = useState<{
@@ -57,37 +59,39 @@ const Notifications = () => {
   }, [project]);
 
   // VARIABLES AND CONSTANTS  ---------------------------------------------------
-  const toasts = Object.keys(notifications).map((id) => {
-    const updatedAccounts = notifications[id];
-    let updatedStorageAccounts: string[] = [];
+  const toasts = Object.keys(notifications)
+    .map((id) => {
+      const updatedAccounts = notifications[id];
+      let updatedStorageAccounts: string[] = [];
 
-    updatedAccounts.forEach((acct: any) => {
-      const { address } = acct;
-      const accountIndex = address.charAt(address.length - 1);
-      const accountHex = `0x0${accountIndex}`;
-      updatedStorageAccounts.push(accountHex);
-    });
+      updatedAccounts.forEach((acct: any) => {
+        const { address } = acct;
+        const accountIndex = address.charAt(address.length - 1);
+        const accountHex = `0x0${accountIndex}`;
+        updatedStorageAccounts.push(accountHex);
+      });
 
-    const shallRender = lastSigners && updatedStorageAccounts;
-    if (!shallRender) {
-      return null;
-    }
+      const shallRender = lastSigners && updatedStorageAccounts;
+      if (!shallRender) {
+        return null;
+      }
 
-    const pluralSigners = lastSigners?.length > 1 ? 'Accounts' : 'Account';
-    const pluralUpdated =
-      updatedStorageAccounts?.length > 1 ? 'accounts' : 'account';
-    const signers = lastSigners.join(', ');
-    const updated = updatedStorageAccounts.join(', ');
-    const toastText = `${pluralSigners} ${signers} updated the storage in ${pluralUpdated} ${updated}.`;
+      const pluralSigners = lastSigners?.length > 1 ? 'Accounts' : 'Account';
+      const pluralUpdated =
+        updatedStorageAccounts?.length > 1 ? 'accounts' : 'account';
+      const signers = lastSigners.join(', ');
+      const updated = updatedStorageAccounts.join(', ');
+      const toastText = `${pluralSigners} ${signers} updated the storage in ${pluralUpdated} ${updated}.`;
 
-    const onClick = () => removeNotification(setNotifications, parseInt(id));
+      const onClick = () => removeNotification(setNotifications, parseInt(id));
 
-    return {
-      id,
-      toastText,
-      onClick,
-    };
-  });
+      return {
+        id,
+        toastText,
+        onClick,
+      };
+    })
+    .filter(Boolean);
 
   // RENDER
   return (

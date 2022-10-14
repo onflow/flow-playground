@@ -7,6 +7,7 @@ const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
+  mode: 'development',
   entry: ['./src/index.tsx', './src/wasm_exec.js'],
   output: {
     filename: 'main.js',
@@ -36,7 +37,12 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: {
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true,
+          },
+        },
         exclude: /node_modules/,
       },
       {
@@ -59,18 +65,23 @@ module.exports = {
     ],
   },
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    disableHostCheck: true,
+    static: './dist',
+    allowedHosts: 'all',
     historyApiFallback: true,
-    writeToDisk: true,
     port: 3000,
+    client: {overlay: {warnings: false, errors: false}},
+    devMiddleware: {
+      writeToDisk: true,
+    },
   },
   plugins: [
     new CleanWebpackPlugin(),
     new MonacoWebpackPlugin({
       languages: [],
     }),
-    new Dotenv(),
+    new Dotenv({
+      systemvars: true
+    }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
     }),
@@ -87,13 +98,13 @@ module.exports = {
         concurrency: 100,
       },
     }),
-    new webpack.EnvironmentPlugin([
-      'PLAYGROUND_API',
-      'GA_TRACKING_CODE',
-      'MIXPANEL_TOKEN',
-      'DEFAULT_SEO_IMAGE',
-      'AVATAAR_URL',
-      'SENTRY_DSN',
-    ]),
+    new webpack.EnvironmentPlugin({
+      'PLAYGROUND_API': 'http://localhost:8080',
+      'GA_TRACKING_CODE': '',
+      'MIXPANEL_TOKEN': '',
+      'DEFAULT_SEO_IMAGE': '',
+      'AVATAAR_URL': 'https://us-central1-flow-developer-playground.cloudfunctions.net/avatar/',
+      'SENTRY_DSN': '',
+    }),
   ],
 };

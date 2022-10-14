@@ -1,12 +1,12 @@
-import React from 'react';
-import { Text } from 'theme-ui';
 import styled from '@emotion/styled';
-import { motion } from 'framer-motion';
-import { IoMdClose } from 'react-icons/io';
 import { WhiteOverlay } from 'components/Common';
+import { motion } from 'framer-motion';
+import React from 'react';
+import { IoMdClose } from 'react-icons/io';
+import { Text } from 'theme-ui';
 
-import Mixpanel from 'util/mixpanel';
 import ActionButton from 'components/ActionButton';
+import Mixpanel from 'util/mixpanel';
 
 const examples = [
   {
@@ -14,57 +14,58 @@ const examples = [
     subtitle:
       'Learn how to use smart contracts, switch accounts, and view account state.',
     emoji: '🏃',
-    docsLink: 'https://docs.onflow.org/cadence/tutorial/01-first-steps/',
+    docsLink: 'https://developers.flow.com/cadence/tutorial/01-first-steps',
   },
   {
     title: 'Hello, World!',
     subtitle:
       'Write your first contract on Flow. This is the perfect place to start to get the hang of the fundamentals of Cadence.',
     emoji: '🌎',
-    projectLink: 'https://play.onflow.org/f51905e8-6030-4641-9324-11a3f1a6091c',
-    docsLink: 'https://docs.onflow.org/cadence/tutorial/02-hello-world/',
+    projectLink: 'https://play.onflow.org/af7aba31-dee9-4477-9e1d-7b46e958468e',
+    docsLink: 'https://developers.flow.com/cadence/tutorial/02-hello-world',
   },
   {
     title: 'Mint Fungible Tokens',
     subtitle:
       'Create and sell digital assets of your own in this tutorial! This tutorial will teach you the basics of creating, storing, and moving digital assets and tokens.',
     emoji: '💸',
-    projectLink: 'https://play.onflow.org/50745fb6-77d5-4510-adfc-cf448fb043e1',
-    docsLink: 'https://docs.onflow.org/cadence/tutorial/06-fungible-tokens/',
+    projectLink: 'https://play.onflow.org/e63bfce9-3324-4385-9542-626845ae0363',
+    docsLink: 'https://developers.flow.com/cadence/tutorial/06-fungible-tokens',
   },
   {
     title: 'Create Non-Fungible Tokens',
     subtitle:
       'Create and shape your own unique digital objects. Here you’ll learn what really makes blockchains magic - the ability for unique items to be created, shared, and stored forever.',
     emoji: '😺',
-    projectLink: 'https://play.onflow.org/ae2f2a83-6698-4e03-93cf-70d35627e28e',
+    projectLink: 'https://play.onflow.org/a21087ad-b22c-4981-b49e-17297e916fa6',
     docsLink:
-      'https://docs.onflow.org/cadence/tutorial/05-non-fungible-tokens-1/',
+      'https://developers.flow.com/cadence/tutorial/05-non-fungible-tokens-1',
   },
   {
     title: 'Build a Marketplace',
     subtitle:
       'Put it all together in a marketplace! This tutorial will teach you how to turn all the concepts you’ve learned into a place for people to share their creations with the community.',
     emoji: '🤝',
-    projectLink: 'https://play.onflow.org/45ae690e-c527-409c-970e-57f03df92790',
+    projectLink: 'https://play.onflow.org/49ec2856-1258-4675-bac3-850b4bae1929',
     docsLink:
-      'https://docs.onflow.org/cadence/tutorial/08-marketplace-compose/',
+      'https://developers.flow.com/cadence/tutorial/08-marketplace-compose',
   },
   {
     title: 'Expand Non-Fungible Tokens',
     subtitle:
       'This tutorial is for the brave and the bold, an opportunity to discover what resources make possible - resources owning other resources. If you can imagine it, you can create it.',
     emoji: '🤠',
-    projectLink: 'https://play.onflow.org/cda4d057-5898-4a7f-be34-fd47ec75085f',
-    docsLink: 'https://docs.onflow.org/cadence/tutorial/10-resources-compose/',
+    projectLink: 'https://play.onflow.org/01f812d7-799a-42fd-b9cb-9ffe556e02ad',
+    docsLink:
+      'https://developers.flow.com/cadence/tutorial/10-resources-compose',
   },
   {
     title: 'Voting Contract',
     subtitle:
       'With the advent of blockchain technology and smart contracts, it has become popular to try to create decentralized voting mechanisms that allow large groups of users to vote completely on chain',
     emoji: '🗳️',
-    projectLink: 'https://play.onflow.org/75a6ce58-74bb-468f-b7bd-425716c93c3e',
-    docsLink: 'https://docs.onflow.org/cadence/tutorial/09-voting/',
+    projectLink: 'https://play.onflow.org/d120f0a7-d411-4243-bc59-5125a84f99b3',
+    docsLink: 'https://developers.flow.com/cadence/tutorial/09-voting',
   },
 ];
 
@@ -92,6 +93,14 @@ const Stack = styled.div`
   display: flex;
   flex-direction: column;
   padding: 2rem;
+  max-height: 100%;
+  overflow-y: auto;
+  width: 100%;
+`;
+
+const StackContent = styled.div`
+  max-width: 1330px;
+  margin: 0 auto;
 `;
 
 const Header = styled.div`
@@ -228,59 +237,63 @@ const Examples: React.FC<{
     >
       <WhiteOverlay onClick={triggerClose} />
       <Stack>
-        <Header>
-          <h3>Playground Tutorials</h3>
-          <IoMdClose size={34} onClick={triggerClose} />
-        </Header>
-        <ExampleContainer>
-          {examples.map((_example: any, index: number) => {
-            return (
-              <motion.div
-                variants={exampleItem}
-                key={index}
-                className={'full-height'}
-              >
-                <Example>
-                  <Text className="emoji">{_example.emoji}</Text>
-                  <Text className="title">{_example.title}</Text>
-                  <Text className="subtitle">{_example.subtitle}</Text>
-                  <Buttons>
-                    <a
-                      title={`Go to documentation for "${_example.title}"`}
-                      href={_example.docsLink}
-                      target="_blank"
-                      rel="noopener"
-                      onClick={() => {
-                        Mixpanel.track('Redirect to project documentation', {
-                          link: _example.docsLink,
-                          title: _example.title,
-                        });
-                      }}
-                    >
-                      <ActionButton className="violet">Read More</ActionButton>
-                    </a>
-                    {_example.projectLink && (
+        <StackContent>
+          <Header>
+            <h3>Playground Tutorials</h3>
+            <IoMdClose size={34} onClick={triggerClose} />
+          </Header>
+          <ExampleContainer>
+            {examples.map((_example: any, index: number) => {
+              return (
+                <motion.div
+                  variants={exampleItem}
+                  key={index}
+                  className="full-height"
+                >
+                  <Example>
+                    <Text className="emoji">{_example.emoji}</Text>
+                    <Text className="title">{_example.title}</Text>
+                    <Text className="subtitle">{_example.subtitle}</Text>
+                    <Buttons>
                       <a
-                        title={`Open "${_example.title}" project in Playground`}
-                        href={_example.projectLink}
+                        title={`Go to documentation for "${_example.title}"`}
+                        href={_example.docsLink}
                         target="_blank"
-                        rel="noopener"
+                        rel="noreferrer"
                         onClick={() => {
-                          Mixpanel.track('Open example project', {
-                            link: _example.projectLink,
+                          Mixpanel.track('Redirect to project documentation', {
+                            link: _example.docsLink,
                             title: _example.title,
                           });
                         }}
                       >
-                        <ActionButton>Open Project</ActionButton>
+                        <ActionButton className="violet">
+                          Read More
+                        </ActionButton>
                       </a>
-                    )}
-                  </Buttons>
-                </Example>
-              </motion.div>
-            );
-          })}
-        </ExampleContainer>
+                      {_example.projectLink && (
+                        <a
+                          title={`Open "${_example.title}" project in Playground`}
+                          href={_example.projectLink}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            Mixpanel.track('Open example project', {
+                              link: _example.projectLink,
+                              title: _example.title,
+                            });
+                          }}
+                        >
+                          <ActionButton>Open Project</ActionButton>
+                        </a>
+                      )}
+                    </Buttons>
+                  </Example>
+                </motion.div>
+              );
+            })}
+          </ExampleContainer>
+        </StackContent>
       </Stack>
     </ExamplesContainer>
   );

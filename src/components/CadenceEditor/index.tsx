@@ -1,17 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { useProject } from 'providers/Project/projectHooks';
-import { EntityType } from 'providers/Project';
 import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
 
-import Notifications from './Notifications';
-import ControlPanel from './ControlPanel';
 import { EditorContainer } from './components';
+import ControlPanel from './ControlPanel';
+import Notifications from './Notifications';
 
 import { EditorState } from './types';
 
 const MONACO_CONTAINER_ID = 'monaco-container';
+
+type EditorStates = Record<number, EditorState>;
 
 const CadenceEditor = (props: any) => {
   const project = useProject();
@@ -23,7 +24,7 @@ const CadenceEditor = (props: any) => {
     index: 8,
   });
 
-  const [editorStates, setEditorStates] = useState({});
+  const [editorStates, setEditorStates] = useState<EditorStates>({});
 
   // TODO: restore view state in next implementation
   /*
@@ -36,14 +37,14 @@ const CadenceEditor = (props: any) => {
    */
 
   // This method is used to retrieve previous MonacoEditor state
-  const getOrCreateEditorState = (id: string, code: string): EditorState => {
+  const getOrCreateEditorState = (id: number, code: string): EditorState => {
     const existingState = editorStates[id];
 
     if (existingState !== undefined) {
       return existingState;
     }
 
-    const newState = {
+    const newState: EditorState = {
       model: monaco.editor.createModel(code, CADENCE_LANGUAGE_ID),
       viewState: null,
     };
@@ -56,34 +57,6 @@ const CadenceEditor = (props: any) => {
     return newState;
   };
 
-  // "getActiveCode" is used to read Cadence code from active(selected) item
-  const getActiveCode = () => {
-    const { active } = project;
-    const { accounts, scriptTemplates, transactionTemplates } = project.project;
-
-    const { type, index } = active;
-    let code, id;
-    switch (type) {
-      case EntityType.Account:
-        code = accounts[index].draftCode;
-        id = accounts[index].id;
-        break;
-      case EntityType.TransactionTemplate:
-        code = transactionTemplates[index].script;
-        id = transactionTemplates[index].id;
-        break;
-      case EntityType.ScriptTemplate:
-        code = scriptTemplates[index].script;
-        id = scriptTemplates[index].id;
-        break;
-      default:
-        code = '';
-        id = 8;
-    }
-    return [code, id];
-  };
-
-  //@ts-ignore
   const setupEditor = () => {
     const projectExist = project && project.project.accounts;
     if (editor && projectExist) {
@@ -94,7 +67,7 @@ const CadenceEditor = (props: any) => {
       // To pick up new changes in accounts, we will track project's active item and then add and remove
       // new line at EOF to trick Language Client to send code changes and reimport the latest changes,
       // clearing errors and warning about missing fields.
-      const [code, newId] = getActiveCode();
+      const [code, newId] = project.getActiveCode();
       const newState = getOrCreateEditorState(newId, code);
       if (
         lastEdit.current.type == project.active.type &&
@@ -122,14 +95,10 @@ const CadenceEditor = (props: any) => {
         editor.focus();
         editor.layout();
 
-        setTimeout(() => {
-          newState.model.setValue(code);
-        }, 100);
+        newState.model.setValue(code);
       }
       editorOnChange.current = editor.onDidChangeModelContent(() => {
         if (project.project?.accounts) {
-          // we will ignore text line, cause onChange is based on active type
-          // @ts-ignore
           project.active.onChange(editor.getValue());
         }
       });
@@ -162,7 +131,7 @@ const CadenceEditor = (props: any) => {
       },
     });
 
-    const [code] = getActiveCode();
+    const [code] = project.getActiveCode();
     const model = monaco.editor.createModel(code, CADENCE_LANGUAGE_ID);
     const state: EditorState = {
       model,
@@ -174,7 +143,7 @@ const CadenceEditor = (props: any) => {
     editor.layout();
 
     window.addEventListener('resize', () => {
-      editor && editor.layout();
+      if (editor) editor.layout();
     });
 
     // Save editor in component state
@@ -191,13 +160,13 @@ const CadenceEditor = (props: any) => {
   useEffect(() => {
     initEditor().then(); // drop returned Promise as we are not going to use it
     return () => {
-      editor && destroyEditor();
+      if (editor) destroyEditor();
     };
   }, []);
 
   return (
     <EditorContainer id={MONACO_CONTAINER_ID} show={props.show}>
-      <ControlPanel editor={editor} />
+      {!!editor && <ControlPanel editor={editor} />}
       <Notifications />
     </EditorContainer>
   );

@@ -1,23 +1,22 @@
 name: Continuous Integration
 
 on:
+  pull_request:
+    branches:
+      - master
+      - staging
   push:
-
-env:
-  PLAYGROUND_API: ''
-  AVATAAR_URL: ''
-  GA_TRACKING_CODE: ''
-  MIXPANEL_TOKEN: ''
-  DEFAULT_SEO_IMAGE: ''
-  SENTRY_DSN: ''
+    branches:
+      - master
+      - staging
 
 jobs:
-  test:
-    name: 'Tests'
+  tests:
+    name: 'Linter and Unit Tests'
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [15.x]
+        node-version: [16.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -26,3 +25,41 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: make ci
+
+  cypress-e2e:
+    name: Cypress Emulator Tests for Flow-Playground
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Spin up docker backend
+        run: npm run start-docker
+
+      - name: Cypress run emulator
+        uses: cypress-io/github-action@v4
+        with:
+          start: npm run start
+          wait-on: http://localhost:3000
+          spec: cypress/e2e/playground.cy.ts
+          record: true
+          browser: chrome
+        env:
+          PLAYGROUND_API: 'http://localhost:8080'
+          CYPRESS_RECORD_KEY: '${{ secrets.CYPRESS_RECORD_KEY }}'
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos

@@ -1,11 +1,11 @@
-import React from 'react';
 import styled from '@emotion/styled';
+import React from 'react';
+import { ChildPropsOptional } from 'src/types';
 
-type SidebarItemEditProps = {
+interface SidebarItemEditProps extends ChildPropsOptional {
   active?: boolean;
   onClick?: (e: React.SyntheticEvent<Element, Event>) => any | void;
-  children?: React.ReactNode;
-};
+}
 
 export const SidebarItemEdit = styled.div<SidebarItemEditProps>`
     -moz-appearance: none;

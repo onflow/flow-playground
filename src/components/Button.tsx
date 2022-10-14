@@ -1,15 +1,17 @@
-import React from 'react';
-import { Button as ThemedButton } from 'theme-ui';
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
+import React from 'react';
 import { FaSpinner } from 'react-icons/fa';
+import { ChildProps, ChildPropsOptional } from 'src/types';
 import { CSSProperties } from 'styled-components';
+import { Button as ThemedButton } from 'theme-ui';
 
-interface StyledButtonProps {
+interface StyledButtonProps extends ChildProps {
   style?: CSSProperties;
   className?: string;
   onClick?: any;
   variant: string;
+  disabled?: boolean;
 }
 
 const StyledButton: React.FC<StyledButtonProps> = styled(ThemedButton)`
@@ -55,10 +57,13 @@ const StyledButton: React.FC<StyledButtonProps> = styled(ThemedButton)`
 
   cursor: ${({ variant }) =>
     variant === 'buttons.disabled' ? 'not-allowed !important' : 'pointer'};
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
 
-interface ButtonProps {
-  children?: any;
+interface ButtonProps extends ChildPropsOptional {
   onClick?: any;
   className?: string;
   style?: CSSProperties;
@@ -66,9 +71,9 @@ interface ButtonProps {
   isLoading?: boolean;
   isActive?: boolean;
   disabled?: boolean;
+  'data-test'?: string;
+  hideDisabledState?: boolean;
 }
-
-const noop = (): void => {};
 
 const Button: React.FC<ButtonProps> = ({
   children,
@@ -79,14 +84,23 @@ const Button: React.FC<ButtonProps> = ({
   isLoading,
   isActive,
   disabled,
+  'data-test': dataTest,
+  hideDisabledState,
 }) => {
+  const showDisabledState = disabled && !hideDisabledState;
   return (
     <motion.div whileHover={{ scale: 1.05 }}>
       <StyledButton
         style={style}
         className={className}
-        onClick={disabled ? noop : onClick}
-        variant={isActive && !disabled ? 'buttons.primary' : 'buttons.disabled'}
+        data-test={dataTest}
+        onClick={onClick}
+        variant={
+          isActive && !showDisabledState
+            ? 'buttons.primary'
+            : 'buttons.disabled'
+        }
+        disabled={disabled}
       >
         {children}
         {isLoading ? (

@@ -1,8 +1,8 @@
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import React from 'react';
 import { IoIosArrowForward } from 'react-icons/io';
 import { Line as LineType, Tag } from 'util/normalize-interaction-response';
-import styled from '@emotion/styled';
-import { css } from '@emotion/core';
 import theme from '../../../theme';
 
 const PS1 = (tag: Tag) => {

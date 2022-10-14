@@ -18,7 +18,6 @@ export default {
     heading: '#919191',
     badgeResource: '#0093AF',
     badgeCapability: '#3DDC84',
-    badgeStruct: '#FA8C28',
     badgeNull: '#8C92AC',
   },
   fonts: {

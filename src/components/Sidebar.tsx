@@ -1,12 +1,12 @@
-import React from 'react';
-import { EntityType } from 'providers/Project';
 import AccountList from 'components/AccountList';
-import ProjectInfo from 'components/ProjectInfo';
 import MenuList from 'components/MenuList';
+import ProjectInfo from 'components/ProjectInfo';
 import { Sidebar as SidebarRoot } from 'layout/Sidebar';
+import { EntityType } from 'providers/Project';
+import React from 'react';
 
-import { useProject } from 'providers/Project/projectHooks';
 import { navigate } from '@reach/router';
+import { useProject } from 'providers/Project/projectHooks';
 import { isUUUID, LOCAL_PROJECT_ID } from '../util/url';
 
 const Sidebar: React.FC = () => {

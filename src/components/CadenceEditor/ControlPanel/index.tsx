@@ -1,4 +1,9 @@
 // External Modules
+import {
+  editor as monacoEditor,
+  IPosition,
+} from 'monaco-editor/esm/vs/editor/editor.api';
+import { ExecuteCommandRequest } from 'monaco-languageclient';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FaExclamationTriangle,
@@ -6,16 +11,12 @@ import {
   FaRegTimesCircle,
   FaSpinner,
 } from 'react-icons/fa';
-import { ExecuteCommandRequest } from 'monaco-languageclient';
-import {
-  IPosition,
-  editor as monacoEditor,
-} from 'monaco-editor/esm/vs/editor/editor.api';
 
 // Project Modules
 import { CadenceCheckerContext } from 'providers/CadenceChecker';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
+import { CadenceCheckCompleted } from 'util/language-server';
 import {
   CadenceProblem,
   formatMarker,
@@ -26,7 +27,6 @@ import {
   ProblemsList,
 } from 'util/language-syntax-errors';
 import { extractSigners } from 'util/parser';
-import { CadenceCheckCompleted } from 'util/language-server';
 
 // Local Generated Modules
 import {
@@ -35,15 +35,15 @@ import {
 } from 'api/apollo/generated/graphql';
 
 // Component Scoped Files
-import { getLabel, validateByType, useTemplateType } from './utils';
-import { ControlPanelProps, IValue } from './types';
 import {
-  MotionBox,
-  Confirm,
   Cancel,
+  Confirm,
+  MotionBox,
   PromptActionsContainer,
   StatusIcon,
 } from './components';
+import { ControlPanelProps, IValue } from './types';
+import { getLabel, useTemplateType, validateByType } from './utils';
 
 // Other
 import {
@@ -56,31 +56,23 @@ import {
 } from '../../Arguments/components';
 import {
   ControlContainer,
-  HoverPanel,
   Hidable,
+  HoverPanel,
   StatusMessage,
 } from '../../Arguments/styles';
 
 const ControlPanel: React.FC<ControlPanelProps> = (props) => {
-  // We should not render this component if editor is non-existent
-  if (!props.editor) {
-    return null;
-  }
-
   // ===========================================================================
   // GLOBAL HOOKS
   const { languageClient } = useContext(CadenceCheckerContext);
-  const { project, active, isSavingCode } = useProject();
+  const { project, active, isExecutingAction } = useProject();
 
   // HOOKS  -------------------------------------------------------------------
-  const [executionArguments, setExecutionArguments] = useState({});
+  const [executionArguments, setExecutionArguments] = useState<any>({});
   const [processingStatus, setProcessingStatus] = useState(false);
   const [setResult] = useSetExecutionResultsMutation();
-  const {
-    scriptFactory,
-    transactionFactory,
-    contractDeployment,
-  } = useTemplateType();
+  const { scriptFactory, transactionFactory, contractDeployment } =
+    useTemplateType();
   const [selected, updateSelectedAccounts] = useState([]);
   const [expanded, setExpanded] = useState(true);
 
@@ -88,7 +80,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // Handles errors with arguments
   const [errors, setErrors] = useState({});
   // Handles problems, hints and info for checked code
-  const [problemsList, setProblemsList] = useState({});
+  const [problemsList, setProblemsList] = useState<any>({});
   const [showPrompt, setShowPrompt] = useState(false);
 
   // REFS  -------------------------------------------------------------------
@@ -240,7 +232,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       setProcessingStatus(true);
     }
 
-    const fixed = list.map((arg) => {
+    const fixed = list.map((arg: any) => {
       const { name, type } = arg;
       let value = values[name];
 
@@ -257,7 +249,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
 
       // Language server throws "input is not literal" without quotes
       if (type === `String`) {
-        value = `\"${value.replace(/"/g, '\\"')}\"`;
+        value = `"${value.replace(/"/g, '\\"')}"`;
       }
 
       return value;
@@ -274,7 +266,9 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     }
 
     // Map values to strings that will be passed to backend
-    const args: any = list.map((_, index) => JSON.stringify(formatted[index]));
+    const args: any = list.map((_: any, index: number) =>
+      JSON.stringify(formatted[index]),
+    );
 
     let rawResult, resultType;
     try {
@@ -374,10 +368,10 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       break;
   }
 
-  const progress = isSavingCode || processingStatus;
+  const progress = isExecutingAction || processingStatus;
   if (progress) {
     statusIcon = <FaSpinner className="spin" />;
-    statusMessage = 'Please, wait...';
+    statusMessage = 'Please wait...';
   }
 
   // EFFECTS ------------------------------------------------------------------
@@ -441,7 +435,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             progress={progress}
             showPrompt={showPrompt}
           >
-            <StatusMessage>
+            <StatusMessage data-test="control-panel-status-message">
               <StatusIcon
                 isOk={isOk}
                 progress={progress}
@@ -453,7 +447,9 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             </StatusMessage>
             {showPrompt ? (
               <PromptActionsContainer>
-                <Confirm onClick={send}>Confirm</Confirm>
+                <Confirm data-test="redeploy-confirm-button" onClick={send}>
+                  Confirm
+                </Confirm>
                 <Cancel onClick={() => setShowPrompt(false)}>Cancel</Cancel>
               </PromptActionsContainer>
             ) : (

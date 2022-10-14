@@ -1,12 +1,11 @@
-import React from 'react';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { css } from '@emotion/core';
+import { ChildPropsOptional } from 'src/types';
 import theme from '../theme';
 
-type ItemProps = {
+interface ItemProps extends ChildPropsOptional {
   active?: boolean;
-  children?: React.ReactNode;
-};
+}
 
 export const SidebarItem = styled.div<ItemProps>`
   --active-width: 6px;

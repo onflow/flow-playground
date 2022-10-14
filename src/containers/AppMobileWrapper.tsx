@@ -1,6 +1,7 @@
-import React from 'react';
 import styled from '@emotion/styled';
-import { Text, Box, Button } from 'theme-ui';
+import React from 'react';
+import { ChildProps } from 'src/types';
+import { Box, Button, Text } from 'theme-ui';
 
 const AppMobileWrapperDiv = styled.div`
   display: block;
@@ -25,11 +26,7 @@ const AppMobileWrapperMessageDiv = styled.div`
   }
 `;
 
-interface AppMobileWrapperProps {
-  children: any;
-}
-
-const AppMobileWrapper: React.FC<AppMobileWrapperProps> = ({ children }) => {
+const AppMobileWrapper = ({ children }: ChildProps) => {
   return (
     <>
       <AppMobileWrapperDiv>{children}</AppMobileWrapperDiv>
@@ -56,7 +53,7 @@ const AppMobileWrapper: React.FC<AppMobileWrapperProps> = ({ children }) => {
               window.location.href = 'https://www.onflow.org';
             }}
           >
-            Visit Flow's Website
+            Visit Flow&apos;s Website
           </Button>
         </Box>
       </AppMobileWrapperMessageDiv>

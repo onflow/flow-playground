@@ -1,15 +1,17 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "types": ["node", "cypress"],
     "target": "es6",
     "module": "esnext",
     "jsx": "react",
+    "noEmit": true,
     "allowJs": false,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "removeComments": false,
     "preserveConstEnums": true,
     "sourceMap": true,

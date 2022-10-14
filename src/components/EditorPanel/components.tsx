@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Flex, Box, Text } from 'theme-ui';
-import { motion, AnimatePresence } from 'framer-motion';
 import styled from '@emotion/styled';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useState } from 'react';
 import { IoIosArrowUp } from 'react-icons/io';
+import { ChildProps } from 'src/types';
+import { Box, Flex, Text } from 'theme-ui';
 
 export const SavedTemplateContainer = styled(motion.div)`
   position: absolute;
@@ -38,7 +39,7 @@ export const Template = styled(motion.div)`
       props.isSelected
         ? props.theme.colors.primary
         : props.theme.colors.border};
-  background: ${(props) =>
+  background: ${(props: any) =>
     props.isSelected ? 'white' : props.theme.colors.border};
   border-right: none;
   border-top-left-radius: 0.5rem;
@@ -62,10 +63,11 @@ export const PanelContainer = styled(motion.div)`
   grid-template-areas: 'templates editor';
 `;
 
-export const PanelFooter: React.FC<{ dismiss: () => void }> = ({
-  children,
-  dismiss,
-}) => {
+interface PanelFooterProps extends ChildProps {
+  dismiss: () => void;
+}
+
+export const PanelFooter = ({ children, dismiss }: PanelFooterProps) => {
   const [open, setOpen] = useState(false);
   return children ? (
     <motion.div
@@ -82,7 +84,7 @@ export const PanelFooter: React.FC<{ dismiss: () => void }> = ({
       animate={open && children ? 'open' : 'closed'}
     >
       <Flex
-        py={'0.5rem'}
+        py="0.5rem"
         px={1}
         sx={{
           backgroundColor: 'border',
@@ -147,7 +149,7 @@ export const PanelFooter: React.FC<{ dismiss: () => void }> = ({
   ) : null;
 };
 
-export const EditorHeader: React.FC = ({ children }) => {
+export const EditorHeader = ({ children }: ChildProps) => {
   return (
     <Flex
       py={1}
@@ -164,7 +166,7 @@ export const EditorHeader: React.FC = ({ children }) => {
   );
 };
 
-export const EditorPanelMenu: React.FC = ({ children }) => {
+export const EditorPanelMenu = ({ children }: ChildProps) => {
   return (
     <Flex
       p={1}

@@ -1,34 +1,34 @@
-import React, { useState, useEffect } from 'react';
 import { useLocation } from '@reach/router';
-import { Button, Flex, Text } from 'theme-ui';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { FaCloudUploadAlt } from 'react-icons/fa';
 import {
+  FaArrowAltCircleDown,
+  FaCloudUploadAlt,
   FaCodeBranch,
   FaDiscord,
   FaTwitter,
-  FaArrowAltCircleDown,
 } from 'react-icons/fa';
+import { Button, Flex, Text } from 'theme-ui';
 import { getParams } from 'util/url';
 
-import { Header as HeaderRoot } from 'layout/Header';
 import { default as FlowButton } from 'components/Button';
 import { Separator } from 'components/Common';
 import Examples from 'components/Examples';
 import ExportPopup from 'components/ExportPopup';
-import Sidebar from 'components/Sidebar';
 import { IconCadence } from 'components/Icons';
+import Sidebar from 'components/Sidebar';
+import { Header as HeaderRoot } from 'layout/Header';
 
 import Mixpanel from 'util/mixpanel';
 
 import {
+  AnimatedText,
   EditorContainer,
   Header,
-  NavButton,
   Nav,
+  NavButton,
   ShareSaveButton,
-  AnimatedText,
 } from './components';
 
 import { useProject } from 'providers/Project/projectHooks';
@@ -48,7 +48,7 @@ const EditorLayout: React.FC = () => {
   const [projectIsPlayground, setIsPlayground] = useState(false);
   const {
     project,
-    mutator,
+    updateProject,
     isSavingCode,
     isLoading,
     active,
@@ -64,14 +64,8 @@ const EditorLayout: React.FC = () => {
   const location = useLocation();
   const params = getParams(location.search);
   useEffect(() => {
-    params.storage && setSelectedResourceAccount(params.storage);
+    if (params.storage) setSelectedResourceAccount(params.storage);
   }, [params]);
-
-  if (!isLoading && !project) {
-    // NOTE: Leave this. 404 redirect is handled in
-    // projectHooks.tsx. Show nothing before navigating.
-    return <></>;
-  }
 
   const [helmetTitle, setHelmetTitle] = useState(decodeText(project.title));
   const [helmetDescription, setHelmetDescription] = useState(
@@ -94,11 +88,17 @@ const EditorLayout: React.FC = () => {
     }
   }, [project.title]);
 
+  if (!isLoading && !project) {
+    // NOTE: Leave this. 404 redirect is handled in
+    // projectHooks.tsx. Show nothing before navigating.
+    return <></>;
+  }
+
   return (
     <>
       <Helmet>
         <title>Flow - {helmetTitle} </title>
-        <meta name="description" content={helmetDescription}></meta>
+        <meta name="description" content={helmetDescription} />
       </Helmet>
       <HeaderRoot>
         <Header>
@@ -136,7 +136,7 @@ const EditorLayout: React.FC = () => {
                   style={{ display: 'flex', textDecoration: 'none' }}
                   href="https://docs.onflow.org"
                   target="_blank"
-                  rel="noopener"
+                  rel="noreferrer"
                 >
                   <NavButton>Flow Docs</NavButton>
                 </a>
@@ -144,35 +144,35 @@ const EditorLayout: React.FC = () => {
                   style={{ display: 'flex' }}
                   href="https://docs.onflow.org/cadence/language"
                   target="_blank"
-                  rel="noopener"
+                  rel="noreferrer"
                 >
                   <NavButton>
                     <IconCadence
-                      size={'22px'}
-                      title={'Cadence Language Reference'}
+                      size="22px"
+                      title="Cadence Language Reference"
                     />
                   </NavButton>
                 </a>
                 <a
                   style={{ display: 'flex' }}
-                  title={'Flow on Twitter'}
+                  title="Flow on Twitter"
                   href="https://twitter.com/flow_blockchain"
                   target="_blank"
-                  rel="noopener"
+                  rel="noreferrer"
                 >
                   <NavButton>
-                    <FaTwitter size={'20px'} />
+                    <FaTwitter size="20px" />
                   </NavButton>
                 </a>
                 <a
                   style={{ display: 'flex' }}
-                  title={'Flow on Discord'}
+                  title="Flow on Discord"
                   href="https://discord.gg/2h6hgBF"
                   target="_blank"
-                  rel="noopener"
+                  rel="noreferrer"
                 >
                   <NavButton>
-                    <FaDiscord size={'20px'} />
+                    <FaDiscord size="20px" />
                   </NavButton>
                 </a>
               </>
@@ -229,8 +229,7 @@ const EditorLayout: React.FC = () => {
                   saveText={project.parentId ? 'Fork' : 'Save'}
                   showShare={project.persist}
                   onSave={() =>
-                    mutator.saveProject(
-                      !!project.parentId,
+                    updateProject(
                       project.title,
                       project.description,
                       project.readme,
