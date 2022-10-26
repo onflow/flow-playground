@@ -3,7 +3,6 @@ import { Account, Project } from 'api/apollo/generated/graphql';
 import { motion } from 'framer-motion';
 import { Editor as EditorRoot } from 'layout/Editor';
 import { Heading } from 'layout/Heading';
-import { Main as MainRoot } from 'layout/Main';
 import { ActiveEditor, EntityType } from 'providers/Project';
 import {
   PLACEHOLDER_DESCRIPTION,
@@ -34,8 +33,22 @@ import {
 } from './layout-components';
 
 import CadenceEditor from 'components/CadenceEditor';
-import { ChildProps } from 'src/types';
+import { ChildProps, SXStyles } from 'src/types';
 import { decodeText } from 'util/readme';
+
+const styles: SXStyles = {
+  editorContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    background: 'white',
+    overflow: 'hidden',
+    flexGrow: 1,
+    borderRadius: '8px',
+    padding: '8px, 8px, 0px',
+    border: '2px solid rgba(48, 49, 209, 0.1)',
+    margin: '8px',
+  },
+}
 
 export interface WithShowProps {
   show: boolean;
@@ -153,7 +166,9 @@ const EditorContainer = ({
   }`;
 
   return (
-    <MainRoot>
+    <Flex
+      sx={styles.editorContainer}
+    >
       <EditorRoot>
         <EditorTitle type={active.type} />
         {/* This is Project Info Block */}
@@ -224,7 +239,7 @@ const EditorContainer = ({
         <CadenceEditor show={!isReadmeEditor} />
       </EditorRoot>
       <BottomBarContainer active={active} />
-    </MainRoot>
+    </Flex>
   );
 };
 

@@ -4,14 +4,16 @@ import { globalHistory, Router } from '@reach/router';
 import React, { useEffect } from 'react';
 import 'reset-css';
 import { ThemeProvider } from 'theme-ui';
-
 import client from 'api/apollo/client';
 import * as GoogleAnalytics from 'util/google-analytics';
-
 import BrowserDetector from 'components/BrowserDetector';
 import AppMobileWrapper from 'containers/AppMobileWrapper';
+<<<<<<< HEAD
 import Playground from 'containers/Playground';
 
+=======
+import Playground from 'containers/Editor';
+>>>>>>> eb2105e (v2 editor file explorer)
 import globalStyles from './globalStyles';
 import FourOhFour from './pages/404';
 import theme from './theme';

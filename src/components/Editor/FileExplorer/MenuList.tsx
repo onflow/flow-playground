@@ -13,8 +13,15 @@ import { useProject } from 'providers/Project/projectHooks';
 import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { FaPen, FaTimes } from 'react-icons/fa';
 import { IoMdAddCircleOutline } from 'react-icons/io';
+import { SXStyles } from 'src/types';
 import { getParams } from 'util/url';
-import useKeyPress from '../hooks/useKeyPress';
+import useKeyPress from '../../../hooks/useKeyPress';
+
+const styles: SXStyles = {
+  root: {
+    position: 'relative',
+  }
+}
 
 type MenuListProps = {
   active: number | null;

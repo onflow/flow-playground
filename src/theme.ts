@@ -4,7 +4,7 @@ export default {
     black: '#000000',
     primary: '#00ff76',
     darkPrimary: '#2bb169',
-    background: '#fff',
+    background: '#F6F7F9',
     text: '#2F353F',
     muted: '#6a6a6a',
     grey: '#DDDDDD',
