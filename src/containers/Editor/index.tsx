@@ -17,9 +17,9 @@ const styles: SXStyles = {
     height: '100vh',
     display: 'flex',
     flexDirection: 'row',
-    padding: '0px'
-  }
-}
+    padding: '0px',
+  },
+};
 
 const Playground: any = (props: any) => {
   const { projectId } = props;
@@ -30,9 +30,7 @@ const Playground: any = (props: any) => {
   }
 
   return (
-    <Container
-      sx={styles.root}
-    >
+    <Container sx={styles.root}>
       <ProjectProvider urlProjectId={isLocalProject ? null : projectId}>
         <CadenceChecker>
           <PlaygroundLayout />

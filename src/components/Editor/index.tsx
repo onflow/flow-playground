@@ -8,39 +8,39 @@ import { SXStyles } from 'src/types';
 import { Flex } from 'theme-ui';
 
 const styles: SXStyles = {
-    root: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: 'inherit',
-    },
-    ide: {
-        display: 'flex',
-        flexDirection: 'row',
-        width: 'auto',
-        height: '100%'
-    }
-}
-
-type EditorContainerProps = {
-    isLoading: boolean;
-    project: Project;
-    active: ActiveEditor;
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: 'inherit',
+  },
+  ide: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: 'auto',
+    height: '100%',
+  },
 };
 
-const Editor = ({isLoading,project,active}: EditorContainerProps) => {
-    return(
-        <Flex sx={styles.root} >
-            <TopNav />
-            <Flex sx={styles.ide}>
-                <FileExplorer />
-                <EditorContainer
-                    isLoading={isLoading}
-                    project={project}
-                    active={active}
-                />
-            </Flex>
-        </Flex>
-    )
-} 
+type EditorContainerProps = {
+  isLoading: boolean;
+  project: Project;
+  active: ActiveEditor;
+};
+
+const Editor = ({ isLoading, project, active }: EditorContainerProps) => {
+  return (
+    <Flex sx={styles.root}>
+      <TopNav />
+      <Flex sx={styles.ide}>
+        <FileExplorer />
+        <EditorContainer
+          isLoading={isLoading}
+          project={project}
+          active={active}
+        />
+      </Flex>
+    </Flex>
+  );
+};
 
 export default Editor;

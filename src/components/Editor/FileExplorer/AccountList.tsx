@@ -11,7 +11,7 @@ import { useProject } from 'providers/Project/projectHooks';
 import Avatar from 'components/Avatar';
 import styled from '@emotion/styled';
 import { ExportButton } from 'components/ExportButton';
-import { getParams, isUUUID, LOCAL_PROJECT_ID } from '../util/url';
+import { getParams, isUUUID, LOCAL_PROJECT_ID } from '../../../util/url';
 import { ResourcesExplorerButton } from 'components/ResourcesExplorerButton';
 
 function getDeployedContracts(account: Account): string {
