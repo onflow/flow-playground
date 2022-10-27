@@ -1,13 +1,59 @@
+import { Link } from '@reach/router';
 import ContractIcon from 'components/Icons/ContractIcon';
 import ScriptIcon from 'components/Icons/ScriptIcon';
 import TransactionIcon from 'components/Icons/TransactionIcon';
 import { formatDistance } from 'date-fns';
 import React from 'react';
-import { MockProject } from 'src/types';
+import { MockProject, SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
+import paths from '../../paths';
 
 type Props = {
   project: MockProject;
+};
+
+const styles: SXStyles = {
+  root: {
+    borderRadius: 16,
+    backgroundColor: 'white',
+    padding: 10,
+    gap: 7,
+    flexDirection: 'column',
+    color: 'black',
+  },
+  title: {
+    fontSize: 5,
+    '&:hover': {
+      opacity: 0.75,
+    },
+  },
+  details: {
+    gap: 8,
+    alignItems: 'center',
+  },
+  detail: {
+    gap: 5,
+    alignItems: 'center',
+    fontSize: 1,
+  },
+  lastSaved: {
+    color: 'muted',
+    fontSize: 1,
+  },
+};
+
+const titleLinkStyle = {
+  textDecoration: 'none',
+  color: 'inherit',
+};
+
+const getRootStyles = (isCurrentProject: boolean) => {
+  return {
+    ...styles.root,
+    borderColor: isCurrentProject ? `blueBorder` : 'transparent',
+    borderWidth: 2,
+    borderStyle: 'solid',
+  };
 };
 
 const ProjectListItem = ({ project }: Props) => {
@@ -15,23 +61,37 @@ const ProjectListItem = ({ project }: Props) => {
     addSuffix: true,
   });
 
-  return (
-    <Flex>
-      <Box>{project.title}</Box>
-      <Box>
-        <ContractIcon />
-        {project.contractTemplateCount}
-      </Box>
-      <Box>
-        <TransactionIcon />
-        {project.transactionTemplateCount}
-      </Box>
-      <Box>
-        <ScriptIcon />
-        {project.scriptTemplateCount}
-      </Box>
+  // TODO: isCurrentProject is mocked. Compare withe current project id once getProjects query is complete
+  const isCurrentProject = project.id === 1;
+  const rootStyles = getRootStyles(isCurrentProject);
 
-      <Box>Last saved {timeAgo}</Box>
+  return (
+    <Flex sx={rootStyles}>
+      <Link to={paths.projectPath(project.id)} style={titleLinkStyle}>
+        <Box sx={styles.title}>{project.title}</Box>
+      </Link>
+
+      <Flex sx={styles.details}>
+        <Flex sx={styles.detail}>
+          <ContractIcon />
+          {project.contractTemplateCount}
+        </Flex>
+        <Flex sx={styles.detail}>
+          <TransactionIcon />
+          {project.transactionTemplateCount}
+        </Flex>
+        <Flex sx={styles.detail}>
+          <ScriptIcon />
+          {project.scriptTemplateCount}
+        </Flex>
+      </Flex>
+
+      <Box
+        sx={styles.lastSaved}
+        title={new Date(project.lastSavedAt).toISOString()}
+      >
+        Last saved {timeAgo}
+      </Box>
     </Flex>
   );
 };

@@ -6,7 +6,7 @@ import CadenceChecker from 'providers/CadenceChecker';
 import { ProjectProvider } from 'providers/Project';
 
 import LeftSidebar, { LEFT_SIDEBAR_WIDTH } from 'components/LeftSidebar';
-import { motion, MotionStyle } from 'framer-motion';
+import { AnimatePresence, motion, MotionStyle } from 'framer-motion';
 import { useProject } from 'providers/Project/projectHooks';
 import { Box, Button, ThemeUICSSObject } from 'theme-ui';
 import { LOCAL_PROJECT_ID } from 'util/url';
@@ -56,16 +56,41 @@ const getBaseStyles = (
   };
 };
 
+const leftSidebarTransition = { type: 'spring', bounce: 0.2, duration: 0.4 };
+
 const Content = () => {
   const { showProjectsSidebar, toggleProjectsSidebar } = useProject();
   const baseStyles = getBaseStyles(showProjectsSidebar, true);
   return (
     <>
-      {showProjectsSidebar && <LeftSidebar />}
+      <AnimatePresence>
+        {showProjectsSidebar && (
+          <motion.div
+            initial={{
+              width: LEFT_SIDEBAR_WIDTH,
+              height: '100vh',
+              overflowY: 'auto',
+              zIndex: 10,
+              position: 'fixed',
+              bottom: 0,
+              top: 0,
+              left: -LEFT_SIDEBAR_WIDTH,
+            }}
+            animate={{
+              left: 0,
+            }}
+            exit={{ left: -LEFT_SIDEBAR_WIDTH }}
+            transition={leftSidebarTransition}
+          >
+            <LeftSidebar />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.div
         style={editorContainerStyle}
         animate={{ left: showProjectsSidebar ? LEFT_SIDEBAR_WIDTH : 0 }}
-        transition={{ type: 'spring', bounce: 0.2, duration: 0.4 }}
+        transition={leftSidebarTransition}
       >
         {showProjectsSidebar && (
           <Button

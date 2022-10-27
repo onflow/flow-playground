@@ -1,6 +1,7 @@
 export default {
   colors: {
     white: '#ffffff',
+    black: '#000000',
     primary: '#00ff76',
     darkPrimary: '#2bb169',
     background: '#fff',
@@ -25,6 +26,7 @@ export default {
     leftSidebarHeaderText: '#69717E',
     alternateButtonBorder: '#DEE2E9',
     alternateButtonBackground: '#F6F7F9',
+    blueBorder: '#3B3CFF',
     modes: {
       dark: {
         leftSidebarBackground: '#2F353F',
@@ -100,6 +102,12 @@ export default {
       '&:hover': {
         opacity: '0.75',
       },
+    },
+    unstyled: {
+      padding: '0',
+      borderStyle: 'none',
+      outline: 0,
+      background: 'transparent',
     },
   },
   links: {
