@@ -3,7 +3,8 @@ import { Separator } from 'components/Common';
 import Examples from 'components/Examples';
 import ExportPopup from 'components/ExportPopup';
 import PlusIcon from 'components/Icons/PlusIcon';
-import { AnimatedText } from 'containers/Editor/components';
+import ProjectsIcon from 'components/Icons/ProjectsIcon';
+import { AnimatedText } from 'containers/Playground/components';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useState } from 'react';
 import { FaArrowAltCircleDown } from 'react-icons/fa';
@@ -44,7 +45,8 @@ const styles: SXStyles = {
 };
 
 const TopNav = () => {
-  const { project, createBlankProject, isSaving } = useProject();
+  const { project, createBlankProject, isSaving, toggleProjectsSidebar } =
+    useProject();
   const [showExport, setShowExport] = useState(false);
   const [showExamples, setShowExamples] = useState(false);
 
@@ -56,6 +58,15 @@ const TopNav = () => {
   return (
     <Flex sx={styles.root}>
       <Flex sx={styles.topNavSection}>
+        <Button
+          onClick={toggleProjectsSidebar}
+          variant="alternate"
+          size="sm"
+          disabled={isSaving}
+        >
+          <ProjectsIcon />
+          Projects
+        </Button>
         <Button
           onClick={createBlankProject}
           variant="alternate"

@@ -1,5 +1,6 @@
 export default {
   colors: {
+    white: '#ffffff',
     primary: '#00ff76',
     darkPrimary: '#2bb169',
     background: '#fff',
@@ -20,10 +21,14 @@ export default {
     badgeCapability: '#3DDC84',
     badgeNull: '#8C92AC',
     // TODO: Consolidate color names after we import more v2 colors
+    leftSidebarBackground: '#DEE2E9',
+    leftSidebarHeaderText: '#69717E',
     alternateButtonBorder: '#DEE2E9',
     alternateButtonBackground: '#F6F7F9',
     modes: {
       dark: {
+        leftSidebarBackground: '#2F353F',
+        leftSidebarHeaderText: '#ABB3BF',
         alternateButtonBorder: '#2F353F',
         alternateButtonBackground: '#161616',
       },

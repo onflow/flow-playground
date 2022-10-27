@@ -15,7 +15,7 @@ export const SidebarItem = styled.div<ItemProps>`
   padding-right: 0.25rem;
   padding-top: 0.2rem;
   padding-bottom: 0.2rem;
-  background: var(--bg);
+  background: ${theme.colors.white};
   position: relative;
 
   ${(p) =>

@@ -10,7 +10,7 @@ import * as GoogleAnalytics from 'util/google-analytics';
 
 import BrowserDetector from 'components/BrowserDetector';
 import AppMobileWrapper from 'containers/AppMobileWrapper';
-import Playground from 'containers/Editor';
+import Playground from 'containers/Playground';
 
 import globalStyles from './globalStyles';
 import FourOhFour from './pages/404';
