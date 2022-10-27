@@ -1,7 +1,3 @@
-const FileExplorerHeader = () => {
+const FileExplorerHeader = () => {};
 
-
-
-}
-
-export default FileExplorerHeader
+export default FileExplorerHeader;

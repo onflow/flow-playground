@@ -13,9 +13,9 @@ const styles: SXStyles = {
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
-}
+};
 
 const PlaygroundLayout: React.FC = () => {
   const { project, isLoading, active, setSelectedResourceAccount } =
@@ -60,11 +60,7 @@ const PlaygroundLayout: React.FC = () => {
         <title>Flow - {helmetTitle} </title>
         <meta name="description" content={helmetDescription} />
       </Helmet>
-      <Editor
-        isLoading={isLoading}
-        project={project}
-        active={active}
-      />
+      <Editor isLoading={isLoading} project={project} active={active} />
     </Flex>
   );
 };

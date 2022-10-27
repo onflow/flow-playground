@@ -48,7 +48,7 @@ const styles: SXStyles = {
     border: '2px solid rgba(48, 49, 209, 0.1)',
     margin: '8px',
   },
-}
+};
 
 export interface WithShowProps {
   show: boolean;
@@ -166,9 +166,7 @@ const EditorContainer = ({
   }`;
 
   return (
-    <Flex
-      sx={styles.editorContainer}
-    >
+    <Flex sx={styles.editorContainer}>
       <EditorRoot>
         <EditorTitle type={active.type} />
         {/* This is Project Info Block */}

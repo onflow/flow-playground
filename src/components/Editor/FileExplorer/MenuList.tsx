@@ -1,31 +1,46 @@
 import { useLocation } from '@reach/router';
 import { ExportButton } from 'components/ExportButton';
-import { SidebarHeader } from 'layout/SidebarHeader';
+import ExplorerPlusIcon from 'components/Icons/ExplorerPlusIcon';
+import ExplorerFileIcon from 'components/Icons/ExplorerFileIcon';
 import { SidebarItem } from 'layout/SidebarItem';
 import { SidebarItemDelete } from 'layout/SidebarItemDelete';
 import { SidebarItemEdit } from 'layout/SidebarItemEdit';
 import { SidebarItemInput } from 'layout/SidebarItemInput';
 import { SidebarItemInsert } from 'layout/SidebarItemInsert';
 import { SidebarItems } from 'layout/SidebarItems';
-import { SidebarSection } from 'layout/SidebarSection';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { FaPen, FaTimes } from 'react-icons/fa';
-import { IoMdAddCircleOutline } from 'react-icons/io';
 import { SXStyles } from 'src/types';
+import { Flex } from 'theme-ui';
 import { getParams } from 'util/url';
 import useKeyPress from '../../../hooks/useKeyPress';
+import Button from 'components/Button';
 
 const styles: SXStyles = {
   root: {
-    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '1rem',
+    fontSize: '14px',
+    fontStyle: 'normal',
+    fontWeight: 450,
+    lineHeight: '100%',
+    letterSpacing: '-0.02em',
+    color: '#2F353F'
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    
   }
-}
+};
 
 type MenuListProps = {
   active: number | null;
-  title: string;
+  title?: string;
   items: any[];
   onSelect: (e: SyntheticEvent, id: string) => void;
   onUpdate: any;
@@ -83,11 +98,12 @@ const MenuList: React.FC<MenuListProps> = ({
   const params = getParams(location.search);
 
   return (
-    <SidebarSection>
-      <SidebarHeader>
+    <Flex sx={ styles.root } >
+      <Flex sx={ styles.header }>
+        < ExplorerFileIcon />
         {title}
         {!!onInsert && (
-          <SidebarItemInsert
+          <Button
             disabled={isInserting}
             onClick={async () => {
               setIsInserting(true);
@@ -99,10 +115,10 @@ const MenuList: React.FC<MenuListProps> = ({
               setIsInserting(false);
             }}
           >
-            <IoMdAddCircleOutline size="20px" />
-          </SidebarItemInsert>
+            <ExplorerPlusIcon />
+          </Button>
         )}
-      </SidebarHeader>
+      </Flex>
       <SidebarItems>
         {items.map((item, i) => {
           const isActive = active.type === itemType && item.id === params.id;
@@ -163,7 +179,7 @@ const MenuList: React.FC<MenuListProps> = ({
           );
         })}
       </SidebarItems>
-    </SidebarSection>
+    </Flex >
   );
 };
 
