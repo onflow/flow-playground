@@ -22,7 +22,9 @@ const styles: SXStyles = {
     color: 'black',
   },
   title: {
-    fontSize: 5,
+    fontSize: 3,
+    fontFamily: 'Termina',
+    fontWeight: 600,
     '&:hover': {
       opacity: 0.75,
     },
@@ -73,15 +75,21 @@ const ProjectListItem = ({ project }: Props) => {
 
       <Flex sx={styles.details}>
         <Flex sx={styles.detail}>
-          <ContractIcon />
+          <span title="Contracts">
+            <ContractIcon />
+          </span>
           {project.contractTemplateCount}
         </Flex>
         <Flex sx={styles.detail}>
-          <TransactionIcon />
+          <span title="Transactions">
+            <TransactionIcon />
+          </span>
           {project.transactionTemplateCount}
         </Flex>
         <Flex sx={styles.detail}>
-          <ScriptIcon />
+          <span title="Scripts">
+            <ScriptIcon />
+          </span>
           {project.scriptTemplateCount}
         </Flex>
       </Flex>

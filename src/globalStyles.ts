@@ -462,6 +462,26 @@ export default css`
       U+2215, U+FEFF, U+FFFD;
   }
 
+  @font-face {
+    font-family: 'Termina';
+    src: local('Termina'),
+      url(/fonts/termina/Termina-Regular.otf) format('opentype');
+  }
+
+  @font-face {
+    font-family: 'Termina';
+    src: local('Termina'),
+      url(/fonts/termina/Termina-Bold.otf) format('opentype');
+    font-weight: 700;
+  }
+
+  @font-face {
+    font-family: 'Termina';
+    src: local('Termina'),
+      url(/fonts/termina/Termina-Heavy.otf) format('opentype');
+    font-weight: 800;
+  }
+
   * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
