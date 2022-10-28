@@ -4,20 +4,9 @@ import { Helmet } from 'react-helmet';
 import { getParams } from 'util/url';
 import { useProject } from 'providers/Project/projectHooks';
 import { decodeText } from 'util/readme';
-import { SXStyles } from 'src/types';
-import { Flex } from 'theme-ui';
-import Editor from './../../components/Editor/index';
+import Editor from '../../components/Editor/index';
 
-const styles: SXStyles = {
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    height: '100%',
-  },
-};
-
-const PlaygroundLayout: React.FC = () => {
+const EditorLayout: React.FC = () => {
   const { project, isLoading, active, setSelectedResourceAccount } =
     useProject();
 
@@ -55,14 +44,14 @@ const PlaygroundLayout: React.FC = () => {
   }
 
   return (
-    <Flex sx={styles.root}>
+    <>
       <Helmet>
         <title>Flow - {helmetTitle} </title>
         <meta name="description" content={helmetDescription} />
       </Helmet>
       <Editor isLoading={isLoading} project={project} active={active} />
-    </Flex>
+    </>
   );
 };
 
-export default PlaygroundLayout;
+export default EditorLayout;

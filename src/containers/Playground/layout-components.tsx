@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { WithShowProps } from 'containers/Editor/components';
+import { WithShowProps } from 'containers/Playground/components';
 
 export const ProjectInfoContainer = styled.div<WithShowProps>`
   display: ${({ show }) => (show ? 'block' : 'none')};

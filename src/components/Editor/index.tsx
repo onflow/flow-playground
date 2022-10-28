@@ -1,7 +1,7 @@
 import { Project } from 'api/apollo/generated/graphql';
 import FileExplorer from 'components/Editor/FileExplorer';
 import TopNav from 'components/TopNav';
-import { EditorContainer } from 'containers/Editor/components';
+import { EditorContainer } from 'containers/Playground/components';
 import { ActiveEditor } from 'providers/Project';
 import React from 'react';
 import { SXStyles } from 'src/types';
@@ -29,9 +29,9 @@ type EditorContainerProps = {
 
 const Editor = ({ isLoading, project, active }: EditorContainerProps) => {
   return (
-    <Flex sx={styles.root}>
+    <Flex>
       <TopNav />
-      <Flex sx={styles.ide}>
+      <Flex>
         <FileExplorer />
         <EditorContainer
           isLoading={isLoading}
