@@ -16,13 +16,15 @@ import ExternalNavLinks from './TopNavButton';
 
 const styles: SXStyles = {
   root: {
-    background: 'white',
+    background: 'background',
     display: 'flex',
+    gridArea: 'header',
+    flex: '1 1 auto',
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '9px, 19px',
-    height: '50px',
+    paddingLeft: '1em',
+    paddingRight: '1em',
   },
   topNavSection: {
     alignItems: 'center',
