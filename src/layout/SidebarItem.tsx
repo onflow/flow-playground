@@ -22,18 +22,6 @@ export const SidebarItem = styled.div<ItemProps>`
     p.active &&
     css`
       background: rgba(255, 255, 255, 0.75);
-
-      &:after {
-        content: '';
-        display: block;
-        position: absolute;
-        left: 0;
-        top: 6px;
-        bottom: 6px;
-        width: 6px;
-        border-radius: 0 3px 3px 0;
-        background: ${theme.colors.primary};
-      }
     `}
 
   cursor: pointer;

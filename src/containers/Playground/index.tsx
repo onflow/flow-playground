@@ -36,7 +36,7 @@ const getBaseStyles = (
 ): ThemeUICSSObject => {
   const fileExplorerWidth = showFileExplorer ? '244px' : '65px';
 
-  return {
+  const styles: ThemeUICSSObject = {
     position: 'absolute',
     top: 0,
     right: 0,
@@ -44,10 +44,10 @@ const getBaseStyles = (
     left: 0,
     height: '100vh',
     display: 'grid',
-    'grid-gap': '1px 1px',
-    'grid-template-areas': "'header header' 'sidebar main'",
-    'grid-template-columns': `${fileExplorerWidth} auto`,
-    'grid-template-rows': '50px auto',
+    gridGap: '1px 1px',
+    gridTemplateAreas: "'header header' 'sidebar main'",
+    gridTemplateColumns: `${isCollapsed ? '65px' : '244px'} auto`,
+    gridTemplateRows: '50px auto',
     background: 'greyBorder',
     overflow: 'hidden',
     filter: showProjectsSidebar ? 'blur(1px)' : 'none',

@@ -1,10 +1,13 @@
 import AccountList from 'components/Editor/FileExplorer/AccountList';
-import React from 'react';
-import { SXStyles } from 'src/types'
+import React, { useState } from 'react';
+import { SXStyles } from 'src/types';
 import { useProject } from 'providers/Project/projectHooks';
-import { Flex } from 'theme-ui'
+import { Flex } from 'theme-ui';
 import FilesList from './FilesList';
-import ExplorerArrowIcon from 'components/Icons/ExplorerArrowIcon';
+import Button from 'components/Button';
+import ExplorerCloseShutterIcon from 'components/Icons/ExplorerCloseShutterIcon';
+import ExplorerOpenShutterIcon from 'components/Icons/ExplorerOpenShutterIcon';
+import useToggleExplorer from '../../../hooks/useToggleExplorer';
 
 const styles: SXStyles = {
   root: {
@@ -18,35 +21,38 @@ const styles: SXStyles = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    padding: '24px',
+    padding: '24px 8px 24px 24px',
     width: '222px',
   },
   shutter: {
     position: 'absolute',
-    width: '24px',
-    height: '24px',
+    padding: 0,
     left: '200px',
-    top: '65px',
-    borderRadius: '8px 0px 0px 8px',
-    padding: 0
+    top: '60px',
+    borderRadius: '8px',
   },
-}
+};
 
 const FileExplorer: React.FC = () => {
-  const {
-    isLoading,
-  } = useProject();
+  const { isLoading } = useProject();
+  const { isCollapsed, toggleExplorer } = useToggleExplorer();
 
   if (isLoading) return <p>Loading...</p>;
 
   return (
-    <Flex sx={styles.root} >
-      <Flex sx={styles.content} >
+    <Flex sx={styles.root}>
+      <Flex sx={styles.content}>
         <FilesList />
         <AccountList />
       </Flex>
-      <Flex sx={styles.shutter} >
-        <ExplorerArrowIcon />
+      <Flex sx={styles.shutter}>
+        <Button variant="secondary" onClick={toggleExplorer}>
+          {isCollapsed ? (
+            <ExplorerCloseShutterIcon />
+          ) : (
+            <ExplorerOpenShutterIcon />
+          )}
+        </Button>
       </Flex>
     </Flex>
   );

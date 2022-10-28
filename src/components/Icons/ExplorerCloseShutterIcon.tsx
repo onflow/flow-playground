@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-function ExplorerArrow() {
+function ExplorerCloseShutterIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,10 +14,11 @@ function ExplorerArrow() {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"
-        d="M14 16l-4-4 4-4"
+        d="M10 8l4 4-4 4"
         opacity="0.4"
       ></path>
     </svg>
   );
 }
-export default ExplorerArrow;
+
+export default ExplorerCloseShutterIcon;

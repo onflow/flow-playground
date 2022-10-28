@@ -1,35 +1,34 @@
 import React from 'react';
 import { navigate } from '@reach/router';
-import { SidebarSection as Root } from 'layout/SidebarSection';
-import { SidebarItems as Items } from 'layout/SidebarItems';
-import { ProjectItem as Item } from 'layout/ProjectItem';
 import { useProject } from 'providers/Project/projectHooks';
 import { isUUUID, LOCAL_PROJECT_ID } from 'util/url';
 import { EntityType } from 'providers/Project';
-import { HiOutlineDocumentReport } from 'react-icons/hi';
-import { Text, Box } from '@theme-ui/components';
+import { Text, Flex } from '@theme-ui/components';
+import ExplorerReadMeIcon from '../../Icons/ExplorerReadMeIcon'
+import Button from 'components/Button';
 
+const styles = {
+  button: {
+    paddingLeft: '0px'
+  }
+}
 const ProjectInfo: React.FC = () => {
   const { project, active } = useProject();
 
   const projectPath = isUUUID(project.id) ? project.id : LOCAL_PROJECT_ID;
 
   return (
-    <Root>
-      <Items>
-        <Item
-          active={active.type === EntityType.Readme}
-          onClick={() => {
-            navigate(`/${projectPath}`);
-          }}
-        >
-          <Box sx={{ marginLeft: '0.25rem' }}>
-            <HiOutlineDocumentReport fontSize="1.5rem" />
-          </Box>
-          <Text sx={{ marginLeft: '1.15rem' }}>Project</Text>
-        </Item>
-      </Items>
-    </Root>
+    <Button
+      sx={styles.button}
+      variant='secondary'
+      selected={active.type === EntityType.Readme}
+      onClick={() => {
+        navigate(`/${projectPath}`);
+      }}
+    >
+      <ExplorerReadMeIcon/>
+      <Text>ReadMe</Text>
+    </Button>
   );
 };
 
