@@ -38,6 +38,7 @@ import { decodeText } from 'util/readme';
 
 const styles: SXStyles = {
   editorContainer: {
+    gridArea: 'main',
     display: 'flex',
     flexDirection: 'column',
     background: 'white',

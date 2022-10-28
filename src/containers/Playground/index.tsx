@@ -5,13 +5,14 @@ import { ProjectProvider } from 'providers/Project';
 import { LOCAL_PROJECT_ID } from 'util/url';
 import EditorLayout from './EditorLayout';
 import { Container, ThemeUICSSObject } from 'theme-ui';
+import useToggleExplorer from '../../hooks/useToggleExplorer';
 
-const getBaseStyles = (
-  showFileExplorer: boolean,
-): ThemeUICSSObject => {
-  const fileExplorerWidth = showFileExplorer ? '244px' : '65px';
+const Playground: any = (props: any) => {
+  const { projectId } = props;
+  const isLocalProject = projectId === LOCAL_PROJECT_ID;
+  const { isCollapsed, toggleExplorer } = useToggleExplorer();
 
-  return {
+  const styles: ThemeUICSSObject = {
     position: 'absolute',
     top: 0,
     right: 0,
@@ -19,19 +20,13 @@ const getBaseStyles = (
     left: 0,
     height: '100vh',
     display: 'grid',
-    'grid-gap': '1px 1px',
-    'grid-template-areas': "'header header' 'sidebar main'",
-    'grid-template-columns': `${fileExplorerWidth} auto`,
-    'grid-template-rows': '50px auto',
+    gridGap: '1px 1px',
+    gridTemplateAreas: "'header header' 'sidebar main'",
+    gridTemplateColumns: `${isCollapsed ? '65px' : '244px'} auto`,
+    gridTemplateRows: '50px auto',
     background: 'greyBorder',
     overflow: 'hidden',
   };
-};
-
-const Playground: any = (props: any) => {
-  const { projectId } = props;
-  const isLocalProject = projectId === LOCAL_PROJECT_ID;
-  const styles = getBaseStyles(true);
 
   if (!projectId) {
     return <Redirect noThrow to={`/${LOCAL_PROJECT_ID}`} />;
