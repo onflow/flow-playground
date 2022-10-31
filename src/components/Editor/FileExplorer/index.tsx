@@ -1,5 +1,5 @@
 import AccountList from 'components/Editor/FileExplorer/AccountList';
-import React, { useState } from 'react';
+import React from 'react';
 import { SXStyles } from 'src/types';
 import { useProject } from 'providers/Project/projectHooks';
 import { Flex } from 'theme-ui';
