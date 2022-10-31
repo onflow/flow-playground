@@ -42,7 +42,7 @@ const styles: SXStyles = {
 
 const FileExplorer: React.FC = () => {
   const { isLoading } = useProject();
-  const { isCollapsed, toggleExplorer } = useToggleExplorer();
+  const { isExplorerCollapsed, toggleExplorer } = useToggleExplorer();
 
   if (isLoading) return <p>Loading...</p>;
 
@@ -52,8 +52,8 @@ const FileExplorer: React.FC = () => {
         <FilesList />
         <AccountList />
       </Flex>
-      <Flex sx={isCollapsed ? styles.shutterClosed : styles.shutterOpened}>
-        <Button variant="secondary" onClick={toggleExplorer}>
+      <Flex sx={isExplorerCollapsed ? styles.shutterClosed : styles.shutterOpened}>
+        <Button variant="secondaryLegacy" onClick={toggleExplorer}>
           <ExplorerCollapseIcon />
         </Button>
       </Flex>

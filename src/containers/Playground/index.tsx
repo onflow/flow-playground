@@ -9,6 +9,7 @@ import { useProject } from 'providers/Project/projectHooks';
 import { Box, Button, ThemeUICSSObject } from 'theme-ui';
 import { LOCAL_PROJECT_ID } from 'util/url';
 import EditorLayout from './EditorLayout';
+import useToggleExplorer from '../../hooks/useToggleExplorer';
 
 const editorContainerStyle: MotionStyle = {
   position: 'fixed',
@@ -32,9 +33,9 @@ const closeLeftSidebarButtonStyle: CSSProperties = {
 
 const getBaseStyles = (
   showProjectsSidebar: boolean,
-  showFileExplorer: boolean,
+  isExplorerCollapsed: boolean,
 ): ThemeUICSSObject => {
-  const fileExplorerWidth = showFileExplorer ? '244px' : '65px';
+  const fileExplorerWidth = isExplorerCollapsed ? '65px' : '244px';
 
   const styles: ThemeUICSSObject = {
     position: 'absolute',
@@ -46,19 +47,23 @@ const getBaseStyles = (
     display: 'grid',
     gridGap: '1px 1px',
     gridTemplateAreas: "'header header' 'sidebar main'",
-    gridTemplateColumns: `${isCollapsed ? '65px' : '244px'} auto`,
+    gridTemplateColumns: `${fileExplorerWidth} auto`,
     gridTemplateRows: '50px auto',
     background: 'greyBorder',
     overflow: 'hidden',
     filter: showProjectsSidebar ? 'blur(1px)' : 'none',
   };
+
+  return styles;
 };
 
 const leftSidebarTransition = { type: 'spring', bounce: 0.2, duration: 0.25 };
 
 const Content = () => {
   const { showProjectsSidebar, toggleProjectsSidebar } = useProject();
-  const baseStyles = getBaseStyles(showProjectsSidebar, true);
+  const { isExplorerCollapsed } = useToggleExplorer();
+
+  const baseStyles = getBaseStyles(showProjectsSidebar, isExplorerCollapsed);
   return (
     <>
       <AnimatePresence>

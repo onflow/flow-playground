@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
 function useToggleExplorer() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isExplorerCollapsed, setIsExplorerCollapsed] = useState(false);
 
   const toggleExplorer = () => {
-    setIsCollapsed(!isCollapsed);
+    setIsExplorerCollapsed(!isExplorerCollapsed);
   };
 
-  return { isCollapsed, toggleExplorer };
+  return { isExplorerCollapsed, toggleExplorer };
 }
 
 export default useToggleExplorer;

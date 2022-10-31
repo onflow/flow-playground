@@ -3,7 +3,6 @@ import { navigate, Redirect, useLocation } from '@reach/router';
 import React, { createContext, useState } from 'react';
 import useGetProject from './projectHooks';
 import ProjectMutator, { PROJECT_SERIALIZATION_KEY } from './projectMutator';
-
 import { Account, Project } from 'api/apollo/generated/graphql';
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
 import { ChildProps } from 'src/types';

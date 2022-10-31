@@ -226,12 +226,14 @@ const MenuList: React.FC<MenuListProps> = ({
       <Flex sx={styles.header}>
         <Flex sx={styles.headerTitle}>
           <Button
+            disabled={false}
+            inline={true}
             sx={
               isFileShuttered
                 ? styles.fileShutterClosed
                 : styles.fileShutterOpened
             }
-            variant="secondary"
+            variant="secondaryLegacy"
             onClick={toggleFileShutter}
           >
             <ExplorerFileShutterIcon />
@@ -243,9 +245,10 @@ const MenuList: React.FC<MenuListProps> = ({
         </Flex>
         {!!onInsert && (
           <Button
+            inline={false}
             sx={styles.button}
             disabled={isInserting}
-            variant="secondary"
+            variant="secondaryLegacy"
             onClick={async () => {
               setIsInserting(true);
               try {
@@ -314,7 +317,7 @@ const MenuList: React.FC<MenuListProps> = ({
                 }
                 <Button
                   sx={isActive ? styles.ctaButtonSelected : styles.ctaButton}
-                  variant='secondary'
+                  variant='secondaryLegacy'
                   onClick={()=> setIsSubMenuOpened(!isSubMenuOpened)}
                 >
                   <ExplorerEllipseIcon/>

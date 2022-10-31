@@ -111,7 +111,7 @@ const AccountList: React.FC = () => {
         <Flex sx={styles.headerTitle}>Accounts</Flex>
         <Button
           disabled={isInserting}
-          variant="secondary"
+          variant="secondaryLegacy"
           onClick={async () => {
             setIsInserting(true);
             try {
