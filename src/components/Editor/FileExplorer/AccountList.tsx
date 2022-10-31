@@ -16,6 +16,7 @@ const styles: SXStyles = {
   root: {
     display: 'flex',
     flexDirection: 'column',
+    fontFamily: 'IBM Plex Mono'
   },
   header: {
     fontStyle: 'normal',
@@ -31,6 +32,7 @@ const styles: SXStyles = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    fontFamily: 'Acumin Pro'
   },
   button: {
     padding: 'none',
@@ -46,10 +48,6 @@ const styles: SXStyles = {
     alignItems: 'center',
     justifyContent: 'start',
     padding: '0.2rem 0.5rem',
-    '&.small': {
-      fontWeight: 'normal',
-      fontSize: '13px',
-    },
     '&:hover': {
       background: '#DEE2E9',
       borderRadius: '8px',
@@ -63,10 +61,7 @@ const styles: SXStyles = {
     background: '#EAEAFA',
     borderRadius: '8px',
     padding: '0.2rem 0.5rem',
-    '&.small': {
-      fontWeight: 'normal',
-      fontSize: '13px',
-    },
+
   },
   accountCard: {
     display: 'flex',
@@ -78,7 +73,6 @@ const styles: SXStyles = {
   accountTitle: {
     display: 'flex',
     flexDirection: 'column',
-    flex: 1,
     marginTop: '3px',
   },
   avatar: {
@@ -138,7 +132,7 @@ const AccountList: React.FC = () => {
           const rawAddress = account.address.slice(-2);
           const accountAddress =
             rawAddress == '01'
-              ? `0x${rawAddress} - Default`
+              ? `0x${rawAddress}-Default`
               : `0x${rawAddress}`;
           const contractName = getDeployedContracts(account);
           const title = contractName

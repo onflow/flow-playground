@@ -16,6 +16,8 @@ import ExplorerTransactionIcon from 'components/Icons/ExplorerTransactionIcon';
 import ExplorerScriptIcon from 'components/Icons/ExplorerScriptIcon';
 import Input from 'components/Input';
 import ExplorerFileShutterIcon from 'components/Icons/ExplorerFileShutterIcon';
+import ExplorerEllipseIcon from 'components/Icons/ExplorerEllipseIcon';
+import FileExplorerSubMenu from './FileExplorerSubMenu';
 
 const styles: SXStyles = {
   root: {
@@ -28,7 +30,7 @@ const styles: SXStyles = {
     letterSpacing: '-0.02em',
     color: '#2F353F',
     alignItems: 'start',
-    font: 'IBM Plex Mono',
+    fontFamily: 'IBM Plex Mono',
   },
   header: {
     display: 'flex',
@@ -74,7 +76,9 @@ const styles: SXStyles = {
     alignItems: 'center',
     fontWeight: 'bold',
     justifyContent: 'start',
-    padding: '0px 24px',
+    paddingLeft: '24px',
+    fontFamily: 'inherit',
+    overflow: 'd',
     '&:hover': {
       background: '#DEE2E9',
       borderRadius: '8px',
@@ -85,39 +89,60 @@ const styles: SXStyles = {
       filter:
         'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
     },
+    '&:hover button': {
+      visibility: 'visible'
+    }
   },
   selectedItem: {
     display: 'flex',
     alignItems: 'center',
     fontWeight: 'bold',
+    fontFamily: 'inherit',
     justifyContent: 'start',
-    padding: '0px 24px',
+    paddingLeft: '24px',
     background: '#EAEAFA',
     borderRadius: '8px',
     color: '#3031D1',
   },
   input: {
     width: '100%',
-    marginRight: '0.5rem',
     fontSize: '15px',
     color: '#69717E',
     fontWeight: '450',
-    textOverflow: 'ellipsis',
+    textOverflow: 'hidden',
     border: '1px solid #dedede',
     pointerEvents: 'initial',
     background: '#FFFFFF',
+    fontFamily: 'inherit',
   },
   inputReadOnly: {
     width: '100%',
-    marginRight: '0.5rem',
     fontSize: '15px',
     color: 'inherit',
     fontWeight: '450',
-    textOverflow: 'ellipsis',
+    textOverflow: 'hidden',
     border: '1px solid transparent',
     background: 'none',
     pointerEvents: 'none',
+    fontFamily: 'inherit',
   },
+  ctaButton: {
+    visibility: 'hidden',
+    alignSelf: 'baseline',
+    padding: '0px',
+    paddingRight: '6px',
+    '&:hover': {
+      background: 'none'
+    }
+  },
+  ctaButtonSelected: {
+    alignSelf: 'baseline',
+    padding: '0px',
+    paddingRight: '6px',
+    '&:hover': {
+      background: 'none'
+    }
+  }
 };
 
 type MenuListProps = {
@@ -147,6 +172,7 @@ const MenuList: React.FC<MenuListProps> = ({
   const escapePressed = useKeyPress('Escape');
   const [isInserting, setIsInserting] = useState(false);
   const [isFileShuttered, setIsFileShuttered] = useState(false);
+  const [isSubMenuOpened, setIsSubMenuOpened] = useState(false);
 
   const toggleFileShutter = () => {
     setIsFileShuttered(!isFileShuttered);
@@ -283,10 +309,21 @@ const MenuList: React.FC<MenuListProps> = ({
                     }
                   }}
                 />
-                {isActive && (
-                  <ExportButton id={item.id} typeName={item.__typename} />
-                )}
-
+                {
+                  // TODO: Separate button from Parent onClick
+                }
+                <Button
+                  sx={isActive ? styles.ctaButtonSelected : styles.ctaButton}
+                  variant='secondary'
+                  onClick={()=> setIsSubMenuOpened(!isSubMenuOpened)}
+                >
+                  <ExplorerEllipseIcon/>
+                </Button>
+                { isSubMenuOpened ?? 
+                  <FileExplorerSubMenu />
+                }
+        
+                {/* TODO: Duplicate file, Delete file, Update Filename userflows 
                 {!editing.includes(i) && isActive && items.length > 1 && (
                   <Box
                     onClick={(e: any) => {
@@ -296,7 +333,7 @@ const MenuList: React.FC<MenuListProps> = ({
                   >
                     <FaTimes />
                   </Box>
-                )}
+                )} */}
               </Flex>
             );
           })}

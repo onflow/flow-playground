@@ -12,6 +12,7 @@ const styles: SXStyles = {
     display: 'flex',
     flexDirection: 'column',
     paddingBottom: '24px',
+    fontFamily: 'IBM Plex Mono',
   },
   header: {
     fontStyle: 'normal',
@@ -21,6 +22,7 @@ const styles: SXStyles = {
     letterSpacing: '-0.01em',
     textTransform: 'uppercase',
     color: '#69717E',
+    fontFamily: 'Acumin Pro',
   },
 };
 
@@ -46,7 +48,7 @@ const FilesList = () => {
       <Flex sx={styles.header}>Files</Flex>
       <MenuList
         title="Contracts"
-        items={[{title: 'Contract Test', key: 0,}]}
+        items={[{title: 'Contract Test', key: 0,}, {title: 'Contract 2 Test', key: 1}]}
         active={null}
         onSelect={() => {}}
         onUpdate={(templateId: string, script: string, title: string) => {
