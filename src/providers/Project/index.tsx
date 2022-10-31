@@ -33,8 +33,7 @@ export interface ProjectContextValue {
     description: string,
     readme: string,
   ) => Promise<any>;
-  updateAccountDeployedCode: () => Promise<any>;
-  updateAccountDraftCode: (value: string) => Promise<any>;
+  createContractDeployment: () => Promise<any>;
   updateSelectedContractAccount: (accountIndex: number) => void;
   updateSelectedTransactionAccounts: (accountIndexes: number[]) => void;
   updateActiveScriptTemplate: (script: string, title: string) => Promise<any>;
@@ -52,8 +51,14 @@ export interface ProjectContextValue {
     title: string,
     script: string,
   ) => Promise<any>;
+  updateContractTemplate: (
+    templateId: string,
+    title: string,
+    script: string,
+  ) => Promise<any>;
   deleteScriptTemplate: (templateId: string) => void;
   deleteTransactionTemplate: (templateId: string) => void;
+  deleteContractTemplate: (templateID: string) => void;
   createTransactionExecution: (
     signingAccounts: Account[],
     args?: string[],
@@ -184,12 +189,12 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
-  const updateAccountDeployedCode: any = async () => {
+  const createContractDeployment: any = async () => {
     setIsSaving(true);
     setIsExecutingAction(true);
     let res;
     try {
-      res = await mutator.updateAccountDeployedCode(
+      res = await mutator.createContractDeployment(
         project.accounts[active.index],
         active.index,
       );
@@ -210,11 +215,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
-  const updateAccountDraftCode = async (value: string) => {
+  const updateContractTemplate = async (value: string) => {
     setIsSaving(true);
     let res;
     try {
-      res = await mutator.updateAccountDraftCode(
+      res = await mutator.updateContractTemplate(
         project.accounts[active.index],
         value,
       );
@@ -352,6 +357,20 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
+  const deleteContractTemplate = async (templateId: string) => {
+    setIsSaving(true);
+    let res;
+    try {
+      res = await mutator.deleteContractTemplate(templateId);
+    } catch (e) {
+      console.error(e);
+      setIsSaving(false);
+      showError();
+    }
+    setIsSaving(false);
+    return res;
+  };
+
   const deleteScriptTemplate = async (templateId: string) => {
     setIsSaving(true);
     let res;
@@ -394,7 +413,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         return {
           type: active.type,
           index: active.index,
-          onChange: (code: string) => updateAccountDraftCode(code),
+          onChange: (code: string) => updateContractTemplate(code),
         };
       case EntityType.TransactionTemplate:
         return {
@@ -567,14 +586,15 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         isExecutingAction,
         createBlankProject,
         updateProject,
-        updateAccountDeployedCode,
-        updateAccountDraftCode,
+        createContractDeployment,
+        updateContractTemplate,
         updateScriptTemplate,
         updateTransactionTemplate,
         updateActiveScriptTemplate,
         updateActiveTransactionTemplate,
         deleteScriptTemplate,
         deleteTransactionTemplate,
+        deleteContractTemplate,
         createTransactionExecution,
         createScriptExecution,
         updateSelectedContractAccount,

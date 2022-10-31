@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { navigate, useLocation } from '@reach/router';
 import { Account } from 'api/apollo/generated/graphql';
 import { EntityType } from 'providers/Project';
-import { SidebarItem as Item } from 'layout/SidebarItem';
 import { useProject } from 'providers/Project/projectHooks';
 import Avatar from 'components/Avatar';
-import styled from '@emotion/styled';
 import { ExportButton } from 'components/ExportButton';
 import { getParams, isUUUID, LOCAL_PROJECT_ID } from '../../../util/url';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex } from 'theme-ui';
 import { SXStyles } from 'src/types';
 import Button from 'components/Button';
 import ExplorerPlusIcon from 'components/Icons/ExplorerPlusIcon';
@@ -27,13 +25,12 @@ const styles: SXStyles = {
     letterSpacing: '-0.01em',
     textTransform: 'uppercase',
     color: '#69717E',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   headerTitle: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-
   },
   button: {
     padding: 'none',
@@ -44,7 +41,40 @@ const styles: SXStyles = {
     width: '16px',
     height: '16px',
   },
-  accountCard: {},
+  item: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'start',
+    padding: '0.2rem 0.5rem',
+    '&.small': {
+      fontWeight: 'normal',
+      fontSize: '13px',
+    },
+    '&:hover': {
+      background: '#DEE2E9',
+      borderRadius: '8px',
+      cursor: 'pointer',
+    },
+  },
+  selectedItem: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'start',
+    background: '#EAEAFA',
+    borderRadius: '8px',
+    padding: '0.2rem 0.5rem',
+    '&.small': {
+      fontWeight: 'normal',
+      fontSize: '13px',
+    },
+  },
+  accountCard: {
+    display: 'flex',
+    alignItems: 'center',
+    paddingTop: '0.5rem',
+    paddingBottom: '0.5rem',
+    width: '100%',
+  },
   accountTitle: {
     display: 'flex',
     flexDirection: 'column',
@@ -56,23 +86,21 @@ const styles: SXStyles = {
     width: '35px',
     height: '35px',
     borderRadius: '0 0 20px 20px',
-  }
+  },
 };
 
 function getDeployedContracts(account: Account): string {
-  const contracts = account.deployedContracts.map(
-    (contract) => contract.split('.').slice(-1)[0],
-  );
-  return contracts.join(', ');
+  const contractCount = account.deployedContracts.length;
+  if (contractCount > 1) {
+    return contractCount + ' Contracts';
+  } else if (contractCount > 0) {
+    const singleContract = account.deployedContracts[0];
+    const contractName = singleContract.split('.').slice(-1)[0];
+    return contractName;
+  } else {
+    return '';
+  }
 }
-
-export const AccountCard = styled.div`
-  display: flex;
-  align-items: center;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  width: 100%;
-`;
 
 const AccountList: React.FC = () => {
   const { project, active, setSelectedResourceAccount } = useProject();
@@ -83,39 +111,38 @@ const AccountList: React.FC = () => {
   const projectPath = isUUUID(project.id) ? project.id : LOCAL_PROJECT_ID;
   const [isInserting, setIsInserting] = useState(false);
 
-
   return (
-    <Flex sx={styles.root} >
+    <Flex sx={styles.root}>
       <Flex sx={styles.header}>
-        <Flex sx={styles.headerTitle}>
-          Accounts
-        </Flex>
-          <Button
-            disabled={isInserting}
-            variant="secondary"
-            onClick={async () => {
-              setIsInserting(true);
-              try {
-                // insert account
-              } catch {
-                setIsInserting(false);
-              }
+        <Flex sx={styles.headerTitle}>Accounts</Flex>
+        <Button
+          disabled={isInserting}
+          variant="secondary"
+          onClick={async () => {
+            setIsInserting(true);
+            try {
+              // insert account
+            } catch {
               setIsInserting(false);
-            }}
-          >
-            <ExplorerPlusIcon />
-          </Button>
-
+            }
+            setIsInserting(false);
+          }}
+        >
+          <ExplorerPlusIcon />
+        </Button>
       </Flex>
       <Box data-test="account-list">
         {project.accounts.map((account: Account, i: number) => {
           const { id } = account;
           const isActive = accountSelected && params.id === id;
           const rawAddress = account.address.slice(-2);
-          const accountAddress = rawAddress == '01' ? `0x${rawAddress} - Default` : `0x${rawAddress}`;
+          const accountAddress =
+            rawAddress == '01'
+              ? `0x${rawAddress} - Default`
+              : `0x${rawAddress}`;
           const contractName = getDeployedContracts(account);
           const title = contractName
-            ? `${contractName} is deployed to this account`
+            ? `${contractName} deployed to this account`
             : `This account don't have any contracts`;
           const typeName = account.__typename;
 
@@ -123,14 +150,21 @@ const AccountList: React.FC = () => {
           queryParams += params.id ? `&id=${params.id}` : '';
           if (params.storage) {
             queryParams +=
-              params.storage === accountAddress ? '&storage=none' : `&storage=${accountAddress}`;
+              params.storage === accountAddress
+                ? '&storage=none'
+                : `&storage=${accountAddress}`;
           }
-      
+
           queryParams = queryParams.replace('&', '?');
 
           return (
-            <Item title={title} active={isActive} key={account.address}>
-              <AccountCard
+            <Flex
+              sx={isActive ? styles.selectedItem : styles.item}
+              title={title}
+              key={account.address}
+            >
+              <Flex
+                sx={styles.accountCard}
                 onClick={() => {
                   if (accountAddress === params.storage) {
                     setSelectedResourceAccount('none');
@@ -140,7 +174,7 @@ const AccountList: React.FC = () => {
                   navigate(`/${projectPath}${queryParams}`);
                 }}
               >
-                <Avatar seed={project.seed} index={i} />
+                <Avatar style={styles.avatar} seed={project.seed} index={i} />
                 <Flex sx={styles.accountTitle}>
                   <strong>{accountAddress}</strong>
                   <small>{contractName || '--'}</small>
@@ -148,8 +182,8 @@ const AccountList: React.FC = () => {
                 {isActive && (
                   <ExportButton id={account.id} typeName={typeName} />
                 )}
-              </AccountCard>
-            </Item>
+              </Flex>
+            </Flex>
           );
         })}
       </Box>

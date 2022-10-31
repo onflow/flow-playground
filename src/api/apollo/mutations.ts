@@ -120,6 +120,84 @@ export const UPDATE_ACCOUNT_DEPLOYED_CODE = gql`
   }
 `;
 
+export const CREATE_CONTRACT_TEMPLATE = gql`
+  mutation CreateContractTemplate(
+    $projectId: UUID!
+    $script: String!
+    $title: String!
+  ) {
+    createContractTemplate(
+      input: { projectId: $projectId, script: $script, title: $title }
+    ) {
+      id
+      script
+      title
+    }
+  }
+`;
+
+export const UPDATE_CONTRACT_TEMPLATE = gql`
+  mutation UpdateContractTemplate(
+    $projectId: UUID!
+    $templateId: UUID!
+    $script: String!
+    $title: String
+  ) {
+    updateContractTemplate(
+      input: {
+        projectId: $projectId
+        id: $templateId
+        script: $script
+        title: $title
+      }
+    ) {
+      id
+      script
+      index
+      title
+    }
+  }
+`;
+
+export const DELETE_CONTRACT_TEMPLATE = gql`
+  mutation DeleteContractTemplate($projectId: UUID!, $templateId: UUID!) {
+    deleteContractTemplate(id: $templateId, projectId: $projectId)
+  }
+`;
+
+export const CREATE_CONTRACT_DEPLOYMENT = gql`
+  mutation CreateContractDeployment(
+    $projectId: UUID!
+    $script: String!
+    $signer: Address!
+  ) {
+    createContractDeployment(
+      input: { id: $projectId, script: $script, address: $signer }
+    ) {
+      id
+      script
+      errors {
+        message
+        startPosition {
+          offset
+          line
+          column
+        }
+        endPosition {
+          offset
+          line
+          column
+        }
+      }
+      logs
+      events {
+        type
+        values
+      }
+    }
+  }
+`;
+
 export const UPDATE_TRANSACTION_TEMPLATE = gql`
   mutation UpdateTransactionTemplate(
     $projectId: UUID!
