@@ -10,7 +10,7 @@ function PlusIcon() {
       viewBox="0 0 16 16"
     >
       <path
-        stroke="#2F353F"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"

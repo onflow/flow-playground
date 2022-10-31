@@ -52,6 +52,7 @@
     "react-ga": "^3.3.1",
     "react-helmet": "^6.1.0",
     "react-icons": "^4.4.0",
+    "react-popper-tooltip": "^4.4.2",
     "react-simplemde-editor": "^5.0.2",
     "react-use-clipboard": "^1.0.8",
     "reset-css": "^5.0.1",

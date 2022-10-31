@@ -487,10 +487,13 @@ export default css`
     -moz-osx-font-smoothing: grayscale;
   }
 
+  body {
+    font-family: 'Overpass', sans-serif;
+  }
+
   #root {
     height: 100vh;
     width: 100vw;
-    font-family: 'Overpass', sans-serif;
   }
 
   /* applies to the markdown editor button text */

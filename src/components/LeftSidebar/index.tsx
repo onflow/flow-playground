@@ -1,3 +1,4 @@
+import NewProjectButton from 'components/NewProjectButton';
 import React from 'react';
 import { SXStyles } from 'src/types';
 import { Box } from 'theme-ui';
@@ -16,6 +17,14 @@ const styles: SXStyles = {
 const LeftSidebar = () => {
   return (
     <Box sx={styles.root}>
+      <Box mb={12}>
+        <NewProjectButton
+          label="Create New Project"
+          size="md"
+          variant="secondary"
+          delayTooltipShow={300} // Wait for sidebar animation to complete
+        />
+      </Box>
       <ProjectsList />
     </Box>
   );

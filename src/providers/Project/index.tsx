@@ -156,8 +156,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       setIsSaving(false);
       showError();
     }
-
     setIsSaving(false);
+    setShowProjectsSidebar(false);
     return res;
   };
 

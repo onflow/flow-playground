@@ -56,7 +56,7 @@ const getBaseStyles = (
   };
 };
 
-const leftSidebarTransition = { type: 'spring', bounce: 0.2, duration: 0.4 };
+const leftSidebarTransition = { type: 'spring', bounce: 0.2, duration: 0.25 };
 
 const Content = () => {
   const { showProjectsSidebar, toggleProjectsSidebar } = useProject();
