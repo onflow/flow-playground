@@ -4,8 +4,6 @@ import { SXStyles } from 'src/types';
 import { Box } from 'theme-ui';
 import ProjectsList from './ProjectsList';
 
-export const LEFT_SIDEBAR_WIDTH = 350;
-
 const styles: SXStyles = {
   root: {
     backgroundColor: 'leftSidebarBackground',

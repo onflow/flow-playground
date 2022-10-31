@@ -3,13 +3,15 @@ import React, { CSSProperties } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import CadenceChecker from 'providers/CadenceChecker';
 import { ProjectProvider } from 'providers/Project';
-import LeftSidebar, { LEFT_SIDEBAR_WIDTH } from 'components/LeftSidebar';
+import LeftSidebar from 'components/LeftSidebar';
 import { AnimatePresence, motion, MotionStyle } from 'framer-motion';
 import { useProject } from 'providers/Project/projectHooks';
 import { Box, Button, ThemeUICSSObject } from 'theme-ui';
 import { LOCAL_PROJECT_ID } from 'util/url';
 import EditorLayout from './EditorLayout';
 import useToggleExplorer from '../../hooks/useToggleExplorer';
+
+export const LEFT_SIDEBAR_WIDTH = 350;
 
 const editorContainerStyle: MotionStyle = {
   position: 'fixed',
