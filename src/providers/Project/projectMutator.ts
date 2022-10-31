@@ -6,7 +6,6 @@ import {
   Account,
   GetProjectQuery,
   Project,
-  Scalars,
 } from 'api/apollo/generated/graphql';
 import {
   CREATE_PROJECT,
@@ -43,7 +42,6 @@ export default class ProjectMutator {
   readme: string;
   isLocal: boolean;
   track: any;
-  persistToLocalStorage: (id: Scalars['UUID']) => void;
 
   constructor(
     client: ApolloClient<object>,
@@ -52,7 +50,6 @@ export default class ProjectMutator {
     title: string,
     description: string,
     readme: string,
-    persistToLocalStorage?: (id: Scalars['UUID']) => void,
   ) {
     this.client = client;
     this.projectId = projectId;
@@ -60,7 +57,6 @@ export default class ProjectMutator {
     this.title = title;
     this.description = description;
     this.readme = readme;
-    this.persistToLocalStorage = persistToLocalStorage;
   }
 
   async createProject(blank = false): Promise<Project> {
@@ -166,8 +162,6 @@ export default class ProjectMutator {
       },
     });
 
-    this.persistToLocalStorage(this.projectId);
-
     if (isFork) {
       Mixpanel.track('Project forked', { projectId: this.projectId });
     } else {
@@ -177,7 +171,8 @@ export default class ProjectMutator {
     navigate(`/${this.projectId}`, { replace: true });
   }
 
-  // TODO: This is a temporary function. The v2 api will change how projects are created and persisted
+  // TODO: This is a temporary function used to set persist: true after creating a blank project.
+  // The v2 api will change how projects are created and persisted
   async persistProject() {
     this.client.writeData({
       id: `Project:${this.projectId}`,
@@ -198,8 +193,6 @@ export default class ProjectMutator {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
     });
-
-    this.persistToLocalStorage(this.projectId);
   }
 
   async updateAccountDraftCode(account: Account, code: string) {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-function PlusIcon() {
+function ScriptIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -10,14 +10,14 @@ function PlusIcon() {
       viewBox="0 0 16 16"
     >
       <path
-        stroke="currentColor"
+        stroke="#69717E"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"
-        d="M8 3.333v9.334M3.333 8h9.334"
+        d="M14.667 8H12l-2 6L6 2 4 8H1.333"
       />
     </svg>
   );
 }
 
-export default PlusIcon;
+export default ScriptIcon;

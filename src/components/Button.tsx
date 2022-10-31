@@ -4,22 +4,32 @@ import { Button as ThemeUiButton, ThemeUICSSObject } from 'theme-ui';
 
 type ButtonSizes = 'sm' | 'md' | 'lg';
 
-interface ButtonProps extends ChildProps {
+export interface ButtonProps extends ChildProps {
   children: React.ReactNode;
   onClick?: () => void;
-  variant?: 'primary' | 'secondary' | 'disabled' | 'alternate' | 'link';
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'secondaryLegacy'
+    | 'disabled'
+    | 'alternate'
+    | 'link';
   size?: ButtonSizes;
   submit?: boolean;
   disabled?: boolean;
   sx?: ThemeUICSSObject;
   'data-test'?: string;
+  hideDisabledState?: boolean;
+  inline?: boolean;
 }
 
-const getStyles = (disabled: boolean) => ({
+const getStyles = (disabled: boolean, inline?: boolean) => ({
   root: {
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 4,
+    width: inline ? 'auto' : '100%',
     '&:hover': {
       cursor: disabled ? 'default' : 'pointer',
     },
@@ -32,10 +42,14 @@ const sizeStyles: Record<ButtonSizes, ThemeUICSSObject> = {
     py: 2,
     px: 4,
     fontSize: 1,
-    color: 'text',
     borderRadius: '4px',
   },
-  md: {},
+  md: {
+    px: 14,
+    py: 8,
+    fontSize: 1,
+    fontWeight: 600,
+  },
   lg: {},
 };
 
@@ -48,16 +62,19 @@ const Button = ({
   disabled,
   sx = {},
   'data-test': dataTest,
+  hideDisabledState,
+  inline,
 }: ButtonProps) => {
-  const styles = getStyles(disabled);
+  const styles = getStyles(disabled, inline);
   const mergedSx = { ...styles.root, ...sizeStyles[size], ...sx };
+  const showDisabledState = disabled && !hideDisabledState;
   return (
     <ThemeUiButton
       sx={mergedSx}
       onClick={onClick}
       disabled={disabled}
       type={submit ? 'submit' : 'button'}
-      variant={variant}
+      variant={showDisabledState ? 'disabled' : variant}
       data-test={dataTest}
     >
       {children}

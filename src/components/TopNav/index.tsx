@@ -2,13 +2,14 @@ import Button from 'components/Button';
 import { Separator } from 'components/Common';
 import Examples from 'components/Examples';
 import ExportPopup from 'components/ExportPopup';
-import PlusIcon from 'components/Icons/PlusIcon';
-import { AnimatedText } from 'containers/Editor/components';
+import ProjectsIcon from 'components/Icons/ProjectsIcon';
+import NewProjectButton from 'components/NewProjectButton';
+import { AnimatedText } from 'containers/Playground/components';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useState } from 'react';
 import { FaArrowAltCircleDown } from 'react-icons/fa';
 import { SXStyles } from 'src/types';
-import { Flex } from 'theme-ui';
+import { Button as ThemeUIButton, Flex } from 'theme-ui';
 import Mixpanel from 'util/mixpanel';
 import ShareSaveButton from './ShareSaveButton';
 import ExternalNavLinks from './TopNavButton';
@@ -44,7 +45,7 @@ const styles: SXStyles = {
 };
 
 const TopNav = () => {
-  const { project, createBlankProject, isSaving } = useProject();
+  const { project, toggleProjectsSidebar } = useProject();
   const [showExport, setShowExport] = useState(false);
   const [showExamples, setShowExamples] = useState(false);
 
@@ -57,18 +58,20 @@ const TopNav = () => {
     <Flex sx={styles.root}>
       <Flex sx={styles.topNavSection}>
         <Button
-          onClick={createBlankProject}
+          onClick={toggleProjectsSidebar}
           variant="alternate"
           size="sm"
-          disabled={isSaving}
+          inline={true}
         >
-          <PlusIcon />
+          <ProjectsIcon />
+          Projects
         </Button>
+        <NewProjectButton size="sm" variant="alternate" inline={true} />
       </Flex>
       <Flex sx={styles.topNavSection}>
-        <Button variant="secondary" onClick={onStartButtonClick}>
+        <ThemeUIButton variant="secondaryLegacy" onClick={onStartButtonClick}>
           <AnimatedText>Click here to start a tutorial</AnimatedText>
-        </Button>
+        </ThemeUIButton>
         <Separator />
         <ExternalNavLinks />
       </Flex>
@@ -79,6 +82,7 @@ const TopNav = () => {
               onClick={() => setShowExport(true)}
               variant="alternate"
               size="sm"
+              inline={true}
             >
               Export
               <FaArrowAltCircleDown />

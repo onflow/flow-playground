@@ -18,6 +18,8 @@ const StyledButton: React.FC<StyledButtonProps> = styled(ThemedButton)`
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 14px;
+  padding: 0.75rem 1rem;
 
   @keyframes rotating {
     from {

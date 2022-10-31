@@ -1,5 +1,7 @@
 export default {
   colors: {
+    white: '#ffffff',
+    black: '#000000',
     primary: '#00ff76',
     darkPrimary: '#2bb169',
     background: '#fff',
@@ -20,12 +22,25 @@ export default {
     badgeCapability: '#3DDC84',
     badgeNull: '#8C92AC',
     // TODO: Consolidate color names after we import more v2 colors
+    leftSidebarBackground: '#DEE2E9',
+    leftSidebarHeaderText: '#69717E',
     alternateButtonBorder: '#DEE2E9',
     alternateButtonBackground: '#F6F7F9',
+    blueBorder: '#3B3CFF',
+    disabledButtonText: '#F6F7F9',
+    secondaryButtonBorder: '#161616',
+    secondaryButtonHover: '#1E1FB9',
+    disabledButtonBackground: '#BDBDBD',
     modes: {
       dark: {
+        leftSidebarBackground: '#2F353F',
+        leftSidebarHeaderText: '#ABB3BF',
         alternateButtonBorder: '#2F353F',
         alternateButtonBackground: '#161616',
+        blueBorder: '#2C50D7',
+        disabledButtonText: '#2F353F',
+        secondaryButtonBorder: '#B795FF',
+        secondaryButtonHover: '#B795FF',
       },
     },
   },
@@ -52,27 +67,43 @@ export default {
       fontWeight: 500,
       color: 'text',
       margin: 0,
-      paddingX: '1rem',
-      paddingY: '0.75rem',
-      fontSize: 4,
+      fontSize: 1,
       '&:active': {
         backgroundColor: '#10EF77',
       },
     },
-    disabled: {
-      border: 'none',
-      backgroundColor: 'grey',
+    secondary: {
+      borderWidth: '1px',
+      borderStyle: 'solid',
+      borderColor: 'secondaryButtonBorder',
       borderRadius: '8px',
-      borderWidth: 3,
+      backgroundColor: 'transparent',
       fontFamily: 'body',
       fontWeight: 500,
       color: 'text',
       margin: 0,
-      paddingX: '1rem',
-      paddingY: '0.75rem',
-      fontSize: 4,
+      '&:hover': {
+        color: 'white',
+        borderColor: 'secondaryButtonHover',
+        backgroundColor: 'secondaryButtonHover',
+      },
+      '&:active': {
+        color: 'white',
+        borderColor: 'secondaryButtonHover',
+        backgroundColor: 'secondaryButtonHover',
+      },
     },
-    secondary: {
+    disabled: {
+      border: 'none',
+      borderRadius: '8px',
+      borderWidth: 3,
+      fontFamily: 'body',
+      fontWeight: 500,
+      color: 'disabledButtonText',
+      backgroundColor: 'disabledButtonBackground',
+      margin: 0,
+    },
+    secondaryLegacy: {
       border: 'none',
       background: 'none',
       fontFamily: 'body',
@@ -85,16 +116,24 @@ export default {
       paddingX: '0.65rem',
       paddingY: '0.5rem',
       borderRadius: '5px',
+      fontSize: 4,
       '&:hover': {
         background: 'rgb(245, 245, 245)',
       },
     },
     alternate: {
+      color: 'text',
       border: '1px solid alternateButtonBorder',
       backgroundColor: 'alternateButtonBackground',
       '&:hover': {
         opacity: '0.75',
       },
+    },
+    unstyled: {
+      padding: '0',
+      borderStyle: 'none',
+      outline: 0,
+      background: 'transparent',
     },
   },
   links: {

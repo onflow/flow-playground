@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
+import theme from '../theme';
 
 export const SidebarItems = styled.div`
-  background: var(--key);
+  background: ${theme.colors.greyBorder};
 `;

@@ -1,5 +1,18 @@
 import gql from 'graphql-tag';
 
+export const GET_PROJECTS = gql`
+  query GetProjects {
+    projects @client {
+      id
+      title
+      contractTemplateCount @client
+      transactionTemplateCount @client
+      scriptTemplateCount @client
+      lastSavedAt @client
+    }
+  }
+`;
+
 export const GET_PROJECT = gql`
   query GetProject($projectId: UUID!) {
     project(id: $projectId) {

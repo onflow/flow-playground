@@ -4,10 +4,9 @@ import React, { createContext, useState } from 'react';
 import useGetProject from './projectHooks';
 import ProjectMutator, { PROJECT_SERIALIZATION_KEY } from './projectMutator';
 
-import { Account, Project, Scalars } from 'api/apollo/generated/graphql';
+import { Account, Project } from 'api/apollo/generated/graphql';
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
 import { ChildProps } from 'src/types';
-import createPersistedState from 'use-persisted-state';
 import { getParams } from 'util/url';
 
 export enum EntityType {
@@ -27,7 +26,6 @@ export type ActiveEditor = {
 export interface ProjectContextValue {
   project: Project | null;
   isLoading: boolean;
-  persistedProjectIds: string[];
   mutator: ProjectMutator;
   createBlankProject: () => Promise<Project>;
   updateProject: (
@@ -71,6 +69,8 @@ export interface ProjectContextValue {
   transactionAccounts: number[];
   isSaving: boolean;
   isExecutingAction: boolean;
+  showProjectsSidebar: boolean;
+  toggleProjectsSidebar: () => void;
 }
 
 export const ProjectContext: React.Context<ProjectContextValue> =
@@ -79,10 +79,6 @@ export const ProjectContext: React.Context<ProjectContextValue> =
 interface ProjectProviderProps extends ChildProps {
   urlProjectId: string | null;
 }
-
-const usePersistedProjectIdsState = createPersistedState<string[]>(
-  'persistedProjectIds',
-);
 
 export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   children,
@@ -125,6 +121,9 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const [isExecutingAction, setIsExecutingAction] = useState(false);
   const [lastSigners, setLastSigners] = useState(null);
+  const [showProjectsSidebar, setShowProjectsSidebar] = useState(false);
+
+  const toggleProjectsSidebar = () => setShowProjectsSidebar((prev) => !prev);
 
   const [selectedResourceAccount, setSelectedResourceAccount] = useState<
     string | null
@@ -133,12 +132,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const title = project ? project.title : null;
   const description = project ? project.description : null;
   const readme = project ? project.readme : null;
-  const [persistedProjectIds, setPersistedProjectIds] =
-    usePersistedProjectIdsState([]);
-
-  const persistToLocalStorage = (id: Scalars['UUID']) => {
-    setPersistedProjectIds((prev: string[]) => [...prev, id]);
-  };
 
   const mutator = new ProjectMutator(
     client,
@@ -147,7 +140,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     title,
     description,
     readme,
-    persistToLocalStorage,
   );
 
   const showError = () => alert('Something went wrong, please try again');
@@ -164,8 +156,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       setIsSaving(false);
       showError();
     }
-
     setIsSaving(false);
+    setShowProjectsSidebar(false);
     return res;
   };
 
@@ -570,7 +562,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       value={{
         project,
         isLoading,
-        persistedProjectIds,
         mutator,
         isSaving,
         isExecutingAction,
@@ -602,6 +593,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           setLastSigners(signers);
         },
         transactionAccounts,
+        showProjectsSidebar,
+        toggleProjectsSidebar,
       }}
     >
       {children}

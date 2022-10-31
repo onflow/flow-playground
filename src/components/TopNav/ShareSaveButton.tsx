@@ -38,6 +38,7 @@ const ShareSaveButton = () => {
       variant="alternate"
       disabled={isSaving}
       size="sm"
+      inline={true}
     >
       {text}
       {hasParent ? <FaCodeBranch /> : <FaCloudUploadAlt />}
