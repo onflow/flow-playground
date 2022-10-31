@@ -10,7 +10,7 @@ import useToggleExplorer from '../../hooks/useToggleExplorer';
 const Playground: any = (props: any) => {
   const { projectId } = props;
   const isLocalProject = projectId === LOCAL_PROJECT_ID;
-  const { isCollapsed, toggleExplorer } = useToggleExplorer();
+  const { isCollapsed } = useToggleExplorer();
 
   const styles: ThemeUICSSObject = {
     position: 'absolute',

@@ -5,8 +5,7 @@ import { useProject } from 'providers/Project/projectHooks';
 import { Flex } from 'theme-ui';
 import FilesList from './FilesList';
 import Button from 'components/Button';
-import ExplorerCloseShutterIcon from 'components/Icons/ExplorerCloseShutterIcon';
-import ExplorerOpenShutterIcon from 'components/Icons/ExplorerOpenShutterIcon';
+import ExplorerCollapseIcon from 'components/Icons/ExplorerCollapseIcon';
 import useToggleExplorer from '../../../hooks/useToggleExplorer';
 
 const styles: SXStyles = {
@@ -24,12 +23,20 @@ const styles: SXStyles = {
     padding: '24px 8px 24px 24px',
     width: '222px',
   },
-  shutter: {
+  shutterOpened: {
     position: 'absolute',
     padding: 0,
     left: '200px',
     top: '60px',
     borderRadius: '8px',
+  },
+  shutterClosed: {
+    position: 'absolute',
+    padding: 0,
+    left: '200px',
+    top: '60px',
+    borderRadius: '8px',
+    transform: 'rotate(180deg)',
   },
 };
 
@@ -45,13 +52,9 @@ const FileExplorer: React.FC = () => {
         <FilesList />
         <AccountList />
       </Flex>
-      <Flex sx={styles.shutter}>
+      <Flex sx={isCollapsed ? styles.shutterClosed : styles.shutterOpened}>
         <Button variant="secondary" onClick={toggleExplorer}>
-          {isCollapsed ? (
-            <ExplorerCloseShutterIcon />
-          ) : (
-            <ExplorerOpenShutterIcon />
-          )}
+          <ExplorerCollapseIcon />
         </Button>
       </Flex>
     </Flex>

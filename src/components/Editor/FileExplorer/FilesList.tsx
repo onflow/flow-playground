@@ -6,13 +6,12 @@ import { SXStyles } from 'src/types';
 import { Flex } from 'theme-ui';
 import { isUUUID, LOCAL_PROJECT_ID } from 'util/url';
 import MenuList from './MenuList';
-import ReadMe from './ReadMe';
 
 const styles: SXStyles = {
   root: {
     display: 'flex',
     flexDirection: 'column',
-    paddingBottom: '16px'
+    paddingBottom: '24px',
   },
   header: {
     fontStyle: 'normal',
@@ -47,17 +46,24 @@ const FilesList = () => {
       <Flex sx={styles.header}>Files</Flex>
       <MenuList
         title="Contracts"
-        items={[]}
+        items={[{title: 'Contract Test', key: 0,}]}
         active={null}
-        onSelect={(_,id) =>
+        onSelect={() => {}}
+        onUpdate={(templateId: string, script: string, title: string) => {
+          updateContractTemplate(templateId, script, title);
+        }}
+        onDelete={async (templateId: string) => {
+          await deleteContractTemplate(templateId);
+          // const id = project.contractTemplates[0].id;
+          const id = 0;
+          navigate(`/${projectPath}?type=tx&id=${id}&storage=${storageAcct}`);
+        }}
+        onInsert={async () => {
+          const res = await mutator.createContractTemplate('', `New Contract`);
           navigate(
-            `/${projectPath}?type=account&id=${id}&storage=${
-              selectedResourceAccount || 'none'
-            }`,
-          )}
-        onUpdate={}
-        onDelete={}
-        onInsert={}
+            `/${projectPath}?type=tx&id=${res.data?.createContractTemplate?.id}&storage=${storageAcct}`,
+          );
+        }}
       />
       <MenuList
         title="Transactions"
@@ -112,7 +118,6 @@ const FilesList = () => {
           );
         }}
       />
-      <ReadMe />
     </Flex>
   );
 };
