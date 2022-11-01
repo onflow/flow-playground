@@ -25,16 +25,16 @@ const styles: SXStyles = {
   },
   shutterOpened: {
     position: 'absolute',
-    padding: 0,
-    left: '200px',
-    top: '60px',
+    padding: '0px',
+    left: '215px',
+    top: '69px',
     borderRadius: '8px',
   },
   shutterClosed: {
     position: 'absolute',
-    padding: 0,
-    left: '200px',
-    top: '60px',
+    padding: '0px',
+    left: '215px',
+    top: '69px',
     borderRadius: '8px',
     transform: 'rotate(180deg)',
   },
@@ -52,11 +52,11 @@ const FileExplorer: React.FC = () => {
         <FilesList />
         <AccountList />
       </Flex>
-      <Flex sx={isExplorerCollapsed ? styles.shutterClosed : styles.shutterOpened}>
-        <Button variant="secondaryLegacy" onClick={toggleExplorer}>
-          <ExplorerCollapseIcon />
-        </Button>
-      </Flex>
+
+      <Button sx={isExplorerCollapsed ? styles.shutterClosed : styles.shutterOpened} inline={true} variant="secondaryLegacy" onClick={toggleExplorer}>
+        <ExplorerCollapseIcon />
+      </Button>
+
     </Flex>
   );
 };

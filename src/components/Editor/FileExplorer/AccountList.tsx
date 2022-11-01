@@ -10,7 +10,6 @@ import { Box, Flex } from 'theme-ui';
 import { SXStyles } from 'src/types';
 import Button from 'components/Button';
 import ExplorerPlusIcon from 'components/Icons/ExplorerPlusIcon';
-import theme from '../../../theme';
 
 const styles: SXStyles = {
   root: {
@@ -35,13 +34,7 @@ const styles: SXStyles = {
     fontFamily: 'Acumin Pro'
   },
   button: {
-    padding: 'none',
-    color: theme.colors.grey,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '16px',
-    height: '16px',
+    padding: '0px',
   },
   item: {
     display: 'flex',
@@ -110,6 +103,8 @@ const AccountList: React.FC = () => {
       <Flex sx={styles.header}>
         <Flex sx={styles.headerTitle}>Accounts</Flex>
         <Button
+          sx={styles.button}
+          inline={true}
           disabled={isInserting}
           variant="secondaryLegacy"
           onClick={async () => {

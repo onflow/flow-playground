@@ -31,6 +31,7 @@ const styles: SXStyles = {
     color: '#2F353F',
     alignItems: 'start',
     fontFamily: 'IBM Plex Mono',
+    padding: '8px 0px'
   },
   header: {
     display: 'flex',
@@ -38,6 +39,7 @@ const styles: SXStyles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
+    paddingBottom: '8px'
   },
   headerTitle: {
     display: 'flex',
@@ -46,11 +48,13 @@ const styles: SXStyles = {
   },
   button: {
     '&:hover': { borderRadius: '16px' },
+    padding: '0px',
   },
   fileShutterOpened: {
     position: 'absolute',
     left: '0px',
     transform: 'none',
+    padding: '0px 0px 0px 8px',
     '&:hover': {
       background: 'none',
     },
@@ -59,6 +63,7 @@ const styles: SXStyles = {
     position: 'absolute',
     left: '0px',
     transform: 'rotate(180deg)',
+    padding: '0px 8px 0px 0px',
     '&:hover': {
       background: 'none',
     },
@@ -76,9 +81,9 @@ const styles: SXStyles = {
     alignItems: 'center',
     fontWeight: 'bold',
     justifyContent: 'start',
-    paddingLeft: '24px',
+    marginLeft: '16px',
+    paddingLeft: '8px',
     fontFamily: 'inherit',
-    overflow: 'd',
     '&:hover': {
       background: '#DEE2E9',
       borderRadius: '8px',
@@ -99,7 +104,8 @@ const styles: SXStyles = {
     fontWeight: 'bold',
     fontFamily: 'inherit',
     justifyContent: 'start',
-    paddingLeft: '24px',
+    marginLeft: '16px',
+    paddingLeft: '8px',
     background: '#EAEAFA',
     borderRadius: '8px',
     color: '#3031D1',
@@ -109,7 +115,7 @@ const styles: SXStyles = {
     fontSize: '15px',
     color: '#69717E',
     fontWeight: '450',
-    textOverflow: 'hidden',
+    textOverflow: 'ellipsis',
     border: '1px solid #dedede',
     pointerEvents: 'initial',
     background: '#FFFFFF',
@@ -120,7 +126,7 @@ const styles: SXStyles = {
     fontSize: '15px',
     color: 'inherit',
     fontWeight: '450',
-    textOverflow: 'hidden',
+    textOverflow: 'ellipsis',
     border: '1px solid transparent',
     background: 'none',
     pointerEvents: 'none',
@@ -129,16 +135,14 @@ const styles: SXStyles = {
   ctaButton: {
     visibility: 'hidden',
     alignSelf: 'baseline',
-    padding: '0px',
-    paddingRight: '6px',
+    padding: '0px 8px 0px 0px',
     '&:hover': {
       background: 'none'
     }
   },
   ctaButtonSelected: {
     alignSelf: 'baseline',
-    padding: '0px',
-    paddingRight: '6px',
+    padding: '0px 8px 0px 0px',
     '&:hover': {
       background: 'none'
     }
@@ -245,7 +249,7 @@ const MenuList: React.FC<MenuListProps> = ({
         </Flex>
         {!!onInsert && (
           <Button
-            inline={false}
+            inline={true}
             sx={styles.button}
             disabled={isInserting}
             variant="secondaryLegacy"
@@ -317,6 +321,7 @@ const MenuList: React.FC<MenuListProps> = ({
                 }
                 <Button
                   sx={isActive ? styles.ctaButtonSelected : styles.ctaButton}
+                  inline={true}
                   variant='secondaryLegacy'
                   onClick={()=> setIsSubMenuOpened(!isSubMenuOpened)}
                 >
