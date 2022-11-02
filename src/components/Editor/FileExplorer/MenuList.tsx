@@ -225,7 +225,7 @@ const MenuList: React.FC<MenuListProps> = ({
     }
   };
 
-  const ForwardInput = React.forwardRef<ThemeUICSSObject>(({_ref, sx, defaultValue, onBlur, onClick, type}: ForwardInputProps) => (
+  const ForwardInput = forwardRef<ThemeUICSSObject>(({_ref, sx, defaultValue, onBlur, onClick, type}: ForwardInputProps) => (
     <Input
       ref={_ref}
       sx={sx}
