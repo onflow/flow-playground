@@ -119,7 +119,21 @@ export default {
       fontSize: 4,
       '&:hover': {
         background: 'rgb(245, 245, 245)',
-      },
+      }},
+      explorer: {
+        border: 'none',
+        background: 'none',
+        fontFamily: 'body',
+        color: 'text',
+        textDecoration: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        margin: 0,
+        fontWeight: 500,
+        paddingX: '0.65rem',
+        paddingY: '0.5rem',
+        borderRadius: '5px',
+        fontSize: 4,
     },
     alternate: {
       color: 'text',

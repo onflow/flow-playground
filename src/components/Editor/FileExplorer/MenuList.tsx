@@ -256,7 +256,7 @@ const MenuList: React.FC<MenuListProps> = ({
                 ? styles.fileShutterClosed
                 : styles.fileShutterOpened
             }
-            variant="secondaryLegacy"
+            variant="explorer"
             onClick={toggleFileShutter}
           >
             <ExplorerFileShutterIcon />
@@ -271,7 +271,7 @@ const MenuList: React.FC<MenuListProps> = ({
             inline={true}
             sx={styles.button}
             disabled={isInserting}
-            variant="secondaryLegacy"
+            variant="explorer"
             onClick={async () => {
               setIsInserting(true);
               try {
@@ -341,7 +341,7 @@ const MenuList: React.FC<MenuListProps> = ({
                 <Button
                   sx={isActive ? styles.ctaButtonSelected : styles.ctaButton}
                   inline={true}
-                  variant="secondaryLegacy"
+                  variant="explorer"
                   onClick={() => setIsSubMenuOpened(!isSubMenuOpened)}
                 >
                   <ExplorerEllipseIcon />

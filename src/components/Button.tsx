@@ -13,7 +13,8 @@ export interface ButtonProps extends ChildProps {
     | 'secondaryLegacy'
     | 'disabled'
     | 'alternate'
-    | 'link';
+    | 'link'
+    | 'explorer';
   size?: ButtonSizes;
   submit?: boolean;
   disabled?: boolean;

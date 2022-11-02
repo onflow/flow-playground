@@ -112,7 +112,7 @@ const AccountList = ({ isExplorerCollapsed }: AccountListProps) => {
           sx={styles.button}
           inline={true}
           disabled={isInserting}
-          variant="secondaryLegacy"
+          variant="explorer"
           onClick={async () => {
             setIsInserting(true);
             try {

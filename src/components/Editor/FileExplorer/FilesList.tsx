@@ -94,7 +94,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           title="Contracts"
           items={[
             { title: 'Contract Test', key: 0 },
-            { title: 'Contract 2 Test', key: 1 },
+            { title: 'Contract 2 Test', key: 1 }
           ]}
           active={null}
           onSelect={() => {}}
@@ -176,7 +176,9 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
     );
   };
 
-  return <Flex sx={styles.root}>{getListContent()}</Flex>;
+  return (
+    <Flex sx={styles.root}>{getListContent()}</Flex>
+  );
 };
 
 export default FilesList;

@@ -18,6 +18,7 @@ const styles: SXStyles = {
     flexDirection: 'row',
     display: 'flex',
     gridArea: 'sidebar',
+    overflowY: 'auto'
   },
   collapsedRoot: {
     background: ' #F6F7F9',
@@ -68,7 +69,7 @@ const FileExplorer = ({
       <Button
         sx={isExplorerCollapsed ? styles.shutterClosed : styles.shutterOpened}
         inline={true}
-        variant="secondaryLegacy"
+        variant="explorer"
         onClick={toggleExplorer}
       >
         <ExplorerCollapseIcon />
