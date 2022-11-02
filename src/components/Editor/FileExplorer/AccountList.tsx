@@ -82,7 +82,7 @@ function getDeployedContracts(account: Account): string {
     return contractCount + ' Contracts';
   } else if (contractCount > 0) {
     const singleContract = account.deployedContracts[0];
-    const contractName = singleContract.split('.').slice(-1)[0];
+    const contractName = singleContract.split('.')[0];
     return contractName;
   } else {
     return '';
