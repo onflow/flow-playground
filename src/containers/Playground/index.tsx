@@ -47,13 +47,13 @@ const getBaseStyles = (
     left: 0,
     height: '100vh',
     display: 'grid',
-    gridGap: '1px 1px',
     gridTemplateAreas: "'header header' 'sidebar main'",
     gridTemplateColumns: `${fileExplorerWidth} auto`,
     gridTemplateRows: '50px auto',
     background: 'greyBorder',
     overflow: 'hidden',
     filter: showProjectsSidebar ? 'blur(1px)' : 'none',
+    transition: '1s',
   };
 
   return styles;
@@ -63,7 +63,7 @@ const leftSidebarTransition = { type: 'spring', bounce: 0.2, duration: 0.25 };
 
 const Content = () => {
   const { showProjectsSidebar, toggleProjectsSidebar } = useProject();
-  const { isExplorerCollapsed } = useToggleExplorer();
+  const { isExplorerCollapsed, toggleExplorer } = useToggleExplorer();
 
   const baseStyles = getBaseStyles(showProjectsSidebar, isExplorerCollapsed);
   return (
@@ -106,7 +106,10 @@ const Content = () => {
           />
         )}
         <Box sx={baseStyles}>
-          <EditorLayout />
+          <EditorLayout
+            isExplorerCollapsed={isExplorerCollapsed}
+            toggleExplorer={toggleExplorer}
+          />
         </Box>
       </motion.div>
     </>

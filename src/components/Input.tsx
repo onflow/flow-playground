@@ -1,16 +1,16 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, ForwardedRef } from 'react';
 import { Input as ThemeUiInput, ThemeUICSSObject } from 'theme-ui';
 
 interface InputProps {
   onClick?: () => void;
-  onBlur?: (event) => void;
+  onBlur?: (event: any) => void;
   onChange?: (event: ChangeEvent) => void;
   readOnly?: boolean;
   defaultValue: string;
   sx?: ThemeUICSSObject;
   type: string;
   'data-test'?: string;
-  ref: (element: HTMLInputElement | undefined) => void;
+  ref: ForwardedRef<any>;
 }
 
 const getStyles = () => ({

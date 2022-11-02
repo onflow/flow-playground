@@ -1,11 +1,9 @@
 import { useLocation } from '@reach/router';
-import { ExportButton } from 'components/ExportButton';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
-import { FaTimes } from 'react-icons/fa';
-import { SXStyles } from 'src/types';
-import { Box, Flex } from 'theme-ui';
+import React, { SyntheticEvent, useEffect, useRef, useState, forwardRef, ChangeEvent, ForwardedRef } from 'react';
+import { ChildProps, SXStyles } from 'src/types';
+import { Box, Flex, ThemeUICSSObject } from 'theme-ui';
 import { getParams } from 'util/url';
 import useKeyPress from '../../../hooks/useKeyPress';
 import Button from 'components/Button';
@@ -31,7 +29,7 @@ const styles: SXStyles = {
     color: '#2F353F',
     alignItems: 'start',
     fontFamily: 'IBM Plex Mono',
-    padding: '8px 0px'
+    padding: '8px 0px',
   },
   header: {
     display: 'flex',
@@ -39,7 +37,7 @@ const styles: SXStyles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    paddingBottom: '8px'
+    paddingBottom: '8px',
   },
   headerTitle: {
     display: 'flex',
@@ -95,8 +93,8 @@ const styles: SXStyles = {
         'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
     },
     '&:hover button': {
-      visibility: 'visible'
-    }
+      visibility: 'visible',
+    },
   },
   selectedItem: {
     display: 'flex',
@@ -137,16 +135,16 @@ const styles: SXStyles = {
     alignSelf: 'baseline',
     padding: '0px 8px 0px 0px',
     '&:hover': {
-      background: 'none'
-    }
+      background: 'none',
+    },
   },
   ctaButtonSelected: {
     alignSelf: 'baseline',
     padding: '0px 8px 0px 0px',
     '&:hover': {
-      background: 'none'
-    }
-  }
+      background: 'none',
+    },
+  },
 };
 
 type MenuListProps = {
@@ -158,6 +156,16 @@ type MenuListProps = {
   onInsert: () => Promise<void>;
   onDelete: any;
 };
+
+interface ForwardInputProps extends ChildProps {
+  _ref: ForwardedRef<HTMLInputElement>
+  sx: SXStyles,
+  defaultValue: string;
+  onClick?: () => void;
+  onBlur?: () => void;
+  onChange?: (event: ChangeEvent) => void;
+  type: string;
+}
 
 const NAME_MAX_CHARS = 50;
 
@@ -217,6 +225,17 @@ const MenuList: React.FC<MenuListProps> = ({
     }
   };
 
+  const ForwardInput = React.forwardRef<ThemeUICSSObject>(({_ref, sx, defaultValue, onBlur, onClick, type}: ForwardInputProps) => (
+    <Input
+      ref={_ref}
+      sx={sx}
+      type={type}
+      defaultValue={defaultValue}
+      onBlur={onBlur}
+      onClick={onClick}
+    />
+  ))
+
   const isScript = title.toLowerCase().includes('script');
   const itemType = isScript
     ? EntityType.ScriptTemplate
@@ -275,7 +294,7 @@ const MenuList: React.FC<MenuListProps> = ({
             const isActive = active.type === itemType && item.id === params.id;
             const dataTest = `sidebar-${item.title}`;
             const inputRef = editing.includes(i) ? setEditingRef : () => {};
-            const isReadOnly = !editing.includes(i);
+            const inputStyles = editing.includes(i) ? styles.input : styles.inputReadOnly;
             return (
               <Flex
                 sx={isActive ? styles.selectedItem : styles.item}
@@ -295,9 +314,9 @@ const MenuList: React.FC<MenuListProps> = ({
                 </Box>
                 {/* NOTE: Optimize this to a controlled input! */}
 
-                <Input
+                <ForwardInput
                   ref={inputRef}
-                  sx={isReadOnly ? styles.inputReadOnly : styles.input}
+                  sx={inputStyles}
                   type="text"
                   onBlur={(e: any) => {
                     if (e.target.value.length === 0) {
@@ -322,15 +341,13 @@ const MenuList: React.FC<MenuListProps> = ({
                 <Button
                   sx={isActive ? styles.ctaButtonSelected : styles.ctaButton}
                   inline={true}
-                  variant='secondaryLegacy'
-                  onClick={()=> setIsSubMenuOpened(!isSubMenuOpened)}
+                  variant="secondaryLegacy"
+                  onClick={() => setIsSubMenuOpened(!isSubMenuOpened)}
                 >
-                  <ExplorerEllipseIcon/>
+                  <ExplorerEllipseIcon />
                 </Button>
-                { isSubMenuOpened ?? 
-                  <FileExplorerSubMenu />
-                }
-        
+                {isSubMenuOpened ?? <FileExplorerSubMenu />}
+
                 {/* TODO: Duplicate file, Delete file, Update Filename userflows 
                 {!editing.includes(i) && isActive && items.length > 1 && (
                   <Box

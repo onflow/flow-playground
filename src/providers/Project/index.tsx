@@ -10,6 +10,7 @@ import { getParams } from 'util/url';
 
 export enum EntityType {
   Account = 1,
+  ContractTemplate,
   TransactionTemplate,
   ScriptTemplate,
   Readme,

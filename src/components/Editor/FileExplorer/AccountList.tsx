@@ -11,11 +11,18 @@ import { SXStyles } from 'src/types';
 import Button from 'components/Button';
 import ExplorerPlusIcon from 'components/Icons/ExplorerPlusIcon';
 
+type AccountListProps = {
+  isExplorerCollapsed: boolean;
+};
+
 const styles: SXStyles = {
   root: {
     display: 'flex',
     flexDirection: 'column',
-    fontFamily: 'IBM Plex Mono'
+    fontFamily: 'IBM Plex Mono',
+  },
+  hiddenRoot: {
+    visibility: 'hidden',
   },
   header: {
     fontStyle: 'normal',
@@ -31,7 +38,7 @@ const styles: SXStyles = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    fontFamily: 'Acumin Pro'
+    fontFamily: 'Acumin Pro',
   },
   button: {
     padding: '0px',
@@ -54,7 +61,6 @@ const styles: SXStyles = {
     background: '#EAEAFA',
     borderRadius: '8px',
     padding: '0.2rem 0.5rem',
-
   },
   accountCard: {
     display: 'flex',
@@ -89,7 +95,7 @@ function getDeployedContracts(account: Account): string {
   }
 }
 
-const AccountList: React.FC = () => {
+const AccountList = ({ isExplorerCollapsed }: AccountListProps) => {
   const { project, active, setSelectedResourceAccount } = useProject();
   const accountSelected = active.type === EntityType.Account;
 
@@ -99,7 +105,7 @@ const AccountList: React.FC = () => {
   const [isInserting, setIsInserting] = useState(false);
 
   return (
-    <Flex sx={styles.root}>
+    <Flex sx={isExplorerCollapsed ? styles.hiddenRoot : styles.root}>
       <Flex sx={styles.header}>
         <Flex sx={styles.headerTitle}>Accounts</Flex>
         <Button
@@ -126,9 +132,7 @@ const AccountList: React.FC = () => {
           const isActive = accountSelected && params.id === id;
           const rawAddress = account.address.slice(-2);
           const accountAddress =
-            rawAddress == '01'
-              ? `0x${rawAddress}-Default`
-              : `0x${rawAddress}`;
+            rawAddress == '01' ? `0x${rawAddress}-Default` : `0x${rawAddress}`;
           const contractName = getDeployedContracts(account);
           const title = contractName
             ? `${contractName} deployed to this account`

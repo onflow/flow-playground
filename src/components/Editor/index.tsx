@@ -6,16 +6,27 @@ import { ActiveEditor } from 'providers/Project';
 import React from 'react';
 
 type EditorContainerProps = {
+  isExplorerCollapsed: boolean;
+  toggleExplorer: () => void;
   isLoading: boolean;
   project: Project;
   active: ActiveEditor;
 };
 
-const Editor = ({ isLoading, project, active }: EditorContainerProps) => {
+const Editor = ({
+  isExplorerCollapsed,
+  toggleExplorer,
+  isLoading,
+  project,
+  active,
+}: EditorContainerProps) => {
   return (
     <>
       <TopNav />
-      <FileExplorer />
+      <FileExplorer
+        isExplorerCollapsed={isExplorerCollapsed}
+        toggleExplorer={toggleExplorer}
+      />
       <EditorContainer
         isLoading={isLoading}
         project={project}
