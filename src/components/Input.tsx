@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ForwardedRef } from 'react';
+import React, { ChangeEvent, ForwardedRef, useEffect, useRef, useState } from 'react';
 import { Input as ThemeUiInput, ThemeUICSSObject } from 'theme-ui';
 
 interface InputProps {
@@ -11,6 +11,10 @@ interface InputProps {
   type: string;
   'data-test'?: string;
   ref: ForwardedRef<any>;
+  title: string;
+  index: number;
+  editing: Array<number>;
+  toggleEditing: any;
 }
 
 const getStyles = () => ({
@@ -30,20 +34,46 @@ const Input = ({
   onChange,
   readOnly,
   defaultValue,
-  ref,
+  index,
+  title,
+  editing,
+  toggleEditing,
 }: InputProps) => {
   const styles = getStyles();
   const mergedSx = { ...styles.root, ...sx };
+  const ref = useRef(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      console.log('effect hit')
+      if (ref.current && !ref.current.contains(event.target)) {
+        document.removeEventListener('click', handleClickOutside, true);
+        toggleEditing(index, title)
+        setIsEditing(false)
+      }
+      return
+    };
+    if (editing.includes(index) && !isEditing) {
+      document.addEventListener('click', handleClickOutside, true);
+      setIsEditing(true);
+    }
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+      setIsEditing(false)
+    };
+  }, [editing]);
+
   return (
     <ThemeUiInput
       sx={mergedSx}
+      ref={ref}
       onClick={onClick}
       type={type}
       onBlur={onBlur}
       onChange={onChange}
       readOnly={readOnly}
       defaultValue={defaultValue}
-      ref={ref}
       data-test={dataTest}
     />
   );

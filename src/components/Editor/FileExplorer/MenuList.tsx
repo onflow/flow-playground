@@ -191,6 +191,7 @@ const MenuList: React.FC<MenuListProps> = ({
   };
 
   const toggleEditing = (i: number, newTitle: string) => {
+    console.log(JSON.stringify(editing));
     if (editing.includes(i)) {
       let _editing = [...editing];
       _editing.splice(_editing.indexOf(i), 1);
@@ -225,14 +226,18 @@ const MenuList: React.FC<MenuListProps> = ({
     }
   };
 
-  const ForwardInput = forwardRef<ThemeUICSSObject>(({_ref, sx, defaultValue, onBlur, onClick, type}: ForwardInputProps) => (
+  const ForwardInput = forwardRef<any>((props, ref: ForwardedRef<any>) => (
     <Input
-      ref={_ref}
-      sx={sx}
-      type={type}
-      defaultValue={defaultValue}
-      onBlur={onBlur}
-      onClick={onClick}
+      editing={editing}
+      ref={ref}
+      sx={props.sx}
+      type={props.type}
+      defaultValue={props.defaultValue}
+      onBlur={props.onBlur}
+      onClick={props.onClick}
+      title={props.title}
+      index={props.index}
+      toggleEditing={toggleEditing}
     />
   ))
 
@@ -317,13 +322,12 @@ const MenuList: React.FC<MenuListProps> = ({
                 <ForwardInput
                   ref={inputRef}
                   sx={inputStyles}
+                  title={item.title}
+                  index={i}
                   type="text"
                   onBlur={(e: any) => {
-                    if (e.target.value.length === 0) {
-                      isEditing.current.value = item.title;
-                    } else {
-                      toggleEditing(i, e.target.value);
-                    }
+                    console.log('blur:' + i);
+                    
                   }}
                   defaultValue={item.title}
                   onChange={(e: any) => {
