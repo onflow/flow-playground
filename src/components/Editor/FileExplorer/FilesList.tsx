@@ -21,7 +21,7 @@ const styles: SXStyles = {
     lineHeight: '14px',
     letterSpacing: '-0.01em',
     textTransform: 'uppercase',
-    color: '#69717E',
+    color: 'leftSidebarHeaderText',
     fontFamily: 'Acumin Pro',
   },
 };
