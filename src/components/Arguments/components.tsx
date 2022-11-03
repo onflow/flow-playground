@@ -285,10 +285,9 @@ type SignersProps = {
   updateSelectedAccounts: (selection: number[]) => void;
 };
 
-export const Signers: React.FC<SignersProps> = (props) => {
+export const Signers: React.FC<SignersProps> = ({ maxSelection, selected, updateSelectedAccounts }) => {
   const { project } = useProject();
   const { accounts } = project;
-  const { maxSelection, selected, updateSelectedAccounts } = props;
 
   const enoughSigners = selected.length < maxSelection;
   const lineColor = enoughSigners ? theme.colors.error : null;

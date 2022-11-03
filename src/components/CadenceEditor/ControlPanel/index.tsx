@@ -60,6 +60,7 @@ import {
   HoverPanel,
   StatusMessage,
 } from '../../Arguments/styles';
+import { SignersPanel } from 'components/SignersPanel';
 
 const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // ===========================================================================
@@ -337,8 +338,10 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const needSigners = type == EntityType.TransactionTemplate && signers > 0;
 
   const numberOfErrors = Object.keys(errors).length;
+
+  // TODO: disable button if not enough signers
   const notEnoughSigners = needSigners && selected.length < signers;
-  const haveErrors = numberOfErrors > 0 || notEnoughSigners;
+  const haveErrors = numberOfErrors > 0
 
   const { accounts } = project;
   const signersAccounts = selected.map((i) => accounts[i]);
@@ -419,7 +422,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
               </>
             )}
             {needSigners && (
-              <Signers
+              <SignersPanel
                 maxSelection={signers}
                 selected={selected}
                 updateSelectedAccounts={updateSelectedAccounts}

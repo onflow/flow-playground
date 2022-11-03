@@ -50,9 +50,7 @@ const AccountPicker = ({
         sx={{
           padding: '0.8rem 0.5rem',
           alignItems: 'center',
-          border: `1px solid ${theme.colors.borderDark}`,
           backgroundColor: theme.colors.background,
-          borderRadius: '50px',
         }}
       >
         <AccountAvatars
@@ -64,32 +62,7 @@ const AccountPicker = ({
           maxSelection={maxSelection}
         />
       </Flex>
-      <Flex
-        sx={{
-          padding: '0.8rem 0.5rem',
-          alignItems: 'center',
-          border: `1px solid ${theme.colors.borderDark}`,
-          backgroundColor: theme.colors.background,
-          borderRadius: '8px',
-        }}
-      >
-        <AccountSigners
-          multi={true}
-          project={project}
-          accounts={accounts}
-          selectedAccounts={selected.slice(0, maxSelection)}
-          onChange={handleOnChange}
-          maxSelection={maxSelection}
-        />
-        <Flex
-          px="0.5rem"
-          sx={{
-            alignItems: 'center',
-          }}
-        >
-          {children}
-        </Flex>
-      </Flex>
+
     </Flex>
   );
 };

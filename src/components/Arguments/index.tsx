@@ -30,6 +30,7 @@ import {
   Hints,
   Signers,
 } from './components';
+import { SignersPanel } from 'components/SignersPanel';
 
 const isDictionaary = (type: string) => type.includes('{');
 const isArray = (type: string) => type.includes('[');
@@ -120,10 +121,10 @@ const getLabel = (
   return resultType === ResultType.Contract
     ? 'Deployment'
     : resultType === ResultType.Script
-    ? project.scriptTemplates[index].title
-    : resultType === ResultType.Transaction
-    ? project.transactionTemplates[index].title
-    : 'Interaction';
+      ? project.scriptTemplates[index].title
+      : resultType === ResultType.Transaction
+        ? project.transactionTemplates[index].title
+        : 'Interaction';
 };
 
 type ScriptExecution = (args?: string[]) => Promise<any>;
@@ -397,7 +398,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                 </>
               )}
               {needSigners && (
-                <Signers
+                <SignersPanel
                   maxSelection={signers}
                   selected={selected}
                   updateSelectedAccounts={updateSelectedAccounts}

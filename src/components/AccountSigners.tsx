@@ -75,6 +75,7 @@ const AccountSigners: React.FC<{
                 onClick={() => {
                   onChange(i);
                 }}
+                isSelected={false}
               >
                 <motion.div
                   style={{

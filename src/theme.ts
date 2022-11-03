@@ -31,6 +31,9 @@ export default {
     secondaryButtonBorder: '#161616',
     secondaryButtonHover: '#1E1FB9',
     disabledButtonBackground: '#BDBDBD',
+    avatarSelectedColor: '#3031D1',
+    avatarNotSelectedColor: '#DEE2E9',
+    avatarTextColor: '#69717E',
     modes: {
       dark: {
         leftSidebarBackground: '#2F353F',
