@@ -44,40 +44,43 @@ const styles: SXStyles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    paddingBottom: '8px',
   },
   headerTitle: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
   },
+  titleText: {
+    width: '125px',
+    paddingLeft: '8px',
+  },
   button: {
     '&:hover': { borderRadius: '16px' },
     padding: '0px',
   },
   fileShutterOpened: {
-    position: 'absolute',
-    left: '0px',
+    position: 'relative',
+    right: '150px',
     transform: 'none',
-    padding: '0px 0px 0px 8px',
+    padding: '0px',
     '&:hover': {
       background: 'none',
     },
   },
   fileShutterClosed: {
-    position: 'absolute',
-    left: '0px',
+    position: 'relative',
+    right: '150px',
+    padding: '0px',
     transform: 'rotate(180deg)',
-    padding: '0px 8px 0px 0px',
     '&:hover': {
       background: 'none',
     },
   },
   icon: {
-    paddingRight: '12px',
+    paddingRight: '4px',
   },
   selectedIcon: {
-    paddingRight: '12px',
+    paddingRight: '4px',
     filter:
       'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
   },
@@ -239,6 +242,12 @@ const MenuList: React.FC<MenuListProps> = ({
     <Flex sx={styles.root}>
       <Flex sx={styles.header}>
         <Flex sx={styles.headerTitle}>
+          <Box>
+            <ExplorerFileIcon />
+          </Box>
+          <Box sx={styles.titleText}>
+            {title}
+          </Box>
           <Button
             disabled={false}
             inline={true}
@@ -252,10 +261,7 @@ const MenuList: React.FC<MenuListProps> = ({
           >
             <ExplorerFileShutterIcon />
           </Button>
-          <Box sx={{ paddingRight: '8px' }}>
-            <ExplorerFileIcon />
-          </Box>
-          {title}
+
         </Flex>
         {!!onInsert && (
           <Button

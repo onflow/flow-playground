@@ -39,7 +39,7 @@ const styles: SXStyles = {
   shutterOpened: {
     position: 'absolute',
     padding: '0px',
-    left: '215px',
+    left: '205px',
     top: '69px',
     borderRadius: '8px',
   },
