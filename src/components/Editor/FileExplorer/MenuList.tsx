@@ -1,7 +1,15 @@
 import { useLocation } from '@reach/router';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import React, { SyntheticEvent, useEffect, useRef, useState, forwardRef, ChangeEvent, ForwardedRef } from 'react';
+import React, {
+  SyntheticEvent,
+  useEffect,
+  useRef,
+  useState,
+  forwardRef,
+  ChangeEvent,
+  ForwardedRef,
+} from 'react';
 import { ChildProps, SXStyles } from 'src/types';
 import { Box, Flex, ThemeUICSSObject } from 'theme-ui';
 import { getParams } from 'util/url';
@@ -158,8 +166,8 @@ type MenuListProps = {
 };
 
 interface ForwardInputProps extends ChildProps {
-  _ref: ForwardedRef<HTMLInputElement>
-  sx: SXStyles,
+  _ref: ForwardedRef<HTMLInputElement>;
+  sx: SXStyles;
   defaultValue: string;
   onClick?: () => void;
   onBlur?: () => void;
@@ -209,12 +217,6 @@ const MenuList: React.FC<MenuListProps> = ({
     }
   }, [enterPressed, escapePressed]);
 
-  const setEditingRef = (element: HTMLInputElement | undefined) => {
-    isEditing.current = element;
-    element?.focus();
-    element?.select();
-  };
-
   const getIcon = (title: string) => {
     switch (title) {
       case 'Transaction':
@@ -225,21 +227,6 @@ const MenuList: React.FC<MenuListProps> = ({
         return <ExplorerContractIcon />;
     }
   };
-
-  const ForwardInput = forwardRef<any>((props, ref: ForwardedRef<any>) => (
-    <Input
-      editing={editing}
-      ref={ref}
-      sx={props.sx}
-      type={props.type}
-      defaultValue={props.defaultValue}
-      onBlur={props.onBlur}
-      onClick={props.onClick}
-      title={props.title}
-      index={props.index}
-      toggleEditing={toggleEditing}
-    />
-  ))
 
   const isScript = title.toLowerCase().includes('script');
   const itemType = isScript
@@ -298,8 +285,9 @@ const MenuList: React.FC<MenuListProps> = ({
           {items.map((item, i) => {
             const isActive = active.type === itemType && item.id === params.id;
             const dataTest = `sidebar-${item.title}`;
-            const inputRef = editing.includes(i) ? setEditingRef : () => {};
-            const inputStyles = editing.includes(i) ? styles.input : styles.inputReadOnly;
+            const inputStyles = editing.includes(i)
+              ? styles.input
+              : styles.inputReadOnly;
             return (
               <Flex
                 sx={isActive ? styles.selectedItem : styles.item}
@@ -318,18 +306,14 @@ const MenuList: React.FC<MenuListProps> = ({
                   {getIcon(item.title)}
                 </Box>
                 {/* NOTE: Optimize this to a controlled input! */}
-
-                <ForwardInput
-                  ref={inputRef}
+                <Input
+                  editing={editing}
                   sx={inputStyles}
+                  type="text"
+                  defaultValue={item.title}
                   title={item.title}
                   index={i}
-                  type="text"
-                  onBlur={(e: any) => {
-                    console.log('blur:' + i);
-                    
-                  }}
-                  defaultValue={item.title}
+                  toggleEditing={toggleEditing}
                   onChange={(e: any) => {
                     if (e.target.value.length > NAME_MAX_CHARS) {
                       isEditing.current.value = e.target.value.substr(

@@ -10,7 +10,6 @@ import { Box, Flex } from 'theme-ui';
 import { SXStyles } from 'src/types';
 import Button from 'components/Button';
 import ExplorerPlusIcon from 'components/Icons/ExplorerPlusIcon';
-import theme from '../../../theme';
 
 type AccountListProps = {
   isExplorerCollapsed: boolean;
@@ -28,7 +27,7 @@ const styles: SXStyles = {
   header: {
     fontStyle: 'normal',
     fontWeight: 600,
-    fontSize: theme.fontSizes[13],
+    fontSize: '12px',
     lineHeight: '14px',
     letterSpacing: '-0.01em',
     textTransform: 'uppercase',

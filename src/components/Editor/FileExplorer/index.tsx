@@ -18,7 +18,7 @@ const styles: SXStyles = {
     flexDirection: 'row',
     display: 'flex',
     gridArea: 'sidebar',
-    overflowY: 'auto'
+    overflowY: 'auto',
   },
   collapsedRoot: {
     background: ' #F6F7F9',

@@ -1,4 +1,9 @@
-import React, { ChangeEvent, ForwardedRef, useEffect, useRef, useState } from 'react';
+import React, {
+  ChangeEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Input as ThemeUiInput, ThemeUICSSObject } from 'theme-ui';
 
 interface InputProps {
@@ -10,7 +15,6 @@ interface InputProps {
   sx?: ThemeUICSSObject;
   type: string;
   'data-test'?: string;
-  ref: ForwardedRef<any>;
   title: string;
   index: number;
   editing: Array<number>;
@@ -46,13 +50,13 @@ const Input = ({
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
-      console.log('effect hit')
+      console.log('effect hit');
       if (ref.current && !ref.current.contains(event.target)) {
         document.removeEventListener('click', handleClickOutside, true);
-        toggleEditing(index, title)
-        setIsEditing(false)
+        toggleEditing(index, title);
+        setIsEditing(false);
       }
-      return
+      return;
     };
     if (editing.includes(index) && !isEditing) {
       document.addEventListener('click', handleClickOutside, true);
@@ -60,7 +64,7 @@ const Input = ({
     }
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
-      setIsEditing(false)
+      setIsEditing(false);
     };
   }, [editing]);
 
