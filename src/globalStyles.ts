@@ -480,6 +480,59 @@ export default css`
     src: local('Termina'),
       url(/fonts/termina/Termina-Heavy.otf) format('opentype');
     font-weight: 800;
+    font-family: 'Acumin Pro';
+    src: local('Acumin Pro'),
+      url(/fonts/acumin-pro/AcuminPro-Regular.otf) format('opentype');
+  }
+
+  @font-face {
+    font-family: 'Acumin Pro';
+    src: local('Acumin Pro'),
+      url(/fonts/acumin-pro/AcuminPro-Italic.otf) format('opentype');
+    font-style: italic;
+  }
+
+  @font-face {
+    font-family: 'Acumin Pro';
+    src: local('Acumin Pro'),
+      url(/fonts/acumin-pro/AcuminPro-Medium.otf) format('opentype');
+    font-weight: 500;
+  }
+
+  @font-face {
+    font-family: 'Acumin Pro';
+    src: local('Acumin Pro'),
+      url(/fonts/acumin-pro/AcuminPro-MediumItalic.otf) format('opentype');
+    font-weight: 500;
+    font-style: italic;
+  }
+
+  @font-face {
+    font-family: 'Acumin Pro';
+    src: local('Acumin Pro'),
+      url(/fonts/acumin-pro/AcuminPro-SemiBold.otf) format('opentype');
+    font-weight: 600;
+  }
+
+  @font-face {
+    font-family: 'Acumin Pro';
+    src: local('Acumin Pro'),
+      url(/fonts/acumin-pro/AcuminPro-SemiBoldItalic.otf) format('opentype');
+    font-weight: 600;
+    font-style: italic;
+  }
+
+  @font-face {
+    font-family: 'Acumin Pro';
+    src: local('Acumin Pro'),
+      url(/fonts/acumin-pro/AcuminPro-Bold.otf) format('opentype');
+    font-weight: 700;
+  }
+
+  @font-face {
+    font-family: 'IBM Plex Mono';
+    src: local('IBM Plex Mono'),
+      url(/fonts/ibm-plex/IBMPlexMono-Regular.ttf) format('truetype');
   }
 
   * {

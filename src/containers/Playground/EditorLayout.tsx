@@ -2,16 +2,19 @@ import { useLocation } from '@reach/router';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { getParams } from 'util/url';
-
-import Sidebar from 'components/Sidebar';
-
-import { EditorContainer } from './components';
-
-import TopNav from 'components/TopNav';
 import { useProject } from 'providers/Project/projectHooks';
 import { decodeText } from 'util/readme';
+import Editor from '../../components/Editor/index';
 
-const EditorLayout: React.FC = () => {
+type EditorLayoutProps = {
+  isExplorerCollapsed: boolean;
+  toggleExplorer: () => void;
+};
+
+const EditorLayout = ({
+  isExplorerCollapsed,
+  toggleExplorer,
+}: EditorLayoutProps) => {
   const { project, isLoading, active, setSelectedResourceAccount } =
     useProject();
 
@@ -54,9 +57,9 @@ const EditorLayout: React.FC = () => {
         <title>Flow - {helmetTitle} </title>
         <meta name="description" content={helmetDescription} />
       </Helmet>
-      <TopNav />
-      <Sidebar />
-      <EditorContainer
+      <Editor
+        isExplorerCollapsed={isExplorerCollapsed}
+        toggleExplorer={toggleExplorer}
         isLoading={isLoading}
         project={project}
         active={active}

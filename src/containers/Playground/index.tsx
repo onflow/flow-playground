@@ -1,16 +1,15 @@
 import { Redirect } from '@reach/router';
 import React, { CSSProperties } from 'react';
-
 import { RouteComponentProps } from '@reach/router';
 import CadenceChecker from 'providers/CadenceChecker';
 import { ProjectProvider } from 'providers/Project';
-
 import LeftSidebar from 'components/LeftSidebar';
 import { AnimatePresence, motion, MotionStyle } from 'framer-motion';
 import { useProject } from 'providers/Project/projectHooks';
 import { Box, Button, ThemeUICSSObject } from 'theme-ui';
 import { LOCAL_PROJECT_ID } from 'util/url';
-import EditorLayout from './layout';
+import EditorLayout from './EditorLayout';
+import useToggleExplorer from '../../hooks/useToggleExplorer';
 
 export const LEFT_SIDEBAR_WIDTH = 350;
 
@@ -36,11 +35,11 @@ const closeLeftSidebarButtonStyle: CSSProperties = {
 
 const getBaseStyles = (
   showProjectsSidebar: boolean,
-  showFileExplorer: boolean,
+  isExplorerCollapsed: boolean,
 ): ThemeUICSSObject => {
-  const fileExplorerWidth = showFileExplorer ? '244px' : '65px';
+  const fileExplorerWidth = isExplorerCollapsed ? '65px' : '244px';
 
-  return {
+  const styles: ThemeUICSSObject = {
     position: 'absolute',
     top: 0,
     right: 0,
@@ -48,21 +47,24 @@ const getBaseStyles = (
     left: 0,
     height: '100vh',
     display: 'grid',
-    'grid-gap': '1px 1px',
-    'grid-template-areas': "'header header' 'sidebar main'",
-    'grid-template-columns': `${fileExplorerWidth} auto`,
-    'grid-template-rows': '50px auto',
+    gridTemplateAreas: "'header header' 'sidebar main'",
+    gridTemplateColumns: `${fileExplorerWidth} auto`,
+    gridTemplateRows: '50px auto',
     background: 'greyBorder',
     overflow: 'hidden',
     filter: showProjectsSidebar ? 'blur(1px)' : 'none',
   };
+
+  return styles;
 };
 
 const leftSidebarTransition = { type: 'spring', bounce: 0.2, duration: 0.25 };
 
 const Content = () => {
   const { showProjectsSidebar, toggleProjectsSidebar } = useProject();
-  const baseStyles = getBaseStyles(showProjectsSidebar, true);
+  const { isExplorerCollapsed, toggleExplorer } = useToggleExplorer();
+
+  const baseStyles = getBaseStyles(showProjectsSidebar, isExplorerCollapsed);
   return (
     <>
       <AnimatePresence>
@@ -103,7 +105,10 @@ const Content = () => {
           />
         )}
         <Box sx={baseStyles}>
-          <EditorLayout />
+          <EditorLayout
+            isExplorerCollapsed={isExplorerCollapsed}
+            toggleExplorer={toggleExplorer}
+          />
         </Box>
       </motion.div>
     </>
