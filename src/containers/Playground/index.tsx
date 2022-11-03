@@ -53,7 +53,6 @@ const getBaseStyles = (
     background: 'greyBorder',
     overflow: 'hidden',
     filter: showProjectsSidebar ? 'blur(1px)' : 'none',
-    transition: '1s',
   };
 
   return styles;
