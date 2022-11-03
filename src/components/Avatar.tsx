@@ -1,5 +1,4 @@
 import React from 'react';
-import { avataaar } from 'util/avataaar';
 import { mb32 } from 'util/rng';
 
 interface AvatarProps {
@@ -18,7 +17,7 @@ const Avatar: React.FC<AvatarProps> = ({ seed, index, style }) => {
   return (
     <img
       className="avatar"
-      src={avataaar(rng().toString())}
+      src={'/defaultAvataaar.png'}
       style={style}
       alt="Avatar"
     />
