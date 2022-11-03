@@ -194,6 +194,8 @@ export default {
     '4.5rem',
     '6rem',
     '8rem',
+    '12px',
+    '14px'
   ],
   space: [
     '0',
