@@ -6,12 +6,11 @@ import React, {
   useEffect,
   useRef,
   useState,
-  forwardRef,
   ChangeEvent,
   ForwardedRef,
 } from 'react';
 import { ChildProps, SXStyles } from 'src/types';
-import { Box, Flex, ThemeUICSSObject } from 'theme-ui';
+import { Box, Flex } from 'theme-ui';
 import { getParams } from 'util/url';
 import useKeyPress from '../../../hooks/useKeyPress';
 import Button from 'components/Button';
