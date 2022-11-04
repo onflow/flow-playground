@@ -1,15 +1,14 @@
-import { Redirect } from '@reach/router';
-import React, { CSSProperties } from 'react';
-import { RouteComponentProps } from '@reach/router';
-import CadenceChecker from 'providers/CadenceChecker';
-import { ProjectProvider } from 'providers/Project';
+import { Redirect, RouteComponentProps } from '@reach/router';
 import LeftSidebar from 'components/LeftSidebar';
 import { AnimatePresence, motion, MotionStyle } from 'framer-motion';
+import CadenceChecker from 'providers/CadenceChecker';
+import { ProjectProvider } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
+import React, { CSSProperties } from 'react';
 import { Box, Button, ThemeUICSSObject } from 'theme-ui';
 import { LOCAL_PROJECT_ID } from 'util/url';
-import EditorLayout from './EditorLayout';
 import useToggleExplorer from '../../hooks/useToggleExplorer';
+import EditorLayout from './EditorLayout';
 
 export const LEFT_SIDEBAR_WIDTH = 350;
 
@@ -50,7 +49,6 @@ const getBaseStyles = (
     gridTemplateAreas: "'header header' 'sidebar main'",
     gridTemplateColumns: `${fileExplorerWidth} auto`,
     gridTemplateRows: '50px auto',
-    background: 'greyBorder',
     overflow: 'hidden',
     filter: showProjectsSidebar ? 'blur(1px)' : 'none',
   };

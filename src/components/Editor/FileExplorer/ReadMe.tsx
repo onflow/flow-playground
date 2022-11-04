@@ -1,10 +1,10 @@
-import React from 'react';
 import { navigate } from '@reach/router';
-import { useProject } from 'providers/Project/projectHooks';
-import { isUUUID, LOCAL_PROJECT_ID } from 'util/url';
 import { Text } from '@theme-ui/components';
-import ExplorerReadMeIcon from '../../Icons/ExplorerReadMeIcon';
 import Button from 'components/Button';
+import { useProject } from 'providers/Project/projectHooks';
+import React from 'react';
+import { isUUUID, LOCAL_PROJECT_ID } from 'util/url';
+import ExplorerReadMeIcon from '../../Icons/ExplorerReadMeIcon';
 
 const styles = {
   button: {
@@ -12,7 +12,7 @@ const styles = {
   },
 };
 const ProjectInfo: React.FC = () => {
-  const { project, active } = useProject();
+  const { project } = useProject();
 
   const projectPath = isUUUID(project.id) ? project.id : LOCAL_PROJECT_ID;
 

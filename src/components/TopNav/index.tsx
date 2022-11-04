@@ -16,7 +16,7 @@ import ExternalNavLinks from './TopNavButton';
 
 const styles: SXStyles = {
   root: {
-    background: 'background',
+    background: 'white',
     display: 'flex',
     gridArea: 'header',
     flex: '1 1 auto',

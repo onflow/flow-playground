@@ -14,7 +14,7 @@ function ExplorerPlusIcon() {
         strokeWidth="2"
         d="M8 2.343v11.314M13.657 8H2.343"
         opacity="0.4"
-      ></path>
+      />
     </svg>
   );
 }

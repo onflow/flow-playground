@@ -65,7 +65,8 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // ===========================================================================
   // GLOBAL HOOKS
   const { languageClient } = useContext(CadenceCheckerContext);
-  const { project, active, isExecutingAction } = useProject();
+  const { project, active, isExecutingAction, setShowBottomPanel } =
+    useProject();
 
   // HOOKS  -------------------------------------------------------------------
   const [executionArguments, setExecutionArguments] = useState<any>({});
@@ -310,6 +311,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
 
     setShowPrompt(false);
     setProcessingStatus(false);
+    setShowBottomPanel(true);
 
     // Display result in the bottom area
     setResult({
