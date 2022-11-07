@@ -6,10 +6,7 @@
     "plugin:react-hooks/recommended",
     "plugin:jsx-a11y/recommended"
   ],
-  "plugins": [
-    "react",
-    "jsx-a11y"
-  ],
+  "plugins": ["react", "jsx-a11y"],
   "env": {
     "browser": true,
     "node": true,
@@ -54,14 +51,8 @@
     "react/sort-comp": 1,
     "react/jsx-closing-bracket-location": 2,
     "react/jsx-closing-tag-location": 2,
-    "react/jsx-indent": [
-      2,
-      2
-    ],
-    "react/jsx-indent-props": [
-      2,
-      2
-    ],
+    "react/jsx-indent": [2, 2],
+    "react/jsx-indent-props": [2, 2],
     "react/jsx-no-duplicate-props": [
       2,
       {
@@ -77,42 +68,29 @@
   },
   "overrides": [
     {
-      "files": [
-        "**/*.ts",
-        "**/*.tsx"
-      ],
+      "files": ["**/*.ts", "**/*.tsx"],
       "parser": "@typescript-eslint/parser",
-      "plugins": [
-        "@typescript-eslint"
-      ],
+      "plugins": ["@typescript-eslint"],
       "rules": {
         "@typescript-eslint/no-explicit-any": 1,
         "no-undef": 0,
         "no-unused-vars": 0,
         "@typescript-eslint/no-unused-vars": [
           "warn",
-          {
-            "argsIgnorePattern": "^_"
-          }
+          { "argsIgnorePattern": "^_" }
         ],
         "no-unused-expressions": 0,
-        "@typescript-eslint/no-unused-expressions": [
-          "error"
-        ]
+        "@typescript-eslint/no-unused-expressions": ["error"]
       }
     },
     {
-      "files": [
-        "**/*.spec.js"
-      ],
+      "files": ["**/*.spec.js"],
       "rules": {
         "no-unused-expressions": "off"
       }
     },
     {
-      "files": [
-        "**/*.test.js"
-      ],
+      "files": ["**/*.test.js"],
       "rules": {
         "jsx-a11y/no-static-element-interactions": 0,
         "jsx-a11y/click-events-have-key-events": 0
