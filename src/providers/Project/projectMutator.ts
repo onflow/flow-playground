@@ -13,14 +13,16 @@ import {
   CREATE_SCRIPT_TEMPLATE,
   CREATE_TRANSACTION_EXECUTION,
   CREATE_TRANSACTION_TEMPLATE,
+  CREATE_CONTRACT_TEMPLATE,
+  CREATE_CONTRACT_DEPLOYMENT,
   DELETE_SCRIPT_TEMPLATE,
   DELETE_TRANSACTION_TEMPLATE,
+  DELETE_CONTRACT_TEMPLATE,
   SAVE_PROJECT,
   SET_ACTIVE_PROJECT,
-  UPDATE_ACCOUNT_DEPLOYED_CODE,
-  UPDATE_ACCOUNT_DRAFT_CODE,
   UPDATE_SCRIPT_TEMPLATE,
   UPDATE_TRANSACTION_TEMPLATE,
+  UPDATE_CONTRACT_TEMPLATE,
 } from 'api/apollo/mutations';
 import { GET_LOCAL_PROJECT, GET_PROJECT } from 'api/apollo/queries';
 
@@ -195,37 +197,6 @@ export default class ProjectMutator {
     });
   }
 
-  async updateAccountDraftCode(account: Account, code: string) {
-    this.client.writeData({
-      id: `Account:${account.id}`,
-      data: {
-        __typename: 'Account',
-        draftCode: code,
-      },
-    });
-
-    if (this.isLocal) {
-      registerOnCloseSaveMessage();
-      return;
-    }
-
-    const key = ['UPDATE_ACCOUNT_DRAFT_CODE', this.projectId, account.id];
-
-    await this.client.mutate({
-      mutation: UPDATE_ACCOUNT_DRAFT_CODE,
-      variables: {
-        projectId: this.projectId,
-        accountId: account.id,
-        code,
-      },
-      context: {
-        debounceKey: key,
-        serializationKey: PROJECT_SERIALIZATION_KEY,
-      },
-      fetchPolicy: 'no-cache',
-    });
-  }
-
   clearProjectAccountsOnReDeploy(accountId: string) {
     const project = this.getProject();
 
@@ -251,38 +222,6 @@ export default class ProjectMutator {
         project: newProject,
       },
     });
-  }
-
-  async updateAccountDeployedCode(account: Account, index: number) {
-    const hasDeployedCode = !!account.deployedCode?.length;
-
-    if (this.isLocal) {
-      const project = await this.createProject();
-      account = project.accounts[index];
-      unregisterOnCloseSaveMessage();
-    }
-
-    const res = await this.client.mutate({
-      mutation: UPDATE_ACCOUNT_DEPLOYED_CODE,
-      variables: {
-        projectId: this.projectId,
-        accountId: account.id,
-        code: account.draftCode,
-      },
-      context: {
-        serializationKey: PROJECT_SERIALIZATION_KEY,
-      },
-    });
-
-    if (hasDeployedCode) this.clearProjectAccountsOnReDeploy(account.id);
-
-    Mixpanel.track('Contract deployed', {
-      projectId: this.projectId,
-      accountId: account.id,
-      code: account.draftCode,
-    });
-
-    return res;
   }
 
   async updateTransactionTemplate(
@@ -583,5 +522,147 @@ export default class ProjectMutator {
       },
     });
     return project;
+  }
+
+  async createContractTemplate(script: string, title: string) {
+    if (this.isLocal) {
+      await this.createProject();
+    }
+
+    const res = await this.client.mutate({
+      mutation: CREATE_CONTRACT_TEMPLATE,
+      variables: {
+        projectId: this.projectId,
+        script,
+        title,
+      },
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
+    });
+
+    // Update gql codegen
+    // const project = this.getProject();
+    // this.client.writeQuery({
+    //   query: GET_PROJECT,
+    //   variables: {
+    //     projectId: project.id,
+    //   },
+    //   data: {
+    //     project: {
+    //       ...project,
+    //       contractTemplates: [
+    //         ...project.contractTemplates,
+    //         res.data.createContractTemplate,
+    //       ],
+    //     },
+    //   },
+    // });
+
+    Mixpanel.track('Contract template created', {
+      projectId: this.projectId,
+      script,
+    });
+
+    return res;
+  }
+
+  async updateContractTemplate(account: Account, code: string) {
+    this.client.writeData({
+      id: `Account:${account.id}`,
+      data: {
+        __typename: 'Account',
+        draftCode: code,
+      },
+    });
+
+    if (this.isLocal) {
+      registerOnCloseSaveMessage();
+      return;
+    }
+
+    const key = ['UPDATE_CONTRACT_TEMPLATE', this.projectId, account.id];
+
+    await this.client.mutate({
+      mutation: UPDATE_CONTRACT_TEMPLATE,
+      variables: {
+        projectId: this.projectId,
+        accountId: account.id,
+        code,
+      },
+      context: {
+        debounceKey: key,
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
+      fetchPolicy: 'no-cache',
+    });
+  }
+
+  async createContractDeployment(account: Account, index: number) {
+    const hasDeployedCode = !!account.deployedCode?.length;
+
+    if (this.isLocal) {
+      const project = await this.createProject();
+      account = project.accounts[index];
+      unregisterOnCloseSaveMessage();
+    }
+
+    const res = await this.client.mutate({
+      mutation: CREATE_CONTRACT_DEPLOYMENT,
+      variables: {
+        projectId: this.projectId,
+        accountId: account.id,
+        code: account.draftCode,
+      },
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
+    });
+
+    if (hasDeployedCode) this.clearProjectAccountsOnReDeploy(account.id);
+
+    Mixpanel.track('Contract deployed', {
+      projectId: this.projectId,
+      accountId: account.id,
+      code: account.draftCode,
+    });
+
+    return res;
+  }
+
+  async deleteContractTemplate(templateId: string) {
+    if (this.isLocal) {
+      await this.createProject();
+    }
+
+    const res = await this.client.mutate({
+      mutation: DELETE_CONTRACT_TEMPLATE,
+      variables: {
+        projectId: this.projectId,
+        templateId,
+      },
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
+    });
+
+    // const project = this.getProject();
+
+    // this.client.writeQuery({
+    //   query: GET_PROJECT,
+    //   variables: {
+    //     projectId: project.id,
+    //   },
+    //   data: {
+    //     project: {
+    //       ...project,
+    //       contractTemplates: project.contractTemplates.filter(
+    //         (template) => template.id !== templateId,
+    //       ),
+    //     },
+    //   },
+    // });
+
+    return res;
   }
 }
