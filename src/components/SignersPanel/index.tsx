@@ -2,28 +2,13 @@ import { useProject } from 'providers/Project/projectHooks';
 import React, { useState, useMemo } from 'react';
 import theme from '../../theme';
 import { CollapseButton } from './CollapseButton';
-import { SignerPicker } from './SignerPicker';
 import AccountPicker from 'components/AccountPicker';
-import {
-  FaArrowCircleRight,
-  FaCaretSquareDown,
-  FaCaretSquareUp,
-  FaExclamationTriangle,
-} from 'react-icons/fa';
 import { Flex, Text } from 'theme-ui';
 import {
-  Badge,
-  Controls,
-  ErrorIndex,
-  ErrorMessage,
-  Heading,
-  List,
   SignersContainer,
-  SignersError,
-  SingleError,
-  Title,
 } from '../Arguments/styles';
 import { Account } from 'api/apollo/generated/graphql';
+import Avatar from 'components/Avatar';
 
 type SignersProps = {
   maxSelection?: number;
@@ -31,34 +16,52 @@ type SignersProps = {
   updateSelectedAccounts: (selection: number[]) => void;
 };
 
-const defaultHeader = (max: number) => `Choose ${max} Signers`;
-
 const displayAddress = ({ address }: { address: string }) => {
   return `0x${address.slice(-2)}`;
 }
 
-const PanelHeader = (maxSelection: number, accounts: Account[], selected: number[] = []) => {
-  let message = ""
-  let isDefault = false;
-  const needSigners = selected.length < maxSelection;
+const AvatarIcon = (seed: number, index: number, complete: boolean) => {
+  return (
+    <Avatar
+      seed={seed}
+      index={index}
+      style={{
+        width: '17px',
+        height: '17px',
+        display: 'block',
+        borderRadius: '20px',
+        border: `1px solid ${complete ? theme.colors.primary : theme.colors.errors}`
+      }}
+    />)
+}
 
-  console.log('selected.length === 1 && selected.includes(1)', selected, selected.length === 1, selected.includes(1))
-  if (needSigners) {
+const AvatarIconList = (seed: number, indexes: number[], complete: boolean = false) => {
+  return (
+    <Flex>
+      {indexes.map(index => {
+        return AvatarIcon(seed, index, complete);
+      })}
+    </Flex>
+  )
+}
+
+const PanelHeader = (maxSelection: number, accounts: Account[], seed: number, selected: number[] = []) => {
+  // TODO: accounts might be needed for displaying account addr, to be determined
+  let message = ""
+  const correctNumSigners = selected.length === maxSelection;
+  const signersSelected = "Signers Selected";
+  if (correctNumSigners && selected.length === 1) {
+    message = `${selected.length} ${signersSelected}`;
+  } else if (correctNumSigners) {
     message = `${selected.length} of ${maxSelection} Signers`;
-  } else if (selected.length === 0) {
-    message = defaultHeader(maxSelection);
-  } else if (selected.length === 1 && selected.includes(0)) {
-    message = `${displayAddress(accounts[0])} - `
-    isDefault = true;
-  } else if (selected.length < 3) {
-    message = `${selected.map(id => displayAddress(accounts[id])).join(",")} Selected`;
   } else {
-    message = `${selected.length} Selected`;
+    message = `${selected.length} of ${maxSelection} ${signersSelected}`;
   }
 
   return (
     <Flex sx={{ justifyContent: "flex-start" }}>
-      <Text>{message}</Text>{isDefault ? <Text sx={{ color: theme.colors.blue }}>Default</Text> : null}
+      {AvatarIconList(seed, selected, correctNumSigners)}
+      <Text sx={{marginLeft: '0.25rem'}}>{message}</Text>
     </Flex>
   )
 }
@@ -68,7 +71,7 @@ export const SignersPanel: React.FC<SignersProps> = ({ maxSelection, selected, u
   const [isAvatarOpen, setIsAvatarOpen] = useState(false);
   const { accounts } = project;
 
-  const HeaderText = useMemo(() => PanelHeader(maxSelection, accounts, selected), [maxSelection, accounts, selected])
+  const HeaderText = useMemo(() => PanelHeader(maxSelection, accounts, project.seed, selected), [maxSelection, accounts, selected, project.seed])
 
   return (
     <SignersContainer>

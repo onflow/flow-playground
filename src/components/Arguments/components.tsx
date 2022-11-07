@@ -254,7 +254,7 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
   type,
   active = true,
   onClick,
-}) => {
+}: {type: EntityType, active: boolean, onClick: Function}) => {
   const {
     project,
     active: activeEditor,

@@ -12,6 +12,7 @@ export default {
     greyBorder: '#D8D8D8',
     purple: '#f694ff',
     border: 'rgb(240, 240, 240)',
+    errors: '#FC4723',
     borderDark: 'rgb(222, 222, 222)',
     shadowColor: 'rgb(222, 222, 222)',
     warning: '#ffcc00',

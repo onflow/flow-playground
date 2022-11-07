@@ -5,6 +5,6 @@ import React from "react";
 export const CollapseButton = ({ isOpen = true }: { isOpen: boolean }) => {
 
     return (
-        <span>{isOpen ? CollapseOpenIcon() : CollapseClosedIcon()}</span>
+      <span>{isOpen ? CollapseOpenIcon() : CollapseClosedIcon()}</span>
     )
 }

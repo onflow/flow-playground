@@ -361,11 +361,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       statusMessage =
         'Redeploying will clear the state of all accounts. Proceed?';
       break;
-    case isOk:
-      statusIcon = <FaRegCheckCircle />;
-      statusMessage = 'Ready';
-      break;
-    default:
+    case !isOk:
       statusIcon = <FaRegTimesCircle />;
       statusMessage = 'Fix errors';
       break;
