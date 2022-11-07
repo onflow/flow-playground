@@ -14,7 +14,8 @@ export interface ButtonProps extends ChildProps {
     | 'disabled'
     | 'alternate'
     | 'link'
-    | 'explorer';
+    | 'explorer'
+    | 'unstyled';
   size?: ButtonSizes;
   submit?: boolean;
   disabled?: boolean;

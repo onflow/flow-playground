@@ -25,12 +25,14 @@ export const GET_PROJECT = gql`
       description
       readme
       accounts {
-        id
         address
-        draftCode
-        deployedCode
         deployedContracts
         state
+      }
+      contractTemplates {
+        id
+        script
+        title
       }
       transactionTemplates {
         id
@@ -58,12 +60,14 @@ export const GET_LOCAL_PROJECT = gql`
       description
       readme
       accounts {
-        id
         address
-        draftCode
-        deployedCode
         deployedContracts
         state
+      }
+      contractTemplates {
+        id
+        script
+        title
       }
       transactionTemplates {
         id

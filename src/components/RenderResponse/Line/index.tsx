@@ -1,9 +1,8 @@
-import { css } from '@emotion/react';
-import styled from '@emotion/styled';
 import React from 'react';
-import { IoIosArrowForward } from 'react-icons/io';
+import { GoChevronRight } from 'react-icons/go';
+import { SXStyles } from 'src/types';
+import { Box, Flex } from 'theme-ui';
 import { Line as LineType, Tag } from 'util/normalize-interaction-response';
-import theme from '../../../theme';
 
 const PS1 = (tag: Tag) => {
   switch (tag) {
@@ -20,87 +19,69 @@ const PS1 = (tag: Tag) => {
   }
 };
 
-const Root = styled.div`
-  --gap: 5px;
-  --font-family: ${theme.fonts.monospace};
-  --font-size: 11px;
-  font-family: var(--font-family);
-  font-size: var(--font-size);
-  display: flex;
-  padding: 5px;
+const styles: SXStyles = {
+  root: {
+    fontFamily: 'monospace',
+    fontSize: 0,
+    padding: 4,
+    alignItems: 'center',
+    gap: 6,
+  },
+  index: {
+    color: 'text',
+    fontWeight: 'bold',
+  },
+  label: {
+    fontWeight: 'bold',
+  },
+  timestamp: {
+    opacity: 0.4,
+  },
+  objectValue: {
+    borderRadius: '3px',
+    padding: 8,
+    background: 'muted',
+    color: 'background',
+  },
+};
 
-  & + & {
-    border-top: 1px dashed ${theme.colors.border};
+const getColor = (tag: Tag) => {
+  switch (tag) {
+    case Tag.ERROR:
+      return 'error';
+    case Tag.VALUE:
+      return 'purple';
+    case Tag.UNKNOWN:
+      return 'error';
+    default:
+      return '';
   }
-`;
+};
 
-const Label = styled.strong<{ tag: Tag }>`
-  margin-right: var(--gap);
-  font-weight: bold;
-
-  &:before {
-    counter-increment: lines;
-    content: '[' counter(lines) ']';
-    margin-right: var(--gap);
-    color: ${theme.colors.text};
-  }
-
-  &:empty {
-    margin-right: 0;
-  }
-
-  & + svg {
-    margin-right: var(--gap);
-    margin-left: -3px;
-  }
-
-  ${(p) =>
-    p.tag === Tag.ERROR &&
-    css`
-      color: ${theme.colors.error};
-    `}
-  ${(p) =>
-    p.tag === Tag.VALUE &&
-    css`
-      color: ${theme.colors.purple};
-    `}
-  ${(p) =>
-    p.tag === Tag.UNKNOWN &&
-    css`
-      color: ${theme.colors.error};
-    `}
-`;
-
-const StringValue = styled.pre<{ tag: Tag }>`
-  ${(p) =>
-    p.tag === Tag.ERROR &&
-    css`
-      color: ${theme.colors.error};
-    `}
-`;
-
-const ObjectValue = styled.pre`
-  border-radius: 3px;
-  padding: 13px;
-  background: ${theme.colors.muted};
-  color: ${theme.colors.background};
-  font-family: var(--font-family);
-  font-size: var(--font-size);
-`;
-
-export const Line: React.FC<LineType> = ({ timestamp, tag, value, label }) => {
+type LineProps = LineType & { index: number };
+export const Line = ({ timestamp, tag, value, label, index }: LineProps) => {
+  const ps1Content = PS1(tag);
   return (
-    <Root>
-      {timestamp}&nbsp;
-      {label && <span style={{ fontWeight: 'bold' }}>{label}&nbsp;</span>}
-      <IoIosArrowForward />
-      <Label tag={tag}>{PS1(tag)}</Label>
-      <IoIosArrowForward />
-      {typeof value === 'string' ? (
-        <StringValue tag={tag}>{value}</StringValue>
-      ) : (
-        <ObjectValue>{JSON.stringify(value, null, 2)}</ObjectValue>
+    <Flex sx={styles.root}>
+      <Box sx={styles.timestamp} as="span">
+        {timestamp}
+      </Box>
+      {label && <span>{label}</span>}
+      <GoChevronRight size="15px" />
+      <Box sx={styles.index}>[{index + 1}]</Box>
+      {!!ps1Content && (
+        <Box sx={{ ...styles.label, color: getColor(tag) }}>{ps1Content}</Box>
       )}
-    </Root>
+      <GoChevronRight size="15px" />
+      {typeof value === 'string' ? (
+        <Box as="pre" sx={{ color: tag === Tag.ERROR ? 'error' : 'text' }}>
+          {value}
+        </Box>
+      ) : (
+        <Box sx={styles.objectValue} as="pre">
+          {JSON.stringify(value, null, 2)}
+        </Box>
+      )}
+    </Flex>
   );
 };

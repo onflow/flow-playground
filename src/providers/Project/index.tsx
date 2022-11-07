@@ -1,12 +1,12 @@
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { navigate, Redirect, useLocation } from '@reach/router';
-import React, { createContext, useState } from 'react';
-import useGetProject from './projectHooks';
-import ProjectMutator, { PROJECT_SERIALIZATION_KEY } from './projectMutator';
 import { Account, Project } from 'api/apollo/generated/graphql';
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
+import React, { createContext, useState } from 'react';
 import { ChildProps } from 'src/types';
 import { getParams } from 'util/url';
+import useGetProject from './projectHooks';
+import ProjectMutator, { PROJECT_SERIALIZATION_KEY } from './projectMutator';
 
 export enum EntityType {
   Account = 1,
@@ -36,6 +36,7 @@ export interface ProjectContextValue {
   createContractDeployment: () => Promise<any>;
   updateSelectedContractAccount: (accountIndex: number) => void;
   updateSelectedTransactionAccounts: (accountIndexes: number[]) => void;
+  updateActiveContractTemplate: (script: string) => Promise<any>;
   updateActiveScriptTemplate: (script: string, title: string) => Promise<any>;
   updateActiveTransactionTemplate: (
     script: string,
@@ -51,11 +52,7 @@ export interface ProjectContextValue {
     title: string,
     script: string,
   ) => Promise<any>;
-  updateContractTemplate: (
-    templateId: string,
-    title: string,
-    script: string,
-  ) => Promise<any>;
+  updateContractTemplate: (title: string, script: string) => Promise<any>;
   deleteScriptTemplate: (templateId: string) => void;
   deleteTransactionTemplate: (templateId: string) => void;
   deleteContractTemplate: (templateID: string) => void;
@@ -76,6 +73,9 @@ export interface ProjectContextValue {
   isExecutingAction: boolean;
   showProjectsSidebar: boolean;
   toggleProjectsSidebar: () => void;
+  showBottomPanel: boolean;
+  toggleBottomPanel: () => void;
+  setShowBottomPanel: (show: boolean) => void;
 }
 
 export const ProjectContext: React.Context<ProjectContextValue> =
@@ -114,11 +114,12 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     isLocal = _isLocal;
     isLoading = _isLoading;
   } catch (e) {
+    console.error(e);
     navigate('/404');
   }
 
   const [active, setActive] = useState<{ type: EntityType; index: number }>({
-    type: EntityType.Account,
+    type: EntityType.ContractTemplate,
     index: 0,
   });
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
@@ -127,12 +128,15 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const [isExecutingAction, setIsExecutingAction] = useState(false);
   const [lastSigners, setLastSigners] = useState(null);
   const [showProjectsSidebar, setShowProjectsSidebar] = useState(false);
-
-  const toggleProjectsSidebar = () => setShowProjectsSidebar((prev) => !prev);
+  const [showBottomPanel, setShowBottomPanel] = useState(false);
 
   const [selectedResourceAccount, setSelectedResourceAccount] = useState<
     string | null
   >(null);
+
+  const toggleProjectsSidebar = () => setShowProjectsSidebar((prev) => !prev);
+  const toggleBottomPanel = () => setShowBottomPanel((prev) => !prev);
+
   const projectID = project ? project.id : null;
   const title = project ? project.title : null;
   const description = project ? project.description : null;
@@ -195,6 +199,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     let res;
     try {
       res = await mutator.createContractDeployment(
+        project.contractTemplates[active.index],
         project.accounts[active.index],
         active.index,
       );
@@ -215,13 +220,35 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
-  const updateContractTemplate = async (value: string) => {
+  const updateContractTemplate = async (script: string, title: string) => {
     setIsSaving(true);
     let res;
     try {
       res = await mutator.updateContractTemplate(
-        project.accounts[active.index],
-        value,
+        project.contractTemplates[active.index],
+        script,
+        title,
+        active.index,
+      );
+    } catch (e) {
+      console.error(e);
+      setIsSaving(false);
+      showError();
+    }
+    setIsSaving(false);
+    return res;
+  };
+
+  const updateActiveContractTemplate = async (script: string) => {
+    setIsSaving(true);
+    let res;
+    const contractTemplate = project.contractTemplates[active.index];
+    try {
+      res = await mutator.updateContractTemplate(
+        project.contractTemplates[active.index],
+        script,
+        contractTemplate.title,
+        active.index,
       );
     } catch (e) {
       console.error(e);
@@ -413,7 +440,13 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         return {
           type: active.type,
           index: active.index,
-          onChange: (code: string) => updateContractTemplate(code),
+          onChange: () => '',
+        };
+      case EntityType.ContractTemplate:
+        return {
+          type: active.type,
+          index: active.index,
+          onChange: (code: string) => updateActiveContractTemplate(code),
         };
       case EntityType.TransactionTemplate:
         return {
@@ -440,14 +473,15 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   // "getActiveCode" is used to read Cadence code from active(selected) item
   const getActiveCode: () => [string, number] = () => {
-    const { accounts, scriptTemplates, transactionTemplates } = project;
+    const { contractTemplates, scriptTemplates, transactionTemplates } =
+      project;
 
     const { type, index } = active;
     let code: string, id: number;
     switch (type) {
-      case EntityType.Account:
-        code = accounts[index].draftCode;
-        id = accounts[index].id;
+      case EntityType.ContractTemplate:
+        code = contractTemplates[index].script;
+        id = contractTemplates[index].id;
         break;
       case EntityType.TransactionTemplate:
         code = transactionTemplates[index].script;
@@ -471,8 +505,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   }
 
   const params = getParams(location.search || '');
-  const { id, type, storage: storageParam } = params;
-  const storage = storageParam || 'none';
+  const { id, type } = params;
 
   let templateIndex = 0;
   switch (type) {
@@ -497,10 +530,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         });
         const templateId = project.transactionTemplates[templateIndex].id;
         return (
-          <Redirect
-            noThrow
-            to={`/${project.id}?type=tx&id=${templateId}&storage=${storage}`}
-          />
+          <Redirect noThrow to={`/${project.id}?type=tx&id=${templateId}`} />
         );
       }
       break;
@@ -527,41 +557,13 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         return (
           <Redirect
             noThrow
-            to={`/${project.id}?type=script&id=${templateId}&storage=${storage}`}
+            to={`/${project.id}?type=script&id=${templateId}`}
           />
         );
       }
       break;
     }
-    case 'account': {
-      if (id && id !== '') {
-        const foundIndex = project.accounts.findIndex(
-          (template) => template.id === id,
-        );
-        if (foundIndex > 0) {
-          templateIndex = foundIndex;
-        }
-      }
-      const sameType = active.type == EntityType.Account;
-      const sameIndex = active.index == templateIndex;
-
-      if (!sameIndex || !sameType || initialLoad) {
-        setInitialLoad(false);
-        setActive({
-          type: EntityType.Account,
-          index: templateIndex,
-        });
-        const templateId = project.accounts[templateIndex].id;
-        return (
-          <Redirect
-            noThrow
-            to={`/${project.id}?type=account&id=${templateId}&storage=${storage}`}
-          />
-        );
-      }
-      break;
-    }
-    default: {
+    case 'readme': {
       const sameType = active.type == EntityType.Readme;
       const sameIndex = active.index == templateIndex;
 
@@ -572,6 +574,35 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           index: 0,
         });
         return <Redirect noThrow to={`/${project.id}`} />;
+      }
+
+      break;
+    }
+    default: {
+      if (id && id !== '') {
+        const foundIndex = project.contractTemplates.findIndex(
+          (template) => template.id === id,
+        );
+        if (foundIndex > 0) {
+          templateIndex = foundIndex;
+        }
+      }
+      const sameType = active.type == EntityType.ContractTemplate;
+      const sameIndex = active.index == templateIndex;
+
+      if (!sameIndex || !sameType || initialLoad) {
+        setInitialLoad(false);
+        setActive({
+          type: EntityType.ContractTemplate,
+          index: templateIndex,
+        });
+        const templateId = project.contractTemplates[templateIndex].id;
+        return (
+          <Redirect
+            noThrow
+            to={`/${project.id}?type=account&id=${templateId}`}
+          />
+        );
       }
     }
   }
@@ -591,6 +622,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         updateScriptTemplate,
         updateTransactionTemplate,
         updateActiveScriptTemplate,
+        updateActiveContractTemplate,
         updateActiveTransactionTemplate,
         deleteScriptTemplate,
         deleteTransactionTemplate,
@@ -615,6 +647,9 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         transactionAccounts,
         showProjectsSidebar,
         toggleProjectsSidebar,
+        showBottomPanel,
+        toggleBottomPanel,
+        setShowBottomPanel,
       }}
     >
       {children}

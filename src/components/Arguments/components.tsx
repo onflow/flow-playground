@@ -43,7 +43,7 @@ export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
   return (
     <Heading>
       <Title lineColor={lineColor}>
-        {type === EntityType.Account && 'Contract Arguments'}
+        {type === EntityType.ContractTemplate && 'Contract Arguments'}
         {type === EntityType.TransactionTemplate && 'Transaction Arguments'}
         {type === EntityType.ScriptTemplate && 'Script Arguments'}
       </Title>
@@ -226,10 +226,11 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
 
 const getLabel = (type: EntityType, project: Project, active: ActiveEditor) => {
   const { accounts } = project;
-
   switch (true) {
-    case type === EntityType.Account:
-      return accounts[active.index].deployedCode ? 'Redeploy' : 'Deploy';
+    case type === EntityType.ContractTemplate:
+      return accounts[active.index]?.deployedContracts?.length > 0
+        ? 'Redeploy'
+        : 'Deploy';
     case type === EntityType.TransactionTemplate:
       return 'Send';
     case type === EntityType.ScriptTemplate:

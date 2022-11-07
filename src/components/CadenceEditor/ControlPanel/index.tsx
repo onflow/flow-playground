@@ -65,7 +65,8 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // ===========================================================================
   // GLOBAL HOOKS
   const { languageClient } = useContext(CadenceCheckerContext);
-  const { project, active, isExecutingAction } = useProject();
+  const { project, active, isExecutingAction, setShowBottomPanel } =
+    useProject();
 
   // HOOKS  -------------------------------------------------------------------
   const [executionArguments, setExecutionArguments] = useState<any>({});
@@ -285,11 +286,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
           break;
         }
 
-        case EntityType.Account: {
-          // Ask if user wants to redeploy the contract
+        case EntityType.ContractTemplate: {
+          // TODO: Deploy to selected account after we have the deployment account selector
           if (
             accounts[active.index] &&
-            accounts[active.index].deployedCode &&
+            accounts[active.index].deployedContracts.length > 0 &&
             !showPrompt
           ) {
             setProcessingStatus(false);
@@ -310,6 +311,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
 
     setShowPrompt(false);
     setProcessingStatus(false);
+    setShowBottomPanel(true);
 
     // Display result in the bottom area
     setResult({

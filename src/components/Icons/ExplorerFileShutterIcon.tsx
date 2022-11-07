@@ -14,7 +14,7 @@ function FileShutterIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
         d="M9 7.5l-3-3-3 3"
-      ></path>
+      />
     </svg>
   );
 }

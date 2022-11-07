@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
 import { navigate, useLocation } from '@reach/router';
 import { Account } from 'api/apollo/generated/graphql';
+import Avatar from 'components/Avatar';
+import Button from 'components/Button';
+import { ExportButton } from 'components/ExportButton';
+import ExplorerPlusIcon from 'components/Icons/ExplorerPlusIcon';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import Avatar from 'components/Avatar';
-import { ExportButton } from 'components/ExportButton';
-import { getParams, isUUUID, LOCAL_PROJECT_ID } from '../../../util/url';
-import { Box, Flex } from 'theme-ui';
+import React, { useState } from 'react';
 import { SXStyles } from 'src/types';
-import Button from 'components/Button';
-import ExplorerPlusIcon from 'components/Icons/ExplorerPlusIcon';
+import { Box, Flex } from 'theme-ui';
+import { getParams, isUUUID, LOCAL_PROJECT_ID } from '../../../util/url';
 
 type AccountListProps = {
   isExplorerCollapsed: boolean;
@@ -128,8 +128,8 @@ const AccountList = ({ isExplorerCollapsed }: AccountListProps) => {
       </Flex>
       <Box data-test="account-list">
         {project.accounts.map((account: Account, i: number) => {
-          const { id } = account;
-          const isActive = accountSelected && params.id === id;
+          const { address } = account;
+          const isActive = accountSelected && params.id === address;
           const rawAddress = account.address.slice(-2);
           const accountAddress =
             rawAddress == '01' ? `0x${rawAddress}-Default` : `0x${rawAddress}`;
@@ -173,7 +173,7 @@ const AccountList = ({ isExplorerCollapsed }: AccountListProps) => {
                   <small>{contractName || '--'}</small>
                 </Flex>
                 {isActive && (
-                  <ExportButton id={account.id} typeName={typeName} />
+                  <ExportButton id={account.address} typeName={typeName} />
                 )}
               </Flex>
             </Flex>

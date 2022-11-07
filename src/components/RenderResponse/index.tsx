@@ -4,33 +4,62 @@ import { GET_CACHED_EXECUTION_RESULTS } from 'api/apollo/queries';
 import React from 'react';
 import { Line as LineType } from 'util/normalize-interaction-response';
 
-import styled from '@emotion/styled';
 import { Line } from 'components/RenderResponse/Line';
+import { ActiveEditor, EntityType } from 'providers/Project';
+import { useProject } from 'providers/Project/projectHooks';
 import { PROJECT_SERIALIZATION_KEY } from 'providers/Project/projectMutator';
+import { SXStyles } from 'src/types';
+import { Flex } from 'theme-ui';
 
-const Root = styled.div<{ resultType: ResultType }>`
-  counter-reset: lines;
-  padding: 8px;
-  overflow-y: scroll;
-  min-height: 40px;
-`;
+const styles: SXStyles = {
+  root: {
+    flex: 1,
+    gap: 3,
+    flexDirection: 'column-reverse',
+    counterReset: 'lines',
+    minHeight: '40px',
+    padding: 6,
+    background: 'background',
+    borderRadius: '8px',
+    overflowY: 'auto',
+    height: '100%',
+  },
+};
 
-export const RenderResponse: React.FC<{
-  resultType: ResultType.Transaction | ResultType.Script | ResultType.Contract;
-}> = ({ resultType }) => {
+const getResultType = (active: ActiveEditor) => {
+  switch (active.type) {
+    case EntityType.ContractTemplate:
+      return ResultType.Contract;
+    case EntityType.TransactionTemplate:
+      return ResultType.Transaction;
+    case EntityType.ScriptTemplate:
+      return ResultType.Script;
+    default:
+      return undefined;
+  }
+};
+
+export const RenderResponse = () => {
+  const { active } = useProject();
   const { data, error, loading } = useQuery(GET_CACHED_EXECUTION_RESULTS, {
     context: {
       serializationKey: PROJECT_SERIALIZATION_KEY,
     },
   });
-  const dataTest = `${resultType}-response`;
+  const resultType = getResultType(active);
+  const filteredResults = resultType
+    ? data.cachedExecutionResults[resultType]
+    : data.cachedExecutionResults;
+
   return (
-    <Root resultType={resultType} data-test={dataTest}>
+    <Flex sx={styles.root} data-test="execution-results">
       {!loading &&
         !error &&
-        data.cachedExecutionResults[resultType].map(
-          (line: LineType, n: number) => <Line {...line} key={n} />,
-        )}
-    </Root>
+        filteredResults
+          .map((line: LineType, n: number) => (
+            <Line {...line} key={n} index={n} />
+          ))
+          .reverse()}
+    </Flex>
   );
 };

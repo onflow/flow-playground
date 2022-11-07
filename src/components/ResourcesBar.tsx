@@ -36,9 +36,6 @@ const AccountStateContainer = styled.div<{ height: number }>`
   flex-direction: row;
   justify-content: space-even;
   height: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
   width: 100%;
   background: white;
   border-top: 1px solid ${theme.colors.greyBorder};

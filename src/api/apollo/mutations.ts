@@ -3,24 +3,26 @@ import gql from 'graphql-tag';
 export const CREATE_PROJECT = gql`
   mutation CreateProject(
     $parentId: UUID
-    $accounts: [String!]!
-    $seed: Int!
     $title: String!
     $description: String!
     $readme: String!
+    $seed: Int!
+    $numberOfAccounts: Int!
     $transactionTemplates: [NewProjectTransactionTemplate!]!
     $scriptTemplates: [NewProjectScriptTemplate!]!
+    $contractTemplates: [NewProjectContractTemplate!]!
   ) {
     project: createProject(
       input: {
         parentId: $parentId
-        accounts: $accounts
+        numberOfAccounts: $numberOfAccounts
         seed: $seed
         title: $title
         description: $description
         readme: $readme
         transactionTemplates: $transactionTemplates
         scriptTemplates: $scriptTemplates
+        contractTemplates: $contractTemplates
       }
     ) {
       id
@@ -32,10 +34,7 @@ export const CREATE_PROJECT = gql`
       description
       readme
       accounts {
-        id
         address
-        draftCode
-        deployedCode
         deployedContracts
         state
       }
@@ -45,6 +44,11 @@ export const CREATE_PROJECT = gql`
         title
       }
       scriptTemplates {
+        id
+        script
+        title
+      }
+      contractTemplates {
         id
         script
         title
@@ -81,42 +85,6 @@ export const SAVE_PROJECT = gql`
 export const SET_ACTIVE_PROJECT = gql`
   mutation SetActiveProject($id: Int!) {
     setActiveProjectId(id: $id) @client
-  }
-`;
-
-export const UPDATE_ACCOUNT_DRAFT_CODE = gql`
-  mutation UpdateAccountDraftCode(
-    $projectId: UUID!
-    $accountId: UUID!
-    $code: String!
-  ) {
-    updateAccount(
-      input: { projectId: $projectId, id: $accountId, draftCode: $code }
-    ) {
-      id
-      address
-      draftCode
-      deployedCode
-    }
-  }
-`;
-
-export const UPDATE_ACCOUNT_DEPLOYED_CODE = gql`
-  mutation UpdateAccountDeployedCode(
-    $projectId: UUID!
-    $accountId: UUID!
-    $code: String!
-  ) {
-    updateAccount(
-      input: { projectId: $projectId, id: $accountId, deployedCode: $code }
-    ) {
-      id
-      address
-      draftCode
-      deployedCode
-      deployedContracts
-      state
-    }
   }
 `;
 
@@ -172,7 +140,7 @@ export const CREATE_CONTRACT_DEPLOYMENT = gql`
     $signer: Address!
   ) {
     createContractDeployment(
-      input: { id: $projectId, script: $script, address: $signer }
+      input: { projectId: $projectId, script: $script, address: $signer }
     ) {
       id
       script

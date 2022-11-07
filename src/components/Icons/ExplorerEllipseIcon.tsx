@@ -12,7 +12,7 @@ function ExplorerEllipseIcon() {
       <path
         fill="#000"
         d="M20 16a2 2 0 114 0 2 2 0 01-4 0zm-6 0a2 2 0 114 0 2 2 0 01-4 0zm-6 0a2 2 0 114 0 2 2 0 01-4 0z"
-      ></path>
+      />
     </svg>
   );
 }
