@@ -12,6 +12,7 @@ export default {
     greyBorder: '#D8D8D8',
     purple: '#f694ff',
     border: 'rgb(240, 240, 240)',
+    errors: '#FC4723',
     borderDark: 'rgb(222, 222, 222)',
     shadowColor: 'rgb(222, 222, 222)',
     warning: '#ffcc00',
@@ -32,6 +33,9 @@ export default {
     secondaryButtonBorder: '#161616',
     secondaryButtonHover: '#1E1FB9',
     disabledButtonBackground: '#BDBDBD',
+    avatarSelectedColor: '#3031D1',
+    avatarNotSelectedColor: '#DEE2E9',
+    avatarTextColor: '#69717E',
     borderColor: '#ABB3BF',
     modes: {
       dark: {

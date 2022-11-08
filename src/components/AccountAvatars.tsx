@@ -2,28 +2,38 @@ import Avatar from 'components/Avatar';
 import { motion } from 'framer-motion';
 import React from 'react';
 import { Account, Project } from 'src/api/apollo/generated/graphql';
+import theme from '../theme';
 import { ChildProps } from 'src/types';
-import { Badge, Box, Flex, useThemeUI } from 'theme-ui';
+import { Text, Badge, Box, Flex, useThemeUI } from 'theme-ui';
 
 interface AccountAvatarProps extends ChildProps {
   onClick: (e: any, i: number) => void;
+  isSelected: boolean;
 }
 
-export const AccountAvatar = ({ children, onClick }: AccountAvatarProps) => {
+const styles = {
+  root: {
+    borderRadius: '0.5rem',
+    border: '1px solid',
+    padding: '0.25rem 0.5rem 0.75px',
+    margin: '0',
+    borderColor: theme.colors.avatarNotSelectedColor
+  },
+  selected: {
+    borderColor: theme.colors.avatarSelectedColor
+  }
+}
+export const AccountAvatar = ({ children, onClick, isSelected }: AccountAvatarProps) => {
+  const getStyle = (active: boolean) => {
+    return active ? {...styles.root, ...styles.selected} : styles.root;
+  }
   return (
     <motion.div>
       <Box
         // @ts-expect-error #TODO: switch to button
         onClick={onClick}
-        mx="0.5rem"
-        sx={{
-          position: 'relative',
-          borderRadius: '50%',
-          '.avatar': {
-            position: 'relative',
-            top: '-3px',
-          },
-        }}
+        mx="0.25rem"
+        sx={getStyle(isSelected)}
       >
         {children}
       </Box>
@@ -37,6 +47,8 @@ export const AvatarList = ({ children }: ChildProps) => {
       sx={{
         flex: '1 1 auto',
         alignItems: 'center',
+        justifyContent: 'space-between',
+        overflowX: 'scroll'
       }}
     >
       {children}
@@ -44,7 +56,7 @@ export const AvatarList = ({ children }: ChildProps) => {
   );
 };
 
-const noop = (): void => {};
+const noop = (): void => { };
 
 const AccountAvatars: React.FC<{
   multi?: boolean;
@@ -60,37 +72,28 @@ const AccountAvatars: React.FC<{
     accounts,
     project,
     onChange,
-    maxSelection = 4,
   } = props;
   if (!multi) {
     throw new Error('Must include multi prop.');
   }
 
   const { theme } = useThemeUI();
-
-  const selectionLimitReached = selectedAccounts.length >= maxSelection;
   return (
     <AvatarList>
       {accounts.map((account: Account, i: number) => {
         const isSelected =
-          selectedAccounts.includes(i) || selectionLimitReached;
+          selectedAccounts.includes(i);
         return (
           <motion.div key={account.address}>
             <AccountAvatar
+              onClick={() => onChange(i)}
+              isSelected={isSelected}
               key={account.address}
-              onClick={
-                isSelected
-                  ? noop
-                  : () => {
-                      onChange(i);
-                    }
-              }
             >
               <motion.div
                 style={{
                   cursor: 'pointer',
-                  borderRadius: '50%',
-                  pointerEvents: isSelected ? 'none' : 'auto',
+                  pointerEvents: 'auto',
                 }}
                 whileHover={{ scale: 1.05 }}
               >
@@ -101,24 +104,20 @@ const AccountAvatars: React.FC<{
                     width: '35px',
                     height: '35px',
                     display: 'block',
-                    borderRadius: '0 0 20px 20px',
-                    filter: isSelected ? 'grayscale(1)' : 'none',
+                    borderRadius: '0 0 20px 20px'
                   }}
                 />
-                <Badge
+                <Text
                   px="5px"
                   sx={{
-                    fontSize: 3,
-                    backgroundColor: isSelected
-                      ? theme.colors.greyBorder
-                      : theme.colors.primary,
-                    position: 'absolute',
-                    left: '-2px',
-                    bottom: '-1px',
+                    fontSize: "0.75rem",
+                    color: isSelected
+                      ? theme.colors.avatarSelectedColor
+                      : theme.colors.avatarTextColor,
                   }}
                 >
                   0x{account.address.slice(-2)}
-                </Badge>
+                </Text>
               </motion.div>
             </AccountAvatar>
           </motion.div>

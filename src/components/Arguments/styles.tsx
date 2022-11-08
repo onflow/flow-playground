@@ -7,7 +7,7 @@ interface HoverPanelProps {
 
 export const HoverPanel = styled.div<HoverPanelProps>`
   min-width: ${({ minWidth }) => minWidth};
-  max-width: 500px;
+  max-width: 300px;
   padding: 20px;
   border-radius: 4px;
   background-color: #fff;
