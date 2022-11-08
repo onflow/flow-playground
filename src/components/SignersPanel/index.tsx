@@ -1,14 +1,16 @@
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useState, useMemo } from 'react';
 import theme from '../../theme';
-import { CollapseButton } from './CollapseButton';
 import AccountPicker from 'components/AccountPicker';
 import { Flex, Text } from 'theme-ui';
+import { SXStyles } from 'src/types';
 import {
   SignersContainer,
 } from '../Arguments/styles';
 import { Account } from 'api/apollo/generated/graphql';
 import Avatar from 'components/Avatar';
+import CollapseOpenIcon from 'components/Icons/CollapseOpenIcon';
+import Button from 'components/Button';
 
 type SignersProps = {
   maxSelection?: number;
@@ -66,6 +68,18 @@ const PanelHeader = (maxSelection: number, accounts: Account[], seed: number, se
   )
 }
 
+const styles: SXStyles = {   
+  root: {
+    backgroundColor: theme.colors.white,
+    width: '50px'
+  },
+  carrotDown: {
+    backgroundColor: theme.colors.white,
+    transform: 'rotate(180deg)',
+    width: '50px'
+  },
+};
+
 export const SignersPanel: React.FC<SignersProps> = ({ maxSelection, selected, updateSelectedAccounts }) => {
   const { project } = useProject();
   const [isAvatarOpen, setIsAvatarOpen] = useState(false);
@@ -75,8 +89,8 @@ export const SignersPanel: React.FC<SignersProps> = ({ maxSelection, selected, u
 
   return (
     <SignersContainer>
-      <Flex sx={{ justifyContent: "space-between" }} onClick={() => setIsAvatarOpen(!isAvatarOpen)}>
-        {HeaderText}<CollapseButton isOpen={isAvatarOpen} />
+      <Flex sx={{ justifyContent: "space-between", alignItems: "center" }} onClick={() => setIsAvatarOpen(!isAvatarOpen)}>
+        {HeaderText}<Button sx={isAvatarOpen ? styles.carrotDown : styles.root} size="sm" >{CollapseOpenIcon()}</Button>
       </Flex>
       {(isAvatarOpen || selected.length === 0) && (
         <AccountPicker
