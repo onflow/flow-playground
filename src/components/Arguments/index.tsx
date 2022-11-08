@@ -358,7 +358,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
 
   const isOk = !haveErrors && validCode !== undefined && !!validCode;
   //let statusIcon = isOk ? <FaRegCheckCircle /> : <FaRegTimesCircle />;
-  let statusMessage = isOk ? 'Ready' : `${problems?.error?.length} Errors`;
+  let statusMessage = !isOk && `${problems?.error?.length} Errors`;
 
   const progress = isSaving || processingStatus;
 
@@ -414,11 +414,13 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           <Hints problems={problems} actions={actions} />
 
           <ControlContainer isOk={isOk} progress={progress}>
-            <StatusMessage>
-              <FaRegTimesCircle />
-              <p>{statusMessage}</p>
-            </StatusMessage>
-            <ActionButton active={isOk} type={type} onClick={send} />
+            {statusMessage && 
+              <StatusMessage>
+                <FaRegTimesCircle />
+                <p>{statusMessage}</p>
+              </StatusMessage>
+            }
+            <ActionButton progress={progress} active={isOk} type={type} onClick={send} />
           </ControlContainer>
         </HoverPanel>
       </motion.div>

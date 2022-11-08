@@ -435,7 +435,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             showPrompt={showPrompt}
           >
             {statusMessage && (
-              <StatusMessage data-test="control-panel-status-message">
+              <StatusMessage isOk={isOk} data-test="control-panel-status-message">
                 <StatusIcon
                   isOk={isOk}
                   progress={progress}

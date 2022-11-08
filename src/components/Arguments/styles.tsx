@@ -110,7 +110,6 @@ interface ControlContainerProps {
 }
 export const ControlContainer = styled.div<ControlContainerProps>`
   display: ${({ showPrompt }) => (showPrompt ? 'block' : 'flex')};
-  max-width: ${({ showPrompt }) => (showPrompt ? 'min-content' : 'none')};
   align-items: center;
   justify-content: space-between;
   padding: 8px;
@@ -152,7 +151,8 @@ export const StatusMessage = styled.div`
   }
 
   display: flex;
-  width: 50%;
+  width: ${({ isOk }) => isOk ? '100%' : '50%'};
+  padding: ${({ isOk }) => isOk ? '1rem' : 'unset'};
   justify-content: flex-start;
   font-size: 16px;
   svg {
