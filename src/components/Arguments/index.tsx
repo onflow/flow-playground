@@ -28,7 +28,6 @@ import {
   ArgumentsTitle,
   ErrorsList,
   Hints,
-  Signers,
 } from './components';
 import { SignersPanel } from 'components/SignersPanel';
 

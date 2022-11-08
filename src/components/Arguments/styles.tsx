@@ -8,10 +8,10 @@ interface HoverPanelProps {
 export const HoverPanel = styled.div<HoverPanelProps>`
   min-width: ${({ minWidth }) => minWidth};
   max-width: 300px;
-  padding: 20px;
-  border-radius: 4px;
+  border-radius: 8px;
   background-color: #fff;
-  box-shadow: 10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff;
+  border: 1px solid #ABB3BF;
+  box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.08);
 `;
 
 interface HidableProps {
@@ -99,7 +99,7 @@ export const List = styled.div<ListProps>`
 `;
 
 export const SignersContainer = styled.div`
-  margin-bottom: 20px;
+  
 `;
 
 interface ControlContainerProps {
@@ -112,6 +112,8 @@ export const ControlContainer = styled.div<ControlContainerProps>`
   max-width: ${({ showPrompt }) => (showPrompt ? 'min-content' : 'none')};
   align-items: center;
   justify-content: space-between;
+  padding: 8px;
+  border-top: 1px solid #ABB3BF;
   color: ${({ isOk, progress, showPrompt }) => {
     switch (true) {
       case progress:

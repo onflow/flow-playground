@@ -52,7 +52,6 @@ import {
   ArgumentsTitle,
   ErrorsList,
   Hints,
-  Signers,
 } from '../../Arguments/components';
 import {
   ControlContainer,
@@ -336,9 +335,9 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const problems = getProblems();
   const validCode = problems.error.length === 0;
 
-  const signers = extractSigners(code).length;
-  const needSigners = type == EntityType.TransactionTemplate && signers > 0;
-
+  // contracts need one signer for deployment
+  const signers = type === EntityType.TransactionTemplate ? extractSigners(code).length : 1;
+  const needSigners = type === EntityType.TransactionTemplate && signers > 0 || type == EntityType.ContractTemplate;
   const numberOfErrors = Object.keys(errors).length;
 
   // TODO: disable button if not enough signers
@@ -346,7 +345,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const haveErrors = numberOfErrors > 0
 
   const { accounts } = project;
-  const signersAccounts = selected.map((i) => accounts[i]);
+  const signersAccounts = selected.map((i: number) => accounts[i]);
 
   const actions = {
     goTo: (position: IPosition) => goTo(editor, position),
@@ -354,7 +353,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     hover: (highlight: Highlight) => hover(editor, highlight),
   };
 
-  const isOk = !haveErrors && validCode !== undefined && !!validCode;
+  const isOk = !haveErrors && validCode !== undefined && !!validCode && !notEnoughSigners;
   let statusIcon;
   let statusMessage;
   switch (true) {
