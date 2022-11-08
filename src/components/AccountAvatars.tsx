@@ -11,22 +11,29 @@ interface AccountAvatarProps extends ChildProps {
   isSelected: boolean;
 }
 
+const styles = {
+  root: {
+    borderRadius: '0.5rem',
+    border: '1px solid',
+    padding: '0.25rem 0.5rem 0.75px',
+    margin: '0',
+    borderColor: theme.colors.avatarNotSelectedColor
+  },
+  selected: {
+    borderColor: theme.colors.avatarSelectedColor
+  }
+}
 export const AccountAvatar = ({ children, onClick, isSelected }: AccountAvatarProps) => {
+  const getStyle = (active: boolean) => {
+    return active ? {...styles.root, ...styles.selected} : styles.root;
+  }
   return (
     <motion.div>
       <Box
         // @ts-expect-error #TODO: switch to button
         onClick={onClick}
         mx="0.25rem"
-        sx={{
-          borderRadius: '0.5rem',
-          border: '1px solid',
-          padding: '0.25rem 0.5rem 0.75px',
-          margin: '0',
-          borderColor: isSelected
-            ? theme.colors.avatarSelectedColor
-            : theme.colors.avatarNotSelectedColor,
-        }}
+        sx={getStyle(isSelected)}
       >
         {children}
       </Box>
