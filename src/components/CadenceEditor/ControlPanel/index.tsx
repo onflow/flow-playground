@@ -364,7 +364,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       break;
     case !isOk:
       statusIcon = <FaRegTimesCircle />;
-      statusMessage = 'Fix errors';
+      statusMessage = `${problems?.error?.length} Error${problems?.error?.length > 1 ? 's' : ''}`;
       break;
   }
 
@@ -397,37 +397,36 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       <div ref={constraintsRef} className="constraints" />
       <MotionBox dragConstraints={constraintsRef}>
         <HoverPanel minWidth={showPrompt ? 'min-content' : '300px'}>
-          <Hidable hidden={!validCode}>
-            {list.length > 0 && (
-              <>
-                <ArgumentsTitle
-                  type={type}
-                  errors={numberOfErrors}
-                  expanded={expanded}
-                  setExpanded={setExpanded}
-                />
-                <ArgumentsList
-                  list={list}
-                  errors={errors}
-                  hidden={!expanded}
-                  onChange={(name, value) => {
-                    let key = name.toString();
-                    let newValue = { ...values, [key]: value };
-                    setValue(newValue);
-                  }}
-                />
-              </>
-            )}
-            {needSigners && (
-              <SignersPanel
-                maxSelection={signers}
-                selected={selected}
-                updateSelectedAccounts={updateSelectedAccounts}
+          {list.length > 0 && (
+            <>
+              <ArgumentsTitle
+                type={type}
+                errors={numberOfErrors}
+                expanded={expanded}
+                setExpanded={setExpanded}
               />
-            )}
-          </Hidable>
+              <ArgumentsList
+                list={list}
+                errors={errors}
+                hidden={!expanded}
+                onChange={(name, value) => {
+                  let key = name.toString();
+                  let newValue = { ...values, [key]: value };
+                  setValue(newValue);
+                }}
+              />
+            </>
+          )}
+          {needSigners && (
+            <SignersPanel
+              maxSelection={signers}
+              selected={selected}
+              updateSelectedAccounts={updateSelectedAccounts}
+            />
+          )}
 
-          <ErrorsList list={problems.error} actions={actions} />
+
+          {/*<ErrorsList list={problems.error} actions={actions} />*/}
           <Hints problems={problems} actions={actions} />
 
           <ControlContainer
@@ -435,16 +434,18 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             progress={progress}
             showPrompt={showPrompt}
           >
-            <StatusMessage data-test="control-panel-status-message">
-              <StatusIcon
-                isOk={isOk}
-                progress={progress}
-                showPrompt={showPrompt}
-              >
-                {statusIcon}
-              </StatusIcon>
-              <p>{statusMessage}</p>
-            </StatusMessage>
+            {statusMessage && (
+              <StatusMessage data-test="control-panel-status-message">
+                <StatusIcon
+                  isOk={isOk}
+                  progress={progress}
+                  showPrompt={showPrompt}
+                >
+                  {statusIcon}
+                </StatusIcon>
+                <p>{statusMessage}</p>
+              </StatusMessage>)
+            }
             {showPrompt ? (
               <PromptActionsContainer>
                 <Confirm data-test="redeploy-confirm-button" onClick={send}>

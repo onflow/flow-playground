@@ -1,6 +1,5 @@
 import { Project } from 'api/apollo/generated/graphql';
-import AccountPicker from 'components/AccountPicker';
-import Button from 'components/LegacyButton';
+import PanelButton from 'components/PanelButton';
 import { Stack } from 'layout/Stack';
 import { ActiveEditor, EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
@@ -9,7 +8,6 @@ import {
   FaArrowCircleRight,
   FaCaretSquareDown,
   FaCaretSquareUp,
-  FaExclamationTriangle,
 } from 'react-icons/fa';
 import { CadenceProblem } from 'util/language-syntax-errors';
 import theme from '../../theme';
@@ -21,8 +19,6 @@ import {
   ErrorMessage,
   Heading,
   List,
-  SignersContainer,
-  SignersError,
   SingleError,
   Title,
 } from './styles';
@@ -34,7 +30,7 @@ import {
   InteractionButtonProps,
 } from './types';
 
-export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
+export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props: ArgumentsTitleProps) => {
   const { type, errors, expanded, setExpanded } = props;
 
   const hasErrors = errors > 0;
@@ -68,7 +64,7 @@ export const ArgumentsList: React.FC<ArgumentsListProps> = ({
   errors,
   onChange,
   hidden,
-}) => {
+}: ArgumentsListProps) => {
   return (
     <List hidden={hidden}>
       {list.map((argument) => {
@@ -134,7 +130,7 @@ const renderMessage = (message: string) => {
   return items;
 };
 
-export const ErrorsList: React.FC<ErrorListProps> = (props) => {
+export const ErrorsList: React.FC<ErrorListProps> = (props: ErrorListProps) => {
   const { list, actions } = props;
   const { goTo, hideDecorations, hover } = actions;
   if (list.length === 0) {
@@ -144,9 +140,6 @@ export const ErrorsList: React.FC<ErrorListProps> = (props) => {
 
   return (
     <Stack>
-      <Heading>
-        <Title lineColor={theme.colors.error}>Problems</Title>
-      </Heading>
       <List>
         {list.map((item: CadenceProblem, i) => {
           const message = renderMessage(item.message);
@@ -267,7 +260,7 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
   const code = getActiveCode()[0].trim();
   return (
     <Controls>
-      <Button
+      <PanelButton
         onClick={onClick}
         Icon={FaArrowCircleRight}
         disabled={isSaving || !active || code.length === 0}
@@ -275,40 +268,7 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
         data-test={getActionButtonTestTag(type)}
       >
         {label}
-      </Button>
+      </PanelButton>
     </Controls>
-  );
-};
-
-type SignersProps = {
-  maxSelection?: number;
-  selected: number[];
-  updateSelectedAccounts: (selection: number[]) => void;
-};
-
-const Signers: React.FC<SignersProps> = ({ maxSelection, selected, updateSelectedAccounts }) => {
-  const { project } = useProject();
-  const { accounts } = project;
-
-  const enoughSigners = selected.length < maxSelection;
-  const lineColor = enoughSigners ? theme.colors.error : null;
-
-  return (
-    <SignersContainer>
-      <Title lineColor={lineColor}>Transaction Signers</Title>
-      <AccountPicker
-        project={project}
-        accounts={accounts}
-        selected={selected}
-        onChange={updateSelectedAccounts}
-        maxSelection={maxSelection}
-      />
-      {enoughSigners && (
-        <SignersError>
-          <FaExclamationTriangle />
-          Not enough signers...
-        </SignersError>
-      )}
-    </SignersContainer>
   );
 };

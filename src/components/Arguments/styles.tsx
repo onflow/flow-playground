@@ -58,6 +58,7 @@ export const Controls = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  width: 100%;
   cursor: pointer;
 `;
 
@@ -113,6 +114,7 @@ export const ControlContainer = styled.div<ControlContainerProps>`
   align-items: center;
   justify-content: space-between;
   padding: 8px;
+  width: 100%;
   border-top: 1px solid #ABB3BF;
   color: ${({ isOk, progress, showPrompt }) => {
     switch (true) {
@@ -150,6 +152,7 @@ export const StatusMessage = styled.div`
   }
 
   display: flex;
+  width: 50%;
   justify-content: flex-start;
   font-size: 16px;
   svg {
@@ -166,6 +169,8 @@ export const ErrorsContainer = styled.div`
   grid-gap: 10px;
   grid-template-columns: 100%;
   margin-bottom: 12px;
+  background: #F6F7F9;
+  border-radius: 8px 8px 8px 0px;
 `;
 
 export const SingleError = styled.div`
@@ -174,8 +179,10 @@ export const SingleError = styled.div`
   align-items: baseline;
   box-sizing: border-box;
   padding: 10px;
-  border-radius: 4px;
   font-size: 14px;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
   &:hover {
     background-color: rgba(244, 57, 64, 0.15);
 
@@ -190,15 +197,9 @@ export const SingleError = styled.div`
 `;
 
 export const ErrorIndex = styled.div`
-  width: 20px;
-  height: 20px;
-  background-color: rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
-  justify-content: center;
-  border-radius: 20px;
-  margin-right: 8px;
-  flex: 0 0 auto;
+  justify-content: space-between;
 `;
 
 export const ErrorMessage = styled.p`
