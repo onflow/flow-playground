@@ -51,13 +51,13 @@ const PanelHeader = (maxSelection: number, accounts: Account[], seed: number, se
   // TODO: accounts might be needed for displaying account addr, to be determined
   let message = ""
   const correctNumSigners = selected.length === maxSelection;
-  const signersSelected = "Signers Selected";
+  const SIGNERSSELECTED = "Signers Selected";
   if (correctNumSigners && selected.length === 1) {
-    message = `${selected.length} ${signersSelected}`;
+    message = `${selected.length} ${SIGNERSSELECTED}`;
   } else if (correctNumSigners) {
     message = `${selected.length} of ${maxSelection} Signers`;
   } else {
-    message = `${selected.length} of ${maxSelection} ${signersSelected}`;
+    message = `${selected.length} of ${maxSelection} ${SIGNERSSELECTED}`;
   }
 
   return (
