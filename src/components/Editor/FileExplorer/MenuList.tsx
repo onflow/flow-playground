@@ -1,27 +1,20 @@
 import { useLocation } from '@reach/router';
+import Button from 'components/Button';
+import ExplorerContractIcon from 'components/Icons/ExplorerContractIcon';
+import ExplorerEllipseIcon from 'components/Icons/ExplorerEllipseIcon';
+import ExplorerFileIcon from 'components/Icons/ExplorerFileIcon';
+import ExplorerFileShutterIcon from 'components/Icons/ExplorerFileShutterIcon';
+import ExplorerPlusIcon from 'components/Icons/ExplorerPlusIcon';
+import ExplorerScriptIcon from 'components/Icons/ExplorerScriptIcon';
+import ExplorerTransactionIcon from 'components/Icons/ExplorerTransactionIcon';
+import Input from 'components/Input';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import React, {
-  SyntheticEvent,
-  useEffect,
-  useRef,
-  useState,
-  ChangeEvent,
-  ForwardedRef,
-} from 'react';
-import { ChildProps, SXStyles } from 'src/types';
+import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import { getParams } from 'util/url';
 import useKeyPress from '../../../hooks/useKeyPress';
-import Button from 'components/Button';
-import ExplorerPlusIcon from 'components/Icons/ExplorerPlusIcon';
-import ExplorerFileIcon from 'components/Icons/ExplorerFileIcon';
-import ExplorerContractIcon from 'components/Icons/ExplorerContractIcon';
-import ExplorerTransactionIcon from 'components/Icons/ExplorerTransactionIcon';
-import ExplorerScriptIcon from 'components/Icons/ExplorerScriptIcon';
-import Input from 'components/Input';
-import ExplorerFileShutterIcon from 'components/Icons/ExplorerFileShutterIcon';
-import ExplorerEllipseIcon from 'components/Icons/ExplorerEllipseIcon';
 import FileExplorerSubMenu from './FileExplorerSubMenu';
 
 const styles: SXStyles = {
@@ -160,7 +153,7 @@ const styles: SXStyles = {
 };
 
 type MenuListProps = {
-  active: number | null;
+  itemType: EntityType;
   title?: string;
   items: any[];
   onSelect: (e: SyntheticEvent, id: string) => void;
@@ -169,24 +162,16 @@ type MenuListProps = {
   onDelete: any;
 };
 
-interface ForwardInputProps extends ChildProps {
-  _ref: ForwardedRef<HTMLInputElement>;
-  sx: SXStyles;
-  defaultValue: string;
-  onClick?: () => void;
-  onBlur?: () => void;
-  onChange?: (event: ChangeEvent) => void;
-  type: string;
-}
-
 const NAME_MAX_CHARS = 50;
 
 const MenuList: React.FC<MenuListProps> = ({
   title,
+  itemType,
   items,
   onSelect,
   onUpdate,
   onInsert,
+  // @ts-expect-error TODO: add template deletion
   onDelete,
 }) => {
   const { active } = useProject();
@@ -203,7 +188,6 @@ const MenuList: React.FC<MenuListProps> = ({
   };
 
   const toggleEditing = (i: number, newTitle: string) => {
-    console.log(JSON.stringify(editing));
     if (editing.includes(i)) {
       let _editing = [...editing];
       _editing.splice(_editing.indexOf(i), 1);
@@ -232,11 +216,6 @@ const MenuList: React.FC<MenuListProps> = ({
     }
   };
 
-  const isScript = title.toLowerCase().includes('script');
-  const itemType = isScript
-    ? EntityType.ScriptTemplate
-    : EntityType.TransactionTemplate;
-
   const location = useLocation();
   const params = getParams(location.search);
 
@@ -247,9 +226,7 @@ const MenuList: React.FC<MenuListProps> = ({
           <Box>
             <ExplorerFileIcon />
           </Box>
-          <Box sx={styles.titleText}>
-            {title}
-          </Box>
+          <Box sx={styles.titleText}>{title}</Box>
           <Button
             disabled={false}
             inline={true}
@@ -263,7 +240,6 @@ const MenuList: React.FC<MenuListProps> = ({
           >
             <ExplorerFileShutterIcon />
           </Button>
-
         </Flex>
         {!!onInsert && (
           <Button
@@ -290,7 +266,12 @@ const MenuList: React.FC<MenuListProps> = ({
       ) : (
         <Box>
           {items.map((item, i) => {
-            const isActive = active.type === itemType && item.id === params.id;
+            const isDefault =
+              params.id === undefined &&
+              itemType === EntityType.ContractTemplate &&
+              i === 0;
+            const isActive =
+              isDefault || (active.type === itemType && item.id === params.id);
             const dataTest = `sidebar-${item.title}`;
             const inputStyles = editing.includes(i)
               ? styles.input
@@ -342,8 +323,7 @@ const MenuList: React.FC<MenuListProps> = ({
                   <ExplorerEllipseIcon />
                 </Button>
                 {isSubMenuOpened ?? <FileExplorerSubMenu />}
-
-                {/* TODO: Duplicate file, Delete file, Update Filename userflows 
+                {/* TODO: Duplicate file, Delete file, Update Filename userflows
                 {!editing.includes(i) && isActive && items.length > 1 && (
                   <Box
                     onClick={(e: any) => {

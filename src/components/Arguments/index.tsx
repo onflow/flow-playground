@@ -146,14 +146,14 @@ const useTemplateType = (): ProcessingArgs => {
   const {
     createScriptExecution,
     createTransactionExecution,
-    updateAccountDeployedCode,
+    createContractDeployment,
   } = useProject();
 
   return {
     disabled: isSaving,
     scriptFactory: createScriptExecution,
     transactionFactory: createTransactionExecution,
-    contractDeployment: updateAccountDeployedCode,
+    contractDeployment: createContractDeployment,
   };
 };
 interface IValue {
@@ -319,9 +319,13 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           break;
         }
 
-        case EntityType.Account: {
+        case EntityType.ContractTemplate: {
+          // TODO: Check selected account after we have the deployment account selector
           // Ask if user wants to redeploy the contract
-          if (accounts[active.index] && accounts[active.index].deployedCode) {
+          if (
+            accounts[active.index] &&
+            accounts[active.index].deployedContracts.length > 0
+          ) {
             const choiceMessage =
               'Redeploying will clear the state of all accounts. Proceed?';
             if (!confirm(choiceMessage)) {

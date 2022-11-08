@@ -1,9 +1,4 @@
-import React, {
-  ChangeEvent,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Input as ThemeUiInput, ThemeUICSSObject } from 'theme-ui';
 
 interface InputProps {
@@ -50,7 +45,6 @@ const Input = ({
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
-      console.log('effect hit');
       if (ref.current && !ref.current.contains(event.target)) {
         document.removeEventListener('click', handleClickOutside, true);
         toggleEditing(index, title);

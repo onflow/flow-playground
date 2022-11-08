@@ -26,7 +26,12 @@ function cloneProject(client: any, project: Project) {
     project.title,
     project.description,
     project.readme,
-    project.accounts.map((acc) => acc.draftCode),
+    project.accounts.map((acc) => acc.address),
+
+    project.contractTemplates.map((tpl) => ({
+      code: tpl.script,
+      title: tpl.title,
+    })),
 
     project.transactionTemplates.map((tpl) => ({
       code: tpl.script,
@@ -38,7 +43,6 @@ function cloneProject(client: any, project: Project) {
       title: tpl.title,
     })),
   );
-
   client.writeData({
     data: {
       activeProject: true,

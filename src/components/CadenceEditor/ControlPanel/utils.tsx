@@ -102,13 +102,13 @@ export const useTemplateType = (): ProcessingArgs => {
   const {
     createScriptExecution,
     createTransactionExecution,
-    updateAccountDeployedCode,
+    createContractDeployment,
   } = useProject();
 
   return {
     disabled: isSaving,
     scriptFactory: createScriptExecution,
     transactionFactory: createTransactionExecution,
-    contractDeployment: updateAccountDeployedCode,
+    contractDeployment: createContractDeployment,
   };
 };

@@ -4,25 +4,26 @@ import ApolloClient from 'apollo-client';
 
 import {
   Account,
+  ContractTemplate,
   GetProjectQuery,
   Project,
 } from 'api/apollo/generated/graphql';
 import {
+  CREATE_CONTRACT_DEPLOYMENT,
+  CREATE_CONTRACT_TEMPLATE,
   CREATE_PROJECT,
   CREATE_SCRIPT_EXECUTION,
   CREATE_SCRIPT_TEMPLATE,
   CREATE_TRANSACTION_EXECUTION,
   CREATE_TRANSACTION_TEMPLATE,
-  CREATE_CONTRACT_TEMPLATE,
-  CREATE_CONTRACT_DEPLOYMENT,
+  DELETE_CONTRACT_TEMPLATE,
   DELETE_SCRIPT_TEMPLATE,
   DELETE_TRANSACTION_TEMPLATE,
-  DELETE_CONTRACT_TEMPLATE,
   SAVE_PROJECT,
   SET_ACTIVE_PROJECT,
+  UPDATE_CONTRACT_TEMPLATE,
   UPDATE_SCRIPT_TEMPLATE,
   UPDATE_TRANSACTION_TEMPLATE,
-  UPDATE_CONTRACT_TEMPLATE,
 } from 'api/apollo/mutations';
 import { GET_LOCAL_PROJECT, GET_PROJECT } from 'api/apollo/queries';
 
@@ -69,7 +70,6 @@ export default class ProjectMutator {
         }).project;
 
     const parentId = newProject.parentId;
-    const accounts = newProject.accounts.map((acc: Account) => acc.draftCode);
     const seed = newProject.seed;
     const title = newProject.title;
     const description = newProject.description;
@@ -81,18 +81,23 @@ export default class ProjectMutator {
       script: tpl.script,
       title: tpl.title,
     }));
+    const contractTemplates = newProject.contractTemplates.map((tpl: any) => ({
+      script: tpl.script,
+      title: tpl.title,
+    }));
 
     const { data } = await this.client.mutate({
       mutation: CREATE_PROJECT,
       variables: {
         parentId: parentId,
-        accounts: accounts,
-        seed: seed,
         title: title,
         description: description,
         readme: readme,
-        transactionTemplates: transactionTemplates,
-        scriptTemplates: scriptTemplates,
+        seed: seed,
+        numberOfAccounts: newProject.accounts.length,
+        transactionTemplates,
+        scriptTemplates,
+        contractTemplates,
       },
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
@@ -103,7 +108,6 @@ export default class ProjectMutator {
 
     this.projectId = project.id;
     this.isLocal = false;
-
     // TODO: this writeQuery is required to avoid having the active GET_PROJECT hook refetch unnecessarily. Investigate further after switching to Apollo 3
     this.client.writeQuery({
       query: GET_PROJECT,
@@ -197,16 +201,15 @@ export default class ProjectMutator {
     });
   }
 
-  clearProjectAccountsOnReDeploy(accountId: string) {
+  clearProjectAccountsOnReDeploy(accountAddress: string) {
     const project = this.getProject();
 
     const newProject = {
       ...project,
       accounts: project.accounts.map((cachedAccount: Account) => {
-        if (cachedAccount.id === accountId) return cachedAccount;
+        if (cachedAccount.address === accountAddress) return cachedAccount;
         return {
           ...cachedAccount,
-          deployedCode: '',
           deployedContracts: [],
           state: DEFAULT_ACCOUNT_STATE,
         };
@@ -541,23 +544,22 @@ export default class ProjectMutator {
       },
     });
 
-    // Update gql codegen
-    // const project = this.getProject();
-    // this.client.writeQuery({
-    //   query: GET_PROJECT,
-    //   variables: {
-    //     projectId: project.id,
-    //   },
-    //   data: {
-    //     project: {
-    //       ...project,
-    //       contractTemplates: [
-    //         ...project.contractTemplates,
-    //         res.data.createContractTemplate,
-    //       ],
-    //     },
-    //   },
-    // });
+    const project = this.getProject();
+    this.client.writeQuery({
+      query: GET_PROJECT,
+      variables: {
+        projectId: project.id,
+      },
+      data: {
+        project: {
+          ...project,
+          contractTemplates: [
+            ...project.contractTemplates,
+            res.data.createContractTemplate,
+          ],
+        },
+      },
+    });
 
     Mixpanel.track('Contract template created', {
       projectId: this.projectId,
@@ -567,12 +569,18 @@ export default class ProjectMutator {
     return res;
   }
 
-  async updateContractTemplate(account: Account, code: string) {
+  async updateContractTemplate(
+    contractTemplate: ContractTemplate,
+    script: string,
+    title: string,
+    index: number,
+  ) {
     this.client.writeData({
-      id: `Account:${account.id}`,
+      id: `ContractTemplate:${contractTemplate.id}`,
       data: {
-        __typename: 'Account',
-        draftCode: code,
+        __typename: 'ContractTemplate',
+        title,
+        script,
       },
     });
 
@@ -581,14 +589,20 @@ export default class ProjectMutator {
       return;
     }
 
-    const key = ['UPDATE_CONTRACT_TEMPLATE', this.projectId, account.id];
+    const key = [
+      'UPDATE_CONTRACT_TEMPLATE',
+      this.projectId,
+      contractTemplate.id,
+    ];
 
     await this.client.mutate({
       mutation: UPDATE_CONTRACT_TEMPLATE,
       variables: {
+        templateId: contractTemplate.id,
+        title: title,
+        script: script,
+        index,
         projectId: this.projectId,
-        accountId: account.id,
-        code,
       },
       context: {
         debounceKey: key,
@@ -598,12 +612,16 @@ export default class ProjectMutator {
     });
   }
 
-  async createContractDeployment(account: Account, index: number) {
-    const hasDeployedCode = !!account.deployedCode?.length;
+  async createContractDeployment(
+    contractTemplate: ContractTemplate,
+    account: Account,
+    index: number,
+  ) {
+    const hasDeployedCode = !!account.deployedContracts?.length;
 
     if (this.isLocal) {
       const project = await this.createProject();
-      account = project.accounts[index];
+      contractTemplate = project.contractTemplates[index];
       unregisterOnCloseSaveMessage();
     }
 
@@ -611,20 +629,21 @@ export default class ProjectMutator {
       mutation: CREATE_CONTRACT_DEPLOYMENT,
       variables: {
         projectId: this.projectId,
-        accountId: account.id,
-        code: account.draftCode,
+        script: contractTemplate.script,
+        signer: account.address,
       },
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
     });
 
-    if (hasDeployedCode) this.clearProjectAccountsOnReDeploy(account.id);
+    // TODO: update accounts based on latest api changes
+    if (hasDeployedCode) this.clearProjectAccountsOnReDeploy(account.address);
 
     Mixpanel.track('Contract deployed', {
       projectId: this.projectId,
-      accountId: account.id,
-      code: account.draftCode,
+      accountAddress: account.address,
+      code: contractTemplate.script,
     });
 
     return res;

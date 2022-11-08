@@ -23,6 +23,7 @@ export default {
     badgeCapability: '#3DDC84',
     badgeNull: '#8C92AC',
     // TODO: Consolidate color names after we import more v2 colors
+    actionBlue: '#1E1FB9',
     leftSidebarBackground: '#DEE2E9',
     leftSidebarHeaderText: '#69717E',
     alternateButtonBorder: '#DEE2E9',
@@ -35,6 +36,7 @@ export default {
     avatarSelectedColor: '#3031D1',
     avatarNotSelectedColor: '#DEE2E9',
     avatarTextColor: '#69717E',
+    borderColor: '#ABB3BF',
     modes: {
       dark: {
         leftSidebarBackground: '#2F353F',
@@ -149,6 +151,7 @@ export default {
       },
     },
     unstyled: {
+      color: 'text',
       padding: '0',
       borderStyle: 'none',
       outline: 0,

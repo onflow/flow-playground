@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import { Account, Project } from 'api/apollo/generated/graphql';
 import { motion } from 'framer-motion';
 import { Editor as EditorRoot } from 'layout/Editor';
-import { Heading } from 'layout/Heading';
 import { ActiveEditor, EntityType } from 'providers/Project';
 import {
   PLACEHOLDER_DESCRIPTION,
@@ -18,13 +17,8 @@ import {
   InputBlock,
   Label,
 } from 'components/Arguments/SingleArgument/styles';
-import { Version } from 'components/CadenceVersion';
-import DeploymentBottomBar from 'components/DeploymentBottomBar';
 import { Markdown } from 'components/Markdown';
 import { MdeEditor } from 'components/MdeEditor';
-import ResourcesBar from 'components/ResourcesBar';
-import ScriptBottomBar from 'components/ScriptBottomBar';
-import TransactionBottomBar from 'components/TransactionBottomBar';
 import {
   ProjectDescription,
   ProjectHeading,
@@ -32,7 +26,7 @@ import {
   ReadmeHtmlContainer,
 } from './layout-components';
 
-import CadenceEditor from 'components/CadenceEditor';
+import EditorPanels from 'components/EditorPanels';
 import { ChildProps, SXStyles } from 'src/types';
 import { decodeText } from 'util/readme';
 
@@ -41,13 +35,10 @@ const styles: SXStyles = {
     gridArea: 'main',
     display: 'flex',
     flexDirection: 'column',
-    background: 'white',
     overflow: 'hidden',
-    flexGrow: 1,
     borderRadius: '8px',
-    padding: '8px, 8px, 0px',
-    border: '2px solid rgba(48, 49, 209, 0.1)',
-    margin: '8px',
+    flexGrow: 1,
+    margin: '8px 8px 0 8px',
   },
 };
 
@@ -92,7 +83,7 @@ const usePrevious = (value: any) => {
 // This method
 const compareContracts = (prev: Account[], current: Account[]) => {
   for (let i = 0; i < prev.length; i++) {
-    if (prev[i].deployedCode !== current[i].deployedCode) {
+    if (prev[i].deployedContracts !== current[i].deployedContracts) {
       return false;
     }
   }
@@ -161,7 +152,7 @@ const EditorContainer = ({
     active.onChange(title, description, readme);
   };
 
-  const isReadmeEditor = active.type === 4;
+  const isReadmeEditor = active.type === EntityType.Readme;
   const readmeLabel = `README.md${
     descriptionOverflow ? " - Content can't be more than 1Mb in size" : ''
   }`;
@@ -169,7 +160,6 @@ const EditorContainer = ({
   return (
     <Flex sx={styles.editorContainer}>
       <EditorRoot>
-        <EditorTitle type={active.type} />
         {/* This is Project Info Block */}
         <ProjectInfoContainer show={isReadmeEditor}>
           {project.parentId && !project.persist ? (
@@ -226,70 +216,10 @@ const EditorContainer = ({
             </>
           )}
         </ProjectInfoContainer>
-        {/* This is Cadence Editor */}
-        {/*        <CadenceEditor
-          type={active.type}
-          activeId={activeId}
-          code={code}
-          mount="cadenceEditor"
-          onChange={(code: string, _: any) => onEditorChange(code)}
-          show={!isReadmeEditor}
-        />*/}
-        <CadenceEditor show={!isReadmeEditor} />
+        <EditorPanels show={!isReadmeEditor} />
       </EditorRoot>
-      <BottomBarContainer active={active} />
     </Flex>
   );
-};
-
-type EditorTitleProps = {
-  type: EntityType;
-};
-
-const EditorTitle = ({ type }: EditorTitleProps) => {
-  return (
-    <Heading data-test="editor-heading">
-      {type === EntityType.Account && 'Contract'}
-      {type === EntityType.TransactionTemplate && 'Transaction Template'}
-      {type === EntityType.ScriptTemplate && 'Script Template'}
-      {type === EntityType.Readme && 'Project Details'}
-
-      {type !== EntityType.Readme && <Version />}
-    </Heading>
-  );
-};
-
-type BottomBarContainerProps = {
-  active: ActiveEditor;
-};
-
-const BottomBarContainer: React.FC<BottomBarContainerProps> = ({ active }) => {
-  const [bottomBarHeight, setBottomBarHeight] = useState(140);
-  switch (active.type) {
-    case EntityType.Account:
-      return (
-        <>
-          <ResourcesBar resultHeight={bottomBarHeight} />
-          <DeploymentBottomBar setBottomBarHeight={setBottomBarHeight} />
-        </>
-      );
-    case EntityType.TransactionTemplate:
-      return (
-        <>
-          <ResourcesBar resultHeight={bottomBarHeight} />
-          <TransactionBottomBar setBottomBarHeight={setBottomBarHeight} />
-        </>
-      );
-    case EntityType.ScriptTemplate:
-      return (
-        <>
-          <ResourcesBar resultHeight={bottomBarHeight} />
-          <ScriptBottomBar setBottomBarHeight={setBottomBarHeight} />
-        </>
-      );
-    default:
-      return null;
-  }
 };
 
 const AnimatedText = styled.div`

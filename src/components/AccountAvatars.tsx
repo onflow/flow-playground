@@ -86,9 +86,9 @@ const AccountAvatars: React.FC<{
         return (
           <motion.div key={account.address}>
             <AccountAvatar
-              key={account.id}
               onClick={() => onChange(i)}
               isSelected={isSelected}
+              key={account.address}
             >
               <motion.div
                 style={{

@@ -1,11 +1,11 @@
+import Button from 'components/Button';
 import AccountList from 'components/Editor/FileExplorer/AccountList';
+import ExplorerCollapseIcon from 'components/Icons/ExplorerCollapseIcon';
+import { useProject } from 'providers/Project/projectHooks';
 import React from 'react';
 import { SXStyles } from 'src/types';
-import { useProject } from 'providers/Project/projectHooks';
 import { Flex } from 'theme-ui';
 import FilesList from './FilesList';
-import Button from 'components/Button';
-import ExplorerCollapseIcon from 'components/Icons/ExplorerCollapseIcon';
 
 type FileExplorerProps = {
   isExplorerCollapsed: boolean;

@@ -1,20 +1,19 @@
 overwrite: true
 schema:
-  - "http://localhost:8080/query"
-  - "https://playground.staging.flow.dapperlabs.com/query"
-  - "src/api/apollo/local.graphql"
-documents: "src/api/apollo/**/*.ts"
+  - 'http://localhost:8080/query'
+  - 'src/api/apollo/local.graphql'
+documents: 'src/api/apollo/**/*.ts'
 generates:
   src/api/apollo/generated/graphql.tsx:
     plugins:
-      - "typescript"
-      - "typescript-operations"
-      - "typescript-react-apollo"
-      - "fragment-matcher"
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+      - 'fragment-matcher'
     config:
       withComponent: false
       withHOC: false
       withHooks: true
     ./graphql.schema.json:
       plugins:
-        - "introspection"
+        - 'introspection'

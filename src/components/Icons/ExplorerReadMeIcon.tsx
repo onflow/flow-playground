@@ -15,14 +15,14 @@ function Icon() {
         strokeLinejoin="round"
         strokeWidth="1.5"
         d="M2.667 13a1.667 1.667 0 011.666-1.667h9"
-      ></path>
+      />
       <path
         stroke="#69717E"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="1.5"
         d="M4.333 1.333h9v13.334h-9A1.667 1.667 0 012.666 13V3a1.667 1.667 0 011.667-1.667v0z"
-      ></path>
+      />
     </svg>
   );
 }
