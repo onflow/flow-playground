@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ExplorerEllipseIcon from './Icons/ExplorerEllipseIcon';
 import Button from 'components/Button';
 import { Container, Flex, Text } from 'theme-ui';
@@ -26,13 +26,14 @@ const styles: SXStyles = {
     display: 'flex',
     flexDirection: 'column',
     borderRadius: '8px',
-    whiteSpace: 'nowrap',
     border: `1px solid ${theme.colors.borderColor}`,
     boxShadow: `0px 4px 40px rgba(0, 0, 0, 0.08)`,
-    width: `170px`,
     position: 'absolute',
     zIndex: '11',
     left: '150px',
+    margin: '0',
+    background: theme.colors.white,
+    padding: '1rem',
   },
   ctaButton: {
     alignSelf: 'baseline',
@@ -43,11 +44,12 @@ const styles: SXStyles = {
   },
   ctaOption: {
     backgroundColor: theme.colors.white,
-    fontFamily: 'Arial',
-    fontStyle: `normal`,
-    fontWeight: `400`,
-    fontSize: `14px`,
-    lineHeight: `22px`,
+    padding: '0.25rem',
+    whiteSpace: 'nowrap',
+    '&:hover': {
+        color: theme.colors.darkGrey,
+      },
+  
   },
 };
 
@@ -59,10 +61,25 @@ export const ContextMenu = ({ options, showDotDotDot }: ContextMenuType) => {
     onClick(...args);
   };
 
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: Event) => {
+        console.log('clicked ouside')
+      if (ref.current && !ref.current.contains(event.target)) {
+        setIsOpen(false)
+      }
+    };
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  }, [ ]);
+
   if (!showDotDotDot) return null;
 
   return (
-    <Container sx={styles.container}>
+    <Container sx={styles.container} ref={ref}>
       <Button
         sx={styles.ctaButton}
         inline={true}
