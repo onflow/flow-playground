@@ -357,13 +357,11 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   };
 
   const isOk = !haveErrors && validCode !== undefined && !!validCode;
-  //let statusIcon = isOk ? <FaRegCheckCircle /> : <FaRegTimesCircle />;
   let statusMessage = !isOk && `${problems?.error?.length} Errors`;
 
   const progress = isSaving || processingStatus;
 
   if (progress) {
-    //statusIcon = <FaSpinner className="spin" />;
     statusMessage = 'Please, wait...';
   }
 
