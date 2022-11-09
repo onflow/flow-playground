@@ -28,7 +28,6 @@ import {
   ArgumentsTitle,
   ErrorsList,
   Hints,
-  Signers,
 } from './components';
 import { SignersPanel } from 'components/SignersPanel';
 
@@ -358,13 +357,11 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   };
 
   const isOk = !haveErrors && validCode !== undefined && !!validCode;
-  let statusIcon = isOk ? <FaRegCheckCircle /> : <FaRegTimesCircle />;
-  let statusMessage = isOk ? 'Ready' : 'Fix errors';
+  let statusMessage = !isOk && `${problems?.error?.length} Errors`;
 
   const progress = isSaving || processingStatus;
 
   if (progress) {
-    statusIcon = <FaSpinner className="spin" />;
     statusMessage = 'Please, wait...';
   }
 
@@ -411,15 +408,17 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
             </>
           )}
 
-          <ErrorsList list={problems.error} actions={actions} />
+          {/*<ErrorsList list={problems.error} actions={actions} />*/}
           <Hints problems={problems} actions={actions} />
 
           <ControlContainer isOk={isOk} progress={progress}>
-            <StatusMessage>
-              {statusIcon}
-              <p>{statusMessage}</p>
-            </StatusMessage>
-            <ActionButton active={isOk} type={type} onClick={send} />
+            {statusMessage && 
+              <StatusMessage>
+                <FaRegTimesCircle />
+                <p>{statusMessage}</p>
+              </StatusMessage>
+            }
+            <ActionButton progress={progress} active={isOk} type={type} onClick={send} />
           </ControlContainer>
         </HoverPanel>
       </motion.div>
