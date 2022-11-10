@@ -42,6 +42,7 @@
     "handlebars-loader": "^1.7.2",
     "isomorphic-fetch": "^3.0.0",
     "jszip": "^3.10.1",
+    "loader-utils": "^3.2.0",
     "markdown-to-jsx": "^7.1.7",
     "mixpanel-browser": "^2.45.0",
     "monaco-editor": "^0.34.0",
