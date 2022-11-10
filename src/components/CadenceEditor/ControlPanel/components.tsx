@@ -253,9 +253,8 @@ export const Cancel = styled(LegacyButton)`
 `;
 
 export const PromptActionsContainer = styled.div`
-  padding-top: 1rem;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
 interface StatusIconProps {

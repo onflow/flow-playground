@@ -43,18 +43,12 @@ const AccountPicker = ({
 
   return (
     <Flex
+      my={1}
       sx={{
-        flexDirection: 'column',
+        padding: '0 0.5rem 0.5rem 0.5rem',
+        alignItems: 'flex-start',
       }}
     >
-      <Flex
-        my={1}
-        sx={{
-          padding: '0.8rem 0.5rem',
-          alignItems: 'center',
-          backgroundColor: theme.colors.background,
-        }}
-      >
         <AccountAvatars
           multi={true}
           project={project}

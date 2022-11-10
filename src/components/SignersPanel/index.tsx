@@ -1,11 +1,12 @@
 import { useProject } from 'providers/Project/projectHooks';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import theme from '../../theme';
 import AccountPicker from 'components/AccountPicker';
 import { Flex, Text } from 'theme-ui';
 import { SXStyles } from 'src/types';
-import { SignersContainer } from '../Arguments/styles';
-import { Account } from 'api/apollo/generated/graphql';
+import {
+  SignersContainer,
+} from '../Arguments/styles';
 import Avatar from 'components/Avatar';
 import CollapseOpenIcon from 'components/Icons/CollapseOpenIcon';
 import Button from 'components/Button';
@@ -14,10 +15,6 @@ type SignersProps = {
   maxSelection?: number;
   selected: number[];
   updateSelectedAccounts: (selection: number[]) => void;
-};
-
-const displayAddress = ({ address }: { address: string }) => {
-  return `0x${address.slice(-2)}`;
 };
 
 const AvatarIcon = (seed: number, index: number, complete: boolean) => {
@@ -52,14 +49,8 @@ const AvatarIconList = (
   );
 };
 
-const PanelHeader = (
-  maxSelection: number,
-  accounts: Account[],
-  seed: number,
-  selected: number[] = [],
-) => {
-  // TODO: accounts might be needed for displaying account addr, to be determined
-  let message = '';
+const PanelHeader = (maxSelection: number, seed: number, selected: number[] = []) => {
+  let message = ""
   const correctNumSigners = selected.length === maxSelection;
   const SIGNERSSELECTED = 'Signers Selected';
   if (correctNumSigners && selected.length === 1) {
@@ -71,9 +62,9 @@ const PanelHeader = (
   }
 
   return (
-    <Flex sx={{ justifyContent: 'flex-start' }}>
+    <Flex sx={{ justifyContent: "flex-start", padding: " 0.875rem" }}>
       {AvatarIconList(seed, selected, correctNumSigners)}
-      <Text sx={{ marginLeft: '0.25rem' }}>{message}</Text>
+      <Text sx={{marginLeft: '0.25rem', fontSize: '14px'}}>{message}</Text>
     </Flex>
   );
 };
@@ -81,12 +72,12 @@ const PanelHeader = (
 const styles: SXStyles = {
   root: {
     backgroundColor: theme.colors.white,
-    width: '50px',
+    width: '3rem'
   },
   carrotDown: {
     backgroundColor: theme.colors.white,
     transform: 'rotate(180deg)',
-    width: '50px',
+    width: '3rem'
   },
 };
 
@@ -98,12 +89,14 @@ export const SignersPanel: React.FC<SignersProps> = ({
   const { project } = useProject();
   const [isAvatarOpen, setIsAvatarOpen] = useState(false);
   const { accounts } = project;
+  const HeaderText = useMemo(() => PanelHeader(maxSelection, project.seed, selected), [maxSelection, selected, project.seed])
 
-  const HeaderText = useMemo(
-    () => PanelHeader(maxSelection, accounts, project.seed, selected),
-    [maxSelection, accounts, selected, project.seed],
-  );
-
+  useEffect(() => {
+    if (selected.length === 0 && maxSelection > 0) {
+      updateSelectedAccounts([0]) // select first signer as default
+    }
+  }, [maxSelection, selected, updateSelectedAccounts])
+  
   return (
     <SignersContainer>
       <Flex

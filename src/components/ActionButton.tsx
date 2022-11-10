@@ -14,7 +14,7 @@ interface ActionButtonProps extends ChildPropsOptional {
   'data-test'?: string;
 }
 
-const ActionButton: React.FC<ActionButtonProps> = (props) => {
+const ActionButton: React.FC<ActionButtonProps> = (props: ActionButtonProps) => {
   return (
     <motion.div
       style={{
