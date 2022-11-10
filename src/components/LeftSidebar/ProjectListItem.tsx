@@ -74,7 +74,7 @@ const ProjectListItem = ({ project }: Props) => {
     setShowConfirmation(false);
     if (isConfirmed) {
       // todo: wire up actually deleting the project here
-    }      
+    }
   };
 
   const contextMenuOptions = [

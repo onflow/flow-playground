@@ -336,13 +336,16 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const validCode = problems.error.length === 0;
 
   // contracts need one signer for deployment
-  const signers = type === EntityType.TransactionTemplate ? extractSigners(code).length : 1;
-  const needSigners = type === EntityType.TransactionTemplate && signers > 0 || type == EntityType.ContractTemplate;
+  const signers =
+    type === EntityType.TransactionTemplate ? extractSigners(code).length : 1;
+  const needSigners =
+    (type === EntityType.TransactionTemplate && signers > 0) ||
+    type == EntityType.ContractTemplate;
   const numberOfErrors = Object.keys(errors).length;
 
   // TODO: disable button if not enough signers
   const notEnoughSigners = needSigners && selected.length < signers;
-  const haveErrors = numberOfErrors > 0
+  const haveErrors = numberOfErrors > 0;
 
   const { accounts } = project;
   const signersAccounts = selected.map((i: number) => accounts[i]);
@@ -353,7 +356,8 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     hover: (highlight: Highlight) => hover(editor, highlight),
   };
 
-  const isOk = !haveErrors && validCode !== undefined && !!validCode && !notEnoughSigners;
+  const isOk =
+    !haveErrors && validCode !== undefined && !!validCode && !notEnoughSigners;
   let statusIcon;
   let statusMessage;
   switch (true) {
@@ -364,7 +368,9 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       break;
     case !isOk:
       statusIcon = <FaRegTimesCircle />;
-      statusMessage = `${problems?.error?.length} Error${problems?.error?.length > 1 ? 's' : ''}`;
+      statusMessage = `${problems?.error?.length} Error${
+        problems?.error?.length > 1 ? 's' : ''
+      }`;
       break;
   }
 
@@ -425,7 +431,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             />
           )}
 
-
           {/*<ErrorsList list={problems.error} actions={actions} />*/}
           <Hints problems={problems} actions={actions} />
 
@@ -435,7 +440,10 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             showPrompt={showPrompt}
           >
             {statusMessage && (
-              <StatusMessage isOk={isOk} data-test="control-panel-status-message">
+              <StatusMessage
+                isOk={isOk}
+                data-test="control-panel-status-message"
+              >
                 <StatusIcon
                   isOk={isOk}
                   progress={progress}
@@ -444,8 +452,8 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
                   {statusIcon}
                 </StatusIcon>
                 <p>{statusMessage}</p>
-              </StatusMessage>)
-            }
+              </StatusMessage>
+            )}
             {showPrompt ? (
               <PromptActionsContainer>
                 <Confirm data-test="redeploy-confirm-button" onClick={send}>

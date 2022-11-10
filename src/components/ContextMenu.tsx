@@ -47,9 +47,8 @@ const styles: SXStyles = {
     padding: '0.25rem',
     whiteSpace: 'nowrap',
     '&:hover': {
-        color: theme.colors.darkGrey,
-      },
-  
+      color: theme.colors.darkGrey,
+    },
   },
 };
 
@@ -66,14 +65,14 @@ export const ContextMenu = ({ options, showDotDotDot }: ContextMenuType) => {
   useEffect(() => {
     const handleClickOutside = (event: Event) => {
       if (ref.current && !ref.current.contains(event.target)) {
-        setIsOpen(false)
+        setIsOpen(false);
       }
     };
     document.addEventListener('click', handleClickOutside, true);
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  }, [ ]);
+  }, []);
 
   if (!showDotDotDot) return null;
 
@@ -91,7 +90,11 @@ export const ContextMenu = ({ options, showDotDotDot }: ContextMenuType) => {
         <Flex sx={styles.menu}>
           {options.map(
             ({ icon, name, onClick, args }: ContextMenuOptionsType) => (
-              <Button sx={styles.ctaOption} key={name} onClick={() => clickOption(onClick, args)}>
+              <Button
+                sx={styles.ctaOption}
+                key={name}
+                onClick={() => clickOption(onClick, args)}
+              >
                 {icon()}
                 <Text>{name}</Text>
               </Button>

@@ -10,50 +10,48 @@ import {
   WhiteOverlay,
 } from 'components/Common';
 
-import {
-  Label,
-} from 'components/Arguments/SingleArgument/styles';
+import { Label } from 'components/Arguments/SingleArgument/styles';
 
 const containerFrames = {
-    visible: {
-      display: 'flex',
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-      zIndex: 200,
+  visible: {
+    display: 'flex',
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
     },
-    hidden: {
-      opacity: 0,
-      transition: {
-        when: 'afterChildren',
-        staggerChildren: 0,
-        staggerDirection: -1,
-      },
-      zIndex: -1,
+    zIndex: 200,
+  },
+  hidden: {
+    opacity: 0,
+    transition: {
+      when: 'afterChildren',
+      staggerChildren: 0,
+      staggerDirection: -1,
     },
-  };
+    zIndex: -1,
+  },
+};
 
-  const spring = {
-    type: 'spring',
-    damping: 11,
-    stiffness: 120,
-  };
+const spring = {
+  type: 'spring',
+  damping: 11,
+  stiffness: 120,
+};
 
-  const popupFrames = {
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: spring,
+const popupFrames = {
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: spring,
+  },
+  hidden: {
+    opacity: 0,
+    y: -200,
+    transition: {
+      ease: [1, 0.5, 0, 0],
     },
-    hidden: {
-      opacity: 0,
-      y: -200,
-      transition: {
-        ease: [1, 0.5, 0, 0],
-      },
-    },
-  };
+  },
+};
 
 type ConfirmationPopupType = {
   title: string;
@@ -68,11 +66,10 @@ const ConfirmationPopup = ({
   onClose,
   message,
 }: ConfirmationPopupType) => {
-
-const closeModal = (isConfirmed: boolean) => {
-    console.log('closing')
-    onClose(isConfirmed)
-}
+  const closeModal = (isConfirmed: boolean) => {
+    console.log('closing');
+    onClose(isConfirmed);
+  };
 
   if (!visible) return null;
 
