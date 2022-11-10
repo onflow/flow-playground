@@ -8,7 +8,7 @@ import theme from '../theme';
 type ContextMenuOptionsType = {
   name: string;
   onClick: Function;
-  args: any[];
+  args?: any[];
   icon: Function;
 };
 
@@ -56,7 +56,7 @@ const styles: SXStyles = {
 export const ContextMenu = ({ options, showDotDotDot }: ContextMenuType) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const clickOption = (onClick: Function, args: any[]) => {
+  const clickOption = (onClick: Function, args: any[] = []) => {
     setIsOpen(false);
     onClick(...args);
   };
@@ -65,7 +65,6 @@ export const ContextMenu = ({ options, showDotDotDot }: ContextMenuType) => {
 
   useEffect(() => {
     const handleClickOutside = (event: Event) => {
-        console.log('clicked ouside')
       if (ref.current && !ref.current.contains(event.target)) {
         setIsOpen(false)
       }
