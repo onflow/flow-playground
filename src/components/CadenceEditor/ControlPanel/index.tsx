@@ -343,7 +343,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
 
   // TODO: disable button if not enough signers
   const notEnoughSigners = needSigners && selected.length < signers;
-  const haveErrors = numberOfErrors > 0
+  const haveErrors = numberOfErrors > 0;
 
   const { accounts } = project;
   const signersAccounts = selected.map((i) => accounts[i]);
