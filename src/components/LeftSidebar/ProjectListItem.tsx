@@ -1,11 +1,12 @@
 import { Link } from '@reach/router';
+import ConfirmationPopup from 'components/ConfirmationPopup';
 import { ContextMenu } from 'components/ContextMenu';
 import ContractIcon from 'components/Icons/ContractIcon';
 import DeleteIcon from 'components/Icons/DeleteIcon';
 import ScriptIcon from 'components/Icons/ScriptIcon';
 import TransactionIcon from 'components/Icons/TransactionIcon';
 import { formatDistance } from 'date-fns';
-import React from 'react';
+import React, { useState } from 'react';
 import { MockProject, SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import paths from '../../paths';
@@ -60,15 +61,26 @@ const getRootStyles = (isCurrentProject: boolean) => {
   };
 };
 
+const confirmDeleteOptions = {
+  title: `Delete this project?`,
+  message:
+    'Are you sure you want to delete this project? This cannot be undone.',
+};
+
 const ProjectListItem = ({ project }: Props) => {
-  const deleteProject = (project: MockProject) => {
-    console.log('deleting project', project);
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
+
+  const confirmDelete = (isConfirmed: boolean): void => {
+    setShowConfirmation(false);
+    if (isConfirmed) {
+      // todo: wire up actually deleting the project here
+    }
   };
+
   const contextMenuOptions = [
     {
       name: 'Delete Project',
-      onClick: deleteProject,
-      args: [project],
+      onClick: () => setShowConfirmation(true),
       icon: DeleteIcon,
     },
   ];
@@ -82,12 +94,17 @@ const ProjectListItem = ({ project }: Props) => {
   const headerStyles: SXStyles = {
     header: {
       justifyContent: 'space-between',
-      alignItems: 'center'
-    }
-    
-  }
+      alignItems: 'center',
+    },
+  };
+
   return (
     <Flex sx={rootStyles}>
+      <ConfirmationPopup
+        onClose={confirmDelete}
+        visible={showConfirmation}
+        {...confirmDeleteOptions}
+      />
       <Flex sx={headerStyles.header}>
         <Link to={paths.projectPath(project.id)} style={titleLinkStyle}>
           <Box sx={styles.title}>{project.title}</Box>

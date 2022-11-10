@@ -10,7 +10,7 @@ export const HoverPanel = styled.div<HoverPanelProps>`
   max-width: 300px;
   border-radius: 8px;
   background-color: #fff;
-  border: 1px solid #ABB3BF;
+  border: 1px solid #abb3bf;
   box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.08);
 `;
 
@@ -99,9 +99,7 @@ export const List = styled.div<ListProps>`
   overflow-y: auto;
 `;
 
-export const SignersContainer = styled.div`
-  
-`;
+export const SignersContainer = styled.div``;
 
 interface ControlContainerProps {
   isOk: boolean;
@@ -114,7 +112,7 @@ export const ControlContainer = styled.div<ControlContainerProps>`
   justify-content: space-between;
   padding: 8px;
   width: 100%;
-  border-top: 1px solid #ABB3BF;
+  border-top: 1px solid #abb3bf;
   color: ${({ isOk, progress, showPrompt }) => {
     switch (true) {
       case progress:
@@ -151,8 +149,8 @@ export const StatusMessage = styled.div`
   }
 
   display: flex;
-  width: ${({ isOk }) => isOk ? '100%' : '50%'};
-  padding: ${({ isOk }) => isOk ? '1rem' : 'unset'};
+  width: ${({ isOk }) => (isOk ? '100%' : '50%')};
+  padding: ${({ isOk }) => (isOk ? '1rem' : 'unset')};
   justify-content: flex-start;
   font-size: 16px;
   svg {
@@ -169,7 +167,7 @@ export const ErrorsContainer = styled.div`
   grid-gap: 10px;
   grid-template-columns: 100%;
   margin-bottom: 12px;
-  background: #F6F7F9;
+  background: #f6f7f9;
   border-radius: 8px 8px 8px 0px;
 `;
 
@@ -180,7 +178,7 @@ export const SingleError = styled.div`
   box-sizing: border-box;
   padding: 10px;
   font-size: 14px;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.08);
   border-radius: 8px;
   &:hover {

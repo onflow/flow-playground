@@ -20,7 +20,6 @@ const AccountPicker = ({
   maxSelection = 4,
   children,
 }: AccountPickerProps) => {
-  const { theme } = useThemeUI();
   const handleOnChange = (i: number, max: number) => {
     if (max === 1) {
       // behave like radio button
@@ -49,15 +48,14 @@ const AccountPicker = ({
         alignItems: 'flex-start',
       }}
     >
-        <AccountAvatars
-          multi={true}
-          project={project}
-          accounts={accounts}
-          selectedAccounts={selected}
-          onChange={(index: number) => handleOnChange(index, maxSelection)}
-          maxSelection={maxSelection}
-        />
-      </Flex>
+      <AccountAvatars
+        multi={true}
+        project={project}
+        accounts={accounts}
+        selectedAccounts={selected}
+        onChange={(index: number) => handleOnChange(index, maxSelection)}
+        maxSelection={maxSelection}
+      />
     </Flex>
   );
 };

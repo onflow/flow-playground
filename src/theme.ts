@@ -42,7 +42,7 @@ export default {
         leftSidebarBackground: '#2F353F',
         leftSidebarHeaderText: '#ABB3BF',
         alternateButtonBorder: '#2F353F',
-        alternateButtonBackground: '#161616',
+        alternateButtonBackground: 'darkgrey',
         blueBorder: '#2C50D7',
         disabledButtonText: '#2F353F',
         secondaryButtonBorder: '#B795FF',

@@ -412,13 +412,18 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           <Hints problems={problems} actions={actions} />
 
           <ControlContainer isOk={isOk} progress={progress}>
-            {statusMessage && 
+            {statusMessage && (
               <StatusMessage>
                 <FaRegTimesCircle />
                 <p>{statusMessage}</p>
               </StatusMessage>
-            }
-            <ActionButton progress={progress} active={isOk} type={type} onClick={send} />
+            )}
+            <ActionButton
+              progress={progress}
+              active={isOk}
+              type={type}
+              onClick={send}
+            />
           </ControlContainer>
         </HoverPanel>
       </motion.div>

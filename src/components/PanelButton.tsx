@@ -20,19 +20,19 @@ interface PanelButtonProps extends ChildPropsOptional {
 }
 
 const PanelButton: React.FC<PanelButtonProps> = (props) => {
-    // TODO: what is hideDisabledState used for
+  // TODO: what is hideDisabledState used for
 
-    const getStyle = ({disabled, isComplete}: PanelButtonProps) => {
-        if (disabled) return theme.colors.grey;
-        if (isComplete) return theme.colors.primary;
-        return theme.colors.black
-    }
+  const getStyle = ({ disabled, isComplete }: PanelButtonProps) => {
+    if (disabled) return theme.colors.grey;
+    if (isComplete) return theme.colors.primary;
+    return theme.colors.black;
+  };
 
-    const sx = {
-        ...props.style,
-        backgroundColor: getStyle(props),
-        color: theme.colors.white,
-    }
+  const sx = {
+    ...props.style,
+    backgroundColor: getStyle(props),
+    color: theme.colors.white,
+  };
 
   return (
     <motion.div
@@ -44,7 +44,14 @@ const PanelButton: React.FC<PanelButtonProps> = (props) => {
       }}
       whileTap={{ scale: 0.95 }}
     >
-      <Button {...props} sx={sx} disabled={props.disabled || props.hideDisabledState}>{props.isComplete && CheckMarkIcon()}{props.children}</Button>
+      <Button
+        {...props}
+        sx={sx}
+        disabled={props.disabled || props.hideDisabledState}
+      >
+        {props.isComplete && CheckMarkIcon()}
+        {props.children}
+      </Button>
     </motion.div>
   );
 };
