@@ -17,16 +17,20 @@ const styles = {
     border: '1px solid',
     padding: '0.25rem 0.5rem 0.75px',
     margin: '0',
-    borderColor: theme.colors.avatarNotSelectedColor
+    borderColor: theme.colors.avatarNotSelectedColor,
   },
   selected: {
-    borderColor: theme.colors.avatarSelectedColor
-  }
-}
-export const AccountAvatar = ({ children, onClick, isSelected }: AccountAvatarProps) => {
+    borderColor: theme.colors.avatarSelectedColor,
+  },
+};
+export const AccountAvatar = ({
+  children,
+  onClick,
+  isSelected,
+}: AccountAvatarProps) => {
   const getStyle = (active: boolean) => {
-    return active ? {...styles.root, ...styles.selected} : styles.root;
-  }
+    return active ? { ...styles.root, ...styles.selected } : styles.root;
+  };
   return (
     <motion.div>
       <Box
@@ -48,7 +52,7 @@ export const AvatarList = ({ children }: ChildProps) => {
         flex: '1 1 auto',
         alignItems: 'center',
         justifyContent: 'space-between',
-        overflowX: 'scroll'
+        overflowX: 'scroll',
       }}
     >
       {children}
@@ -56,7 +60,7 @@ export const AvatarList = ({ children }: ChildProps) => {
   );
 };
 
-const noop = (): void => { };
+const noop = (): void => {};
 
 const AccountAvatars: React.FC<{
   multi?: boolean;
@@ -66,13 +70,7 @@ const AccountAvatars: React.FC<{
   accounts: Account[];
   maxSelection?: number;
 }> = (props) => {
-  const {
-    multi,
-    selectedAccounts,
-    accounts,
-    project,
-    onChange,
-  } = props;
+  const { multi, selectedAccounts, accounts, project, onChange } = props;
   if (!multi) {
     throw new Error('Must include multi prop.');
   }
@@ -81,8 +79,7 @@ const AccountAvatars: React.FC<{
   return (
     <AvatarList>
       {accounts.map((account: Account, i: number) => {
-        const isSelected =
-          selectedAccounts.includes(i);
+        const isSelected = selectedAccounts.includes(i);
         return (
           <motion.div key={account.address}>
             <AccountAvatar
@@ -104,13 +101,13 @@ const AccountAvatars: React.FC<{
                     width: '35px',
                     height: '35px',
                     display: 'block',
-                    borderRadius: '0 0 20px 20px'
+                    borderRadius: '0 0 20px 20px',
                   }}
                 />
                 <Text
                   px="5px"
                   sx={{
-                    fontSize: "0.75rem",
+                    fontSize: '0.75rem',
                     color: isSelected
                       ? theme.colors.avatarSelectedColor
                       : theme.colors.avatarTextColor,

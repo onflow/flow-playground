@@ -7,7 +7,7 @@ import ExplorerFileShutterIcon from 'components/Icons/ExplorerFileShutterIcon';
 import ExplorerPlusIcon from 'components/Icons/ExplorerPlusIcon';
 import ExplorerScriptIcon from 'components/Icons/ExplorerScriptIcon';
 import ExplorerTransactionIcon from 'components/Icons/ExplorerTransactionIcon';
-import Input from 'components/Input';
+import Input from 'components/ExplorerInput';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
@@ -123,6 +123,7 @@ const styles: SXStyles = {
     pointerEvents: 'initial',
     background: '#FFFFFF',
     fontFamily: 'inherit',
+    borderRadius: '4px',
   },
   inputReadOnly: {
     width: '100%',

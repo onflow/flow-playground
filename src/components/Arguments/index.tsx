@@ -120,10 +120,10 @@ const getLabel = (
   return resultType === ResultType.Contract
     ? 'Deployment'
     : resultType === ResultType.Script
-      ? project.scriptTemplates[index].title
-      : resultType === ResultType.Transaction
-        ? project.transactionTemplates[index].title
-        : 'Interaction';
+    ? project.scriptTemplates[index].title
+    : resultType === ResultType.Transaction
+    ? project.transactionTemplates[index].title
+    : 'Interaction';
 };
 
 type ScriptExecution = (args?: string[]) => Promise<any>;

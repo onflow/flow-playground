@@ -10,19 +10,11 @@ interface InputProps {
   sx?: ThemeUICSSObject;
   type: string;
   'data-test'?: string;
-  title: string;
+  title?: string;
   index: number;
   editing: Array<number>;
   toggleEditing: any;
 }
-
-const getStyles = () => ({
-  root: {
-    background: '#FFFFF',
-    border: '1px solid #ABB3BF',
-    borderRadius: '4px',
-  },
-});
 
 const Input = ({
   onClick,
@@ -38,8 +30,6 @@ const Input = ({
   editing,
   toggleEditing,
 }: InputProps) => {
-  const styles = getStyles();
-  const mergedSx = { ...styles.root, ...sx };
   const ref = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -64,7 +54,7 @@ const Input = ({
 
   return (
     <ThemeUiInput
-      sx={mergedSx}
+      sx={sx}
       ref={ref}
       onClick={onClick}
       type={type}
