@@ -1,9 +1,12 @@
 import { Link } from '@reach/router';
+import ConfirmationPopup from 'components/ConfirmationPopup';
+import { ContextMenu } from 'components/ContextMenu';
 import ContractIcon from 'components/Icons/ContractIcon';
+import DeleteIcon from 'components/Icons/DeleteIcon';
 import ScriptIcon from 'components/Icons/ScriptIcon';
 import TransactionIcon from 'components/Icons/TransactionIcon';
 import { formatDistance } from 'date-fns';
-import React from 'react';
+import React, { useState } from 'react';
 import { MockProject, SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import paths from '../../paths';
@@ -58,7 +61,29 @@ const getRootStyles = (isCurrentProject: boolean) => {
   };
 };
 
+const confirmDeleteOptions = {
+  title: `Delete this project?`,
+  message:
+    'Are you sure you want to delete this project? This cannot be undone.',
+};
+
 const ProjectListItem = ({ project }: Props) => {
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
+
+  const confirmDelete = (isConfirmed: boolean): void => {
+    setShowConfirmation(false);
+    if (isConfirmed) {
+      // todo: wire up actually deleting the project here
+    }
+  };
+
+  const contextMenuOptions = [
+    {
+      name: 'Delete Project',
+      onClick: () => setShowConfirmation(true),
+      icon: DeleteIcon,
+    },
+  ];
   const timeAgo = formatDistance(new Date(project.lastSavedAt), new Date(), {
     addSuffix: true,
   });
@@ -66,12 +91,26 @@ const ProjectListItem = ({ project }: Props) => {
   // TODO: isCurrentProject is mocked. Compare withe current project id once getProjects query is complete
   const isCurrentProject = project.id === 1;
   const rootStyles = getRootStyles(isCurrentProject);
+  const headerStyles: SXStyles = {
+    header: {
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+  };
 
   return (
     <Flex sx={rootStyles}>
-      <Link to={paths.projectPath(project.id)} style={titleLinkStyle}>
-        <Box sx={styles.title}>{project.title}</Box>
-      </Link>
+      <ConfirmationPopup
+        onClose={confirmDelete}
+        visible={showConfirmation}
+        {...confirmDeleteOptions}
+      />
+      <Flex sx={headerStyles.header}>
+        <Link to={paths.projectPath(project.id)} style={titleLinkStyle}>
+          <Box sx={styles.title}>{project.title}</Box>
+        </Link>
+        <ContextMenu showDotDotDot={true} options={contextMenuOptions} />
+      </Flex>
 
       <Flex sx={styles.details}>
         <Flex sx={styles.detail}>

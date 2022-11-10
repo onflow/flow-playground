@@ -91,6 +91,7 @@ export const SignersPanel: React.FC<SignersProps> = ({
   const { project } = useProject();
   const [isAvatarOpen, setIsAvatarOpen] = useState(false);
   const { accounts } = project;
+
   const HeaderText = useMemo(
     () => PanelHeader(maxSelection, project.seed, selected),
     [maxSelection, selected, project.seed],
