@@ -14,8 +14,14 @@ export type SXStyles = Record<string, ThemeUICSSObject>;
 export type MockProject = {
   id: Scalars['UUID'];
   title: string;
-  contractTemplateCount: number;
-  transactionTemplateCount: number;
-  scriptTemplateCount: number;
+  contractTemplates: Template;
+  transactionTemplates: Template;
+  scriptTemplates: Template;
   lastSavedAt: string;
+};
+
+export type Template = {
+  id: number;
+  script: string;
+  title: string;
 };

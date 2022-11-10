@@ -5,10 +5,21 @@ export const GET_PROJECTS = gql`
     projects @client {
       id
       title
-      contractTemplateCount @client
-      transactionTemplateCount @client
-      scriptTemplateCount @client
-      lastSavedAt @client
+      contractTemplates {
+        id
+        script
+        title
+      }
+      transactionTemplates {
+        id
+        script
+        title
+      }
+      scriptTemplates {
+        id
+        script
+        title
+      }
     }
   }
 `;

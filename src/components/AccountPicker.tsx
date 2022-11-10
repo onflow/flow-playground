@@ -20,7 +20,6 @@ const AccountPicker = ({
   maxSelection = 4,
   children,
 }: AccountPickerProps) => {
-  const { theme } = useThemeUI();
   const handleOnChange = (i: number, max: number) => {
     if (max === 1) {
       // behave like radio button

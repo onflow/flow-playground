@@ -61,9 +61,9 @@ const localResolvers = {
           __typename: 'Project',
           id,
           title: 'Untitled Project',
-          contractTemplateCount: 0,
-          transactionTemplateCount: 0,
-          scriptTemplateCount: 0,
+          contractTemplates: { id: 0, title: 'contract', script: '' },
+          transactionTemplates: { id: 0, title: 'transaction', script: '' },
+          scriptTemplates: { id: 0, title: 'script', script: '' },
           lastSavedAt: new Date().toISOString(),
         };
       });

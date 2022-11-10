@@ -441,13 +441,14 @@ export type UpdateTransactionTemplate = {
 
 export type CreateProjectMutationVariables = Exact<{
   parentId?: Maybe<Scalars['UUID']>;
-  numberOfAccounts: Scalars['Int'];
-  seed: Scalars['Int'];
   title: Scalars['String'];
   description: Scalars['String'];
   readme: Scalars['String'];
+  seed: Scalars['Int'];
+  numberOfAccounts: Scalars['Int'];
   transactionTemplates: Array<NewProjectTransactionTemplate> | NewProjectTransactionTemplate;
   scriptTemplates: Array<NewProjectScriptTemplate> | NewProjectScriptTemplate;
+  contractTemplates: Array<NewProjectContractTemplate> | NewProjectContractTemplate;
 }>;
 
 
@@ -465,6 +466,9 @@ export type CreateProjectMutation = (
     )>>, scriptTemplates?: Maybe<Array<(
       { __typename?: 'ScriptTemplate' }
       & Pick<ScriptTemplate, 'id' | 'script' | 'title'>
+    )>>, contractTemplates?: Maybe<Array<(
+      { __typename?: 'ContractTemplate' }
+      & Pick<ContractTemplate, 'id' | 'script' | 'title'>
     )>> }
   ) }
 );
@@ -736,6 +740,16 @@ export type GetProjectsQuery = (
   & { projects: Array<Maybe<(
     { __typename?: 'Project' }
     & Pick<Project, 'id' | 'title'>
+    & { contractTemplates?: Maybe<Array<(
+      { __typename?: 'ContractTemplate' }
+      & Pick<ContractTemplate, 'id' | 'script' | 'title'>
+    )>>, transactionTemplates?: Maybe<Array<(
+      { __typename?: 'TransactionTemplate' }
+      & Pick<TransactionTemplate, 'id' | 'script' | 'title'>
+    )>>, scriptTemplates?: Maybe<Array<(
+      { __typename?: 'ScriptTemplate' }
+      & Pick<ScriptTemplate, 'id' | 'script' | 'title'>
+    )>> }
   )>> }
 );
 
@@ -925,9 +939,9 @@ export const ContractResultsFragmentDoc = gql`
 }
     `;
 export const CreateProjectDocument = gql`
-    mutation CreateProject($parentId: UUID, $numberOfAccounts: Int!, $seed: Int!, $title: String!, $description: String!, $readme: String!, $transactionTemplates: [NewProjectTransactionTemplate!]!, $scriptTemplates: [NewProjectScriptTemplate!]!) {
+    mutation CreateProject($parentId: UUID, $title: String!, $description: String!, $readme: String!, $seed: Int!, $numberOfAccounts: Int!, $transactionTemplates: [NewProjectTransactionTemplate!]!, $scriptTemplates: [NewProjectScriptTemplate!]!, $contractTemplates: [NewProjectContractTemplate!]!) {
   project: createProject(
-    input: {parentId: $parentId, numberOfAccounts: $numberOfAccounts, seed: $seed, title: $title, description: $description, readme: $readme, transactionTemplates: $transactionTemplates, scriptTemplates: $scriptTemplates}
+    input: {parentId: $parentId, numberOfAccounts: $numberOfAccounts, seed: $seed, title: $title, description: $description, readme: $readme, transactionTemplates: $transactionTemplates, scriptTemplates: $scriptTemplates, contractTemplates: $contractTemplates}
   ) {
     id
     persist
@@ -952,6 +966,11 @@ export const CreateProjectDocument = gql`
       script
       title
     }
+    contractTemplates {
+      id
+      script
+      title
+    }
   }
 }
     `;
@@ -971,13 +990,14 @@ export type CreateProjectMutationFn = ApolloReactCommon.MutationFunction<CreateP
  * const [createProjectMutation, { data, loading, error }] = useCreateProjectMutation({
  *   variables: {
  *      parentId: // value for 'parentId'
- *      numberOfAccounts: // value for 'numberOfAccounts'
- *      seed: // value for 'seed'
  *      title: // value for 'title'
  *      description: // value for 'description'
  *      readme: // value for 'readme'
+ *      seed: // value for 'seed'
+ *      numberOfAccounts: // value for 'numberOfAccounts'
  *      transactionTemplates: // value for 'transactionTemplates'
  *      scriptTemplates: // value for 'scriptTemplates'
+ *      contractTemplates: // value for 'contractTemplates'
  *   },
  * });
  */
@@ -1619,6 +1639,21 @@ export const GetProjectsDocument = gql`
   projects @client {
     id
     title
+    contractTemplates {
+      id
+      script
+      title
+    }
+    transactionTemplates {
+      id
+      script
+      title
+    }
+    scriptTemplates {
+      id
+      script
+      title
+    }
   }
 }
     `;
