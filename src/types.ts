@@ -21,7 +21,7 @@ export type MockProject = {
 };
 
 export type Template = {
-  id: number,
-  script: string,
-  title: string
-}
+  id: number;
+  script: string;
+  title: string;
+};

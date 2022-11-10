@@ -29,11 +29,10 @@ const Input = ({
     const handleClickOutside = (event: any) => {
       if (ref.current && !ref.current.contains(event.target)) {
         document.removeEventListener('click', handleClickOutside, true);
-        updateProjectName()
+        updateProjectName();
         toggleEditing();
         setIsEditing(false);
       }
-      return;
     };
     if (editing && !isEditing) {
       document.addEventListener('click', handleClickOutside, true);
