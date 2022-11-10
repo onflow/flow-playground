@@ -30,7 +30,9 @@ import {
   InteractionButtonProps,
 } from './types';
 
-export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props: ArgumentsTitleProps) => {
+export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (
+  props: ArgumentsTitleProps,
+) => {
   const { type, errors, expanded, setExpanded } = props;
 
   const hasErrors = errors > 0;

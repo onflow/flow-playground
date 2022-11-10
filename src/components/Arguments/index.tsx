@@ -120,10 +120,10 @@ const getLabel = (
   return resultType === ResultType.Contract
     ? 'Deployment'
     : resultType === ResultType.Script
-      ? project.scriptTemplates[index].title
-      : resultType === ResultType.Transaction
-        ? project.transactionTemplates[index].title
-        : 'Interaction';
+    ? project.scriptTemplates[index].title
+    : resultType === ResultType.Transaction
+    ? project.transactionTemplates[index].title
+    : 'Interaction';
 };
 
 type ScriptExecution = (args?: string[]) => Promise<any>;
@@ -412,13 +412,18 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           <Hints problems={problems} actions={actions} />
 
           <ControlContainer isOk={isOk} progress={progress}>
-            {statusMessage && 
+            {statusMessage && (
               <StatusMessage>
                 <FaRegTimesCircle />
                 <p>{statusMessage}</p>
               </StatusMessage>
-            }
-            <ActionButton progress={progress} active={isOk} type={type} onClick={send} />
+            )}
+            <ActionButton
+              progress={progress}
+              active={isOk}
+              type={type}
+              onClick={send}
+            />
           </ControlContainer>
         </HoverPanel>
       </motion.div>

@@ -22,7 +22,8 @@ const AccountPicker = ({
 }: AccountPickerProps) => {
   const { theme } = useThemeUI();
   const handleOnChange = (i: number, max: number) => {
-    if (max === 1) { // behave like radio button
+    if (max === 1) {
+      // behave like radio button
       onChange([i]);
     } else if (selected.includes(i)) {
       onChange(selected.filter((j: any) => j !== i));

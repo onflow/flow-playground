@@ -4,9 +4,7 @@ import theme from '../../theme';
 import AccountPicker from 'components/AccountPicker';
 import { Flex, Text } from 'theme-ui';
 import { SXStyles } from 'src/types';
-import {
-  SignersContainer,
-} from '../Arguments/styles';
+import { SignersContainer } from '../Arguments/styles';
 import Avatar from 'components/Avatar';
 import CollapseOpenIcon from 'components/Icons/CollapseOpenIcon';
 import Button from 'components/Button';
@@ -27,25 +25,36 @@ const AvatarIcon = (seed: number, index: number, complete: boolean) => {
         height: '17px',
         display: 'block',
         borderRadius: '20px',
-        border: `1px solid ${complete ? theme.colors.primary : theme.colors.errors}`
+        border: `1px solid ${
+          complete ? theme.colors.primary : theme.colors.errors
+        }`,
       }}
-    />)
-}
+    />
+  );
+};
 
-const AvatarIconList = (seed: number, indexes: number[], complete: boolean = false) => {
+const AvatarIconList = (
+  seed: number,
+  indexes: number[],
+  complete: boolean = false,
+) => {
   return (
     <Flex>
-      {indexes.map(index => {
+      {indexes.map((index) => {
         return AvatarIcon(seed, index, complete);
       })}
     </Flex>
-  )
-}
+  );
+};
 
-const PanelHeader = (maxSelection: number, seed: number, selected: number[] = []) => {
-  let message = ""
+const PanelHeader = (
+  maxSelection: number,
+  seed: number,
+  selected: number[] = [],
+) => {
+  let message = '';
   const correctNumSigners = selected.length === maxSelection;
-  const SIGNERSSELECTED = "Signers Selected";
+  const SIGNERSSELECTED = 'Signers Selected';
   if (correctNumSigners && selected.length === 1) {
     message = `${selected.length} ${SIGNERSSELECTED}`;
   } else if (correctNumSigners) {
@@ -55,42 +64,55 @@ const PanelHeader = (maxSelection: number, seed: number, selected: number[] = []
   }
 
   return (
-    <Flex sx={{ justifyContent: "flex-start", padding: " 0.875rem" }}>
+    <Flex sx={{ justifyContent: 'flex-start', padding: ' 0.875rem' }}>
       {AvatarIconList(seed, selected, correctNumSigners)}
-      <Text sx={{marginLeft: '0.25rem', fontSize: '14px'}}>{message}</Text>
+      <Text sx={{ marginLeft: '0.25rem', fontSize: '14px' }}>{message}</Text>
     </Flex>
-  )
-}
+  );
+};
 
-const styles: SXStyles = {   
+const styles: SXStyles = {
   root: {
     backgroundColor: theme.colors.white,
-    width: '3rem'
+    width: '3rem',
   },
   carrotDown: {
     backgroundColor: theme.colors.white,
     transform: 'rotate(180deg)',
-    width: '3rem'
+    width: '3rem',
   },
 };
 
-export const SignersPanel: React.FC<SignersProps> = ({ maxSelection, selected, updateSelectedAccounts }) => {
+export const SignersPanel: React.FC<SignersProps> = ({
+  maxSelection,
+  selected,
+  updateSelectedAccounts,
+}) => {
   const { project } = useProject();
   const [isAvatarOpen, setIsAvatarOpen] = useState(false);
   const { accounts } = project;
 
-  const HeaderText = useMemo(() => PanelHeader(maxSelection, project.seed, selected), [maxSelection, selected, project.seed])
+  const HeaderText = useMemo(
+    () => PanelHeader(maxSelection, project.seed, selected),
+    [maxSelection, selected, project.seed],
+  );
 
   useEffect(() => {
     if (selected.length === 0 && maxSelection > 0) {
-      updateSelectedAccounts([0]) // select first signer as default
+      updateSelectedAccounts([0]); // select first signer as default
     }
-  }, [maxSelection, selected, updateSelectedAccounts])
-  
+  }, [maxSelection, selected, updateSelectedAccounts]);
+
   return (
     <SignersContainer>
-      <Flex sx={{ justifyContent: "space-between", alignItems: "center" }} onClick={() => setIsAvatarOpen(!isAvatarOpen)}>
-        {HeaderText}<Button sx={isAvatarOpen ? styles.carrotDown : styles.root} size="sm" >{CollapseOpenIcon()}</Button>
+      <Flex
+        sx={{ justifyContent: 'space-between', alignItems: 'center' }}
+        onClick={() => setIsAvatarOpen(!isAvatarOpen)}
+      >
+        {HeaderText}
+        <Button sx={isAvatarOpen ? styles.carrotDown : styles.root} size="sm">
+          {CollapseOpenIcon()}
+        </Button>
       </Flex>
       {(isAvatarOpen || selected.length === 0) && (
         <AccountPicker
@@ -99,9 +121,8 @@ export const SignersPanel: React.FC<SignersProps> = ({ maxSelection, selected, u
           selected={selected}
           onChange={updateSelectedAccounts}
           maxSelection={maxSelection}
-        />)
-      }
+        />
+      )}
     </SignersContainer>
   );
 };
-
