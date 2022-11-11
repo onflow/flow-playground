@@ -4,7 +4,7 @@ import React from 'react';
 import { Account, Project } from 'src/api/apollo/generated/graphql';
 import theme from '../theme';
 import { ChildProps } from 'src/types';
-import { Text, Badge, Box, Flex, useThemeUI } from 'theme-ui';
+import { Text, Box, Flex, useThemeUI } from 'theme-ui';
 
 interface AccountAvatarProps extends ChildProps {
   onClick: (e: any, i: number) => void;
@@ -59,8 +59,6 @@ export const AvatarList = ({ children }: ChildProps) => {
     </Flex>
   );
 };
-
-const noop = (): void => {};
 
 const AccountAvatars: React.FC<{
   multi?: boolean;

@@ -1,6 +1,5 @@
 import { default as FlowButton } from 'components/LegacyButton';
-import { useProject } from 'providers/Project/projectHooks';
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 
 import {
   FullScreenContainer,

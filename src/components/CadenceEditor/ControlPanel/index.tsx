@@ -7,7 +7,6 @@ import { ExecuteCommandRequest } from 'monaco-languageclient';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FaExclamationTriangle,
-  FaRegCheckCircle,
   FaRegTimesCircle,
   FaSpinner,
 } from 'react-icons/fa';
@@ -50,12 +49,10 @@ import {
   ActionButton,
   ArgumentsList,
   ArgumentsTitle,
-  ErrorsList,
   Hints,
 } from '../../Arguments/components';
 import {
   ControlContainer,
-  Hidable,
   HoverPanel,
   StatusMessage,
 } from '../../Arguments/styles';
