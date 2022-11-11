@@ -10,6 +10,7 @@ import React, { useState } from 'react';
 import { MockProject, SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import paths from '../../paths';
+import { useProject } from 'providers/Project/projectHooks';
 
 type Props = {
   project: MockProject;
@@ -69,11 +70,12 @@ const confirmDeleteOptions = {
 
 const ProjectListItem = ({ project }: Props) => {
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
+  const { deleteProject } = useProject();
 
-  const confirmDelete = (isConfirmed: boolean): void => {
+  const confirmDelete = async (isConfirmed: boolean): Promise<void> => {
     setShowConfirmation(false);
     if (isConfirmed) {
-      // todo: wire up actually deleting the project here
+      await deleteProject(project.id);
     }
   };
 

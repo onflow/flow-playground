@@ -33,6 +33,7 @@ export interface ProjectContextValue {
     description: string,
     readme: string,
   ) => Promise<any>;
+  deleteProject: (projectId: string) => Promise<any>;
   createContractDeployment: () => Promise<any>;
   updateSelectedContractAccount: (accountIndex: number) => void;
   updateSelectedTransactionAccounts: (accountIndexes: number[]) => void;
@@ -190,6 +191,22 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       showError();
     }
     setIsSaving(false);
+    return res;
+  };
+
+  const deleteProject = async (projectId: string) => {
+    setIsSaving(true);
+    let res;
+    try {
+      res = await mutator.deleteProject(projectId);
+      navigate(`/`);
+    } catch (e) {
+      console.error(e);
+      setIsSaving(false);
+      showError();
+    }
+    setIsSaving(false);
+    setShowProjectsSidebar(false);
     return res;
   };
 
@@ -617,6 +634,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         isExecutingAction,
         createBlankProject,
         updateProject,
+        deleteProject,
         createContractDeployment,
         updateContractTemplate,
         updateScriptTemplate,

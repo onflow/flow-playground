@@ -325,6 +325,12 @@ export const CREATE_SCRIPT_EXECUTION = gql`
   }
 `;
 
+export const DELETE_PROJECT = gql`
+  mutation DeleteProject($projectId: UUID) {
+    deleteProject(projectId: $projectId)
+  }
+`;
+
 export const SET_EXECUTION_RESULT = gql`
   mutation SetExecutionResults(
     $resultType: ResultType!

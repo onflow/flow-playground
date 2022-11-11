@@ -67,7 +67,6 @@ const ConfirmationPopup = ({
   message,
 }: ConfirmationPopupType) => {
   const closeModal = (isConfirmed: boolean) => {
-    console.log('closing');
     onClose(isConfirmed);
   };
 
