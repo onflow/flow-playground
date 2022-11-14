@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import ConfirmationPopup, { ActionsType } from './ConfirmationPopup';
 
 type InformationalPopupType = {
@@ -14,13 +14,13 @@ const InformationalPopup = ({
   onClose,
   message,
 }: InformationalPopupType) => {
-    const buttons: ActionsType[] = [
-        {
-            name: 'Confirm',
-            action: onClose,
-            args: [false],
-          },
-    ]
+  const buttons: ActionsType[] = [
+    {
+      name: 'Confirm',
+      action: onClose,
+      args: [false],
+    },
+  ];
   return (
     <ConfirmationPopup
       visible={visible}
@@ -32,4 +32,4 @@ const InformationalPopup = ({
   );
 };
 
-export default InformationalPopup
+export default InformationalPopup;
