@@ -18,7 +18,6 @@ const AccountPicker = ({
   selected,
   onChange,
   maxSelection = 4,
-  children,
 }: AccountPickerProps) => {
   const handleOnChange = (i: number, max: number) => {
     if (max === 1) {
