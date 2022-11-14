@@ -11,9 +11,11 @@ import { MockProject, SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import paths from '../../paths';
 import { useProject } from 'providers/Project/projectHooks';
+import InformationalPopup from 'components/InformationalPopup';
 
 type Props = {
   project: MockProject;
+  projectCount: number;
 };
 
 const styles: SXStyles = {
@@ -68,8 +70,14 @@ const confirmDeleteOptions = {
     'Are you sure you want to delete this project? This cannot be undone.',
 };
 
-const ProjectListItem = ({ project }: Props) => {
+const infoLastProjectOptions = {
+  title: `Unable to delete this project!`,
+  message: 'At least one playground project is required.',
+};
+
+const ProjectListItem = ({ project, projectCount }: Props) => {
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
+  const [showLastProject, setShowLastProject] = useState<boolean>(false);
   const { deleteProject } = useProject();
 
   const confirmDelete = async (isConfirmed: boolean): Promise<void> => {
@@ -82,7 +90,8 @@ const ProjectListItem = ({ project }: Props) => {
   const contextMenuOptions = [
     {
       name: 'Delete Project',
-      onClick: () => setShowConfirmation(true),
+      onClick: () =>
+        projectCount > 1 ? setShowConfirmation(true) : setShowLastProject(true),
       icon: DeleteIcon,
     },
   ];
@@ -106,6 +115,11 @@ const ProjectListItem = ({ project }: Props) => {
         onClose={confirmDelete}
         visible={showConfirmation}
         {...confirmDeleteOptions}
+      />
+      <InformationalPopup
+        onClose={setShowLastProject}
+        visible={showLastProject}
+        {...infoLastProjectOptions}
       />
       <Flex sx={headerStyles.header}>
         <Link to={paths.projectPath(project.id)} style={titleLinkStyle}>

@@ -26,7 +26,11 @@ const ProjectsList = () => {
         {projects.length === 0 && '0 Projects'}
         <Flex sx={styles.items}>
           {projects.map((project: MockProject) => (
-            <ProjectListItem project={project} key={project.id} />
+            <ProjectListItem
+              project={project}
+              key={project.id}
+              projectCount={projects.length}
+            />
           ))}
         </Flex>
       </LeftSidebarSection>

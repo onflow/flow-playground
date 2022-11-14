@@ -52,11 +52,18 @@ const popupFrames = {
   },
 };
 
+export type ActionsType = {
+  name: string;
+  action: (...args: any) => void;
+  args: any[];
+};
+
 type ConfirmationPopupType = {
   title: string;
   message: string;
   onClose: (isConfirmed: boolean) => void;
   visible: boolean;
+  actions?: ActionsType[];
 };
 
 const ConfirmationPopup = ({
@@ -64,10 +71,27 @@ const ConfirmationPopup = ({
   title,
   onClose,
   message,
+  actions = null,
 }: ConfirmationPopupType) => {
   const closeModal = (isConfirmed: boolean) => {
     onClose(isConfirmed);
   };
+
+  const buttons =
+    actions !== null
+      ? actions
+      : [
+          {
+            name: 'Confirm',
+            action: closeModal,
+            args: [true],
+          },
+          {
+            name: 'Close',
+            action: closeModal,
+            args: [false],
+          },
+        ];
 
   if (!visible) return null;
 
@@ -84,12 +108,17 @@ const ConfirmationPopup = ({
         </PopupHeader>
         <Label>{message}</Label>
         <SpaceBetween>
-          <FlowButton className="grey modal" onClick={() => closeModal(false)}>
-            Close
-          </FlowButton>
-          <FlowButton className="violet modal" onClick={() => closeModal(true)}>
-            Confirm
-          </FlowButton>
+          {buttons.map((btn) => {
+            return (
+              <FlowButton
+                key={btn.name}
+                className="grey modal"
+                onClick={() => btn.action(...btn.args)}
+              >
+                {btn.name}
+              </FlowButton>
+            );
+          })}
         </SpaceBetween>
       </PopupContainer>
       <WhiteOverlay onClick={() => closeModal(false)} />
