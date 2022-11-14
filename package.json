@@ -2,7 +2,7 @@
   "name": "flow-playground",
   "private": true,
   "engines": {
-    "node": ">=16.0.0 <17.0.0"
+    "node": ">=16.0.0 <18.0.0"
   },
   "scripts": {
     "start": "webpack-dev-server -d source-map --config webpack.config.js",
@@ -116,6 +116,11 @@
     "webpack-bundle-analyzer": "^4.6.1",
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.11.1"
+  },
+  "overrides": {
+    "handlebars-loader@^1.7.2": {
+      "loader-utils": "1.4.2"
+    }
   },
   "resolutions": {
     "property-expr": "2.0.3"
