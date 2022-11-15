@@ -10,6 +10,7 @@ import {
 export type InteractionButtonProps = {
   onClick: () => void;
   active?: boolean;
+  progress?: boolean;
   type: EntityType;
 };
 

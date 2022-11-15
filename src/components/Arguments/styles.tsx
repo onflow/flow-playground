@@ -106,6 +106,10 @@ interface ControlContainerProps {
   progress: boolean;
   showPrompt?: boolean;
 }
+interface MessageProps {
+  isOk: boolean;
+}
+
 export const ControlContainer = styled.div<ControlContainerProps>`
   display: ${({ showPrompt }) => (showPrompt ? 'block' : 'flex')};
   align-items: center;
@@ -138,7 +142,7 @@ export const ToastContainer = styled.div`
   color: ${theme.colors.darkPrimary};
 `;
 
-export const StatusMessage = styled.div`
+export const StatusMessage = styled.div<MessageProps>`
   @keyframes spin {
     from {
       transform: rotate(0deg);
