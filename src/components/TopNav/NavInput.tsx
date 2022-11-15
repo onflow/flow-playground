@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Input as ThemeUiInput, ThemeUICSSObject } from 'theme-ui';
 
-interface InputProps {
+interface NavInputProps {
   onChange?: (event: ChangeEvent) => void;
   defaultValue: string;
   sx?: ThemeUICSSObject;
@@ -12,7 +12,7 @@ interface InputProps {
   updateProjectName: any;
 }
 
-const Input = ({
+const NavInput = ({
   onChange,
   defaultValue,
   sx = {},
@@ -21,7 +21,7 @@ const Input = ({
   editing,
   toggleEditing,
   updateProjectName,
-}: InputProps) => {
+}: NavInputProps) => {
   const ref = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -57,4 +57,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default NavInput;

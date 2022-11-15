@@ -15,7 +15,7 @@ import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import { getParams } from 'util/url';
 import useKeyPress from '../../../hooks/useKeyPress';
-import FileExplorerSubMenu from './FileExplorerSubMenu';
+import { ContextMenu } from '../../ContextMenu';
 
 const styles: SXStyles = {
   root: {
@@ -277,60 +277,77 @@ const MenuList: React.FC<MenuListProps> = ({
             const inputStyles = editing.includes(i)
               ? styles.input
               : styles.inputReadOnly;
+            const submenuOptions = [
+              {
+                name: 'Edit name',
+                onClick: () => toggleEditing(i, item.title),
+            
+              },
+              {
+                name: 'Delete File',
+                onClick: (e: any) => {
+                  e.stopPropagation();
+                  onDelete(item.id);
+                }
+              }
+            ];
+
             return (
               <Flex
                 sx={isActive ? styles.selectedItem : styles.item}
                 title={item.title}
                 key={item.id}
-                onClick={(e: React.SyntheticEvent<Element, Event>) =>
-                  onSelect(e, item.id)
-                }
-                onDoubleClick={() => toggleEditing(i, item.title)}
                 data-test={dataTest}
               >
-                <Box
-                  className="menu-icon"
-                  sx={isActive ? styles.selectedIcon : styles.icon}
+                <Flex
+                  sx={{alignItems: 'center'}}
+                  onClick={(e: React.SyntheticEvent<Element, Event>) =>
+                    onSelect(e, item.id)}
                 >
-                  {getIcon(item.title)}
-                </Box>
-                {/* NOTE: Optimize this to a controlled input! */}
-                <Input
-                  editing={editing}
-                  sx={inputStyles}
-                  type="text"
-                  defaultValue={item.title}
-                  title={item.title}
-                  index={i}
-                  toggleEditing={toggleEditing}
-                  onChange={(e: any) => {
-                    if (e.target.value.length > NAME_MAX_CHARS) {
-                      isEditing.current.value = e.target.value.substr(
-                        0,
-                        NAME_MAX_CHARS - 1,
-                      );
-                    }
-                  }}
-                />
-                {
-                  // TODO: Separate button from Parent onClick
-                }
+                  <Box
+                    className="menu-icon"
+                    sx={isActive ? styles.selectedIcon : styles.icon}
+                  >
+                    {getIcon(item.title)}
+                  </Box>
+                  {/* NOTE: Optimize this to a controlled input! */}
+                  <Input
+                    editing={editing}
+                    sx={inputStyles}
+                    type="text"
+                    defaultValue={item.title}
+                    title={item.title}
+                    index={i}
+                    toggleEditing={toggleEditing}
+                    onChange={(e: any) => {
+                      if (e.target.value.length > NAME_MAX_CHARS) {
+                        isEditing.current.value = e.target.value.substr(
+                          0,
+                          NAME_MAX_CHARS - 1,
+                        );
+                      }
+                    }}
+                  />
+                </Flex>
+                {isSubMenuOpened ? (
+                  <ContextMenu
+                    options={submenuOptions}
+                    showDotDotDot={false}
+                  />
+                ): <></>}
                 <Button
                   sx={isActive ? styles.ctaButtonSelected : styles.ctaButton}
                   inline={true}
                   variant="explorer"
-                  onClick={() => setIsSubMenuOpened(!isSubMenuOpened)}
+                  onClick={() => setIsSubMenuOpened(true)}
                 >
                   <ExplorerEllipseIcon />
                 </Button>
-                {isSubMenuOpened ?? <FileExplorerSubMenu />}
+
                 {/* TODO: Duplicate file, Delete file, Update Filename userflows
                 {!editing.includes(i) && isActive && items.length > 1 && (
                   <Box
-                    onClick={(e: any) => {
-                      e.stopPropagation();
-                      onDelete(item.id);
-                    }}
+                    onClick={}
                   >
                     <FaTimes />
                   </Box>

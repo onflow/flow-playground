@@ -9,7 +9,7 @@ type ContextMenuOptionsType = {
   name: string;
   onClick: Function;
   args?: any[];
-  icon: Function;
+  icon?: Function;
 };
 
 type ContextMenuType = {
@@ -95,7 +95,7 @@ export const ContextMenu = ({ options, showDotDotDot }: ContextMenuType) => {
                 key={name}
                 onClick={() => clickOption(onClick, args)}
               >
-                {icon()}
+                {icon ?? icon()}
                 <Text>{name}</Text>
               </Button>
             ),

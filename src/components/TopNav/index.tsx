@@ -132,7 +132,7 @@ const TopNav = () => {
           onChange={(e: any) => {
             onNameInputChange(e.target.value);
           }}
-          updateProject={updateProject}
+          updateProjectName={updateProject}
         />
         {/* <ThemeUIButton variant="secondaryLegacy" onClick={onStartButtonClick}>
           <AnimatedText>Click here to start a tutorial</AnimatedText>

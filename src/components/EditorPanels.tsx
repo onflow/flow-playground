@@ -23,6 +23,11 @@ const styles: SXStyles = {
     width: '100%',
     flexDirection: 'column',
   },
+  editor: {
+    borderRadius: '8px',
+    height: '100%',
+    border: '2px solid rgba(48, 49, 209, 0.1)'
+  }
 };
 
 const EditorPanels = ({ show }: EditorPanelsProps) => {
@@ -31,7 +36,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
 
   return (
     <Flex sx={styles.root}>
-      <Flex sx={{ height: '100%' }}>
+      <Flex sx={styles.editor}>
         <Allotment vertical={true}>
           <Allotment.Pane minSize={100} preferredSize="100%">
             <CadenceEditor show={show} />
