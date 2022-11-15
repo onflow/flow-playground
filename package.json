@@ -111,6 +111,11 @@
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.11.1"
   },
+  "overrides": {
+    "handlebars-loader@^1.7.2": {
+      "loader-utils": "1.4.2"
+    }
+  },
   "resolutions": {
     "property-expr": "2.0.3"
   },
