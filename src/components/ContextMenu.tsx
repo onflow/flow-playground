@@ -32,7 +32,7 @@ const styles: SXStyles = {
     border: `1px solid ${theme.colors.borderColor}`,
     boxShadow: `0px 4px 40px rgba(0, 0, 0, 0.08)`,
     position: 'absolute',
-    zIndex: '100',
+    zIndex: '100', // todo: create zIndex constant in theme object
     margin: '0',
     right: '5px',
     bottom: '12px',
