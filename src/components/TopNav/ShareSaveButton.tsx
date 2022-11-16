@@ -1,12 +1,14 @@
 import Button from 'components/Button';
+import LinkIcon from 'components/Icons/LinkIcon';
 import AnchorIcon from 'components/Icons/AnchorIcon';
 import { useProject } from 'providers/Project/projectHooks';
-import React from 'react';
-import { FaCloudUploadAlt, FaCodeBranch } from 'react-icons/fa';
+import React, { useState } from 'react';
 import useClipboard from 'react-use-clipboard';
 import Mixpanel from 'util/mixpanel';
+import { ShareMenu } from './ShareMenu';
+import { Flex } from 'theme-ui';
 
-const ShareButton = () => {
+const ShareLinkButton = () => {
   const url = window.location.href;
   const [isCopied, setCopied] = useClipboard(url, { successDuration: 2000 });
 
@@ -18,32 +20,33 @@ const ShareButton = () => {
   return (
     <Button onClick={onClick} variant="alternate" size="sm">
       {!isCopied ? 'Share' : 'Link Copied!'}
-      <AnchorIcon />
+      <LinkIcon />
     </Button>
   );
 };
 
-const ShareSaveButton = () => {
-  const { project, isSaving, updateProject } = useProject();
+const ShareButton = () => {
+  const { project, updateProject } = useProject();
+  const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
   const hasParent = !!project.parentId;
-  const text = hasParent ? 'Fork' : 'Save';
-  const onSaveButtonClick = () =>
+  if (!hasParent) {
     updateProject(project.title, project.description, project.readme);
-
-  if (project.persist) return <ShareButton />;
+  }
 
   return (
-    <Button
-      onClick={onSaveButtonClick}
-      variant="alternate"
-      disabled={isSaving}
-      size="sm"
-      inline={true}
-    >
-      {text}
-      {hasParent ? <FaCodeBranch /> : <FaCloudUploadAlt />}
-    </Button>
+    <Flex>
+      <Button
+        onClick={() => {setIsShareMenuOpen(true)}}
+        variant="alternate"
+        size="sm"
+        inline={true}
+      >
+        Share
+        <AnchorIcon/>
+      </Button>
+      <ShareMenu/>
+    </Flex>
   );
 };
 
-export default ShareSaveButton;
+export default ShareButton;
