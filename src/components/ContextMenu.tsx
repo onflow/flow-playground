@@ -60,8 +60,6 @@ export const ContextMenu = ({ options, showEllipsis }: ContextMenuType) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const clickOption = (onClick: Function, args: any[] = []) => {
-    console.log(args);
-    console.log(onClick);
     setIsOpen(false);
     onClick(...args);
   };
