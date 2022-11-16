@@ -1,11 +1,22 @@
 import { useQuery } from '@apollo/react-hooks';
 import { GET_PROJECTS } from 'api/apollo/queries';
-import { MockProject } from 'src/types';
+import { ProjectType } from 'src/types';
 
 export default function useProjects() {
-  const { loading, error, data } = useQuery<{ projects: MockProject[] }>(
-    GET_PROJECTS,
+
+  const reload = async () => {
+    const { loading, error, data } = useQuery<{ projects: ProjectType[] }>(
+      GET_PROJECTS, { fetchPolicy: 'network-only' },
+    );
+    console.log('loading', loading, error, data)      
+  }
+
+  console.log('calling get projects', GET_PROJECTS)
+  const { loading, error, data } = useQuery<{ projects: ProjectType[] }>(
+    GET_PROJECTS, { fetchPolicy: 'network-only' },
   );
+
+  console.log('projects', loading, error, data, )
 
   const projects = data?.projects || [];
 
@@ -13,5 +24,6 @@ export default function useProjects() {
     projects,
     loading,
     error,
+    reload,
   };
 }

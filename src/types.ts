@@ -11,7 +11,7 @@ export interface ChildPropsOptional {
 
 export type SXStyles = Record<string, ThemeUICSSObject>;
 
-export type MockProject = {
+export type ProjectType = {
   id: Scalars['UUID'];
   title: string;
   contractTemplates: Template;

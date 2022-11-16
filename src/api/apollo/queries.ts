@@ -4,6 +4,7 @@ export const GET_PROJECTS = gql`
   query GetProjects {
     projects @client {
       id
+      updatedAt
       title
       contractTemplates {
         id
@@ -31,6 +32,7 @@ export const GET_PROJECT = gql`
       persist
       mutable
       parentId
+      updatedAt
       seed
       title
       description

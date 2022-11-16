@@ -82,6 +82,7 @@ export type Mutation = {
   createTransactionExecution: TransactionExecution;
   createTransactionTemplate: TransactionTemplate;
   deleteContractTemplate: Scalars['UUID'];
+  deleteProject: Scalars['UUID'];
   deleteScriptTemplate: Scalars['UUID'];
   deleteTransactionTemplate: Scalars['UUID'];
   setActiveProjectId?: Maybe<Scalars['Boolean']>;
@@ -135,6 +136,11 @@ export type MutationCreateTransactionTemplateArgs = {
 
 export type MutationDeleteContractTemplateArgs = {
   id: Scalars['UUID'];
+  projectId: Scalars['UUID'];
+};
+
+
+export type MutationDeleteProjectArgs = {
   projectId: Scalars['UUID'];
 };
 
@@ -288,6 +294,7 @@ export type Project = {
   seed: Scalars['Int'];
   version: Scalars['Version'];
   persist?: Maybe<Scalars['Boolean']>;
+  updatedAt: Scalars['String'];
   mutable?: Maybe<Scalars['Boolean']>;
   numberOfAccounts: Scalars['Int'];
   accounts?: Maybe<Array<Account>>;
@@ -297,6 +304,11 @@ export type Project = {
   scriptExecutions?: Maybe<Array<ScriptExecution>>;
   contractTemplates?: Maybe<Array<ContractTemplate>>;
   contractDeployments?: Maybe<Array<ContractDeployment>>;
+};
+
+export type ProjectList = {
+  __typename?: 'ProjectList';
+  projects?: Maybe<Array<Project>>;
 };
 
 export type Query = {
@@ -309,6 +321,7 @@ export type Query = {
   localProject?: Maybe<Project>;
   playgroundInfo: PlaygroundInfo;
   project: Project;
+  projectList: ProjectList;
   projects: Array<Maybe<Project>>;
   scriptTemplate: ScriptTemplate;
   transactionTemplate: TransactionTemplate;
@@ -710,6 +723,16 @@ export type CreateScriptExecutionMutation = (
   ) }
 );
 
+export type DeleteProjectMutationVariables = Exact<{
+  projectId: Scalars['UUID'];
+}>;
+
+
+export type DeleteProjectMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteProject'>
+);
+
 export type SetExecutionResultsMutationVariables = Exact<{
   resultType: ResultType;
   rawResult: Scalars['RawExecutionResult'];
@@ -739,7 +762,7 @@ export type GetProjectsQuery = (
   { __typename?: 'Query' }
   & { projects: Array<Maybe<(
     { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'title'>
+    & Pick<Project, 'id' | 'updatedAt' | 'title'>
     & { contractTemplates?: Maybe<Array<(
       { __typename?: 'ContractTemplate' }
       & Pick<ContractTemplate, 'id' | 'script' | 'title'>
@@ -762,7 +785,7 @@ export type GetProjectQuery = (
   { __typename?: 'Query' }
   & { project: (
     { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'persist' | 'mutable' | 'parentId' | 'seed' | 'title' | 'description' | 'readme'>
+    & Pick<Project, 'id' | 'persist' | 'mutable' | 'parentId' | 'updatedAt' | 'seed' | 'title' | 'description' | 'readme'>
     & { accounts?: Maybe<Array<(
       { __typename?: 'Account' }
       & Pick<Account, 'address' | 'deployedContracts' | 'state'>
@@ -1568,6 +1591,36 @@ export function useCreateScriptExecutionMutation(baseOptions?: ApolloReactHooks.
 export type CreateScriptExecutionMutationHookResult = ReturnType<typeof useCreateScriptExecutionMutation>;
 export type CreateScriptExecutionMutationResult = ApolloReactCommon.MutationResult<CreateScriptExecutionMutation>;
 export type CreateScriptExecutionMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateScriptExecutionMutation, CreateScriptExecutionMutationVariables>;
+export const DeleteProjectDocument = gql`
+    mutation DeleteProject($projectId: UUID!) {
+  deleteProject(projectId: $projectId)
+}
+    `;
+export type DeleteProjectMutationFn = ApolloReactCommon.MutationFunction<DeleteProjectMutation, DeleteProjectMutationVariables>;
+
+/**
+ * __useDeleteProjectMutation__
+ *
+ * To run a mutation, you first call `useDeleteProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteProjectMutation, { data, loading, error }] = useDeleteProjectMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useDeleteProjectMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteProjectMutation, DeleteProjectMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteProjectMutation, DeleteProjectMutationVariables>(DeleteProjectDocument, baseOptions);
+      }
+export type DeleteProjectMutationHookResult = ReturnType<typeof useDeleteProjectMutation>;
+export type DeleteProjectMutationResult = ApolloReactCommon.MutationResult<DeleteProjectMutation>;
+export type DeleteProjectMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteProjectMutation, DeleteProjectMutationVariables>;
 export const SetExecutionResultsDocument = gql`
     mutation SetExecutionResults($resultType: ResultType!, $rawResult: RawExecutionResult!, $label: String) {
   updateCachedExecutionResults(
@@ -1638,6 +1691,7 @@ export const GetProjectsDocument = gql`
     query GetProjects {
   projects @client {
     id
+    updatedAt
     title
     contractTemplates {
       id
@@ -1689,6 +1743,7 @@ export const GetProjectDocument = gql`
     persist
     mutable
     parentId
+    updatedAt
     seed
     title
     description

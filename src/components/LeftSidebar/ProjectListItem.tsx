@@ -7,14 +7,14 @@ import ScriptIcon from 'components/Icons/ScriptIcon';
 import TransactionIcon from 'components/Icons/TransactionIcon';
 import { formatDistance } from 'date-fns';
 import React, { useState } from 'react';
-import { MockProject, SXStyles } from 'src/types';
+import { ProjectType, SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import paths from '../../paths';
 import { useProject } from 'providers/Project/projectHooks';
 import InformationalPopup from 'components/InformationalPopup';
 
 type Props = {
-  project: MockProject;
+  project: ProjectType;
   projectCount: number;
 };
 

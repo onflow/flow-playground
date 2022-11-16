@@ -1,6 +1,6 @@
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import gql from 'graphql-tag';
-import { MockProject } from 'src/types';
+import { ProjectType } from 'src/types';
 import { normalizeInteractionResponse } from 'util/normalize-interaction-response';
 import {
   ClearExecutionResultsMutationVariables,
@@ -55,7 +55,7 @@ const localResolvers = {
       _variables: unknown,
       _context: unknown,
       _info: unknown,
-    ): MockProject[] => {
+    ): ProjectType[] => {
       return [1, 2, 3, 4, 5, 6].map((id: Scalars['UUID']) => {
         return {
           __typename: 'Project',
