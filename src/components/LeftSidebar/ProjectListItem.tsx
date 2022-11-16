@@ -125,7 +125,7 @@ const ProjectListItem = ({ project, projectCount }: Props) => {
         <Link to={paths.projectPath(project.id)} style={titleLinkStyle}>
           <Box sx={styles.title}>{project.title}</Box>
         </Link>
-        <ContextMenu showDotDotDot={true} options={contextMenuOptions} />
+        <ContextMenu showEllipsis={true} options={contextMenuOptions} />
       </Flex>
 
       <Flex sx={styles.details}>
@@ -133,19 +133,19 @@ const ProjectListItem = ({ project, projectCount }: Props) => {
           <span title="Contracts">
             <ContractIcon />
           </span>
-          {project.contractTemplateCount}
+          {project.contractTemplates.length}
         </Flex>
         <Flex sx={styles.detail}>
           <span title="Transactions">
             <TransactionIcon />
           </span>
-          {project.transactionTemplateCount}
+          {project.transactionTemplates.length}
         </Flex>
         <Flex sx={styles.detail}>
           <span title="Scripts">
             <ScriptIcon />
           </span>
-          {project.scriptTemplateCount}
+          {project.scriptTemplates.length}
         </Flex>
       </Flex>
 

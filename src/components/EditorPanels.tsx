@@ -26,8 +26,8 @@ const styles: SXStyles = {
   editor: {
     borderRadius: '8px',
     height: '100%',
-    border: '2px solid rgba(48, 49, 209, 0.1)'
-  }
+    border: '2px solid rgba(48, 49, 209, 0.1)',
+  },
 };
 
 const EditorPanels = ({ show }: EditorPanelsProps) => {

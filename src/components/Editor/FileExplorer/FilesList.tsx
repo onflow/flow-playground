@@ -4,11 +4,12 @@ import ExplorerScriptIcon from 'components/Icons/ExplorerScriptIcon';
 import ExplorerTransactionIcon from 'components/Icons/ExplorerTransactionIcon';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import React from 'react';
+import React, { useState } from 'react';
 import { ChildProps, SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import { isUUUID, LOCAL_PROJECT_ID } from 'util/url';
 import MenuList from './MenuList';
+import InformationalPopup from '../../InformationalPopup';
 
 type FileListProps = {
   isExplorerCollapsed: boolean;
@@ -62,10 +63,47 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
   } = useProject();
 
   const projectPath = isUUUID(project.id) ? project.id : LOCAL_PROJECT_ID;
-
+  const [showDeleteError, setShowDeleteError] = useState<boolean>(false);
   const DynamicIcon = ({ children, isSelected }: DynamicIconProps) => {
     return <Box sx={isSelected ? styles.selected : {}}>{children}</Box>;
   };
+
+  const handleDelete = async ({
+    title,
+    templateId,
+  }: {
+    templateId: string;
+    title: string;
+  }) => {
+    switch (title) {
+      case 'Transaction':
+        if (project.transactionTemplates.length > 1) {
+          await deleteTransactionTemplate(templateId);
+          const id = project.transactionTemplates[0].id;
+          navigate(`/${projectPath}?type=tx&id=${id}`);
+        } else {
+          setShowDeleteError(true);
+        }
+      case 'Script':
+        if (project.scriptTemplates.length > 1) {
+          await deleteScriptTemplate(templateId);
+          const id = project.scriptTemplates[0].id;
+          navigate(`/${projectPath}?type=script&id=${id}`);
+        } else {
+          setShowDeleteError(true);
+        }
+      default:
+        if (project.contractTemplates.length > 1) {
+          await deleteContractTemplate(templateId);
+          const id = project.contractTemplates[0].id;
+          navigate(`/${projectPath}?type=contract&id=${id}`);
+        } else {
+          setShowDeleteError(true);
+        }
+    }
+    return;
+  };
+
   const getListContent = () => {
     if (isExplorerCollapsed) {
       return (
@@ -98,11 +136,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           onUpdate={(_templateId: string, script: string, title: string) => {
             updateContractTemplate(script, title);
           }}
-          onDelete={async (templateId: string) => {
-            await deleteContractTemplate(templateId);
-            const id = project.contractTemplates[0].id;
-            navigate(`/${projectPath}?type=tx&id=${id}`);
-          }}
+          onDelete={handleDelete}
           onInsert={async () => {
             const res = await mutator.createContractTemplate(
               '',
@@ -123,11 +157,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           onUpdate={(templateId: string, script: string, title: string) => {
             updateTransactionTemplate(templateId, script, title);
           }}
-          onDelete={async (templateId: string) => {
-            await deleteTransactionTemplate(templateId);
-            const id = project.transactionTemplates[0].id;
-            navigate(`/${projectPath}?type=tx&id=${id}`);
-          }}
+          onDelete={handleDelete}
           onInsert={async () => {
             const res = await mutator.createTransactionTemplate(
               '',
@@ -148,17 +178,19 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           onUpdate={(templateId: string, script: string, title: string) => {
             updateScriptTemplate(templateId, script, title);
           }}
-          onDelete={async (templateId: string) => {
-            await deleteScriptTemplate(templateId);
-            const id = project.scriptTemplates[0].id;
-            navigate(`/${projectPath}?type=script&id=${id}`);
-          }}
+          onDelete={handleDelete}
           onInsert={async () => {
             const res = await mutator.createScriptTemplate('', `New Script`);
             navigate(
               `/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}`,
             );
           }}
+        />
+        <InformationalPopup
+          visible={showDeleteError}
+          title="Unable to Delete file"
+          onClose={() => setShowDeleteError(false)}
+          message="Project requires at least 1 Script, Transaction, and Contract file. Please create a new file before deleting this one."
         />
       </>
     );

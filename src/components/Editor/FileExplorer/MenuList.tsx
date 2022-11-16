@@ -10,7 +10,13 @@ import ExplorerTransactionIcon from 'components/Icons/ExplorerTransactionIcon';
 import Input from 'components/ExplorerInput';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import React, {
+  createRef,
+  SyntheticEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import { getParams } from 'util/url';
@@ -136,21 +142,6 @@ const styles: SXStyles = {
     pointerEvents: 'none',
     fontFamily: 'inherit',
   },
-  ctaButton: {
-    visibility: 'hidden',
-    alignSelf: 'baseline',
-    padding: '0px 8px 0px 0px',
-    '&:hover': {
-      background: 'none',
-    },
-  },
-  ctaButtonSelected: {
-    alignSelf: 'baseline',
-    padding: '0px 8px 0px 0px',
-    '&:hover': {
-      background: 'none',
-    },
-  },
 };
 
 type MenuListProps = {
@@ -176,13 +167,12 @@ const MenuList: React.FC<MenuListProps> = ({
   onDelete,
 }) => {
   const { active } = useProject();
-  const isEditing = useRef<HTMLInputElement>();
+  const isEditing = createRef<HTMLInputElement>();
   const [editing, setEditing] = useState([]);
   const enterPressed = useKeyPress('Enter');
   const escapePressed = useKeyPress('Escape');
   const [isInserting, setIsInserting] = useState(false);
   const [isFileShuttered, setIsFileShuttered] = useState(false);
-  const [isSubMenuOpened, setIsSubMenuOpened] = useState(false);
 
   const toggleFileShutter = () => {
     setIsFileShuttered(!isFileShuttered);
@@ -281,15 +271,13 @@ const MenuList: React.FC<MenuListProps> = ({
               {
                 name: 'Edit name',
                 onClick: () => toggleEditing(i, item.title),
-            
               },
               {
                 name: 'Delete File',
-                onClick: (e: any) => {
-                  e.stopPropagation();
-                  onDelete(item.id);
-                }
-              }
+                onClick: () => {
+                  onDelete({title: item.title, templateId: item.id})
+                },
+              },
             ];
 
             return (
@@ -300,9 +288,10 @@ const MenuList: React.FC<MenuListProps> = ({
                 data-test={dataTest}
               >
                 <Flex
-                  sx={{alignItems: 'center'}}
+                  sx={{ alignItems: 'center' }}
                   onClick={(e: React.SyntheticEvent<Element, Event>) =>
-                    onSelect(e, item.id)}
+                    onSelect(e, item.id)
+                  }
                 >
                   <Box
                     className="menu-icon"
@@ -329,22 +318,9 @@ const MenuList: React.FC<MenuListProps> = ({
                     }}
                   />
                 </Flex>
-                {isSubMenuOpened ? (
-                  <ContextMenu
-                    options={submenuOptions}
-                    showDotDotDot={false}
-                  />
-                ): <></>}
-                <Button
-                  sx={isActive ? styles.ctaButtonSelected : styles.ctaButton}
-                  inline={true}
-                  variant="explorer"
-                  onClick={() => setIsSubMenuOpened(true)}
-                >
-                  <ExplorerEllipseIcon />
-                </Button>
+                <ContextMenu options={submenuOptions} showEllipsis={isActive} />
 
-                {/* TODO: Duplicate file, Delete file, Update Filename userflows
+                {/* TODO: Delete file, Update Filename userflows
                 {!editing.includes(i) && isActive && items.length > 1 && (
                   <Box
                     onClick={}
