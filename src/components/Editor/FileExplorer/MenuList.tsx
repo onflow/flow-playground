@@ -275,7 +275,7 @@ const MenuList: React.FC<MenuListProps> = ({
               {
                 name: 'Delete File',
                 onClick: () => {
-                  onDelete({title: item.title, templateId: item.id})
+                  onDelete({ title: item.title, templateId: item.id });
                 },
               },
             ];
