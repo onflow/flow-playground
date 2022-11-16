@@ -63,7 +63,6 @@ export default function useGetProject(
 } {
   const isNewProject = projectId == null;
 
-  console.log('GET_PROJECT, useGetProject', GET_PROJECT)
   const { loading, data: remoteData } = useQuery(GET_PROJECT, {
     variables: { projectId: projectId },
     // skip remote query if this is a new project

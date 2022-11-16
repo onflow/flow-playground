@@ -16,10 +16,7 @@ const styles: SXStyles = {
 };
 
 const ProjectsList = () => {
-  const { projects, loading, error, reload } = useProjects();
-
-  console.log('reloading ....')
-  reload();
+  const { projects, loading, error } = useProjects();
 
   if (loading || !!error) return null;
 
