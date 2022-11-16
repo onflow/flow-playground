@@ -760,20 +760,23 @@ export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetProjectsQuery = (
   { __typename?: 'Query' }
-  & { projects: Array<Maybe<(
-    { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'updatedAt' | 'title'>
-    & { contractTemplates?: Maybe<Array<(
-      { __typename?: 'ContractTemplate' }
-      & Pick<ContractTemplate, 'id' | 'script' | 'title'>
-    )>>, transactionTemplates?: Maybe<Array<(
-      { __typename?: 'TransactionTemplate' }
-      & Pick<TransactionTemplate, 'id' | 'script' | 'title'>
-    )>>, scriptTemplates?: Maybe<Array<(
-      { __typename?: 'ScriptTemplate' }
-      & Pick<ScriptTemplate, 'id' | 'script' | 'title'>
+  & { projectList: (
+    { __typename?: 'ProjectList' }
+    & { projects?: Maybe<Array<(
+      { __typename?: 'Project' }
+      & Pick<Project, 'id' | 'updatedAt' | 'title'>
+      & { contractTemplates?: Maybe<Array<(
+        { __typename?: 'ContractTemplate' }
+        & Pick<ContractTemplate, 'id' | 'script' | 'title'>
+      )>>, transactionTemplates?: Maybe<Array<(
+        { __typename?: 'TransactionTemplate' }
+        & Pick<TransactionTemplate, 'id' | 'script' | 'title'>
+      )>>, scriptTemplates?: Maybe<Array<(
+        { __typename?: 'ScriptTemplate' }
+        & Pick<ScriptTemplate, 'id' | 'script' | 'title'>
+      )>> }
     )>> }
-  )>> }
+  ) }
 );
 
 export type GetProjectQueryVariables = Exact<{
@@ -1689,24 +1692,26 @@ export type ClearExecutionResultsMutationResult = ApolloReactCommon.MutationResu
 export type ClearExecutionResultsMutationOptions = ApolloReactCommon.BaseMutationOptions<ClearExecutionResultsMutation, ClearExecutionResultsMutationVariables>;
 export const GetProjectsDocument = gql`
     query GetProjects {
-  projects @client {
-    id
-    updatedAt
-    title
-    contractTemplates {
+  projectList {
+    projects {
       id
-      script
+      updatedAt
       title
-    }
-    transactionTemplates {
-      id
-      script
-      title
-    }
-    scriptTemplates {
-      id
-      script
-      title
+      contractTemplates {
+        id
+        script
+        title
+      }
+      transactionTemplates {
+        id
+        script
+        title
+      }
+      scriptTemplates {
+        id
+        script
+        title
+      }
     }
   }
 }

@@ -95,7 +95,7 @@ const ProjectListItem = ({ project, projectCount }: Props) => {
       icon: DeleteIcon,
     },
   ];
-  const timeAgo = formatDistance(new Date(project.lastSavedAt), new Date(), {
+  const timeAgo = formatDistance(new Date(project.updatedAt), new Date(), {
     addSuffix: true,
   });
 
@@ -151,7 +151,7 @@ const ProjectListItem = ({ project, projectCount }: Props) => {
 
       <Box
         sx={styles.lastSaved}
-        title={new Date(project.lastSavedAt).toISOString()}
+        title={new Date(project.updatedAt).toISOString()}
       >
         Last saved {timeAgo}
       </Box>

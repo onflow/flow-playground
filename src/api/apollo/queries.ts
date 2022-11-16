@@ -2,27 +2,29 @@ import gql from 'graphql-tag';
 
 export const GET_PROJECTS = gql`
   query GetProjects {
-    projects @client {
-      id
-      updatedAt
-      title
-      contractTemplates {
-        id
-        script
-        title
+    projectList {
+      projects {
+          id
+          updatedAt
+          title
+          contractTemplates {
+            id
+            script
+            title
+          }
+          transactionTemplates {
+            id
+            script
+            title
+          }
+          scriptTemplates {
+            id
+            script
+            title
+          }
+        }
       }
-      transactionTemplates {
-        id
-        script
-        title
-      }
-      scriptTemplates {
-        id
-        script
-        title
-      }
-    }
-  }
+    }  
 `;
 
 export const GET_PROJECT = gql`
