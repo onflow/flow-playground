@@ -17,6 +17,7 @@ import {
   CREATE_TRANSACTION_EXECUTION,
   CREATE_TRANSACTION_TEMPLATE,
   DELETE_CONTRACT_TEMPLATE,
+  DELETE_PROJECT,
   DELETE_SCRIPT_TEMPLATE,
   DELETE_TRANSACTION_TEMPLATE,
   SAVE_PROJECT,
@@ -225,6 +226,23 @@ export default class ProjectMutator {
         project: newProject,
       },
     });
+  }
+
+  async deleteProject(projectId: string) {
+    if (this.isLocal) {
+      return; // nothing to do
+    }
+
+    const res = await this.client.mutate({
+      mutation: DELETE_PROJECT,
+      variables: {
+        projectId,
+      },
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
+    });
+    return res;
   }
 
   async updateTransactionTemplate(

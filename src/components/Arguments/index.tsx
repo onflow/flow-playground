@@ -9,7 +9,7 @@ import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useRef, useState } from 'react';
 import { AiFillCloseCircle } from 'react-icons/ai';
-import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
+import { FaRegTimesCircle } from 'react-icons/fa';
 import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 
 import { ArgumentsProps } from 'components/Arguments/types';
@@ -26,7 +26,6 @@ import {
   ActionButton,
   ArgumentsList,
   ArgumentsTitle,
-  ErrorsList,
   Hints,
 } from './components';
 import { SignersPanel } from 'components/SignersPanel';

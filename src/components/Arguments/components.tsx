@@ -8,6 +8,7 @@ import {
   FaArrowCircleRight,
   FaCaretSquareDown,
   FaCaretSquareUp,
+  FaSpinner,
 } from 'react-icons/fa';
 import { CadenceProblem } from 'util/language-syntax-errors';
 import theme from '../../theme';
@@ -249,6 +250,7 @@ const getActionButtonTestTag = (type: EntityType) => {
 export const ActionButton: React.FC<InteractionButtonProps> = ({
   type,
   active = true,
+  progress = false,
   onClick,
 }: InteractionButtonProps) => {
   const {
@@ -264,7 +266,7 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
     <Controls>
       <PanelButton
         onClick={onClick}
-        Icon={FaArrowCircleRight}
+        Icon={progress ? FaSpinner : FaArrowCircleRight}
         disabled={isSaving || !active || code.length === 0}
         hideDisabledState={isSaving && !isExecutingAction}
         data-test={getActionButtonTestTag(type)}
