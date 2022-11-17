@@ -15,6 +15,8 @@ import { Button as ThemeUIButton, Flex } from 'theme-ui';
 import Mixpanel from 'util/mixpanel';
 import ShareSaveButton from './ShareSaveButton';
 import ExternalNavLinks from './TopNavButton';
+import LearnCadenceIcon from 'components/Icons/LearnCadenceIcon';
+import { ShareMenu } from './ShareMenu';
 
 const styles: SXStyles = {
   root: {
@@ -144,15 +146,15 @@ const TopNav = () => {
         {!!project && (
           <>
             <Button
-              onClick={() => setShowExport(true)}
-              variant="secondaryLegacy"
+              onClick={() => onStartButtonClick()}
+              variant="explorer"
               size="sm"
               inline={true}
             >
-              Export
-              <FaArrowAltCircleDown />
+              <LearnCadenceIcon />
+              Learn Cadence
             </Button>
-            <ShareSaveButton />
+            <ShareMenu />
           </>
         )}
       </Flex>

@@ -7,6 +7,7 @@ import useClipboard from 'react-use-clipboard';
 import Mixpanel from 'util/mixpanel';
 import { ShareMenu } from './ShareMenu';
 import { Flex } from 'theme-ui';
+import ShareIcon from 'components/Icons/ShareIcon';
 
 const ShareLinkButton = () => {
   const url = window.location.href;
@@ -28,10 +29,6 @@ const ShareLinkButton = () => {
 const ShareButton = () => {
   const { project, updateProject } = useProject();
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
-  const hasParent = !!project.parentId;
-  if (!hasParent) {
-    updateProject(project.title, project.description, project.readme);
-  }
 
   return (
     <Flex>
@@ -42,7 +39,7 @@ const ShareButton = () => {
         inline={true}
       >
         Share
-        <AnchorIcon/>
+        {isShareMenuOpen ? <AnchorIcon/> : <ShareIcon/>}
       </Button>
       <ShareMenu/>
     </Flex>
