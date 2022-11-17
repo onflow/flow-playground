@@ -14,14 +14,12 @@ type FileExplorerProps = {
 
 const styles: SXStyles = {
   root: {
-    background: ' #FFFFFF',
     flexDirection: 'row',
     display: 'flex',
     gridArea: 'sidebar',
     overflowY: 'auto',
   },
   collapsedRoot: {
-    background: ' #FFFFFF',
     display: 'flex',
     flexDirection: 'column',
     gridArea: 'sidebar',

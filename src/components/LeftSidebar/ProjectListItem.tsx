@@ -7,14 +7,14 @@ import ScriptIcon from 'components/Icons/ScriptIcon';
 import TransactionIcon from 'components/Icons/TransactionIcon';
 import { formatDistance } from 'date-fns';
 import React, { useState } from 'react';
-import { MockProject, SXStyles } from 'src/types';
+import { ProjectType, SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import paths from '../../paths';
 import { useProject } from 'providers/Project/projectHooks';
 import InformationalPopup from 'components/InformationalPopup';
 
 type Props = {
-  project: MockProject;
+  project: ProjectType;
   projectCount: number;
 };
 
@@ -95,7 +95,7 @@ const ProjectListItem = ({ project, projectCount }: Props) => {
       icon: DeleteIcon,
     },
   ];
-  const timeAgo = formatDistance(new Date(project.lastSavedAt), new Date(), {
+  const timeAgo = formatDistance(new Date(project.updatedAt), new Date(), {
     addSuffix: true,
   });
 
@@ -125,7 +125,7 @@ const ProjectListItem = ({ project, projectCount }: Props) => {
         <Link to={paths.projectPath(project.id)} style={titleLinkStyle}>
           <Box sx={styles.title}>{project.title}</Box>
         </Link>
-        <ContextMenu showDotDotDot={true} options={contextMenuOptions} />
+        <ContextMenu showEllipsis={true} options={contextMenuOptions} />
       </Flex>
 
       <Flex sx={styles.details}>
@@ -133,25 +133,25 @@ const ProjectListItem = ({ project, projectCount }: Props) => {
           <span title="Contracts">
             <ContractIcon />
           </span>
-          {project.contractTemplateCount}
+          {project.contractTemplates.length}
         </Flex>
         <Flex sx={styles.detail}>
           <span title="Transactions">
             <TransactionIcon />
           </span>
-          {project.transactionTemplateCount}
+          {project.transactionTemplates.length}
         </Flex>
         <Flex sx={styles.detail}>
           <span title="Scripts">
             <ScriptIcon />
           </span>
-          {project.scriptTemplateCount}
+          {project.scriptTemplates.length}
         </Flex>
       </Flex>
 
       <Box
         sx={styles.lastSaved}
-        title={new Date(project.lastSavedAt).toISOString()}
+        title={new Date(project.updatedAt).toISOString()}
       >
         Last saved {timeAgo}
       </Box>
