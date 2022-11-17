@@ -19,7 +19,7 @@ const LeftSidebar = () => {
         <NewProjectButton
           label="Create New Project"
           size="md"
-          variant="secondary"
+          variant="primary"
           delayTooltipShow={300} // Wait for sidebar animation to complete
         />
       </Box>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockProject, SXStyles } from 'src/types';
+import { ProjectType, SXStyles } from 'src/types';
 import { Flex } from 'theme-ui';
 import useProjects from '../../hooks/useProjects';
 import LeftSidebarSection from './LeftSidebarSection';
@@ -25,7 +25,7 @@ const ProjectsList = () => {
       <LeftSidebarSection title="Projects">
         {projects.length === 0 && '0 Projects'}
         <Flex sx={styles.items}>
-          {projects.map((project: MockProject) => (
+          {projects.map((project: ProjectType) => (
             <ProjectListItem
               project={project}
               key={project.id}
