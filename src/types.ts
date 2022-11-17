@@ -11,13 +11,17 @@ export interface ChildPropsOptional {
 
 export type SXStyles = Record<string, ThemeUICSSObject>;
 
-export type MockProject = {
+export type ProjectListType = {
+    projects: ProjectType[];
+}
+
+export type ProjectType = {
   id: Scalars['UUID'];
   title: string;
-  contractTemplates: Template[];
-  transactionTemplates: Template[];
-  scriptTemplates: Template[];
-  lastSavedAt: string;
+  contractTemplates: Template;
+  transactionTemplates: Template;
+  scriptTemplates: Template;
+  updatedAt: string;
 };
 
 export type Template = {

@@ -1,6 +1,6 @@
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import gql from 'graphql-tag';
-import { MockProject } from 'src/types';
+import { ProjectType } from 'src/types';
 import { normalizeInteractionResponse } from 'util/normalize-interaction-response';
 import {
   ClearExecutionResultsMutationVariables,
@@ -49,25 +49,6 @@ function getResultTypeFragment(resultType: ResultType) {
 
 const localResolvers = {
   Query: {
-    // Mocked projects query
-    projects: (
-      _parent: unknown,
-      _variables: unknown,
-      _context: unknown,
-      _info: unknown,
-    ): MockProject[] => {
-      return [1, 2, 3, 4, 5, 6].map((id: Scalars['UUID']) => {
-        return {
-          __typename: 'Project',
-          id,
-          title: 'Untitled Project',
-          contractTemplates: [{ id: 0, title: 'contract', script: '' }],
-          transactionTemplates: [{ id: 0, title: 'transaction', script: '' }],
-          scriptTemplates: [{ id: 0, title: 'script', script: '' }],
-          lastSavedAt: new Date().toISOString(),
-        };
-      });
-    },
     cachedExecutionResults: (
       _root: any,
       _: any,

@@ -326,7 +326,7 @@ export const CREATE_SCRIPT_EXECUTION = gql`
 `;
 
 export const DELETE_PROJECT = gql`
-  mutation DeleteProject($projectId: UUID) {
+  mutation DeleteProject($projectId: UUID!) {
     deleteProject(projectId: $projectId)
   }
 `;
