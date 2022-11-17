@@ -426,6 +426,7 @@ export default class ProjectMutator {
             (template) => template.id !== templateId,
           ),
         },
+        persist: true,
       },
     });
 
@@ -462,6 +463,7 @@ export default class ProjectMutator {
             (template) => template.id !== templateId,
           ),
         },
+        persist: true,
       },
     });
 
@@ -683,22 +685,23 @@ export default class ProjectMutator {
       },
     });
 
-    // const project = this.getProject();
+    const project = this.getProject();
 
-    // this.client.writeQuery({
-    //   query: GET_PROJECT,
-    //   variables: {
-    //     projectId: project.id,
-    //   },
-    //   data: {
-    //     project: {
-    //       ...project,
-    //       contractTemplates: project.contractTemplates.filter(
-    //         (template) => template.id !== templateId,
-    //       ),
-    //     },
-    //   },
-    // });
+    this.client.writeQuery({
+      query: GET_PROJECT,
+      variables: {
+        projectId: project.id,
+      },
+      data: {
+        project: {
+          ...project,
+          contractTemplates: project.contractTemplates.filter(
+            (template) => template.id !== templateId,
+          ),
+        },
+        persist: true,
+      },
+    });
 
     return res;
   }

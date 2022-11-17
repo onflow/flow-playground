@@ -9,12 +9,12 @@ type ContextMenuOptionsType = {
   name: string;
   onClick: Function;
   args?: any[];
-  icon: Function;
+  icon?: Function | undefined;
 };
 
 type ContextMenuType = {
   options: ContextMenuOptionsType[];
-  showDotDotDot: boolean;
+  showEllipsis: boolean;
 };
 
 const styles: SXStyles = {
@@ -22,16 +22,20 @@ const styles: SXStyles = {
     margin: '0',
     width: 'unset',
   },
-  menu: {
+  menuRelative: {
+    position: 'relative',
+  },
+  menuAbsolute: {
     display: 'flex',
     flexDirection: 'column',
     borderRadius: '8px',
     border: `1px solid ${theme.colors.borderColor}`,
     boxShadow: `0px 4px 40px rgba(0, 0, 0, 0.08)`,
     position: 'absolute',
-    zIndex: '11',
-    left: '150px',
+    zIndex: '100', // todo: create zIndex constant in theme object
     margin: '0',
+    right: '5px',
+    bottom: '12px',
     background: theme.colors.white,
     padding: '1rem',
   },
@@ -52,12 +56,19 @@ const styles: SXStyles = {
   },
 };
 
-export const ContextMenu = ({ options, showDotDotDot }: ContextMenuType) => {
+export const ContextMenu = ({ options, showEllipsis }: ContextMenuType) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const clickOption = (onClick: Function, args: any[] = []) => {
     setIsOpen(false);
     onClick(...args);
+  };
+
+  const getIcon = (icon: Function) => {
+    if (icon) {
+      return icon();
+    }
+    return;
   };
 
   const ref = useRef(null);
@@ -74,7 +85,7 @@ export const ContextMenu = ({ options, showDotDotDot }: ContextMenuType) => {
     };
   }, []);
 
-  if (!showDotDotDot) return null;
+  if (!showEllipsis) return null;
 
   return (
     <Container sx={styles.container} ref={ref}>
@@ -87,19 +98,21 @@ export const ContextMenu = ({ options, showDotDotDot }: ContextMenuType) => {
         {ExplorerEllipseIcon()}
       </Button>
       {isOpen && (
-        <Flex sx={styles.menu}>
-          {options.map(
-            ({ icon, name, onClick, args }: ContextMenuOptionsType) => (
-              <Button
-                sx={styles.ctaOption}
-                key={name}
-                onClick={() => clickOption(onClick, args)}
-              >
-                {icon()}
-                <Text>{name}</Text>
-              </Button>
-            ),
-          )}
+        <Flex sx={styles.menuRelative}>
+          <Flex sx={styles.menuAbsolute}>
+            {options.map(
+              ({ icon, name, onClick, args }: ContextMenuOptionsType) => (
+                <Button
+                  sx={styles.ctaOption}
+                  key={name}
+                  onClick={() => clickOption(onClick, args)}
+                >
+                  {getIcon(icon)}
+                  <Text>{name}</Text>
+                </Button>
+              ),
+            )}
+          </Flex>
         </Flex>
       )}
     </Container>
