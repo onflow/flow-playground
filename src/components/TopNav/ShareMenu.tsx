@@ -9,6 +9,7 @@ import theme from '../../theme';
 import AnchorIcon from 'components/Icons/AnchorIcon';
 import ShareIcon from 'components/Icons/ShareIcon';
 import InfoIcon from 'components/Icons/InfoIcon';
+import { useProject } from 'providers/Project/projectHooks';
 
 
 const styles: SXStyles = {
@@ -66,9 +67,11 @@ export const ShareMenu = () => {
   const url = window.location.href;
   const [isCopied, setCopied] = useClipboard(url, { successDuration: 2000 });
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { project } = useProject();
 
-  // placeholder for flag if Project is saved. pass in through project hook or as prop
-  const isSaved = true;
+  //console.log('share project', project?.persist)
+  // todo: verify Project persist is true when project is saved.
+  const isSaved = project.persist;
 
   const copyLink = () => {
     setCopied();

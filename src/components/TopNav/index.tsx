@@ -16,6 +16,7 @@ import Mixpanel from 'util/mixpanel';
 import ExternalNavLinks from './TopNavButton';
 import LearnCadenceIcon from 'components/Icons/LearnCadenceIcon';
 import { ShareMenu } from './ShareMenu';
+import { SaveButton } from './SaveButton';
 
 const styles: SXStyles = {
   root: {
@@ -154,6 +155,7 @@ const TopNav = () => {
               Learn Cadence
             </Button>
             <ShareMenu />
+            <SaveButton />
           </>
         )}
       </Flex>

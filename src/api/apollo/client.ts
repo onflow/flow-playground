@@ -29,6 +29,7 @@ const client = new ApolloClient({
 
 cache.writeData({
   data: {
+    localProject: null,
     activeProjectId: null,
     activeProject: false,
     cachedExecutionResults: {

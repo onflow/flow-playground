@@ -5,6 +5,7 @@ import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
 import React, { createContext, useState } from 'react';
 import { ChildProps } from 'src/types';
 import { getParams } from 'util/url';
+import { createDefaultProject } from './projectDefault';
 import useGetProject from './projectHooks';
 import ProjectMutator, { PROJECT_SERIALIZATION_KEY } from './projectMutator';
 
@@ -158,9 +159,9 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     setIsSaving(true);
     let res;
     try {
-      project = await mutator.createProject(true);
+      project = await createDefaultProject();
       navigate(`/${project.id}`, { replace: true });
-      await mutator.persistProject();
+      //await mutator.persistProject();
     } catch (e) {
       console.error(e);
       setIsSaving(false);
