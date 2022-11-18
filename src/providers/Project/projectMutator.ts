@@ -229,10 +229,6 @@ export default class ProjectMutator {
   }
 
   async deleteProject(projectId: string) {
-    if (this.isLocal) {
-      return; // nothing to do
-    }
-
     const res = await this.client.mutate({
       mutation: DELETE_PROJECT,
       variables: {

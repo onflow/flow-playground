@@ -244,5 +244,6 @@ export function createLocalProject(
     scriptTemplates: scriptsTemplatesEntities,
     version: '',
     numberOfAccounts: accountEntities.length,
+    updatedAt: null,
   };
 }
