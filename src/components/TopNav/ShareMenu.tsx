@@ -11,7 +11,6 @@ import ShareIcon from 'components/Icons/ShareIcon';
 import InfoIcon from 'components/Icons/InfoIcon';
 import { useProject } from 'providers/Project/projectHooks';
 
-
 const styles: SXStyles = {
   container: {
     margin: '0',
@@ -32,7 +31,7 @@ const styles: SXStyles = {
   },
   copyLink: {
     flexDirection: 'row',
-    paddingBottom: '12px'
+    paddingBottom: '12px',
   },
   ctaButton: {
     display: 'flex',
@@ -44,7 +43,7 @@ const styles: SXStyles = {
     background: '#F6F7F9',
     border: '1px solid #DEE2E9',
     borderRadius: '4px',
-    height: '48px'
+    height: '48px',
   },
   linkInput: {
     display: 'flex',
@@ -60,8 +59,8 @@ const styles: SXStyles = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-  }
-}
+  },
+};
 
 export const ShareMenu = () => {
   const url = window.location.href;
@@ -69,7 +68,6 @@ export const ShareMenu = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { project } = useProject();
 
-  //console.log('share project', project?.persist)
   // todo: verify Project persist is true when project is saved.
   const isSaved = project.persist;
 
@@ -92,40 +90,39 @@ export const ShareMenu = () => {
     };
   }, []);
 
-  return(
+  return (
     <Container sx={styles.container} ref={ref}>
       <Button
-        onClick={() => {setIsOpen(!isOpen)}}
+        onClick={() => {
+          setIsOpen(!isOpen);
+        }}
         variant="alternate"
         size="sm"
         inline={true}
         disabled={!isSaved}
       >
         Share
-        {isOpen ? <AnchorIcon/> : <ShareIcon/>}
+        {isOpen ? <AnchorIcon /> : <ShareIcon />}
       </Button>
       {isOpen && (
         <Flex sx={styles.menu}>
           <Flex sx={styles.copyLink}>
-            <Input
-              sx={styles.linkInput}
-              defaultValue={url}
-            />
+            <Input sx={styles.linkInput} defaultValue={url} />
             <Button
               onClick={copyLink}
-              variant='primary'
-              size='sm'
+              variant="primary"
+              size="sm"
               sx={styles.ctaButton}
             >
               {!isCopied ? 'Copy URL' : 'Copied!'}
-              <CopyIcon/>
+              <CopyIcon />
             </Button>
           </Flex>
           <Text sx={styles.message}>
-            <InfoIcon/> Your current page will be where your share link lands. 
+            <InfoIcon /> Your current page will be where your share link lands.
           </Text>
         </Flex>
       )}
     </Container>
-  )
-}
+  );
+};

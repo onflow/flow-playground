@@ -4,27 +4,27 @@ export const GET_PROJECTS = gql`
   query GetProjects {
     projectList {
       projects {
+        id
+        updatedAt
+        title
+        contractTemplates {
           id
-          updatedAt
+          script
           title
-          contractTemplates {
-            id
-            script
-            title
-          }
-          transactionTemplates {
-            id
-            script
-            title
-          }
-          scriptTemplates {
-            id
-            script
-            title
-          }
+        }
+        transactionTemplates {
+          id
+          script
+          title
+        }
+        scriptTemplates {
+          id
+          script
+          title
         }
       }
-    }  
+    }
+  }
 `;
 
 export const GET_PROJECT = gql`

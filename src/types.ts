@@ -12,8 +12,8 @@ export interface ChildPropsOptional {
 export type SXStyles = Record<string, ThemeUICSSObject>;
 
 export type ProjectListType = {
-    projects: ProjectType[];
-}
+  projects: ProjectType[];
+};
 
 export type ProjectType = {
   id: Scalars['UUID'];
