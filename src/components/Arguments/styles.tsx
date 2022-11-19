@@ -107,7 +107,7 @@ interface ControlContainerProps {
   showPrompt?: boolean;
 }
 interface MessageProps {
-  isOk: boolean;
+  isOk?: boolean;
 }
 
 export const ControlContainer = styled.div<ControlContainerProps>`
