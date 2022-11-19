@@ -1,11 +1,9 @@
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import gql from 'graphql-tag';
-import { ProjectType } from 'src/types';
 import { normalizeInteractionResponse } from 'util/normalize-interaction-response';
 import {
   ClearExecutionResultsMutationVariables,
   ResultType,
-  Scalars,
   SetExecutionResultsMutationVariables,
 } from './generated/graphql';
 

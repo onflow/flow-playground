@@ -2,7 +2,7 @@ import { Account, Project } from 'api/apollo/generated/graphql';
 import AccountAvatars from 'components/AccountAvatars';
 import React, { useEffect } from 'react';
 import { ChildPropsOptional } from 'src/types';
-import { Flex, useThemeUI } from 'theme-ui';
+import { Flex } from 'theme-ui';
 
 interface AccountPickerProps extends ChildPropsOptional {
   project: Project;

@@ -1,7 +1,6 @@
 import { useLocation } from '@reach/router';
 import Button from 'components/Button';
 import ExplorerContractIcon from 'components/Icons/ExplorerContractIcon';
-import ExplorerEllipseIcon from 'components/Icons/ExplorerEllipseIcon';
 import ExplorerFileIcon from 'components/Icons/ExplorerFileIcon';
 import ExplorerFileShutterIcon from 'components/Icons/ExplorerFileShutterIcon';
 import ExplorerPlusIcon from 'components/Icons/ExplorerPlusIcon';
@@ -10,13 +9,7 @@ import ExplorerTransactionIcon from 'components/Icons/ExplorerTransactionIcon';
 import Input from 'components/ExplorerInput';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import React, {
-  createRef,
-  SyntheticEvent,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { createRef, SyntheticEvent, useEffect, useState } from 'react';
 import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import { getParams } from 'util/url';
@@ -163,7 +156,6 @@ const MenuList: React.FC<MenuListProps> = ({
   onSelect,
   onUpdate,
   onInsert,
-  // @ts-expect-error TODO: add template deletion
   onDelete,
 }) => {
   const { active } = useProject();
