@@ -1,5 +1,32 @@
 import gql from 'graphql-tag';
 
+export const GET_PROJECTS = gql`
+  query GetProjects {
+    projectList {
+      projects {
+        id
+        updatedAt
+        title
+        contractTemplates {
+          id
+          script
+          title
+        }
+        transactionTemplates {
+          id
+          script
+          title
+        }
+        scriptTemplates {
+          id
+          script
+          title
+        }
+      }
+    }
+  }
+`;
+
 export const GET_PROJECT = gql`
   query GetProject($projectId: UUID!) {
     project(id: $projectId) {
@@ -7,17 +34,20 @@ export const GET_PROJECT = gql`
       persist
       mutable
       parentId
+      updatedAt
       seed
       title
       description
       readme
       accounts {
-        id
         address
-        draftCode
-        deployedCode
         deployedContracts
         state
+      }
+      contractTemplates {
+        id
+        script
+        title
       }
       transactionTemplates {
         id
@@ -45,12 +75,14 @@ export const GET_LOCAL_PROJECT = gql`
       description
       readme
       accounts {
-        id
         address
-        draftCode
-        deployedCode
         deployedContracts
         state
+      }
+      contractTemplates {
+        id
+        script
+        title
       }
       transactionTemplates {
         id

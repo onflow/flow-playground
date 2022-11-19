@@ -9,7 +9,7 @@ import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useRef, useState } from 'react';
 import { AiFillCloseCircle } from 'react-icons/ai';
-import { FaRegCheckCircle, FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
+import { FaRegTimesCircle } from 'react-icons/fa';
 import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 
 import { ArgumentsProps } from 'components/Arguments/types';
@@ -26,10 +26,9 @@ import {
   ActionButton,
   ArgumentsList,
   ArgumentsTitle,
-  ErrorsList,
   Hints,
-  Signers,
 } from './components';
+import { SignersPanel } from 'components/SignersPanel';
 
 const isDictionaary = (type: string) => type.includes('{');
 const isArray = (type: string) => type.includes('[');
@@ -141,18 +140,18 @@ type ProcessingArgs = {
 };
 
 const useTemplateType = (): ProcessingArgs => {
-  const { isSavingCode } = useProject();
+  const { isSaving } = useProject();
   const {
     createScriptExecution,
     createTransactionExecution,
-    updateAccountDeployedCode,
+    createContractDeployment,
   } = useProject();
 
   return {
-    disabled: isSavingCode,
+    disabled: isSaving,
     scriptFactory: createScriptExecution,
     transactionFactory: createTransactionExecution,
-    contractDeployment: updateAccountDeployedCode,
+    contractDeployment: createContractDeployment,
   };
 };
 interface IValue {
@@ -218,7 +217,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   const {
     project,
     active,
-    isSavingCode,
+    isSaving,
     lastSigners,
     // updateAccountDeployedCode
   } = useProject();
@@ -318,9 +317,13 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
           break;
         }
 
-        case EntityType.Account: {
+        case EntityType.ContractTemplate: {
+          // TODO: Check selected account after we have the deployment account selector
           // Ask if user wants to redeploy the contract
-          if (accounts[active.index] && accounts[active.index].deployedCode) {
+          if (
+            accounts[active.index] &&
+            accounts[active.index].deployedContracts.length > 0
+          ) {
             const choiceMessage =
               'Redeploying will clear the state of all accounts. Proceed?';
             if (!confirm(choiceMessage)) {
@@ -353,13 +356,11 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
   };
 
   const isOk = !haveErrors && validCode !== undefined && !!validCode;
-  let statusIcon = isOk ? <FaRegCheckCircle /> : <FaRegTimesCircle />;
-  let statusMessage = isOk ? 'Ready' : 'Fix errors';
+  let statusMessage = !isOk && `${problems?.error?.length} Errors`;
 
-  const progress = isSavingCode || processingStatus;
+  const progress = isSaving || processingStatus;
 
   if (progress) {
-    statusIcon = <FaSpinner className="spin" />;
     statusMessage = 'Please, wait...';
   }
 
@@ -397,7 +398,7 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
                 </>
               )}
               {needSigners && (
-                <Signers
+                <SignersPanel
                   maxSelection={signers}
                   selected={selected}
                   updateSelectedAccounts={updateSelectedAccounts}
@@ -406,15 +407,22 @@ const Arguments: React.FC<ArgumentsProps> = (props) => {
             </>
           )}
 
-          <ErrorsList list={problems.error} actions={actions} />
+          {/*<ErrorsList list={problems.error} actions={actions} />*/}
           <Hints problems={problems} actions={actions} />
 
           <ControlContainer isOk={isOk} progress={progress}>
-            <StatusMessage>
-              {statusIcon}
-              <p>{statusMessage}</p>
-            </StatusMessage>
-            <ActionButton active={isOk} type={type} onClick={send} />
+            {statusMessage && (
+              <StatusMessage>
+                <FaRegTimesCircle />
+                <p>{statusMessage}</p>
+              </StatusMessage>
+            )}
+            <ActionButton
+              progress={progress}
+              active={isOk}
+              type={type}
+              onClick={send}
+            />
           </ControlContainer>
         </HoverPanel>
       </motion.div>

@@ -17,7 +17,7 @@ const Avatar: React.FC<AvatarProps> = ({ seed, index, style }) => {
   return (
     <img
       className="avatar"
-      src={'/defaultAvataaar.png'}
+      src="/defaultAvataaar.png"
       style={style}
       alt="Avatar"
     />

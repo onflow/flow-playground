@@ -1,6 +1,5 @@
 import { Project } from 'api/apollo/generated/graphql';
-import AccountPicker from 'components/AccountPicker';
-import Button from 'components/Button';
+import PanelButton from 'components/PanelButton';
 import { Stack } from 'layout/Stack';
 import { ActiveEditor, EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
@@ -9,7 +8,7 @@ import {
   FaArrowCircleRight,
   FaCaretSquareDown,
   FaCaretSquareUp,
-  FaExclamationTriangle,
+  FaSpinner,
 } from 'react-icons/fa';
 import { CadenceProblem } from 'util/language-syntax-errors';
 import theme from '../../theme';
@@ -21,8 +20,6 @@ import {
   ErrorMessage,
   Heading,
   List,
-  SignersContainer,
-  SignersError,
   SingleError,
   Title,
 } from './styles';
@@ -34,7 +31,9 @@ import {
   InteractionButtonProps,
 } from './types';
 
-export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
+export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (
+  props: ArgumentsTitleProps,
+) => {
   const { type, errors, expanded, setExpanded } = props;
 
   const hasErrors = errors > 0;
@@ -43,7 +42,7 @@ export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (props) => {
   return (
     <Heading>
       <Title lineColor={lineColor}>
-        {type === EntityType.Account && 'Contract Arguments'}
+        {type === EntityType.ContractTemplate && 'Contract Arguments'}
         {type === EntityType.TransactionTemplate && 'Transaction Arguments'}
         {type === EntityType.ScriptTemplate && 'Script Arguments'}
       </Title>
@@ -68,7 +67,7 @@ export const ArgumentsList: React.FC<ArgumentsListProps> = ({
   errors,
   onChange,
   hidden,
-}) => {
+}: ArgumentsListProps) => {
   return (
     <List hidden={hidden}>
       {list.map((argument) => {
@@ -134,7 +133,7 @@ const renderMessage = (message: string) => {
   return items;
 };
 
-export const ErrorsList: React.FC<ErrorListProps> = (props) => {
+export const ErrorsList: React.FC<ErrorListProps> = (props: ErrorListProps) => {
   const { list, actions } = props;
   const { goTo, hideDecorations, hover } = actions;
   if (list.length === 0) {
@@ -144,9 +143,6 @@ export const ErrorsList: React.FC<ErrorListProps> = (props) => {
 
   return (
     <Stack>
-      <Heading>
-        <Title lineColor={theme.colors.error}>Problems</Title>
-      </Heading>
       <List>
         {list.map((item: CadenceProblem, i) => {
           const message = renderMessage(item.message);
@@ -226,10 +222,11 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
 
 const getLabel = (type: EntityType, project: Project, active: ActiveEditor) => {
   const { accounts } = project;
-
   switch (true) {
-    case type === EntityType.Account:
-      return accounts[active.index].deployedCode ? 'Redeploy' : 'Deploy';
+    case type === EntityType.ContractTemplate:
+      return accounts[active.index]?.deployedContracts?.length > 0
+        ? 'Redeploy'
+        : 'Deploy';
     case type === EntityType.TransactionTemplate:
       return 'Send';
     case type === EntityType.ScriptTemplate:
@@ -253,62 +250,29 @@ const getActionButtonTestTag = (type: EntityType) => {
 export const ActionButton: React.FC<InteractionButtonProps> = ({
   type,
   active = true,
+  progress = false,
   onClick,
-}) => {
+}: InteractionButtonProps) => {
   const {
     project,
     active: activeEditor,
     getActiveCode,
-    isSavingCode,
+    isSaving,
     isExecutingAction,
   } = useProject();
   const label = getLabel(type, project, activeEditor);
   const code = getActiveCode()[0].trim();
   return (
     <Controls>
-      <Button
+      <PanelButton
         onClick={onClick}
-        Icon={FaArrowCircleRight}
-        disabled={isSavingCode || !active || code.length === 0}
+        Icon={progress ? FaSpinner : FaArrowCircleRight}
+        disabled={isSaving || !active || code.length === 0}
+        hideDisabledState={isSaving && !isExecutingAction}
         data-test={getActionButtonTestTag(type)}
-        hideDisabledState={isSavingCode && !isExecutingAction}
       >
         {label}
-      </Button>
+      </PanelButton>
     </Controls>
-  );
-};
-
-type SignersProps = {
-  maxSelection?: number;
-  selected: number[];
-  updateSelectedAccounts: (selection: number[]) => void;
-};
-
-export const Signers: React.FC<SignersProps> = (props) => {
-  const { project } = useProject();
-  const { accounts } = project;
-  const { maxSelection, selected, updateSelectedAccounts } = props;
-
-  const enoughSigners = selected.length < maxSelection;
-  const lineColor = enoughSigners ? theme.colors.error : null;
-
-  return (
-    <SignersContainer>
-      <Title lineColor={lineColor}>Transaction Signers</Title>
-      <AccountPicker
-        project={project}
-        accounts={accounts}
-        selected={selected}
-        onChange={updateSelectedAccounts}
-        maxSelection={maxSelection}
-      />
-      {enoughSigners && (
-        <SignersError>
-          <FaExclamationTriangle />
-          Not enough signers...
-        </SignersError>
-      )}
-    </SignersContainer>
   );
 };

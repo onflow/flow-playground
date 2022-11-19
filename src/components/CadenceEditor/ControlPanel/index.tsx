@@ -7,7 +7,6 @@ import { ExecuteCommandRequest } from 'monaco-languageclient';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FaExclamationTriangle,
-  FaRegCheckCircle,
   FaRegTimesCircle,
   FaSpinner,
 } from 'react-icons/fa';
@@ -50,22 +49,21 @@ import {
   ActionButton,
   ArgumentsList,
   ArgumentsTitle,
-  ErrorsList,
   Hints,
-  Signers,
 } from '../../Arguments/components';
 import {
   ControlContainer,
-  Hidable,
   HoverPanel,
   StatusMessage,
 } from '../../Arguments/styles';
+import { SignersPanel } from 'components/SignersPanel';
 
 const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // ===========================================================================
   // GLOBAL HOOKS
   const { languageClient } = useContext(CadenceCheckerContext);
-  const { project, active, isExecutingAction } = useProject();
+  const { project, active, isExecutingAction, setShowBottomPanel } =
+    useProject();
 
   // HOOKS  -------------------------------------------------------------------
   const [executionArguments, setExecutionArguments] = useState<any>({});
@@ -285,11 +283,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
           break;
         }
 
-        case EntityType.Account: {
-          // Ask if user wants to redeploy the contract
+        case EntityType.ContractTemplate: {
+          // TODO: Deploy to selected account after we have the deployment account selector
           if (
             accounts[active.index] &&
-            accounts[active.index].deployedCode &&
+            accounts[active.index].deployedContracts.length > 0 &&
             !showPrompt
           ) {
             setProcessingStatus(false);
@@ -310,6 +308,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
 
     setShowPrompt(false);
     setProcessingStatus(false);
+    setShowBottomPanel(true);
 
     // Display result in the bottom area
     setResult({
@@ -333,15 +332,20 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const problems = getProblems();
   const validCode = problems.error.length === 0;
 
-  const signers = extractSigners(code).length;
-  const needSigners = type == EntityType.TransactionTemplate && signers > 0;
-
+  // contracts need one signer for deployment
+  const signers =
+    type === EntityType.TransactionTemplate ? extractSigners(code).length : 1;
+  const needSigners =
+    (type === EntityType.TransactionTemplate && signers > 0) ||
+    type == EntityType.ContractTemplate;
   const numberOfErrors = Object.keys(errors).length;
+
+  // TODO: disable button if not enough signers
   const notEnoughSigners = needSigners && selected.length < signers;
-  const haveErrors = numberOfErrors > 0 || notEnoughSigners;
+  const haveErrors = numberOfErrors > 0;
 
   const { accounts } = project;
-  const signersAccounts = selected.map((i) => accounts[i]);
+  const signersAccounts = selected.map((i: number) => accounts[i]);
 
   const actions = {
     goTo: (position: IPosition) => goTo(editor, position),
@@ -349,7 +353,8 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     hover: (highlight: Highlight) => hover(editor, highlight),
   };
 
-  const isOk = !haveErrors && validCode !== undefined && !!validCode;
+  const isOk =
+    !haveErrors && validCode !== undefined && !!validCode && !notEnoughSigners;
   let statusIcon;
   let statusMessage;
   switch (true) {
@@ -358,13 +363,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       statusMessage =
         'Redeploying will clear the state of all accounts. Proceed?';
       break;
-    case isOk:
-      statusIcon = <FaRegCheckCircle />;
-      statusMessage = 'Ready';
-      break;
-    default:
+    case !isOk:
       statusIcon = <FaRegTimesCircle />;
-      statusMessage = 'Fix errors';
+      statusMessage = `${problems?.error?.length} Error${
+        problems?.error?.length > 1 ? 's' : ''
+      }`;
       break;
   }
 
@@ -397,37 +400,35 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       <div ref={constraintsRef} className="constraints" />
       <MotionBox dragConstraints={constraintsRef}>
         <HoverPanel minWidth={showPrompt ? 'min-content' : '300px'}>
-          <Hidable hidden={!validCode}>
-            {list.length > 0 && (
-              <>
-                <ArgumentsTitle
-                  type={type}
-                  errors={numberOfErrors}
-                  expanded={expanded}
-                  setExpanded={setExpanded}
-                />
-                <ArgumentsList
-                  list={list}
-                  errors={errors}
-                  hidden={!expanded}
-                  onChange={(name, value) => {
-                    let key = name.toString();
-                    let newValue = { ...values, [key]: value };
-                    setValue(newValue);
-                  }}
-                />
-              </>
-            )}
-            {needSigners && (
-              <Signers
-                maxSelection={signers}
-                selected={selected}
-                updateSelectedAccounts={updateSelectedAccounts}
+          {list.length > 0 && (
+            <>
+              <ArgumentsTitle
+                type={type}
+                errors={numberOfErrors}
+                expanded={expanded}
+                setExpanded={setExpanded}
               />
-            )}
-          </Hidable>
+              <ArgumentsList
+                list={list}
+                errors={errors}
+                hidden={!expanded}
+                onChange={(name, value) => {
+                  let key = name.toString();
+                  let newValue = { ...values, [key]: value };
+                  setValue(newValue);
+                }}
+              />
+            </>
+          )}
+          {needSigners && (
+            <SignersPanel
+              maxSelection={signers}
+              selected={selected}
+              updateSelectedAccounts={updateSelectedAccounts}
+            />
+          )}
 
-          <ErrorsList list={problems.error} actions={actions} />
+          {/*<ErrorsList list={problems.error} actions={actions} />*/}
           <Hints problems={problems} actions={actions} />
 
           <ControlContainer
@@ -435,16 +436,21 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             progress={progress}
             showPrompt={showPrompt}
           >
-            <StatusMessage data-test="control-panel-status-message">
-              <StatusIcon
+            {statusMessage && (
+              <StatusMessage
                 isOk={isOk}
-                progress={progress}
-                showPrompt={showPrompt}
+                data-test="control-panel-status-message"
               >
-                {statusIcon}
-              </StatusIcon>
-              <p>{statusMessage}</p>
-            </StatusMessage>
+                <StatusIcon
+                  isOk={isOk}
+                  progress={progress}
+                  showPrompt={showPrompt}
+                >
+                  {statusIcon}
+                </StatusIcon>
+                <p>{statusMessage}</p>
+              </StatusMessage>
+            )}
             {showPrompt ? (
               <PromptActionsContainer>
                 <Confirm data-test="redeploy-confirm-button" onClick={send}>

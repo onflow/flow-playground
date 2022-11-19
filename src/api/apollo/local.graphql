@@ -25,6 +25,7 @@ input ExecutionResultInput {
 }
 
 type Query {
+  projects: [Project]!
   localProject: Project
   activeProject: Boolean!
   account(accountId: String): Account

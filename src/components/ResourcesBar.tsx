@@ -36,12 +36,9 @@ const AccountStateContainer = styled.div<{ height: number }>`
   flex-direction: row;
   justify-content: space-even;
   height: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
   width: 100%;
   background: white;
-  border-top: var(--gap) solid var(--key);
+  border-top: 1px solid ${theme.colors.greyBorder};
   height: ${(p) => p.height}px;
 `;
 
@@ -49,7 +46,7 @@ const StorageListContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  border-right: var(--gap) solid var(--key);
+  border-right: 1px solid ${theme.colors.greyBorder};
 `;
 
 interface StorageBadgeProps {

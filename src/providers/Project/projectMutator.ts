@@ -4,21 +4,25 @@ import ApolloClient from 'apollo-client';
 
 import {
   Account,
+  ContractTemplate,
   GetProjectQuery,
   Project,
 } from 'api/apollo/generated/graphql';
 import {
+  CREATE_CONTRACT_DEPLOYMENT,
+  CREATE_CONTRACT_TEMPLATE,
   CREATE_PROJECT,
   CREATE_SCRIPT_EXECUTION,
   CREATE_SCRIPT_TEMPLATE,
   CREATE_TRANSACTION_EXECUTION,
   CREATE_TRANSACTION_TEMPLATE,
+  DELETE_CONTRACT_TEMPLATE,
+  DELETE_PROJECT,
   DELETE_SCRIPT_TEMPLATE,
   DELETE_TRANSACTION_TEMPLATE,
   SAVE_PROJECT,
   SET_ACTIVE_PROJECT,
-  UPDATE_ACCOUNT_DEPLOYED_CODE,
-  UPDATE_ACCOUNT_DRAFT_CODE,
+  UPDATE_CONTRACT_TEMPLATE,
   UPDATE_SCRIPT_TEMPLATE,
   UPDATE_TRANSACTION_TEMPLATE,
 } from 'api/apollo/mutations';
@@ -29,7 +33,7 @@ import {
   registerOnCloseSaveMessage,
   unregisterOnCloseSaveMessage,
 } from 'util/onclose';
-import { DEFAULT_ACCOUNT_STATE } from './projectDefault';
+import { createDefaultProject, DEFAULT_ACCOUNT_STATE } from './projectDefault';
 
 // TODO: Switch to directives for serialization keys after upgrading to the newest Apollo/apollo-link-serialize
 export const PROJECT_SERIALIZATION_KEY = 'PROJECT_SERIALIZATION_KEY';
@@ -59,21 +63,26 @@ export default class ProjectMutator {
     this.readme = readme;
   }
 
-  async createProject(): Promise<Project> {
-    const { project: localProject } = this.client.readQuery({
-      query: GET_LOCAL_PROJECT,
-    });
+  async createProject(blank = false): Promise<Project> {
+    const newProject = blank
+      ? createDefaultProject()
+      : this.client.readQuery({
+          query: GET_LOCAL_PROJECT,
+        }).project;
 
-    const parentId = localProject.parentId;
-    const accounts = localProject.accounts.map((acc: Account) => acc.draftCode);
-    const seed = localProject.seed;
-    const title = localProject.title;
-    const description = localProject.description;
-    const readme = localProject.readme;
-    const transactionTemplates = localProject.transactionTemplates.map(
+    const parentId = newProject.parentId;
+    const seed = newProject.seed;
+    const title = newProject.title;
+    const description = newProject.description;
+    const readme = newProject.readme;
+    const transactionTemplates = newProject.transactionTemplates.map(
       (tpl: any) => ({ script: tpl.script, title: tpl.title }),
     );
-    const scriptTemplates = localProject.scriptTemplates.map((tpl: any) => ({
+    const scriptTemplates = newProject.scriptTemplates.map((tpl: any) => ({
+      script: tpl.script,
+      title: tpl.title,
+    }));
+    const contractTemplates = newProject.contractTemplates.map((tpl: any) => ({
       script: tpl.script,
       title: tpl.title,
     }));
@@ -82,13 +91,14 @@ export default class ProjectMutator {
       mutation: CREATE_PROJECT,
       variables: {
         parentId: parentId,
-        accounts: accounts,
-        seed: seed,
         title: title,
         description: description,
         readme: readme,
-        transactionTemplates: transactionTemplates,
-        scriptTemplates: scriptTemplates,
+        seed: seed,
+        numberOfAccounts: newProject.accounts.length,
+        transactionTemplates,
+        scriptTemplates,
+        contractTemplates,
       },
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
@@ -99,7 +109,6 @@ export default class ProjectMutator {
 
     this.projectId = project.id;
     this.isLocal = false;
-
     // TODO: this writeQuery is required to avoid having the active GET_PROJECT hook refetch unnecessarily. Investigate further after switching to Apollo 3
     this.client.writeQuery({
       query: GET_PROJECT,
@@ -169,47 +178,39 @@ export default class ProjectMutator {
     navigate(`/${this.projectId}`, { replace: true });
   }
 
-  async updateAccountDraftCode(account: Account, code: string) {
+  // TODO: This is a temporary function used to set persist: true after creating a blank project.
+  // The v2 api will change how projects are created and persisted
+  async persistProject() {
     this.client.writeData({
-      id: `Account:${account.id}`,
+      id: `Project:${this.projectId}`,
       data: {
-        __typename: 'Account',
-        draftCode: code,
+        persist: true,
       },
     });
 
-    if (this.isLocal) {
-      registerOnCloseSaveMessage();
-      return;
-    }
-
-    const key = ['UPDATE_ACCOUNT_DRAFT_CODE', this.projectId, account.id];
-
     await this.client.mutate({
-      mutation: UPDATE_ACCOUNT_DRAFT_CODE,
+      mutation: SAVE_PROJECT,
       variables: {
         projectId: this.projectId,
-        accountId: account.id,
-        code,
+        title: this.title,
+        description: this.description,
+        readme: this.readme,
       },
       context: {
-        debounceKey: key,
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
-      fetchPolicy: 'no-cache',
     });
   }
 
-  clearProjectAccountsOnReDeploy(accountId: string) {
+  clearProjectAccountsOnReDeploy(accountAddress: string) {
     const project = this.getProject();
 
     const newProject = {
       ...project,
       accounts: project.accounts.map((cachedAccount: Account) => {
-        if (cachedAccount.id === accountId) return cachedAccount;
+        if (cachedAccount.address === accountAddress) return cachedAccount;
         return {
           ...cachedAccount,
-          deployedCode: '',
           deployedContracts: [],
           state: DEFAULT_ACCOUNT_STATE,
         };
@@ -227,35 +228,16 @@ export default class ProjectMutator {
     });
   }
 
-  async updateAccountDeployedCode(account: Account, index: number) {
-    const hasDeployedCode = !!account.deployedCode?.length;
-
-    if (this.isLocal) {
-      const project = await this.createProject();
-      account = project.accounts[index];
-      unregisterOnCloseSaveMessage();
-    }
-
+  async deleteProject(projectId: string) {
     const res = await this.client.mutate({
-      mutation: UPDATE_ACCOUNT_DEPLOYED_CODE,
+      mutation: DELETE_PROJECT,
       variables: {
-        projectId: this.projectId,
-        accountId: account.id,
-        code: account.draftCode,
+        projectId,
       },
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
     });
-
-    if (hasDeployedCode) this.clearProjectAccountsOnReDeploy(account.id);
-
-    Mixpanel.track('Contract deployed', {
-      projectId: this.projectId,
-      accountId: account.id,
-      code: account.draftCode,
-    });
-
     return res;
   }
 
@@ -440,6 +422,7 @@ export default class ProjectMutator {
             (template) => template.id !== templateId,
           ),
         },
+        persist: true,
       },
     });
 
@@ -476,6 +459,7 @@ export default class ProjectMutator {
             (template) => template.id !== templateId,
           ),
         },
+        persist: true,
       },
     });
 
@@ -557,5 +541,164 @@ export default class ProjectMutator {
       },
     });
     return project;
+  }
+
+  async createContractTemplate(script: string, title: string) {
+    if (this.isLocal) {
+      await this.createProject();
+    }
+
+    const res = await this.client.mutate({
+      mutation: CREATE_CONTRACT_TEMPLATE,
+      variables: {
+        projectId: this.projectId,
+        script,
+        title,
+      },
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
+    });
+
+    const project = this.getProject();
+    this.client.writeQuery({
+      query: GET_PROJECT,
+      variables: {
+        projectId: project.id,
+      },
+      data: {
+        project: {
+          ...project,
+          contractTemplates: [
+            ...project.contractTemplates,
+            res.data.createContractTemplate,
+          ],
+        },
+      },
+    });
+
+    Mixpanel.track('Contract template created', {
+      projectId: this.projectId,
+      script,
+    });
+
+    return res;
+  }
+
+  async updateContractTemplate(
+    contractTemplate: ContractTemplate,
+    script: string,
+    title: string,
+    index: number,
+  ) {
+    this.client.writeData({
+      id: `ContractTemplate:${contractTemplate.id}`,
+      data: {
+        __typename: 'ContractTemplate',
+        title,
+        script,
+      },
+    });
+
+    if (this.isLocal) {
+      registerOnCloseSaveMessage();
+      return;
+    }
+
+    const key = [
+      'UPDATE_CONTRACT_TEMPLATE',
+      this.projectId,
+      contractTemplate.id,
+    ];
+
+    await this.client.mutate({
+      mutation: UPDATE_CONTRACT_TEMPLATE,
+      variables: {
+        templateId: contractTemplate.id,
+        title: title,
+        script: script,
+        index,
+        projectId: this.projectId,
+      },
+      context: {
+        debounceKey: key,
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
+      fetchPolicy: 'no-cache',
+    });
+  }
+
+  async createContractDeployment(
+    contractTemplate: ContractTemplate,
+    account: Account,
+    index: number,
+  ) {
+    const hasDeployedCode = !!account.deployedContracts?.length;
+
+    if (this.isLocal) {
+      const project = await this.createProject();
+      contractTemplate = project.contractTemplates[index];
+      unregisterOnCloseSaveMessage();
+    }
+
+    const res = await this.client.mutate({
+      mutation: CREATE_CONTRACT_DEPLOYMENT,
+      variables: {
+        projectId: this.projectId,
+        script: contractTemplate.script,
+        signer: account.address,
+      },
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
+    });
+
+    // TODO: update accounts based on latest api changes
+    if (hasDeployedCode) this.clearProjectAccountsOnReDeploy(account.address);
+
+    Mixpanel.track('Contract deployed', {
+      projectId: this.projectId,
+      accountAddress: account.address,
+      code: contractTemplate.script,
+    });
+
+    return res;
+  }
+
+  async deleteContractTemplate(templateId: string) {
+    if (this.isLocal) {
+      await this.createProject();
+    }
+
+    const res = await this.client.mutate({
+      mutation: DELETE_CONTRACT_TEMPLATE,
+      variables: {
+        projectId: this.projectId,
+        templateId,
+      },
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
+    });
+
+    const project = this.getProject();
+
+    this.client.writeQuery({
+      query: GET_PROJECT,
+      variables: {
+        projectId: project.id,
+      },
+      data: {
+        project: {
+          ...project,
+          contractTemplates: project.contractTemplates.filter(
+            (template) => template.id !== templateId,
+          ),
+        },
+        persist: true,
+      },
+    });
+
+    return res;
   }
 }

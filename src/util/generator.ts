@@ -1,18 +1,18 @@
+import { Project } from 'api/apollo/generated/graphql';
+import { saveAs } from 'file-saver';
+import JSZip from 'jszip';
 import prettier from 'prettier';
 import parserBabel from 'prettier/parser-babel';
-import JSZip from 'jszip';
-import { saveAs } from 'file-saver';
-import { Project } from 'api/apollo/generated/graphql';
 
 import contractUnitTestTemplate from '../templates/js/contractUnitTest.hbs';
-import transactionUnitTestTemplate from '../templates/js/transactionUnitTest.hbs';
 import scriptUnitTestTemplate from '../templates/js/scriptUnitTest.hbs';
 import testSuit from '../templates/js/testSuit.hbs';
+import transactionUnitTestTemplate from '../templates/js/transactionUnitTest.hbs';
 
-import readmeTemplate from '../templates/js/config/README.md.hbs';
 import babelConfigTemplate from '../templates/js/config/babel.config.hbs';
-import packageTemplate from '../templates/js/config/package.json.hbs';
 import jestConfigTemplate from '../templates/js/config/jest.config.js.hbs';
+import packageTemplate from '../templates/js/config/package.json.hbs';
+import readmeTemplate from '../templates/js/config/README.md.hbs';
 
 export const prettify = (code: string): string => {
   return prettier.format(code, { parser: 'babel', plugins: [parserBabel] });
@@ -262,6 +262,7 @@ const generateTests = async (cadenceFolder: string, project: Project) => {
   for (let i = 0; i < project.accounts.length; i++) {
     const account = project.accounts[i];
     const address = `0x0${account.address.slice(-1)}`;
+    // @ts-expect-error TODO: update generators to use contractTemplates
     const code = account.draftCode;
     if (code.length > 0) {
       const unitTest = generateContractUnitTest(address, code);
@@ -323,8 +324,10 @@ export const createZip = async (
 
   for (let i = 0; i < accounts.length; i++) {
     const account = accounts[i];
+    // @ts-expect-error TODO: update generators to use contractTemplates
     const name = getContractName(account.draftCode);
     const fileName = `cadence/contracts/${name}.cdc`;
+    // @ts-expect-error TODO: update generators to use contractTemplates
     zip.file(fileName, account.draftCode);
   }
 

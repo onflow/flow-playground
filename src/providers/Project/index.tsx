@@ -1,16 +1,17 @@
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { navigate, Redirect, useLocation } from '@reach/router';
+import { Account, Project } from 'api/apollo/generated/graphql';
+import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
 import React, { createContext, useState } from 'react';
+import { ChildProps } from 'src/types';
+import { getParams } from 'util/url';
+import { createDefaultProject } from './projectDefault';
 import useGetProject from './projectHooks';
 import ProjectMutator, { PROJECT_SERIALIZATION_KEY } from './projectMutator';
 
-import { Account, Project } from 'api/apollo/generated/graphql';
-import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
-import { ChildProps } from 'src/types';
-import { getParams } from 'util/url';
-
 export enum EntityType {
   Account = 1,
+  ContractTemplate,
   TransactionTemplate,
   ScriptTemplate,
   Readme,
@@ -27,15 +28,17 @@ export interface ProjectContextValue {
   project: Project | null;
   isLoading: boolean;
   mutator: ProjectMutator;
+  createBlankProject: () => Promise<Project>;
   updateProject: (
     title: string,
     description: string,
     readme: string,
   ) => Promise<any>;
-  updateAccountDeployedCode: () => Promise<any>;
-  updateAccountDraftCode: (value: string) => Promise<any>;
+  deleteProject: (projectId: string) => Promise<any>;
+  createContractDeployment: () => Promise<any>;
   updateSelectedContractAccount: (accountIndex: number) => void;
   updateSelectedTransactionAccounts: (accountIndexes: number[]) => void;
+  updateActiveContractTemplate: (script: string) => Promise<any>;
   updateActiveScriptTemplate: (script: string, title: string) => Promise<any>;
   updateActiveTransactionTemplate: (
     script: string,
@@ -51,8 +54,10 @@ export interface ProjectContextValue {
     title: string,
     script: string,
   ) => Promise<any>;
+  updateContractTemplate: (title: string, script: string) => Promise<any>;
   deleteScriptTemplate: (templateId: string) => void;
   deleteTransactionTemplate: (templateId: string) => void;
+  deleteContractTemplate: (templateID: string) => void;
   createTransactionExecution: (
     signingAccounts: Account[],
     args?: string[],
@@ -66,8 +71,13 @@ export interface ProjectContextValue {
   lastSigners: string[];
   setLastSigners: (signers: string[]) => void;
   transactionAccounts: number[];
-  isSavingCode: boolean;
+  isSaving: boolean;
   isExecutingAction: boolean;
+  showProjectsSidebar: boolean;
+  toggleProjectsSidebar: () => void;
+  showBottomPanel: boolean;
+  toggleBottomPanel: () => void;
+  setShowBottomPanel: (show: boolean) => void;
 }
 
 export const ProjectContext: React.Context<ProjectContextValue> =
@@ -106,22 +116,29 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     isLocal = _isLocal;
     isLoading = _isLoading;
   } catch (e) {
+    console.error(e);
     navigate('/404');
   }
 
   const [active, setActive] = useState<{ type: EntityType; index: number }>({
-    type: EntityType.Account,
+    type: EntityType.ContractTemplate,
     index: 0,
   });
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [transactionAccounts, setTransactionAccounts] = useState<number[]>([0]);
-  const [isSavingCode, setIsSaving] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [isExecutingAction, setIsExecutingAction] = useState(false);
   const [lastSigners, setLastSigners] = useState(null);
+  const [showProjectsSidebar, setShowProjectsSidebar] = useState(false);
+  const [showBottomPanel, setShowBottomPanel] = useState(false);
 
   const [selectedResourceAccount, setSelectedResourceAccount] = useState<
     string | null
   >(null);
+
+  const toggleProjectsSidebar = () => setShowProjectsSidebar((prev) => !prev);
+  const toggleBottomPanel = () => setShowBottomPanel((prev) => !prev);
+
   const projectID = project ? project.id : null;
   const title = project ? project.title : null;
   const description = project ? project.description : null;
@@ -137,6 +154,24 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   );
 
   const showError = () => alert('Something went wrong, please try again');
+
+  const createBlankProject = async () => {
+    setIsSaving(true);
+    let res;
+    try {
+      project = await createDefaultProject();
+      navigate(`/${project.id}`, { replace: true });
+      //TODO: verify this isn't needed for saving a blank project to cache
+      // await mutator.persistProject();
+    } catch (e) {
+      console.error(e);
+      setIsSaving(false);
+      showError();
+    }
+    setIsSaving(false);
+    setShowProjectsSidebar(false);
+    return res;
+  };
 
   const updateProject: any = async (
     title: string,
@@ -161,12 +196,29 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
-  const updateAccountDeployedCode: any = async () => {
+  const deleteProject = async (projectId: string) => {
+    setIsSaving(true);
+    let res;
+    try {
+      res = await mutator.deleteProject(projectId);
+      navigate(`/`);
+    } catch (e) {
+      console.error(e);
+      setIsSaving(false);
+      showError();
+    }
+    setIsSaving(false);
+    setShowProjectsSidebar(false);
+    return res;
+  };
+
+  const createContractDeployment: any = async () => {
     setIsSaving(true);
     setIsExecutingAction(true);
     let res;
     try {
-      res = await mutator.updateAccountDeployedCode(
+      res = await mutator.createContractDeployment(
+        project.contractTemplates[active.index],
         project.accounts[active.index],
         active.index,
       );
@@ -187,13 +239,35 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
-  const updateAccountDraftCode = async (value: string) => {
+  const updateContractTemplate = async (script: string, title: string) => {
     setIsSaving(true);
     let res;
     try {
-      res = await mutator.updateAccountDraftCode(
-        project.accounts[active.index],
-        value,
+      res = await mutator.updateContractTemplate(
+        project.contractTemplates[active.index],
+        script,
+        title,
+        active.index,
+      );
+    } catch (e) {
+      console.error(e);
+      setIsSaving(false);
+      showError();
+    }
+    setIsSaving(false);
+    return res;
+  };
+
+  const updateActiveContractTemplate = async (script: string) => {
+    setIsSaving(true);
+    let res;
+    const contractTemplate = project.contractTemplates[active.index];
+    try {
+      res = await mutator.updateContractTemplate(
+        project.contractTemplates[active.index],
+        script,
+        contractTemplate.title,
+        active.index,
       );
     } catch (e) {
       console.error(e);
@@ -329,6 +403,20 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
+  const deleteContractTemplate = async (templateId: string) => {
+    setIsSaving(true);
+    let res;
+    try {
+      res = await mutator.deleteContractTemplate(templateId);
+    } catch (e) {
+      console.error(e);
+      setIsSaving(false);
+      showError();
+    }
+    setIsSaving(false);
+    return res;
+  };
+
   const deleteScriptTemplate = async (templateId: string) => {
     setIsSaving(true);
     let res;
@@ -371,7 +459,13 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         return {
           type: active.type,
           index: active.index,
-          onChange: (code: string) => updateAccountDraftCode(code),
+          onChange: () => '',
+        };
+      case EntityType.ContractTemplate:
+        return {
+          type: active.type,
+          index: active.index,
+          onChange: (code: string) => updateActiveContractTemplate(code),
         };
       case EntityType.TransactionTemplate:
         return {
@@ -398,14 +492,15 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   // "getActiveCode" is used to read Cadence code from active(selected) item
   const getActiveCode: () => [string, number] = () => {
-    const { accounts, scriptTemplates, transactionTemplates } = project;
+    const { contractTemplates, scriptTemplates, transactionTemplates } =
+      project;
 
     const { type, index } = active;
     let code: string, id: number;
     switch (type) {
-      case EntityType.Account:
-        code = accounts[index].draftCode;
-        id = accounts[index].id;
+      case EntityType.ContractTemplate:
+        code = contractTemplates[index].script;
+        id = contractTemplates[index].id;
         break;
       case EntityType.TransactionTemplate:
         code = transactionTemplates[index].script;
@@ -429,8 +524,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   }
 
   const params = getParams(location.search || '');
-  const { id, type, storage: storageParam } = params;
-  const storage = storageParam || 'none';
+  const { id, type } = params;
 
   let templateIndex = 0;
   switch (type) {
@@ -455,10 +549,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         });
         const templateId = project.transactionTemplates[templateIndex].id;
         return (
-          <Redirect
-            noThrow
-            to={`/${project.id}?type=tx&id=${templateId}&storage=${storage}`}
-          />
+          <Redirect noThrow to={`/${project.id}?type=tx&id=${templateId}`} />
         );
       }
       break;
@@ -485,41 +576,13 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         return (
           <Redirect
             noThrow
-            to={`/${project.id}?type=script&id=${templateId}&storage=${storage}`}
+            to={`/${project.id}?type=script&id=${templateId}`}
           />
         );
       }
       break;
     }
-    case 'account': {
-      if (id && id !== '') {
-        const foundIndex = project.accounts.findIndex(
-          (template) => template.id === id,
-        );
-        if (foundIndex > 0) {
-          templateIndex = foundIndex;
-        }
-      }
-      const sameType = active.type == EntityType.Account;
-      const sameIndex = active.index == templateIndex;
-
-      if (!sameIndex || !sameType || initialLoad) {
-        setInitialLoad(false);
-        setActive({
-          type: EntityType.Account,
-          index: templateIndex,
-        });
-        const templateId = project.accounts[templateIndex].id;
-        return (
-          <Redirect
-            noThrow
-            to={`/${project.id}?type=account&id=${templateId}&storage=${storage}`}
-          />
-        );
-      }
-      break;
-    }
-    default: {
+    case 'readme': {
       const sameType = active.type == EntityType.Readme;
       const sameIndex = active.index == templateIndex;
 
@@ -531,6 +594,35 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         });
         return <Redirect noThrow to={`/${project.id}`} />;
       }
+
+      break;
+    }
+    default: {
+      if (id && id !== '') {
+        const foundIndex = project.contractTemplates.findIndex(
+          (template) => template.id === id,
+        );
+        if (foundIndex > 0) {
+          templateIndex = foundIndex;
+        }
+      }
+      const sameType = active.type == EntityType.ContractTemplate;
+      const sameIndex = active.index == templateIndex;
+
+      if (!sameIndex || !sameType || initialLoad) {
+        setInitialLoad(false);
+        setActive({
+          type: EntityType.ContractTemplate,
+          index: templateIndex,
+        });
+        const templateId = project.contractTemplates[templateIndex].id;
+        return (
+          <Redirect
+            noThrow
+            to={`/${project.id}?type=account&id=${templateId}`}
+          />
+        );
+      }
     }
   }
 
@@ -540,17 +632,21 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         project,
         isLoading,
         mutator,
-        isSavingCode,
+        isSaving,
         isExecutingAction,
+        createBlankProject,
         updateProject,
-        updateAccountDeployedCode,
-        updateAccountDraftCode,
+        deleteProject,
+        createContractDeployment,
+        updateContractTemplate,
         updateScriptTemplate,
         updateTransactionTemplate,
         updateActiveScriptTemplate,
+        updateActiveContractTemplate,
         updateActiveTransactionTemplate,
         deleteScriptTemplate,
         deleteTransactionTemplate,
+        deleteContractTemplate,
         createTransactionExecution,
         createScriptExecution,
         updateSelectedContractAccount,
@@ -569,6 +665,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           setLastSigners(signers);
         },
         transactionAccounts,
+        showProjectsSidebar,
+        toggleProjectsSidebar,
+        showBottomPanel,
+        toggleBottomPanel,
+        setShowBottomPanel,
       }}
     >
       {children}

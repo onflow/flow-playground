@@ -71,10 +71,11 @@ const AccountSigners: React.FC<{
           return (
             <motion.div key={account.address}>
               <AccountAvatar
-                key={account.id}
+                key={account.address}
                 onClick={() => {
                   onChange(i);
                 }}
+                isSelected={false}
               >
                 <motion.div
                   style={{

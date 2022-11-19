@@ -7,11 +7,11 @@ interface HoverPanelProps {
 
 export const HoverPanel = styled.div<HoverPanelProps>`
   min-width: ${({ minWidth }) => minWidth};
-  max-width: 500px;
-  padding: 20px;
-  border-radius: 4px;
+  max-width: 300px;
+  border-radius: 8px;
   background-color: #fff;
-  box-shadow: 10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff;
+  border: 1px solid #abb3bf;
+  box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.08);
 `;
 
 interface HidableProps {
@@ -58,6 +58,7 @@ export const Controls = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  width: 100%;
   cursor: pointer;
 `;
 
@@ -98,20 +99,24 @@ export const List = styled.div<ListProps>`
   overflow-y: auto;
 `;
 
-export const SignersContainer = styled.div`
-  margin-bottom: 20px;
-`;
+export const SignersContainer = styled.div``;
 
 interface ControlContainerProps {
   isOk: boolean;
   progress: boolean;
   showPrompt?: boolean;
 }
+interface MessageProps {
+  isOk?: boolean;
+}
+
 export const ControlContainer = styled.div<ControlContainerProps>`
   display: ${({ showPrompt }) => (showPrompt ? 'block' : 'flex')};
-  max-width: ${({ showPrompt }) => (showPrompt ? 'min-content' : 'none')};
   align-items: center;
   justify-content: space-between;
+  padding: 8px;
+  width: 100%;
+  border-top: 1px solid #abb3bf;
   color: ${({ isOk, progress, showPrompt }) => {
     switch (true) {
       case progress:
@@ -137,7 +142,7 @@ export const ToastContainer = styled.div`
   color: ${theme.colors.darkPrimary};
 `;
 
-export const StatusMessage = styled.div`
+export const StatusMessage = styled.div<MessageProps>`
   @keyframes spin {
     from {
       transform: rotate(0deg);
@@ -148,6 +153,8 @@ export const StatusMessage = styled.div`
   }
 
   display: flex;
+  width: ${({ isOk }) => (isOk ? '100%' : '50%')};
+  padding: ${({ isOk }) => (isOk ? '1rem' : 'unset')};
   justify-content: flex-start;
   font-size: 16px;
   svg {
@@ -164,6 +171,8 @@ export const ErrorsContainer = styled.div`
   grid-gap: 10px;
   grid-template-columns: 100%;
   margin-bottom: 12px;
+  background: #f6f7f9;
+  border-radius: 8px 8px 8px 0px;
 `;
 
 export const SingleError = styled.div`
@@ -172,8 +181,10 @@ export const SingleError = styled.div`
   align-items: baseline;
   box-sizing: border-box;
   padding: 10px;
-  border-radius: 4px;
   font-size: 14px;
+  background: #ffffff;
+  box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
   &:hover {
     background-color: rgba(244, 57, 64, 0.15);
 
@@ -188,15 +199,9 @@ export const SingleError = styled.div`
 `;
 
 export const ErrorIndex = styled.div`
-  width: 20px;
-  height: 20px;
-  background-color: rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
-  justify-content: center;
-  border-radius: 20px;
-  margin-right: 8px;
-  flex: 0 0 auto;
+  justify-content: space-between;
 `;
 
 export const ErrorMessage = styled.p`

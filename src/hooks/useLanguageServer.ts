@@ -1,6 +1,7 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { MonacoLanguageClient } from 'monaco-languageclient';
 import { MonacoServices } from 'monaco-languageclient/lib/monaco-services';
+import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import { useEffect, useState } from 'react';
 import { createCadenceLanguageClient } from 'util/language-client';
@@ -69,20 +70,17 @@ export default function useLanguageServer() {
     useState<MonacoLanguageClient | null>(null);
   const [callbacks, setCallbacks] = useState(initialCallbacks);
 
-  const getCode = (address: string) => {
-    const { accounts } = project.project;
+  const getCode = (_address: string) => {
+    const {
+      active,
+      project: { contractTemplates },
+    } = project;
 
-    const number = parseInt(address, 16);
-    if (!number) {
-      return;
+    if (active.type === EntityType.ContractTemplate) {
+      return contractTemplates[active.index].script;
     }
 
-    const index = number - 1;
-    if (index < 0 || index >= accounts.length) {
-      return;
-    }
-    let code = accounts[index].deployedCode;
-    return code;
+    return '';
   };
 
   const restartServer = () => {

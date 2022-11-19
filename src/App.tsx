@@ -4,17 +4,15 @@ import { globalHistory, Router } from '@reach/router';
 import React, { useEffect } from 'react';
 import 'reset-css';
 import { ThemeProvider } from 'theme-ui';
-
 import client from 'api/apollo/client';
 import * as GoogleAnalytics from 'util/google-analytics';
-
 import BrowserDetector from 'components/BrowserDetector';
 import AppMobileWrapper from 'containers/AppMobileWrapper';
-import Playground from 'containers/Editor';
-
+import Playground from 'containers/Playground';
 import globalStyles from './globalStyles';
 import FourOhFour from './pages/404';
 import theme from './theme';
+import tooltipStyles from './tooltipStyles';
 
 GoogleAnalytics.initialize(process.env.GA_TRACKING_CODE);
 
@@ -36,7 +34,7 @@ const App: React.FC = () => {
   return (
     <>
       <BrowserDetector />
-      <Global styles={globalStyles} />
+      <Global styles={[globalStyles, tooltipStyles]} />
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
           <AppMobileWrapper>

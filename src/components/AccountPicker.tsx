@@ -1,9 +1,8 @@
 import { Account, Project } from 'api/apollo/generated/graphql';
 import AccountAvatars from 'components/AccountAvatars';
-import AccountSigners from 'components/AccountSigners';
 import React, { useEffect } from 'react';
 import { ChildPropsOptional } from 'src/types';
-import { Flex, useThemeUI } from 'theme-ui';
+import { Flex } from 'theme-ui';
 
 interface AccountPickerProps extends ChildPropsOptional {
   project: Project;
@@ -19,11 +18,12 @@ const AccountPicker = ({
   selected,
   onChange,
   maxSelection = 4,
-  children,
 }: AccountPickerProps) => {
-  const { theme } = useThemeUI();
-  const handleOnChange = (i: number) => {
-    if (selected.includes(i)) {
+  const handleOnChange = (i: number, max: number) => {
+    if (max === 1) {
+      // behave like radio button
+      onChange([i]);
+    } else if (selected.includes(i)) {
       onChange(selected.filter((j: any) => j !== i));
     } else {
       onChange([...selected, i]);
@@ -41,55 +41,20 @@ const AccountPicker = ({
 
   return (
     <Flex
+      my={1}
       sx={{
-        flexDirection: 'column',
+        padding: '0 0.5rem 0.5rem 0.5rem',
+        alignItems: 'flex-start',
       }}
     >
-      <Flex
-        my={1}
-        sx={{
-          padding: '0.8rem 0.5rem',
-          alignItems: 'center',
-          border: `1px solid ${theme.colors.borderDark}`,
-          backgroundColor: theme.colors.background,
-          borderRadius: '50px',
-        }}
-      >
-        <AccountAvatars
-          multi={true}
-          project={project}
-          accounts={accounts}
-          selectedAccounts={selected}
-          onChange={handleOnChange}
-          maxSelection={maxSelection}
-        />
-      </Flex>
-      <Flex
-        sx={{
-          padding: '0.8rem 0.5rem',
-          alignItems: 'center',
-          border: `1px solid ${theme.colors.borderDark}`,
-          backgroundColor: theme.colors.background,
-          borderRadius: '8px',
-        }}
-      >
-        <AccountSigners
-          multi={true}
-          project={project}
-          accounts={accounts}
-          selectedAccounts={selected.slice(0, maxSelection)}
-          onChange={handleOnChange}
-          maxSelection={maxSelection}
-        />
-        <Flex
-          px="0.5rem"
-          sx={{
-            alignItems: 'center',
-          }}
-        >
-          {children}
-        </Flex>
-      </Flex>
+      <AccountAvatars
+        multi={true}
+        project={project}
+        accounts={accounts}
+        selectedAccounts={selected}
+        onChange={(index: number) => handleOnChange(index, maxSelection)}
+        maxSelection={maxSelection}
+      />
     </Flex>
   );
 };

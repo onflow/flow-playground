@@ -1,5 +1,6 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import React, { useEffect, useRef, useState } from 'react';
+import { useResizeDetector } from 'react-resize-detector';
 
 import { useProject } from 'providers/Project/projectHooks';
 import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
@@ -25,6 +26,7 @@ const CadenceEditor = (props: any) => {
   });
 
   const [editorStates, setEditorStates] = useState<EditorStates>({});
+  const { width, height, ref } = useResizeDetector();
 
   // TODO: restore view state in next implementation
   /*
@@ -142,10 +144,6 @@ const CadenceEditor = (props: any) => {
     editor.focus();
     editor.layout();
 
-    window.addEventListener('resize', () => {
-      if (editor) editor.layout();
-    });
-
     // Save editor in component state
     setEditor(editor);
     setupEditor();
@@ -164,8 +162,12 @@ const CadenceEditor = (props: any) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (editor) editor.layout();
+  }, [width, height, editor]);
+
   return (
-    <EditorContainer id={MONACO_CONTAINER_ID} show={props.show}>
+    <EditorContainer id={MONACO_CONTAINER_ID} show={props.show} ref={ref}>
       {!!editor && <ControlPanel editor={editor} />}
       <Notifications />
     </EditorContainer>

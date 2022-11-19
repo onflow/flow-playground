@@ -1,3 +1,5 @@
+const FLOW_ACCOUNT_CONTRACT_ADDED_EVENT = 'flow.AccountContractAdded';
+
 export enum Tag {
   ERROR,
   LOG,
@@ -27,8 +29,8 @@ const makeLine = (tag: Tag, value: string): Line => ({
   value,
 });
 
-const respIsUpdateAccount = (response: any): boolean => {
-  return response?.data?.updateAccount != null;
+const respIsCreateContractDeployment = (response: any): boolean => {
+  return response?.data?.createContractDeployment != null;
 };
 
 const respIsCreateTransactionExecution = (response: any): boolean => {
@@ -50,11 +52,25 @@ export const normalizeInteractionResponse = (response: any): Array<Line> => {
     return [makeLine(Tag.UNKNOWN, response)];
   }
 
-  if (respIsUpdateAccount(response)) {
-    const scoped = response.data.updateAccount;
-    return [
-      makeLine(Tag.LOG, `Deployed Contract To: 0x${scoped.address.slice(-2)}`),
-    ];
+  if (respIsCreateContractDeployment(response)) {
+    const scoped = response.data.createContractDeployment;
+    const addresses = scoped.events
+      .filter(
+        (event: { type: string }) =>
+          event.type === FLOW_ACCOUNT_CONTRACT_ADDED_EVENT,
+      )
+      .map((event: { values: string[] }) => {
+        const addressValue = event.values.find(
+          (value: string) => JSON.parse(value)['type'] === 'Address',
+        );
+        if (addressValue) return JSON.parse(addressValue)['value'];
+        return null;
+      })
+      .filter(Boolean);
+
+    return addresses.map((address: string) =>
+      makeLine(Tag.LOG, `Deployed Contract To: 0x${address.slice(-2)}`),
+    );
   }
 
   if (respIsCreateTransactionExecution(response)) {

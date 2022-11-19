@@ -18,6 +18,7 @@ export const animations = {
   contracts: {
     default: {
       opacity: 0,
+      position: 'relative',
       zIndex: -1,
       paddingTop: '1rem',
       marginTop: '-1rem',
