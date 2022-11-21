@@ -2,7 +2,7 @@ import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { navigate, Redirect, useLocation } from '@reach/router';
 import { Account, Project } from 'api/apollo/generated/graphql';
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { ChildProps } from 'src/types';
 import { getParams } from 'util/url';
 import { createDefaultProject } from './projectDefault';
@@ -131,6 +131,13 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const [lastSigners, setLastSigners] = useState(null);
   const [showProjectsSidebar, setShowProjectsSidebar] = useState(false);
   const [showBottomPanel, setShowBottomPanel] = useState(false);
+
+  useEffect(() => {
+    if (showProjectsSidebar) {
+      // close project sidebar if open and a different project gets loaded.
+      setShowProjectsSidebar(false);
+    }
+  }, [projectId]);
 
   const [selectedResourceAccount, setSelectedResourceAccount] = useState<
     string | null
