@@ -2,9 +2,9 @@ name: "Code Vulnerability Analysis"
 
 on:
   push:
-    branches: [ "development" ]
+    branches: [ "staging" ]
   pull_request:
-    branches: [ "development" ]
+    branches: [ "staging" ]
   schedule:
     - cron: '0 7 * * *'
     
@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'go', 'javascript' ]
+        language: [ 'javascript' ]
 
     steps:
     - name: Checkout repository
