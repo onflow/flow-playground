@@ -6,7 +6,6 @@ import NavInput from './NavInput';
 import NewProjectButton from 'components/NewProjectButton';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useState } from 'react';
-import useKeyPress from '../../hooks/useKeyPress';
 import { SXStyles } from 'src/types';
 import { Flex } from 'theme-ui';
 import Mixpanel from 'util/mixpanel';
@@ -80,9 +79,7 @@ const TopNav = () => {
   const [showExport, setShowExport] = useState(false);
   const [showExamples, setShowExamples] = useState(false);
   const [editing, setEditing] = useState(false);
-  const [projectName, setProjectName] = useState(defaultProjectName);
-  const enterPressed = useKeyPress('Enter');
-  const escapePressed = useKeyPress('Escape');
+  const [projectName, setProjectName] = useState(project.title);
   const inputStyles = editing ? styles.input : styles.inputReadOnly;
 
   const onStartButtonClick = () => {
@@ -92,6 +89,7 @@ const TopNav = () => {
 
   const onNameInputChange = (name: string) => {
     setProjectName(name);
+    console.log(name)
   };
 
   const toggleEditing = () => {
@@ -99,12 +97,15 @@ const TopNav = () => {
     return setEditing(toggledEditing);
   };
 
+  const updateProjectName = (name: string) => {
+    updateProject(name, project.description, project.readme);
+    setEditing(false);
+  }
+
   useEffect(() => {
-    if (enterPressed || escapePressed) {
-      updateProject(projectName, project.description, project.readme);
-      setEditing(false);
-    }
-  }, [enterPressed, escapePressed]);
+    console.log('useEffect' + project.title)
+    setProjectName(project.title);
+  }, [project?.id])
 
   return (
     <Flex sx={styles.root}>
@@ -125,12 +126,13 @@ const TopNav = () => {
           editing={editing}
           sx={inputStyles}
           type="text"
+          value={projectName}
           defaultValue={defaultProjectName}
-          toggleEditing={toggleEditing}
+          setTopNavEditing={setEditing}
           onChange={(e: any) => {
             onNameInputChange(e.target.value);
           }}
-          updateProjectName={updateProject}
+          updateProjectName={updateProjectName}
         />
         {/* <ThemeUIButton variant="secondaryLegacy" onClick={onStartButtonClick}>
           <AnimatedText>Click here to start a tutorial</AnimatedText>

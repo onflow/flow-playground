@@ -175,7 +175,7 @@ export default class ProjectMutator {
       Mixpanel.track('Project saved', { projectId: this.projectId });
     }
 
-    navigate(`/${this.projectId}`, { replace: true });
+    // navigate(`/${this.projectId}`, { replace: true });
   }
 
   // TODO: This is a temporary function used to set persist: true after creating a blank project.

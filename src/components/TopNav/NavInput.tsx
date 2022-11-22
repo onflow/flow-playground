@@ -4,22 +4,24 @@ import { Input as ThemeUiInput, ThemeUICSSObject } from 'theme-ui';
 interface NavInputProps {
   onChange?: (event: ChangeEvent) => void;
   defaultValue: string;
+  value: string
   sx?: ThemeUICSSObject;
   type: string;
   'data-test'?: string;
   editing: boolean;
-  toggleEditing: any;
+  setTopNavEditing: any;
   updateProjectName: any;
 }
 
 const NavInput = ({
   onChange,
   defaultValue,
+  value,
   sx = {},
   type,
   'data-test': dataTest,
   editing,
-  toggleEditing,
+  setTopNavEditing,
   updateProjectName,
 }: NavInputProps) => {
   const ref = useRef(null);
@@ -28,9 +30,11 @@ const NavInput = ({
   useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (ref.current && !ref.current.contains(event.target)) {
+        console.log(event)
+        console.log(value)
         document.removeEventListener('click', handleClickOutside, true);
-        updateProjectName();
-        toggleEditing();
+        updateProjectName(value);
+        setTopNavEditing(false);
         setIsEditing(false);
       }
     };
@@ -38,12 +42,7 @@ const NavInput = ({
       document.addEventListener('click', handleClickOutside, true);
       setIsEditing(true);
     }
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-      setIsEditing(false);
-    };
   }, [editing]);
-
   return (
     <ThemeUiInput
       sx={sx}
@@ -51,6 +50,7 @@ const NavInput = ({
       type={type}
       onChange={onChange}
       readOnly={editing}
+      value={value}
       defaultValue={defaultValue}
       data-test={dataTest}
     />
