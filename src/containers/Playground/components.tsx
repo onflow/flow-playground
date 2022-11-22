@@ -141,7 +141,7 @@ const EditorContainer = ({
     }
   }, [project]);
 
-  const updateProject = (
+  const setProjectProperties = (
     title: string,
     description: string,
     readme: string,
@@ -185,7 +185,11 @@ const EditorContainer = ({
                   placeholder={PLACEHOLDER_TITLE}
                   onChange={(event) => {
                     setTitle(event.target.value);
-                    updateProject(event.target.value, description, readme);
+                    setProjectProperties(
+                      event.target.value,
+                      description,
+                      readme,
+                    );
                   }}
                 />
               </InputBlock>
@@ -196,7 +200,7 @@ const EditorContainer = ({
                   placeholder={PLACEHOLDER_DESCRIPTION}
                   onChange={(event) => {
                     setDescription(event.target.value);
-                    updateProject(title, event.target.value, readme);
+                    setProjectProperties(title, event.target.value, readme);
                   }}
                 />
               </InputBlock>
@@ -208,7 +212,7 @@ const EditorContainer = ({
                   setDescriptionOverflow(overflow);
                   setReadme(readme);
                   if (!overflow) {
-                    updateProject(title, description, readme);
+                    setProjectProperties(title, description, readme);
                   }
                 }}
                 overflow={descriptionOverflow}

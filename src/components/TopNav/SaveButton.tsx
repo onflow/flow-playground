@@ -26,7 +26,6 @@ export const SaveButton = () => {
   const isSaved = project?.persist;
 
   const saveClicked = () => {
-    console.log('save project');
     Mixpanel.track('Save project clicked', { projectId });
     updateProject(project.title, project.description, project.readme);
   };
