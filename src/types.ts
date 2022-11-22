@@ -22,6 +22,7 @@ export type ProjectType = {
   transactionTemplates: Template[];
   scriptTemplates: Template[];
   updatedAt: string;
+  persist: boolean;
 };
 
 export type Template = {

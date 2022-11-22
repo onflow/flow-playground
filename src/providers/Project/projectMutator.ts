@@ -178,30 +178,6 @@ export default class ProjectMutator {
     navigate(`/${this.projectId}`, { replace: true });
   }
 
-  // TODO: This is a temporary function used to set persist: true after creating a blank project.
-  // The v2 api will change how projects are created and persisted
-  async persistProject() {
-    this.client.writeData({
-      id: `Project:${this.projectId}`,
-      data: {
-        persist: true,
-      },
-    });
-
-    await this.client.mutate({
-      mutation: SAVE_PROJECT,
-      variables: {
-        projectId: this.projectId,
-        title: this.title,
-        description: this.description,
-        readme: this.readme,
-      },
-      context: {
-        serializationKey: PROJECT_SERIALIZATION_KEY,
-      },
-    });
-  }
-
   clearProjectAccountsOnReDeploy(accountAddress: string) {
     const project = this.getProject();
 

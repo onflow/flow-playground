@@ -168,8 +168,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     try {
       project = await createDefaultProject();
       navigate(`/${project.id}`, { replace: true });
-      //TODO: verify this isn't needed for saving a blank project to cache
-      // await mutator.persistProject();
     } catch (e) {
       console.error(e);
       setIsSaving(false);
