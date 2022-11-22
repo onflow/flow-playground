@@ -1,4 +1,4 @@
-import { Link, navigate } from '@reach/router';
+import { navigate } from '@reach/router';
 import ConfirmationPopup from 'components/ConfirmationPopup';
 import { ContextMenu } from 'components/ContextMenu';
 import ContractIcon from 'components/Icons/ContractIcon';
@@ -50,11 +50,6 @@ const styles: SXStyles = {
     color: 'muted',
     fontSize: 1,
   },
-};
-
-const titleLinkStyle = {
-  textDecoration: 'none',
-  color: 'inherit',
 };
 
 const getRootStyles = (isCurrentProject: boolean) => {
