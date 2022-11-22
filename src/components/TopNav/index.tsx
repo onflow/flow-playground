@@ -89,7 +89,7 @@ const TopNav = () => {
 
   const onNameInputChange = (name: string) => {
     setProjectName(name);
-    console.log(name)
+    console.log('setting onChange ' + name)
   };
 
   const toggleEditing = () => {

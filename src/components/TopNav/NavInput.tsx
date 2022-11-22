@@ -31,7 +31,7 @@ const NavInput = ({
     const handleClickOutside = (event: any) => {
       if (ref.current && !ref.current.contains(event.target)) {
         console.log(event)
-        console.log(value)
+        console.log('saving on outsideclick navinput projectnanme ' + value)
         document.removeEventListener('click', handleClickOutside, true);
         updateProjectName(value);
         setTopNavEditing(false);
