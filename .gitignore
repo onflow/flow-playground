@@ -23,6 +23,7 @@ yarn-error.log*
 
 
 .idea
+.vscode
 
 # tests
 cypress/videos
