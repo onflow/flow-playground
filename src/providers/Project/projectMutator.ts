@@ -1,5 +1,3 @@
-import { navigate } from '@reach/router';
-
 import ApolloClient from 'apollo-client';
 
 import {
@@ -132,12 +130,7 @@ export default class ProjectMutator {
     return project;
   }
 
-  async saveProject(
-    isFork: boolean,
-    title: string,
-    description: string,
-    readme: string,
-  ) {
+  async saveProject(title: string, description: string, readme: string) {
     if (this.isLocal) {
       await this.createProject();
       unregisterOnCloseSaveMessage();
@@ -169,13 +162,7 @@ export default class ProjectMutator {
       },
     });
 
-    if (isFork) {
-      Mixpanel.track('Project forked', { projectId: this.projectId });
-    } else {
-      Mixpanel.track('Project saved', { projectId: this.projectId });
-    }
-
-    navigate(`/${this.projectId}`, { replace: true });
+    Mixpanel.track('Project saved', { projectId: this.projectId });
   }
 
   clearProjectAccountsOnReDeploy(accountAddress: string) {

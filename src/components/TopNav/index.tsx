@@ -6,7 +6,6 @@ import NavInput from './NavInput';
 import NewProjectButton from 'components/NewProjectButton';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useState } from 'react';
-import useKeyPress from '../../hooks/useKeyPress';
 import { SXStyles } from 'src/types';
 import { Flex } from 'theme-ui';
 import Mixpanel from 'util/mixpanel';
@@ -45,45 +44,13 @@ const styles: SXStyles = {
   topNavSectionRight: {
     flexDirection: 'row-reverse',
   },
-  input: {
-    width: '100%',
-    fontSize: '15px',
-    color: '#000000',
-    fontWeight: '450',
-    textOverflow: 'ellipsis',
-    border: 'none',
-    pointerEvents: 'initial',
-    background: '#DEE2E9',
-    backgroundColor: '#DEE2E9',
-    fontFamily: 'Termina',
-    textAlign: 'center',
-    borderRadius: '0px',
-  },
-  inputReadOnly: {
-    width: '100%',
-    fontSize: '15px',
-    border: 'none',
-    color: 'inherit',
-    fontWeight: '450',
-    textOverflow: 'ellipsis',
-    background: 'none',
-    pointerEvents: 'none',
-    fontFamily: 'Termina',
-    textAlign: 'center',
-    borderRadius: '0px',
-  },
 };
 
 const TopNav = () => {
-  const defaultProjectName = 'Untitled Project';
   const { project, updateProject, toggleProjectsSidebar } = useProject();
   const [showExport, setShowExport] = useState(false);
   const [showExamples, setShowExamples] = useState(false);
-  const [editing, setEditing] = useState(false);
-  const [projectName, setProjectName] = useState(defaultProjectName);
-  const enterPressed = useKeyPress('Enter');
-  const escapePressed = useKeyPress('Escape');
-  const inputStyles = editing ? styles.input : styles.inputReadOnly;
+  const [projectName, setProjectName] = useState(project.title);
 
   const onStartButtonClick = () => {
     setShowExamples(true);
@@ -94,17 +61,13 @@ const TopNav = () => {
     setProjectName(name);
   };
 
-  const toggleEditing = () => {
-    const toggledEditing = !editing;
-    return setEditing(toggledEditing);
+  const updateProjectName = (name: string) => {
+    updateProject(name, project.description, project.readme);
   };
 
   useEffect(() => {
-    if (enterPressed || escapePressed) {
-      updateProject(projectName, project.description, project.readme);
-      setEditing(false);
-    }
-  }, [enterPressed, escapePressed]);
+    setProjectName(project.title);
+  }, [project?.id]);
 
   return (
     <Flex sx={styles.root}>
@@ -120,17 +83,14 @@ const TopNav = () => {
         </Button>
         <NewProjectButton size="sm" variant="secondaryLegacy" inline={true} />
       </Flex>
-      <Flex sx={styles.topNavProjectName} onClick={() => toggleEditing()}>
+      <Flex sx={styles.topNavProjectName}>
         <NavInput
-          editing={editing}
-          sx={inputStyles}
           type="text"
-          defaultValue={defaultProjectName}
-          toggleEditing={toggleEditing}
+          value={projectName}
           onChange={(e: any) => {
             onNameInputChange(e.target.value);
           }}
-          updateProjectName={updateProject}
+          updateValue={updateProjectName}
         />
         {/* <ThemeUIButton variant="secondaryLegacy" onClick={onStartButtonClick}>
           <AnimatedText>Click here to start a tutorial</AnimatedText>

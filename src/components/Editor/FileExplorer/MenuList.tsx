@@ -9,11 +9,10 @@ import ExplorerTransactionIcon from 'components/Icons/ExplorerTransactionIcon';
 import Input from 'components/ExplorerInput';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import React, { createRef, SyntheticEvent, useEffect, useState } from 'react';
+import React, { SyntheticEvent, useState } from 'react';
 import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import { getParams } from 'util/url';
-import useKeyPress from '../../../hooks/useKeyPress';
 import { ContextMenu } from '../../ContextMenu';
 
 const styles: SXStyles = {
@@ -112,29 +111,6 @@ const styles: SXStyles = {
     borderRadius: '8px',
     color: '#3031D1',
   },
-  input: {
-    width: '100%',
-    fontSize: '15px',
-    color: '#69717E',
-    fontWeight: '450',
-    textOverflow: 'ellipsis',
-    border: '1px solid #dedede',
-    pointerEvents: 'initial',
-    background: '#FFFFFF',
-    fontFamily: 'inherit',
-    borderRadius: '4px',
-  },
-  inputReadOnly: {
-    width: '100%',
-    fontSize: '15px',
-    color: 'inherit',
-    fontWeight: '450',
-    textOverflow: 'ellipsis',
-    border: '1px solid transparent',
-    background: 'none',
-    pointerEvents: 'none',
-    fontFamily: 'inherit',
-  },
 };
 
 type MenuListProps = {
@@ -147,8 +123,6 @@ type MenuListProps = {
   onDelete: any;
 };
 
-const NAME_MAX_CHARS = 50;
-
 const MenuList: React.FC<MenuListProps> = ({
   title,
   itemType,
@@ -159,10 +133,12 @@ const MenuList: React.FC<MenuListProps> = ({
   onDelete,
 }) => {
   const { active } = useProject();
-  const isEditing = createRef<HTMLInputElement>();
   const [editing, setEditing] = useState([]);
-  const enterPressed = useKeyPress('Enter');
-  const escapePressed = useKeyPress('Escape');
+  const [itemNames, setItemNames] = useState(
+    items.map((item) => {
+      return item.title;
+    }),
+  );
   const [isInserting, setIsInserting] = useState(false);
   const [isFileShuttered, setIsFileShuttered] = useState(false);
 
@@ -181,12 +157,13 @@ const MenuList: React.FC<MenuListProps> = ({
     return setEditing([...editing, i]);
   };
 
-  useEffect(() => {
-    if (enterPressed || escapePressed) {
-      setEditing([]);
-      isEditing.current?.blur();
+  const setItemName = (name: string, index: number) => {
+    if (itemNames.indexOf(index)) {
+      let _newNames = [...itemNames];
+      _newNames.splice(index, 1, name);
+      setItemNames(_newNames);
     }
-  }, [enterPressed, escapePressed]);
+  };
 
   const getIcon = (title: string) => {
     switch (title) {
@@ -255,10 +232,7 @@ const MenuList: React.FC<MenuListProps> = ({
               i === 0;
             const isActive =
               isDefault || (active.type === itemType && item.id === params.id);
-            const dataTest = `sidebar-${item.title}`;
-            const inputStyles = editing.includes(i)
-              ? styles.input
-              : styles.inputReadOnly;
+
             const submenuOptions = [
               {
                 name: 'Edit name',
@@ -277,7 +251,6 @@ const MenuList: React.FC<MenuListProps> = ({
                 sx={isActive ? styles.selectedItem : styles.item}
                 title={item.title}
                 key={item.id}
-                data-test={dataTest}
               >
                 <Flex
                   sx={{ alignItems: 'center' }}
@@ -294,32 +267,16 @@ const MenuList: React.FC<MenuListProps> = ({
                   {/* NOTE: Optimize this to a controlled input! */}
                   <Input
                     editing={editing}
-                    sx={inputStyles}
                     type="text"
-                    defaultValue={item.title}
-                    title={item.title}
+                    value={itemNames[i]}
                     index={i}
                     toggleEditing={toggleEditing}
                     onChange={(e: any) => {
-                      if (e.target.value.length > NAME_MAX_CHARS) {
-                        isEditing.current.value = e.target.value.substr(
-                          0,
-                          NAME_MAX_CHARS - 1,
-                        );
-                      }
+                      setItemName(e.target.value, i);
                     }}
                   />
                 </Flex>
                 <ContextMenu options={submenuOptions} showEllipsis={isActive} />
-
-                {/* TODO: Delete file, Update Filename userflows
-                {!editing.includes(i) && isActive && items.length > 1 && (
-                  <Box
-                    onClick={}
-                  >
-                    <FaTimes />
-                  </Box>
-                )} */}
               </Flex>
             );
           })}

@@ -186,12 +186,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     setIsSaving(true);
     let res;
     try {
-      res = await mutator.saveProject(
-        project.transactionTemplates[active.index].id,
-        title,
-        description,
-        readme,
-      );
+      res = await mutator.saveProject(title, description, readme);
     } catch (e) {
       console.error(e);
       setIsSaving(false);
