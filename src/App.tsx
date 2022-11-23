@@ -6,6 +6,7 @@ import 'reset-css';
 import { ThemeProvider } from 'theme-ui';
 import client from 'api/apollo/client';
 import * as GoogleAnalytics from 'util/google-analytics';
+import { onLCP, onFID, onCLS, CLSMetric } from 'web-vitals';
 import BrowserDetector from 'components/BrowserDetector';
 import AppMobileWrapper from 'containers/AppMobileWrapper';
 import Playground from 'containers/Playground';
@@ -30,6 +31,29 @@ const App: React.FC = () => {
       GoogleAnalytics.pageview(window.location);
     });
   }, []);
+
+  function sendToGoogleAnalytics({ name, delta, value, id }: CLSMetric) {
+    window?.gtag('event', name, {
+      // Built-in params:
+      value: delta, // Use `delta` so the value can be summed.
+      // Custom params:
+      metric_id: id, // Needed to aggregate events.
+      metric_value: value, // Optional.
+      metric_delta: delta, // Optional.
+
+      // OPTIONAL: any additional params or debug info here.
+      // See: https://web.dev/debug-performance-in-the-field/
+      // metric_rating: 'good' | 'needs-improvement' | 'poor',
+      // debug_info: '...',
+      // ...
+    });
+  }
+
+  if (process.env.REACT_APP_ENABLE_GA === 'true') {
+    onCLS(sendToGoogleAnalytics);
+    onFID(sendToGoogleAnalytics);
+    onLCP(sendToGoogleAnalytics);
+  }
 
   return (
     <>
