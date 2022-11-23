@@ -36,7 +36,7 @@ const styles: SXStyles = {
     pointerEvents: 'none',
     fontFamily: 'inherit',
   },
-}
+};
 
 const Input = ({
   onClick,

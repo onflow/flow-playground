@@ -64,11 +64,11 @@ const TopNav = () => {
 
   const updateProjectName = (name: string) => {
     updateProject(name, project.description, project.readme);
-  }
+  };
 
   useEffect(() => {
     setProjectName(project.title);
-  }, [project?.id])
+  }, [project?.id]);
 
   return (
     <Flex sx={styles.root}>
@@ -84,7 +84,7 @@ const TopNav = () => {
         </Button>
         <NewProjectButton size="sm" variant="secondaryLegacy" inline={true} />
       </Flex>
-      <Flex sx={styles.topNavProjectName} >
+      <Flex sx={styles.topNavProjectName}>
         <NavInput
           type="text"
           value={projectName}

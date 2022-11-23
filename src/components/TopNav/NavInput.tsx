@@ -4,7 +4,7 @@ import { Input as ThemeUiInput } from 'theme-ui';
 
 interface NavInputProps {
   onChange?: (event: ChangeEvent) => void;
-  value: string
+  value: string;
   type: string;
   updateValue: any;
 }
@@ -36,14 +36,9 @@ const styles: SXStyles = {
     textAlign: 'center',
     borderRadius: '0px',
   },
-}
+};
 
-const NavInput = ({
-  onChange,
-  value,
-  type,
-  updateValue,
-}: NavInputProps) => {
+const NavInput = ({ onChange, value, type, updateValue }: NavInputProps) => {
   const ref = useRef(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const inputStyle = isEditing ? styles.input : styles.inputReadOnly;
@@ -51,9 +46,9 @@ const NavInput = ({
 
   const openEditing = () => {
     if (!isEditing) {
-      setIsEditing(!isEditing)
+      setIsEditing(!isEditing);
     }
-  }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
@@ -67,9 +62,8 @@ const NavInput = ({
     if (isEditing) {
       document.addEventListener('click', handleClickOutside, true);
     }
-    return
+    return;
   }, [isEditing]);
-
 
   return (
     <ThemeUiInput

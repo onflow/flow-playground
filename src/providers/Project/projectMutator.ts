@@ -132,11 +132,7 @@ export default class ProjectMutator {
     return project;
   }
 
-  async saveProject(
-    title: string,
-    description: string,
-    readme: string,
-  ) {
+  async saveProject(title: string, description: string, readme: string) {
     if (this.isLocal) {
       await this.createProject();
       unregisterOnCloseSaveMessage();
@@ -169,8 +165,6 @@ export default class ProjectMutator {
     });
 
     Mixpanel.track('Project saved', { projectId: this.projectId });
-
-
   }
 
   // TODO: This is a temporary function used to set persist: true after creating a blank project.

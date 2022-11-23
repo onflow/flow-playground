@@ -112,7 +112,6 @@ const styles: SXStyles = {
     borderRadius: '8px',
     color: '#3031D1',
   },
-
 };
 
 type MenuListProps = {
@@ -136,7 +135,11 @@ const MenuList: React.FC<MenuListProps> = ({
 }) => {
   const { active } = useProject();
   const [editing, setEditing] = useState([]);
-  const [itemNames, setItemNames] = useState(items.map(item => {return item.title}));
+  const [itemNames, setItemNames] = useState(
+    items.map((item) => {
+      return item.title;
+    }),
+  );
   const [isInserting, setIsInserting] = useState(false);
   const [isFileShuttered, setIsFileShuttered] = useState(false);
 
@@ -161,7 +164,7 @@ const MenuList: React.FC<MenuListProps> = ({
       _newNames.splice(index, 1, name);
       setItemNames(_newNames);
     }
-  }
+  };
 
   const getIcon = (title: string) => {
     switch (title) {
@@ -230,7 +233,7 @@ const MenuList: React.FC<MenuListProps> = ({
               i === 0;
             const isActive =
               isDefault || (active.type === itemType && item.id === params.id);
-            
+
             const submenuOptions = [
               {
                 name: 'Edit name',
@@ -270,7 +273,7 @@ const MenuList: React.FC<MenuListProps> = ({
                     index={i}
                     toggleEditing={toggleEditing}
                     onChange={(e: any) => {
-                      setItemName(e.target.value, i)
+                      setItemName(e.target.value, i);
                     }}
                   />
                 </Flex>
