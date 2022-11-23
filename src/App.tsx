@@ -14,6 +14,7 @@ import globalStyles from './globalStyles';
 import FourOhFour from './pages/404';
 import theme from './theme';
 import tooltipStyles from './tooltipStyles';
+import { Helmet } from 'react-helmet';
 
 GoogleAnalytics.initialize(process.env.GA_TRACKING_CODE);
 
@@ -49,7 +50,7 @@ const App: React.FC = () => {
     });
   }
 
-  if (process.env.REACT_APP_ENABLE_GA === 'true') {
+  if (process.env.GA_TRACKING_ID) {
     onCLS(sendToGoogleAnalytics);
     onFID(sendToGoogleAnalytics);
     onLCP(sendToGoogleAnalytics);
@@ -59,6 +60,23 @@ const App: React.FC = () => {
     <>
       <BrowserDetector />
       <Global styles={[globalStyles, tooltipStyles]} />
+      {process.env.GA_TRACKING_ID && (
+        <Helmet>
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GA_TRACKING_ID}`}
+          />
+          <script>
+            {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', '${process.env.GA_TRACKING_ID}');
+              `}
+          </script>
+        </Helmet>
+      )}
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
           <AppMobileWrapper>
