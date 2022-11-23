@@ -89,13 +89,6 @@ const TopNav = () => {
           type="text"
           value={projectName}
           onChange={(e: any) => {
-            if (e.target.value.length > MAX_CHARS){
-              e.target.value = e.target.value.substr(
-                0,
-                MAX_CHARS - 1,
-              );
-            }
-            console.log(e.target.value)
             onNameInputChange(e.target.value);
           }}
           updateValue={updateProjectName}
