@@ -1,4 +1,4 @@
-import { Link } from '@reach/router';
+import { navigate } from '@reach/router';
 import ConfirmationPopup from 'components/ConfirmationPopup';
 import { ContextMenu } from 'components/ContextMenu';
 import ContractIcon from 'components/Icons/ContractIcon';
@@ -12,6 +12,7 @@ import { Box, Flex } from 'theme-ui';
 import paths from '../../paths';
 import { useProject } from 'providers/Project/projectHooks';
 import InformationalPopup from 'components/InformationalPopup';
+import { LOCAL_PROJECT_ID } from 'util/url';
 
 type Props = {
   project: ProjectType;
@@ -34,6 +35,7 @@ const styles: SXStyles = {
     '&:hover': {
       opacity: 0.75,
     },
+    cursor: 'pointer',
   },
   details: {
     gap: 8,
@@ -48,11 +50,6 @@ const styles: SXStyles = {
     color: 'muted',
     fontSize: 1,
   },
-};
-
-const titleLinkStyle = {
-  textDecoration: 'none',
-  color: 'inherit',
 };
 
 const getRootStyles = (isCurrentProject: boolean) => {
@@ -75,15 +72,30 @@ const infoLastProjectOptions = {
   message: 'At least one playground project is required.',
 };
 
+const willLoseChangesOptions = {
+  title: `You have unsaved Changes!`,
+  message:
+    'The project you are working on has not been saved, you will lose changes.',
+};
+
 const ProjectListItem = ({ project, projectCount }: Props) => {
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [showLastProject, setShowLastProject] = useState<boolean>(false);
-  const { deleteProject } = useProject();
+  const [showWillLoseChanges, setShowWillLoseChanges] =
+    useState<boolean>(false);
+  const { deleteProject, project: activeProject } = useProject();
 
   const confirmDelete = async (isConfirmed: boolean): Promise<void> => {
     setShowConfirmation(false);
     if (isConfirmed) {
       await deleteProject(project.id);
+    }
+  };
+
+  const confirmSelectProject = async (isConfirmed: boolean): Promise<void> => {
+    setShowWillLoseChanges(false);
+    if (isConfirmed) {
+      navigate(`${paths.projectPath(project.id)}`);
     }
   };
 
@@ -109,6 +121,7 @@ const ProjectListItem = ({ project, projectCount }: Props) => {
     },
   };
 
+  const isLocal = Boolean(activeProject?.id === LOCAL_PROJECT_ID); // figure out if there are local project changes
   return (
     <Flex sx={rootStyles}>
       <ConfirmationPopup
@@ -121,10 +134,21 @@ const ProjectListItem = ({ project, projectCount }: Props) => {
         visible={showLastProject}
         {...infoLastProjectOptions}
       />
+      <ConfirmationPopup
+        onClose={confirmSelectProject}
+        visible={showWillLoseChanges}
+        {...willLoseChangesOptions}
+      />
       <Flex sx={headerStyles.header}>
-        <Link to={paths.projectPath(project.id)} style={titleLinkStyle}>
-          <Box sx={styles.title}>{project.title}</Box>
-        </Link>
+        <Box
+          onClick={() =>
+            isLocal ? setShowWillLoseChanges(true) : confirmSelectProject(true)
+          }
+          sx={styles.title}
+        >
+          {project.title}
+        </Box>
+
         <ContextMenu showEllipsis={true} options={contextMenuOptions} />
       </Flex>
 
