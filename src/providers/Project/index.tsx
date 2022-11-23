@@ -162,22 +162,24 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const errorMessages = [
     {
-      keyText: "maximum number",
-      userMessage: "Maximum saved projects is 10. Delete a project in order to save."
-    }
-  ]
+      keyText: 'maximum number',
+      userMessage:
+        'Maximum saved projects is 10. Delete a project in order to save.',
+    },
+  ];
 
   const translateError = (text: string): string => {
     let transMessage = text;
-    errorMessages.forEach(msg => {
+    errorMessages.forEach((msg) => {
       if (text.includes(msg.keyText)) {
-        transMessage = msg.userMessage
+        transMessage = msg.userMessage;
       }
-    })
+    });
     return transMessage;
-  }
-  
-  const showError = (message?: string) => alert(`Error: ${translateError(message)}`);
+  };
+
+  const showError = (message?: string) =>
+    alert(`Error: ${translateError(message)}`);
 
   const createBlankProject = async () => {
     setIsSaving(true);
