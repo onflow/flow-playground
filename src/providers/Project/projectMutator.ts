@@ -133,7 +133,6 @@ export default class ProjectMutator {
   }
 
   async saveProject(
-    isFork: boolean,
     title: string,
     description: string,
     readme: string,
@@ -169,11 +168,8 @@ export default class ProjectMutator {
       },
     });
 
-    if (isFork) {
-      Mixpanel.track('Project forked', { projectId: this.projectId });
-    } else {
-      Mixpanel.track('Project saved', { projectId: this.projectId });
-    }
+    Mixpanel.track('Project saved', { projectId: this.projectId });
+
 
   }
 

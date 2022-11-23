@@ -1,58 +1,88 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { Input as ThemeUiInput, ThemeUICSSObject } from 'theme-ui';
+import { SXStyles } from 'src/types';
+import { Input as ThemeUiInput } from 'theme-ui';
 
 interface NavInputProps {
   onChange?: (event: ChangeEvent) => void;
-  defaultValue: string;
   value: string
-  sx?: ThemeUICSSObject;
   type: string;
-  'data-test'?: string;
-  editing: boolean;
-  setTopNavEditing: any;
-  updateProjectName: any;
+  updateValue: any;
+}
+
+const styles: SXStyles = {
+  input: {
+    width: '100%',
+    fontSize: '15px',
+    color: '#000000',
+    fontWeight: '450',
+    textOverflow: 'ellipsis',
+    border: 'none',
+    pointerEvents: 'initial',
+    background: '#DEE2E9',
+    backgroundColor: '#DEE2E9',
+    fontFamily: 'Termina',
+    textAlign: 'center',
+    borderRadius: '0px',
+  },
+  inputReadOnly: {
+    width: '100%',
+    fontSize: '15px',
+    border: 'none',
+    color: 'inherit',
+    fontWeight: '450',
+    textOverflow: 'ellipsis',
+    background: 'none',
+    fontFamily: 'Termina',
+    textAlign: 'center',
+    borderRadius: '0px',
+  },
 }
 
 const NavInput = ({
   onChange,
-  defaultValue,
   value,
-  sx = {},
   type,
-  'data-test': dataTest,
-  editing,
-  setTopNavEditing,
-  updateProjectName,
+  updateValue,
 }: NavInputProps) => {
   const ref = useRef(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const inputStyle = isEditing ? styles.input : styles.inputReadOnly;
+  const MAX_LENGTH = 50;
 
+  const openEditing = () => {
+    if (!isEditing) {
+      setIsEditing(!isEditing)
+    }
+  }
+
+  // clean up editing calls
+  // do the same for the menu inputs
   useEffect(() => {
     const handleClickOutside = (event: any) => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        console.log(event)
-        console.log('saving on outsideclick navinput projectnanme ' + value)
+      const clicked = !ref.current.contains(event.target);
+      if (ref.current && clicked) {
         document.removeEventListener('click', handleClickOutside, true);
-        updateProjectName(value);
-        setTopNavEditing(false);
+        updateValue(ref.current.value);
         setIsEditing(false);
       }
     };
-    if (editing && !isEditing) {
+    if (isEditing) {
       document.addEventListener('click', handleClickOutside, true);
-      setIsEditing(true);
     }
-  }, [editing]);
+    return
+  }, [isEditing]);
+
+
   return (
     <ThemeUiInput
-      sx={sx}
+      onClick={openEditing}
+      sx={inputStyle}
       ref={ref}
+      readOnly={!isEditing}
       type={type}
       onChange={onChange}
-      readOnly={editing}
       value={value}
-      defaultValue={defaultValue}
-      data-test={dataTest}
+      maxLength={MAX_LENGTH}
     />
   );
 };
