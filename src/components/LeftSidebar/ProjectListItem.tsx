@@ -111,8 +111,7 @@ const ProjectListItem = ({ project, projectCount }: Props) => {
     addSuffix: true,
   });
 
-  // TODO: isCurrentProject is mocked. Compare withe current project id once getProjects query is complete
-  const isCurrentProject = project.id === 1;
+  const isCurrentProject = project.id === activeProject?.id;
   const rootStyles = getRootStyles(isCurrentProject);
   const headerStyles: SXStyles = {
     header: {
