@@ -9,11 +9,10 @@ import ExplorerTransactionIcon from 'components/Icons/ExplorerTransactionIcon';
 import Input from 'components/ExplorerInput';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import React, { createRef, SyntheticEvent, useEffect, useState } from 'react';
+import React, { SyntheticEvent, useState } from 'react';
 import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import { getParams } from 'util/url';
-import useKeyPress from '../../../hooks/useKeyPress';
 import { ContextMenu } from '../../ContextMenu';
 
 const styles: SXStyles = {

@@ -1,5 +1,3 @@
-import { navigate } from '@reach/router';
-
 import ApolloClient from 'apollo-client';
 
 import {

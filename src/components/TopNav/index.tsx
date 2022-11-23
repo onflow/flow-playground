@@ -51,7 +51,6 @@ const TopNav = () => {
   const [showExport, setShowExport] = useState(false);
   const [showExamples, setShowExamples] = useState(false);
   const [projectName, setProjectName] = useState(project.title);
-  const MAX_CHARS = 50;
 
   const onStartButtonClick = () => {
     setShowExamples(true);
