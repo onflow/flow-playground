@@ -55,8 +55,6 @@ const NavInput = ({
     }
   }
 
-  // clean up editing calls
-  // do the same for the menu inputs
   useEffect(() => {
     const handleClickOutside = (event: any) => {
       const clicked = !ref.current.contains(event.target);
