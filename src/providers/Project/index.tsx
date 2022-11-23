@@ -160,7 +160,24 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     readme,
   );
 
-  const showError = () => alert('Something went wrong, please try again');
+  const errorMessages = [
+    {
+      keyText: "maximum number",
+      userMessage: "Maximum saved projects is 10. Delete a project in order to save."
+    }
+  ]
+
+  const translateError = (text: string): string => {
+    let transMessage = text;
+    errorMessages.forEach(msg => {
+      if (text.includes(msg.keyText)) {
+        transMessage = msg.userMessage
+      }
+    })
+    return transMessage;
+  }
+  
+  const showError = (message?: string) => alert(`Error: ${translateError(message)}`);
 
   const createBlankProject = async () => {
     setIsSaving(true);
@@ -171,7 +188,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError();
+      showError(e?.message);
     }
     setIsSaving(false);
     setShowProjectsSidebar(false);
@@ -190,7 +207,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError();
+      showError(e?.message);
     }
     setIsSaving(false);
     return res;
@@ -205,7 +222,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError();
+      showError(e?.message);
     }
     setIsSaving(false);
     setShowProjectsSidebar(false);
@@ -232,7 +249,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       console.error(e);
       setIsSaving(false);
       setIsExecutingAction(false);
-      showError();
+      showError(e?.message);
     }
     setIsSaving(false);
     setIsExecutingAction(false);
@@ -252,7 +269,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError();
+      showError(e?.message);
     }
     setIsSaving(false);
     return res;
@@ -272,7 +289,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError();
+      showError(e?.message);
     }
     setIsSaving(false);
     return res;
@@ -290,7 +307,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError();
+      showError(e?.message);
     }
     setIsSaving(false);
     return res;
@@ -308,7 +325,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError();
+      showError(e?.message);
     }
     setIsSaving(false);
     return res;
@@ -326,7 +343,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError();
+      showError(e?.message);
     }
     setIsSaving(false);
     return res;
@@ -344,7 +361,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError();
+      showError(e?.message);
     }
     setIsSaving(false);
     return res;
@@ -376,7 +393,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       console.error(e);
       setIsSaving(false);
       setIsExecutingAction(false);
-      showError();
+      showError(e?.message);
     }
     setIsSaving(false);
     setIsExecutingAction(false);
@@ -396,7 +413,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       console.error(e);
       setIsSaving(false);
       setIsExecutingAction(false);
-      showError();
+      showError(e?.message);
     }
     setIsSaving(false);
     setIsExecutingAction(false);
@@ -411,7 +428,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError();
+      showError(e?.message);
     }
     setIsSaving(false);
     return res;
@@ -425,7 +442,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError();
+      showError(e?.message);
     }
     setIsSaving(false);
     return res;
@@ -439,7 +456,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError();
+      showError(e?.message);
     }
     setIsSaving(false);
     return res;
