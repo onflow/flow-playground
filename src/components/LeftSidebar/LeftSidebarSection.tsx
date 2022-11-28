@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import React from 'react';
 import { ChildProps, SXStyles } from 'src/types';
-import { Box, Button, Flex } from 'theme-ui';
+import { Box, Flex } from 'theme-ui';
 
 interface Props extends ChildProps {
   title: string;
@@ -30,22 +29,11 @@ const styles: SXStyles = {
 };
 
 const LeftSidebarSection = ({ title, children }: Props) => {
-  const [showContent, setShowContent] = useState(true);
-  const onToggle = () => setShowContent((prev) => !prev);
 
   return (
     <Flex sx={styles.root}>
-      <Button
-        type="button"
-        onClick={onToggle}
-        sx={styles.headerButton}
-        variant="unstyled"
-        title={`Toggle ${title}`}
-      >
-        <Box sx={styles.headerTitle}>{title}</Box>
-        {showContent ? <FaChevronDown size={12} /> : <FaChevronUp size={12} />}
-      </Button>
-      {showContent && children}
+      <Box sx={styles.headerTitle}>{title}</Box>
+      {children}
     </Flex>
   );
 };

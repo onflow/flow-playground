@@ -3,7 +3,6 @@ import Examples from 'components/Examples';
 import ExportPopup from 'components/ExportPopup';
 import ProjectsIcon from 'components/Icons/ProjectsIcon';
 import NavInput from './NavInput';
-import NewProjectButton from 'components/NewProjectButton';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useState } from 'react';
 import { SXStyles } from 'src/types';
@@ -81,7 +80,6 @@ const TopNav = () => {
           <ProjectsIcon />
           Projects
         </Button>
-        <NewProjectButton size="sm" variant="secondaryLegacy" inline={true} />
       </Flex>
       <Flex sx={styles.topNavProjectName}>
         <NavInput
