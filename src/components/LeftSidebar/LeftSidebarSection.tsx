@@ -29,7 +29,6 @@ const styles: SXStyles = {
 };
 
 const LeftSidebarSection = ({ title, children }: Props) => {
-
   return (
     <Flex sx={styles.root}>
       <Box sx={styles.headerTitle}>{title}</Box>
