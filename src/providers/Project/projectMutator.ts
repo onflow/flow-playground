@@ -485,7 +485,7 @@ export default class ProjectMutator {
             res.data.createScriptTemplate,
           ],
         },
-        persist: true
+        persist: true,
       },
     });
 

@@ -136,9 +136,7 @@ const MenuList: React.FC<MenuListProps> = ({
 }) => {
   const { active } = useProject();
   const [editing, setEditing] = useState([]);
-  const [itemNames, setItemNames] = useState(
-    itemTitles
-  );
+  const [itemNames, setItemNames] = useState(itemTitles);
 
   const [isInserting, setIsInserting] = useState(false);
   const [isFileShuttered, setIsFileShuttered] = useState(false);
@@ -166,9 +164,9 @@ const MenuList: React.FC<MenuListProps> = ({
     }
   };
 
-  useEffect(()=> {
-    setItemNames(itemTitles)
-  },[itemTitles])
+  useEffect(() => {
+    setItemNames(itemTitles);
+  }, [itemTitles]);
 
   const getIcon = (title: string) => {
     switch (title) {
