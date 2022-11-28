@@ -130,6 +130,9 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           title="Contracts"
           itemType={EntityType.ContractTemplate}
           items={project.contractTemplates}
+          itemTitles={project.contractTemplates?.map((template) => {
+            return template.title;
+          })}
           onSelect={(_, id) => {
             navigate(`/${projectPath}?type=contract&id=${id}`);
           }}
@@ -151,6 +154,9 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           title="Transactions"
           itemType={EntityType.TransactionTemplate}
           items={project.transactionTemplates}
+          itemTitles={project.transactionTemplates?.map((template) => {
+            return template.title;
+          })}
           onSelect={(_, id) => {
             navigate(`/${projectPath}?type=tx&id=${id}`);
           }}
@@ -172,6 +178,9 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           title="Scripts"
           itemType={EntityType.ScriptTemplate}
           items={project.scriptTemplates}
+          itemTitles={project.scriptTemplates?.map((template) => {
+            return template.title;
+          })}
           onSelect={(_, id) => {
             navigate(`/${projectPath}?type=script&id=${id}`);
           }}

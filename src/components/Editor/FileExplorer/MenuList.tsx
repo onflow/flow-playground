@@ -9,7 +9,7 @@ import ExplorerTransactionIcon from 'components/Icons/ExplorerTransactionIcon';
 import Input from 'components/ExplorerInput';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import React, { SyntheticEvent, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import { getParams } from 'util/url';
@@ -117,6 +117,7 @@ type MenuListProps = {
   itemType: EntityType;
   title?: string;
   items: any[];
+  itemTitles: any[];
   onSelect: (e: SyntheticEvent, id: string) => void;
   onUpdate: any;
   onInsert: () => Promise<void>;
@@ -127,6 +128,7 @@ const MenuList: React.FC<MenuListProps> = ({
   title,
   itemType,
   items,
+  itemTitles,
   onSelect,
   onUpdate,
   onInsert,
@@ -134,11 +136,8 @@ const MenuList: React.FC<MenuListProps> = ({
 }) => {
   const { active } = useProject();
   const [editing, setEditing] = useState([]);
-  const [itemNames, setItemNames] = useState(
-    items.map((item) => {
-      return item.title;
-    }),
-  );
+  const [itemNames, setItemNames] = useState(itemTitles);
+
   const [isInserting, setIsInserting] = useState(false);
   const [isFileShuttered, setIsFileShuttered] = useState(false);
 
@@ -164,6 +163,10 @@ const MenuList: React.FC<MenuListProps> = ({
       setItemNames(_newNames);
     }
   };
+
+  useEffect(() => {
+    setItemNames(itemTitles);
+  }, [itemTitles]);
 
   const getIcon = (title: string) => {
     switch (title) {
