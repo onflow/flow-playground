@@ -393,6 +393,10 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     validate(list, values);
   }, [list, values]);
 
+  if (type === EntityType.AccountStorage) {
+    return null;
+  }
+
   // ===========================================================================
   // RENDER
   return (

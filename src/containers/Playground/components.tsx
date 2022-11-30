@@ -2,29 +2,29 @@ import styled from '@emotion/styled';
 import { Account, Project } from 'api/apollo/generated/graphql';
 import { motion } from 'framer-motion';
 import { Editor as EditorRoot } from 'layout/Editor';
-import { ActiveEditor, EntityType } from 'providers/Project';
-import {
-  PLACEHOLDER_DESCRIPTION,
-  PLACEHOLDER_TITLE,
-} from 'providers/Project/projectDefault';
+import { ActiveEditor } from 'providers/Project';
+// import {
+//   PLACEHOLDER_DESCRIPTION,
+//   PLACEHOLDER_TITLE,
+// } from 'providers/Project/projectDefault';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useRef, useState } from 'react';
-import { Divider, Flex } from 'theme-ui';
+import { Flex } from 'theme-ui';
 
 // import CadenceEditor from 'components/CadenceEditor';
-import {
-  Input,
-  InputBlock,
-  Label,
-} from 'components/Arguments/SingleArgument/styles';
-import { Markdown } from 'components/Markdown';
-import { MdeEditor } from 'components/MdeEditor';
-import {
-  ProjectDescription,
-  ProjectHeading,
-  ProjectInfoContainer,
-  ReadmeHtmlContainer,
-} from './layout-components';
+// import {
+//   Input,
+//   InputBlock,
+//   Label,
+// } from 'components/Arguments/SingleArgument/styles';
+// import { Markdown } from 'components/Markdown';
+// import { MdeEditor } from 'components/MdeEditor';
+// import {
+//   ProjectDescription,
+//   ProjectHeading,
+//   ProjectInfoContainer,
+//   ReadmeHtmlContainer,
+// } from './layout-components';
 
 import EditorPanels from 'components/EditorPanels';
 import { ChildProps, SXStyles } from 'src/types';
@@ -90,11 +90,11 @@ const compareContracts = (prev: Account[], current: Account[]) => {
   return true;
 };
 
-const MAX_DESCRIPTION_SIZE = Math.pow(1024, 2); // 1mb of storage can be saved into readme field
-const calculateSize = (readme: string) => {
-  const { size } = new Blob([readme]);
-  return size >= MAX_DESCRIPTION_SIZE;
-};
+// const MAX_DESCRIPTION_SIZE = Math.pow(1024, 2); // 1mb of storage can be saved into readme field
+// const calculateSize = (readme: string) => {
+//   const { size } = new Blob([readme]);
+//   return size >= MAX_DESCRIPTION_SIZE;
+// };
 
 const EditorContainer = ({
   isLoading,
@@ -111,9 +111,9 @@ const EditorContainer = ({
 
   const projectAccess = useProject();
 
-  const [descriptionOverflow, setDescriptionOverflow] = useState(
-    calculateSize(project.readme),
-  );
+  // const [descriptionOverflow, setDescriptionOverflow] = useState(
+  //   calculateSize(project.readme),
+  // );
 
   useEffect(() => {
     if (isLoading) {
@@ -141,27 +141,28 @@ const EditorContainer = ({
     }
   }, [project]);
 
-  const setProjectProperties = (
-    title: string,
-    description: string,
-    readme: string,
-  ) => {
-    project.title = title;
-    project.description = description;
-    project.readme = readme;
-    active.onChange(title, description, readme);
-  };
+  // const setProjectProperties = (
+  //   title: string,
+  //   description: string,
+  //   readme: string,
+  // ) => {
+  //   project.title = title;
+  //   project.description = description;
+  //   project.readme = readme;
+  //   active.onChange(title, description, readme);
+  // };
 
-  const isReadmeEditor = active.type === EntityType.Readme;
-  const readmeLabel = `README.md${
-    descriptionOverflow ? " - Content can't be more than 1Mb in size" : ''
-  }`;
+  // const isReadmeEditor = active.type === EntityType.Readme;
+
+  // const readmeLabel = `README.md${
+  //   descriptionOverflow ? " - Content can't be more than 1Mb in size" : ''
+  // }`;
 
   return (
     <Flex sx={styles.editorContainer}>
       <EditorRoot>
-        {/* This is Project Info Block */}
-        <ProjectInfoContainer show={isReadmeEditor}>
+        {/* This is Project Info Block, PRODUCT INFO (ReadMe) REMOVED FOR v2 MVP */}
+        {/* <ProjectInfoContainer show={isReadmeEditor}>
           {project.parentId && !project.persist ? (
             <>
               <ProjectHeading>{title}</ProjectHeading>
@@ -219,8 +220,8 @@ const EditorContainer = ({
               />
             </>
           )}
-        </ProjectInfoContainer>
-        <EditorPanels show={!isReadmeEditor} />
+        </ProjectInfoContainer> */}
+        <EditorPanels show={true} />
       </EditorRoot>
     </Flex>
   );

@@ -2,7 +2,6 @@ import { navigate, useLocation } from '@reach/router';
 import { Account } from 'api/apollo/generated/graphql';
 import Avatar from 'components/Avatar';
 import Button from 'components/Button';
-import { ExportButton } from 'components/ExportButton';
 import ExplorerPlusIcon from 'components/Icons/ExplorerPlusIcon';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
@@ -97,8 +96,7 @@ function getDeployedContracts(account: Account): string {
 
 const AccountList = ({ isExplorerCollapsed }: AccountListProps) => {
   const { project, active, setSelectedResourceAccount } = useProject();
-  const accountSelected = active.type === EntityType.Account;
-
+  const accountSelected = active.type === EntityType.AccountStorage;
   const location = useLocation();
   const params = getParams(location.search);
   const projectPath = isUUUID(project.id) ? project.id : LOCAL_PROJECT_ID;
@@ -128,27 +126,22 @@ const AccountList = ({ isExplorerCollapsed }: AccountListProps) => {
       </Flex>
       <Box data-test="account-list">
         {project.accounts.map((account: Account, i: number) => {
-          const { address } = account;
-          const isActive = accountSelected && params.id === address;
           const rawAddress = account.address.slice(-2);
-          const accountAddress =
-            rawAddress == '01' ? `0x${rawAddress}-Default` : `0x${rawAddress}`;
+          const accountAddress = `0x${rawAddress}`;
+          const finalAddress =
+            accountAddress == '0x01'
+              ? `${accountAddress}-Default`
+              : `${accountAddress}`;
           const contractName = getDeployedContracts(account);
           const title = contractName
             ? `${contractName} deployed to this account`
             : `This account don't have any contracts`;
-          const typeName = account.__typename;
 
-          let queryParams = params.type ? `&type=${params.type}` : '';
-          queryParams += params.id ? `&id=${params.id}` : '';
-          if (params.storage) {
-            queryParams +=
-              params.storage === accountAddress
-                ? '&storage=none'
-                : `&storage=${accountAddress}`;
-          }
-
-          queryParams = queryParams.replace('&', '?');
+          const isActive = accountSelected && accountAddress == params.storage;
+          let queryParams =
+            params.storage === accountAddress
+              ? `?type=account&storage=none`
+              : `?type=account&storage=${accountAddress}`;
 
           return (
             <Flex
@@ -159,22 +152,17 @@ const AccountList = ({ isExplorerCollapsed }: AccountListProps) => {
               <Flex
                 sx={styles.accountCard}
                 onClick={() => {
-                  if (accountAddress === params.storage) {
-                    setSelectedResourceAccount('none');
-                  } else {
+                  if (accountAddress !== params.storage) {
                     setSelectedResourceAccount(accountAddress);
+                    navigate(`/${projectPath}${queryParams}`);
                   }
-                  navigate(`/${projectPath}${queryParams}`);
                 }}
               >
                 <Avatar style={styles.avatar} seed={project.seed} index={i} />
                 <Flex sx={styles.accountTitle}>
-                  <strong>{accountAddress}</strong>
+                  <strong>{finalAddress}</strong>
                   <small>{contractName || '--'}</small>
                 </Flex>
-                {isActive && (
-                  <ExportButton id={account.address} typeName={typeName} />
-                )}
               </Flex>
             </Flex>
           );

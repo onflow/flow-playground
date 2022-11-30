@@ -184,7 +184,6 @@ export function createLocalProject(
   const accountEntities: Account[] = accounts.map((_account, i) => {
     return {
       __typename: 'Account',
-      id: `local-account-${i}`,
       address: `000000000000000${i + 1}`,
       deployedContracts: [],
       state: DEFAULT_ACCOUNT_STATE,

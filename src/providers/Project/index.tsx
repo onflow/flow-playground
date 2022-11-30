@@ -8,9 +8,11 @@ import { getParams } from 'util/url';
 import { createDefaultProject } from './projectDefault';
 import useGetProject from './projectHooks';
 import ProjectMutator, { PROJECT_SERIALIZATION_KEY } from './projectMutator';
+import { storageMap } from 'util/accounts';
+import { getStorageData } from 'util/storage';
 
 export enum EntityType {
-  Account = 1,
+  AccountStorage,
   ContractTemplate,
   TransactionTemplate,
   ScriptTemplate,
@@ -465,7 +467,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   };
 
   const updateSelectedContractAccount = (accountIndex: number) => {
-    setActive({ type: EntityType.Account, index: accountIndex });
+    setActive({ type: EntityType.AccountStorage, index: accountIndex });
   };
 
   const updateSelectedTransactionAccounts = (accountIndexes: number[]) => {
@@ -474,7 +476,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const getActiveEditor = (): ActiveEditor => {
     switch (active.type) {
-      case EntityType.Account:
+      case EntityType.AccountStorage:
         return {
           type: active.type,
           index: active.index,
@@ -511,12 +513,31 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   // "getActiveCode" is used to read Cadence code from active(selected) item
   const getActiveCode: () => [string, number] = () => {
-    const { contractTemplates, scriptTemplates, transactionTemplates } =
-      project;
+    const {
+      contractTemplates,
+      scriptTemplates,
+      transactionTemplates,
+      accounts,
+    } = project;
 
     const { type, index } = active;
     let code: string, id: number;
+
     switch (type) {
+      case EntityType.AccountStorage:
+        const accountId = storageMap[selectedResourceAccount];
+        const accountState = accounts[accountId || 0]?.state;
+        const parsedAccountState = JSON.stringify(accountState);
+        // empty account storage = '"{}"' which is a string length 4
+        // need to figure out a better way to determine empty storage
+        const state =
+          parsedAccountState.length < 5 ? '(Empty)' : parsedAccountState;
+        const contracts = JSON.stringify(
+          accounts[accountId]?.deployedContracts,
+        );
+        code = `Deployed Contracts: \n${contracts} \nAccount Storage: \n${state}`;
+        id = accountId;
+        break;
       case EntityType.ContractTemplate:
         code = contractTemplates[index].script;
         id = contractTemplates[index].id;
@@ -543,7 +564,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   }
 
   const params = getParams(location.search || '');
-  const { id, type } = params;
+  const { id, type, storage } = params;
 
   let templateIndex = 0;
   switch (type) {
@@ -616,6 +637,28 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
       break;
     }
+    case 'account': {
+      const storageIndex = storageMap[storage];
+      const sameType = active.type == EntityType.AccountStorage;
+      const sameIndex = active.index == storageIndex;
+      if (!sameType || !sameIndex || initialLoad) {
+        setInitialLoad(false);
+        setActive({
+          type: EntityType.AccountStorage,
+          index: storageIndex,
+        });
+        const rawAddress = project.accounts[templateIndex].address;
+
+        return (
+          <Redirect
+            noThrow
+            to={`/${project.id}?type=account&address=${rawAddress}&storage=${storage}`}
+          />
+        );
+      }
+
+      break;
+    }
     default: {
       if (id && id !== '') {
         const foundIndex = project.contractTemplates.findIndex(
@@ -638,7 +681,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         return (
           <Redirect
             noThrow
-            to={`/${project.id}?type=account&id=${templateId}`}
+            to={`/${project.id}?type=contract&id=${templateId}`}
           />
         );
       }
