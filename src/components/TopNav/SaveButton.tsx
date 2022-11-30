@@ -20,9 +20,7 @@ export const SaveButton = () => {
       ? null
       : window.location.pathname.slice(1);
 
-  const { project, updateProject } = useProject();
-
-  // todo: verify Project persist is true when project is saved.
+  const { project, isSaving, updateProject } = useProject();
   const isSaved = project?.persist;
 
   const saveClicked = () => {
@@ -48,7 +46,7 @@ export const SaveButton = () => {
           variant="alternate"
           size="sm"
           inline={true}
-          disabled={isSaved}
+          disabled={isSaved || isSaving}
         >
           {buttonLabel}
         </Button>

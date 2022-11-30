@@ -156,6 +156,9 @@ export default class ProjectMutator {
         description,
         readme,
       },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
       context: {
         debounceKey: key,
         serializationKey: PROJECT_SERIALIZATION_KEY,
@@ -232,6 +235,9 @@ export default class ProjectMutator {
         script,
         title,
       },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
       context: {
         debounceKey: key,
         serializationKey: PROJECT_SERIALIZATION_KEY,
@@ -289,6 +295,9 @@ export default class ProjectMutator {
         script,
         title,
       },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
@@ -347,6 +356,9 @@ export default class ProjectMutator {
         script: script,
         title: title,
       },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
       context: {
         debounceKey: key,
         serializationKey: PROJECT_SERIALIZATION_KEY,
@@ -366,6 +378,9 @@ export default class ProjectMutator {
         projectId: this.projectId,
         templateId,
       },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
@@ -403,6 +418,9 @@ export default class ProjectMutator {
         projectId: this.projectId,
         templateId,
       },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
@@ -441,6 +459,9 @@ export default class ProjectMutator {
         script,
         arguments: args,
       },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
@@ -465,6 +486,9 @@ export default class ProjectMutator {
         script,
         title,
       },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
@@ -519,6 +543,9 @@ export default class ProjectMutator {
         script,
         title,
       },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
@@ -584,6 +611,9 @@ export default class ProjectMutator {
         index,
         projectId: this.projectId,
       },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
       context: {
         debounceKey: key,
         serializationKey: PROJECT_SERIALIZATION_KEY,
@@ -612,6 +642,9 @@ export default class ProjectMutator {
         script: contractTemplate.script,
         signer: account.address,
       },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
@@ -640,6 +673,9 @@ export default class ProjectMutator {
         projectId: this.projectId,
         templateId,
       },
+      refetchQueries: [
+        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+      ],
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },
