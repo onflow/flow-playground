@@ -9,7 +9,6 @@ import { createDefaultProject } from './projectDefault';
 import useGetProject from './projectHooks';
 import ProjectMutator, { PROJECT_SERIALIZATION_KEY } from './projectMutator';
 import { storageMap } from 'util/accounts';
-import { getStorageData } from 'util/storage';
 
 export enum EntityType {
   AccountStorage,

@@ -66,7 +66,7 @@ const styles: SXStyles = {
     paddingRight: '4px',
     filter:
       'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
-  }
+  },
 };
 
 const EditorPanels = ({ show }: EditorPanelsProps) => {
@@ -92,9 +92,9 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
         (key) => storageMap[key] == active.index,
       );
       fileName =
-      accountNumber == '0x01'
-        ? `${accountNumber}-Default`
-        : `${accountNumber}`;
+        accountNumber == '0x01'
+          ? `${accountNumber}-Default`
+          : `${accountNumber}`;
       script = project.accounts[active.index].state;
   }
 
