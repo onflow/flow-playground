@@ -1,5 +1,5 @@
 export const storageMap: { [account: string]: number } = {
-  none: 0,
+  none: -1,
   '0x01': 0,
   '0x02': 1,
   '0x03': 2,

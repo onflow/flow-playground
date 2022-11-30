@@ -1,15 +1,13 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import React, { useEffect, useRef, useState } from 'react';
 import { useResizeDetector } from 'react-resize-detector';
-
 import { useProject } from 'providers/Project/projectHooks';
 import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
-
 import { EditorContainer } from './components';
 import ControlPanel from './ControlPanel';
 import Notifications from './Notifications';
-
 import { EditorState } from './types';
+import { EntityType } from 'providers/Project';
 
 const MONACO_CONTAINER_ID = 'monaco-container';
 
@@ -27,7 +25,6 @@ const CadenceEditor = (props: any) => {
 
   const [editorStates, setEditorStates] = useState<EditorStates>({});
   const { width, height, ref } = useResizeDetector();
-
   // TODO: restore view state in next implementation
   /*
   const saveEditorState = (id: string, viewState: any) => {
@@ -46,10 +43,13 @@ const CadenceEditor = (props: any) => {
       return existingState;
     }
 
-    const newState: EditorState = {
-      model: monaco.editor.createModel(code, CADENCE_LANGUAGE_ID),
-      viewState: null,
-    };
+    const newState: EditorState =
+      project.active.type == EntityType.AccountStorage
+        ? { model: monaco.editor.createModel(code, 'json'), viewState: null }
+        : {
+            model: monaco.editor.createModel(code, CADENCE_LANGUAGE_ID),
+            viewState: null,
+          };
 
     setEditorStates({
       ...editorStates,
@@ -65,7 +65,11 @@ const CadenceEditor = (props: any) => {
       if (editorOnChange.current) {
         editorOnChange.current.dispose();
       }
-
+      if (project.active.type === EntityType.AccountStorage) {
+        editor.updateOptions({ readOnly: true });
+      } else {
+        editor.updateOptions({ readOnly: false });
+      }
       // To pick up new changes in accounts, we will track project's active item and then add and remove
       // new line at EOF to trick Language Client to send code changes and reimport the latest changes,
       // clearing errors and warning about missing fields.
@@ -125,12 +129,14 @@ const CadenceEditor = (props: any) => {
   // "initEditor" will create new instance of Monaco Editor and set it up
   const initEditor = async () => {
     const container = document.getElementById(MONACO_CONTAINER_ID);
+
     const editor = monaco.editor.create(container, {
       theme: 'vs-light',
       language: CADENCE_LANGUAGE_ID,
       minimap: {
         enabled: false,
       },
+      readOnly: project.active.type === EntityType.AccountStorage,
     });
 
     const [code] = project.getActiveCode();

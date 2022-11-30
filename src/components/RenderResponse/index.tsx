@@ -49,8 +49,7 @@ export const RenderResponse = () => {
   const resultType = getResultType(active);
   const filteredResults = resultType
     ? data.cachedExecutionResults[resultType]
-    : data.cachedExecutionResults;
-
+    : [];
   return (
     <Flex sx={styles.root} data-test="execution-results">
       {!loading &&

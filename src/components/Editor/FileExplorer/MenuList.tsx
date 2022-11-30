@@ -231,6 +231,7 @@ const MenuList: React.FC<MenuListProps> = ({
           {items.map((item, i) => {
             const isDefault =
               params.id === undefined &&
+              params.storage === undefined &&
               itemType === EntityType.ContractTemplate &&
               i === 0;
             const isActive =
