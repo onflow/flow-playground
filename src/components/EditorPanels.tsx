@@ -81,11 +81,11 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
       break;
     case EntityType.TransactionTemplate:
       fileName = `${project.transactionTemplates[active.index].title}.cdc`;
-      script = project.contractTemplates[active.index].script;
+      script = project.transactionTemplates[active.index].script;
       break;
     case EntityType.ScriptTemplate:
       fileName = `${project.scriptTemplates[active.index].title}.cdc`;
-      script = project.contractTemplates[active.index].script;
+      script = project.scriptTemplates[active.index].script;
       break;
     default:
       const accountNumber = Object.keys(storageMap).find(
