@@ -6,7 +6,6 @@ import {
 import { ExecuteCommandRequest } from 'monaco-languageclient';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  FaExclamationTriangle,
   FaRegTimesCircle,
   FaSpinner,
 } from 'react-icons/fa';
@@ -35,10 +34,7 @@ import {
 
 // Component Scoped Files
 import {
-  Cancel,
-  Confirm,
   MotionBox,
-  PromptActionsContainer,
   StatusIcon,
 } from './components';
 import { ControlPanelProps, IValue } from './types';
