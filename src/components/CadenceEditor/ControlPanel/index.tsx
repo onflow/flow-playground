@@ -59,7 +59,7 @@ import {
 import { SignersPanel } from 'components/SignersPanel';
 import ConfirmationPopup from 'components/ConfirmationPopup';
 
-const willLoseChangesOptions = {
+const willRedeployContractOptions = {
   title: `You have overwrite data!`,
   message: 'Redeploying will clear the state of all accounts. Proceed?',
 };
@@ -469,7 +469,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             <ConfirmationPopup
               onClose={send}
               visible={showPrompt}
-              {...willLoseChangesOptions}
+              {...willRedeployContractOptions}
             />
           </ControlContainer>
         </HoverPanel>
