@@ -166,7 +166,6 @@ export default {
       fontSize: 4,
       backgroundColor: 'unset',
       padding: '8px 12px',
-      whiteSpace: 'nowrap',
       '&:hover': {
         backgroundColor: 'menuBg',
         color: 'menuText',
