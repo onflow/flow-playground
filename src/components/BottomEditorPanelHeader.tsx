@@ -5,7 +5,6 @@ import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import Button from './Button';
-import HistoryIcon from './Icons/HistoryIcon';
 import LogIcon from './Icons/LogIcon';
 
 type BottomEditorPanelHeaderProps = {
