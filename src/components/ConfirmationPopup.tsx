@@ -45,7 +45,7 @@ const popupFrames = {
     opacity: 1,
     y: 0,
     transition: spring,
-    borderRadius: '5px'
+    borderRadius: '5px',
   },
   hidden: {
     opacity: 0,
@@ -89,13 +89,13 @@ const ConfirmationPopup = ({
           {
             name: 'Confirm',
             action: closeModal,
-            variant: "primary" as ButtonVariant,
+            variant: 'primary' as ButtonVariant,
             args: [true],
           },
           {
             name: 'Close',
             action: closeModal,
-            variant: "secondary" as ButtonVariant,
+            variant: 'secondary' as ButtonVariant,
             args: [false],
           },
         ];
@@ -110,9 +110,7 @@ const ConfirmationPopup = ({
       variants={containerFrames}
     >
       <PopupContainer width="50%" variants={popupFrames}>
-        <PopupHeader mb="20px">
-          {title}
-        </PopupHeader>
+        <PopupHeader mb="20px">{title}</PopupHeader>
         <Label>{message}</Label>
         <SpaceBetween>
           {buttons.map((btn) => {

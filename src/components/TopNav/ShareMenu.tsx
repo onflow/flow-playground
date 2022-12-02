@@ -45,8 +45,8 @@ const styles: SXStyles = {
     borderRadius: '4px',
     height: '48px',
     '&:hover': {
-      background: `${theme.colors.menuBg}`
-    }
+      background: `${theme.colors.menuBg}`,
+    },
   },
   linkInput: {
     display: 'flex',
