@@ -1,4 +1,3 @@
-import { default as FlowButton } from 'components/LegacyButton';
 import React from 'react';
 
 import {
@@ -10,6 +9,10 @@ import {
 } from 'components/Common';
 
 import { Label } from 'components/Arguments/SingleArgument/styles';
+import PanelButton from './PanelButton';
+import theme from '../theme';
+import { CSSProperties } from 'theme-ui';
+import Button, { ButtonProps, ButtonVariant } from './Button';
 
 const containerFrames = {
   visible: {
@@ -42,6 +45,7 @@ const popupFrames = {
     opacity: 1,
     y: 0,
     transition: spring,
+    borderRadius: '5px'
   },
   hidden: {
     opacity: 0,
@@ -55,6 +59,7 @@ const popupFrames = {
 export type ActionsType = {
   name: string;
   action: (...args: any) => void;
+  variant: ButtonVariant;
   args: any[];
 };
 
@@ -84,11 +89,13 @@ const ConfirmationPopup = ({
           {
             name: 'Confirm',
             action: closeModal,
+            variant: "primary" as ButtonVariant,
             args: [true],
           },
           {
             name: 'Close',
             action: closeModal,
+            variant: "secondary" as ButtonVariant,
             args: [false],
           },
         ];
@@ -102,21 +109,21 @@ const ConfirmationPopup = ({
       animate={visible ? 'visible' : 'hidden'}
       variants={containerFrames}
     >
-      <PopupContainer width="350px" variants={popupFrames}>
-        <PopupHeader mb="20px" color="#575E89" lineColor="#B4BEFC">
+      <PopupContainer width="50%" variants={popupFrames}>
+        <PopupHeader mb="20px">
           {title}
         </PopupHeader>
         <Label>{message}</Label>
         <SpaceBetween>
           {buttons.map((btn) => {
             return (
-              <FlowButton
+              <Button
                 key={btn.name}
-                className="grey modal"
+                variant={btn.variant}
                 onClick={() => btn.action(...btn.args)}
               >
                 {btn.name}
-              </FlowButton>
+              </Button>
             );
           })}
         </SpaceBetween>

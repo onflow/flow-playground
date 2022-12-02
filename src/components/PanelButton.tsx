@@ -29,9 +29,9 @@ const PanelButton: React.FC<PanelButtonProps> = (props) => {
   };
 
   const sx = {
-    ...props.style,
     backgroundColor: getStyle(props),
     color: theme.colors.white,
+    ...props.style,
   };
 
   return (
