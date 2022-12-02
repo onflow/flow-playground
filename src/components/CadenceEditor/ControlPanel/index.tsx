@@ -5,10 +5,7 @@ import {
 } from 'monaco-editor/esm/vs/editor/editor.api';
 import { ExecuteCommandRequest } from 'monaco-languageclient';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  FaRegTimesCircle,
-  FaSpinner,
-} from 'react-icons/fa';
+import { FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
 
 // Project Modules
 import { CadenceCheckerContext } from 'providers/CadenceChecker';
@@ -33,10 +30,7 @@ import {
 } from 'api/apollo/generated/graphql';
 
 // Component Scoped Files
-import {
-  MotionBox,
-  StatusIcon,
-} from './components';
+import { MotionBox, StatusIcon } from './components';
 import { ControlPanelProps, IValue } from './types';
 import { getLabel, useTemplateType, validateByType } from './utils';
 
