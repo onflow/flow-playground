@@ -9,10 +9,7 @@ import {
 } from 'components/Common';
 
 import { Label } from 'components/Arguments/SingleArgument/styles';
-import PanelButton from './PanelButton';
-import theme from '../theme';
-import { CSSProperties } from 'theme-ui';
-import Button, { ButtonProps, ButtonVariant } from './Button';
+import Button, { ButtonVariant } from './Button';
 
 const containerFrames = {
   visible: {
