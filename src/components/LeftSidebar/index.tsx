@@ -12,9 +12,9 @@ const styles: SXStyles = {
   },
 };
 
-const LeftSidebar = () => {
+const LeftSidebar = ({ reference }: { reference: any }) => {
   return (
-    <Box sx={styles.root}>
+    <Box sx={styles.root} ref={reference}>
       <Box mb={12}>
         <NewProjectButton
           label="Create New Project"
