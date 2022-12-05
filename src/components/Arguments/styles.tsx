@@ -25,7 +25,7 @@ export const Heading = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  padding: 0.5rem;
 `;
 
 interface TitleProps {
@@ -94,9 +94,9 @@ export const List = styled.div<ListProps>`
   display: ${({ hidden }) => (hidden ? 'none' : 'grid')};
   grid-gap: 12px;
   grid-template-columns: 100%;
-  margin-bottom: 24px;
   max-height: 350px;
   overflow-y: auto;
+  padding: 0.5rem;
 `;
 
 export const SignersContainer = styled.div``;
