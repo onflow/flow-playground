@@ -83,7 +83,11 @@ const ProjectListItem = ({ project, projectCount }: Props) => {
   const [showLastProject, setShowLastProject] = useState<boolean>(false);
   const [showWillLoseChanges, setShowWillLoseChanges] =
     useState<boolean>(false);
-  const { deleteProject, project: activeProject } = useProject();
+  const {
+    toggleProjectsSidebar,
+    deleteProject,
+    project: activeProject,
+  } = useProject();
 
   const confirmDelete = async (isConfirmed: boolean): Promise<void> => {
     setShowConfirmation(false);
@@ -95,6 +99,7 @@ const ProjectListItem = ({ project, projectCount }: Props) => {
   const confirmSelectProject = async (isConfirmed: boolean): Promise<void> => {
     setShowWillLoseChanges(false);
     if (isConfirmed) {
+      toggleProjectsSidebar();
       navigate(`${paths.projectPath(project.id)}`);
     }
   };
