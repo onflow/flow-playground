@@ -50,7 +50,7 @@ import { SignersPanel } from 'components/SignersPanel';
 import ConfirmationPopup from 'components/ConfirmationPopup';
 
 const willRedeployContractOptions = {
-  title: `You have overwrite data!`,
+  title: `You will overwrite data!`,
   message: 'Redeploying will clear the state of all accounts. Proceed?',
 };
 

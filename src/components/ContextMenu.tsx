@@ -37,22 +37,17 @@ const styles: SXStyles = {
     right: '5px',
     bottom: '12px',
     background: theme.colors.white,
-    padding: '1rem',
+    padding: '8px 4px',
   },
   ctaButton: {
     alignSelf: 'baseline',
-    padding: '0px 8px 0px 0px',
+    padding: '4px 8px',
     '&:hover': {
       background: 'none',
     },
   },
   ctaOption: {
-    backgroundColor: theme.colors.white,
-    padding: '0.25rem',
-    whiteSpace: 'nowrap',
-    '&:hover': {
-      color: theme.colors.darkGrey,
-    },
+    padding: '8px 12px',
   },
 };
 
@@ -104,6 +99,7 @@ export const ContextMenu = ({ options, showEllipsis }: ContextMenuType) => {
               ({ icon, name, onClick, args }: ContextMenuOptionsType) => (
                 <Button
                   sx={styles.ctaOption}
+                  variant="explorer"
                   key={name}
                   onClick={() => clickOption(onClick, args)}
                 >
