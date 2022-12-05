@@ -4,7 +4,7 @@ import { AnimatePresence, motion, MotionStyle } from 'framer-motion';
 import CadenceChecker from 'providers/CadenceChecker';
 import { ProjectProvider } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import React, { CSSProperties, useEffect, useRef } from 'react';
+import React, { CSSProperties } from 'react';
 import { Box, Button, ThemeUICSSObject } from 'theme-ui';
 import { LOCAL_PROJECT_ID } from 'util/url';
 import useToggleExplorer from '../../hooks/useToggleExplorer';
@@ -63,21 +63,6 @@ const Content = () => {
   const { isExplorerCollapsed, toggleExplorer } = useToggleExplorer();
 
   const baseStyles = getBaseStyles(showProjectsSidebar, isExplorerCollapsed);
-
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: Event) => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        toggleProjectsSidebar();
-      }
-    };
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
-  }, []);
-
   return (
     <>
       <AnimatePresence>
@@ -99,7 +84,7 @@ const Content = () => {
             exit={{ left: -LEFT_SIDEBAR_WIDTH }}
             transition={leftSidebarTransition}
           >
-            <LeftSidebar reference={ref} />
+            <LeftSidebar />
           </motion.div>
         )}
       </AnimatePresence>
