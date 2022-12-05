@@ -84,6 +84,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
         } else {
           setShowDeleteError(true);
         }
+        break;
       case 'Script':
         if (project.scriptTemplates.length > 1) {
           await deleteScriptTemplate(templateId);
@@ -92,6 +93,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
         } else {
           setShowDeleteError(true);
         }
+        break;
       default:
         if (project.contractTemplates.length > 1) {
           await deleteContractTemplate(templateId);
