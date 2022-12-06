@@ -98,7 +98,7 @@ const getSpanClass = (message: string): string => {
   return '';
 };
 
-const renderMessage = (message: string) => {
+export const renderMessage = (message: string) => {
   let spanClass = getSpanClass(message);
 
   const { items } = message.split(' ').reduce(

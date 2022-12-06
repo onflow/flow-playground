@@ -4,11 +4,13 @@ import React from 'react';
 import { SXStyles } from 'src/types';
 import { Flex } from 'theme-ui';
 import BottomEditorPanelHeader from './BottomEditorPanelHeader';
+import RenderError from './RenderError';
 import { RenderResponse } from './RenderResponse';
 
 export const BOTTOM_EDITOR_PANEL_HEADER_HEIGHT = 80;
 
 type BottomEditorPanelProps = {
+  problemsList: any;
   selectedBottomTab: number;
   setSelectedBottomTab: (index: number) => void;
 };
@@ -27,6 +29,7 @@ const styles: SXStyles = {
     borderTopColor: 'borderColor',
     backgroundColor: 'white',
     overflow: 'auto',
+    width: '100%'
   },
   tabPanel: {
     flex: 1,
@@ -36,11 +39,30 @@ const styles: SXStyles = {
 };
 
 const BottomEditorPanel = ({
+  problemsList,
   selectedBottomTab,
   setSelectedBottomTab,
 }: BottomEditorPanelProps) => {
-  const { showBottomPanel } = useProject();
+  const { showBottomPanel, active } = useProject();
 
+    /**
+   * Make active key out of active project item type and index
+   */
+     const getActiveKey = () => `${active.type}-${active.index}`;
+  
+     const getProblems = (): any => {
+       const key = getActiveKey();
+       return (
+         problemsList[key] || {
+           error: [],
+           warning: [],
+           hint: [],
+           info: [],
+         }
+         );
+       };
+       const panelProblems = getProblems();
+       console.log("panel",panelProblems)
   return (
     <Flex sx={styles.root}>
       <Tab.Group
@@ -48,6 +70,7 @@ const BottomEditorPanel = ({
         onChange={setSelectedBottomTab}
       >
         <BottomEditorPanelHeader
+          problems={problemsList}
           selectedBottomTab={selectedBottomTab}
           setSelectedBottomTab={setSelectedBottomTab}
         />
@@ -56,7 +79,12 @@ const BottomEditorPanel = ({
             <Flex as={Tab.Panel} sx={styles.tabPanel}>
               <RenderResponse />
             </Flex>
-            <Tab.Panel>History</Tab.Panel>
+            <Flex as={Tab.Panels} sx={styles.tabPanels} >
+            <Flex as={Tab.Panel} sx={styles.tabPanel}>
+
+              <RenderError list={panelProblems}/>
+              </Flex>
+            </Flex>
           </Flex>
         )}
       </Tab.Group>

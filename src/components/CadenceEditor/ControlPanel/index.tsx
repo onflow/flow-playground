@@ -74,7 +74,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // Handles errors with arguments
   const [errors, setErrors] = useState({});
   // Handles problems, hints and info for checked code
-  const [problemsList, setProblemsList] = useState<any>({});
+
   const [showPrompt, setShowPrompt] = useState(false);
 
   // REFS  -------------------------------------------------------------------
@@ -96,7 +96,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const getProblems = (): ProblemsList => {
     const key = getActiveKey();
     return (
-      problemsList[key] || {
+      props.problemsList[key] || {
         error: [],
         warning: [],
         hint: [],
@@ -153,8 +153,8 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
 
     const key = getActiveKey(); // <- this value will be from static closure
 
-    setProblemsList({
-      ...problemsList,
+    props.setProblemsList({
+      ...props.problemsList,
       [key]: errors,
     });
   };
@@ -429,10 +429,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
               updateSelectedAccounts={updateSelectedAccounts}
             />
           )}
-
-          {/*<ErrorsList list={problems.error} actions={actions} />*/}
           <Hints problems={problems} actions={actions} />
-
           <ControlContainer
             isOk={isOk}
             progress={progress}

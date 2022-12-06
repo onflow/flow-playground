@@ -72,7 +72,7 @@ const styles: SXStyles = {
 const EditorPanels = ({ show }: EditorPanelsProps) => {
   const { project, active, showBottomPanel } = useProject();
   const [selectedBottomTab, setSelectedBottomTab] = useState(0);
-  const [panelErrors, setPanelErrors] =useState([])
+  const [problemsList, setProblemsList] = useState<any>({});
 
   let fileName, script;
   switch (active.type) {
@@ -137,13 +137,14 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
             </Flex>
           </Allotment.Pane>
           <Allotment.Pane minSize={100} preferredSize="100%">
-            <CadenceEditor setPanelErrors={setPanelErrors} show={show} />
+            <CadenceEditor problemsList={problemsList} setProblemsList={setProblemsList} show={show} />
           </Allotment.Pane>
           <Allotment.Pane
             minSize={BOTTOM_EDITOR_PANEL_HEADER_HEIGHT + 70}
             visible={showBottomPanel}
           >
             <BottomEditorPanel
+              problemsList={problemsList}
               selectedBottomTab={selectedBottomTab}
               setSelectedBottomTab={setSelectedBottomTab}
             />
@@ -155,6 +156,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
           style={{
             height: BOTTOM_EDITOR_PANEL_HEADER_HEIGHT,
             paddingTop: 10,
+            width: '100%'
           }}
         >
           <Tab.Group
@@ -162,6 +164,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
             onChange={setSelectedBottomTab}
           >
             <BottomEditorPanelHeader
+              problems={problemsList}
               selectedBottomTab={selectedBottomTab}
               setSelectedBottomTab={setSelectedBottomTab}
             />
