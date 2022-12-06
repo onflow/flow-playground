@@ -3,7 +3,6 @@ import { useProject } from 'providers/Project/projectHooks';
 import React, { Fragment } from 'react';
 import { FaRegTimesCircle } from 'react-icons/fa';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
-import theme from '../theme';
 import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import Button from './Button';
