@@ -5,11 +5,7 @@ import {
 } from 'monaco-editor/esm/vs/editor/editor.api';
 import { ExecuteCommandRequest } from 'monaco-languageclient';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  FaExclamationTriangle,
-  FaRegTimesCircle,
-  FaSpinner,
-} from 'react-icons/fa';
+import { FaRegTimesCircle, FaSpinner } from 'react-icons/fa';
 
 // Project Modules
 import { CadenceCheckerContext } from 'providers/CadenceChecker';
@@ -34,13 +30,7 @@ import {
 } from 'api/apollo/generated/graphql';
 
 // Component Scoped Files
-import {
-  Cancel,
-  Confirm,
-  MotionBox,
-  PromptActionsContainer,
-  StatusIcon,
-} from './components';
+import { MotionBox, StatusIcon } from './components';
 import { ControlPanelProps, IValue } from './types';
 import { getLabel, useTemplateType, validateByType } from './utils';
 
@@ -57,6 +47,12 @@ import {
   StatusMessage,
 } from '../../Arguments/styles';
 import { SignersPanel } from 'components/SignersPanel';
+import ConfirmationPopup from 'components/ConfirmationPopup';
+
+const willRedeployContractOptions = {
+  title: `You will overwrite data!`,
+  message: 'Redeploying will clear the state of all accounts. Proceed?',
+};
 
 const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // ===========================================================================
@@ -225,7 +221,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   /**
    * Processes arguments and send scripts and transaction for execution or contracts for deployment
    */
-  const send = async () => {
+  const send = async (isConfirmed: boolean) => {
+    if (!isConfirmed) {
+      setShowPrompt(false);
+      return;
+    }
     if (!processingStatus) {
       setProcessingStatus(true);
     }
@@ -358,12 +358,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   let statusIcon;
   let statusMessage;
   switch (true) {
-    case isOk && showPrompt:
-      statusIcon = <FaExclamationTriangle />;
-      statusMessage =
-        'Redeploying will clear the state of all accounts. Proceed?';
-      break;
-    case !isOk:
+    case !isOk && !showPrompt:
       statusIcon = <FaRegTimesCircle />;
       statusMessage = `${problems?.error?.length} Error${
         problems?.error?.length > 1 ? 's' : ''
@@ -397,6 +392,9 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     return null;
   }
 
+  const activateConfirmation =
+    type === EntityType.ContractTemplate &&
+    accounts[active.index]?.deployedContracts?.length > 0;
   // ===========================================================================
   // RENDER
   return (
@@ -445,26 +443,24 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
                 isOk={isOk}
                 data-test="control-panel-status-message"
               >
-                <StatusIcon
-                  isOk={isOk}
-                  progress={progress}
-                  showPrompt={showPrompt}
-                >
+                <StatusIcon isOk={isOk} progress={progress} showPrompt={false}>
                   {statusIcon}
                 </StatusIcon>
                 <p>{statusMessage}</p>
               </StatusMessage>
             )}
-            {showPrompt ? (
-              <PromptActionsContainer>
-                <Confirm data-test="redeploy-confirm-button" onClick={send}>
-                  Confirm
-                </Confirm>
-                <Cancel onClick={() => setShowPrompt(false)}>Cancel</Cancel>
-              </PromptActionsContainer>
-            ) : (
-              <ActionButton active={isOk} type={type} onClick={send} />
-            )}
+            <ActionButton
+              active={isOk}
+              type={type}
+              onClick={() =>
+                activateConfirmation ? setShowPrompt(true) : send(true)
+              }
+            />
+            <ConfirmationPopup
+              onClose={send}
+              visible={showPrompt}
+              {...willRedeployContractOptions}
+            />
           </ControlContainer>
         </HoverPanel>
       </MotionBox>

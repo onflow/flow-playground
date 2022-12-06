@@ -4,18 +4,19 @@ import { Button as ThemeUiButton, ThemeUICSSObject } from 'theme-ui';
 
 type ButtonSizes = 'sm' | 'md' | 'lg';
 
+export type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'secondaryLegacy'
+  | 'disabled'
+  | 'alternate'
+  | 'link'
+  | 'explorer'
+  | 'unstyled';
 export interface ButtonProps extends ChildProps {
   children: React.ReactNode;
   onClick?: () => void;
-  variant?:
-    | 'primary'
-    | 'secondary'
-    | 'secondaryLegacy'
-    | 'disabled'
-    | 'alternate'
-    | 'link'
-    | 'explorer'
-    | 'unstyled';
+  variant?: ButtonVariant;
   size?: ButtonSizes;
   submit?: boolean;
   disabled?: boolean;

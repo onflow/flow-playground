@@ -5,7 +5,6 @@ import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import Button from './Button';
-import HistoryIcon from './Icons/HistoryIcon';
 import LogIcon from './Icons/LogIcon';
 
 type BottomEditorPanelHeaderProps = {
@@ -79,8 +78,9 @@ const BottomEditorPanelHeader = ({
     }
   };
 
-  const isLogSelected = selectedBottomTab === 0;
-  const isHistorySelected = selectedBottomTab === 1;
+  const isLogSelected = true; //selectedBottomTab === 0;
+  // temporarily disabling history tab. need more info if this is going to get perm del.
+  //const isHistorySelected = selectedBottomTab === 1;
 
   return (
     <Flex as={Tab.List} sx={styles.header}>
@@ -97,7 +97,7 @@ const BottomEditorPanelHeader = ({
             <TabIndicator selected={isLogSelected} />
           </Button>
         </Tab>
-        <Tab as={Fragment}>
+        {/*<Tab as={Fragment}>
           <Button
             sx={styles.tabButton}
             variant="unstyled"
@@ -107,7 +107,7 @@ const BottomEditorPanelHeader = ({
             <HistoryIcon /> History
             <TabIndicator selected={isHistorySelected} />
           </Button>
-        </Tab>
+        </Tab>*/}
       </Flex>
       <Flex ml="auto">
         <Button

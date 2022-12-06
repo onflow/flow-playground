@@ -14,6 +14,8 @@ import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import { getParams } from 'util/url';
 import { ContextMenu } from '../../ContextMenu';
+import PencilIcon from 'components/Icons/PencilIcon';
+import DeleteIcon from 'components/Icons/DeleteIcon';
 
 const styles: SXStyles = {
   root: {
@@ -239,10 +241,12 @@ const MenuList: React.FC<MenuListProps> = ({
 
             const submenuOptions = [
               {
+                icon: PencilIcon,
                 name: 'Edit name',
                 onClick: () => toggleEditing(i, item.title),
               },
               {
+                icon: DeleteIcon,
                 name: 'Delete File',
                 onClick: () => {
                   onDelete({ title: item.title, templateId: item.id });

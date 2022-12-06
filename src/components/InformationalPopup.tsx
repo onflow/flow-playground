@@ -17,6 +17,7 @@ const InformationalPopup = ({
   const buttons: ActionsType[] = [
     {
       name: 'Confirm',
+      variant: 'primary',
       action: onClose,
       args: [false],
     },

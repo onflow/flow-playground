@@ -38,9 +38,9 @@ interface PopupContainerProps {
 export const PopupContainer = styled(motion.div)<PopupContainerProps>`
   display: flex;
   width: ${({ width }) => width};
-  max-width: 50%;
+  max-width: 75%;
   flex-direction: column;
-  padding: 20px;
+  padding: 40px;
   border-radius: 6px;
   background-color: white;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1), 0 0 3px 1px rgba(0, 0, 0, 0.05);
@@ -55,26 +55,17 @@ interface CommonProps {
 }
 
 export const PopupHeader = styled.h3<CommonProps>`
-  font-size: 14px;
+  font-size: 32px;
   font-weight: bold;
-  text-transform: uppercase;
   color: ${({ color = 'inherit' }) => color};
-  margin-bottom: ${({ mb = '0' }) => mb};
-  :after {
-    content: '';
-    display: block;
-    height: 3px;
-    width: 16px;
-    background-color: ${({ lineColor = 'currentColor' }) => lineColor};
-    margin-top: 4px;
-  }
+  margin-bottom: 16px;
 `;
 
 export const SpaceBetween = styled.div<CommonProps>`
   display: flex;
   width: 100%;
   justify-content: space-between;
-  margin-bottom: ${({ mb = '0' }) => mb};
+  margin-top: 16px;
 `;
 
 export const Separator = styled.div`
