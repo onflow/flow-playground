@@ -137,7 +137,11 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
             </Flex>
           </Allotment.Pane>
           <Allotment.Pane minSize={100} preferredSize="100%">
-            <CadenceEditor problemsList={problemsList} setProblemsList={setProblemsList} show={show} />
+            <CadenceEditor
+              problemsList={problemsList}
+              setProblemsList={setProblemsList}
+              show={show}
+            />
           </Allotment.Pane>
           <Allotment.Pane
             minSize={BOTTOM_EDITOR_PANEL_HEADER_HEIGHT + 70}
@@ -156,7 +160,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
           style={{
             height: BOTTOM_EDITOR_PANEL_HEADER_HEIGHT,
             paddingTop: 10,
-            width: '100%'
+            width: '100%',
           }}
         >
           <Tab.Group

@@ -52,12 +52,15 @@ export const RenderResponse = () => {
 
   return (
     <Flex sx={styles.root} data-test="execution-results">
-      {filteredResults.length > 1 ? 
-        (!loading && !error ) && filteredResults.map((line: LineType, n: number) => (
-            <Line {...line} key={n} index={n} />
-          )).reverse() : 
-          "Welcome to the Playground!"      
-          }
+      {filteredResults.length > 1
+        ? !loading &&
+          !error &&
+          filteredResults
+            .map((line: LineType, n: number) => (
+              <Line {...line} key={n} index={n} />
+            ))
+            .reverse()
+        : 'Welcome to the Playground!'}
     </Flex>
   );
 };

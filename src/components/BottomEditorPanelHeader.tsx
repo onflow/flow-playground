@@ -71,13 +71,12 @@ const BottomEditorPanelHeader = ({
 }: BottomEditorPanelHeaderProps) => {
   const { showBottomPanel, setShowBottomPanel, toggleBottomPanel, active } =
     useProject();
-  
-    
+
   /**
    * Make active key out of active project item type and index
    */
   const getActiveKey = () => `${active.type}-${active.index}`;
-  
+
   const getProblems = (): any => {
     const key = getActiveKey();
     return (
@@ -87,21 +86,23 @@ const BottomEditorPanelHeader = ({
         hint: [],
         info: [],
       }
-      );
-    };
-    const panelProblems = getProblems();
-    
-    const onTabClick = (index: number) => {
-      setSelectedBottomTab(index);
-      if (!showBottomPanel) {
-        setShowBottomPanel(true);
-      } else if (index === selectedBottomTab) {
-        setShowBottomPanel(false);
-      }
-    };
+    );
+  };
+  const panelProblems = getProblems();
+
+  const onTabClick = (index: number) => {
+    setSelectedBottomTab(index);
+    if (!showBottomPanel) {
+      setShowBottomPanel(true);
+    } else if (index === selectedBottomTab) {
+      setShowBottomPanel(false);
+    }
+  };
 
   const statusMessage = `${panelProblems.error.length} Error${
-    (panelProblems.error.length === 0) || (panelProblems.error.length > 1) ? 's' : ''
+    panelProblems.error.length === 0 || panelProblems.error.length > 1
+      ? 's'
+      : ''
   }`;
 
   return (
@@ -126,13 +127,14 @@ const BottomEditorPanelHeader = ({
             inline={true}
             onClick={() => onTabClick(1)}
           >
-              <FaRegTimesCircle />
-              <p>{statusMessage}</p>
+            <FaRegTimesCircle />
+            <p>{statusMessage}</p>
             <TabIndicator selected={selectedBottomTab == 1} />
           </Button>
         </Tab>
-        {  // temporarily disabling history tab. need more info if this is going to get perm del.
-        /*<Tab as={Fragment}>
+        {
+          // temporarily disabling history tab. need more info if this is going to get perm del.
+          /*<Tab as={Fragment}>
           <Button
             sx={styles.tabButton}
             variant="unstyled"
@@ -142,7 +144,8 @@ const BottomEditorPanelHeader = ({
             <HistoryIcon /> History
             <TabIndicator selected={isHistorySelected} />
           </Button>
-        </Tab>*/}
+        </Tab>*/
+        }
       </Flex>
       <Flex ml="auto">
         <Button

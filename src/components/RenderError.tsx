@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { CadenceProblem } from 'util/language-syntax-errors';
-import {  ErrorMessage } from './Arguments/styles';
+import { ErrorMessage } from './Arguments/styles';
 import { renderMessage } from './Arguments/components';
 import { Flex } from 'theme-ui';
 import { SXStyles } from 'src/types';
@@ -21,7 +20,7 @@ const styles: SXStyles = {
   },
   list: {
     flexDirection: 'column',
-    width: '100%'
+    width: '100%',
   },
   errorLine: {
     cursor: 'pointer',
@@ -35,36 +34,34 @@ const styles: SXStyles = {
     borderRadius: '8px',
     '&:hover': {
       backgroundColor: 'rgba(244, 57, 64, 0.15)',
-    }
+    },
   },
   index: {
     alignItems: 'center',
-  justifyContent: 'space-between',
-  paddingRight: '8px'
-  }
-}
+    justifyContent: 'space-between',
+    paddingRight: '8px',
+  },
+};
 
 const RenderError = (props: any) => {
-
   const list = props.list.error ?? [];
 
   return (
     <Flex sx={styles.root}>
       <Flex sx={styles.list}>
-        {list.length > 1 ? list.map((item: CadenceProblem, i: number) => {
-          const message = renderMessage(item.message);
-          return (
-            <Flex
-              sx={styles.errorLine}
-              key={i}
-            >
-              <Flex sx={styles.index}>
-                <span>{i + 1}</span>
-              </Flex>
-              <ErrorMessage>{message}</ErrorMessage>
-            </Flex>
-          );
-        }) : "Nice! No Syntax Errors Found."}
+        {list.length > 1
+          ? list.map((item: CadenceProblem, i: number) => {
+              const message = renderMessage(item.message);
+              return (
+                <Flex sx={styles.errorLine} key={i}>
+                  <Flex sx={styles.index}>
+                    <span>{i + 1}</span>
+                  </Flex>
+                  <ErrorMessage>{message}</ErrorMessage>
+                </Flex>
+              );
+            })
+          : 'Nice! No Syntax Errors Found.'}
       </Flex>
     </Flex>
   );

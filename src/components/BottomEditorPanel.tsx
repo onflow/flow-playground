@@ -29,13 +29,13 @@ const styles: SXStyles = {
     borderTopColor: 'borderColor',
     backgroundColor: 'white',
     overflow: 'auto',
-    width: '100%'
+    width: '100%',
   },
   tabPanel: {
     flex: 1,
     height: '100%',
     padding: 7,
-    margin: '0px 45px'
+    margin: '0px 45px',
   },
 };
 
@@ -46,23 +46,23 @@ const BottomEditorPanel = ({
 }: BottomEditorPanelProps) => {
   const { showBottomPanel, active } = useProject();
 
-    /**
+  /**
    * Make active key out of active project item type and index
    */
-     const getActiveKey = () => `${active.type}-${active.index}`;
-  
-     const getProblems = (): any => {
-       const key = getActiveKey();
-       return (
-         problemsList[key] || {
-           error: [],
-           warning: [],
-           hint: [],
-           info: [],
-         }
-         );
-       };
-       const panelProblems = getProblems();
+  const getActiveKey = () => `${active.type}-${active.index}`;
+
+  const getProblems = (): any => {
+    const key = getActiveKey();
+    return (
+      problemsList[key] || {
+        error: [],
+        warning: [],
+        hint: [],
+        info: [],
+      }
+    );
+  };
+  const panelProblems = getProblems();
 
   return (
     <Flex sx={styles.root}>
@@ -81,7 +81,7 @@ const BottomEditorPanel = ({
               <RenderResponse />
             </Flex>
             <Flex as={Tab.Panel} sx={styles.tabPanel}>
-              <RenderError list={panelProblems}/>
+              <RenderError list={panelProblems} />
             </Flex>
           </Flex>
         )}
