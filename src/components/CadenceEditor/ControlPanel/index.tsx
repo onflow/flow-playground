@@ -360,9 +360,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   switch (true) {
     case !isOk && !showPrompt:
       statusIcon = <FaRegTimesCircle />;
-      statusMessage = `${problems?.error?.length} Error${
-        problems?.error?.length > 1 ? 's' : ''
-      }`;
+      statusMessage = problems?.error?.length
+        ? `${problems?.error?.length} Error${
+            problems?.error?.length > 1 ? 's' : ''
+          }`
+        : '';
       break;
   }
 
