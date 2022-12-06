@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { CadenceProblem } from 'util/language-syntax-errors';
-import { ErrorIndex, ErrorMessage, List, SingleError } from './Arguments/styles';
+import {  ErrorMessage } from './Arguments/styles';
 import { renderMessage } from './Arguments/components';
 import { Flex } from 'theme-ui';
 import { SXStyles } from 'src/types';
@@ -22,6 +22,25 @@ const styles: SXStyles = {
   list: {
     flexDirection: 'column',
     width: '100%'
+  },
+  errorLine: {
+    cursor: 'pointer',
+    alignItems: 'baseline',
+    boxSizing: 'border-box',
+    padding: '10px',
+    fontSize: '14px',
+    background: '#ffffff',
+    margin: '4px 0px',
+    boxShadow: '0px 4px 40px rgba(0, 0, 0, 0.08)',
+    borderRadius: '8px',
+    '&:hover': {
+      backgroundColor: 'rgba(244, 57, 64, 0.15)',
+    }
+  },
+  index: {
+    alignItems: 'center',
+  justifyContent: 'space-between',
+  paddingRight: '8px'
   }
 }
 
@@ -32,19 +51,20 @@ const RenderError = (props: any) => {
   return (
     <Flex sx={styles.root}>
       <Flex sx={styles.list}>
-        {list.map((item: CadenceProblem, i: number) => {
+        {list.length > 1 ? list.map((item: CadenceProblem, i: number) => {
           const message = renderMessage(item.message);
           return (
-            <SingleError
+            <Flex
+              sx={styles.errorLine}
               key={i}
             >
-              <ErrorIndex>
+              <Flex sx={styles.index}>
                 <span>{i + 1}</span>
-              </ErrorIndex>
+              </Flex>
               <ErrorMessage>{message}</ErrorMessage>
-            </SingleError>
+            </Flex>
           );
-        })}
+        }) : "Nice! No Syntax Errors Found."}
       </Flex>
     </Flex>
   );

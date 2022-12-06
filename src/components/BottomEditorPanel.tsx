@@ -35,6 +35,7 @@ const styles: SXStyles = {
     flex: 1,
     height: '100%',
     padding: 7,
+    margin: '0px 45px'
   },
 };
 
@@ -62,7 +63,7 @@ const BottomEditorPanel = ({
          );
        };
        const panelProblems = getProblems();
-       console.log("panel",panelProblems)
+
   return (
     <Flex sx={styles.root}>
       <Tab.Group
@@ -79,11 +80,8 @@ const BottomEditorPanel = ({
             <Flex as={Tab.Panel} sx={styles.tabPanel}>
               <RenderResponse />
             </Flex>
-            <Flex as={Tab.Panels} sx={styles.tabPanels} >
             <Flex as={Tab.Panel} sx={styles.tabPanel}>
-
               <RenderError list={panelProblems}/>
-              </Flex>
             </Flex>
           </Flex>
         )}

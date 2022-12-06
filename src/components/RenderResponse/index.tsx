@@ -49,15 +49,15 @@ export const RenderResponse = () => {
   const filteredResults = resultType
     ? data.cachedExecutionResults[resultType]
     : [];
+
   return (
     <Flex sx={styles.root} data-test="execution-results">
-      {!loading &&
-        !error &&
-        filteredResults
-          .map((line: LineType, n: number) => (
+      {filteredResults.length > 1 ? 
+        (!loading && !error ) && filteredResults.map((line: LineType, n: number) => (
             <Line {...line} key={n} index={n} />
-          ))
-          .reverse()}
+          )).reverse() : 
+          "Welcome to the Playground!"      
+          }
     </Flex>
   );
 };

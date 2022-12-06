@@ -26,7 +26,6 @@ import {
 import {
   ArgumentsListProps,
   ArgumentsTitleProps,
-  ErrorListProps,
   HintsProps,
   InteractionButtonProps,
 } from './types';
@@ -131,38 +130,6 @@ export const renderMessage = (message: string) => {
   );
 
   return items;
-};
-
-export const ErrorsList: React.FC<ErrorListProps> = (props: ErrorListProps) => {
-  const { list, actions } = props;
-  const { goTo, hideDecorations, hover } = actions;
-  if (list.length === 0) {
-    hideDecorations();
-    return null;
-  }
-
-  return (
-    <Stack>
-      <List>
-        {list.map((item: CadenceProblem, i) => {
-          const message = renderMessage(item.message);
-          return (
-            <SingleError
-              key={i}
-              onClick={() => goTo(item.position)}
-              onMouseOver={() => hover(item.highlight)}
-              onMouseOut={() => hideDecorations()}
-            >
-              <ErrorIndex>
-                <span>{i + 1}</span>
-              </ErrorIndex>
-              <ErrorMessage>{message}</ErrorMessage>
-            </SingleError>
-          );
-        })}
-      </List>
-    </Stack>
-  );
 };
 
 export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
