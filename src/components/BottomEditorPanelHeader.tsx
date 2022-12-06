@@ -66,9 +66,10 @@ const BottomEditorPanelHeader = ({
   selectedBottomTab,
   setSelectedBottomTab,
 }: BottomEditorPanelHeaderProps) => {
-  const { showBottomPanel, setShowBottomPanel, toggleBottomPanel } =
+  const { showBottomPanel, setShowBottomPanel, toggleBottomPanel, project } =
     useProject();
-
+  
+    console.log(project)
   const onTabClick = (index: number) => {
     setSelectedBottomTab(index);
     if (!showBottomPanel) {

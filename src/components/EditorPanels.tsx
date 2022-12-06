@@ -72,6 +72,7 @@ const styles: SXStyles = {
 const EditorPanels = ({ show }: EditorPanelsProps) => {
   const { project, active, showBottomPanel } = useProject();
   const [selectedBottomTab, setSelectedBottomTab] = useState(0);
+  const [panelErrors, setPanelErrors] =useState([])
 
   let fileName, script;
   switch (active.type) {
@@ -136,7 +137,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
             </Flex>
           </Allotment.Pane>
           <Allotment.Pane minSize={100} preferredSize="100%">
-            <CadenceEditor show={show} />
+            <CadenceEditor setPanelErrors={setPanelErrors} show={show} />
           </Allotment.Pane>
           <Allotment.Pane
             minSize={BOTTOM_EDITOR_PANEL_HEADER_HEIGHT + 70}
