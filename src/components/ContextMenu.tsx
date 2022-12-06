@@ -34,10 +34,11 @@ const styles: SXStyles = {
     position: 'absolute',
     zIndex: '100', // todo: create zIndex constant in theme object
     margin: '0',
-    right: '5px',
-    bottom: '12px',
+    right: '0',
+    bottom: '22px',
     background: theme.colors.white,
     padding: '8px 4px',
+    whiteSpace: 'nowrap',
   },
   ctaButton: {
     alignSelf: 'baseline',

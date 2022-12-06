@@ -11,7 +11,9 @@ export const MotionBox = (props: any) => {
       className="drag-box"
       drag={true}
       dragConstraints={dragConstraints}
-      dragElastic={1}
+      dragElastic={0}
+      whileDrag={{ scale: '1.1', opacity: '0.5' }}
+      dragMomentum={false}
     >
       {children}
     </motion.div>
