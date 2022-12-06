@@ -3,7 +3,6 @@ import { ResultType } from 'api/apollo/generated/graphql';
 import { GET_CACHED_EXECUTION_RESULTS } from 'api/apollo/queries';
 import React from 'react';
 import { Line as LineType } from 'util/normalize-interaction-response';
-
 import { Line } from 'components/RenderResponse/Line';
 import { ActiveEditor, EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
@@ -50,15 +49,18 @@ export const RenderResponse = () => {
   const filteredResults = resultType
     ? data.cachedExecutionResults[resultType]
     : [];
+
   return (
     <Flex sx={styles.root} data-test="execution-results">
-      {!loading &&
-        !error &&
-        filteredResults
-          .map((line: LineType, n: number) => (
-            <Line {...line} key={n} index={n} />
-          ))
-          .reverse()}
+      {filteredResults.length > 1
+        ? !loading &&
+          !error &&
+          filteredResults
+            .map((line: LineType, n: number) => (
+              <Line {...line} key={n} index={n} />
+            ))
+            .reverse()
+        : 'Welcome to the Playground!'}
     </Flex>
   );
 };

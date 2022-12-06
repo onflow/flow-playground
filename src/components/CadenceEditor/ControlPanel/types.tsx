@@ -6,6 +6,8 @@ export interface IValue {
 }
 
 export type ControlPanelProps = {
+  problemsList: any;
+  setProblemsList: any;
   editor: monacoEditor.ICodeEditor;
 };
 

@@ -1,6 +1,7 @@
 import { Tab } from '@headlessui/react';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { Fragment } from 'react';
+import { FaRegTimesCircle } from 'react-icons/fa';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
@@ -8,6 +9,7 @@ import Button from './Button';
 import LogIcon from './Icons/LogIcon';
 
 type BottomEditorPanelHeaderProps = {
+  problems: any;
   selectedBottomTab: number;
   setSelectedBottomTab: (index: number) => void;
 };
@@ -62,11 +64,30 @@ const TabIndicator = ({ selected }: { selected: boolean }) => {
 };
 
 const BottomEditorPanelHeader = ({
+  problems,
   selectedBottomTab,
   setSelectedBottomTab,
 }: BottomEditorPanelHeaderProps) => {
-  const { showBottomPanel, setShowBottomPanel, toggleBottomPanel } =
+  const { showBottomPanel, setShowBottomPanel, toggleBottomPanel, active } =
     useProject();
+
+  /**
+   * Make active key out of active project item type and index
+   */
+  const getActiveKey = () => `${active.type}-${active.index}`;
+
+  const getProblems = (): any => {
+    const key = getActiveKey();
+    return (
+      problems[key] || {
+        error: [],
+        warning: [],
+        hint: [],
+        info: [],
+      }
+    );
+  };
+  const panelProblems = getProblems();
 
   const onTabClick = (index: number) => {
     setSelectedBottomTab(index);
@@ -77,9 +98,11 @@ const BottomEditorPanelHeader = ({
     }
   };
 
-  const isLogSelected = true; //selectedBottomTab === 0;
-  // temporarily disabling history tab. need more info if this is going to get perm del.
-  //const isHistorySelected = selectedBottomTab === 1;
+  const statusMessage = `${panelProblems.error.length} Error${
+    panelProblems.error.length === 0 || panelProblems.error.length > 1
+      ? 's'
+      : ''
+  }`;
 
   return (
     <Flex as={Tab.List} sx={styles.header}>
@@ -93,10 +116,24 @@ const BottomEditorPanelHeader = ({
           >
             <LogIcon />
             Log
-            <TabIndicator selected={isLogSelected} />
+            <TabIndicator selected={selectedBottomTab == 0} />
           </Button>
         </Tab>
-        {/*<Tab as={Fragment}>
+        <Tab as={Fragment}>
+          <Button
+            sx={styles.tabButton}
+            variant="unstyled"
+            inline={true}
+            onClick={() => onTabClick(1)}
+          >
+            <FaRegTimesCircle />
+            <p>{statusMessage}</p>
+            <TabIndicator selected={selectedBottomTab == 1} />
+          </Button>
+        </Tab>
+        {
+          // temporarily disabling history tab. need more info if this is going to get perm del.
+          /*<Tab as={Fragment}>
           <Button
             sx={styles.tabButton}
             variant="unstyled"
@@ -106,7 +143,8 @@ const BottomEditorPanelHeader = ({
             <HistoryIcon /> History
             <TabIndicator selected={isHistorySelected} />
           </Button>
-        </Tab>*/}
+        </Tab>*/
+        }
       </Flex>
       <Flex ml="auto">
         <Button
