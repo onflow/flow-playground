@@ -80,7 +80,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
       case 'Transaction':
         if (project.transactionTemplates.length > 1) {
           await deleteTransactionTemplate(templateId);
-          const path = UrlRewritter(project, FILE_TYPE_NAME.transaction, 0)
+          const path = UrlRewritter(project, FILE_TYPE_NAME.transaction, 0);
           navigate(path);
         } else {
           setShowDeleteError(true);
@@ -89,7 +89,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
       case 'Script':
         if (project.scriptTemplates.length > 1) {
           await deleteScriptTemplate(templateId);
-          const path = UrlRewritter(project, FILE_TYPE_NAME.script, 0)          
+          const path = UrlRewritter(project, FILE_TYPE_NAME.script, 0);
           navigate(path);
         } else {
           setShowDeleteError(true);
@@ -98,7 +98,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
       default:
         if (project.contractTemplates.length > 1) {
           await deleteContractTemplate(templateId);
-          const path = UrlRewritter(project, FILE_TYPE_NAME.contract, 0)          
+          const path = UrlRewritter(project, FILE_TYPE_NAME.contract, 0);
           navigate(path);
         } else {
           setShowDeleteError(true);

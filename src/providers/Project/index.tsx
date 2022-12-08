@@ -238,7 +238,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
-
   const deleteProject = async (projectId: string) => {
     setIsSaving(true);
     let res;

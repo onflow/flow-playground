@@ -148,7 +148,7 @@ export default class ProjectMutator {
     });
     Mixpanel.track('Project created', { projectId: project.id, project });
 
-    // project saved 
+    // project saved
     unregisterOnCloseSaveMessage();
     return project;
   }
@@ -181,8 +181,8 @@ export default class ProjectMutator {
   async saveProject(title: string, description: string, readme: string) {
     if (this.isLocal) {
       const project = await this.createProject();
-      const path = UrlRewritter(project, FILE_TYPE_NAME.contract, 0)
-      navigate(path)
+      const path = UrlRewritter(project, FILE_TYPE_NAME.contract, 0);
+      navigate(path);
     }
 
     const key = ['SAVE_PROJECT', this.projectId];
@@ -262,7 +262,6 @@ export default class ProjectMutator {
     script: string,
     title: string,
   ) {
-
     this.client.writeData({
       id: `TransactionTemplate:${templateId}`,
       data: {
@@ -304,8 +303,8 @@ export default class ProjectMutator {
   ) {
     if (this.isLocal) {
       const project = await this.createProject();
-      const path = UrlRewritter(project, FILE_TYPE_NAME.transaction, 0)
-      navigate(path)
+      const path = UrlRewritter(project, FILE_TYPE_NAME.transaction, 0);
+      navigate(path);
     }
 
     const signerAddresses: string[] = signers.map(
@@ -339,8 +338,8 @@ export default class ProjectMutator {
   async createTransactionTemplate(script: string, title: string) {
     if (this.isLocal) {
       const project = await this.createProject();
-      const path = UrlRewritter(project, FILE_TYPE_NAME.transaction, 0)
-      navigate(path)
+      const path = UrlRewritter(project, FILE_TYPE_NAME.transaction, 0);
+      navigate(path);
     }
 
     const res = await this.client.mutate({
@@ -507,8 +506,8 @@ export default class ProjectMutator {
   async createScriptExecution(script: string, args: string[]) {
     if (this.isLocal) {
       const project = await this.createProject();
-      const path = UrlRewritter(project, FILE_TYPE_NAME.script, 0)
-      navigate(path)
+      const path = UrlRewritter(project, FILE_TYPE_NAME.script, 0);
+      navigate(path);
     }
 
     const res = await this.client.mutate({
@@ -536,8 +535,8 @@ export default class ProjectMutator {
   async createScriptTemplate(script: string, title: string) {
     if (!this.projectId) {
       const project = await this.createProject();
-      const path = UrlRewritter(project, FILE_TYPE_NAME.script, 0)
-      navigate(path)
+      const path = UrlRewritter(project, FILE_TYPE_NAME.script, 0);
+      navigate(path);
     }
 
     const res = await this.client.mutate({
@@ -595,8 +594,8 @@ export default class ProjectMutator {
   async createContractTemplate(script: string, title: string) {
     if (this.isLocal) {
       const project = await this.createProject();
-      const path = UrlRewritter(project, FILE_TYPE_NAME.contract, 0)
-      navigate(path)
+      const path = UrlRewritter(project, FILE_TYPE_NAME.contract, 0);
+      navigate(path);
     }
 
     const res = await this.client.mutate({
@@ -695,8 +694,8 @@ export default class ProjectMutator {
     if (this.isLocal) {
       const project = await this.createProject();
       contractTemplate = project.contractTemplates[index];
-      const path = UrlRewritter(project, FILE_TYPE_NAME.contract, index)
-      navigate(path)
+      const path = UrlRewritter(project, FILE_TYPE_NAME.contract, index);
+      navigate(path);
     }
 
     const res = await this.client.mutate({
