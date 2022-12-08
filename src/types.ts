@@ -17,7 +17,7 @@ export type ProjectListType = {
 
 export type ProjectType = {
   id: Scalars['UUID'];
-  title: string;
+  title?: string;
   contractTemplates: Template[];
   transactionTemplates: Template[];
   scriptTemplates: Template[];
