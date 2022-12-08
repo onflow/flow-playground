@@ -10,6 +10,7 @@ import { Box, Flex } from 'theme-ui';
 import { isUUUID, LOCAL_PROJECT_ID } from 'util/url';
 import MenuList from './MenuList';
 import InformationalPopup from '../../InformationalPopup';
+import { UrlRewritter, FILE_TYPE_NAME } from 'util/urlRewritter';
 
 type FileListProps = {
   isExplorerCollapsed: boolean;
@@ -79,8 +80,8 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
       case 'Transaction':
         if (project.transactionTemplates.length > 1) {
           await deleteTransactionTemplate(templateId);
-          const id = project.transactionTemplates[0].id;
-          navigate(`/${projectPath}?type=tx&id=${id}`);
+          const path = UrlRewritter(project, FILE_TYPE_NAME.transaction, 0);
+          navigate(path);
         } else {
           setShowDeleteError(true);
         }
@@ -88,8 +89,8 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
       case 'Script':
         if (project.scriptTemplates.length > 1) {
           await deleteScriptTemplate(templateId);
-          const id = project.scriptTemplates[0].id;
-          navigate(`/${projectPath}?type=script&id=${id}`);
+          const path = UrlRewritter(project, FILE_TYPE_NAME.script, 0);
+          navigate(path);
         } else {
           setShowDeleteError(true);
         }
@@ -97,8 +98,8 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
       default:
         if (project.contractTemplates.length > 1) {
           await deleteContractTemplate(templateId);
-          const id = project.contractTemplates[0].id;
-          navigate(`/${projectPath}?type=contract&id=${id}`);
+          const path = UrlRewritter(project, FILE_TYPE_NAME.contract, 0);
+          navigate(path);
         } else {
           setShowDeleteError(true);
         }

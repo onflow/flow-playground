@@ -1,4 +1,5 @@
 import ApolloClient from 'apollo-client';
+import { navigate } from '@reach/router';
 
 import {
   Account,
@@ -32,6 +33,7 @@ import {
   unregisterOnCloseSaveMessage,
 } from 'util/onclose';
 import { createDefaultProject, DEFAULT_ACCOUNT_STATE } from './projectDefault';
+import { UrlRewritter, FILE_TYPE_NAME } from 'util/urlRewritter';
 
 // TODO: Switch to directives for serialization keys after upgrading to the newest Apollo/apollo-link-serialize
 export const PROJECT_SERIALIZATION_KEY = 'PROJECT_SERIALIZATION_KEY';
@@ -61,12 +63,30 @@ export default class ProjectMutator {
     this.readme = readme;
   }
 
-  async createProject(blank = false): Promise<Project> {
-    const newProject = blank
-      ? createDefaultProject()
-      : this.client.readQuery({
-          query: GET_LOCAL_PROJECT,
-        }).project;
+  async createLocalProject(): Promise<Project> {
+    const project = createDefaultProject();
+
+    this.client.writeQuery({
+      query: GET_PROJECT,
+      variables: {
+        projectId: project.id,
+      },
+      data: { project },
+    });
+
+    await this.client.mutate({
+      mutation: SET_ACTIVE_PROJECT,
+      variables: {
+        id: project.id,
+      },
+    });
+    return project;
+  }
+
+  async createProject(): Promise<Project> {
+    const newProject = this.client.readQuery({
+      query: GET_LOCAL_PROJECT,
+    }).project;
 
     const parentId = newProject.parentId;
     const seed = newProject.seed;
@@ -107,7 +127,7 @@ export default class ProjectMutator {
 
     this.projectId = project.id;
     this.isLocal = false;
-    // TODO: this writeQuery is required to avoid having the active GET_PROJECT hook refetch unnecessarily. Investigate further after switching to Apollo 3
+
     this.client.writeQuery({
       query: GET_PROJECT,
       variables: {
@@ -127,13 +147,42 @@ export default class ProjectMutator {
       projectId: project.id,
     });
     Mixpanel.track('Project created', { projectId: project.id, project });
+
+    // project saved
+    unregisterOnCloseSaveMessage();
     return project;
+  }
+
+  /** update local project meta
+   * keeps track of changes to meta data before project is saved to server
+   */
+  async updateLocalProjectMeta(
+    title: string,
+    description: string,
+    readme: string,
+  ) {
+    const project = this.client.readQuery({
+      query: GET_LOCAL_PROJECT,
+    }).project;
+
+    project.title = title || project.title;
+    project.description = description || project.description;
+    project.readme = readme || project.readme;
+
+    this.client.writeQuery({
+      query: GET_PROJECT,
+      variables: {
+        projectId: project.id,
+      },
+      data: { project },
+    });
   }
 
   async saveProject(title: string, description: string, readme: string) {
     if (this.isLocal) {
-      await this.createProject();
-      unregisterOnCloseSaveMessage();
+      const project = await this.createProject();
+      const path = UrlRewritter(project, FILE_TYPE_NAME.contract, 0);
+      navigate(path);
     }
 
     const key = ['SAVE_PROJECT', this.projectId];
@@ -166,6 +215,7 @@ export default class ProjectMutator {
     });
 
     Mixpanel.track('Project saved', { projectId: this.projectId });
+    return { projectId: this.projectId };
   }
 
   clearProjectAccountsOnReDeploy(accountAddress: string) {
@@ -252,7 +302,9 @@ export default class ProjectMutator {
     args: string[],
   ) {
     if (this.isLocal) {
-      await this.createProject();
+      const project = await this.createProject();
+      const path = UrlRewritter(project, FILE_TYPE_NAME.transaction, 0);
+      navigate(path);
     }
 
     const signerAddresses: string[] = signers.map(
@@ -285,7 +337,9 @@ export default class ProjectMutator {
 
   async createTransactionTemplate(script: string, title: string) {
     if (this.isLocal) {
-      await this.createProject();
+      const project = await this.createProject();
+      const path = UrlRewritter(project, FILE_TYPE_NAME.transaction, 0);
+      navigate(path);
     }
 
     const res = await this.client.mutate({
@@ -369,7 +423,8 @@ export default class ProjectMutator {
 
   async deleteTransactionTemplate(templateId: string) {
     if (this.isLocal) {
-      await this.createProject();
+      // if project not saved don't save when deleting a file
+      return;
     }
 
     const res = await this.client.mutate({
@@ -409,7 +464,8 @@ export default class ProjectMutator {
 
   async deleteScriptTemplate(templateId: string) {
     if (this.isLocal) {
-      await this.createProject();
+      // don't save if project is local and deleting a file
+      return;
     }
 
     const res = await this.client.mutate({
@@ -449,7 +505,9 @@ export default class ProjectMutator {
 
   async createScriptExecution(script: string, args: string[]) {
     if (this.isLocal) {
-      await this.createProject();
+      const project = await this.createProject();
+      const path = UrlRewritter(project, FILE_TYPE_NAME.script, 0);
+      navigate(path);
     }
 
     const res = await this.client.mutate({
@@ -476,7 +534,9 @@ export default class ProjectMutator {
 
   async createScriptTemplate(script: string, title: string) {
     if (!this.projectId) {
-      await this.createProject();
+      const project = await this.createProject();
+      const path = UrlRewritter(project, FILE_TYPE_NAME.script, 0);
+      navigate(path);
     }
 
     const res = await this.client.mutate({
@@ -533,7 +593,9 @@ export default class ProjectMutator {
 
   async createContractTemplate(script: string, title: string) {
     if (this.isLocal) {
-      await this.createProject();
+      const project = await this.createProject();
+      const path = UrlRewritter(project, FILE_TYPE_NAME.contract, 0);
+      navigate(path);
     }
 
     const res = await this.client.mutate({
@@ -632,7 +694,8 @@ export default class ProjectMutator {
     if (this.isLocal) {
       const project = await this.createProject();
       contractTemplate = project.contractTemplates[index];
-      unregisterOnCloseSaveMessage();
+      const path = UrlRewritter(project, FILE_TYPE_NAME.contract, index);
+      navigate(path);
     }
 
     const res = await this.client.mutate({
@@ -664,7 +727,8 @@ export default class ProjectMutator {
 
   async deleteContractTemplate(templateId: string) {
     if (this.isLocal) {
-      await this.createProject();
+      // don't save a local project if deleting a file
+      return;
     }
 
     const res = await this.client.mutate({

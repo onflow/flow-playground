@@ -4,8 +4,7 @@ import { Account, Project } from 'api/apollo/generated/graphql';
 import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
 import React, { createContext, useEffect, useState } from 'react';
 import { ChildProps } from 'src/types';
-import { getParams } from 'util/url';
-import { createDefaultProject } from './projectDefault';
+import { getParams, LOCAL_PROJECT_ID } from 'util/url';
 import useGetProject from './projectHooks';
 import ProjectMutator, { PROJECT_SERIALIZATION_KEY } from './projectMutator';
 import { storageMap } from 'util/accounts';
@@ -35,6 +34,7 @@ export interface ProjectContextValue {
     description: string,
     readme: string,
   ) => Promise<any>;
+  saveProject: () => Promise<any>;
   deleteProject: (projectId: string) => Promise<any>;
   createContractDeployment: () => Promise<any>;
   updateSelectedContractAccount: (accountIndex: number) => void;
@@ -102,7 +102,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     },
   });
 
-  const projectId = activeProjectId || urlProjectId;
+  const projectId = urlProjectId || activeProjectId;
 
   let project: Project;
   let isLocal: boolean;
@@ -186,7 +186,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     setIsSaving(true);
     let res;
     try {
-      project = await createDefaultProject();
+      // create default project and save to cache
+      project = await mutator.createLocalProject();
       navigate(`/${project.id}`, { replace: true });
     } catch (e) {
       console.error(e);
@@ -203,6 +204,27 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     description: string,
     readme: string,
   ) => {
+    setIsSaving(true);
+    let res;
+    try {
+      if (project.id === LOCAL_PROJECT_ID) {
+        mutator.updateLocalProjectMeta(title, description, readme);
+      } else {
+        res = await mutator.saveProject(title, description, readme);
+      }
+    } catch (e) {
+      console.error(e);
+      setIsSaving(false);
+      showError(e?.message);
+    }
+    setIsSaving(false);
+    return res;
+  };
+
+  /**
+   * save local project to server and get project id
+   */
+  const saveProject: any = async () => {
     setIsSaving(true);
     let res;
     try {
@@ -697,6 +719,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         isExecutingAction,
         createBlankProject,
         updateProject,
+        saveProject,
         deleteProject,
         createContractDeployment,
         updateContractTemplate,

@@ -20,12 +20,12 @@ export const SaveButton = () => {
       ? null
       : window.location.pathname.slice(1);
 
-  const { project, isSaving, updateProject } = useProject();
-  const isSaved = project?.persist;
+  const { project, isSaving, saveProject } = useProject();
+  const isSaved = Boolean(project?.updatedAt);
 
   const saveClicked = () => {
     Mixpanel.track('Save project clicked', { projectId });
-    updateProject(project.title, project.description, project.readme);
+    saveProject();
   };
 
   const timeAgo = isSaved
