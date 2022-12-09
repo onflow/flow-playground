@@ -79,7 +79,7 @@ const ErrorToastContainer = () => {
             <Box sx={styles.message}>
               {applicationErrorMessage.length > 0
                 ? applicationErrorMessage
-                : `Oops! Something went wrong. If you'd like, please report the Bug. Thank you!`}
+                : `this is a really long filler text to show overflow properties of the application toast that wont be a part of the regular error messageOops! Something went wrong. If you'd like, please report the Bug. Thank you!`}
             </Box>
             <Flex sx={styles.buttonContainer}>
               <Link

@@ -136,7 +136,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const [lastSigners, setLastSigners] = useState(null);
   const [showProjectsSidebar, setShowProjectsSidebar] = useState(false);
   const [showBottomPanel, setShowBottomPanel] = useState(false);
-  const [showErrorToast, setShowErrorToast] = useState(true);
+  const [showErrorToast, setShowErrorToast] = useState(false);
   const [applicationErrorMessage, setApplicationErrorMessage] = useState('');
 
   useEffect(() => {
