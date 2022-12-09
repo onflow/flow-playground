@@ -79,6 +79,10 @@ export interface ProjectContextValue {
   showBottomPanel: boolean;
   toggleBottomPanel: () => void;
   setShowBottomPanel: (show: boolean) => void;
+  showErrorToast: boolean;
+  setShowErrorToast: (show: boolean) => void;
+  applicationErrorMessage: string;
+  setApplicationErrorMessage: (message: string) => void;
 }
 
 export const ProjectContext: React.Context<ProjectContextValue> =
@@ -132,6 +136,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const [lastSigners, setLastSigners] = useState(null);
   const [showProjectsSidebar, setShowProjectsSidebar] = useState(false);
   const [showBottomPanel, setShowBottomPanel] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(true);
+  const [applicationErrorMessage, setApplicationErrorMessage] = useState('');
 
   useEffect(() => {
     if (showProjectsSidebar) {
@@ -179,9 +185,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return transMessage;
   };
 
-  const showError = (message?: string) =>
-    alert(`Error: ${translateError(message)}`);
-
   const createBlankProject = async () => {
     setIsSaving(true);
     let res;
@@ -192,7 +195,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError(e?.message);
+      setApplicationErrorMessage(translateError(e?.message));
+      setShowErrorToast(true);
     }
     setIsSaving(false);
     setShowProjectsSidebar(false);
@@ -215,7 +219,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError(e?.message);
+      setApplicationErrorMessage(translateError(e?.message));
+      setShowErrorToast(true);
     }
     setIsSaving(false);
     return res;
@@ -232,7 +237,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError(e?.message);
+      setApplicationErrorMessage(translateError(e?.message));
+      setShowErrorToast(true);
     }
     setIsSaving(false);
     return res;
@@ -247,7 +253,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError(e?.message);
+      setApplicationErrorMessage(translateError(e?.message));
+      setShowErrorToast(true);
     }
     setIsSaving(false);
     setShowProjectsSidebar(false);
@@ -274,7 +281,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       console.error(e);
       setIsSaving(false);
       setIsExecutingAction(false);
-      showError(e?.message);
+      setApplicationErrorMessage(translateError(e?.message));
+      setShowErrorToast(true);
     }
     setIsSaving(false);
     setIsExecutingAction(false);
@@ -294,7 +302,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError(e?.message);
+      setApplicationErrorMessage(translateError(e?.message));
+      setShowErrorToast(true);
     }
     setIsSaving(false);
     return res;
@@ -314,7 +323,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError(e?.message);
+      setApplicationErrorMessage(translateError(e?.message));
+      setShowErrorToast(true);
     }
     setIsSaving(false);
     return res;
@@ -332,7 +342,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError(e?.message);
+      setApplicationErrorMessage(translateError(e?.message));
+      setShowErrorToast(true);
     }
     setIsSaving(false);
     return res;
@@ -350,7 +361,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError(e?.message);
+      setApplicationErrorMessage(translateError(e?.message));
+      setShowErrorToast(true);
     }
     setIsSaving(false);
     return res;
@@ -368,7 +380,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError(e?.message);
+      setApplicationErrorMessage(translateError(e?.message));
+      setShowErrorToast(true);
     }
     setIsSaving(false);
     return res;
@@ -386,7 +399,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError(e?.message);
+      setApplicationErrorMessage(translateError(e?.message));
+      setShowErrorToast(true);
     }
     setIsSaving(false);
     return res;
@@ -418,7 +432,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       console.error(e);
       setIsSaving(false);
       setIsExecutingAction(false);
-      showError(e?.message);
+      setApplicationErrorMessage(translateError(e?.message));
+      setShowErrorToast(true);
     }
     setIsSaving(false);
     setIsExecutingAction(false);
@@ -438,7 +453,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       console.error(e);
       setIsSaving(false);
       setIsExecutingAction(false);
-      showError(e?.message);
+      setApplicationErrorMessage(translateError(e?.message));
+      setShowErrorToast(true);
     }
     setIsSaving(false);
     setIsExecutingAction(false);
@@ -453,7 +469,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError(e?.message);
+      setApplicationErrorMessage(translateError(e?.message));
+      setShowErrorToast(true);
     }
     setIsSaving(false);
     return res;
@@ -467,7 +484,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError(e?.message);
+      setApplicationErrorMessage(translateError(e?.message));
+      setShowErrorToast(true);
     }
     setIsSaving(false);
     return res;
@@ -481,7 +499,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
-      showError(e?.message);
+      setApplicationErrorMessage(translateError(e?.message));
+      setShowErrorToast(true);
     }
     setIsSaving(false);
     return res;
@@ -754,6 +773,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         showBottomPanel,
         toggleBottomPanel,
         setShowBottomPanel,
+        showErrorToast,
+        setShowErrorToast,
+        applicationErrorMessage,
+        setApplicationErrorMessage,
       }}
     >
       {children}

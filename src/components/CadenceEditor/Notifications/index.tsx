@@ -37,7 +37,9 @@ const Notifications = () => {
 
   // EFFECTS  -------------------------------------------------------------------
   useEffect(() => {
+    console.log('acct', project.accounts);
     setProjectAccounts((prevAccounts) => {
+      console.log('prev', prevAccounts);
       const latestAccounts = project.accounts;
       const updatedAccounts = latestAccounts.filter(
         (latestAccount, index) =>
