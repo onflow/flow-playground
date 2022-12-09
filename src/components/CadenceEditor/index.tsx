@@ -182,7 +182,6 @@ const CadenceEditor = (props: any) => {
           editor={editor}
         />
       )}
-      <Notifications />
     </EditorContainer>
   );
 };
