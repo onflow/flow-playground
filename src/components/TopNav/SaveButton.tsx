@@ -26,29 +26,24 @@ export const SaveButton = () => {
   const { projects } = useProjects();
   const hasReachedProjectsLimit = projects.length >= MAX_PROJECTS;
 
-  let showText = Boolean(project?.updatedAt);
+  const isSaved = Boolean(project?.updatedAt);
 
   const saveClicked = () => {
     Mixpanel.track('Save project clicked', { projectId });
     saveProject();
   };
 
-  const timeAgo = showText
+  const timeAgo = isSaved
     ? formatDistance(new Date(project.updatedAt), new Date(), {
         addSuffix: false,
       })
     : null;
 
-  let buttonLabel = timeAgo ? `Saved ${timeAgo}` : `Save`;
-
-  if (!projectId && hasReachedProjectsLimit) {
-    buttonLabel =  "Max projects reached"
-    showText = true;
-  }
+  const buttonLabel = timeAgo ? `Saved ${timeAgo}` : `Save`;
 
   return (
     <Container sx={styles.container}>
-      {showText ? (
+      {isSaved ? (
         <Text>{buttonLabel}</Text>
       ) : (
         <Button
@@ -56,7 +51,7 @@ export const SaveButton = () => {
           variant="alternate"
           size="sm"
           inline={true}
-          disabled={showText || isSaving }
+          disabled={isSaved || isSaving || hasReachedProjectsLimit }
         >
           {buttonLabel}
         </Button>
