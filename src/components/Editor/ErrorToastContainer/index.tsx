@@ -60,20 +60,17 @@ const styles: SXStyles = {
 
 const ErrorToastContainer = () => {
   const {
-    showErrorToast,
-    setShowErrorToast,
     applicationErrorMessage,
     setApplicationErrorMessage,
   } = useProject();
 
   const onCloseToastClicked = () => {
-    setShowErrorToast(false);
     setApplicationErrorMessage('');
   };
 
   return (
     <Flex sx={styles.root}>
-      {showErrorToast && (
+      {applicationErrorMessage.length > 0 && (
         <ErrorToast>
           <Flex sx={styles.errorContent}>
             <Box sx={styles.message}>
