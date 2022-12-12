@@ -542,14 +542,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     const state =
       parsedAccountState.length < 5 ? '(Empty)' : parsedAccountState;
     const contracts = JSON.stringify(accounts[accountId]?.deployedContracts);
-    console.log(
-      'accounts',
-      accounts,
-      'accountId',
-      accountId,
-      'selected index',
-      selectedResourceAccount,
-    );
+
     return {
       code: `Deployed Contracts: \n${contracts} \nAccount Storage: \n${state}`,
       id: accountId,
