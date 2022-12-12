@@ -7,4 +7,4 @@ export const storageMapByIndex = (index: number): string => {
 export const storageMapByAddress = (address: string): number => {
   if (!address) return 0;
   return accountAddresses.indexOf(address);
-}
+};

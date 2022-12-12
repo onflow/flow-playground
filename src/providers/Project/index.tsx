@@ -487,7 +487,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   };
 
   const updateSelectedContractAccount = (accountIndex: number) => {
-    console.log('updateSelectedContractAccount setActive', accountIndex);
     setActive({ type: EntityType.AccountStorage, index: accountIndex });
   };
 
@@ -543,7 +542,14 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     const state =
       parsedAccountState.length < 5 ? '(Empty)' : parsedAccountState;
     const contracts = JSON.stringify(accounts[accountId]?.deployedContracts);
-    console.log('accounts', accounts, 'accountId', accountId, 'selected index', selectedResourceAccount)
+    console.log(
+      'accounts',
+      accounts,
+      'accountId',
+      accountId,
+      'selected index',
+      selectedResourceAccount,
+    );
     return {
       code: `Deployed Contracts: \n${contracts} \nAccount Storage: \n${state}`,
       id: accountId,
@@ -612,7 +618,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
       if (!sameIndex || !sameType || initialLoad) {
         setInitialLoad(false);
-        console.log('not initial setActive tx', templateIndex);
         setActive({
           type: EntityType.TransactionTemplate,
           index: templateIndex,
@@ -638,7 +643,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
       if (!sameIndex || !sameType || initialLoad) {
         setInitialLoad(false);
-        console.log('not initial setActive script', templateIndex);
         setActive({
           type: EntityType.ScriptTemplate,
           index: templateIndex,
@@ -659,7 +663,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
       if (!sameIndex || !sameType || initialLoad) {
         setInitialLoad(false);
-        console.log('not initial setActive readme', 0);
         setActive({
           type: EntityType.Readme,
           index: 0,
@@ -675,7 +678,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       const sameIndex = active.index == storageIndex;
       if (!sameType || !sameIndex || initialLoad) {
         setInitialLoad(false);
-        console.log('not initial setActive account', storageIndex);
         setActive({
           type: EntityType.AccountStorage,
           index: storageIndex,
@@ -706,7 +708,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
       if (!sameIndex || !sameType || initialLoad) {
         setInitialLoad(false);
-        console.log('not initial setActive default', templateIndex);
         setActive({
           type: EntityType.ContractTemplate,
           index: templateIndex,
