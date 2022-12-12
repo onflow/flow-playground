@@ -6,6 +6,8 @@ import { Container, Text } from 'theme-ui';
 import { useProject } from 'providers/Project/projectHooks';
 import { LOCAL_PROJECT_ID } from 'util/url';
 import { formatDistance } from 'date-fns';
+import useProjects from '../../hooks/useProjects';
+import { MAX_PROJECTS } from 'components/NewProjectButton';
 
 const styles: SXStyles = {
   container: {
@@ -21,6 +23,9 @@ export const SaveButton = () => {
       : window.location.pathname.slice(1);
 
   const { project, isSaving, saveProject } = useProject();
+  const { projects } = useProjects();
+  const hasReachedProjectsLimit = projects.length >= MAX_PROJECTS;
+
   const isSaved = Boolean(project?.updatedAt);
 
   const saveClicked = () => {
@@ -46,7 +51,7 @@ export const SaveButton = () => {
           variant="alternate"
           size="sm"
           inline={true}
-          disabled={isSaved || isSaving}
+          disabled={isSaved || isSaving || hasReachedProjectsLimit}
         >
           {buttonLabel}
         </Button>
