@@ -49,7 +49,7 @@ const RenderError = (props: any) => {
   return (
     <Flex sx={styles.root}>
       <Flex sx={styles.list}>
-        {list.length > 1
+        {list.length > 0
           ? list.map((item: CadenceProblem, i: number) => {
               const message = renderMessage(item.message);
               return (

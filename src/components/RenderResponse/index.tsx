@@ -52,7 +52,7 @@ export const RenderResponse = () => {
 
   return (
     <Flex sx={styles.root} data-test="execution-results">
-      {filteredResults.length > 1
+      {filteredResults.length > 0
         ? !loading &&
           !error &&
           filteredResults

@@ -5,7 +5,6 @@ import { useProject } from 'providers/Project/projectHooks';
 import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
 import { EditorContainer } from './components';
 import ControlPanel from './ControlPanel';
-import Notifications from './Notifications';
 import { EditorState } from './types';
 import { EntityType } from 'providers/Project';
 
@@ -182,7 +181,6 @@ const CadenceEditor = (props: any) => {
           editor={editor}
         />
       )}
-      <Notifications />
     </EditorContainer>
   );
 };

@@ -4,6 +4,7 @@ import TopNav from 'components/TopNav';
 import { EditorContainer } from 'containers/Playground/components';
 import { ActiveEditor } from 'providers/Project';
 import React from 'react';
+import ErrorToastContainer from './ErrorToastContainer';
 
 type EditorContainerProps = {
   isExplorerCollapsed: boolean;
@@ -32,6 +33,7 @@ const Editor = ({
         project={project}
         active={active}
       />
+      <ErrorToastContainer />
     </>
   );
 };

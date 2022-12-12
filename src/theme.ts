@@ -21,6 +21,7 @@ export default {
     shadowColor: 'rgb(222, 222, 222)',
     warning: '#ffcc00',
     error: '#f44336',
+    errorToast: '#fc4723',
     blue: '#0000ff',
     heading: '#919191',
     badgeResource: '#0093AF',
