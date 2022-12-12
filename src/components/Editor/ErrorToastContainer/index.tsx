@@ -59,10 +59,7 @@ const styles: SXStyles = {
 };
 
 const ErrorToastContainer = () => {
-  const {
-    applicationErrorMessage,
-    setApplicationErrorMessage,
-  } = useProject();
+  const { applicationErrorMessage, setApplicationErrorMessage } = useProject();
 
   const onCloseToastClicked = () => {
     setApplicationErrorMessage('');
