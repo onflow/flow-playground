@@ -592,7 +592,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   }
 
   const params = getParams(location.search || '');
-  const { id, type, storage } = params;
+  const { id, type, storage: storageAddress } = params;
 
   let templateIndex = 0;
   switch (type) {
@@ -666,7 +666,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       break;
     }
     case 'account': {
-      const storageIndex = storageMapByAddress(storage);
+      const storageIndex = storageMapByAddress(storageAddress);
       const sameType = active.type == EntityType.AccountStorage;
       const sameIndex = active.index == storageIndex;
       if (!sameType || !sameIndex || initialLoad) {
@@ -680,7 +680,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         return (
           <Redirect
             noThrow
-            to={`/${project.id}?type=account&address=${rawAddress}&storage=${storage}`}
+            to={`/${project.id}?type=account&address=${rawAddress}&storage=${storageAddress}`}
           />
         );
       }
