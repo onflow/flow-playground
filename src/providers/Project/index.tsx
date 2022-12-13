@@ -240,19 +240,21 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
-  const deleteProject = async (projectId: string) => {
+  const deleteProject = async (dProjectId: string) => {
     setIsSaving(true);
     let res;
     try {
-      res = await mutator.deleteProject(projectId);
-      navigate(`/`);
+      res = await mutator.deleteProject(dProjectId);
+      if (projectId === dProjectId) {
+        navigate(`/`);
+      }
     } catch (e) {
       console.error(e);
       setIsSaving(false);
       setApplicationErrorMessage(translateError(e?.message));
     }
     setIsSaving(false);
-    setShowProjectsSidebar(false);
+    //setShowProjectsSidebar(false);
     return res;
   };
 
