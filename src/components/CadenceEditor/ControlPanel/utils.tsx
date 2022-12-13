@@ -98,8 +98,8 @@ export const getLabel = (
 };
 
 export const useTemplateType = (): ProcessingArgs => {
-  const { isSaving } = useProject();
   const {
+    isSaving,
     createScriptExecution,
     createTransactionExecution,
     createContractDeployment,
