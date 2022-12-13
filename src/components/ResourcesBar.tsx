@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { ChildProps } from 'src/types';
 import { Badge, Box, Divider, Flex } from 'theme-ui';
-import { storageMap } from 'util/accounts';
+import { storageMapByAddress } from 'util/accounts';
 import { getStorageData } from 'util/storage';
 import useMousePosition from '../hooks/useMousePosition';
 import theme from '../theme';
@@ -318,7 +318,7 @@ interface ResourcesBarProps {
 const ResourcesBar: React.FC<ResourcesBarProps> = ({ resultHeight }) => {
   const { project, selectedResourceAccount } = useProject();
   const accountState =
-    project?.accounts?.[storageMap[selectedResourceAccount] || 0]?.state;
+    project?.accounts?.[storageMapByAddress(selectedResourceAccount)]?.state;
   return (
     <FeedbackRoot>
       {selectedResourceAccount && !!accountState ? (

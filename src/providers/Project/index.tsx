@@ -7,7 +7,7 @@ import { ChildProps } from 'src/types';
 import { getParams, LOCAL_PROJECT_ID } from 'util/url';
 import useGetProject from './projectHooks';
 import ProjectMutator, { PROJECT_SERIALIZATION_KEY } from './projectMutator';
-import { storageMap } from 'util/accounts';
+import { storageMapByAddress } from 'util/accounts';
 
 export enum EntityType {
   AccountStorage,
@@ -531,6 +531,24 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     }
   };
 
+  const getAccountCodeId = (
+    accounts: Account[],
+  ): { code: string; id: number } => {
+    const accountId = storageMapByAddress(selectedResourceAccount);
+    const accountState = accounts[accountId || 0]?.state;
+    const parsedAccountState = JSON.stringify(accountState);
+    // empty account storage = '"{}"' which is a string length 4
+    // need to figure out a better way to determine empty storage
+    const state =
+      parsedAccountState.length < 5 ? '(Empty)' : parsedAccountState;
+    const contracts = JSON.stringify(accounts[accountId]?.deployedContracts);
+
+    return {
+      code: `Deployed Contracts: \n${contracts} \nAccount Storage: \n${state}`,
+      id: accountId,
+    };
+  };
+
   // "getActiveCode" is used to read Cadence code from active(selected) item
   const getActiveCode: () => [string, number] = () => {
     const {
@@ -545,18 +563,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
     switch (type) {
       case EntityType.AccountStorage:
-        const accountId = storageMap[selectedResourceAccount];
-        const accountState = accounts[accountId || 0]?.state;
-        const parsedAccountState = JSON.stringify(accountState);
-        // empty account storage = '"{}"' which is a string length 4
-        // need to figure out a better way to determine empty storage
-        const state =
-          parsedAccountState.length < 5 ? '(Empty)' : parsedAccountState;
-        const contracts = JSON.stringify(
-          accounts[accountId]?.deployedContracts,
-        );
-        code = `Deployed Contracts: \n${contracts} \nAccount Storage: \n${state}`;
-        id = accountId;
+        code = getAccountCodeId(accounts).code;
+        id = getAccountCodeId(accounts).id;
         break;
       case EntityType.ContractTemplate:
         code = contractTemplates[index].script;
@@ -584,7 +592,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   }
 
   const params = getParams(location.search || '');
-  const { id, type, storage } = params;
+  const { id, type, storage: storageAddress } = params;
 
   let templateIndex = 0;
   switch (type) {
@@ -658,7 +666,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       break;
     }
     case 'account': {
-      const storageIndex = storageMap[storage];
+      const storageIndex = storageMapByAddress(storageAddress);
       const sameType = active.type == EntityType.AccountStorage;
       const sameIndex = active.index == storageIndex;
       if (!sameType || !sameIndex || initialLoad) {
@@ -672,7 +680,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         return (
           <Redirect
             noThrow
-            to={`/${project.id}?type=account&address=${rawAddress}&storage=${storage}`}
+            to={`/${project.id}?type=account&address=${rawAddress}&storage=${storageAddress}`}
           />
         );
       }

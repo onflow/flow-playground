@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import theme from '../theme';
 import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
-import { storageMap } from 'util/accounts';
+import { storageMapByIndex } from 'util/accounts';
 import BottomEditorPanel from './BottomEditorPanel';
 import BottomEditorPanelHeader from './BottomEditorPanelHeader';
 import Button from './Button';
@@ -89,9 +89,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
       script = project.scriptTemplates[active.index].script;
       break;
     default:
-      const accountNumber = Object.keys(storageMap).find(
-        (key) => storageMap[key] == active.index,
-      );
+      const accountNumber = storageMapByIndex(active.index);
       fileName =
         accountNumber == '0x01'
           ? `${accountNumber}-Default`

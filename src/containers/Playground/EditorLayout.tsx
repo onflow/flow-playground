@@ -1,7 +1,5 @@
-import { useLocation } from '@reach/router';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { getParams } from 'util/url';
 import { useProject } from 'providers/Project/projectHooks';
 import { decodeText } from 'util/readme';
 import Editor from '../../components/Editor/index';
@@ -15,14 +13,7 @@ const EditorLayout = ({
   isExplorerCollapsed,
   toggleExplorer,
 }: EditorLayoutProps) => {
-  const { project, isLoading, active, setSelectedResourceAccount } =
-    useProject();
-
-  const location = useLocation();
-  const params = getParams(location.search);
-  useEffect(() => {
-    if (params.storage) setSelectedResourceAccount(params.storage);
-  }, [params]);
+  const { project, isLoading, active } = useProject();
 
   const [helmetTitle, setHelmetTitle] = useState(decodeText(project.title));
   const [helmetDescription, setHelmetDescription] = useState(
