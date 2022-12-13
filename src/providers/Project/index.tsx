@@ -81,6 +81,7 @@ export interface ProjectContextValue {
   setShowBottomPanel: (show: boolean) => void;
   applicationErrorMessage: string;
   setApplicationErrorMessage: (message: string) => void;
+  clearApplicationErrors: () => void;
 }
 
 export const ProjectContext: React.Context<ProjectContextValue> =
@@ -508,6 +509,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     setTransactionAccounts(accountIndexes);
   };
 
+  const clearApplicationErrors = () => {
+    mutator.clearApplicationErrors();
+  };
+
   const getActiveEditor = (): ActiveEditor => {
     switch (active.type) {
       case EntityType.AccountStorage:
@@ -769,6 +774,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         setShowBottomPanel,
         applicationErrorMessage,
         setApplicationErrorMessage,
+        clearApplicationErrors,
       }}
     >
       {children}

@@ -8,7 +8,6 @@ import App from './App';
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   integrations: [new BrowserTracing()],
-  ignoreErrors: [/GraphQL/i, /Failed to fetch/i],
   tracesSampleRate: 1.0,
 });
 

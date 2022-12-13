@@ -205,9 +205,9 @@ export default class ProjectMutator {
       mutation: SAVE_PROJECT,
       variables: {
         projectId: this.projectId,
-        title,
-        description,
-        readme,
+        title: null,
+        description: 1,
+        readme: 3,
       },
       refetchQueries: [
         { query: GET_PROJECT, variables: { projectId: this.projectId } },
@@ -775,5 +775,14 @@ export default class ProjectMutator {
       query: GET_APPLICATION_ERRORS,
     });
     return response;
+  }
+
+  async clearApplicationErrors() {
+    this.client.writeQuery({
+      query: GET_APPLICATION_ERRORS,
+      data: {
+        errorMessage: '',
+      },
+    });
   }
 }
