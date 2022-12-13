@@ -25,7 +25,11 @@ import {
   UPDATE_SCRIPT_TEMPLATE,
   UPDATE_TRANSACTION_TEMPLATE,
 } from 'api/apollo/mutations';
-import { GET_LOCAL_PROJECT, GET_PROJECT } from 'api/apollo/queries';
+import {
+  GET_APPLICATION_ERRORS,
+  GET_LOCAL_PROJECT,
+  GET_PROJECT,
+} from 'api/apollo/queries';
 
 import Mixpanel from 'util/mixpanel';
 import {
@@ -201,9 +205,9 @@ export default class ProjectMutator {
       mutation: SAVE_PROJECT,
       variables: {
         projectId: this.projectId,
-        title,
-        description,
-        readme,
+        title: null,
+        description: 1,
+        readme: 3,
       },
       refetchQueries: [
         { query: GET_PROJECT, variables: { projectId: this.projectId } },
@@ -764,5 +768,21 @@ export default class ProjectMutator {
     });
 
     return res;
+  }
+
+  async getApplicationErrors() {
+    const response = this.client.readQuery({
+      query: GET_APPLICATION_ERRORS,
+    });
+    return response;
+  }
+
+  async clearApplicationErrors() {
+    this.client.writeQuery({
+      query: GET_APPLICATION_ERRORS,
+      data: {
+        errorMessage: '',
+      },
+    });
   }
 }

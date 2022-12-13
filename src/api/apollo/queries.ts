@@ -127,3 +127,9 @@ export const GET_CACHED_EXECUTION_RESULTS = gql`
     }
   }
 `;
+
+export const GET_APPLICATION_ERRORS = gql`
+  query GetApplicationErrors {
+    errorMessage @client
+  }
+`;

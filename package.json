@@ -34,6 +34,7 @@
     "apollo-client": "^2.6.10",
     "apollo-link": "^1.2.14",
     "apollo-link-debounce": "^2.1.0",
+    "apollo-link-error": "^1.1.13",
     "apollo-link-http": "^1.5.17",
     "apollo-link-serialize": "^2.1.0",
     "date-fns": "^2.29.3",

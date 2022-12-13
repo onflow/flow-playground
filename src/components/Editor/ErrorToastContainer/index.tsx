@@ -59,22 +59,24 @@ const styles: SXStyles = {
 };
 
 const ErrorToastContainer = () => {
-  const { applicationErrorMessage, setApplicationErrorMessage } = useProject();
+  const {
+    applicationErrorMessage,
+    setApplicationErrorMessage,
+    clearApplicationErrors,
+  } = useProject();
+  const errorMessage = applicationErrorMessage ?? '';
 
   const onCloseToastClicked = () => {
     setApplicationErrorMessage('');
+    clearApplicationErrors();
   };
 
   return (
     <Flex sx={styles.root}>
-      {applicationErrorMessage.length > 0 && (
+      {errorMessage.length > 0 && (
         <ErrorToast>
           <Flex sx={styles.errorContent}>
-            <Box sx={styles.message}>
-              {applicationErrorMessage.length > 0
-                ? applicationErrorMessage
-                : `Oops! Something went wrong. If you'd like, please report the Bug. Thank you!`}
-            </Box>
+            <Box sx={styles.message}>{errorMessage}</Box>
             <Flex sx={styles.buttonContainer}>
               <Link
                 sx={styles.issuesLink}
