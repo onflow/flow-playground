@@ -17,6 +17,7 @@ import { LOCAL_PROJECT_ID } from 'util/url';
 type Props = {
   project: ProjectType;
   projectCount: number;
+  refetch: Function;
 };
 
 const styles: SXStyles = {
@@ -78,7 +79,7 @@ const willLoseChangesOptions = {
     'The project you are working on has not been saved, you will lose changes.',
 };
 
-const ProjectListItem = ({ project, projectCount }: Props) => {
+const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [showLastProject, setShowLastProject] = useState<boolean>(false);
   const [showWillLoseChanges, setShowWillLoseChanges] =
@@ -93,6 +94,7 @@ const ProjectListItem = ({ project, projectCount }: Props) => {
     setShowConfirmation(false);
     if (isConfirmed) {
       await deleteProject(project.id);
+      await refetch();
     }
   };
 

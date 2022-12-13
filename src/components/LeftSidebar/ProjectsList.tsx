@@ -16,7 +16,7 @@ const styles: SXStyles = {
 };
 
 const ProjectsList = () => {
-  const { projects, loading, error } = useProjects();
+  const { projects, loading, error, refetch } = useProjects();
 
   if (loading || !!error) return null;
 
@@ -30,6 +30,7 @@ const ProjectsList = () => {
               project={project}
               key={project.id}
               projectCount={projects.length}
+              refetch={refetch}
             />
           ))}
         </Flex>
