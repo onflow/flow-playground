@@ -254,7 +254,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       setApplicationErrorMessage(translateError(e?.message));
     }
     setIsSaving(false);
-    //setShowProjectsSidebar(false);
     return res;
   };
 
