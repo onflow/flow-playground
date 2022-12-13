@@ -9,7 +9,7 @@ import { ResultType } from './generated/graphql';
 import localResolvers from './resolvers';
 import { onError } from 'apollo-link-error';
 import { GET_APPLICATION_ERRORS } from './queries';
-import * as Sentry from "@sentry/react"
+import * as Sentry from '@sentry/react';
 const PLAYGROUND_API = process.env.PLAYGROUND_API;
 const DEFAULT_DEBOUNCE_TIMEOUT = 1200; // Debounce time in ms
 
@@ -30,7 +30,6 @@ const client = new ApolloClient({
           errorMessage = errors[0].message;
           break;
         case 'GRAPHQL_VALIDATION_FAILED':
-          
           errorMessage = 'GraphQlError. Invalid request';
           break;
         case 'INTERNAL_SERVER_ERROR':
