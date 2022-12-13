@@ -266,7 +266,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     try {
       const deployAccount = project.accounts[accountId];
       const template = project.contractTemplates[fileIndex];
-      console.log(accountId, 'deploy to account', deployAccount);
       res = await mutator.createContractDeployment(
         template,
         deployAccount,
