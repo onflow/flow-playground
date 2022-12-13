@@ -51,7 +51,7 @@ export const SaveButton = () => {
           variant="alternate"
           size="sm"
           inline={true}
-          // disabled={isSaved || isSaving || hasReachedProjectsLimit}
+          disabled={isSaved || isSaving || hasReachedProjectsLimit}
         >
           {buttonLabel}
         </Button>
