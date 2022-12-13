@@ -54,7 +54,6 @@ export default {
     secondaryBtnDisabled: '#59595966',
     modes: {
       dark: {
-        leftSidebarBackground: '#2F353F',
         leftSidebarHeaderText: '#ABB3BF',
         alternateButtonBorder: '#2F353F',
         alternateButtonBackground: 'darkgrey',
