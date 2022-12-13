@@ -19,6 +19,7 @@ const AvatarIcon = (seed: number, index: number, complete: boolean) => {
   return (
     <Avatar
       seed={seed}
+      key={index} 
       index={index}
       style={{
         width: '17px',
