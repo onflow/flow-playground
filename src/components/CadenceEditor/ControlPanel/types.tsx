@@ -16,7 +16,7 @@ export type TransactionExecution = (
   signingAccounts: Account[],
   args?: string[],
 ) => Promise<any>;
-export type DeployExecution = () => Promise<any>;
+export type DeployExecution = (fileIndex: number, accountId: number) => Promise<any>;
 
 export type ProcessingArgs = {
   disabled: boolean;

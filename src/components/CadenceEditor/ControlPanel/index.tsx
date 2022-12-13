@@ -294,8 +294,9 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             setShowPrompt(true);
             return;
           }
+          const selectedAccountId = selected[0]
           resultType = ResultType.Contract;
-          rawResult = await contractDeployment();
+          rawResult = await contractDeployment(active.index, selectedAccountId);
           break;
         }
         default:

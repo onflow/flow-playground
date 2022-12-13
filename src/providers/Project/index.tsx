@@ -36,7 +36,7 @@ export interface ProjectContextValue {
   ) => Promise<any>;
   saveProject: () => Promise<any>;
   deleteProject: (projectId: string) => Promise<any>;
-  createContractDeployment: () => Promise<any>;
+  createContractDeployment: (fileIndex: number, accountId: number) => Promise<any>;
   updateSelectedContractAccount: (accountIndex: number) => void;
   updateSelectedTransactionAccounts: (accountIndexes: number[]) => void;
   updateActiveContractTemplate: (script: string) => Promise<any>;
@@ -253,14 +253,17 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
-  const createContractDeployment: any = async () => {
+  const createContractDeployment: any = async (fileIndex: number, accountId: number) => {
     setIsSaving(true);
     setIsExecutingAction(true);
     let res;
     try {
+      const deployAccount = project.accounts[accountId];
+      const template = project.contractTemplates[fileIndex];
+      console.log(accountId, 'deploy to account', deployAccount)
       res = await mutator.createContractDeployment(
-        project.contractTemplates[active.index],
-        project.accounts[active.index],
+        template,
+        deployAccount,
         active.index,
       );
 

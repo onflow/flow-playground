@@ -110,7 +110,7 @@ export const SignersPanel: React.FC<SignersProps> = ({
         onClick={() => setIsAvatarOpen(!isAvatarOpen)}
       >
         {HeaderText}
-        <Button sx={isAvatarOpen ? styles.carrotDown : styles.root} size="sm">
+        <Button variant="explorer" sx={isAvatarOpen ? styles.carrotDown : styles.root} size="sm">
           {CollapseOpenIcon()}
         </Button>
       </Flex>
