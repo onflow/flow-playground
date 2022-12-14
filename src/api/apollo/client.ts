@@ -50,7 +50,7 @@ const client = new ApolloClient({
           break;
         case 'AUTHORIZATION_ERROR':
           console.log('Encountered Authorization Error', gqlError);
-          errorMessage = 'User Not Authorized. Please check your cookies.';
+          errorMessage = 'User Not Authorized. Please clear application data and/or make sure cookies are enabled.';
           break;
         default:
           errorMessage = '';
