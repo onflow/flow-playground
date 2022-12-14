@@ -205,9 +205,9 @@ export default class ProjectMutator {
       mutation: SAVE_PROJECT,
       variables: {
         projectId: this.projectId,
-        title: null,
-        description: 1,
-        readme: 3,
+        title: title,
+        description: description,
+        readme: readme,
       },
       refetchQueries: [
         { query: GET_PROJECT, variables: { projectId: this.projectId } },
