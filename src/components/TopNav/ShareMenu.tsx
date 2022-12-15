@@ -44,6 +44,8 @@ const styles: SXStyles = {
     border: '1px solid #DEE2E9',
     borderRadius: '4px',
     height: '48px',
+    whiteSpace: 'nowrap',
+    fontSize: '0.75rem',
     '&:hover': {
       background: `${theme.colors.menuBg}`,
     },
@@ -113,7 +115,7 @@ export const ShareMenu = () => {
             <Input sx={styles.linkInput} defaultValue={url} />
             <Button
               onClick={copyLink}
-              variant="primary"
+              variant="secondary"
               size="sm"
               sx={styles.ctaButton}
             >

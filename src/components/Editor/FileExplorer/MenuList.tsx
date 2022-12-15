@@ -29,7 +29,6 @@ const styles: SXStyles = {
     color: '#2F353F',
     alignItems: 'start',
     fontFamily: 'IBM Plex Mono',
-    padding: '8px 0px',
   },
   header: {
     display: 'flex',
@@ -48,7 +47,7 @@ const styles: SXStyles = {
     paddingLeft: '8px',
   },
   button: {
-    '&:hover': { borderRadius: '16px' },
+    '&:hover': { borderRadius: '8px' },
     padding: '0px',
   },
   fileShutterOpened: {
@@ -89,7 +88,7 @@ const styles: SXStyles = {
     fontFamily: 'inherit',
     '&:hover': {
       background: '#DEE2E9',
-      borderRadius: '8px',
+      borderRadius: '4px',
       cursor: 'pointer',
       color: '#3031D1',
     },
@@ -109,6 +108,7 @@ const styles: SXStyles = {
     justifyContent: 'start',
     marginLeft: '16px',
     paddingLeft: '8px',
+    paddingRight: '8px',
     background: '#EAEAFA',
     borderRadius: '8px',
     color: '#3031D1',

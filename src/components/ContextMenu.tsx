@@ -30,19 +30,20 @@ const styles: SXStyles = {
     flexDirection: 'column',
     borderRadius: '8px',
     border: `1px solid ${theme.colors.borderColor}`,
-    boxShadow: `0px 4px 40px rgba(0, 0, 0, 0.08)`,
+    boxShadow: `0px 4px 20px rgba(0, 0, 0, 0.08)`,
     position: 'absolute',
     zIndex: '100', // todo: create zIndex constant in theme object
     margin: '0',
     right: '0',
     bottom: '22px',
     background: theme.colors.white,
-    padding: '8px 4px',
+    padding: '4px 4px',
     whiteSpace: 'nowrap',
   },
   ctaButton: {
     alignSelf: 'baseline',
-    padding: '4px 8px',
+    padding: '0px 8px',
+    maxHeight: '10px',
     '&:hover': {
       background: 'none',
     },
