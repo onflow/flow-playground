@@ -32,7 +32,7 @@ export default {
     leftSidebarBackground: '#DEE2E9',
     leftSidebarHeaderText: '#69717E',
     alternateButtonBorder: '#DEE2E9',
-    alternateButtonBackground: '#F6F7F9',
+    alternateButtonBackground: '#DEE2E9',
     blueBorder: '#3B3CFF',
     disabledButtonText: '#F6F7F9',
     secondaryButtonBorder: '#000000',
@@ -56,8 +56,6 @@ export default {
       dark: {
         leftSidebarHeaderText: '#ABB3BF',
         alternateButtonBorder: '#2F353F',
-        alternateButtonBackground: 'darkgrey',
-        blueBorder: '#2C50D7',
         disabledButtonText: '#2F353F',
         secondaryButtonBorder: '#B795FF',
       },
@@ -96,7 +94,7 @@ export default {
         backgroundColor: 'primaryBtnHover',
       },
       '&:disabled': {
-        backgroundColor: 'primaryBtnDisabled',
+        backgroundColor: 'alternateButtonBorder',
       },
     },
     secondary: {
@@ -111,7 +109,7 @@ export default {
       margin: 0,
       maxWidth: '350px',
       '&:hover': {
-        color: 'primaryText',
+        color: 'secondaryText',
         borderColor: 'secondaryBtnHover',
         backgroundColor: 'secondaryBtnHover',
       },
@@ -173,11 +171,19 @@ export default {
       },
     },
     alternate: {
-      color: 'text',
-      border: '1px solid alternateButtonBorder',
-      backgroundColor: 'alternateButtonBackground',
+      fontSize: 4,
+      color: 'alternateButtonBorder',
+      border: '1px solid #DEE2E9',
+      background: 'alternateButtonBackground',
       '&:hover': {
         opacity: '0.75',
+      },
+      borderRadius: '4px',
+      '&:disabled': {
+        backgroundColor: 'primaryBtnDisabled',
+      },
+      '&:active': {
+        backgroundColor: 'secondaryBtnPressed',
       },
     },
     unstyled: {
