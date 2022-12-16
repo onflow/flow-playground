@@ -404,7 +404,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     <>
       <div ref={constraintsRef} className="constraints" />
       <MotionBox dragConstraints={constraintsRef}>
-        <HoverPanel minWidth={showPrompt ? 'min-content' : '300px'}>
+        <HoverPanel minWidth={showPrompt ? 'min-content' : '362px'}>
           {list.length > 0 && (
             <>
               <ArgumentsTitle
