@@ -106,15 +106,13 @@ export const SignersPanel: React.FC<SignersProps> = ({
 
   return (
     <SignersContainer>
-      <Flex
-        sx={{ justifyContent: 'space-between', alignItems: 'center' }}
-        onClick={() => setIsAvatarOpen(!isAvatarOpen)}
-      >
+      <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
         {HeaderText}
         <Button
           variant="explorer"
           sx={isAvatarOpen ? styles.carrotDown : styles.root}
           size="sm"
+          onClick={() => setIsAvatarOpen(!isAvatarOpen)}
         >
           {CollapseOpenIcon()}
         </Button>

@@ -20,7 +20,7 @@ import useClipboard from 'react-use-clipboard';
 import { FaClipboardCheck } from 'react-icons/fa';
 
 export const BOTTOM_EDITOR_PANEL_HEADER_HEIGHT = 70;
-const EDITOR_HEADER_HEIGHT = 70;
+const EDITOR_HEADER_HEIGHT = 75;
 
 type EditorPanelsProps = {
   show: boolean;
@@ -44,19 +44,20 @@ const styles: SXStyles = {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: '24px 28px',
+    backgroundColor: theme.colors.white,
   },
   copyButton: {
     width: '32px',
     height: '32px',
     padding: '0px',
-    backgroundColor: theme.colors.alternateButtonBackground,
+    backgroundColor: theme.colors.white,
   },
   editorTitle: {
     display: 'flex',
     alignItems: 'center',
     fontFamily: 'inherit',
     justifyContent: 'start',
-    marginLeft: '16px',
+    margin: '0',
     padding: '0px 8px',
     background: '#EAEAFA',
     borderRadius: '8px',
