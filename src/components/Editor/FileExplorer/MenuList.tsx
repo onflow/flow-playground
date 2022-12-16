@@ -36,6 +36,7 @@ const styles: SXStyles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
+    marginBottom: '4px',
   },
   headerTitle: {
     display: 'flex',
@@ -83,7 +84,7 @@ const styles: SXStyles = {
     alignItems: 'center',
     fontWeight: 'bold',
     justifyContent: 'start',
-    marginLeft: '16px',
+    margin: '6px 0 6px 6px',
     paddingLeft: '8px',
     fontFamily: 'inherit',
     '&:hover': {
@@ -106,7 +107,7 @@ const styles: SXStyles = {
     fontWeight: 'bold',
     fontFamily: 'inherit',
     justifyContent: 'start',
-    marginLeft: '16px',
+    margin: '6px 0 6px 6px',
     paddingLeft: '8px',
     paddingRight: '8px',
     background: '#EAEAFA',
