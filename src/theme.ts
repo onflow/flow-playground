@@ -88,6 +88,7 @@ export default {
       margin: 0,
       fontSize: 1,
       maxWidth: '350px',
+      height: '54px',
       '&:active': {
         backgroundColor: 'primaryBtnPressed',
       },

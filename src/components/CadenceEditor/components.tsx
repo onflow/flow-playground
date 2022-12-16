@@ -22,7 +22,7 @@ export const EditorContainer = styled.div<EditorContainerProps>`
     height: fit-content;
     position: absolute;
     right: 30px;
-    top: 0;
+    bottom: 20px;
     z-index: 12;
   }
 
