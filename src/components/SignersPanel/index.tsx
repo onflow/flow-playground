@@ -106,9 +106,7 @@ export const SignersPanel: React.FC<SignersProps> = ({
 
   return (
     <SignersContainer>
-      <Flex
-        sx={{ justifyContent: 'space-between', alignItems: 'center' }}
-      >
+      <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
         {HeaderText}
         <Button
           variant="explorer"
