@@ -166,8 +166,11 @@ export default {
       backgroundColor: 'unset',
       padding: '8px 12px',
       '&:hover': {
-        backgroundColor: 'menuBg',
+        backgroundColor: 'unset',
         color: 'menuText',
+      },
+      '&:active': {
+        backgroundColor: 'unset',
       },
     },
     alternate: {
