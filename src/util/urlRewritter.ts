@@ -6,6 +6,14 @@ export const FILE_TYPE_NAME: { [key: string]: string } = {
   script: 'script',
 };
 
+export const UrlRewritterWithId = (
+  project: Project,
+  type: string,
+  id: string,
+): string => {
+  return `/${project.id}?type=${type}&id=${id}`;
+};
+
 export const UrlRewritter = (
   project: Project,
   type: string,
