@@ -30,7 +30,7 @@ const client = new ApolloClient({
         errorMessage = gqlError.message;
         extensions = gqlError.extensions;
       }
-      const errorCode = extensions.code;
+      const errorCode = extensions?.code;
 
       switch (errorCode) {
         case 'BAD_REQUEST':

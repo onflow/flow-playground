@@ -10,7 +10,11 @@ import { Box, Flex } from 'theme-ui';
 import { isUUUID, LOCAL_PROJECT_ID } from 'util/url';
 import MenuList from './MenuList';
 import InformationalPopup from '../../InformationalPopup';
-import { UrlRewritter, FILE_TYPE_NAME } from 'util/urlRewritter';
+import {
+  UrlRewritter,
+  UrlRewritterWithId,
+  FILE_TYPE_NAME,
+} from 'util/urlRewritter';
 
 type FileListProps = {
   isExplorerCollapsed: boolean;
@@ -138,7 +142,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
             return template.title;
           })}
           onSelect={(_, id) => {
-            navigate(`/${projectPath}?type=contract&id=${id}`);
+            navigate(UrlRewritterWithId(project, FILE_TYPE_NAME.contract, id));
           }}
           onUpdate={(_templateId: string, script: string, title: string) => {
             updateContractTemplate(script, title);
@@ -149,7 +153,11 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
             try {
               res = await mutator.createContractTemplate('', 'New Contract');
               navigate(
-                `/${projectPath}?type=contract&id=${res.data?.createContractTemplate?.id}`,
+                UrlRewritterWithId(
+                  project,
+                  FILE_TYPE_NAME.contract,
+                  res.data?.createContractTemplate?.id,
+                ),
               );
             } catch (e) {
               await mutator.getApplicationErrors().then((res) => {
@@ -166,7 +174,9 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
             return template.title;
           })}
           onSelect={(_, id) => {
-            navigate(`/${projectPath}?type=tx&id=${id}`);
+            navigate(
+              UrlRewritterWithId(project, FILE_TYPE_NAME.transaction, id),
+            );
           }}
           onUpdate={(templateId: string, script: string, title: string) => {
             updateTransactionTemplate(templateId, script, title);
@@ -180,7 +190,11 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
                 `New Transaction`,
               );
               navigate(
-                `/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}`,
+                UrlRewritterWithId(
+                  project,
+                  FILE_TYPE_NAME.transaction,
+                  res.data?.createTransactionTemplate?.id,
+                ),
               );
             } catch (e) {
               await mutator.getApplicationErrors().then((res) => {
@@ -197,7 +211,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
             return template.title;
           })}
           onSelect={(_, id) => {
-            navigate(`/${projectPath}?type=script&id=${id}`);
+            navigate(UrlRewritterWithId(project, FILE_TYPE_NAME.script, id));
           }}
           onUpdate={(templateId: string, script: string, title: string) => {
             updateScriptTemplate(templateId, script, title);
@@ -208,7 +222,11 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
             try {
               res = await mutator.createScriptTemplate('', `New Script`);
               navigate(
-                `/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}`,
+                UrlRewritterWithId(
+                  project,
+                  FILE_TYPE_NAME.script,
+                  res.data?.createScriptTemplate?.id,
+                ),
               );
             } catch (e) {
               await mutator.getApplicationErrors().then((res) => {
