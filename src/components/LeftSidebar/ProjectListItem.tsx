@@ -38,7 +38,7 @@ const styles: SXStyles = {
     },
     cursor: 'pointer',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
   },
   details: {
     gap: 8,

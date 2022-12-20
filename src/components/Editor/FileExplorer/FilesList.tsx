@@ -147,10 +147,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           onInsert={async () => {
             let res;
             try {
-              res = await mutator.createContractTemplate(
-                '',
-                'New Contract',
-              );
+              res = await mutator.createContractTemplate('', 'New Contract');
               navigate(
                 `/${projectPath}?type=contract&id=${res.data?.createContractTemplate?.id}`,
               );
