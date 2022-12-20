@@ -456,14 +456,14 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
                 activateConfirmation ? setShowPrompt(true) : send(true)
               }
             />
-            <ConfirmationPopup
-              onClose={send}
-              visible={showPrompt}
-              {...willRedeployContractOptions}
-            />
           </ControlContainer>
         </HoverPanel>
       </MotionBox>
+      <ConfirmationPopup
+        onClose={send}
+        visible={showPrompt}
+        {...willRedeployContractOptions}
+      />
     </>
   );
 };
