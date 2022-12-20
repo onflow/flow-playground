@@ -68,7 +68,6 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
     setApplicationErrorMessage,
   } = useProject();
 
-  const projectPath = isUUUID(project.id) ? project.id : LOCAL_PROJECT_ID;
   const [showDeleteError, setShowDeleteError] = useState<boolean>(false);
   const DynamicIcon = ({ children, isSelected }: DynamicIconProps) => {
     return <Box sx={isSelected ? styles.selected : {}}>{children}</Box>;
