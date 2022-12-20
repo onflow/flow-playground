@@ -61,6 +61,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
     updateTransactionTemplate,
     updateScriptTemplate,
     updateContractTemplate,
+    setApplicationErrorMessage,
   } = useProject();
 
   const projectPath = isUUUID(project.id) ? project.id : LOCAL_PROJECT_ID;
@@ -144,13 +145,20 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           }}
           onDelete={handleDelete}
           onInsert={async () => {
-            const res = await mutator.createContractTemplate(
-              '',
-              'New Contract',
-            );
-            navigate(
-              `/${projectPath}?type=contract&id=${res.data?.createContractTemplate?.id}`,
-            );
+            let res;
+            try {
+              res = await mutator.createContractTemplate(
+                '',
+                'New Contract',
+              );
+              navigate(
+                `/${projectPath}?type=contract&id=${res.data?.createContractTemplate?.id}`,
+              );
+            } catch (e) {
+              await mutator.getApplicationErrors().then((res) => {
+                setApplicationErrorMessage(res.errorMessage);
+              });
+            }
           }}
         />
         <MenuList
@@ -168,13 +176,20 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           }}
           onDelete={handleDelete}
           onInsert={async () => {
-            const res = await mutator.createTransactionTemplate(
-              '',
-              `New Transaction`,
-            );
-            navigate(
-              `/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}`,
-            );
+            let res;
+            try {
+              res = await mutator.createTransactionTemplate(
+                '',
+                `New Transaction`,
+              );
+              navigate(
+                `/${projectPath}?type=tx&id=${res.data?.createTransactionTemplate?.id}`,
+              );
+            } catch (e) {
+              await mutator.getApplicationErrors().then((res) => {
+                setApplicationErrorMessage(res.errorMessage);
+              });
+            }
           }}
         />
         <MenuList
@@ -192,10 +207,17 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           }}
           onDelete={handleDelete}
           onInsert={async () => {
-            const res = await mutator.createScriptTemplate('', `New Script`);
-            navigate(
-              `/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}`,
-            );
+            let res;
+            try {
+              res = await mutator.createScriptTemplate('', `New Script`);
+              navigate(
+                `/${projectPath}?type=script&id=${res.data?.createScriptTemplate?.id}`,
+              );
+            } catch (e) {
+              await mutator.getApplicationErrors().then((res) => {
+                setApplicationErrorMessage(res.errorMessage);
+              });
+            }
           }}
         />
         <InformationalPopup

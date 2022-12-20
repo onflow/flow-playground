@@ -537,7 +537,7 @@ export default class ProjectMutator {
   }
 
   async createScriptTemplate(script: string, title: string) {
-    if (!this.projectId) {
+    if (this.isLocal) {
       const project = await this.createProject();
       const path = UrlRewritter(project, FILE_TYPE_NAME.script, 0);
       navigate(path);
