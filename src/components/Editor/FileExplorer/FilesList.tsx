@@ -7,7 +7,6 @@ import { useProject } from 'providers/Project/projectHooks';
 import React, { useState } from 'react';
 import { ChildProps, SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
-import { isUUUID, LOCAL_PROJECT_ID } from 'util/url';
 import MenuList from './MenuList';
 import InformationalPopup from '../../InformationalPopup';
 import {
