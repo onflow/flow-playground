@@ -11,7 +11,7 @@ import {
 } from 'react-icons/fa';
 import { Button, Flex, Text } from 'theme-ui';
 import { getParams } from 'util/url';
-
+import {useCookies} from 'react-cookie';
 import { default as FlowButton } from 'components/Button';
 import { Separator } from 'components/Common';
 import Examples from 'components/Examples';
@@ -19,7 +19,7 @@ import ExportPopup from 'components/ExportPopup';
 import { IconCadence } from 'components/Icons';
 import Sidebar from 'components/Sidebar';
 import { Header as HeaderRoot } from 'layout/Header';
-
+import BetaFunnel from '../../components/BetaFunnel';
 import Mixpanel from 'util/mixpanel';
 
 import {
@@ -46,6 +46,11 @@ const EditorLayout: React.FC = () => {
   const [showExport, toggleShowExport] = useState(false);
   const [showExamples, toggleShowExamples] = useState(false);
   const [projectIsPlayground, setIsPlayground] = useState(false);
+
+  const [cookies, setCookie] = useCookies(['playgroundFunnel']);
+
+  const hasSeenFunnel = cookies.playgroundFunnel ?? false;
+
   const {
     project,
     updateProject,
@@ -272,6 +277,9 @@ const EditorLayout: React.FC = () => {
           toggleShowExport(false);
         }}
       />
+      {!hasSeenFunnel && <BetaFunnel
+        setCookie={setCookie}
+      />}
     </>
   );
 };

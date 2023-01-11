@@ -47,6 +47,7 @@
     "monaco-editor": "^0.34.0",
     "monaco-languageclient": "^0.18.1",
     "react": "^17.0.2",
+    "react-cookie": "^4.1.1",
     "react-dom": "^17.0.2",
     "react-ga": "^3.3.1",
     "react-helmet": "^6.1.0",
