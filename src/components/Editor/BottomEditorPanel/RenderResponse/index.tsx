@@ -3,7 +3,7 @@ import { ResultType } from 'api/apollo/generated/graphql';
 import { GET_CACHED_EXECUTION_RESULTS } from 'api/apollo/queries';
 import React from 'react';
 import { Line as LineType } from 'util/normalize-interaction-response';
-import { Line } from 'components/RenderResponse/Line';
+import { Line } from 'components/Editor/BottomEditorPanel/RenderResponse/Line';
 import { ActiveEditor, EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import { PROJECT_SERIALIZATION_KEY } from 'providers/Project/projectMutator';

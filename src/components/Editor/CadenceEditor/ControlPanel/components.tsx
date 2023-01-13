@@ -1,31 +1,43 @@
+import LegacyButton from 'components/LegacyButton';
+import { motion } from 'framer-motion';
+import React from 'react';
 import styled from 'styled-components';
-import theme from '../../theme';
+import theme from '../../../../theme';
+
+export const MotionBox = (props: any) => {
+  const { children, dragConstraints } = props;
+  return (
+    <motion.div
+      className="drag-box"
+      drag={true}
+      dragConstraints={dragConstraints}
+      dragElastic={0}
+      whileDrag={{ scale: '1.1', opacity: '0.5' }}
+      dragMomentum={false}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 interface HoverPanelProps {
-  minWidth?: string;
+  width?: string;
 }
 
 export const HoverPanel = styled.div<HoverPanelProps>`
-  min-width: ${({ minWidth }) => minWidth};
-  max-width: 362px;
-  border-radius: 8px;
+  min-width: 362px;
+  max-width: 500px;
+  padding: 20px;
+  border-radius: 4px;
   background-color: #fff;
-  border: 1px solid #abb3bf;
-  box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.08);
-`;
-
-interface HidableProps {
-  hidden: Boolean;
-}
-export const Hidable = styled.div<HidableProps>`
-  display: ${({ hidden = false }) => (hidden ? 'none' : 'block')};
+  box-shadow: 10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff;
 `;
 
 export const Heading = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem;
+  margin-bottom: 16px;
 `;
 
 interface TitleProps {
@@ -58,7 +70,6 @@ export const Controls = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  width: 100%;
   cursor: pointer;
 `;
 
@@ -94,35 +105,27 @@ export const List = styled.div<ListProps>`
   display: ${({ hidden }) => (hidden ? 'none' : 'grid')};
   grid-gap: 12px;
   grid-template-columns: 100%;
+  margin-bottom: 24px;
   max-height: 350px;
   overflow-y: auto;
-  padding: 0.5rem;
 `;
 
-export const SignersContainer = styled.div``;
+export const SignersContainer = styled.div`
+  margin-bottom: 20px;
+`;
 
 interface ControlContainerProps {
   isOk: boolean;
   progress: boolean;
-  showPrompt?: boolean;
 }
-interface MessageProps {
-  isOk?: boolean;
-}
-
 export const ControlContainer = styled.div<ControlContainerProps>`
-  display: ${({ showPrompt }) => (showPrompt ? 'block' : 'flex')};
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px;
-  width: 100%;
-  border-top: 1px solid #abb3bf;
-  color: ${({ isOk, progress, showPrompt }) => {
+  color: ${({ isOk, progress }) => {
     switch (true) {
       case progress:
         return '#a2a2a2';
-      case isOk && showPrompt:
-        return theme.colors.error;
       case isOk:
         return '#2bb169';
       default:
@@ -142,7 +145,7 @@ export const ToastContainer = styled.div`
   color: ${theme.colors.darkPrimary};
 `;
 
-export const StatusMessage = styled.div<MessageProps>`
+export const StatusMessage = styled.div`
   @keyframes spin {
     from {
       transform: rotate(0deg);
@@ -153,8 +156,6 @@ export const StatusMessage = styled.div<MessageProps>`
   }
 
   display: flex;
-  width: ${({ isOk }) => (isOk ? '100%' : '50%')};
-  padding: ${({ isOk }) => (isOk ? '1rem' : 'unset')};
   justify-content: flex-start;
   font-size: 16px;
   svg {
@@ -171,8 +172,6 @@ export const ErrorsContainer = styled.div`
   grid-gap: 10px;
   grid-template-columns: 100%;
   margin-bottom: 12px;
-  background: #f6f7f9;
-  border-radius: 8px 8px 8px 0px;
 `;
 
 export const SingleError = styled.div`
@@ -181,10 +180,8 @@ export const SingleError = styled.div`
   align-items: baseline;
   box-sizing: border-box;
   padding: 10px;
+  border-radius: 4px;
   font-size: 14px;
-  background: #ffffff;
-  box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.08);
-  border-radius: 8px;
   &:hover {
     background-color: rgba(244, 57, 64, 0.15);
 
@@ -199,9 +196,15 @@ export const SingleError = styled.div`
 `;
 
 export const ErrorIndex = styled.div`
+  width: 20px;
+  height: 20px;
+  background-color: rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  border-radius: 20px;
+  margin-right: 8px;
+  flex: 0 0 auto;
 `;
 
 export const ErrorMessage = styled.p`
@@ -229,4 +232,49 @@ export const SignersError = styled.p`
   svg {
     margin-right: 0.5em;
   }
+`;
+
+export const Confirm = styled(LegacyButton)`
+  background-color: ${theme.colors.error};
+  color: #fff;
+  margin-right: 0.5rem;
+
+  &:active {
+    background-color: #cf3529;
+  }
+`;
+
+export const Cancel = styled(LegacyButton)`
+  background-color: ${theme.colors.background};
+  color: ${theme.colors.text};
+  border: 1px solid ${theme.colors.greyBorder};
+
+  &:active {
+    background-color: #dedede;
+  }
+`;
+
+export const PromptActionsContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`;
+
+interface StatusIconProps {
+  isOk: boolean;
+  progress: boolean;
+  showPrompt: boolean;
+}
+export const StatusIcon = styled.div<StatusIconProps>`
+  color: ${({ isOk, progress, showPrompt }) => {
+    switch (true) {
+      case progress:
+        return '#a2a2a2';
+      case isOk && showPrompt:
+        return theme.colors.warning;
+      case isOk:
+        return '#2bb169';
+      default:
+        return '#EE431E';
+    }
+  }};
 `;

@@ -1,4 +1,4 @@
-import NewProjectButton from 'components/NewProjectButton';
+import NewProjectButton from 'components/LeftSidebar/NewProjectButton';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useRef } from 'react';
 import { SXStyles } from 'src/types';

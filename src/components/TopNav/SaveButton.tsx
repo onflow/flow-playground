@@ -7,7 +7,7 @@ import { useProject } from 'providers/Project/projectHooks';
 import { LOCAL_PROJECT_ID } from 'util/url';
 import { formatDistance } from 'date-fns';
 import useProjects from '../../hooks/useProjects';
-import { MAX_PROJECTS } from 'components/NewProjectButton';
+import { MAX_PROJECTS } from 'components/LeftSidebar/NewProjectButton';
 
 const styles: SXStyles = {
   container: {

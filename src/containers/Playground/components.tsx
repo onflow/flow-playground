@@ -26,7 +26,7 @@ import { Flex } from 'theme-ui';
 //   ReadmeHtmlContainer,
 // } from './layout-components';
 
-import EditorPanels from 'components/EditorPanels';
+import EditorPanels from 'components/Editor/EditorPanels';
 import { ChildProps, SXStyles } from 'src/types';
 import { decodeText } from 'util/readme';
 
