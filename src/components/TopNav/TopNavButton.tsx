@@ -1,4 +1,4 @@
-import { IconCadence } from 'components/Icons';
+import { IconCadence } from 'components/Icons/CadenceIcon';
 import React from 'react';
 import { FaDiscord, FaTwitter } from 'react-icons/fa';
 import { ChildProps, SXStyles } from 'src/types';

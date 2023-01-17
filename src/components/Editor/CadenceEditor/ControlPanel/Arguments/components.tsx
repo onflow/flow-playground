@@ -11,7 +11,7 @@ import {
   FaSpinner,
 } from 'react-icons/fa';
 import { CadenceProblem } from 'util/language-syntax-errors';
-import theme from '../../theme';
+import theme from '../../../../../theme';
 import SingleArgument from './SingleArgument';
 import {
   Badge,

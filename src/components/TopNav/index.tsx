@@ -1,6 +1,5 @@
 import Button from 'components/Button';
 import Examples from 'components/Examples';
-import ExportPopup from 'components/ExportPopup';
 import ProjectsIcon from 'components/Icons/ProjectsIcon';
 import NavInput from './NavInput';
 import { useProject } from 'providers/Project/projectHooks';
@@ -47,7 +46,6 @@ const styles: SXStyles = {
 
 const TopNav = () => {
   const { project, updateProject, toggleProjectsSidebar } = useProject();
-  const [showExport, setShowExport] = useState(false);
   const [showExamples, setShowExamples] = useState(false);
   const [projectName, setProjectName] = useState(project.title);
 
@@ -90,11 +88,6 @@ const TopNav = () => {
           }}
           updateValue={updateProjectName}
         />
-        {/* <ThemeUIButton variant="secondaryLegacy" onClick={onStartButtonClick}>
-          <AnimatedText>Click here to start a tutorial</AnimatedText>
-        </ThemeUIButton>
-        <Separator />
-        <ExternalNavLinks /> */}
       </Flex>
       <Flex sx={{ ...styles.topNavSection, ...styles.topNavSectionRight }}>
         {!!project && (
@@ -116,11 +109,6 @@ const TopNav = () => {
       <Examples
         visible={showExamples}
         triggerClose={() => setShowExamples(false)}
-      />
-      <ExportPopup
-        visible={showExport}
-        projectTitle={project.title}
-        triggerClose={() => setShowExport(false)}
       />
     </Flex>
   );

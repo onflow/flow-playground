@@ -1,5 +1,5 @@
 import React from 'react';
-import { Argument } from 'components/Arguments/types';
+import { Argument } from 'components/Editor/CadenceEditor/ControlPanel/Arguments/types';
 import { InputBlock, Input, Label, Type, Error } from './styles';
 
 type SingleArgumentProps = {

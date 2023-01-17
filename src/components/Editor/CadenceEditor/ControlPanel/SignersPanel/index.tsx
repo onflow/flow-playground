@@ -1,7 +1,7 @@
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useState, useMemo, useEffect } from 'react';
-import theme from '../../theme';
-import AccountPicker from 'components/AccountPicker';
+import theme from '../../../../../theme';
+import AccountPicker from './AccountPicker';
 import { Flex, Text } from 'theme-ui';
 import { SXStyles } from 'src/types';
 import { SignersContainer } from '../Arguments/styles';

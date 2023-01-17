@@ -10,8 +10,8 @@ import { ChildProps } from 'src/types';
 import { Badge, Box, Divider, Flex } from 'theme-ui';
 import { storageMapByAddress } from 'util/accounts';
 import { getStorageData } from 'util/storage';
-import useMousePosition from '../hooks/useMousePosition';
-import theme from '../theme';
+import useMousePosition from '../../hooks/useMousePosition';
+import theme from '../../theme';
 
 const RESULT_PANEL_MIN_HEIGHT = 80;
 const STORAGE_PANEL_MIN_HEIGHT = 80 + RESULT_PANEL_MIN_HEIGHT;

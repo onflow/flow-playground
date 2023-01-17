@@ -8,7 +8,7 @@ import {
   WhiteOverlay,
 } from 'components/Common';
 
-import { Label } from 'components/Arguments/SingleArgument/styles';
+import { Label } from 'components/Editor/CadenceEditor/ControlPanel/Arguments/SingleArgument/styles';
 import Button, { ButtonVariant } from './Button';
 
 const containerFrames = {

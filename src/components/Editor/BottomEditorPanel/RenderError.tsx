@@ -1,7 +1,7 @@
 import React from 'react';
 import { CadenceProblem } from 'util/language-syntax-errors';
-import { ErrorMessage } from './Arguments/styles';
-import { renderMessage } from './Arguments/components';
+import { ErrorMessage } from '../CadenceEditor/ControlPanel/Arguments/styles';
+import { renderMessage } from '../CadenceEditor/ControlPanel/Arguments/components';
 import { Flex } from 'theme-ui';
 import { SXStyles } from 'src/types';
 
