@@ -11,7 +11,7 @@ import {
 } from 'react-icons/fa';
 import { Button, Flex, Text } from 'theme-ui';
 import { getParams } from 'util/url';
-import {useCookies} from 'react-cookie';
+import { useCookies } from 'react-cookie';
 import { default as FlowButton } from 'components/Button';
 import { Separator } from 'components/Common';
 import Examples from 'components/Examples';
@@ -19,7 +19,7 @@ import ExportPopup from 'components/ExportPopup';
 import { IconCadence } from 'components/Icons';
 import Sidebar from 'components/Sidebar';
 import { Header as HeaderRoot } from 'layout/Header';
-import BetaFunnel from '../../components/BetaFunnel';
+import BetaFunnelBanner from '../../components/BetaFunnelBanner';
 import Mixpanel from 'util/mixpanel';
 
 import {
@@ -106,6 +106,7 @@ const EditorLayout: React.FC = () => {
         <meta name="description" content={helmetDescription} />
       </Helmet>
       <HeaderRoot>
+        {!hasSeenFunnel && <BetaFunnelBanner setCookie={setCookie} />}
         <Header>
           <Flex
             sx={{
@@ -277,9 +278,6 @@ const EditorLayout: React.FC = () => {
           toggleShowExport(false);
         }}
       />
-      {!hasSeenFunnel && <BetaFunnel
-        setCookie={setCookie}
-      />}
     </>
   );
 };
