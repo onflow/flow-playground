@@ -36,7 +36,6 @@ const styles: SXStyles = {
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    borderRadius: '8px',
     flexGrow: 1,
     margin: '8px 8px 0 8px',
   },
