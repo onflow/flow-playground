@@ -18,7 +18,7 @@ export const Base = styled.div`
     'header header'
     'sidebar main';
   grid-template-columns: 244px auto;
-  grid-template-rows: 72px auto;
+  grid-template-rows: 112px auto;
   background: var(--key);
   overflow: hidden;
 `;
