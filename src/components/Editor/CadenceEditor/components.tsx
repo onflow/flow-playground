@@ -14,6 +14,9 @@ interface EditorContainerProps {
 export const EditorContainer = styled.div<EditorContainerProps>`
   width: 100%;
   height: 100%;
+  border-left: 1px solid #DEE2E9;
+  border-right: 1px solid #DEE2E9;
+  border-bottom: 1px solid #DEE2E9;
 
   display: ${({ show = true }) => (show ? 'block' : 'none')};
 

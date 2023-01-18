@@ -33,6 +33,21 @@ const styles: SXStyles = {
     flexDirection: 'row',
     paddingBottom: '12px',
   },
+  menuButton: {
+    border: '1px solid #DEE2E9',
+    borderRadius: '8px',
+    background: '#F6F7F9',
+    '&:hover': {
+      background: `${theme.colors.menuBg}`,
+    },
+    '&:disabled': {
+      color: '#DEE2E9',
+      '&:hover': {
+        background: '#F6F7F9',
+        cursor: 'not-allowed',
+      },
+    },
+  },
   ctaButton: {
     display: 'flex',
     flexDirection: 'row',
@@ -42,7 +57,7 @@ const styles: SXStyles = {
     marginLeft: '4px',
     background: '#F6F7F9',
     border: '1px solid #DEE2E9',
-    borderRadius: '4px',
+    borderRadius: '8px',
     height: '48px',
     whiteSpace: 'nowrap',
     fontSize: '0.75rem',
@@ -98,10 +113,11 @@ export const ShareMenu = () => {
   return (
     <Container sx={styles.container} ref={ref}>
       <Button
+        sx={styles.menuButton}
         onClick={() => {
           setIsOpen(!isOpen);
         }}
-        variant="alternate"
+        variant="secondary"
         size="sm"
         inline={true}
         disabled={!isSaved}

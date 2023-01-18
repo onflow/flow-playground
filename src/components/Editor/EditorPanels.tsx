@@ -20,7 +20,8 @@ import useClipboard from 'react-use-clipboard';
 import { FaClipboardCheck } from 'react-icons/fa';
 
 export const BOTTOM_EDITOR_PANEL_HEADER_HEIGHT = 70;
-const EDITOR_HEADER_HEIGHT = 75;
+const BOTTOM_EDITOR_HEIGHT = 200;
+const EDITOR_HEADER_HEIGHT = 60;
 
 type EditorPanelsProps = {
   show: boolean;
@@ -36,14 +37,18 @@ const styles: SXStyles = {
     flexDirection: 'column',
   },
   editor: {
-    borderRadius: '8px',
     height: '100%',
-    border: '2px solid rgba(48, 49, 209, 0.1)',
+    borderBottom: `solid 1px #DEE2E9`,
+    borderRight: `solid 1px #DEE2E9`,
+    borderLeft: `solid 1px #DEE2E9`,
   },
   editorHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: '24px 28px',
+    height: '100%',
+    padding: '12px 28px',
+    border: `solid 1px #DEE2E9`,
+    borderRadius:'0px',
     backgroundColor: theme.colors.white,
   },
   copyButton: {
@@ -118,7 +123,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
   return (
     <Flex sx={styles.root}>
       <Flex sx={styles.editor}>
-        <Allotment vertical={true}>
+        <Allotment vertical={true} >
           <Allotment.Pane minSize={EDITOR_HEADER_HEIGHT}>
             <Flex sx={styles.editorHeader}>
               <Flex sx={styles.editorTitle}>
@@ -135,7 +140,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
               </Button>
             </Flex>
           </Allotment.Pane>
-          <Allotment.Pane minSize={100} preferredSize="100%">
+          <Allotment.Pane minSize={100} preferredSize='100%'>
             <CadenceEditor
               problemsList={problemsList}
               setProblemsList={setProblemsList}
@@ -143,7 +148,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
             />
           </Allotment.Pane>
           <Allotment.Pane
-            minSize={BOTTOM_EDITOR_PANEL_HEADER_HEIGHT + 70}
+            minSize={BOTTOM_EDITOR_PANEL_HEADER_HEIGHT + BOTTOM_EDITOR_HEIGHT}
             visible={showBottomPanel}
           >
             <BottomEditorPanel

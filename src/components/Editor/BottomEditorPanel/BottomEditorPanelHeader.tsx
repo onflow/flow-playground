@@ -18,6 +18,7 @@ const styles: SXStyles = {
   header: {
     borderRadius: '8px 8px 0 0',
     backgroundColor: 'white',
+    border: '1px solid #DEE2E9',
   },
   tabButton: {
     display: 'inline-flex',

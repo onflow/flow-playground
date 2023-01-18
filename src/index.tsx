@@ -2,7 +2,10 @@ import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { PLAYGROUND_HOTJAR_SITE_ID, HOTJAR_VERSION } from 'util/globalConstants';
+import {
+  PLAYGROUND_HOTJAR_SITE_ID,
+  HOTJAR_VERSION,
+} from 'util/globalConstants';
 import App from './App';
 import Hotjar from '@hotjar/browser';
 
