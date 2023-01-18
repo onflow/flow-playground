@@ -48,7 +48,7 @@ const styles: SXStyles = {
     height: '100%',
     padding: '12px 28px',
     border: `solid 1px #DEE2E9`,
-    borderRadius:'0px',
+    borderRadius: '0px',
     backgroundColor: theme.colors.white,
   },
   copyButton: {
@@ -123,7 +123,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
   return (
     <Flex sx={styles.root}>
       <Flex sx={styles.editor}>
-        <Allotment vertical={true} >
+        <Allotment vertical={true}>
           <Allotment.Pane minSize={EDITOR_HEADER_HEIGHT}>
             <Flex sx={styles.editorHeader}>
               <Flex sx={styles.editorTitle}>
@@ -140,7 +140,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
               </Button>
             </Flex>
           </Allotment.Pane>
-          <Allotment.Pane minSize={100} preferredSize='100%'>
+          <Allotment.Pane minSize={100} preferredSize="100%">
             <CadenceEditor
               problemsList={problemsList}
               setProblemsList={setProblemsList}
