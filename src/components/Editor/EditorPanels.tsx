@@ -4,23 +4,24 @@ import 'allotment/dist/style.css';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useState } from 'react';
-import theme from '../theme';
+import theme from '../../theme';
 import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import { storageMapByIndex } from 'util/accounts';
 import BottomEditorPanel from './BottomEditorPanel';
-import BottomEditorPanelHeader from './BottomEditorPanelHeader';
-import Button from './Button';
+import BottomEditorPanelHeader from './BottomEditorPanel/BottomEditorPanelHeader';
+import Button from '../Button';
 import CadenceEditor from './CadenceEditor';
-import CopyIcon from './Icons/CopyIcon';
-import ExplorerTransactionIcon from './Icons/ExplorerTransactionIcon';
-import ExplorerScriptIcon from './Icons/ExplorerScriptIcon';
-import ExplorerContractIcon from './Icons/ExplorerContractIcon';
+import CopyIcon from '../Icons/CopyIcon';
+import ExplorerTransactionIcon from '../Icons/ExplorerTransactionIcon';
+import ExplorerScriptIcon from '../Icons/ExplorerScriptIcon';
+import ExplorerContractIcon from '../Icons/ExplorerContractIcon';
 import useClipboard from 'react-use-clipboard';
 import { FaClipboardCheck } from 'react-icons/fa';
 
 export const BOTTOM_EDITOR_PANEL_HEADER_HEIGHT = 70;
-const EDITOR_HEADER_HEIGHT = 75;
+const BOTTOM_EDITOR_HEIGHT = 200;
+const EDITOR_HEADER_HEIGHT = 60;
 
 type EditorPanelsProps = {
   show: boolean;
@@ -36,14 +37,18 @@ const styles: SXStyles = {
     flexDirection: 'column',
   },
   editor: {
-    borderRadius: '8px',
     height: '100%',
-    border: '2px solid rgba(48, 49, 209, 0.1)',
+    borderBottom: `solid 1px #DEE2E9`,
+    borderRight: `solid 1px #DEE2E9`,
+    borderLeft: `solid 1px #DEE2E9`,
   },
   editorHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: '24px 28px',
+    height: '100%',
+    padding: '12px 28px',
+    border: `solid 1px #DEE2E9`,
+    borderRadius: '0px',
     backgroundColor: theme.colors.white,
   },
   copyButton: {
@@ -143,7 +148,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
             />
           </Allotment.Pane>
           <Allotment.Pane
-            minSize={BOTTOM_EDITOR_PANEL_HEADER_HEIGHT + 70}
+            minSize={BOTTOM_EDITOR_PANEL_HEADER_HEIGHT + BOTTOM_EDITOR_HEIGHT}
             visible={showBottomPanel}
           >
             <BottomEditorPanel

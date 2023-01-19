@@ -1,16 +1,18 @@
 import Button from 'components/Button';
 import Examples from 'components/Examples';
-import ExportPopup from 'components/ExportPopup';
-import ProjectsIcon from 'components/Icons/ProjectsIcon';
-import NavInput from './NavInput';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useState } from 'react';
 import { SXStyles } from 'src/types';
-import { Flex } from 'theme-ui';
+import { Flex, Link } from 'theme-ui';
 import Mixpanel from 'util/mixpanel';
+import ProjectsIcon from 'components/Icons/ProjectsIcon';
 import LearnCadenceIcon from 'components/Icons/LearnCadenceIcon';
+import FlagIcon from 'components/Icons/FlagIcon';
+import NavInput from './NavInput';
 import { ShareMenu } from './ShareMenu';
 import { SaveButton } from './SaveButton';
+import theme from '../../theme';
+import { PLAYGROUND_GITHUB_ISSUES_URL } from 'util/globalConstants';
 
 const styles: SXStyles = {
   root: {
@@ -23,6 +25,33 @@ const styles: SXStyles = {
     justifyContent: 'space-between',
     paddingLeft: '1em',
     paddingRight: '1em',
+  },
+  button: {
+    border: '1px solid #DEE2E9',
+    borderRadius: '8px',
+    background: '#F6F7F9',
+    '&:hover': {
+      background: `${theme.colors.menuBg}`,
+    },
+  },
+  link: {
+    border: '1px solid #DEE2E9',
+    background: '#F6F7F9',
+    fontFamily: 'body',
+    color: 'text',
+    textDecoration: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    margin: 0,
+    fontWeight: 500,
+    paddingX: '0.65rem',
+    paddingY: '0.5rem',
+    borderRadius: '8px',
+    fontSize: 4,
+    '&:hover': {
+      background: `${theme.colors.menuBg}`,
+      borderColor: '#1E1FB9',
+    },
   },
   topNavSection: {
     alignItems: 'center',
@@ -47,7 +76,6 @@ const styles: SXStyles = {
 
 const TopNav = () => {
   const { project, updateProject, toggleProjectsSidebar } = useProject();
-  const [showExport, setShowExport] = useState(false);
   const [showExamples, setShowExamples] = useState(false);
   const [projectName, setProjectName] = useState(project.title);
 
@@ -90,24 +118,30 @@ const TopNav = () => {
           }}
           updateValue={updateProjectName}
         />
-        {/* <ThemeUIButton variant="secondaryLegacy" onClick={onStartButtonClick}>
-          <AnimatedText>Click here to start a tutorial</AnimatedText>
-        </ThemeUIButton>
-        <Separator />
-        <ExternalNavLinks /> */}
       </Flex>
       <Flex sx={{ ...styles.topNavSection, ...styles.topNavSectionRight }}>
         {!!project && (
           <>
             <Button
+              sx={styles.button}
               onClick={() => onStartButtonClick()}
-              variant="explorer"
+              variant="secondary"
               size="sm"
               inline={true}
             >
               <LearnCadenceIcon />
               Learn Cadence
             </Button>
+            <Link
+              sx={styles.link}
+              rel="noreferrer"
+              variant="secondary"
+              title="Report a Bug"
+              href={PLAYGROUND_GITHUB_ISSUES_URL}
+              target="_blank"
+            >
+              <FlagIcon />
+            </Link>
             <ShareMenu />
             <SaveButton />
           </>
@@ -116,11 +150,6 @@ const TopNav = () => {
       <Examples
         visible={showExamples}
         triggerClose={() => setShowExamples(false)}
-      />
-      <ExportPopup
-        visible={showExport}
-        projectTitle={project.title}
-        triggerClose={() => setShowExport(false)}
       />
     </Flex>
   );

@@ -40,13 +40,13 @@ import {
   ArgumentsList,
   ArgumentsTitle,
   Hints,
-} from '../../Arguments/components';
+} from './Arguments/components';
 import {
   ControlContainer,
   HoverPanel,
   StatusMessage,
-} from '../../Arguments/styles';
-import { SignersPanel } from 'components/SignersPanel';
+} from './Arguments/styles';
+import { SignersPanel } from 'components/Editor/CadenceEditor/ControlPanel/SignersPanel';
 import ConfirmationPopup from 'components/ConfirmationPopup';
 
 const willRedeployContractOptions = {

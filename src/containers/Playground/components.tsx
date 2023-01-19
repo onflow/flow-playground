@@ -26,7 +26,7 @@ import { Flex } from 'theme-ui';
 //   ReadmeHtmlContainer,
 // } from './layout-components';
 
-import EditorPanels from 'components/EditorPanels';
+import EditorPanels from 'components/Editor/EditorPanels';
 import { ChildProps, SXStyles } from 'src/types';
 import { decodeText } from 'util/readme';
 
@@ -36,7 +36,6 @@ const styles: SXStyles = {
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    borderRadius: '8px',
     flexGrow: 1,
     margin: '8px 8px 0 8px',
   },

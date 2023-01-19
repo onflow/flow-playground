@@ -4,7 +4,7 @@ import { ChildProps } from 'src/types';
 import styled from 'styled-components';
 import { Box, Flex, Text } from 'theme-ui';
 
-import theme from '../../../theme';
+import theme from '../../../../theme';
 
 export const ToastContainer = styled.div`
   z-index: 1000;

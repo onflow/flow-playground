@@ -5,8 +5,8 @@ import { FaRegTimesCircle } from 'react-icons/fa';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
-import Button from './Button';
-import LogIcon from './Icons/LogIcon';
+import Button from '../../Button';
+import LogIcon from '../../Icons/LogIcon';
 
 type BottomEditorPanelHeaderProps = {
   problems: any;
@@ -18,6 +18,7 @@ const styles: SXStyles = {
   header: {
     borderRadius: '8px 8px 0 0',
     backgroundColor: 'white',
+    border: '1px solid #DEE2E9',
   },
   tabButton: {
     display: 'inline-flex',

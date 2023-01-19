@@ -1,9 +1,9 @@
 import { useProject } from 'providers/Project/projectHooks';
 import React from 'react';
-import useProjects from '../hooks/useProjects';
-import Button, { ButtonProps } from './Button';
-import PlusIcon from './Icons/PlusIcon';
-import Tooltip from './Tooltip';
+import useProjects from '../../hooks/useProjects';
+import Button, { ButtonProps } from '../Button';
+import PlusIcon from '../Icons/PlusIcon';
+import Tooltip from '../Tooltip';
 
 export const MAX_PROJECTS = 10;
 

@@ -6,7 +6,7 @@ import ExplorerFileShutterIcon from 'components/Icons/ExplorerFileShutterIcon';
 import ExplorerPlusIcon from 'components/Icons/ExplorerPlusIcon';
 import ExplorerScriptIcon from 'components/Icons/ExplorerScriptIcon';
 import ExplorerTransactionIcon from 'components/Icons/ExplorerTransactionIcon';
-import Input from 'components/ExplorerInput';
+import Input from './ExplorerInput';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
