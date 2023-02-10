@@ -49,7 +49,8 @@ const EditorLayout: React.FC = () => {
 
   const [cookies, setCookie] = useCookies(['playgroundFunnel']);
 
-  const hasSeenFunnel = cookies.playgroundFunnel ?? false;
+  // disable banner until HTTPS issue is resolved
+  const hasSeenFunnel = true; //cookies.playgroundFunnel ?? false;
 
   const {
     project,
