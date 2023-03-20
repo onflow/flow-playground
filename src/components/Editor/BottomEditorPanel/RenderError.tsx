@@ -50,7 +50,7 @@ const RenderError = (props: any) => {
     <Flex sx={styles.root}>
       <Flex sx={styles.list}>
         {list.length > 0
-          ? list.reverse().map((item: CadenceProblem, i: number) => {
+          ? [...list].reverse().map((item: CadenceProblem, i: number) => {
               const message = renderMessage(item.message);
               return (
                 <Flex sx={styles.errorLine} key={i}>
