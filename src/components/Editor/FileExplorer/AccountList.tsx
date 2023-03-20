@@ -18,7 +18,6 @@ const styles: SXStyles = {
   root: {
     display: 'flex',
     flexDirection: 'column',
-    fontFamily: 'IBM Plex Mono',
   },
   hiddenRoot: {
     visibility: 'hidden',

@@ -14,10 +14,11 @@ const Avatar: React.FC<AvatarProps> = ({ seed, index, style }) => {
     rng();
   }
 
+  const profile = `0x0${index + 1}.svg`
   return (
     <img
       className="avatar"
-      src="/defaultAvataaar.png"
+      src={profile}
       style={style}
       alt="Avatar"
     />

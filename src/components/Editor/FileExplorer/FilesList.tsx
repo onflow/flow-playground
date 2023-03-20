@@ -34,10 +34,10 @@ const styles: SXStyles = {
     fontStyle: 'normal',
     fontWeight: 600,
     fontSize: '12px',
-    lineHeight: '14px',
+    lineHeight: '16px',
     letterSpacing: '-0.01em',
     textTransform: 'uppercase',
-    color: 'leftSidebarHeaderText',
+    color: '#69717E',
     fontFamily: 'Acumin Pro',
   },
   collapsed: {
@@ -131,7 +131,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
 
     return (
       <>
-        <Flex sx={styles.header}>Files</Flex>
+        <Flex sx={styles.header}>FILES</Flex>
         <MenuList
           title="Contracts"
           itemType={EntityType.ContractTemplate}

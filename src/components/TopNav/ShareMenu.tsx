@@ -132,7 +132,7 @@ export const ShareMenu = () => {
             <Button
               onClick={copyLink}
               variant="secondary"
-              size="sm"
+              size="md"
               sx={styles.ctaButton}
             >
               {!isCopied ? 'Copy URL' : 'Copied!'}

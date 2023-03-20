@@ -9,7 +9,7 @@ const styles: SXStyles = {
   root: {
     flex: 1,
     gap: 3,
-    flexDirection: 'column-reverse',
+    flexDirection: 'column',
     counterReset: 'lines',
     minHeight: '40px',
     padding: 6,
@@ -50,7 +50,7 @@ const RenderError = (props: any) => {
     <Flex sx={styles.root}>
       <Flex sx={styles.list}>
         {list.length > 0
-          ? list.map((item: CadenceProblem, i: number) => {
+          ? list.reverse().map((item: CadenceProblem, i: number) => {
               const message = renderMessage(item.message);
               return (
                 <Flex sx={styles.errorLine} key={i}>

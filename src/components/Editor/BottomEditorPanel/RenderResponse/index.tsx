@@ -14,7 +14,7 @@ const styles: SXStyles = {
   root: {
     flex: 1,
     gap: 3,
-    flexDirection: 'column-reverse',
+    flexDirection: 'column',
     counterReset: 'lines',
     minHeight: '40px',
     padding: 6,
@@ -55,7 +55,7 @@ export const RenderResponse = () => {
       {filteredResults.length > 0
         ? !loading &&
           !error &&
-          filteredResults
+          filteredResults.reverse()
             .map((line: LineType, n: number) => (
               <Line {...line} key={n} index={n} />
             ))

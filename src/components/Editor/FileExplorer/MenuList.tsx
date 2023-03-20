@@ -53,7 +53,7 @@ const styles: SXStyles = {
   },
   fileShutterOpened: {
     position: 'relative',
-    right: '152px',
+    right: '160px',
     bottom: '1px',
     transform: 'none',
     padding: '0px',
@@ -63,7 +63,7 @@ const styles: SXStyles = {
   },
   fileShutterClosed: {
     position: 'relative',
-    right: '152px',
+    right: '160px',
     bottom: '1px',
     padding: '0px',
     transform: 'rotate(180deg)',

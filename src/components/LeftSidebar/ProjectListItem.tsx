@@ -31,7 +31,6 @@ const styles: SXStyles = {
   },
   title: {
     fontSize: 3,
-    fontFamily: 'Termina',
     fontWeight: 600,
     '&:hover': {
       opacity: 0.75,

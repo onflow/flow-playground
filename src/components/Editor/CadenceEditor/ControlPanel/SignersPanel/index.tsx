@@ -25,10 +25,6 @@ const AvatarIcon = (seed: number, index: number, complete: boolean) => {
         width: '17px',
         height: '17px',
         display: 'block',
-        borderRadius: '20px',
-        border: `1px solid ${
-          complete ? theme.colors.primary : theme.colors.errors
-        }`,
       }}
     />
   );
