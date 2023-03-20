@@ -140,86 +140,9 @@ const EditorContainer = ({
     }
   }, [project]);
 
-  // const setProjectProperties = (
-  //   title: string,
-  //   description: string,
-  //   readme: string,
-  // ) => {
-  //   project.title = title;
-  //   project.description = description;
-  //   project.readme = readme;
-  //   active.onChange(title, description, readme);
-  // };
-
-  // const isReadmeEditor = active.type === EntityType.Readme;
-
-  // const readmeLabel = `README.md${
-  //   descriptionOverflow ? " - Content can't be more than 1Mb in size" : ''
-  // }`;
-
   return (
     <Flex sx={styles.editorContainer}>
       <EditorRoot>
-        {/* This is Project Info Block, PRODUCT INFO (ReadMe) REMOVED FOR v2 MVP */}
-        {/* <ProjectInfoContainer show={isReadmeEditor}>
-          {project.parentId && !project.persist ? (
-            <>
-              <ProjectHeading>{title}</ProjectHeading>
-              <Divider
-                sx={{ marginX: '1.0rem', marginY: '1.0rem', opacity: '0.3' }}
-              />
-              <ProjectDescription>{description}</ProjectDescription>
-              <Divider
-                sx={{ marginX: '1.0rem', marginY: '2.25rem', opacity: '0.3' }}
-              />
-              <ReadmeHtmlContainer>
-                <Markdown content={readme} />
-              </ReadmeHtmlContainer>
-            </>
-          ) : (
-            <>
-              <InputBlock mb="12px">
-                <Label>Title</Label>
-                <Input
-                  value={title}
-                  placeholder={PLACEHOLDER_TITLE}
-                  onChange={(event) => {
-                    setTitle(event.target.value);
-                    setProjectProperties(
-                      event.target.value,
-                      description,
-                      readme,
-                    );
-                  }}
-                />
-              </InputBlock>
-              <InputBlock mb="12px">
-                <Label>Description</Label>
-                <Input
-                  value={description}
-                  placeholder={PLACEHOLDER_DESCRIPTION}
-                  onChange={(event) => {
-                    setDescription(event.target.value);
-                    setProjectProperties(title, event.target.value, readme);
-                  }}
-                />
-              </InputBlock>
-              <Label error={descriptionOverflow}>{readmeLabel} </Label>
-              <MdeEditor
-                value={readme}
-                onChange={(readme: string) => {
-                  const overflow = calculateSize(readme);
-                  setDescriptionOverflow(overflow);
-                  setReadme(readme);
-                  if (!overflow) {
-                    setProjectProperties(title, description, readme);
-                  }
-                }}
-                overflow={descriptionOverflow}
-              />
-            </>
-          )}
-        </ProjectInfoContainer> */}
         <EditorPanels show={true} />
       </EditorRoot>
     </Flex>

@@ -15,7 +15,7 @@ type SignersProps = {
   updateSelectedAccounts: (selection: number[]) => void;
 };
 
-const AvatarIcon = (seed: number, index: number, complete: boolean) => {
+const AvatarIcon = (seed: number, index: number) => {
   return (
     <Avatar
       seed={seed}
@@ -25,24 +25,16 @@ const AvatarIcon = (seed: number, index: number, complete: boolean) => {
         width: '17px',
         height: '17px',
         display: 'block',
-        borderRadius: '20px',
-        border: `1px solid ${
-          complete ? theme.colors.primary : theme.colors.errors
-        }`,
       }}
     />
   );
 };
 
-const AvatarIconList = (
-  seed: number,
-  indexes: number[],
-  complete: boolean = false,
-) => {
+const AvatarIconList = (seed: number, indexes: number[]) => {
   return (
     <Flex>
       {indexes.map((index) => {
-        return AvatarIcon(seed, index, complete);
+        return AvatarIcon(seed, index);
       })}
     </Flex>
   );
@@ -66,7 +58,7 @@ const PanelHeader = (
 
   return (
     <Flex sx={{ justifyContent: 'flex-start', padding: ' 0.875rem' }}>
-      {AvatarIconList(seed, selected, correctNumSigners)}
+      {AvatarIconList(seed, selected)}
       <Text sx={{ marginLeft: '0.25rem', fontSize: '14px' }}>{message}</Text>
     </Flex>
   );

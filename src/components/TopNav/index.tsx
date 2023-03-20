@@ -101,7 +101,7 @@ const TopNav = () => {
       <Flex sx={styles.topNavSection}>
         <Button
           onClick={toggleProjectsSidebar}
-          variant="secondaryLegacy"
+          variant="alternate"
           size="sm"
           inline={true}
         >

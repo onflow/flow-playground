@@ -45,7 +45,6 @@ const styles: SXStyles = {
   editorHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: '100%',
     padding: '12px 28px',
     border: `solid 1px #DEE2E9`,
     borderRadius: '0px',
@@ -60,7 +59,9 @@ const styles: SXStyles = {
   editorTitle: {
     display: 'flex',
     alignItems: 'center',
-    fontFamily: 'inherit',
+    fontFamily: 'IBM Plex Mono',
+    fontSize: '14px',
+    whiteSpace: 'nowrap',
     justifyContent: 'start',
     margin: '0',
     padding: '0px 8px',
@@ -68,8 +69,13 @@ const styles: SXStyles = {
     borderRadius: '8px',
     color: '#3031D1',
   },
+  titleText: {
+    width: '125px',
+    paddingLeft: '4px',
+  },
   icon: {
     paddingRight: '4px',
+    paddingLeft: '8px',
     filter:
       'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
   },
@@ -128,7 +134,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
             <Flex sx={styles.editorHeader}>
               <Flex sx={styles.editorTitle}>
                 <Box sx={styles.icon}>{getIcon()}</Box>
-                {fileName}
+                <Box sx={styles.titleText}>{fileName}</Box>
               </Flex>
 
               <Button

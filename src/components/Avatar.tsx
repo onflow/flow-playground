@@ -14,14 +14,8 @@ const Avatar: React.FC<AvatarProps> = ({ seed, index, style }) => {
     rng();
   }
 
-  return (
-    <img
-      className="avatar"
-      src="/defaultAvataaar.png"
-      style={style}
-      alt="Avatar"
-    />
-  );
+  const profile = `0x0${index + 1}.svg`;
+  return <img className="avatar" src={profile} style={style} alt="Avatar" />;
 };
 
 export default Avatar;
