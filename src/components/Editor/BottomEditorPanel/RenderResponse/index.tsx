@@ -55,7 +55,8 @@ export const RenderResponse = () => {
       {filteredResults.length > 0
         ? !loading &&
           !error &&
-          filteredResults.reverse()
+          filteredResults
+            .reverse()
             .map((line: LineType, n: number) => (
               <Line {...line} key={n} index={n} />
             ))

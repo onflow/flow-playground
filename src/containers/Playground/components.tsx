@@ -142,7 +142,7 @@ const EditorContainer = ({
 
   return (
     <Flex sx={styles.editorContainer}>
-      <EditorRoot>       
+      <EditorRoot>
         <EditorPanels show={true} />
       </EditorRoot>
     </Flex>
