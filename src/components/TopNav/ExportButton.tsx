@@ -71,7 +71,7 @@ export const ExportButton = () => {
   const infoLastProjectOptions = {
     title: `Export Project: ${project.title}`,
     messages:
-      ['Use vs code extension and flow-cli to deploy to an emulator or network.', 'Use "flow dev" to generate a flow.json file for this project.', 'Click "ok" to download project files.'],
+      ['Use vs code extension and flow-cli to deploy to an emulator or network.', 'Use "flow init" to generate a flow.json file for this project.', 'Click "ok" to download project files.'],
   };
 
   return (
