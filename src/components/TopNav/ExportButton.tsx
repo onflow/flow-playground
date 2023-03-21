@@ -6,9 +6,9 @@ import { SXStyles } from 'src/types';
 import { Container } from 'theme-ui';
 import { useProject } from 'providers/Project/projectHooks';
 import { LOCAL_PROJECT_ID } from 'util/url';
-import InformationalPopup from 'components/InformationalPopup';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import ConfirmationPopup from 'components/ConfirmationPopup';
 
 const styles: SXStyles = {
   container: {
@@ -40,13 +40,10 @@ export const ExportButton = () => {
 
   const { project } = useProject();
 
-  const exportClicked = () => {
-    Mixpanel.track('export project clicked', { projectId });
+  const saveProjectClicked = async (isDownload: boolean) => {
     setIsOpen(false);
-    saveProject();
-  };
+    if (!isDownload) return;
 
-  const saveProject = async () => {
     const zip = new JSZip();
     const contracts = zip.folder('contracts');
     project.contractTemplates.map((cdc) =>
@@ -72,7 +69,7 @@ export const ExportButton = () => {
     messages: [
       'Use vs code extension and flow-cli to deploy to an emulator or network.',
       'Use "flow init" to generate a flow.json file for this project.',
-      'Click "ok" to download project files.',
+      'Download project files?',
     ],
   };
 
@@ -87,8 +84,8 @@ export const ExportButton = () => {
       >
         Export
       </Button>
-      <InformationalPopup
-        onClose={exportClicked}
+      <ConfirmationPopup
+        onClose={saveProjectClicked}
         visible={isOpen}
         {...infoLastProjectOptions}
       />
