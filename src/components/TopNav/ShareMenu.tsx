@@ -88,8 +88,7 @@ export const ShareMenu = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { project } = useProject();
 
-  // todo: verify Project persist is true when project is saved.
-  const isSaved = project.persist;
+  const isSaved = !!project?.updatedAt;
 
   const copyLink = () => {
     setCopied();
@@ -110,6 +109,7 @@ export const ShareMenu = () => {
     };
   }, []);
 
+  console.log('share saved', isSaved)
   return (
     <Container sx={styles.container} ref={ref}>
       <Button
@@ -123,7 +123,7 @@ export const ShareMenu = () => {
         disabled={!isSaved}
       >
         Share
-        {isOpen ? <AnchorIcon /> : <ShareIcon />}
+        <ShareIcon />
       </Button>
       {isOpen && (
         <Flex sx={styles.menu}>

@@ -65,19 +65,19 @@ const getRootStyles = (isCurrentProject: boolean) => {
 
 const confirmDeleteOptions = {
   title: `Delete this project?`,
-  message:
-    'Are you sure you want to delete this project? This cannot be undone.',
+  messages:
+    ['Are you sure you want to delete this project? This cannot be undone.'],
 };
 
 const infoLastProjectOptions = {
   title: `Unable to delete this project!`,
-  message: 'At least one playground project is required.',
+  messages: ['At least one playground project is required.'],
 };
 
 const willLoseChangesOptions = {
   title: `You have unsaved Changes!`,
-  message:
-    'The project you are working on has not been saved, you will lose changes.',
+  messages:
+    ['The project you are working on has not been saved, you will lose changes.'],
 };
 
 const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
