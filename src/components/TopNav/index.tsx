@@ -13,6 +13,7 @@ import { ShareMenu } from './ShareMenu';
 import { SaveButton } from './SaveButton';
 import theme from '../../theme';
 import { PLAYGROUND_GITHUB_ISSUES_URL } from 'util/globalConstants';
+import { ExportButton } from './ExportButton';
 
 const styles: SXStyles = {
   root: {
@@ -143,6 +144,7 @@ const TopNav = () => {
               <FlagIcon />
             </Link>
             <ShareMenu />
+            <ExportButton />
             <SaveButton />
           </>
         )}

@@ -3,7 +3,7 @@ import ConfirmationPopup, { ActionsType } from './ConfirmationPopup';
 
 type InformationalPopupType = {
   title: string;
-  message: string;
+  messages: string[];
   onClose: (...args: any) => void;
   visible: boolean;
 };
@@ -12,7 +12,7 @@ const InformationalPopup = ({
   visible,
   title,
   onClose,
-  message,
+  messages,
 }: InformationalPopupType) => {
   const buttons: ActionsType[] = [
     {
@@ -27,7 +27,7 @@ const InformationalPopup = ({
       visible={visible}
       title={title}
       onClose={onClose}
-      message={message}
+      messages={messages}
       actions={buttons}
     />
   );

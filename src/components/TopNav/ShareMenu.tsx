@@ -6,7 +6,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { SXStyles } from 'src/types';
 import { Container, Flex, Input, Text } from 'theme-ui';
 import theme from '../../theme';
-import AnchorIcon from 'components/Icons/AnchorIcon';
 import ShareIcon from 'components/Icons/ShareIcon';
 import InfoIcon from 'components/Icons/InfoIcon';
 import { useProject } from 'providers/Project/projectHooks';
@@ -88,8 +87,7 @@ export const ShareMenu = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { project } = useProject();
 
-  // todo: verify Project persist is true when project is saved.
-  const isSaved = project.persist;
+  const isSaved = !!project?.updatedAt;
 
   const copyLink = () => {
     setCopied();
@@ -123,7 +121,7 @@ export const ShareMenu = () => {
         disabled={!isSaved}
       >
         Share
-        {isOpen ? <AnchorIcon /> : <ShareIcon />}
+        <ShareIcon />
       </Button>
       {isOpen && (
         <Flex sx={styles.menu}>
