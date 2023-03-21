@@ -108,7 +108,6 @@ export const ShareMenu = () => {
     };
   }, []);
 
-  console.log('share saved', isSaved);
   return (
     <Container sx={styles.container} ref={ref}>
       <Button
