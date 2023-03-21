@@ -6,7 +6,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { SXStyles } from 'src/types';
 import { Container, Flex, Input, Text } from 'theme-ui';
 import theme from '../../theme';
-import AnchorIcon from 'components/Icons/AnchorIcon';
 import ShareIcon from 'components/Icons/ShareIcon';
 import InfoIcon from 'components/Icons/InfoIcon';
 import { useProject } from 'providers/Project/projectHooks';
@@ -109,7 +108,7 @@ export const ShareMenu = () => {
     };
   }, []);
 
-  console.log('share saved', isSaved)
+  console.log('share saved', isSaved);
   return (
     <Container sx={styles.container} ref={ref}>
       <Button

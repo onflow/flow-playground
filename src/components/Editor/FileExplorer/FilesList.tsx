@@ -237,7 +237,9 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           visible={showDeleteError}
           title="Unable to Delete file"
           onClose={() => setShowDeleteError(false)}
-          messages={["Project requires at least 1 Script, Transaction, and Contract file. Please create a new file before deleting this one."]}
+          messages={[
+            'Project requires at least 1 Script, Transaction, and Contract file. Please create a new file before deleting this one.',
+          ]}
         />
       </>
     );
