@@ -16,7 +16,7 @@ export type CadenceEditorProps = {
   setProblemsList: Function;
   show: boolean;
   setSelectedBottomTab: (index: number) => void;
-}
+};
 
 const CadenceEditor = (props: CadenceEditorProps) => {
   const project = useProject();

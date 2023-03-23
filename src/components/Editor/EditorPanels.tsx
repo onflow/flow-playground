@@ -130,7 +130,10 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
     <Flex sx={styles.root}>
       <Flex sx={styles.editor}>
         <Allotment vertical={true}>
-          <Allotment.Pane maxSize={EDITOR_HEADER_HEIGHT} minSize={EDITOR_HEADER_HEIGHT}>
+          <Allotment.Pane
+            maxSize={EDITOR_HEADER_HEIGHT}
+            minSize={EDITOR_HEADER_HEIGHT}
+          >
             <Flex sx={styles.editorHeader}>
               <Flex sx={styles.editorTitle}>
                 <Box sx={styles.icon}>{getIcon()}</Box>

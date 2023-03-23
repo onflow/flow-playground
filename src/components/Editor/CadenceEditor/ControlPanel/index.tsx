@@ -357,8 +357,8 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const openErrorPanel = () => {
     props.setSelectedBottomTab(1);
     setShowBottomPanel(true);
-  }
-  
+  };
+
   const isOk =
     !haveErrors && validCode !== undefined && !!validCode && !notEnoughSigners;
   let statusIcon;

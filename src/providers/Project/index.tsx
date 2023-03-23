@@ -8,9 +8,7 @@ import { getParams, LOCAL_PROJECT_ID } from 'util/url';
 import useGetProject from './projectHooks';
 import ProjectMutator, { PROJECT_SERIALIZATION_KEY } from './projectMutator';
 import { storageMapByAddress } from 'util/accounts';
-import {
-  editor as monacoEditor,
-} from 'monaco-editor/esm/vs/editor/editor.api';
+import { editor as monacoEditor } from 'monaco-editor/esm/vs/editor/editor.api';
 
 export enum EntityType {
   AccountStorage,
@@ -88,7 +86,7 @@ export interface ProjectContextValue {
   applicationErrorMessage: string;
   setApplicationErrorMessage: (message: string) => void;
   clearApplicationErrors: () => void;
-  setCurrentEditor: (editor: monacoEditor.ICodeEditor) => void; 
+  setCurrentEditor: (editor: monacoEditor.ICodeEditor) => void;
   currentEditor: monacoEditor.ICodeEditor | null;
 }
 
@@ -144,7 +142,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const [showProjectsSidebar, setShowProjectsSidebar] = useState(false);
   const [showBottomPanel, setShowBottomPanel] = useState(false);
   const [applicationErrorMessage, setApplicationErrorMessage] = useState('');
-  const [currentEditor, setCurrentEditor] = useState<monacoEditor.ICodeEditor | null>(null);
+  const [currentEditor, setCurrentEditor] =
+    useState<monacoEditor.ICodeEditor | null>(null);
 
   useEffect(() => {
     if (showProjectsSidebar) {
@@ -799,7 +798,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         setApplicationErrorMessage,
         clearApplicationErrors,
         setCurrentEditor,
-        currentEditor
+        currentEditor,
       }}
     >
       {children}

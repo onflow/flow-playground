@@ -71,7 +71,7 @@ const RenderError = (props: any) => {
                 <Flex
                   onClick={() => actions.goTo(item.position)}
                   onMouseOver={() => actions.hover(item.highlight)}
-                  onMouseOut={() => actions. hideDecorations()}
+                  onMouseOut={() => actions.hideDecorations()}
                   sx={styles.errorLine}
                   key={i}
                 >
