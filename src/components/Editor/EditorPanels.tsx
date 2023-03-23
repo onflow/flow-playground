@@ -70,7 +70,7 @@ const styles: SXStyles = {
     color: '#3031D1',
   },
   titleText: {
-    width: '125px',
+    minWidth: '125px',
     paddingLeft: '4px',
   },
   icon: {
