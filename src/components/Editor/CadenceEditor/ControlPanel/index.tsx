@@ -354,6 +354,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     hover: (highlight: Highlight) => hover(editor, highlight),
   };
 
+  const openErrorPanel = () => {
+    props.setSelectedBottomTab(1);
+    setShowBottomPanel(true);
+  };
+
   const isOk =
     !haveErrors && validCode !== undefined && !!validCode && !notEnoughSigners;
   let statusIcon;
@@ -442,6 +447,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
               <StatusMessage
                 isOk={isOk}
                 data-test="control-panel-status-message"
+                onClick={openErrorPanel}
               >
                 <StatusIcon isOk={isOk} progress={progress} showPrompt={false}>
                   {statusIcon}

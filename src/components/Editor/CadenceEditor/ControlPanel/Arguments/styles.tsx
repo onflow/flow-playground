@@ -157,6 +157,7 @@ export const StatusMessage = styled.div<MessageProps>`
   padding: ${({ isOk }) => (isOk ? '1rem' : 'unset')};
   justify-content: flex-start;
   font-size: 16px;
+  cursor: pointer;
   svg {
     margin-right: 5px;
   }

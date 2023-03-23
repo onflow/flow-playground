@@ -9,6 +9,7 @@ export type ControlPanelProps = {
   problemsList: any;
   setProblemsList: any;
   editor: monacoEditor.ICodeEditor;
+  setSelectedBottomTab: (index: number) => void;
 };
 
 export type ScriptExecution = (args?: string[]) => Promise<any>;

@@ -11,8 +11,14 @@ import { EntityType } from 'providers/Project';
 const MONACO_CONTAINER_ID = 'monaco-container';
 
 type EditorStates = Record<number, EditorState>;
+export type CadenceEditorProps = {
+  problemsList: any[];
+  setProblemsList: Function;
+  show: boolean;
+  setSelectedBottomTab: (index: number) => void;
+};
 
-const CadenceEditor = (props: any) => {
+const CadenceEditor = (props: CadenceEditorProps) => {
   const project = useProject();
   const [editor, setEditor] = useState(null);
   const editorOnChange = useRef(null);
@@ -101,6 +107,7 @@ const CadenceEditor = (props: any) => {
         editor.layout();
 
         newState.model.setValue(code);
+        project.setCurrentEditor(editor);
       }
       editorOnChange.current = editor.onDidChangeModelContent(() => {
         if (project.project?.accounts) {
@@ -179,6 +186,7 @@ const CadenceEditor = (props: any) => {
           problemsList={props.problemsList}
           setProblemsList={props.setProblemsList}
           editor={editor}
+          setSelectedBottomTab={props.setSelectedBottomTab}
         />
       )}
     </EditorContainer>
