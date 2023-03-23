@@ -358,6 +358,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     props.setSelectedBottomTab(1);
     setShowBottomPanel(true);
   }
+  
   const isOk =
     !haveErrors && validCode !== undefined && !!validCode && !notEnoughSigners;
   let statusIcon;
