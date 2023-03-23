@@ -65,7 +65,7 @@ const TabIndicator = ({ selected }: { selected: boolean }) => {
 };
 
 const BottomEditorPanelHeader = ({
-  problems,
+  problems, 
   selectedBottomTab,
   setSelectedBottomTab,
 }: BottomEditorPanelHeaderProps) => {
