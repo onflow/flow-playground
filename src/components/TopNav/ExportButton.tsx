@@ -9,7 +9,9 @@ import { LOCAL_PROJECT_ID } from 'util/url';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import ConfirmationPopup from 'components/ConfirmationPopup';
+import * as GoogleAnalytics from 'util/google-analytics';
 
+const DOWNLOAD_EVENT = 'export project downloaded';
 const styles: SXStyles = {
   container: {
     margin: '0',
@@ -59,7 +61,8 @@ export const ExportButton = () => {
     );
 
     zip.generateAsync({ type: 'blob' }).then(function (content) {
-      Mixpanel.track('export project downloaded', { projectId });
+      Mixpanel.track(DOWNLOAD_EVENT, { projectId });
+      GoogleAnalytics.event(DOWNLOAD_EVENT);
       saveAs(content, `${project.title}.zip`);
     });
   };
