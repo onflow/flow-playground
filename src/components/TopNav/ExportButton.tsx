@@ -63,7 +63,7 @@ export const ExportButton = () => {
       Mixpanel.track(DOWNLOAD_EVENT, { projectId });
       if (window?.gtag) {
         window?.gtag('event', DOWNLOAD_EVENT, {
-          proejctId: projectId,
+          projectId,
         });
       }
       saveAs(content, `${project.title}.zip`);
