@@ -7,15 +7,15 @@ import { Flex } from 'theme-ui';
 interface AccountPickerProps extends ChildPropsOptional {
   project: Project;
   accounts: Account[];
-  selected: number[];
-  onChange: (selected: number[]) => void;
+  selectedAccounts: number[];
+  onChange: (selectedAccounts: number[]) => void;
   maxSelection?: number;
 }
 
 const AccountPicker = ({
   project,
   accounts,
-  selected,
+  selectedAccounts,
   onChange,
   maxSelection = 4,
 }: AccountPickerProps) => {
@@ -23,19 +23,19 @@ const AccountPicker = ({
     if (max === 1) {
       // behave like radio button
       onChange([i]);
-    } else if (selected.includes(i)) {
-      onChange(selected.filter((j: any) => j !== i));
+    } else if (selectedAccounts.includes(i)) {
+      onChange(selectedAccounts.filter((j: any) => j !== i));
     } else {
-      onChange([...selected, i]);
+      onChange([...selectedAccounts, i]);
     }
   };
 
   useEffect(() => {
-    if (!selected.length) {
+    if (!selectedAccounts.length) {
       onChange([0]);
     }
-    if (selected.length > maxSelection) {
-      onChange(selected.slice(0, maxSelection));
+    if (selectedAccounts.length > maxSelection) {
+      onChange(selectedAccounts.slice(0, maxSelection));
     }
   }, [maxSelection]);
 
@@ -51,7 +51,7 @@ const AccountPicker = ({
         multi={true}
         project={project}
         accounts={accounts}
-        selectedAccounts={selected}
+        selectedAccounts={selectedAccounts}
         onChange={(index: number) => handleOnChange(index, maxSelection)}
         maxSelection={maxSelection}
       />

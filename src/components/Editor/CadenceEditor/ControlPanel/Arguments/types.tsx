@@ -11,6 +11,7 @@ export type InteractionButtonProps = {
   onClick: () => void;
   active?: boolean;
   progress?: boolean;
+  selectedAccounts: number[];
   type: EntityType;
 };
 
