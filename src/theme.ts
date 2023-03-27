@@ -175,7 +175,7 @@ export default {
     },
     alternate: {
       fontSize: 4,
-      color: 'alternateButtonBorder',
+      color: 'text',
       border: '1px solid #DEE2E9',
       background: 'alternateButtonBackground',
       '&:hover': {
