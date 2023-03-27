@@ -16,7 +16,7 @@ import theme from './theme';
 import tooltipStyles from './tooltipStyles';
 import { Helmet } from 'react-helmet';
 
-GoogleAnalytics.initialize(process.env.GA_TRACKING_CODE);
+GoogleAnalytics.initialize(process.env.GA_TRACKING_ID);
 
 const Base = (props: any) => {
   return <div>{props.children}</div>;
