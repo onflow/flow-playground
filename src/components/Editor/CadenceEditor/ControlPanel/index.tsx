@@ -406,13 +406,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     active.index in
       (accounts[selectedAccounts[0] || 0]?.deployedContracts || []);
 
-  console.log(
-    'activateConfirmation',
-    activateConfirmation,
-    accounts,
-    selectedAccounts,
-  );
-
   return (
     <>
       <div ref={constraintsRef} className="constraints" />
