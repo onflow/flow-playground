@@ -9,6 +9,7 @@ import theme from '../../theme';
 import ShareIcon from 'components/Icons/ShareIcon';
 import InfoIcon from 'components/Icons/InfoIcon';
 import { useProject } from 'providers/Project/projectHooks';
+import { FaClipboardCheck } from 'react-icons/fa';
 
 const styles: SXStyles = {
   container: {
@@ -134,7 +135,7 @@ export const ShareMenu = () => {
               sx={styles.ctaButton}
             >
               {!isCopied ? 'Copy URL' : 'Copied!'}
-              <CopyIcon />
+              {!isCopied ? <CopyIcon /> : <FaClipboardCheck />}
             </Button>
           </Flex>
           <Text sx={styles.message}>

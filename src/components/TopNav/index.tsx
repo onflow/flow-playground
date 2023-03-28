@@ -7,13 +7,13 @@ import { Flex, Link } from 'theme-ui';
 import Mixpanel from 'util/mixpanel';
 import ProjectsIcon from 'components/Icons/ProjectsIcon';
 import LearnCadenceIcon from 'components/Icons/LearnCadenceIcon';
-import FlagIcon from 'components/Icons/FlagIcon';
 import NavInput from './NavInput';
 import { ShareMenu } from './ShareMenu';
 import { SaveButton } from './SaveButton';
 import theme from '../../theme';
 import { PLAYGROUND_GITHUB_ISSUES_URL } from 'util/globalConstants';
 import { ExportButton } from './ExportButton';
+import GithubIcon from 'components/Icons/GithubIcon';
 
 const styles: SXStyles = {
   root: {
@@ -45,8 +45,7 @@ const styles: SXStyles = {
     alignItems: 'center',
     margin: 0,
     fontWeight: 500,
-    paddingX: '0.65rem',
-    paddingY: '0.5rem',
+    padding: '0.25rem ',
     borderRadius: '8px',
     fontSize: 4,
     '&:hover': {
@@ -141,7 +140,7 @@ const TopNav = () => {
               href={PLAYGROUND_GITHUB_ISSUES_URL}
               target="_blank"
             >
-              <FlagIcon />
+              <GithubIcon />
             </Link>
             <ShareMenu />
             <ExportButton />

@@ -51,10 +51,15 @@ const styles: SXStyles = {
     backgroundColor: theme.colors.white,
   },
   copyButton: {
+    border: '1px solid #DEE2E9',
+    borderRadius: '8px',
     width: '32px',
     height: '32px',
     padding: '0px',
     backgroundColor: theme.colors.white,
+    '&:hover': {
+      background: `${theme.colors.menuBg}`,
+    },
   },
   editorTitle: {
     display: 'flex',
