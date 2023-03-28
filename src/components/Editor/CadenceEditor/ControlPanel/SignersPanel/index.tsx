@@ -11,7 +11,7 @@ import Button from 'components/Button';
 
 type SignersProps = {
   maxSelection?: number;
-  selected: number[];
+  selectedAccounts: number[];
   updateSelectedAccounts: (selection: number[]) => void;
 };
 
@@ -43,22 +43,22 @@ const AvatarIconList = (seed: number, indexes: number[]) => {
 const PanelHeader = (
   maxSelection: number,
   seed: number,
-  selected: number[] = [],
+  selectedAccounts: number[] = [],
 ) => {
   let message = '';
-  const correctNumSigners = selected.length === maxSelection;
+  const correctNumSigners = selectedAccounts.length === maxSelection;
   const SIGNERSSELECTED = 'Signers Selected';
-  if (correctNumSigners && selected.length === 1) {
-    message = `${selected.length} ${SIGNERSSELECTED}`;
+  if (correctNumSigners && selectedAccounts.length === 1) {
+    message = `${selectedAccounts.length} ${SIGNERSSELECTED}`;
   } else if (correctNumSigners) {
-    message = `${selected.length} of ${maxSelection} Signers`;
+    message = `${selectedAccounts.length} of ${maxSelection} Signers`;
   } else {
-    message = `${selected.length} of ${maxSelection} ${SIGNERSSELECTED}`;
+    message = `${selectedAccounts.length} of ${maxSelection} ${SIGNERSSELECTED}`;
   }
 
   return (
     <Flex sx={{ justifyContent: 'flex-start', padding: ' 0.875rem' }}>
-      {AvatarIconList(seed, selected)}
+      {AvatarIconList(seed, selectedAccounts)}
       <Text sx={{ marginLeft: '0.25rem', fontSize: '14px' }}>{message}</Text>
     </Flex>
   );
@@ -78,7 +78,7 @@ const styles: SXStyles = {
 
 export const SignersPanel: React.FC<SignersProps> = ({
   maxSelection,
-  selected,
+  selectedAccounts,
   updateSelectedAccounts,
 }) => {
   const { project } = useProject();
@@ -86,15 +86,15 @@ export const SignersPanel: React.FC<SignersProps> = ({
   const { accounts } = project;
 
   const HeaderText = useMemo(
-    () => PanelHeader(maxSelection, project.seed, selected),
-    [maxSelection, selected, project.seed],
+    () => PanelHeader(maxSelection, project.seed, selectedAccounts),
+    [maxSelection, selectedAccounts, project.seed],
   );
 
   useEffect(() => {
-    if (selected.length === 0 && maxSelection > 0) {
+    if (selectedAccounts.length === 0 && maxSelection > 0) {
       updateSelectedAccounts([0]); // select first signer as default
     }
-  }, [maxSelection, selected, updateSelectedAccounts]);
+  }, [maxSelection, selectedAccounts, updateSelectedAccounts]);
 
   return (
     <SignersContainer>
@@ -109,11 +109,11 @@ export const SignersPanel: React.FC<SignersProps> = ({
           {CollapseOpenIcon()}
         </Button>
       </Flex>
-      {(isAvatarOpen || selected.length === 0) && (
+      {(isAvatarOpen || selectedAccounts.length === 0) && (
         <AccountPicker
           project={project}
           accounts={accounts}
-          selected={selected}
+          selectedAccounts={selectedAccounts}
           onChange={updateSelectedAccounts}
           maxSelection={maxSelection}
         />

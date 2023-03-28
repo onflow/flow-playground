@@ -12,6 +12,7 @@ import {
 } from 'react-icons/fa';
 import { CadenceProblem } from 'util/language-syntax-errors';
 import theme from '../../../../../theme';
+import { getSelectedAccount } from '../utils';
 import SingleArgument from './SingleArgument';
 import {
   Badge,
@@ -187,11 +188,18 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
   );
 };
 
-const getLabel = (type: EntityType, project: Project, active: ActiveEditor) => {
+const getLabel = (
+  type: EntityType,
+  project: Project,
+  active: ActiveEditor,
+  selectedAccounts: number[],
+) => {
   const { accounts } = project;
   switch (true) {
     case type === EntityType.ContractTemplate:
-      return accounts[active.index]?.deployedContracts?.length > 0
+      return active.index in
+        (getSelectedAccount(accounts, selectedAccounts)?.deployedContracts ||
+          [])
         ? 'Redeploy'
         : 'Deploy';
     case type === EntityType.TransactionTemplate:
@@ -217,6 +225,7 @@ const getActionButtonTestTag = (type: EntityType) => {
 export const ActionButton: React.FC<InteractionButtonProps> = ({
   type,
   active = true,
+  selectedAccounts = [],
   progress = false,
   onClick,
 }: InteractionButtonProps) => {
@@ -227,7 +236,7 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
     isSaving,
     isExecutingAction,
   } = useProject();
-  const label = getLabel(type, project, activeEditor);
+  const label = getLabel(type, project, activeEditor, selectedAccounts);
   const code = getActiveCode()[0].trim();
   return (
     <Controls>

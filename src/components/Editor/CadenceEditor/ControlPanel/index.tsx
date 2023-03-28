@@ -32,7 +32,12 @@ import {
 // Component Scoped Files
 import { MotionBox, StatusIcon } from './components';
 import { ControlPanelProps, IValue } from './types';
-import { getLabel, useTemplateType, validateByType } from './utils';
+import {
+  getSelectedAccount,
+  getLabel,
+  useTemplateType,
+  validateByType,
+} from './utils';
 
 // Other
 import {
@@ -67,7 +72,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const [setResult] = useSetExecutionResultsMutation();
   const { scriptFactory, transactionFactory, contractDeployment } =
     useTemplateType();
-  const [selected, updateSelectedAccounts] = useState([]);
+  const [selectedAccounts, updateSelectedAccounts] = useState([]);
   const [expanded, setExpanded] = useState(true);
 
   const [values, setValue] = useState<IValue>({});
@@ -284,17 +289,18 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
         }
 
         case EntityType.ContractTemplate: {
-          // TODO: Deploy to selected account after we have the deployment account selector
           if (
             accounts[active.index] &&
-            accounts[active.index].deployedContracts.length > 0 &&
+            active.index in
+              (getSelectedAccount(accounts, selectedAccounts)
+                ?.deployedContracts || []) &&
             !showPrompt
           ) {
             setProcessingStatus(false);
             setShowPrompt(true);
             return;
           }
-          const selectedAccountId = selected[0] || 0;
+          const selectedAccountId = selectedAccounts[0] || 0;
           resultType = ResultType.Contract;
           rawResult = await contractDeployment(active.index, selectedAccountId);
           break;
@@ -342,11 +348,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const numberOfErrors = Object.keys(errors).length;
 
   // TODO: disable button if not enough signers
-  const notEnoughSigners = needSigners && selected.length < signers;
+  const notEnoughSigners = needSigners && selectedAccounts.length < signers;
   const haveErrors = numberOfErrors > 0;
 
   const { accounts } = project;
-  const signersAccounts = selected.map((i: number) => accounts[i]);
+  const signersAccounts = selectedAccounts.map((i: number) => accounts[i]);
 
   const actions = {
     goTo: (position: IPosition) => goTo(editor, position),
@@ -402,9 +408,9 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
 
   const activateConfirmation =
     type === EntityType.ContractTemplate &&
-    accounts[active.index]?.deployedContracts?.length > 0;
-  // ===========================================================================
-  // RENDER
+    active.index in
+      (getSelectedAccount(accounts, selectedAccounts)?.deployedContracts || []);
+
   return (
     <>
       <div ref={constraintsRef} className="constraints" />
@@ -433,7 +439,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
           {needSigners && (
             <SignersPanel
               maxSelection={signers}
-              selected={selected}
+              selectedAccounts={selectedAccounts}
               updateSelectedAccounts={updateSelectedAccounts}
             />
           )}
@@ -458,6 +464,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             <ActionButton
               active={isOk}
               type={type}
+              selectedAccounts={selectedAccounts}
               onClick={() =>
                 activateConfirmation ? setShowPrompt(true) : send(true)
               }
