@@ -1,3 +1,4 @@
+import { getAccountContract } from 'components/Editor/CadenceEditor/ControlPanel/utils';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { MonacoLanguageClient } from 'monaco-languageclient';
 import { MonacoServices } from 'monaco-languageclient/lib/monaco-services';
@@ -70,17 +71,14 @@ export default function useLanguageServer() {
     useState<MonacoLanguageClient | null>(null);
   const [callbacks, setCallbacks] = useState(initialCallbacks);
 
-  const getCode = (_address: string) => {
+  const getCode = (_address: string): string => {
     const {
-      active,
-      project: { contractTemplates },
+      project: { contractDeployments },
     } = project;
 
-    if (active.type === EntityType.ContractTemplate) {
-      return contractTemplates[active.index].script;
-    }
-
-    return '';
+    // TODO: investigate if addresses is only contract addresses or other things
+    //    if (active.type === EntityType.ContractTemplate) {
+    return getAccountContract(_address, contractDeployments) || '';
   };
 
   const restartServer = () => {
