@@ -32,7 +32,12 @@ import {
 // Component Scoped Files
 import { MotionBox, StatusIcon } from './components';
 import { ControlPanelProps, IValue } from './types';
-import { getLabel, useTemplateType, validateByType } from './utils';
+import {
+  getSelectedAccount,
+  getLabel,
+  useTemplateType,
+  validateByType,
+} from './utils';
 
 // Other
 import {
@@ -222,7 +227,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
    * Processes arguments and send scripts and transaction for execution or contracts for deployment
    */
   const send = async (isConfirmed: boolean) => {
-    console.log('send', isConfirmed);
     if (!isConfirmed) {
       setShowPrompt(false);
       return;
@@ -288,7 +292,8 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
           if (
             accounts[active.index] &&
             active.index in
-              (accounts[selectedAccounts[0] || 0]?.deployedContracts || []) &&
+              (getSelectedAccount(accounts, selectedAccounts)
+                ?.deployedContracts || []) &&
             !showPrompt
           ) {
             setProcessingStatus(false);
@@ -404,7 +409,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const activateConfirmation =
     type === EntityType.ContractTemplate &&
     active.index in
-      (accounts[selectedAccounts[0] || 0]?.deployedContracts || []);
+      (getSelectedAccount(accounts, selectedAccounts)?.deployedContracts || []);
 
   return (
     <>

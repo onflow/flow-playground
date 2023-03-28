@@ -1,4 +1,4 @@
-import { ResultType } from 'api/apollo/generated/graphql';
+import { Account, ResultType } from 'api/apollo/generated/graphql';
 import { useProject } from 'providers/Project/projectHooks';
 import { ProcessingArgs } from './types';
 
@@ -111,4 +111,11 @@ export const useTemplateType = (): ProcessingArgs => {
     transactionFactory: createTransactionExecution,
     contractDeployment: createContractDeployment,
   };
+};
+
+export const getSelectedAccount = (
+  accounts: Account[],
+  selectedAccounts: number[],
+): Account => {
+  return accounts[selectedAccounts[0] || 0];
 };

@@ -12,6 +12,7 @@ import {
 } from 'react-icons/fa';
 import { CadenceProblem } from 'util/language-syntax-errors';
 import theme from '../../../../../theme';
+import { getSelectedAccount } from '../utils';
 import SingleArgument from './SingleArgument';
 import {
   Badge,
@@ -197,7 +198,8 @@ const getLabel = (
   switch (true) {
     case type === EntityType.ContractTemplate:
       return active.index in
-        (accounts[selectedAccounts[0] || 0]?.deployedContracts || [])
+        (getSelectedAccount(accounts, selectedAccounts)?.deployedContracts ||
+          [])
         ? 'Redeploy'
         : 'Deploy';
     case type === EntityType.TransactionTemplate:
