@@ -22,6 +22,11 @@ export const GET_PROJECTS = gql`
           script
           title
         }
+        contractDeployments {
+          id
+          script
+          address
+        }
       }
     }
   }
@@ -58,6 +63,11 @@ export const GET_PROJECT = gql`
         id
         script
         title
+      }
+      contractDeployments {
+        id
+        script
+        address
       }
     }
   }

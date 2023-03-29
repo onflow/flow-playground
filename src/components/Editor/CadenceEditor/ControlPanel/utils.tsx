@@ -1,4 +1,8 @@
-import { Account, ResultType } from 'api/apollo/generated/graphql';
+import {
+  Account,
+  ContractDeployment,
+  ResultType,
+} from 'api/apollo/generated/graphql';
 import { useProject } from 'providers/Project/projectHooks';
 import { ProcessingArgs } from './types';
 
@@ -118,4 +122,17 @@ export const getSelectedAccount = (
   selectedAccounts: number[],
 ): Account => {
   return accounts[selectedAccounts[0] || 0];
+};
+
+export const getAccountContract = (
+  accountLongAddressContract: string,
+  deployedContracts: ContractDeployment[],
+): string => {
+  if (accountLongAddressContract.indexOf('.') === -1) return null;
+  const addressContract = accountLongAddressContract.split('.');
+  const address = addressContract[0];
+  const deployed = deployedContracts.find((d) => d.address === address);
+  if (!deployed) return null;
+  // TODO: need to get contract name to work, only works if account has one contract deployed
+  return deployed?.script || null;
 };
