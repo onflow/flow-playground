@@ -135,7 +135,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
         <MenuList
           title="Contracts"
           itemType={EntityType.ContractTemplate}
-          items={project.contractTemplates.sort(c => c.index)}
+          items={project.contractTemplates.sort((c) => c.index)}
           itemTitles={project.contractTemplates?.map((template) => {
             return template.title;
           })}
