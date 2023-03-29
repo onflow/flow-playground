@@ -90,7 +90,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
   const { project, active, showBottomPanel } = useProject();
   const [selectedBottomTab, setSelectedBottomTab] = useState(0);
   const [problemsList, setProblemsList] = useState<any>({});
-
+  const accountNumber = storageMapByIndex(active.index);
   let fileName, script;
   switch (active.type) {
     case EntityType.ContractTemplate:
@@ -106,7 +106,6 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
       script = project.scriptTemplates[active.index].script;
       break;
     default:
-      const accountNumber = storageMapByIndex(active.index);
       fileName =
         accountNumber == '0x01'
           ? `${accountNumber}-Default`

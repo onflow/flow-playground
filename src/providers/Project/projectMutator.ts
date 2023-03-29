@@ -618,19 +618,14 @@ export default class ProjectMutator {
     });
 
     const project = this.getProject();
+
     this.client.writeQuery({
       query: GET_PROJECT,
       variables: {
         projectId: project.id,
       },
       data: {
-        project: {
-          ...project,
-          contractTemplates: [
-            ...project.contractTemplates,
-            res.data.createContractTemplate,
-          ],
-        },
+        project,
       },
     });
 

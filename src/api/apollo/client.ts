@@ -77,6 +77,7 @@ cache.writeData({
     localProject: null,
     activeProjectId: null,
     activeProject: false,
+    errorMessage: '',
     cachedExecutionResults: {
       id: '0',
       __typename: 'ExecutionResults',
