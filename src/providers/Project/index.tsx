@@ -269,7 +269,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         active.index,
       );
 
-      const addr = project.accounts[accountId].address;
+      const addr = deployAccount.address;
       const acctNum = addr.charAt(addr.length - 1);
       const acctHex = `0x0${acctNum}`;
       const signer = [acctHex];
