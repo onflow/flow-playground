@@ -2,7 +2,6 @@ import { getAccountContract } from 'components/Editor/CadenceEditor/ControlPanel
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { MonacoLanguageClient } from 'monaco-languageclient';
 import { MonacoServices } from 'monaco-languageclient/lib/monaco-services';
-import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import { useEffect, useState } from 'react';
 import { createCadenceLanguageClient } from 'util/language-client';

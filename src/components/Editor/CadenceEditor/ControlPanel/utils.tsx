@@ -1,7 +1,6 @@
 import {
   Account,
   ContractDeployment,
-  ContractTemplate,
   ResultType,
 } from 'api/apollo/generated/graphql';
 import { useProject } from 'providers/Project/projectHooks';
