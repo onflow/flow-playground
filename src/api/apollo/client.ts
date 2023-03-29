@@ -4,7 +4,7 @@ import { ApolloLink } from 'apollo-link';
 import DebounceLink from 'apollo-link-debounce';
 import { HttpLink } from 'apollo-link-http';
 import SerializingLink from 'apollo-link-serialize';
-import fetch from 'isomorphic-fetch';
+import fetch from 'cross-fetch';
 import { ResultType } from './generated/graphql';
 import localResolvers from './resolvers';
 import { onError } from 'apollo-link-error';
