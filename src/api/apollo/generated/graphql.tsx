@@ -31,6 +31,7 @@ export type ContractDeployment = {
   __typename?: 'ContractDeployment';
   id: Scalars['UUID'];
   script: Scalars['String'];
+  title: Scalars['String'];
   address: Scalars['Address'];
   errors?: Maybe<Array<ProgramError>>;
   events?: Maybe<Array<Event>>;

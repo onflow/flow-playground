@@ -131,7 +131,9 @@ export const getAccountContract = (
   if (accountLongAddressContract.indexOf('.') === -1) return null;
   const addressContract = accountLongAddressContract.split('.');
   const address = addressContract[0];
-  const deployed = deployedContracts.find((d) => d.address === address);
+  const deployed = deployedContracts.find(
+    (d) => d.address === address && d.title === addressContract[1],
+  );
   if (!deployed) return null;
   // TODO: need to get contract name to work, only works if account has one contract deployed
   return deployed?.script || null;
