@@ -75,9 +75,6 @@ export default function useLanguageServer() {
       project: { contractDeployments },
     } = project;
 
-    console.log('contractDeployments', contractDeployments);
-    // TODO: investigate if addresses is only contract addresses or other things
-    //    if (active.type === EntityType.ContractTemplate) {
     return getAccountContract(_address, contractDeployments) || '';
   };
 
