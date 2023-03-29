@@ -290,6 +290,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const updateContractTemplate = async (script: string, title: string) => {
     setIsSaving(true);
     let res;
+    console.log('active.index', active.index);
     try {
       res = await mutator.updateContractTemplate(
         project.contractTemplates[active.index],
@@ -313,6 +314,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     let res;
     const contractTemplate = project.contractTemplates[active.index];
     try {
+      console.log('active.index 2222', active.index);
       res = await mutator.updateContractTemplate(
         project.contractTemplates[active.index],
         script,
