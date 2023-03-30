@@ -291,6 +291,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     setIsSaving(true);
     let res;
     try {
+      project.contractTemplates[active.index].script = script;
+      project.contractTemplates[active.index].title = title;
       res = await mutator.updateContractTemplate(
         project.contractTemplates[active.index],
         script,
@@ -312,6 +314,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     setIsSaving(true);
     let res;
     const contractTemplate = project.contractTemplates[active.index];
+    contractTemplate.script = script;
     try {
       res = await mutator.updateContractTemplate(
         project.contractTemplates[active.index],

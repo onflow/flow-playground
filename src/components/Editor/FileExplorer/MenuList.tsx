@@ -116,10 +116,16 @@ const styles: SXStyles = {
   },
 };
 
+interface TitledScript {
+  script: string;
+  title: string;
+  id: string;
+}
+
 type MenuListProps = {
   itemType: EntityType;
   title?: string;
-  items: any[];
+  items: TitledScript[];
   itemTitles: any[];
   onSelect: (e: SyntheticEvent, id: string) => void;
   onUpdate: any;
@@ -153,6 +159,7 @@ const MenuList: React.FC<MenuListProps> = ({
       let _editing = [...editing];
       _editing.splice(_editing.indexOf(i), 1);
       setEditing(_editing);
+      items[i].title = newTitle;
       onUpdate(items[i].id, items[i].script, newTitle);
       return;
     }
