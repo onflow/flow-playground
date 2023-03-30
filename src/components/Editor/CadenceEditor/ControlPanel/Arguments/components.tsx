@@ -188,13 +188,11 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
   );
 };
 
-const getActionButtonLabel = (
-  type: EntityType,
-) => {
+const getActionButtonLabel = (type: EntityType) => {
   /** In future backend will flag the contract template if it's been deployed. */
   switch (type) {
     case EntityType.ContractTemplate:
-       return 'Deploy';
+      return 'Deploy';
     case EntityType.TransactionTemplate:
       return 'Send';
     case EntityType.ScriptTemplate:
@@ -221,11 +219,7 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
   progress = false,
   onClick,
 }: InteractionButtonProps) => {
-  const {
-    getActiveCode,
-    isSaving,
-    isExecutingAction,
-  } = useProject();
+  const { getActiveCode, isSaving, isExecutingAction } = useProject();
   const label = getActionButtonLabel(type);
   const code = getActiveCode()[0].trim();
   return (

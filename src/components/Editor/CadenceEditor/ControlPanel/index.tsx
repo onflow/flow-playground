@@ -32,11 +32,7 @@ import {
 // Component Scoped Files
 import { MotionBox, StatusIcon } from './components';
 import { ControlPanelProps, IValue } from './types';
-import {
-  getLabel,
-  useTemplateType,
-  validateByType,
-} from './utils';
+import { getLabel, useTemplateType, validateByType } from './utils';
 
 // Other
 import {
@@ -380,7 +376,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     <>
       <div ref={constraintsRef} className="constraints" />
       <MotionBox dragConstraints={constraintsRef}>
-        <HoverPanel minWidth='362px'>
+        <HoverPanel minWidth="362px">
           {list.length > 0 && (
             <>
               <ArgumentsTitle
@@ -409,11 +405,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             />
           )}
           <Hints problems={problems} actions={actions} />
-          <ControlContainer
-            isOk={isOk}
-            progress={progress}
-            showPrompt={false}
-          >
+          <ControlContainer isOk={isOk} progress={progress} showPrompt={false}>
             {statusMessage && (
               <StatusMessage
                 isOk={isOk}
@@ -430,9 +422,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
               active={isOk}
               type={type}
               selectedAccounts={selectedAccounts}
-              onClick={() =>
-                 send()
-              }
+              onClick={() => send()}
             />
           </ControlContainer>
         </HoverPanel>
