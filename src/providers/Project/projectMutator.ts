@@ -643,15 +643,6 @@ export default class ProjectMutator {
     title: string,
     index: number,
   ) {
-    this.client.writeData({
-      id: `ContractTemplate:${contractTemplate.id}`,
-      data: {
-        __typename: 'ContractTemplate',
-        title,
-        script,
-      },
-    });
-
     if (this.isLocal) {
       registerOnCloseSaveMessage();
       return;

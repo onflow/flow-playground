@@ -171,11 +171,11 @@ const MenuList: React.FC<MenuListProps> = ({
     setItemNames(itemTitles);
   }, [itemTitles]);
 
-  const getIcon = (title: string) => {
-    switch (title) {
-      case 'Transaction':
+  const getIcon = (type: EntityType) => {
+    switch (type) {
+      case EntityType.TransactionTemplate:
         return <ExplorerTransactionIcon />;
-      case 'Script':
+      case EntityType.ScriptTemplate:
         return <ExplorerScriptIcon />;
       default:
         return <ExplorerContractIcon />;
@@ -271,7 +271,7 @@ const MenuList: React.FC<MenuListProps> = ({
                     className="menu-icon"
                     sx={isActive ? styles.selectedIcon : styles.icon}
                   >
-                    {getIcon(item.title)}
+                    {getIcon(itemType)}
                   </Box>
                   {/* NOTE: Optimize this to a controlled input! */}
                   <Input
