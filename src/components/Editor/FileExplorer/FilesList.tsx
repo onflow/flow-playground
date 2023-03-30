@@ -129,10 +129,6 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
       );
     }
 
-    console.log(
-      'project.contractTemplates',
-      project.contractTemplates.map((c) => c.title),
-    );
     return (
       <>
         <Flex sx={styles.header}>FILES</Flex>
