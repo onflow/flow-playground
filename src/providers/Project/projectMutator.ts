@@ -663,9 +663,6 @@ export default class ProjectMutator {
         index,
         projectId: this.projectId,
       },
-      refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } },
-      ],
       context: {
         debounceKey: key,
         serializationKey: PROJECT_SERIALIZATION_KEY,
