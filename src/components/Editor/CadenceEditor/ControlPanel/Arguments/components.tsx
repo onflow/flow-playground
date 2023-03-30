@@ -1,7 +1,6 @@
-import { Project } from 'api/apollo/generated/graphql';
 import PanelButton from 'components/PanelButton';
 import { Stack } from 'layout/Stack';
-import { ActiveEditor, EntityType } from 'providers/Project';
+import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useState } from 'react';
 import {
@@ -12,7 +11,6 @@ import {
 } from 'react-icons/fa';
 import { CadenceProblem } from 'util/language-syntax-errors';
 import theme from '../../../../../theme';
-import { getSelectedAccount } from '../utils';
 import SingleArgument from './SingleArgument';
 import {
   Badge,
