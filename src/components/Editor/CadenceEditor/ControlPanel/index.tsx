@@ -32,12 +32,7 @@ import {
 // Component Scoped Files
 import { MotionBox, StatusIcon } from './components';
 import { ControlPanelProps, IValue } from './types';
-import {
-  getSelectedAccount,
-  getLabel,
-  useTemplateType,
-  validateByType,
-} from './utils';
+import { getLabel, useTemplateType, validateByType } from './utils';
 
 // Other
 import {
@@ -52,12 +47,6 @@ import {
   StatusMessage,
 } from './Arguments/styles';
 import { SignersPanel } from 'components/Editor/CadenceEditor/ControlPanel/SignersPanel';
-import ConfirmationPopup from 'components/ConfirmationPopup';
-
-const willRedeployContractOptions = {
-  title: `You will overwrite data!`,
-  messages: ['Redeploying will clear the state of all accounts. Proceed?'],
-};
 
 const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // ===========================================================================
@@ -79,8 +68,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // Handles errors with arguments
   const [errors, setErrors] = useState({});
   // Handles problems, hints and info for checked code
-
-  const [showPrompt, setShowPrompt] = useState(false);
 
   // REFS  -------------------------------------------------------------------
   // Holds reference to constraining div for floating window
@@ -226,11 +213,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   /**
    * Processes arguments and send scripts and transaction for execution or contracts for deployment
    */
-  const send = async (isConfirmed: boolean) => {
-    if (!isConfirmed) {
-      setShowPrompt(false);
-      return;
-    }
+  const send = async () => {
     if (!processingStatus) {
       setProcessingStatus(true);
     }
@@ -289,17 +272,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
         }
 
         case EntityType.ContractTemplate: {
-          if (
-            accounts[active.index] &&
-            active.index in
-              (getSelectedAccount(accounts, selectedAccounts)
-                ?.deployedContracts || []) &&
-            !showPrompt
-          ) {
-            setProcessingStatus(false);
-            setShowPrompt(true);
-            return;
-          }
           const selectedAccountId = selectedAccounts[0] || 0;
           resultType = ResultType.Contract;
           rawResult = await contractDeployment(active.index, selectedAccountId);
@@ -313,7 +285,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       rawResult = e.toString();
     }
 
-    setShowPrompt(false);
     setProcessingStatus(false);
     setShowBottomPanel(true);
 
@@ -370,7 +341,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   let statusIcon;
   let statusMessage;
   switch (true) {
-    case !isOk && !showPrompt:
+    case !isOk:
       statusIcon = <FaRegTimesCircle />;
       statusMessage = problems?.error?.length
         ? `${problems?.error?.length} Error${
@@ -394,11 +365,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   }, [languageClient, active]);
 
   useEffect(() => {
-    // don't carry state of prompt between active editors
-    setShowPrompt(false);
-  }, [active]);
-
-  useEffect(() => {
     validate(list, values);
   }, [list, values]);
 
@@ -406,16 +372,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     return null;
   }
 
-  const activateConfirmation =
-    type === EntityType.ContractTemplate &&
-    active.index in
-      (getSelectedAccount(accounts, selectedAccounts)?.deployedContracts || []);
-
   return (
     <>
       <div ref={constraintsRef} className="constraints" />
       <MotionBox dragConstraints={constraintsRef}>
-        <HoverPanel minWidth={showPrompt ? 'min-content' : '362px'}>
+        <HoverPanel minWidth="362px">
           {list.length > 0 && (
             <>
               <ArgumentsTitle
@@ -444,11 +405,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             />
           )}
           <Hints problems={problems} actions={actions} />
-          <ControlContainer
-            isOk={isOk}
-            progress={progress}
-            showPrompt={showPrompt}
-          >
+          <ControlContainer isOk={isOk} progress={progress} showPrompt={false}>
             {statusMessage && (
               <StatusMessage
                 isOk={isOk}
@@ -465,18 +422,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
               active={isOk}
               type={type}
               selectedAccounts={selectedAccounts}
-              onClick={() =>
-                activateConfirmation ? setShowPrompt(true) : send(true)
-              }
+              onClick={() => send()}
             />
           </ControlContainer>
         </HoverPanel>
       </MotionBox>
-      <ConfirmationPopup
-        onClose={send}
-        visible={showPrompt}
-        {...willRedeployContractOptions}
-      />
     </>
   );
 };
