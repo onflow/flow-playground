@@ -188,23 +188,16 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
   );
 };
 
-const getLabel = (
+const getActionButtonLabel = (
   type: EntityType,
-  project: Project,
-  active: ActiveEditor,
-  selectedAccounts: number[],
 ) => {
-  const { accounts } = project;
-  switch (true) {
-    case type === EntityType.ContractTemplate:
-      return active.index in
-        (getSelectedAccount(accounts, selectedAccounts)?.deployedContracts ||
-          [])
-        ? 'Redeploy'
-        : 'Deploy';
-    case type === EntityType.TransactionTemplate:
+  /** In future backend will flag the contract template if it's been deployed. */
+  switch (type) {
+    case EntityType.ContractTemplate:
+       return 'Deploy';
+    case EntityType.TransactionTemplate:
       return 'Send';
-    case type === EntityType.ScriptTemplate:
+    case EntityType.ScriptTemplate:
       return 'Execute';
     default:
       return 'Send';
@@ -225,18 +218,15 @@ const getActionButtonTestTag = (type: EntityType) => {
 export const ActionButton: React.FC<InteractionButtonProps> = ({
   type,
   active = true,
-  selectedAccounts = [],
   progress = false,
   onClick,
 }: InteractionButtonProps) => {
   const {
-    project,
-    active: activeEditor,
     getActiveCode,
     isSaving,
     isExecutingAction,
   } = useProject();
-  const label = getLabel(type, project, activeEditor, selectedAccounts);
+  const label = getActionButtonLabel(type);
   const code = getActiveCode()[0].trim();
   return (
     <Controls>
