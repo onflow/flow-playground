@@ -116,7 +116,7 @@ const styles: SXStyles = {
   },
 };
 
-export interface TitledScript {
+interface TitledScript {
   script: string;
   title: string;
   id: string;
