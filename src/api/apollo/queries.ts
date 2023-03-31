@@ -11,16 +11,19 @@ export const GET_PROJECTS = gql`
           id
           script
           title
+          index
         }
         transactionTemplates {
           id
           script
           title
+          index
         }
         scriptTemplates {
           id
           script
           title
+          index
         }
         contractDeployments {
           id
@@ -54,16 +57,19 @@ export const GET_PROJECT = gql`
         id
         script
         title
+        index
       }
       transactionTemplates {
         id
         script
         title
+        index
       }
       scriptTemplates {
         id
         script
         title
+        index
       }
       contractDeployments {
         id
@@ -95,16 +101,19 @@ export const GET_LOCAL_PROJECT = gql`
         id
         script
         title
+        index
       }
       transactionTemplates {
         id
         script
         title
+        index
       }
       scriptTemplates {
         id
         script
         title
+        index
       }
     }
   }
