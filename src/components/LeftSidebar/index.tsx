@@ -32,7 +32,7 @@ const LeftSidebar = () => {
 
   return (
     <Box sx={styles.root} ref={ref}>
-      <Box mb={12}>
+      <Box mb={8}>
         <NewProjectButton
           label="Create New Project"
           size="md"
