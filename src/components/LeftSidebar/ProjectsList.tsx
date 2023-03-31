@@ -2,7 +2,6 @@ import React from 'react';
 import { ProjectType, SXStyles } from 'src/types';
 import { Flex } from 'theme-ui';
 import useProjects from '../../hooks/useProjects';
-import LeftSidebarSection from './LeftSidebarSection';
 import ProjectListItem from './ProjectListItem';
 
 const styles: SXStyles = {
@@ -22,19 +21,18 @@ const ProjectsList = () => {
 
   return (
     <Flex sx={styles.root}>
-      <LeftSidebarSection title="Projects">
-        {projects.length === 0 && '0 Projects'}
-        <Flex sx={styles.items}>
-          {projects.map((project: ProjectType) => (
-            <ProjectListItem
-              project={project}
-              key={project.id}
-              projectCount={projects.length}
-              refetch={refetch}
-            />
-          ))}
-        </Flex>
-      </LeftSidebarSection>
+      {projects.length === 0 && '0 Projects'}
+      <Flex sx={styles.items}>
+        {loading && 'Loading...'}
+        {projects.map((project: ProjectType) => (
+          <ProjectListItem
+            project={project}
+            key={project.id}
+            projectCount={projects.length}
+            refetch={refetch}
+          />
+        ))}
+      </Flex>
     </Flex>
   );
 };
