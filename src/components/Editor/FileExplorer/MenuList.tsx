@@ -10,7 +10,7 @@ import Input from './ExplorerInput';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
-import { SXStyles } from 'src/types';
+import { SXStyles, Template } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import { getParams } from 'util/url';
 import { ContextMenu } from '../../ContextMenu';
@@ -116,16 +116,10 @@ const styles: SXStyles = {
   },
 };
 
-interface TitledScript {
-  script: string;
-  title: string;
-  id: string;
-}
-
 type MenuListProps = {
   itemType: EntityType;
   title?: string;
-  items: TitledScript[];
+  items: Template[];
   itemTitles: any[];
   onSelect: (e: SyntheticEvent, id: string) => void;
   onUpdate: any;

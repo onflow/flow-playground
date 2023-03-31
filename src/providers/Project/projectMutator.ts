@@ -29,6 +29,7 @@ import {
   GET_APPLICATION_ERRORS,
   GET_LOCAL_PROJECT,
   GET_PROJECT,
+  GET_PROJECT_UPDATE_AT,
 } from 'api/apollo/queries';
 
 import Mixpanel from 'util/mixpanel';
@@ -38,6 +39,7 @@ import {
 } from 'util/onclose';
 import { createDefaultProject, DEFAULT_ACCOUNT_STATE } from './projectDefault';
 import { UrlRewritter, FILE_TYPE_NAME } from 'util/urlRewritter';
+import { Template } from 'src/types';
 
 // TODO: Switch to directives for serialization keys after upgrading to the newest Apollo/apollo-link-serialize
 export const PROJECT_SERIALIZATION_KEY = 'PROJECT_SERIALIZATION_KEY';
@@ -98,16 +100,18 @@ export default class ProjectMutator {
     const description = newProject.description;
     const readme = newProject.readme;
     const transactionTemplates = newProject.transactionTemplates.map(
-      (tpl: any) => ({ script: tpl.script, title: tpl.title }),
+      (tpl: Template) => ({ script: tpl.script, title: tpl.title }),
     );
-    const scriptTemplates = newProject.scriptTemplates.map((tpl: any) => ({
+    const scriptTemplates = newProject.scriptTemplates.map((tpl: Template) => ({
       script: tpl.script,
       title: tpl.title,
     }));
-    const contractTemplates = newProject.contractTemplates.map((tpl: any) => ({
-      script: tpl.script,
-      title: tpl.title,
-    }));
+    const contractTemplates = newProject.contractTemplates.map(
+      (tpl: Template) => ({
+        script: tpl.script,
+        title: tpl.title,
+      }),
+    );
 
     const { data } = await this.client.mutate({
       mutation: CREATE_PROJECT,
@@ -290,7 +294,10 @@ export default class ProjectMutator {
         title,
       },
       refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+        {
+          query: GET_PROJECT_UPDATE_AT,
+          variables: { projectId: this.projectId },
+        },
       ],
       context: {
         debounceKey: key,
@@ -415,7 +422,10 @@ export default class ProjectMutator {
         title: title,
       },
       refetchQueries: [
-        { query: GET_PROJECT, variables: { projectId: this.projectId } },
+        {
+          query: GET_PROJECT_UPDATE_AT,
+          variables: { projectId: this.projectId },
+        },
       ],
       context: {
         debounceKey: key,
@@ -663,6 +673,12 @@ export default class ProjectMutator {
         index,
         projectId: this.projectId,
       },
+      refetchQueries: [
+        {
+          query: GET_PROJECT_UPDATE_AT,
+          variables: { projectId: this.projectId },
+        },
+      ],
       context: {
         debounceKey: key,
         serializationKey: PROJECT_SERIALIZATION_KEY,

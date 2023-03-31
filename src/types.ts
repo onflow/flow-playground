@@ -26,7 +26,7 @@ export type ProjectType = {
 };
 
 export type Template = {
-  id: number;
+  id: string;
   script: string;
   title: string;
 };

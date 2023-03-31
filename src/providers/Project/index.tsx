@@ -291,14 +291,15 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     setIsSaving(true);
     let res;
     try {
-      project.contractTemplates[active.index].script = script;
-      project.contractTemplates[active.index].title = title;
+      const template = project.contractTemplates[active.index];
       res = await mutator.updateContractTemplate(
-        project.contractTemplates[active.index],
+        template,
         script,
         title,
         active.index,
       );
+      template.script = script;
+      template.title = title;
     } catch (e) {
       console.error(e);
       setIsSaving(false);
@@ -314,7 +315,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     setIsSaving(true);
     let res;
     const contractTemplate = project.contractTemplates[active.index];
-    contractTemplate.script = script;
     try {
       res = await mutator.updateContractTemplate(
         project.contractTemplates[active.index],
@@ -322,6 +322,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         contractTemplate.title,
         active.index,
       );
+      contractTemplate.script = script;
     } catch (e) {
       console.error(e);
       setIsSaving(false);
@@ -342,6 +343,9 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     let res;
     try {
       res = await mutator.updateScriptTemplate(templateId, script, title);
+      const template = project.scriptTemplates.find((t) => t.id === templateId);
+      template.script = script;
+      template.title = title;
     } catch (e) {
       console.error(e);
       setIsSaving(false);
@@ -362,6 +366,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     let res;
     try {
       res = await mutator.updateTransactionTemplate(templateId, script, title);
+      const template = project.transactionTemplates.find(
+        (t) => t.id === templateId,
+      );
+      template.script = script;
+      template.title = title;
     } catch (e) {
       console.error(e);
       setIsSaving(false);
@@ -376,6 +385,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const updateActiveScriptTemplate = async (script: string) => {
     setIsSaving(true);
     let res;
+    const template = project.scriptTemplates[active.index];
+    template.script = script;
     try {
       res = await mutator.updateScriptTemplate(
         project.scriptTemplates[active.index].id,
@@ -396,6 +407,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const updateActiveTransactionTemplate = async (script: string) => {
     setIsSaving(true);
     let res;
+    const template = project.transactionTemplates[active.index];
+    template.script = script;
     try {
       res = await mutator.updateTransactionTemplate(
         project.transactionTemplates[active.index].id,
