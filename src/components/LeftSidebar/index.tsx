@@ -21,6 +21,7 @@ const LeftSidebar = () => {
     const handleClickOutside = (event: Event) => {
       if (ref.current && !ref.current.contains(event.target)) {
         toggleProjectsSidebar();
+        event.stopPropagation();
       }
     };
     document.addEventListener('click', handleClickOutside, true);
