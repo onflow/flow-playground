@@ -8,6 +8,14 @@ import { ProjectContext, ProjectContextValue } from './index';
 import { createDefaultProject, createLocalProject } from './projectDefault';
 import { PROJECT_SERIALIZATION_KEY } from './projectMutator';
 
+function formatProject(project: Project) {
+  // sort based on index, issue getting this to work in the backend
+  project.contractTemplates.sort((a, b) => a.index - b.index);
+  project.scriptTemplates.sort((a, b) => a.index - b.index);
+  project.transactionTemplates.sort((a, b) => a.index - b.index);
+  return project;
+}
+
 function writeDefaultProject(client: any) {
   const defaultProject = createDefaultProject();
 
@@ -98,7 +106,7 @@ export default function useGetProject(
     return { project: null, isLocal: false, isClone: false, isLoading: true };
   }
 
-  const remoteProject = remoteData.project;
+  const remoteProject = formatProject(remoteData.project);
   const isMutable = remoteProject.mutable;
 
   if (!isMutable) {
@@ -115,7 +123,7 @@ export default function useGetProject(
   }
 
   return {
-    project: remoteData.project,
+    project: remoteProject,
     isLocal: false,
     isClone: false,
     isLoading: false,

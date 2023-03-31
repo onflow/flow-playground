@@ -81,6 +81,15 @@ export const GET_PROJECT = gql`
   }
 `;
 
+export const GET_PROJECT_UPDATE_AT = gql`
+  query GetProject($projectId: UUID!) {
+    project(id: $projectId) {
+      id
+      updatedAt
+    }
+  }
+`;
+
 export const GET_LOCAL_PROJECT = gql`
   query GetLocalProject {
     project: localProject @client {
