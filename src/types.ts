@@ -29,4 +29,5 @@ export type Template = {
   id: number;
   script: string;
   title: string;
+  index: number;
 };
