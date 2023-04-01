@@ -17,13 +17,12 @@ const styles: SXStyles = {
 const ProjectsList = () => {
   const { projects, loading, error, refetch } = useProjects();
 
-  if (loading || !!error) return null;
-
   return (
     <Flex sx={styles.root}>
-      {projects.length === 0 && '0 Projects'}
+      {projects.length === 0 && !loading && '0 Projects'}
+      {projects.length === 0 && loading && 'Loading...'}
+      {error && 'Error loading projects'}
       <Flex sx={styles.items}>
-        {loading && 'Loading...'}
         {projects.map((project: ProjectType) => (
           <ProjectListItem
             project={project}
