@@ -17,6 +17,7 @@ export default {
     purple: '#f694ff',
     border: 'rgb(240, 240, 240)',
     errors: '#FC4723',
+    errorBackground: '#FFEAE9',
     borderDark: 'rgb(222, 222, 222)',
     shadowColor: 'rgb(222, 222, 222)',
     warning: '#ffcc00',

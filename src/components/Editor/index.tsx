@@ -1,10 +1,15 @@
 import { Project } from 'api/apollo/generated/graphql';
+import CookieDetector from 'components/BrowserDetector';
 import FileExplorer from 'components/Editor/FileExplorer';
 import TopNav from 'components/TopNav';
+import UnsupportedMessage from 'components/UnsupportedBrowser';
 import { EditorContainer } from 'containers/Playground/components';
 import { ActiveEditor } from 'providers/Project';
 import React from 'react';
 import ErrorToastContainer from './ErrorToastContainer';
+
+const { detect } = require('detect-browser');
+const browser = detect();
 
 type EditorContainerProps = {
   isExplorerCollapsed: boolean;
@@ -23,7 +28,12 @@ const Editor = ({
 }: EditorContainerProps) => {
   return (
     <>
-      <TopNav />
+      {browser && browser.name === 'safari' ? (
+        <UnsupportedMessage />
+      ) : (
+        <TopNav />
+      )}
+      <CookieDetector />
       <FileExplorer
         isExplorerCollapsed={isExplorerCollapsed}
         toggleExplorer={toggleExplorer}
