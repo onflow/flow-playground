@@ -79,7 +79,6 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
     itemType: EntityType;
     templateId: string;
   }) => {
-    console.log('delete transaction template', templateId);
     switch (itemType) {
       case EntityType.TransactionTemplate:
         if (project.transactionTemplates.length > 1) {
