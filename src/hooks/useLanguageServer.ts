@@ -1,3 +1,4 @@
+import { getAccountContract } from 'components/Editor/CadenceEditor/ControlPanel/utils';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { MonacoLanguageClient } from 'monaco-languageclient';
 import { MonacoServices } from 'monaco-languageclient/lib/monaco-services';
@@ -69,20 +70,12 @@ export default function useLanguageServer() {
     useState<MonacoLanguageClient | null>(null);
   const [callbacks, setCallbacks] = useState(initialCallbacks);
 
-  const getCode = (address: string) => {
-    const { accounts } = project.project;
+  const getCode = (_address: string): string => {
+    const {
+      project: { contractDeployments },
+    } = project;
 
-    const number = parseInt(address, 16);
-    if (!number) {
-      return;
-    }
-
-    const index = number - 1;
-    if (index < 0 || index >= accounts.length) {
-      return;
-    }
-    let code = accounts[index].deployedCode;
-    return code;
+    return getAccountContract(_address, contractDeployments) || '';
   };
 
   const restartServer = () => {

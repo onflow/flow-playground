@@ -4,20 +4,19 @@ import { globalHistory, Router } from '@reach/router';
 import React, { useEffect } from 'react';
 import 'reset-css';
 import { ThemeProvider } from 'theme-ui';
-
 import client from 'api/apollo/client';
 import * as GoogleAnalytics from 'util/google-analytics';
 import { onLCP, onFID, onCLS, CLSMetric } from 'web-vitals';
 import BrowserDetector from 'components/BrowserDetector';
 import AppMobileWrapper from 'containers/AppMobileWrapper';
-import Playground from 'containers/Editor';
-
+import Playground from 'containers/Playground';
 import globalStyles from './globalStyles';
 import FourOhFour from './pages/404';
 import theme from './theme';
+import tooltipStyles from './tooltipStyles';
 import { Helmet } from 'react-helmet';
 
-GoogleAnalytics.initialize(process.env.GA_TRACKING_CODE);
+GoogleAnalytics.initialize(process.env.GA_TRACKING_ID);
 
 const Base = (props: any) => {
   return <div>{props.children}</div>;
@@ -60,7 +59,7 @@ const App: React.FC = () => {
   return (
     <>
       <BrowserDetector />
-      <Global styles={globalStyles} />
+      <Global styles={[globalStyles, tooltipStyles]} />
       {process.env.GA_TRACKING_ID && (
         <Helmet>
           <script

@@ -15,25 +15,13 @@ export const SidebarItem = styled.div<ItemProps>`
   padding-right: 0.25rem;
   padding-top: 0.2rem;
   padding-bottom: 0.2rem;
-  background: var(--bg);
+  background: ${theme.colors.white};
   position: relative;
 
   ${(p) =>
     p.active &&
     css`
       background: rgba(255, 255, 255, 0.75);
-
-      &:after {
-        content: '';
-        display: block;
-        position: absolute;
-        left: 0;
-        top: 6px;
-        bottom: 6px;
-        width: 6px;
-        border-radius: 0 3px 3px 0;
-        background: ${theme.colors.primary};
-      }
     `}
 
   cursor: pointer;

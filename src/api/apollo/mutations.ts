@@ -3,24 +3,26 @@ import gql from 'graphql-tag';
 export const CREATE_PROJECT = gql`
   mutation CreateProject(
     $parentId: UUID
-    $accounts: [String!]!
-    $seed: Int!
     $title: String!
     $description: String!
     $readme: String!
+    $seed: Int!
+    $numberOfAccounts: Int!
     $transactionTemplates: [NewProjectTransactionTemplate!]!
     $scriptTemplates: [NewProjectScriptTemplate!]!
+    $contractTemplates: [NewProjectContractTemplate!]!
   ) {
     project: createProject(
       input: {
         parentId: $parentId
-        accounts: $accounts
+        numberOfAccounts: $numberOfAccounts
         seed: $seed
         title: $title
         description: $description
         readme: $readme
         transactionTemplates: $transactionTemplates
         scriptTemplates: $scriptTemplates
+        contractTemplates: $contractTemplates
       }
     ) {
       id
@@ -32,10 +34,7 @@ export const CREATE_PROJECT = gql`
       description
       readme
       accounts {
-        id
         address
-        draftCode
-        deployedCode
         deployedContracts
         state
       }
@@ -45,6 +44,11 @@ export const CREATE_PROJECT = gql`
         title
       }
       scriptTemplates {
+        id
+        script
+        title
+      }
+      contractTemplates {
         id
         script
         title
@@ -84,38 +88,80 @@ export const SET_ACTIVE_PROJECT = gql`
   }
 `;
 
-export const UPDATE_ACCOUNT_DRAFT_CODE = gql`
-  mutation UpdateAccountDraftCode(
+export const CREATE_CONTRACT_TEMPLATE = gql`
+  mutation CreateContractTemplate(
     $projectId: UUID!
-    $accountId: UUID!
-    $code: String!
+    $script: String!
+    $title: String!
   ) {
-    updateAccount(
-      input: { projectId: $projectId, id: $accountId, draftCode: $code }
+    createContractTemplate(
+      input: { projectId: $projectId, script: $script, title: $title }
     ) {
       id
-      address
-      draftCode
-      deployedCode
+      script
+      title
     }
   }
 `;
 
-export const UPDATE_ACCOUNT_DEPLOYED_CODE = gql`
-  mutation UpdateAccountDeployedCode(
+export const UPDATE_CONTRACT_TEMPLATE = gql`
+  mutation UpdateContractTemplate(
     $projectId: UUID!
-    $accountId: UUID!
-    $code: String!
+    $templateId: UUID!
+    $script: String!
+    $title: String
   ) {
-    updateAccount(
-      input: { projectId: $projectId, id: $accountId, deployedCode: $code }
+    updateContractTemplate(
+      input: {
+        projectId: $projectId
+        id: $templateId
+        script: $script
+        title: $title
+      }
     ) {
       id
-      address
-      draftCode
-      deployedCode
-      deployedContracts
-      state
+      script
+      index
+      title
+    }
+  }
+`;
+
+export const DELETE_CONTRACT_TEMPLATE = gql`
+  mutation DeleteContractTemplate($projectId: UUID!, $templateId: UUID!) {
+    deleteContractTemplate(id: $templateId, projectId: $projectId)
+  }
+`;
+
+export const CREATE_CONTRACT_DEPLOYMENT = gql`
+  mutation CreateContractDeployment(
+    $projectId: UUID!
+    $script: String!
+    $signer: Address!
+  ) {
+    createContractDeployment(
+      input: { projectId: $projectId, script: $script, address: $signer }
+    ) {
+      id
+      script
+      errors {
+        message
+        startPosition {
+          offset
+          line
+          column
+        }
+        endPosition {
+          offset
+          line
+          column
+        }
+      }
+      logs
+      events {
+        type
+        values
+      }
     }
   }
 `;
@@ -276,6 +322,12 @@ export const CREATE_SCRIPT_EXECUTION = gql`
       logs
       value
     }
+  }
+`;
+
+export const DELETE_PROJECT = gql`
+  mutation DeleteProject($projectId: UUID!) {
+    deleteProject(projectId: $projectId)
   }
 `;
 

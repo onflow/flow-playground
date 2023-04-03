@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import React from 'react';
 import { ChildPropsOptional } from 'src/types';
 import { CSSProperties } from 'styled-components';
-import Button from './Button';
+import LegacyButton from './LegacyButton';
 
 interface ActionButtonProps extends ChildPropsOptional {
   onClick?: any;
@@ -14,7 +14,9 @@ interface ActionButtonProps extends ChildPropsOptional {
   'data-test'?: string;
 }
 
-const ActionButton: React.FC<ActionButtonProps> = (props) => {
+const ActionButton: React.FC<ActionButtonProps> = (
+  props: ActionButtonProps,
+) => {
   return (
     <motion.div
       style={{
@@ -24,7 +26,7 @@ const ActionButton: React.FC<ActionButtonProps> = (props) => {
       }}
       whileTap={{ scale: 0.95 }}
     >
-      <Button {...props}>{props.children}</Button>
+      <LegacyButton {...props}>{props.children}</LegacyButton>
     </motion.div>
   );
 };
