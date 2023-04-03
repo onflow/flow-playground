@@ -9,6 +9,7 @@ import { createDefaultProject, createLocalProject } from './projectDefault';
 import { PROJECT_SERIALIZATION_KEY } from './projectMutator';
 
 function formatProject(project: Project) {
+  if (!project) return project;
   // sort based on index, issue getting this to work in the backend
   project.contractTemplates.sort((a, b) => a.index - b.index);
   project.scriptTemplates.sort((a, b) => a.index - b.index);
@@ -106,7 +107,7 @@ export default function useGetProject(
     return { project: null, isLocal: false, isClone: false, isLoading: true };
   }
 
-  const remoteProject = formatProject(remoteData.project);
+  const remoteProject = formatProject(remoteData?.project);
   const isMutable = remoteProject.mutable;
 
   if (!isMutable) {

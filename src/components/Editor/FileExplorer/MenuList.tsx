@@ -124,7 +124,13 @@ type MenuListProps = {
   onSelect: (e: SyntheticEvent, id: string) => void;
   onUpdate: any;
   onInsert: () => Promise<void>;
-  onDelete: any;
+  onDelete: ({
+    itemType,
+    templateId,
+  }: {
+    itemType: EntityType;
+    templateId: string;
+  }) => void;
 };
 
 const MenuList: React.FC<MenuListProps> = ({
@@ -251,7 +257,7 @@ const MenuList: React.FC<MenuListProps> = ({
                 icon: DeleteIcon,
                 name: 'Delete File',
                 onClick: () => {
-                  onDelete({ title: item.title, templateId: item.id });
+                  onDelete({ itemType, templateId: item.id });
                 },
               },
             ];

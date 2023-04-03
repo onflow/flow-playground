@@ -244,5 +244,6 @@ export function createLocalProject(
     version: '',
     numberOfAccounts: accountEntities.length,
     updatedAt: null,
+    contractDeployments: [],
   };
 }

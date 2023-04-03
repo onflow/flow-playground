@@ -487,6 +487,9 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     setIsSaving(true);
     let res;
     try {
+      project.contractTemplates = project.contractTemplates.filter(
+        (t) => t.id !== templateId,
+      );
       res = await mutator.deleteContractTemplate(templateId);
     } catch (e) {
       console.error(e);
@@ -503,6 +506,9 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     setIsSaving(true);
     let res;
     try {
+      project.scriptTemplates = project.scriptTemplates.filter(
+        (t) => t.id !== templateId,
+      );
       res = await mutator.deleteScriptTemplate(templateId);
     } catch (e) {
       console.error(e);
@@ -519,6 +525,9 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     setIsSaving(true);
     let res;
     try {
+      project.contractTemplates = project.contractTemplates.filter(
+        (t) => t.id !== templateId,
+      );
       res = await mutator.deleteTransactionTemplate(templateId);
     } catch (e) {
       console.error(e);
