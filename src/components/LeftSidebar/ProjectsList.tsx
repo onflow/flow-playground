@@ -16,7 +16,7 @@ const styles: SXStyles = {
     alignSelf: 'center',
     padding: '1rem 0',
     color: 'red',
-  }
+  },
 };
 
 const ProjectsList = () => {
