@@ -73,14 +73,15 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
   };
 
   const handleDelete = async ({
-    title,
+    itemType,
     templateId,
   }: {
+    itemType: EntityType;
     templateId: string;
-    title: string;
   }) => {
-    switch (title) {
-      case 'Transaction':
+    console.log('delete transaction template', templateId);
+    switch (itemType) {
+      case EntityType.TransactionTemplate:
         if (project.transactionTemplates.length > 1) {
           await deleteTransactionTemplate(templateId);
           const path = UrlRewritter(project, FILE_TYPE_NAME.transaction, 0);
@@ -89,7 +90,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           setShowDeleteError(true);
         }
         break;
-      case 'Script':
+      case EntityType.ScriptTemplate:
         if (project.scriptTemplates.length > 1) {
           await deleteScriptTemplate(templateId);
           const path = UrlRewritter(project, FILE_TYPE_NAME.script, 0);
