@@ -1,125 +1,88 @@
-import styled from '@emotion/styled';
-import { motion } from 'framer-motion';
 import React from 'react';
-import { FaSpinner } from 'react-icons/fa';
-import { ChildProps, ChildPropsOptional } from 'src/types';
-import { CSSProperties } from 'styled-components';
-import { Button as ThemedButton } from 'theme-ui';
+import { ChildProps } from 'src/types';
+import { Button as ThemeUiButton, ThemeUICSSObject } from 'theme-ui';
 
-interface StyledButtonProps extends ChildProps {
-  style?: CSSProperties;
-  className?: string;
-  onClick?: any;
-  variant: string;
+type ButtonSizes = 'sm' | 'md' | 'lg';
+
+export type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'secondaryLegacy'
+  | 'disabled'
+  | 'alternate'
+  | 'link'
+  | 'explorer'
+  | 'unstyled';
+export interface ButtonProps extends ChildProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+  variant?: ButtonVariant;
+  size?: ButtonSizes;
+  submit?: boolean;
   disabled?: boolean;
-}
-
-const StyledButton: React.FC<StyledButtonProps> = styled(ThemedButton)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  @keyframes rotating {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  .icon {
-    margin-left: 0.5rem;
-  }
-
-  .loading {
-    animation: rotating 0.5s linear infinite;
-  }
-
-  &.violet {
-    background-color: #bdc4f4;
-    color: #575e89;
-  }
-
-  &.grey {
-    background-color: #ededed;
-    color: #696969;
-  }
-
-  &.modal {
-    width: 100px;
-    font-size: 16px;
-    font-weight: bold;
-  }
-
-  display: flex;
-  align-items: center;
-
-  cursor: ${({ variant }) =>
-    variant === 'buttons.disabled' ? 'not-allowed !important' : 'pointer'};
-
-  &:disabled {
-    cursor: not-allowed;
-  }
-`;
-
-interface ButtonProps extends ChildPropsOptional {
-  onClick?: any;
-  className?: string;
-  style?: CSSProperties;
-  Icon?: any;
-  isLoading?: boolean;
-  isActive?: boolean;
-  disabled?: boolean;
+  sx?: ThemeUICSSObject;
   'data-test'?: string;
   hideDisabledState?: boolean;
+  inline?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({
-  children,
-  onClick,
-  style,
-  className,
-  Icon,
-  isLoading,
-  isActive,
-  disabled,
-  'data-test': dataTest,
-  hideDisabledState,
-}) => {
-  const showDisabledState = disabled && !hideDisabledState;
-  return (
-    <motion.div whileHover={{ scale: 1.05 }}>
-      <StyledButton
-        style={style}
-        className={className}
-        data-test={dataTest}
-        onClick={onClick}
-        variant={
-          isActive && !showDisabledState
-            ? 'buttons.primary'
-            : 'buttons.disabled'
-        }
-        disabled={disabled}
-      >
-        {children}
-        {isLoading ? (
-          <FaSpinner className="icon loading" />
-        ) : Icon ? (
-          <Icon className="icon" />
-        ) : null}
-      </StyledButton>
-    </motion.div>
-  );
+const getStyles = (disabled: boolean, inline?: boolean) => ({
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    width: inline ? 'auto' : '100%',
+    '&:hover': {
+      cursor: disabled ? 'default' : 'pointer',
+    },
+  },
+});
+
+const sizeStyles: Record<ButtonSizes, ThemeUICSSObject> = {
+  sm: {
+    height: 34,
+    py: 2,
+    px: 4,
+    fontSize: 1,
+    borderRadius: '4px',
+  },
+  md: {
+    px: 14,
+    py: 8,
+    fontSize: 1,
+    fontWeight: 600,
+  },
+  lg: {},
 };
 
-Button.defaultProps = {
-  onClick: () => {},
-  style: {},
-  className: '',
-  Icon: null,
-  isLoading: false,
-  isActive: true,
+const Button = ({
+  children,
+  onClick,
+  variant = 'primary',
+  size = 'md',
+  submit,
+  disabled,
+  sx = {},
+  'data-test': dataTest,
+  hideDisabledState,
+  inline,
+}: ButtonProps) => {
+  const styles = getStyles(disabled, inline);
+  const mergedSx = { ...styles.root, ...sizeStyles[size], ...sx };
+  const showDisabledState = disabled && !hideDisabledState;
+  return (
+    <ThemeUiButton
+      sx={mergedSx}
+      onClick={onClick}
+      disabled={disabled}
+      type={submit ? 'submit' : 'button'}
+      variant={showDisabledState ? 'disabled' : variant}
+      data-test={dataTest}
+    >
+      {children}
+    </ThemeUiButton>
+  );
 };
 
 export default Button;

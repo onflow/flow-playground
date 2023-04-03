@@ -59,7 +59,7 @@
         "ignoreCase": true
       }
     ],
-    "react/jsx-no-undef": 1,
+    "react/jsx-no-undef": 2,
     "react/jsx-uses-react": 1,
     "react/jsx-uses-vars": 1,
     "jsx-a11y/alt-text": 1,

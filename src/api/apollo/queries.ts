@@ -1,5 +1,41 @@
 import gql from 'graphql-tag';
 
+export const GET_PROJECTS = gql`
+  query GetProjects {
+    projectList {
+      projects {
+        id
+        updatedAt
+        title
+        contractTemplates {
+          id
+          script
+          title
+          index
+        }
+        transactionTemplates {
+          id
+          script
+          title
+          index
+        }
+        scriptTemplates {
+          id
+          script
+          title
+          index
+        }
+        contractDeployments {
+          id
+          script
+          title
+          address
+        }
+      }
+    }
+  }
+`;
+
 export const GET_PROJECT = gql`
   query GetProject($projectId: UUID!) {
     project(id: $projectId) {
@@ -7,28 +43,49 @@ export const GET_PROJECT = gql`
       persist
       mutable
       parentId
+      updatedAt
       seed
       title
       description
       readme
       accounts {
-        id
         address
-        draftCode
-        deployedCode
         deployedContracts
         state
+      }
+      contractTemplates {
+        id
+        script
+        title
+        index
       }
       transactionTemplates {
         id
         script
         title
+        index
       }
       scriptTemplates {
         id
         script
         title
+        index
       }
+      contractDeployments {
+        id
+        script
+        title
+        address
+      }
+    }
+  }
+`;
+
+export const GET_PROJECT_UPDATE_AT = gql`
+  query GetProject($projectId: UUID!) {
+    project(id: $projectId) {
+      id
+      updatedAt
     }
   }
 `;
@@ -45,22 +102,27 @@ export const GET_LOCAL_PROJECT = gql`
       description
       readme
       accounts {
-        id
         address
-        draftCode
-        deployedCode
         deployedContracts
         state
+      }
+      contractTemplates {
+        id
+        script
+        title
+        index
       }
       transactionTemplates {
         id
         script
         title
+        index
       }
       scriptTemplates {
         id
         script
         title
+        index
       }
     }
   }
@@ -93,5 +155,11 @@ export const GET_CACHED_EXECUTION_RESULTS = gql`
         ...ExecutionResultDetails
       }
     }
+  }
+`;
+
+export const GET_APPLICATION_ERRORS = gql`
+  query GetApplicationErrors {
+    errorMessage @client
   }
 `;

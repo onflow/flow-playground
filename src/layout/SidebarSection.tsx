@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import theme from '../theme';
 
 export const SidebarSection = styled.div`
   position: relative;
@@ -13,7 +14,7 @@ export const SidebarSection = styled.div`
     position: absolute;
     bottom: 100%;
     margin-bottom: 1rem;
-    border-top: 1px solid var(--key);
+    border-top: 1px solid ${theme.colors.greyBorder};
     right: 4rem;
     left: 4rem;
   }

@@ -2,9 +2,9 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import gql from 'graphql-tag';
 import { normalizeInteractionResponse } from 'util/normalize-interaction-response';
 import {
-  SetExecutionResultsMutationVariables,
   ClearExecutionResultsMutationVariables,
   ResultType,
+  SetExecutionResultsMutationVariables,
 } from './generated/graphql';
 
 function getResultTypeFragment(resultType: ResultType) {

@@ -100,7 +100,7 @@ module.exports = {
     }),
     new webpack.EnvironmentPlugin({
       'PLAYGROUND_API': 'http://localhost:8080',
-      'GA_TRACKING_CODE': '',
+      'GA_TRACKING_ID': '',
       'MIXPANEL_TOKEN': '',
       'DEFAULT_SEO_IMAGE': '',
       'AVATAAR_URL': 'https://us-central1-flow-developer-playground.cloudfunctions.net/avatar/',
