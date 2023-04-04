@@ -7,7 +7,6 @@ import { ThemeProvider } from 'theme-ui';
 import client from 'api/apollo/client';
 import * as GoogleAnalytics from 'util/google-analytics';
 import { onLCP, onFID, onCLS, CLSMetric } from 'web-vitals';
-import BrowserDetector from 'components/BrowserDetector';
 import AppMobileWrapper from 'containers/AppMobileWrapper';
 import Playground from 'containers/Playground';
 import globalStyles from './globalStyles';
@@ -58,7 +57,6 @@ const App: React.FC = () => {
 
   return (
     <>
-      <BrowserDetector />
       <Global styles={[globalStyles, tooltipStyles]} />
       {process.env.GA_TRACKING_ID && (
         <Helmet>

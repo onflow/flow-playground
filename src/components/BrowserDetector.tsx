@@ -1,24 +1,5 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import theme from '../theme';
-
-const { detect } = require('detect-browser');
-const browser = detect();
-
-const UnsupportedMessage = styled.div`
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100px;
-  display: fled;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 2rem 1rem 2rem 1rem;
-  color: ${theme.colors.error};
-  font-size: ${theme.fontSizes[5]};
-  font-weight: 700;
-`;
 
 const CookieWarning = styled.div`
   width: 100vw;
@@ -47,35 +28,20 @@ const CookieWarningModal = styled.div`
   }
 `;
 
-const BrowserDetector: React.FC = () => {
-  switch (true) {
-    case browser && browser.name === 'safari':
-      return (
-        <UnsupportedMessage>
-          You&apos;re currently using an unsupported browser to access the Flow
-          Playground. We hope to support your browser in the future, but for now
-          some features may not function as intended. In order to have the best
-          experience, we recommend you use either Chrome or Firefox to access
-          the Flow Playground.
-        </UnsupportedMessage>
-      );
-    case navigator && !navigator.cookieEnabled:
-      return (
-        <CookieWarning>
-          <CookieWarningModal>
-            <h2>🍪 Please enable cookies</h2>
-            <p>
-              The Playground uses cookies to manage projects. You&apos;ll need
-              to enable cookies in your browser to use the Playground. We
-              don&apos;t use cookies to track you, or collect your personal
-              information.
-            </p>
-          </CookieWarningModal>
-        </CookieWarning>
-      );
-    default:
-      return null;
-  }
+const CookieDetector: React.FC = () => {
+  if (!navigator || navigator.cookieEnabled) return null;
+  return (
+    <CookieWarning>
+      <CookieWarningModal>
+        <h2>🍪 Please enable cookies</h2>
+        <p>
+          The Playground uses cookies to manage projects. You&apos;ll need to
+          enable cookies in your browser to use the Playground. We don&apos;t
+          use cookies to track you, or collect your personal information.
+        </p>
+      </CookieWarningModal>
+    </CookieWarning>
+  );
 };
 
-export default BrowserDetector;
+export default CookieDetector;

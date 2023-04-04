@@ -13,7 +13,7 @@ import * as Sentry from '@sentry/react';
 import { GraphQLError, GraphQLErrorExtensions } from 'graphql';
 const PLAYGROUND_API = process.env.PLAYGROUND_API;
 const DEFAULT_DEBOUNCE_TIMEOUT = 1200; // Debounce time in ms
-
+const { detect } = require('detect-browser');
 const cache = new InMemoryCache();
 const client = new ApolloClient({
   cache: cache,
@@ -31,11 +31,15 @@ const client = new ApolloClient({
         extensions = gqlError.extensions;
       }
       const errorCode = extensions?.code;
-
+      const browser = detect();
       switch (errorCode) {
         case 'BAD_REQUEST':
           console.log('Encountered User Error', gqlError);
           Sentry.captureException(gqlError);
+          if (browser && browser.name === 'safari') {
+            errorMessage =
+              'Safari does not support cookies. Please use Chrome or Firefox.';
+          }
           break;
         case 'GRAPHQL_VALIDATION_FAILED':
           console.log('Encountered GQL Error', gqlError);
