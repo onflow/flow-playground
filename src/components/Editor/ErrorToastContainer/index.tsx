@@ -23,10 +23,9 @@ const styles: SXStyles = {
     marginTop: '0.0rem',
     padding: '16px 0px 16px 24px',
     alignItems: 'center',
-    fontSize: '14px',
+    fontSize: theme.fontSizes[2],
     border: `1px solid ${theme.colors.errorToast}`,
-    background:
-      'linear-gradient(0deg, rgba(252, 71, 35, 0.1), rgba(252, 71, 35, 0.1)), #FFFFFF',
+    background: theme.colors.errorBackground,
     borderRadius: '8px',
     boxShadow: '10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff',
   },
