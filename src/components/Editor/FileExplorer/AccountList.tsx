@@ -2,7 +2,6 @@ import { navigate, useLocation } from '@reach/router';
 import { Account } from 'api/apollo/generated/graphql';
 import Avatar from 'components/Avatar';
 import Button from 'components/Button';
-import ExplorerPlusIcon from 'components/Icons/ExplorerPlusIcon';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useState } from 'react';
@@ -120,7 +119,7 @@ const AccountList = ({ isExplorerCollapsed }: AccountListProps) => {
             setIsInserting(false);
           }}
         >
-          <ExplorerPlusIcon />
+          {/**<ExplorerPlusIcon />**/}
         </Button>
       </Flex>
       <Box data-test="account-list">
