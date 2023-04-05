@@ -120,7 +120,7 @@ const AccountList = ({ isExplorerCollapsed }: AccountListProps) => {
             setIsInserting(false);
           }}
         >
-          <ExplorerPlusIcon />
+          {/**<ExplorerPlusIcon />**/}
         </Button>
       </Flex>
       <Box data-test="account-list">
