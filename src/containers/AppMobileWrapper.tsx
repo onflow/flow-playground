@@ -6,7 +6,7 @@ import { Box, Button, Text } from 'theme-ui';
 const AppMobileWrapperDiv = styled.div`
   display: block;
   position: relative;
-  @media only screen and (max-width: 1080px) {
+  @media only screen and (max-width: 1079px) {
     display: none;
   }
 `;
