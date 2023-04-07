@@ -3,7 +3,7 @@ import Examples from 'components/Examples';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useState } from 'react';
 import { SXStyles } from 'src/types';
-import { Flex, Link } from 'theme-ui';
+import { Flex } from 'theme-ui';
 import Mixpanel from 'util/mixpanel';
 import ProjectsIcon from 'components/Icons/ProjectsIcon';
 import LearnCadenceIcon from 'components/Icons/LearnCadenceIcon';
@@ -17,7 +17,6 @@ import {
 } from 'util/globalConstants';
 import { ExportButton } from './ExportButton';
 import GithubIcon from 'components/Icons/GithubIcon';
-import ExternalNavLinks from './TopNavButton';
 import { NavButtonLink } from './NavButtonLink';
 import { IconCadence } from 'components/Icons/CadenceIcon';
 
