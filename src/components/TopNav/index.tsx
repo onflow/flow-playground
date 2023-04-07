@@ -11,9 +11,15 @@ import NavInput from './NavInput';
 import { ShareMenu } from './ShareMenu';
 import { SaveButton } from './SaveButton';
 import theme from '../../theme';
-import { PLAYGROUND_GITHUB_ISSUES_URL } from 'util/globalConstants';
+import {
+  CADENCE_DOCS_URL,
+  PLAYGROUND_GITHUB_ISSUES_URL,
+} from 'util/globalConstants';
 import { ExportButton } from './ExportButton';
 import GithubIcon from 'components/Icons/GithubIcon';
+import ExternalNavLinks from './TopNavButton';
+import { NavButtonLink } from './NavButtonLink';
+import { IconCadence } from 'components/Icons/CadenceIcon';
 
 const styles: SXStyles = {
   root: {
@@ -132,16 +138,15 @@ const TopNav = () => {
               <LearnCadenceIcon />
               Learn Cadence
             </Button>
-            <Link
-              sx={styles.link}
-              rel="noreferrer"
-              variant="secondary"
+            <NavButtonLink
               title="Report a Bug"
               href={PLAYGROUND_GITHUB_ISSUES_URL}
-              target="_blank"
             >
               <GithubIcon />
-            </Link>
+            </NavButtonLink>
+            <NavButtonLink title="Cadence Docs" href={CADENCE_DOCS_URL}>
+              <IconCadence size="22px" title="Cadence Language Reference" />
+            </NavButtonLink>
             <ShareMenu />
             <ExportButton />
             <SaveButton />
