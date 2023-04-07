@@ -23,9 +23,13 @@ const AccountPicker = ({
     if (max === 1) {
       // behave like radio button
       onChange([i]);
-    } else if (selectedAccounts.includes(i)) {
+    } 
+    // all accounts selected
+    const full = max === selectedAccounts.length;
+    if (selectedAccounts.includes(i)) {
       onChange(selectedAccounts.filter((j: any) => j !== i));
     } else {
+      if (full) return;
       onChange([...selectedAccounts, i]);
     }
   };
