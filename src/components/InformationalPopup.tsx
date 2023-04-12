@@ -6,6 +6,7 @@ type InformationalPopupType = {
   messages: string[];
   onClose: (...args: any) => void;
   visible: boolean;
+  disableActions?: boolean;
 };
 
 const InformationalPopup = ({
@@ -13,6 +14,7 @@ const InformationalPopup = ({
   title,
   onClose,
   messages,
+  disableActions = false,
 }: InformationalPopupType) => {
   const buttons: ActionsType[] = [
     {
@@ -28,7 +30,7 @@ const InformationalPopup = ({
       title={title}
       onClose={onClose}
       messages={messages}
-      actions={buttons}
+      actions={disableActions ? [] : buttons}
     />
   );
 };

@@ -1,7 +1,17 @@
 import styled from '@emotion/styled';
+import InformationalPopup from 'components/InformationalPopup';
 import React from 'react';
 import { ChildProps } from 'src/types';
 import { Box, Button, Text } from 'theme-ui';
+
+const isInMaintenanceMode = process.env.IS_IN_MAINTENANCE === 'true';
+const infoInMaintenance = {
+  title: `Currently in Maintenance`,
+  messages: [
+    'Sorry about this, we are currently under maintenance. Check back soon.',
+  ],
+  disableActions: true,
+};
 
 const AppMobileWrapperDiv = styled.div`
   display: block;
@@ -29,6 +39,11 @@ const AppMobileWrapperMessageDiv = styled.div`
 const AppMobileWrapper = ({ children }: ChildProps) => {
   return (
     <>
+      <InformationalPopup
+        onClose={() => {}}
+        visible={isInMaintenanceMode}
+        {...infoInMaintenance}
+      />
       <AppMobileWrapperDiv>{children}</AppMobileWrapperDiv>
       <AppMobileWrapperMessageDiv>
         <Box
