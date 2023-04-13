@@ -6,6 +6,7 @@ import { ProjectProvider } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { CSSProperties } from 'react';
 import { Box, Button, ThemeUICSSObject } from 'theme-ui';
+import { userDataKeys, UserLocalStorage } from 'util/localstorage';
 import { LOCAL_PROJECT_ID } from 'util/url';
 import useToggleExplorer from '../../hooks/useToggleExplorer';
 import EditorLayout from './EditorLayout';
@@ -118,10 +119,20 @@ interface PlaygroundProps extends RouteComponentProps {
 }
 
 const Playground = ({ projectId }: PlaygroundProps) => {
+  const userStorage = new UserLocalStorage();
   const isLocalProject = projectId === LOCAL_PROJECT_ID;
 
   if (!projectId) {
-    return <Redirect noThrow to={`/${LOCAL_PROJECT_ID}`} />;
+    // get projectId if stored in localstorage
+    const projectId = userStorage.getDataByKey(userDataKeys.PROJECT_ID);
+    return (
+      <Redirect
+        noThrow
+        to={projectId ? `/${projectId}` : `/${LOCAL_PROJECT_ID}`}
+      />
+    );
+  } else if (projectId !== LOCAL_PROJECT_ID) {
+    userStorage.setData(userDataKeys.PROJECT_ID, projectId);
   }
 
   return (
