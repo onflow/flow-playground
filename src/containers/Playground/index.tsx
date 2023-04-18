@@ -156,7 +156,7 @@ const Playground = ({ projectId }: PlaygroundProps) => {
       </Box>
     );
   }
-  
+
   if (startUpError) {
     const startUpErrorMessage = {
       title: `Oops, There is an Issue!!!`,

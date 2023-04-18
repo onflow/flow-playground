@@ -102,7 +102,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   isLocal,
   client,
 }) => {
-
   const projectId = project?.id;
   const [active, setActive] = useState<{ type: EntityType; index: number }>({
     type: EntityType.ContractTemplate,
@@ -615,7 +614,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     }
     return [code || '', id || 8];
   };
-
 
   // End of instantiation and return created context
   const activeEditor = getActiveEditor();
