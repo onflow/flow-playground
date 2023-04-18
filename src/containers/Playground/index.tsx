@@ -1,4 +1,4 @@
-import { Redirect, RouteComponentProps } from '@reach/router';
+import { RouteComponentProps } from '@reach/router';
 import LeftSidebar from 'components/LeftSidebar';
 import { AnimatePresence, motion, MotionStyle } from 'framer-motion';
 import CadenceChecker from 'providers/CadenceChecker';
@@ -123,7 +123,6 @@ const Playground = ({ projectId }: PlaygroundProps) => {
   const isLocalProject = projectId === LOCAL_PROJECT_ID;
   // disable saving last loaded project id
   userStorage.setData(userDataKeys.PROJECT_ID, null);
-
 
   return (
     <ProjectProvider urlProjectId={isLocalProject ? null : projectId}>
