@@ -1,12 +1,9 @@
-import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { navigate, Redirect, useLocation } from '@reach/router';
 import { Account, Project } from 'api/apollo/generated/graphql';
-import { GET_ACTIVE_PROJECT } from 'api/apollo/queries';
 import React, { createContext, useEffect, useState } from 'react';
 import { ChildProps } from 'src/types';
 import { getParams, LOCAL_PROJECT_ID } from 'util/url';
-import useGetProject from './projectHooks';
-import ProjectMutator, { PROJECT_SERIALIZATION_KEY } from './projectMutator';
+import ProjectMutator from './projectMutator';
 import { storageMapByAddress } from 'util/accounts';
 import { editor as monacoEditor } from 'monaco-editor/esm/vs/editor/editor.api';
 
@@ -94,42 +91,18 @@ export const ProjectContext: React.Context<ProjectContextValue> =
   createContext(null);
 
 interface ProjectProviderProps extends ChildProps {
-  urlProjectId: string | null;
+  project: Project;
+  isLocal: boolean;
+  client: any;
 }
 
 export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   children,
-  urlProjectId,
+  project,
+  isLocal,
+  client,
 }) => {
-  const client = useApolloClient();
-
-  const {
-    data: { activeProject, activeProjectId },
-  } = useQuery(GET_ACTIVE_PROJECT, {
-    context: {
-      serializationKey: PROJECT_SERIALIZATION_KEY,
-    },
-  });
-
-  const projectId = urlProjectId || activeProjectId;
-
-  let project: Project;
-  let isLocal: boolean;
-  let isLoading: boolean;
-  try {
-    const {
-      project: _project,
-      isLocal: _isLocal,
-      isLoading: _isLoading,
-    } = useGetProject(client, projectId, activeProject);
-    project = _project;
-    isLocal = _isLocal;
-    isLoading = _isLoading;
-  } catch (e) {
-    console.error(e);
-    navigate('/404');
-  }
-
+  const projectId = project?.id;
   const [active, setActive] = useState<{ type: EntityType; index: number }>({
     type: EntityType.ContractTemplate,
     index: 0,
@@ -215,9 +188,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
-  /**
-   * save local project to server and get project id
-   */
   const saveProject: any = async () => {
     setIsSaving(true);
     let res;
@@ -645,11 +615,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return [code || '', id || 8];
   };
 
+  // End of instantiation and return created context
   const activeEditor = getActiveEditor();
 
   const location = useLocation();
-  if (isLoading) return null;
-  if (!isLoading && !project) {
+  if (!project) {
     navigate('/');
     return null;
   }
@@ -783,7 +753,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     <ProjectContext.Provider
       value={{
         project,
-        isLoading,
+        isLoading: false,
         mutator,
         isSaving,
         isExecutingAction,

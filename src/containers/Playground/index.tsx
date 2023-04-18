@@ -1,13 +1,15 @@
-import { RouteComponentProps } from '@reach/router';
+import { useApolloClient } from '@apollo/react-hooks';
+import { navigate, RouteComponentProps } from '@reach/router';
+import { Project } from 'api/apollo/generated/graphql';
+import InformationalPopup from 'components/InformationalPopup';
 import LeftSidebar from 'components/LeftSidebar';
 import { AnimatePresence, motion, MotionStyle } from 'framer-motion';
 import CadenceChecker from 'providers/CadenceChecker';
 import { ProjectProvider } from 'providers/Project';
-import { useProject } from 'providers/Project/projectHooks';
+import useGetProject, { useProject } from 'providers/Project/projectHooks';
 import React, { CSSProperties } from 'react';
-import { Box, Button, ThemeUICSSObject } from 'theme-ui';
+import { Box, Button, Spinner, ThemeUICSSObject } from 'theme-ui';
 import { userDataKeys, UserLocalStorage } from 'util/localstorage';
-import { LOCAL_PROJECT_ID } from 'util/url';
 import useToggleExplorer from '../../hooks/useToggleExplorer';
 import EditorLayout from './EditorLayout';
 
@@ -119,13 +121,63 @@ interface PlaygroundProps extends RouteComponentProps {
 }
 
 const Playground = ({ projectId }: PlaygroundProps) => {
+  const client = useApolloClient();
+
+  let project: Project;
+  let isLocal: boolean;
+  let isLoading: boolean;
+  let startUpError = '';
+  try {
+    const {
+      project: _project,
+      isLocal: _isLocal,
+      isLoading: _isLoading,
+    } = useGetProject(client, projectId, null);
+    project = _project;
+    isLocal = _isLocal;
+    isLoading = _isLoading;
+  } catch (e) {
+    console.error(e);
+    startUpError = `${e.message}`;
+  }
   const userStorage = new UserLocalStorage();
-  const isLocalProject = projectId === LOCAL_PROJECT_ID;
   // disable saving last loaded project id
   userStorage.setData(userDataKeys.PROJECT_ID, null);
 
+  if (isLoading || (isLoading === undefined && !startUpError)) {
+    const sx = {
+      margin: '10rem',
+      width: '50%',
+      height: '50%',
+    };
+    return (
+      <Box sx={sx}>
+        <Spinner />
+      </Box>
+    );
+  }
+
+  if (startUpError) {
+    const startUpErrorMessage = {
+      title: `Oops, There is an Issue!!!`,
+      messages: [
+        'Sorry about this',
+        `Issue loading project: "${startUpError}"`,
+        'Click <ok> to go to home page',
+      ],
+    };
+    return (
+      <InformationalPopup
+        onClose={() => {
+          navigate('/');
+        }}
+        visible={true}
+        {...startUpErrorMessage}
+      />
+    );
+  }
   return (
-    <ProjectProvider urlProjectId={isLocalProject ? null : projectId}>
+    <ProjectProvider project={project} isLocal={isLocal} client={client}>
       <CadenceChecker>
         <Content />
       </CadenceChecker>
