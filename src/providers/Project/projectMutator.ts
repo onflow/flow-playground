@@ -176,6 +176,8 @@ export default class ProjectMutator {
     project.title = title || project.title;
     project.description = description || project.description;
     project.readme = readme || project.readme;
+    project.updatedAt = null;
+    project.contractDeployments = [];
 
     this.client.writeQuery({
       query: GET_PROJECT,
