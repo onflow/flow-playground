@@ -122,6 +122,9 @@ interface PlaygroundProps extends RouteComponentProps {
 
 const Playground = ({ projectId }: PlaygroundProps) => {
   const client = useApolloClient();
+  const userStorage = new UserLocalStorage();
+  const userProjectId = userStorage.getDataByKey(userDataKeys.PROJECT_ID);
+  const loadingProjectId = projectId || userProjectId;
 
   let project: Project;
   let isLocal: boolean;
@@ -132,7 +135,7 @@ const Playground = ({ projectId }: PlaygroundProps) => {
       project: _project,
       isLocal: _isLocal,
       isLoading: _isLoading,
-    } = useGetProject(client, projectId, null);
+    } = useGetProject(client, loadingProjectId, null);
     project = _project;
     isLocal = _isLocal;
     isLoading = _isLoading;
@@ -140,9 +143,6 @@ const Playground = ({ projectId }: PlaygroundProps) => {
     console.error(e);
     startUpError = `${e.message}`;
   }
-  const userStorage = new UserLocalStorage();
-  // disable saving last loaded project id
-  userStorage.setData(userDataKeys.PROJECT_ID, null);
 
   if (isLoading || (isLoading === undefined && !startUpError)) {
     const sx = {
@@ -163,9 +163,14 @@ const Playground = ({ projectId }: PlaygroundProps) => {
       messages: [
         'Sorry about this',
         `Issue loading project: "${startUpError}"`,
-        'Click <ok> to go to home page',
+        'Click <ok> to go to home page or last loaded project',
       ],
     };
+    if (loadingProjectId === userProjectId) {
+      // issue loading project clear last saved loaded project id
+      userStorage.setData(userDataKeys.PROJECT_ID, null);
+    }
+
     return (
       <InformationalPopup
         onClose={() => {
@@ -176,6 +181,14 @@ const Playground = ({ projectId }: PlaygroundProps) => {
       />
     );
   }
+
+  if (!projectId && loadingProjectId) {
+    // update location to reflect project loaded
+    window.history.replaceState({}, '', loadingProjectId);
+  }
+  // project loaded successfully save as user's last project
+  userStorage.setData(userDataKeys.PROJECT_ID, loadingProjectId);
+
   return (
     <ProjectProvider project={project} isLocal={isLocal} client={client}>
       <CadenceChecker>
