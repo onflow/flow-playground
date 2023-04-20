@@ -3,7 +3,7 @@ import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import theme from '../../theme';
 import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
@@ -91,6 +91,8 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
   const [selectedBottomTab, setSelectedBottomTab] = useState(0);
   const [problemsList, setProblemsList] = useState<any>({});
   const accountNumber = storageMapByIndex(active.index);
+  // clear problems when new project is loaded
+  useEffect(() => setProblemsList({}), [project?.id])
   let fileName, script;
   switch (active.type) {
     case EntityType.ContractTemplate:
