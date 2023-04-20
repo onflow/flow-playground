@@ -92,7 +92,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
   const [problemsList, setProblemsList] = useState<any>({});
   const accountNumber = storageMapByIndex(active.index);
   // clear problems when new project is loaded
-  useEffect(() => setProblemsList({}), [project?.id])
+  useEffect(() => setProblemsList({}), [project?.id]);
   let fileName, script;
   switch (active.type) {
     case EntityType.ContractTemplate:
