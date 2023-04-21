@@ -30,6 +30,7 @@ export const GET_PROJECTS = gql`
           script
           title
           address
+          blockHeight
         }
       }
     }
@@ -76,6 +77,7 @@ export const GET_PROJECT = gql`
         script
         title
         address
+        blockHeight
       }
     }
   }

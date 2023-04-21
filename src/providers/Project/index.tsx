@@ -735,6 +735,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     }
   }
 
+  console.log('project', project.contractDeployments);
   return (
     <ProjectContext.Provider
       value={{

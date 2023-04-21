@@ -200,18 +200,7 @@ const getActionButtonLabel = (type: EntityType) => {
   }
 };
 
-const getActionButtonTestTag = (type: EntityType) => {
-  switch (type) {
-    case 1:
-      return 'deploy-button';
-    case 2:
-      return 'send-button';
-    default:
-      return 'execute-button';
-  }
-};
-
-export const ActionButton: React.FC<InteractionButtonProps> = ({
+export const EditorActionButton: React.FC<InteractionButtonProps> = ({
   type,
   active = true,
   progress = false,
@@ -227,7 +216,6 @@ export const ActionButton: React.FC<InteractionButtonProps> = ({
         Icon={progress ? FaSpinner : FaArrowCircleRight}
         disabled={isSaving || !active || code.length === 0}
         hideDisabledState={isSaving && !isExecutingAction}
-        data-test={getActionButtonTestTag(type)}
       >
         {label}
       </PanelButton>

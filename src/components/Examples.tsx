@@ -5,7 +5,7 @@ import React from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { Text } from 'theme-ui';
 
-import ActionButton from 'components/ActionButton';
+import OpenProjectButton from 'components/ActionButton';
 import Mixpanel from 'util/mixpanel';
 
 const examples = [
@@ -267,9 +267,9 @@ const Examples: React.FC<{
                           });
                         }}
                       >
-                        <ActionButton className="violet">
+                        <OpenProjectButton className="violet">
                           Read More
-                        </ActionButton>
+                        </OpenProjectButton>
                       </a>
                       {_example.projectLink && (
                         <a
@@ -284,7 +284,7 @@ const Examples: React.FC<{
                             });
                           }}
                         >
-                          <ActionButton>Open Project</ActionButton>
+                          <OpenProjectButton>Open Project</OpenProjectButton>
                         </a>
                       )}
                     </Buttons>

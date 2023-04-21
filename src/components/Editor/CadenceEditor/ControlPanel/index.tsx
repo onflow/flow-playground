@@ -36,7 +36,7 @@ import { getLabel, useTemplateType, validateByType } from './utils';
 
 // Other
 import {
-  ActionButton,
+  EditorActionButton,
   ArgumentsList,
   ArgumentsTitle,
   Hints,
@@ -418,7 +418,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
                 <p>{statusMessage}</p>
               </StatusMessage>
             )}
-            <ActionButton
+            <EditorActionButton
               active={isOk}
               type={type}
               selectedAccounts={selectedAccounts}
