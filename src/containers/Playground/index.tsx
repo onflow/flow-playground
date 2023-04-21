@@ -127,16 +127,6 @@ const Playground = ({ projectId }: PlaygroundProps) => {
   const userProjectId = userStorage.getDataByKey(userDataKeys.PROJECT_ID);
   const loadingProjectId = projectId || userProjectId;
 
-  console.log(
-    'projectId',
-    'path',
-    location.pathname,
-    'id',
-    projectId,
-    'user',
-    userProjectId,
-  );
-
   let project: Project;
   let isLocal: boolean;
   let isLoading: boolean;
