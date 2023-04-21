@@ -118,6 +118,14 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const [currentEditor, setCurrentEditor] =
     useState<monacoEditor.ICodeEditor | null>(null);
 
+  const checkAppErrors = async () => {
+    await mutator.getApplicationErrors().then((res) => {
+      if (res?.errorMessage) {
+        setApplicationErrorMessage(res.errorMessage);
+      }
+    });
+  };
+
   useEffect(() => {
     if (showProjectsSidebar) {
       // close project sidebar if open and a different project gets loaded.
@@ -155,9 +163,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       navigate(`/${project.id}`, { replace: true });
     } catch (e) {
       setIsSaving(false);
-      await mutator.getApplicationErrors().then((res) => {
-        setApplicationErrorMessage(res.errorMessage);
-      });
+      checkAppErrors();
     }
     setIsSaving(false);
     setShowProjectsSidebar(false);
@@ -179,12 +185,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       }
     } catch (e) {
       console.error(e);
+      checkAppErrors();
+    } finally {
       setIsSaving(false);
-      await mutator.getApplicationErrors().then((res) => {
-        setApplicationErrorMessage(res.errorMessage);
-      });
     }
-    setIsSaving(false);
+
     return res;
   };
 
@@ -194,13 +199,12 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     try {
       res = await mutator.saveProject(title, description, readme);
     } catch (e) {
+      console.error(e);
+      checkAppErrors();
+    } finally {
       setIsSaving(false);
-      await mutator.getApplicationErrors().then((res) => {
-        setApplicationErrorMessage(res.errorMessage);
-      });
     }
 
-    setIsSaving(false);
     return res;
   };
 
@@ -214,12 +218,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       }
     } catch (e) {
       console.error(e);
+      checkAppErrors();
+    } finally {
       setIsSaving(false);
-      await mutator.getApplicationErrors().then((res) => {
-        setApplicationErrorMessage(res.errorMessage);
-      });
     }
-    setIsSaving(false);
+
     return res;
   };
 
@@ -246,13 +249,12 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       setLastSigners(signer);
     } catch (e) {
       console.error(e);
-      setIsSaving(false);
       setIsExecutingAction(false);
-      await mutator.getApplicationErrors().then((res) => {
-        setApplicationErrorMessage(res.errorMessage);
-      });
+      checkAppErrors();
+    } finally {
+      setIsSaving(false);
     }
-    setIsSaving(false);
+
     setIsExecutingAction(false);
     return res;
   };
@@ -272,12 +274,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       template.title = title;
     } catch (e) {
       console.error(e);
+      checkAppErrors();
+    } finally {
       setIsSaving(false);
-      await mutator.getApplicationErrors().then((res) => {
-        setApplicationErrorMessage(res.errorMessage);
-      });
     }
-    setIsSaving(false);
+
     return res;
   };
 
@@ -295,12 +296,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       contractTemplate.script = script;
     } catch (e) {
       console.error(e);
+      checkAppErrors();
+    } finally {
       setIsSaving(false);
-      await mutator.getApplicationErrors().then((res) => {
-        setApplicationErrorMessage(res.errorMessage);
-      });
     }
-    setIsSaving(false);
+
     return res;
   };
 
@@ -318,12 +318,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       template.title = title;
     } catch (e) {
       console.error(e);
+      checkAppErrors();
+    } finally {
       setIsSaving(false);
-      await mutator.getApplicationErrors().then((res) => {
-        setApplicationErrorMessage(res.errorMessage);
-      });
     }
-    setIsSaving(false);
+
     return res;
   };
 
@@ -343,12 +342,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       template.title = title;
     } catch (e) {
       console.error(e);
+      checkAppErrors();
+    } finally {
       setIsSaving(false);
-      await mutator.getApplicationErrors().then((res) => {
-        setApplicationErrorMessage(res.errorMessage);
-      });
     }
-    setIsSaving(false);
+
     return res;
   };
 
@@ -365,12 +363,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       );
     } catch (e) {
       console.error(e);
+      checkAppErrors();
+    } finally {
       setIsSaving(false);
-      await mutator.getApplicationErrors().then((res) => {
-        setApplicationErrorMessage(res.errorMessage);
-      });
     }
-    setIsSaving(false);
+
     return res;
   };
 
@@ -387,12 +384,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       );
     } catch (e) {
       console.error(e);
+      checkAppErrors();
+    } finally {
       setIsSaving(false);
-      await mutator.getApplicationErrors().then((res) => {
-        setApplicationErrorMessage(res.errorMessage);
-      });
     }
-    setIsSaving(false);
+
     return res;
   };
 
@@ -421,13 +417,12 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } catch (e) {
       console.error(e);
       setIsSaving(false);
+      checkAppErrors();
+    } finally {
+      setIsSaving(false);
       setIsExecutingAction(false);
-      await mutator.getApplicationErrors().then((res) => {
-        setApplicationErrorMessage(res.errorMessage);
-      });
     }
-    setIsSaving(false);
-    setIsExecutingAction(false);
+
     return res;
   };
 
@@ -442,14 +437,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       );
     } catch (e) {
       console.error(e);
+      checkAppErrors();
+    } finally {
       setIsSaving(false);
       setIsExecutingAction(false);
-      await mutator.getApplicationErrors().then((res) => {
-        setApplicationErrorMessage(res.errorMessage);
-      });
     }
-    setIsSaving(false);
-    setIsExecutingAction(false);
     return res;
   };
 
@@ -463,12 +455,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       res = await mutator.deleteContractTemplate(templateId);
     } catch (e) {
       console.error(e);
+      checkAppErrors();
+    } finally {
       setIsSaving(false);
-      await mutator.getApplicationErrors().then((res) => {
-        setApplicationErrorMessage(res.errorMessage);
-      });
     }
-    setIsSaving(false);
     return res;
   };
 
@@ -482,12 +472,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       res = await mutator.deleteScriptTemplate(templateId);
     } catch (e) {
       console.error(e);
+    } finally {
       setIsSaving(false);
-      await mutator.getApplicationErrors().then((res) => {
-        setApplicationErrorMessage(res.errorMessage);
-      });
     }
-    setIsSaving(false);
+
     return res;
   };
 
@@ -501,12 +489,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       res = await mutator.deleteTransactionTemplate(templateId);
     } catch (e) {
       console.error(e);
+    } finally {
       setIsSaving(false);
-      await mutator.getApplicationErrors().then((res) => {
-        setApplicationErrorMessage(res.errorMessage);
-      });
     }
-    setIsSaving(false);
+
     return res;
   };
 

@@ -105,7 +105,7 @@ export default function useLanguageServer() {
     }
 
     restartServer();
-  }, []);
+  }, [project?.project?.id]);
 
   useEffect(() => {
     if (!languageClient) {

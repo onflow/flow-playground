@@ -7,6 +7,7 @@ import { Project } from 'api/apollo/generated/graphql';
 import { ProjectContext, ProjectContextValue } from './index';
 import { createDefaultProject, createLocalProject } from './projectDefault';
 import { PROJECT_SERIALIZATION_KEY } from './projectMutator';
+import { LOCAL_PROJECT_ID } from 'util/url';
 
 function formatProject(project: Project) {
   if (!project) return project;
@@ -70,7 +71,7 @@ export default function useGetProject(
   isClone: boolean;
   isLoading: boolean;
 } {
-  const isNewProject = projectId == null;
+  const isNewProject = !projectId || projectId === LOCAL_PROJECT_ID;
 
   const { loading, data: remoteData } = useQuery(GET_PROJECT, {
     variables: { projectId: projectId },
