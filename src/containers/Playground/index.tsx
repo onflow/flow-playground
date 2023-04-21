@@ -10,6 +10,7 @@ import useGetProject, { useProject } from 'providers/Project/projectHooks';
 import React, { CSSProperties } from 'react';
 import { Box, Button, Spinner, ThemeUICSSObject } from 'theme-ui';
 import { userDataKeys, UserLocalStorage } from 'util/localstorage';
+import { LOCAL_PROJECT_ID } from 'util/url';
 import useToggleExplorer from '../../hooks/useToggleExplorer';
 import EditorLayout from './EditorLayout';
 
@@ -126,6 +127,16 @@ const Playground = ({ projectId }: PlaygroundProps) => {
   const userProjectId = userStorage.getDataByKey(userDataKeys.PROJECT_ID);
   const loadingProjectId = projectId || userProjectId;
 
+  console.log(
+    'projectId',
+    'path',
+    location.pathname,
+    'id',
+    projectId,
+    'user',
+    userProjectId,
+  );
+
   let project: Project;
   let isLocal: boolean;
   let isLoading: boolean;
@@ -166,6 +177,7 @@ const Playground = ({ projectId }: PlaygroundProps) => {
         'Click <ok> to go to home page or last loaded project',
       ],
     };
+
     if (loadingProjectId === userProjectId) {
       // issue loading project clear last saved loaded project id
       userStorage.setData(userDataKeys.PROJECT_ID, null);
@@ -186,8 +198,10 @@ const Playground = ({ projectId }: PlaygroundProps) => {
     // update location to reflect project loaded
     window.history.replaceState({}, '', loadingProjectId);
   }
-  // project loaded successfully save as user's last project
-  userStorage.setData(userDataKeys.PROJECT_ID, loadingProjectId);
+  if (loadingProjectId !== LOCAL_PROJECT_ID) {
+    // project loaded successfully save as user's last project
+    userStorage.setData(userDataKeys.PROJECT_ID, loadingProjectId);
+  }
 
   return (
     <ProjectProvider project={project} isLocal={isLocal} client={client}>

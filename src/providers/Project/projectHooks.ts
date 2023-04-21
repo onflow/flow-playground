@@ -71,7 +71,7 @@ export default function useGetProject(
   isClone: boolean;
   isLoading: boolean;
 } {
-  const isNewProject = projectId == null || projectId === LOCAL_PROJECT_ID;
+  const isNewProject = !projectId || projectId === LOCAL_PROJECT_ID;
 
   const { loading, data: remoteData } = useQuery(GET_PROJECT, {
     variables: { projectId: projectId },
