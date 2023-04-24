@@ -202,7 +202,7 @@ const getActionButtonLabel = (type: EntityType) => {
 
 export const EditorActionButton: React.FC<InteractionButtonProps> = ({
   type,
-  active = true,
+  enabled = true,
   progress = false,
   onClick,
 }: InteractionButtonProps) => {
@@ -214,7 +214,7 @@ export const EditorActionButton: React.FC<InteractionButtonProps> = ({
       <PanelButton
         onClick={onClick}
         Icon={progress ? FaSpinner : FaArrowCircleRight}
-        disabled={isSaving || !active || code.length === 0}
+        disabled={isSaving || !enabled || code.length === 0}
         hideDisabledState={isSaving && !isExecutingAction}
       >
         {label}

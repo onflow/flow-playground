@@ -419,7 +419,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
               </StatusMessage>
             )}
             <EditorActionButton
-              active={isOk}
+              enabled={isOk}
               type={type}
               selectedAccounts={selectedAccounts}
               onClick={() => send()}
