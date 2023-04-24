@@ -251,6 +251,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       console.log(e);
     }
 
+    console.log('formatted', formatted);
     // Map values to strings that will be passed to backend
     const args: any = list.map((_: any, index: number) =>
       JSON.stringify(formatted[index]),
