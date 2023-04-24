@@ -12,7 +12,7 @@ export type InteractionButtonProps = {
   enabled?: boolean;
   progress?: boolean;
   selectedAccounts: number[];
-  type: EntityType;
+  label: string;
 };
 
 export type Argument = {

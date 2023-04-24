@@ -47,6 +47,7 @@ import {
   StatusMessage,
 } from './Arguments/styles';
 import { SignersPanel } from 'components/Editor/CadenceEditor/ControlPanel/SignersPanel';
+import { Template } from 'src/types';
 
 const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // ===========================================================================
@@ -210,6 +211,32 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     setErrors(errors);
   };
 
+  // test if deployment of contract will rollback emulator
+  // if same user has deployed same contract in the past
+  // then emulator will be rolled back and contracts deployed afterwards will also be rolled back
+  const isContractRedeploy = (type: EntityType): boolean => {
+    if (type !== EntityType.ContractTemplate) return false;
+    const user = selectedAccounts[0];
+    const acct = accounts[user];
+    const template = project.contractTemplates[active.index];
+    const templateContract = (template as Template)?.name;
+    return (acct?.deployedContracts || []).includes(templateContract);
+  };
+
+  const getActionButtonLabel = (type: EntityType) => {
+    /** In future backend will flag the contract template if it's been deployed. */
+    switch (type) {
+      case EntityType.ContractTemplate:
+        return isContractRedeploy(type) ? 'Redeploy' : 'Deploy';
+      case EntityType.TransactionTemplate:
+        return 'Send';
+      case EntityType.ScriptTemplate:
+        return 'Execute';
+      default:
+        return 'Send';
+    }
+  };
+
   /**
    * Processes arguments and send scripts and transaction for execution or contracts for deployment
    */
@@ -251,7 +278,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       console.log(e);
     }
 
-    console.log('formatted', formatted);
     // Map values to strings that will be passed to backend
     const args: any = list.map((_: any, index: number) =>
       JSON.stringify(formatted[index]),
@@ -421,7 +447,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             )}
             <EditorActionButton
               enabled={isOk}
-              type={type}
+              label={getActionButtonLabel(type)}
               selectedAccounts={selectedAccounts}
               onClick={() => send()}
             />

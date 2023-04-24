@@ -186,28 +186,13 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
   );
 };
 
-const getActionButtonLabel = (type: EntityType) => {
-  /** In future backend will flag the contract template if it's been deployed. */
-  switch (type) {
-    case EntityType.ContractTemplate:
-      return 'Deploy';
-    case EntityType.TransactionTemplate:
-      return 'Send';
-    case EntityType.ScriptTemplate:
-      return 'Execute';
-    default:
-      return 'Send';
-  }
-};
-
 export const EditorActionButton: React.FC<InteractionButtonProps> = ({
-  type,
+  label,
   enabled = true,
   progress = false,
   onClick,
 }: InteractionButtonProps) => {
   const { getActiveCode, isSaving, isExecutingAction } = useProject();
-  const label = getActionButtonLabel(type);
   const code = getActiveCode()[0].trim();
   return (
     <Controls>
