@@ -1,6 +1,11 @@
 export const userDataKeys = {
   PROJECT_ID: 'projectId',
+  HAS_SEEN: 'hasSeen',
 };
+export const userModalKeys = {
+  REDEPLOY_KEY: 'HideRedeployModel',
+};
+
 type UserData = {
   [key: string]: string;
 };
@@ -25,7 +30,7 @@ export class UserLocalStorage {
   }
 
   getDataByKey(key: string): string {
-    return this.data[key];
+    return this.data ? this.data[key] : null;
   }
 
   deleteDataByKey(key: string): void {

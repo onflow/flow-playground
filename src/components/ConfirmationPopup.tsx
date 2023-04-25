@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { ChangeEventHandler } from 'react';
 
 import {
+  DontShowFooter,
   FullScreenContainer,
   PopupContainer,
   PopupHeader,
@@ -54,6 +55,10 @@ const popupFrames = {
   },
 };
 
+const buttonSpacing = {
+  width: '49%',
+};
+
 export type ActionsType = {
   name: string;
   action: (...args: any) => void;
@@ -67,6 +72,7 @@ type ConfirmationPopupType = {
   onClose: (isConfirmed: boolean) => void;
   visible: boolean;
   actions?: ActionsType[];
+  dontShowAgainAction?: ChangeEventHandler | null;
 };
 
 const ConfirmationPopup = ({
@@ -75,6 +81,7 @@ const ConfirmationPopup = ({
   onClose,
   messages,
   actions = null,
+  dontShowAgainAction = null,
 }: ConfirmationPopupType) => {
   const closeModal = (isConfirmed: boolean) => {
     onClose(isConfirmed);
@@ -121,12 +128,19 @@ const ConfirmationPopup = ({
                 key={btn.name}
                 variant={btn.variant}
                 onClick={() => btn.action(...btn.args)}
+                sx={buttonSpacing}
               >
                 {btn.name}
               </Button>
             );
           })}
         </SpaceBetween>
+        {dontShowAgainAction && (
+          <DontShowFooter>
+            <input type="checkbox" onChange={dontShowAgainAction} />
+            <span>Do not show again</span>
+          </DontShowFooter>
+        )}
       </PopupContainer>
       <WhiteOverlay onClick={() => closeModal(false)} />
     </FullScreenContainer>

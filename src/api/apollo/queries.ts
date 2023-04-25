@@ -79,6 +79,13 @@ export const GET_PROJECT = gql`
         address
         blockHeight
       }
+      transactionExecutions {
+        id
+        script
+        arguments
+        signers
+        logs
+      }
     }
   }
 `;

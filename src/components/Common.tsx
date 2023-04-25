@@ -61,6 +61,17 @@ export const PopupHeader = styled.h3<CommonProps>`
   margin-bottom: 16px;
 `;
 
+export const DontShowFooter = styled.div<CommonProps>`
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 16px;
+  > span {
+    font-size: 14px;
+    margin-left: 6px;
+  }
+`;
 export const SpaceBetween = styled.div<CommonProps>`
   display: flex;
   width: 100%;

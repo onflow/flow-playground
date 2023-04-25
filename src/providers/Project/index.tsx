@@ -1,5 +1,9 @@
 import { navigate, Redirect, useLocation } from '@reach/router';
-import { Account, Project } from 'api/apollo/generated/graphql';
+import {
+  Account,
+  ContractDeployment,
+  Project,
+} from 'api/apollo/generated/graphql';
 import React, { createContext, useEffect, useState } from 'react';
 import { ChildProps, Template } from 'src/types';
 import { getParams, LOCAL_PROJECT_ID } from 'util/url';
@@ -264,7 +268,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       /\s*(?:pub\s+)?(?:access\s*\(all\)\s*)?contract\s+([A-Za-z_][A-Za-z0-9_]*)\s*{/;
     // Search for the pattern in the Cadence code
     const match = cadenceCode.match(pattern);
-    console.log('match', match);
     if (!match) {
       // could not get contract name
       console.log('Could not get contract name');
@@ -563,6 +566,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const getAccountCodeId = (
     accounts: Account[],
+    contractDeployments: ContractDeployment[],
   ): { code: string; id: number } => {
     const accountId = storageMapByAddress(selectedResourceAccount);
     const accountState = accounts[accountId || 0]?.state;
@@ -576,7 +580,19 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     );
     const state =
       parsedAccountState.length < 5 ? '(Empty)' : formattedAcctState;
-    const contracts = JSON.stringify(accounts[accountId]?.deployedContracts);
+    const address = accounts[accountId].address;
+
+    //const contracts = JSON.stringify(accounts[accountId]?.deployedContracts);
+    console.log(accounts[accountId]?.deployedContracts);
+    console.log(address, contractDeployments);
+    const contracts = JSON.stringify(
+      contractDeployments
+        .filter((c) => String(c.address) === String(address))
+        .map((c) => ({
+          contract: c.title,
+          height: c.blockHeight,
+        })),
+    );
 
     return {
       code: `Deployed Contracts: \n${contracts} \nAccount Storage: \n${state}`,
@@ -590,6 +606,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       contractTemplates,
       scriptTemplates,
       transactionTemplates,
+      contractDeployments,
       accounts,
     } = project;
 
@@ -598,8 +615,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
     switch (type) {
       case EntityType.AccountStorage:
-        code = getAccountCodeId(accounts).code;
-        id = getAccountCodeId(accounts).id;
+        code = getAccountCodeId(accounts, contractDeployments).code;
+        id = getAccountCodeId(accounts, contractDeployments).id;
         break;
       case EntityType.ContractTemplate:
         code = contractTemplates[index].script;
@@ -753,11 +770,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     }
   }
 
-  console.log(
-    'project',
-    project.contractTemplates,
-    project.contractDeployments,
-  );
   return (
     <ProjectContext.Provider
       value={{
