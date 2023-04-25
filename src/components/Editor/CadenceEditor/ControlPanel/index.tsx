@@ -259,7 +259,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
 
   const doSend = async () => {
     if (active.type !== EntityType.ContractTemplate) return send(true);
-
     const isRedeploy = isContractRedeploy(
       active.type,
       selectedAccounts,
