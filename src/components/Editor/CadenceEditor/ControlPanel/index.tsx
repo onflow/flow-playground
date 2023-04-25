@@ -259,6 +259,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
 
   const doSend = async () => {
     if (active.type !== EntityType.ContractTemplate) return send(true);
+
     const isRedeploy = isContractRedeploy(
       active.type,
       selectedAccounts,
@@ -520,14 +521,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       </MotionBox>
       <DismissiblePopup
         visible={showRedeploy}
-        messages={[
-          'Emulator will roback to block <num> to redeploy Contract <name>',
-          'Contracts that will not exist at block <num>',
-          '0x01: Bob.cdc',
-          '0x03: Sue.cdc',
-          '0x03: John.cdc',
-          'Deploy this contracts if needed',
-        ]}
         storageKey={userModalKeys.REDEPLOY_KEY}
         onClose={send}
         {...RedeployModalData}

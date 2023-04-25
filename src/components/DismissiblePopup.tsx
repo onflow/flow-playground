@@ -5,7 +5,7 @@ import ConfirmationPopup, { ActionsType } from './ConfirmationPopup';
 type DismissiblePopupType = {
   title: string;
   messages: string[];
-  onClose: (...args: any) => void;
+  onClose: (isConfirmed: boolean) => void;
   visible: boolean;
   storageKey: string;
 };
@@ -18,12 +18,19 @@ const DismissiblePopup = ({
   storageKey,
 }: DismissiblePopupType) => {
   const userLocalStorage = new UserLocalStorage();
-  // if key is not true then show modal.
   const userStorageValueVisible = useMemo(
     () => Boolean(userLocalStorage.getDataByKey(storageKey)),
     [storageKey],
   );
-  let isShow = visible && !userStorageValueVisible;
+
+  if (!visible) return null;
+
+  // if key is not true then show modal.
+
+  let isShow = visible;
+  if (visible && userStorageValueVisible) {
+    onClose(true);
+  }
 
   const doCheck = (e: ChangeEvent<HTMLInputElement>) => {
     const value = String(e.target.checked);
