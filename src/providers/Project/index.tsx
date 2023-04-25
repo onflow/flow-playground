@@ -592,6 +592,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           contract: c.title,
           height: c.blockHeight,
         })),
+      null,
+      2,
     );
 
     return {
