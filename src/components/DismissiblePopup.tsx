@@ -18,15 +18,12 @@ const DismissiblePopup = ({
   storageKey,
 }: DismissiblePopupType) => {
   const userLocalStorage = new UserLocalStorage();
-  const userStorageValueVisible = useMemo(
-    () => Boolean(userLocalStorage.getDataByKey(storageKey)),
-    [storageKey],
+  if (!visible) return null;
+  const userStorageValueVisible = Boolean(
+    userLocalStorage.getDataByKey(storageKey),
   );
 
-  if (!visible) return null;
-
   // if key is not true then show modal.
-
   let isShow = visible;
   if (visible && userStorageValueVisible) {
     onClose(true);
