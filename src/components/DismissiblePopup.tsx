@@ -1,6 +1,6 @@
-import React, { ChangeEvent, useMemo } from 'react';
-import { userDataKeys, UserLocalStorage } from 'util/localstorage';
-import ConfirmationPopup, { ActionsType } from './ConfirmationPopup';
+import React, { ChangeEvent } from 'react';
+import { UserLocalStorage } from 'util/localstorage';
+import ConfirmationPopup from './ConfirmationPopup';
 
 type DismissiblePopupType = {
   title: string;
