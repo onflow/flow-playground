@@ -14,7 +14,7 @@ interface ActionButtonProps extends ChildPropsOptional {
   'data-test'?: string;
 }
 
-const ActionButton: React.FC<ActionButtonProps> = (
+const OpenProjectButton: React.FC<ActionButtonProps> = (
   props: ActionButtonProps,
 ) => {
   return (
@@ -31,4 +31,4 @@ const ActionButton: React.FC<ActionButtonProps> = (
   );
 };
 
-export default ActionButton;
+export default OpenProjectButton;

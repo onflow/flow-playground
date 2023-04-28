@@ -1,7 +1,11 @@
 import { navigate, Redirect, useLocation } from '@reach/router';
-import { Account, Project } from 'api/apollo/generated/graphql';
+import {
+  Account,
+  ContractDeployment,
+  Project,
+} from 'api/apollo/generated/graphql';
 import React, { createContext, useEffect, useState } from 'react';
-import { ChildProps } from 'src/types';
+import { ChildProps, Template } from 'src/types';
 import { getParams, LOCAL_PROJECT_ID } from 'util/url';
 import ProjectMutator from './projectMutator';
 import { storageMapByAddress } from 'util/accounts';
@@ -259,6 +263,19 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
+  const getContractName = (cadenceCode: string): string => {
+    const pattern =
+      /\s*(?:pub\s+)?(?:access\s*\(all\)\s*)?contract\s+([A-Za-z_][A-Za-z0-9_]*)\s*{/;
+    // Search for the pattern in the Cadence code
+    const match = cadenceCode.match(pattern);
+    if (!match) {
+      // could not get contract name
+      console.log('Could not get contract name');
+    }
+    // Return the contract name if found, otherwise return null
+    return match ? match[1] : null;
+  };
+
   const updateContractTemplate = async (script: string, title: string) => {
     setIsSaving(true);
     let res;
@@ -272,6 +289,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       );
       template.script = script;
       template.title = title;
+      (template as Template).name = getContractName(script);
     } catch (e) {
       console.error(e);
       checkAppErrors();
@@ -294,6 +312,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         active.index,
       );
       contractTemplate.script = script;
+      (contractTemplate as Template).name = getContractName(script);
     } catch (e) {
       console.error(e);
       checkAppErrors();
@@ -547,6 +566,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
   const getAccountCodeId = (
     accounts: Account[],
+    contractDeployments: ContractDeployment[],
   ): { code: string; id: number } => {
     const accountId = storageMapByAddress(selectedResourceAccount);
     const accountState = accounts[accountId || 0]?.state;
@@ -560,7 +580,21 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     );
     const state =
       parsedAccountState.length < 5 ? '(Empty)' : formattedAcctState;
-    const contracts = JSON.stringify(accounts[accountId]?.deployedContracts);
+    const address = accounts[accountId].address;
+
+    //const contracts = JSON.stringify(accounts[accountId]?.deployedContracts);
+    console.log(accounts[accountId]?.deployedContracts);
+    console.log(address, contractDeployments);
+    const contracts = JSON.stringify(
+      contractDeployments
+        .filter((c) => String(c.address) === String(address))
+        .map((c) => ({
+          contract: c.title,
+          height: c.blockHeight,
+        })),
+      null,
+      2,
+    );
 
     return {
       code: `Deployed Contracts: \n${contracts} \nAccount Storage: \n${state}`,
@@ -574,6 +608,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       contractTemplates,
       scriptTemplates,
       transactionTemplates,
+      contractDeployments,
       accounts,
     } = project;
 
@@ -582,8 +617,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
     switch (type) {
       case EntityType.AccountStorage:
-        code = getAccountCodeId(accounts).code;
-        id = getAccountCodeId(accounts).id;
+        code = getAccountCodeId(accounts, contractDeployments).code;
+        id = getAccountCodeId(accounts, contractDeployments).id;
         break;
       case EntityType.ContractTemplate:
         code = contractTemplates[index].script;
@@ -724,7 +759,9 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
           type: EntityType.ContractTemplate,
           index: templateIndex,
         });
-        const templateId = project.contractTemplates[templateIndex].id;
+        const template = project.contractTemplates[templateIndex];
+        const templateId = template.id;
+        (template as Template).name = getContractName(template.script);
         return (
           <Redirect
             noThrow

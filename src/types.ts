@@ -30,4 +30,5 @@ export type Template = {
   script: string;
   title: string;
   index: number;
+  name?: string;
 };

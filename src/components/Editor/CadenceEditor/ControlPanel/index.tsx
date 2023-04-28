@@ -25,6 +25,7 @@ import { extractSigners } from 'util/parser';
 
 // Local Generated Modules
 import {
+  Account,
   ResultType,
   useSetExecutionResultsMutation,
 } from 'api/apollo/generated/graphql';
@@ -36,7 +37,7 @@ import { getLabel, useTemplateType, validateByType } from './utils';
 
 // Other
 import {
-  ActionButton,
+  EditorActionButton,
   ArgumentsList,
   ArgumentsTitle,
   Hints,
@@ -47,12 +48,26 @@ import {
   StatusMessage,
 } from './Arguments/styles';
 import { SignersPanel } from 'components/Editor/CadenceEditor/ControlPanel/SignersPanel';
+import { Template } from 'src/types';
+import DismissiblePopup from 'components/DismissiblePopup';
+import { userModalKeys } from 'util/localstorage';
+import { addressToAccount } from 'util/accounts';
 
+const ButtonActionLabels = {
+  [String(EntityType.TransactionTemplate)]: 'Send',
+  [String(EntityType.ScriptTemplate)]: 'Execute',
+  [String(EntityType.AccountStorage)]: 'Unknown',
+  [String(EntityType.ContractTemplate)]: '',
+};
+const RedeployModalData = {
+  title: 'Redeploy contracts will cause rollback',
+  messages: [] as string[],
+};
 const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   // ===========================================================================
   // GLOBAL HOOKS
   const { languageClient } = useContext(CadenceCheckerContext);
-  const { project, active, isExecutingAction, setShowBottomPanel } =
+  const { project, active, isExecutingAction, setShowBottomPanel, isSaving } =
     useProject();
 
   // HOOKS  -------------------------------------------------------------------
@@ -63,7 +78,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     useTemplateType();
   const [selectedAccounts, updateSelectedAccounts] = useState([]);
   const [expanded, setExpanded] = useState(true);
-
+  const [showRedeploy, setShowRedeploy] = useState(false);
   const [values, setValue] = useState<IValue>({});
   // Handles errors with arguments
   const [errors, setErrors] = useState({});
@@ -210,14 +225,90 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     setErrors(errors);
   };
 
+  // test if deployment of contract will rollback emulator
+  // if same user has deployed same contract in the past
+  // then emulator will be rolled back and contracts deployed afterwards will also be rolled back
+  const isContractRedeploy = (
+    type: EntityType,
+    selectedAccounts: number[],
+    accounts: Account[],
+    activeIndex: number,
+  ): boolean => {
+    if (type !== EntityType.ContractTemplate) return false;
+    const user = selectedAccounts[0];
+    const acct = accounts[user];
+    const template = project.contractTemplates[activeIndex];
+    const templateContract = (template as Template)?.name;
+    return (acct?.deployedContracts || []).includes(templateContract);
+  };
+
+  const actionButtonLabel = useMemo(() => {
+    const type = active.type;
+    const label = ButtonActionLabels[type];
+    if (label) return label;
+
+    const isRedeploy = isContractRedeploy(
+      type,
+      selectedAccounts,
+      project.accounts,
+      active.index,
+    );
+    const redeploy = isRedeploy ? 'Redeploy' : 'Deploy';
+    return redeploy;
+  }, [active.index, active.type, selectedAccounts, project.accounts, isSaving]);
+
+  const doSend = async () => {
+    if (active.type !== EntityType.ContractTemplate) return send(true);
+    const isRedeploy = isContractRedeploy(
+      active.type,
+      selectedAccounts,
+      project.accounts,
+      active.index,
+    );
+    if (!isRedeploy) return send(true);
+
+    // determine if other contracts will need to be redeployed and prompt user
+    const template = project.contractTemplates[active.index];
+    const contractName = (template as Template)?.name;
+    if (!contractName) return send(true);
+
+    const deployment = project.contractDeployments.find(
+      (d) => d.title === contractName,
+    );
+
+    if (!deployment) return send(true);
+
+    const rollbackBlock = deployment.blockHeight;
+    const needRedeploy = project.contractDeployments
+      .filter((c) => c.blockHeight > rollbackBlock)
+      .map((c) => ({ title: c.title, account: addressToAccount(c.address) }));
+
+    if (needRedeploy.length === 0) return send(true);
+
+    RedeployModalData.messages = [
+      `Emulator will roback to block ${rollbackBlock} to redeploy Contract ${contractName}`,
+      `Contract${
+        needRedeploy.length > 1 ? 's' : ''
+      } that will not exist at block ${rollbackBlock}`,
+      ...needRedeploy.map((r) => `${r.account}: ${r.title}`),
+      `Redeploy ${needRedeploy.length > 1 ? 'these' : 'this'} contract${
+        needRedeploy.length > 1 ? 's' : ''
+      } if needed`,
+    ];
+
+    setShowRedeploy(true);
+    return;
+  };
   /**
    * Processes arguments and send scripts and transaction for execution or contracts for deployment
    */
-  const send = async () => {
+  const send = async (doRun: boolean) => {
+    setShowRedeploy(false);
+    if (!doRun) return;
+
     if (!processingStatus) {
       setProcessingStatus(true);
     }
-
     const fixed = list.map((arg: any) => {
       const { name, type } = arg;
       let value = values[name];
@@ -418,15 +509,21 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
                 <p>{statusMessage}</p>
               </StatusMessage>
             )}
-            <ActionButton
-              active={isOk}
-              type={type}
+            <EditorActionButton
+              enabled={isOk}
+              label={actionButtonLabel}
               selectedAccounts={selectedAccounts}
-              onClick={() => send()}
+              onClick={() => doSend()}
             />
           </ControlContainer>
         </HoverPanel>
       </MotionBox>
+      <DismissiblePopup
+        visible={showRedeploy}
+        storageKey={userModalKeys.REDEPLOY_KEY}
+        onClose={send}
+        {...RedeployModalData}
+      />
     </>
   );
 };

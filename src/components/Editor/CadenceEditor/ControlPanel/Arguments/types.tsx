@@ -9,10 +9,10 @@ import {
 
 export type InteractionButtonProps = {
   onClick: () => void;
-  active?: boolean;
+  enabled?: boolean;
   progress?: boolean;
   selectedAccounts: number[];
-  type: EntityType;
+  label: string;
 };
 
 export type Argument = {

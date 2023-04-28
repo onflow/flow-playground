@@ -36,6 +36,7 @@ export type ContractDeployment = {
   errors?: Maybe<Array<ProgramError>>;
   events?: Maybe<Array<Event>>;
   logs?: Maybe<Array<Scalars['String']>>;
+  blockHeight?: Maybe<Scalars['Int']>;
 };
 
 export type ContractTemplate = {
