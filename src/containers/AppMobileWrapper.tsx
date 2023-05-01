@@ -44,7 +44,9 @@ const AppMobileWrapper = ({ children }: ChildProps) => {
         visible={isInMaintenanceMode}
         {...infoInMaintenance}
       />
-      {!isInMaintenanceMode && <AppMobileWrapperDiv>{children}</AppMobileWrapperDiv>}
+      {!isInMaintenanceMode && (
+        <AppMobileWrapperDiv>{children}</AppMobileWrapperDiv>
+      )}
       <AppMobileWrapperMessageDiv>
         <Box
           sx={{
