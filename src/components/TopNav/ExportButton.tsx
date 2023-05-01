@@ -59,8 +59,12 @@ export const ExportButton = () => {
     project.transactionTemplates.map((tx) =>
       transactions.file(`${tx.title}.cdc`, tx.script),
     );
-
-    zip.generateAsync({ type: 'blob' }).then(function (content) {
+    const vscode = zip.folder('.vscode');
+    vscode.file(
+      `${project.id}.play`,
+      JSON.stringify({ id: project.id, updatedAt: project.updatedAt }, null, 2),
+    );
+    zip.generateAsync({ type: 'blob' }).then(function (content: any) {
       Mixpanel.track(DOWNLOAD_EVENT, { projectId });
       GoogleAnalytics.event(DOWNLOAD_EVENT);
       saveAs(content, `${project.title}.zip`);
