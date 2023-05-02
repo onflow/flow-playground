@@ -31,6 +31,7 @@ export interface ProjectContextValue {
   isLoading: boolean;
   mutator: ProjectMutator;
   createBlankProject: () => Promise<Project>;
+  copyProject: (project: Project) => Promise<Project>;
   updateProject: (
     title: string,
     description: string,
@@ -158,6 +159,21 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     readme,
   );
 
+  const copyProject = async (project: Project) => {
+    setIsSaving(true);
+    let res;
+    try {
+      // create default project and save to cache
+      res = mutator.createProjectCopy(project);
+      // refresh project list
+    } catch (e) {
+      checkAppErrors();
+    } finally {
+      setIsSaving(false);
+    }
+    return res;
+  };
+
   const createBlankProject = async () => {
     setIsSaving(true);
     let res;
@@ -218,7 +234,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     try {
       res = await mutator.deleteProject(dProjectId);
       if (projectId === dProjectId) {
-        navigate(`/`);
+        navigate(`/${LOCAL_PROJECT_ID}`, { replace: true });
       }
     } catch (e) {
       console.error(e);
@@ -781,6 +797,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         isSaving,
         isExecutingAction,
         createBlankProject,
+        copyProject,
         updateProject,
         saveProject,
         deleteProject,
