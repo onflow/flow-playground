@@ -5,7 +5,7 @@ import {
   Project,
 } from 'api/apollo/generated/graphql';
 import React, { createContext, useEffect, useState } from 'react';
-import { ChildProps, ProjectType, Template } from 'src/types';
+import { ChildProps, Template } from 'src/types';
 import { getParams, LOCAL_PROJECT_ID } from 'util/url';
 import ProjectMutator from './projectMutator';
 import { storageMapByAddress } from 'util/accounts';
