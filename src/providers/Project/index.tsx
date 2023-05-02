@@ -234,7 +234,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     try {
       res = await mutator.deleteProject(dProjectId);
       if (projectId === dProjectId) {
-        navigate(`/`);
+        navigate(`/${LOCAL_PROJECT_ID}`, { replace: true });
       }
     } catch (e) {
       console.error(e);

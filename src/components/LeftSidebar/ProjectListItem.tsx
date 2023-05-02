@@ -15,6 +15,7 @@ import InformationalPopup from 'components/InformationalPopup';
 import { LOCAL_PROJECT_ID } from 'util/url';
 import CopyIcon from 'components/Icons/CopyIcon';
 import { Project } from 'api/apollo/generated/graphql';
+import { userDataKeys, UserLocalStorage } from 'util/localstorage';
 
 type Props = {
   project: ProjectType;
@@ -86,6 +87,7 @@ const willLoseChangesOptions = {
 };
 
 const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
+  const userStorage = new UserLocalStorage();
   const [doingAction, setDoingAction] = useState<boolean>(false);
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [showLastProject, setShowLastProject] = useState<boolean>(false);
@@ -103,6 +105,10 @@ const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
     if (isConfirmed) {
       setDoingAction(true);
       try {
+        // update user's local storage if deleting active project
+        if (activeProject.id === project.id) {
+          userStorage.setData(userDataKeys.PROJECT_ID, null);
+        }
         await deleteProject(project.id);
         await refetch();
       } finally {
