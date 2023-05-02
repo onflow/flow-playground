@@ -5,7 +5,7 @@ import {
   Project,
 } from 'api/apollo/generated/graphql';
 import React, { createContext, useEffect, useState } from 'react';
-import { ChildProps, Template } from 'src/types';
+import { ChildProps, ProjectType, Template } from 'src/types';
 import { getParams, LOCAL_PROJECT_ID } from 'util/url';
 import ProjectMutator from './projectMutator';
 import { storageMapByAddress } from 'util/accounts';
@@ -31,6 +31,7 @@ export interface ProjectContextValue {
   isLoading: boolean;
   mutator: ProjectMutator;
   createBlankProject: () => Promise<Project>;
+  copyProject: (project: Project) => Promise<Project>;
   updateProject: (
     title: string,
     description: string,
@@ -157,6 +158,21 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     description,
     readme,
   );
+
+  const copyProject = async (project: Project) => {
+    setIsSaving(true);
+    let res;
+    try {
+      // create default project and save to cache
+      res = mutator.createProjectCopy(project);
+      // refresh project list
+    } catch (e) {
+      checkAppErrors();
+    } finally {
+      setIsSaving(false);
+    }
+    return res;
+  };
 
   const createBlankProject = async () => {
     setIsSaving(true);
@@ -781,6 +797,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         isSaving,
         isExecutingAction,
         createBlankProject,
+        copyProject,
         updateProject,
         saveProject,
         deleteProject,

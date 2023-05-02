@@ -13,6 +13,8 @@ import paths from '../../paths';
 import { useProject } from 'providers/Project/projectHooks';
 import InformationalPopup from 'components/InformationalPopup';
 import { LOCAL_PROJECT_ID } from 'util/url';
+import CopyIcon from 'components/Icons/CopyIcon';
+import { Project } from 'api/apollo/generated/graphql';
 
 type Props = {
   project: ProjectType;
@@ -54,10 +56,11 @@ const styles: SXStyles = {
   },
 };
 
-const getRootStyles = (isCurrentProject: boolean) => {
+const getRootStyles = (isCurrentProject: boolean, doingAction: boolean) => {
   return {
     ...styles.root,
     borderColor: isCurrentProject ? `blueBorder` : 'transparent',
+    backgroundColor: doingAction ? 'lightBlue' : 'white',
     borderWidth: 2,
     borderStyle: 'solid',
   };
@@ -83,6 +86,7 @@ const willLoseChangesOptions = {
 };
 
 const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
+  const [doingAction, setDoingAction] = useState<boolean>(false);
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [showLastProject, setShowLastProject] = useState<boolean>(false);
   const [showWillLoseChanges, setShowWillLoseChanges] =
@@ -91,13 +95,19 @@ const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
     toggleProjectsSidebar,
     deleteProject,
     project: activeProject,
+    copyProject,
   } = useProject();
 
   const confirmDelete = async (isConfirmed: boolean): Promise<void> => {
     setShowConfirmation(false);
     if (isConfirmed) {
-      await deleteProject(project.id);
-      await refetch();
+      setDoingAction(true);
+      try {
+        await deleteProject(project.id);
+        await refetch();
+      } finally {
+        setDoingAction(false);
+      }
     }
   };
 
@@ -109,6 +119,16 @@ const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
     }
   };
 
+  const copyNewProject = async (project: Project) => {
+    setDoingAction(true);
+    try {
+      await copyProject(project);
+      await refetch();
+    } finally {
+      setDoingAction(false);
+    }
+  };
+
   const contextMenuOptions = [
     {
       name: 'Delete Project',
@@ -116,13 +136,19 @@ const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
         projectCount > 1 ? setShowConfirmation(true) : setShowLastProject(true),
       icon: DeleteIcon,
     },
+    {
+      name: 'Copy Project',
+      onClick: (project: Project) => copyNewProject(project),
+      icon: CopyIcon,
+      args: [project],
+    },
   ];
   const timeAgo = formatDistance(new Date(project.updatedAt), new Date(), {
     addSuffix: true,
   });
 
   const isCurrentProject = project.id === activeProject?.id;
-  const rootStyles = getRootStyles(isCurrentProject);
+  const rootStyles = getRootStyles(isCurrentProject, doingAction);
   const headerStyles: SXStyles = {
     header: {
       justifyContent: 'space-between',

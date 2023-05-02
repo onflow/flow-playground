@@ -89,6 +89,60 @@ export default class ProjectMutator {
     return project;
   }
 
+  async createProjectCopy(sourceProject: Project): Promise<Project> {
+    const parentId = sourceProject?.id || null;
+    const seed = sourceProject?.seed || 0;
+    const title = `${sourceProject?.title} Copy`;
+    const description = sourceProject?.description || '';
+    const readme = sourceProject?.readme || '';
+    const transactionTemplates = sourceProject.transactionTemplates.map(
+      (tpl: Template) => ({
+        script: tpl.script,
+        title: tpl.title,
+      }),
+    );
+    const scriptTemplates = sourceProject.scriptTemplates.map(
+      (tpl: Template) => ({
+        script: tpl.script,
+        title: tpl.title,
+      }),
+    );
+    const contractTemplates = sourceProject.contractTemplates.map(
+      (tpl: Template) => ({
+        script: tpl.script,
+        title: tpl.title,
+      }),
+    );
+
+    const { data } = await this.client.mutate({
+      mutation: CREATE_PROJECT,
+      variables: {
+        parentId: parentId,
+        updatedAt: null,
+        title: title,
+        description: description,
+        numberOfAccounts: sourceProject?.accounts?.length || 5,
+        readme: readme,
+        seed: seed,
+        transactionTemplates,
+        scriptTemplates,
+        contractTemplates,
+      },
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
+    });
+
+    const newProject = data.project;
+
+    Mixpanel.people.set({
+      projectId: newProject.id,
+    });
+    Mixpanel.track('Copy Project', { projectId: sourceProject.id, newProject });
+
+    return newProject;
+  }
+
   async createProject(): Promise<Project> {
     const newProject = this.client.readQuery({
       query: GET_LOCAL_PROJECT,
