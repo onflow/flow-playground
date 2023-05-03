@@ -4,8 +4,8 @@ import ExplorerScriptIcon from 'components/Icons/ExplorerScriptIcon';
 import ExplorerTransactionIcon from 'components/Icons/ExplorerTransactionIcon';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
-import React, { useState } from 'react';
-import { ChildProps, SXStyles } from 'src/types';
+import React, { useEffect, useState } from 'react';
+import { ChildProps, SXStyles, Template } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import MenuList from './MenuList';
 import InformationalPopup from '../../InformationalPopup';
@@ -14,6 +14,8 @@ import {
   UrlRewritterWithId,
   FILE_TYPE_NAME,
 } from 'util/urlRewritter';
+import { hasDuplicates } from '../CadenceEditor/ControlPanel/utils';
+import { ResultType } from 'api/apollo/generated/graphql';
 
 type FileListProps = {
   isExplorerCollapsed: boolean;
@@ -72,6 +74,20 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
     return <Box sx={isSelected ? styles.selected : {}}>{children}</Box>;
   };
 
+  const handelDupNames = (type: ResultType, names: string[]) => {
+    console.log('testing names', names);
+    if (hasDuplicates(names)) {
+      setApplicationErrorMessage(
+        `${type.toLowerCase()} file name already exists`,
+      );
+    }
+  };
+
+  const getNames = (items: Template[]) => {
+    return items?.map((template) => {
+      return template.title;
+    });
+  };
   const handleDelete = async ({
     itemType,
     templateId,
@@ -129,6 +145,16 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
       );
     }
 
+    const contractNames = getNames(project.contractTemplates);
+    const transactionNames = getNames(project.transactionTemplates);
+    const scriptNames = getNames(project.scriptTemplates);
+
+    useEffect(() => {
+      handelDupNames(ResultType.Contract, contractNames);
+      handelDupNames(ResultType.Transaction, transactionNames);
+      handelDupNames(ResultType.Script, scriptNames);
+    }, [contractNames, transactionNames, scriptNames]);
+
     return (
       <>
         <Flex sx={styles.header}>FILES</Flex>
@@ -136,9 +162,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           title="Contracts"
           itemType={EntityType.ContractTemplate}
           items={project.contractTemplates}
-          itemTitles={project.contractTemplates?.map((template) => {
-            return template.title;
-          })}
+          itemTitles={contractNames}
           onSelect={(_, id) => {
             navigate(UrlRewritterWithId(project, FILE_TYPE_NAME.contract, id));
           }}
@@ -168,9 +192,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           title="Transactions"
           itemType={EntityType.TransactionTemplate}
           items={project.transactionTemplates}
-          itemTitles={project.transactionTemplates?.map((template) => {
-            return template.title;
-          })}
+          itemTitles={transactionNames}
           onSelect={(_, id) => {
             navigate(
               UrlRewritterWithId(project, FILE_TYPE_NAME.transaction, id),
@@ -205,9 +227,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           title="Scripts"
           itemType={EntityType.ScriptTemplate}
           items={project.scriptTemplates}
-          itemTitles={project.scriptTemplates?.map((template) => {
-            return template.title;
-          })}
+          itemTitles={scriptNames}
           onSelect={(_, id) => {
             navigate(UrlRewritterWithId(project, FILE_TYPE_NAME.script, id));
           }}

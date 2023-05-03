@@ -138,3 +138,16 @@ export const getAccountContract = (
   // TODO: need to get contract name to work, only works if account has one contract deployed
   return deployed?.script || null;
 };
+
+export const hasDuplicates = (array: string[]) => {
+  return new Set(array).size !== array.length;
+};
+
+export const findDuplicateIndex = (array: string[]): number => {
+  for (let i = 0; i < array.length; i++) {
+    if (array.indexOf(array[i]) !== array.lastIndexOf(array[i])) {
+      return i;
+    }
+  }
+  return -1;
+};

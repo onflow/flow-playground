@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import theme from '../../../theme';
 import { SXStyles } from 'src/types';
 import { Input as ThemeUiInput } from 'theme-ui';
 
@@ -10,6 +11,7 @@ interface InputProps {
   index: number;
   editing: Array<number>;
   toggleEditing: any;
+  hasError?: boolean;
 }
 
 const styles: SXStyles = {
@@ -23,7 +25,7 @@ const styles: SXStyles = {
     pointerEvents: 'initial',
     background: '#FFFFFF',
     fontFamily: 'inherit',
-    borderRadius: '4px',
+    borderRadius: '8px',
   },
   inputReadOnly: {
     width: '100%',
@@ -35,6 +37,11 @@ const styles: SXStyles = {
     background: 'none',
     pointerEvents: 'none',
     fontFamily: 'inherit',
+    borderRadius: '8px',
+  },
+  hasError: {
+    borderColor: theme.colors.errorBackground,
+    background: theme.colors.errorBackground,
   },
 };
 
@@ -46,11 +53,15 @@ const Input = ({
   index,
   editing,
   toggleEditing,
+  hasError = false,
 }: InputProps) => {
   const ref = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
   const isEditingParent = editing.includes(index);
-  const inputStyle = isEditingParent ? styles.input : styles.inputReadOnly;
+  const inputStyle = {
+    ...(isEditingParent ? styles.input : styles.inputReadOnly),
+    ...(hasError ? styles.hasError : null),
+  };
   const MAX_LENGTH = 50;
 
   useEffect(() => {

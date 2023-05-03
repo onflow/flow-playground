@@ -16,6 +16,11 @@ import { getParams } from 'util/url';
 import { ContextMenu } from '../../ContextMenu';
 import PencilIcon from 'components/Icons/PencilIcon';
 import DeleteIcon from 'components/Icons/DeleteIcon';
+import theme from '../../../theme';
+import {
+  findDuplicateIndex,
+  hasDuplicates,
+} from '../CadenceEditor/ControlPanel/utils';
 
 const styles: SXStyles = {
   root: {
@@ -114,6 +119,12 @@ const styles: SXStyles = {
     borderRadius: '8px',
     color: '#3031D1',
   },
+  centerAlign: {
+    alignItems: 'center',
+  },
+  hasError: {
+    background: theme.colors.errorBackground,
+  },
 };
 
 type MenuListProps = {
@@ -146,7 +157,7 @@ const MenuList: React.FC<MenuListProps> = ({
   const { active } = useProject();
   const [editing, setEditing] = useState([]);
   const [itemNames, setItemNames] = useState(itemTitles);
-
+  const [indexHasError, setIndexHasError] = useState(-1);
   const [isInserting, setIsInserting] = useState(false);
   const [isFileShuttered, setIsFileShuttered] = useState(false);
 
@@ -167,15 +178,22 @@ const MenuList: React.FC<MenuListProps> = ({
   };
 
   const setItemName = (name: string, index: number) => {
+    setIndexHasError(-1);
+    let _newNames = [...itemNames];
     if (itemNames.indexOf(index)) {
-      let _newNames = [...itemNames];
       _newNames.splice(index, 1, name);
       setItemNames(_newNames);
+    }
+    if (hasDuplicates(_newNames)) {
+      setIndexHasError(index);
     }
   };
 
   useEffect(() => {
     setItemNames(itemTitles);
+    if (hasDuplicates(itemTitles)) {
+      setIndexHasError(findDuplicateIndex(itemTitles));
+    }
   }, [itemTitles]);
 
   const getIcon = (type: EntityType) => {
@@ -246,7 +264,7 @@ const MenuList: React.FC<MenuListProps> = ({
               i === 0;
             const isActive =
               isDefault || (active.type === itemType && item.id === params.id);
-
+            const hasError = indexHasError === i;
             const submenuOptions = [
               {
                 icon: PencilIcon,
@@ -264,12 +282,15 @@ const MenuList: React.FC<MenuListProps> = ({
 
             return (
               <Flex
-                sx={isActive ? styles.selectedItem : styles.item}
+                sx={{
+                  ...(isActive ? styles.selectedItem : styles.item),
+                  ...(hasError ? styles.hasError : {}),
+                }}
                 title={item.title}
                 key={item.id}
               >
                 <Flex
-                  sx={{ alignItems: 'center' }}
+                  sx={styles.centerAlign}
                   onClick={(e: React.SyntheticEvent<Element, Event>) =>
                     onSelect(e, item.id)
                   }
@@ -290,6 +311,7 @@ const MenuList: React.FC<MenuListProps> = ({
                     onChange={(e: any) => {
                       setItemName(e.target.value, i);
                     }}
+                    hasError={hasError}
                   />
                 </Flex>
                 <ContextMenu options={submenuOptions} showEllipsis={isActive} />
