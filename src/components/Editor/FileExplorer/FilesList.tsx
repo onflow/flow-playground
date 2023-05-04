@@ -75,7 +75,6 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
   };
 
   const handelDupNames = (type: ResultType, names: string[]) => {
-    console.log('testing names', names);
     if (hasDuplicates(names)) {
       setApplicationErrorMessage(
         `${type.toLowerCase()} file name already exists`,

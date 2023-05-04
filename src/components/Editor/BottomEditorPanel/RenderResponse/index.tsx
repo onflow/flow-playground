@@ -1,14 +1,13 @@
 import { useQuery } from '@apollo/react-hooks';
-import { ResultType } from 'api/apollo/generated/graphql';
 import { GET_CACHED_EXECUTION_RESULTS } from 'api/apollo/queries';
 import React from 'react';
 import { Line as LineType } from 'util/normalize-interaction-response';
 import { Line } from 'components/Editor/BottomEditorPanel/RenderResponse/Line';
-import { ActiveEditor, EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import { PROJECT_SERIALIZATION_KEY } from 'providers/Project/projectMutator';
 import { SXStyles } from 'src/types';
 import { Flex } from 'theme-ui';
+import { getResultType } from 'components/Editor/CadenceEditor/ControlPanel/utils';
 
 const styles: SXStyles = {
   root: {
@@ -25,19 +24,6 @@ const styles: SXStyles = {
   },
 };
 
-const getResultType = (active: ActiveEditor) => {
-  switch (active.type) {
-    case EntityType.ContractTemplate:
-      return ResultType.Contract;
-    case EntityType.TransactionTemplate:
-      return ResultType.Transaction;
-    case EntityType.ScriptTemplate:
-      return ResultType.Script;
-    default:
-      return undefined;
-  }
-};
-
 export const RenderResponse = () => {
   const { active } = useProject();
   const { data, error, loading } = useQuery(GET_CACHED_EXECUTION_RESULTS, {
@@ -45,7 +31,7 @@ export const RenderResponse = () => {
       serializationKey: PROJECT_SERIALIZATION_KEY,
     },
   });
-  const resultType = getResultType(active);
+  const resultType = getResultType(active.type);
   const filteredResults = resultType
     ? data.cachedExecutionResults[resultType]
     : [];
