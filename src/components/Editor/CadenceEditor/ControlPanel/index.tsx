@@ -284,7 +284,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     if (!deployment) return send(true);
 
     const rollbackBlock = deployment.blockHeight;
-    const needRedeploy = project.contractDeployments
+    const needRedeploy = (project.contractDeployments || [])
       .filter((c) => c.blockHeight > rollbackBlock)
       .map((c) => ({ title: c.title, account: addressToAccount(c.address) }));
 
