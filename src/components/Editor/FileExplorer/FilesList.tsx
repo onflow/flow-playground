@@ -87,6 +87,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
       return template.title;
     });
   };
+
   const handleDelete = async ({
     itemType,
     templateId,
@@ -94,6 +95,9 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
     itemType: EntityType;
     templateId: string;
   }) => {
+    if (project.parentId) {
+      return setShowDeleteError(true);
+    }
     switch (itemType) {
       case EntityType.TransactionTemplate:
         if (project.transactionTemplates.length > 1) {
@@ -256,9 +260,15 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
           visible={showDeleteError}
           title="Unable to Delete file"
           onClose={() => setShowDeleteError(false)}
-          messages={[
-            'Project requires at least 1 Script, Transaction, and Contract file. Please create a new file before deleting this one.',
-          ]}
+          messages={
+            project.parentId
+              ? [
+                  'Project is from a shared source, need to save before deleting files.',
+                ]
+              : [
+                  'Project requires at least 1 Script, Transaction, and Contract file. Please create a new file before deleting this one.',
+                ]
+          }
         />
       </>
     );

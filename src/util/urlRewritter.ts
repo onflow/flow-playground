@@ -11,7 +11,11 @@ export const UrlRewritterWithId = (
   type: string,
   id: string,
 ): string => {
-  return `/${project.id}?type=${type}&id=${id}`;
+  const query = `?type=${type}&id=${id}`;
+  // if parent then project was shared or is tutorial
+  return project.parentId
+    ? `/${project.parentId}${query}`
+    : `/${project.id}${query}`;
 };
 
 export const UrlRewritter = (

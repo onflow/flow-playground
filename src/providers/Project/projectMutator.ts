@@ -148,7 +148,6 @@ export default class ProjectMutator {
       query: GET_LOCAL_PROJECT,
     }).project;
 
-    const parentId = newProject.parentId;
     const seed = newProject.seed;
     const title = newProject.title;
     const description = newProject.description;
@@ -170,7 +169,6 @@ export default class ProjectMutator {
     const { data } = await this.client.mutate({
       mutation: CREATE_PROJECT,
       variables: {
-        parentId: parentId,
         title: title,
         description: description,
         readme: readme,
