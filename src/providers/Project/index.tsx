@@ -602,7 +602,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     console.log(accounts[accountId]?.deployedContracts);
     console.log(address, contractDeployments);
     const contracts = JSON.stringify(
-      contractDeployments
+      (contractDeployments || [])
         .filter((c) => String(c.address) === String(address))
         .map((c) => ({
           contract: c.title,

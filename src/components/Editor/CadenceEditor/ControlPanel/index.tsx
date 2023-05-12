@@ -33,7 +33,12 @@ import {
 // Component Scoped Files
 import { MotionBox, StatusIcon } from './components';
 import { ControlPanelProps, IValue } from './types';
-import { getLabel, useTemplateType, validateByType } from './utils';
+import {
+  getLabel,
+  getResultType,
+  useTemplateType,
+  validateByType,
+} from './utils';
 
 // Other
 import {
@@ -279,7 +284,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     if (!deployment) return send(true);
 
     const rollbackBlock = deployment.blockHeight;
-    const needRedeploy = project.contractDeployments
+    const needRedeploy = (project.contractDeployments || [])
       .filter((c) => c.blockHeight > rollbackBlock)
       .map((c) => ({ title: c.title, account: addressToAccount(c.address) }));
 
@@ -342,38 +347,46 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       console.log(e);
     }
 
-    // Map values to strings that will be passed to backend
-    const args: any = list.map((_: any, index: number) =>
-      JSON.stringify(formatted[index]),
-    );
-
     let rawResult, resultType;
-    try {
-      switch (type) {
-        case EntityType.ScriptTemplate: {
-          resultType = ResultType.Script;
-          rawResult = await scriptFactory(args);
-          break;
-        }
+    if (!formatted) {
+      resultType = getResultType(type);
+      rawResult = 'Error parsing arguments';
+    } else {
+      // Map values to strings that will be passed to backend
+      const args: any = list.map((_: any, index: number) =>
+        JSON.stringify(formatted[index]),
+      );
 
-        case EntityType.TransactionTemplate: {
-          resultType = ResultType.Transaction;
-          rawResult = await transactionFactory(signersAccounts, args);
-          break;
-        }
+      try {
+        switch (type) {
+          case EntityType.ScriptTemplate: {
+            resultType = ResultType.Script;
+            rawResult = await scriptFactory(args);
+            break;
+          }
 
-        case EntityType.ContractTemplate: {
-          const selectedAccountId = selectedAccounts[0] || 0;
-          resultType = ResultType.Contract;
-          rawResult = await contractDeployment(active.index, selectedAccountId);
-          break;
+          case EntityType.TransactionTemplate: {
+            resultType = ResultType.Transaction;
+            rawResult = await transactionFactory(signersAccounts, args);
+            break;
+          }
+
+          case EntityType.ContractTemplate: {
+            const selectedAccountId = selectedAccounts[0] || 0;
+            resultType = ResultType.Contract;
+            rawResult = await contractDeployment(
+              active.index,
+              selectedAccountId,
+            );
+            break;
+          }
+          default:
+            break;
         }
-        default:
-          break;
+      } catch (e) {
+        console.error(e);
+        rawResult = e.toString();
       }
-    } catch (e) {
-      console.error(e);
-      rawResult = e.toString();
     }
 
     setProcessingStatus(false);

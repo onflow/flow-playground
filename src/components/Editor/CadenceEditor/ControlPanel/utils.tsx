@@ -5,6 +5,7 @@ import {
 } from 'api/apollo/generated/graphql';
 import { useProject } from 'providers/Project/projectHooks';
 import { ProcessingArgs } from './types';
+import { EntityType } from 'providers/Project';
 
 const isDictionary = (type: string) => type.includes('{');
 const isArray = (type: string) => type.includes('[');
@@ -99,6 +100,19 @@ export const getLabel = (
     : resultType === ResultType.Transaction
     ? project.transactionTemplates[index].title
     : 'Interaction';
+};
+
+export const getResultType = (type: EntityType) => {
+  switch (type) {
+    case EntityType.ContractTemplate:
+      return ResultType.Contract;
+    case EntityType.TransactionTemplate:
+      return ResultType.Transaction;
+    case EntityType.ScriptTemplate:
+      return ResultType.Script;
+    default:
+      return undefined;
+  }
 };
 
 export const useTemplateType = (): ProcessingArgs => {
