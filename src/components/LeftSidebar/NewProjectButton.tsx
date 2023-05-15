@@ -5,7 +5,7 @@ import Button, { ButtonProps } from '../Button';
 import PlusIcon from '../Icons/PlusIcon';
 import Tooltip from '../Tooltip';
 
-export const MAX_PROJECTS = 10;
+export const MAX_PROJECTS = 20;
 
 type NewProjectButtonProps = {
   label?: string;
@@ -21,11 +21,11 @@ const NewProjectButton = ({
 }: NewProjectButtonProps) => {
   const { projects } = useProjects();
   const { createBlankProject, isSaving } = useProject();
-  const hasReachedProjectsLimit = projects.length >= MAX_PROJECTS;
+  const hasReachedProjectsLimit = projects.length > MAX_PROJECTS;
   return (
     <>
       <Tooltip
-        label="You can only have a maximum of 10 projects."
+        label={`You can only have a maximum of ${MAX_PROJECTS} projects.`}
         disabled={!hasReachedProjectsLimit}
         delayShow={delayTooltipShow}
       >
