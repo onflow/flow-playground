@@ -21,11 +21,11 @@ const NewProjectButton = ({
 }: NewProjectButtonProps) => {
   const { projects } = useProjects();
   const { createBlankProject, isSaving } = useProject();
-  const hasReachedProjectsLimit = projects.length >= MAX_PROJECTS;
+  const hasReachedProjectsLimit = projects.length > MAX_PROJECTS;
   return (
     <>
       <Tooltip
-        label="You can only have a maximum of 10 projects."
+        label={`You can only have a maximum of ${MAX_PROJECTS} projects.`}
         disabled={!hasReachedProjectsLimit}
         delayShow={delayTooltipShow}
       >
