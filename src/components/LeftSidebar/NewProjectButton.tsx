@@ -5,7 +5,7 @@ import Button, { ButtonProps } from '../Button';
 import PlusIcon from '../Icons/PlusIcon';
 import Tooltip from '../Tooltip';
 
-export const MAX_PROJECTS = 10;
+export const MAX_PROJECTS = 20;
 
 type NewProjectButtonProps = {
   label?: string;
