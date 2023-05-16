@@ -25,7 +25,7 @@ const NewProjectButton = ({
   return (
     <>
       <Tooltip
-        label={`You can only have a maximum of ${MAX_PROJECTS} projects.`}
+        label={`You can have a maximum of ${MAX_PROJECTS} projects.`}
         disabled={!hasReachedProjectsLimit}
         delayShow={delayTooltipShow}
       >
