@@ -130,6 +130,16 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
   };
 
   const getListContent = () => {
+    const contractNames = getNames(project.contractTemplates);
+    const transactionNames = getNames(project.transactionTemplates);
+    const scriptNames = getNames(project.scriptTemplates);
+
+    useEffect(() => {
+      handelDupNames(ResultType.Contract, contractNames);
+      handelDupNames(ResultType.Transaction, transactionNames);
+      handelDupNames(ResultType.Script, scriptNames);
+    }, [contractNames, transactionNames, scriptNames]);
+
     if (isExplorerCollapsed) {
       return (
         <Flex sx={styles.collapsed}>
@@ -147,16 +157,6 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
         </Flex>
       );
     }
-
-    const contractNames = getNames(project.contractTemplates);
-    const transactionNames = getNames(project.transactionTemplates);
-    const scriptNames = getNames(project.scriptTemplates);
-
-    useEffect(() => {
-      handelDupNames(ResultType.Contract, contractNames);
-      handelDupNames(ResultType.Transaction, transactionNames);
-      handelDupNames(ResultType.Script, scriptNames);
-    }, [contractNames, transactionNames, scriptNames]);
 
     return (
       <>
