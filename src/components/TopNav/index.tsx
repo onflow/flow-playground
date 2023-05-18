@@ -14,11 +14,14 @@ import theme from '../../theme';
 import {
   CADENCE_DOCS_URL,
   PLAYGROUND_GITHUB_ISSUES_URL,
+  PLAYGROUND_API_URL,
 } from 'util/globalConstants';
 import { ExportButton } from './ExportButton';
 import GithubIcon from 'components/Icons/GithubIcon';
 import { NavButtonLink } from './NavButtonLink';
 import { IconCadence } from 'components/Icons/CadenceIcon';
+import InfoIcon from 'components/Icons/InfoIcon';
+import InformationalPopup from 'components/InformationalPopup';
 
 const styles: SXStyles = {
   root: {
@@ -79,10 +82,19 @@ const styles: SXStyles = {
   },
 };
 
+const infoShowVersionModalProps = {
+  title: `Playground Versions`,
+  messages: ['Versions not supported in local development environment.'],
+};
+
 const TopNav = () => {
   const { project, updateProject, toggleProjectsSidebar } = useProject();
   const [showExamples, setShowExamples] = useState(false);
   const [projectName, setProjectName] = useState(project.title);
+  const [showVersionModal, setShowVersionModal] = useState(false);
+  const [infoShowVersionModal, setInfoShowVersionModal] = useState({
+    ...infoShowVersionModalProps,
+  });
 
   const onStartButtonClick = () => {
     setShowExamples(true);
@@ -100,6 +112,21 @@ const TopNav = () => {
   useEffect(() => {
     setProjectName(project.title);
   }, [project?.id]);
+
+  useEffect(() => {
+    const versions = `${PLAYGROUND_API_URL}/version`;
+    fetch(versions)
+      .then((response) => response.json())
+      .then((data) => {
+        infoShowVersionModal.messages = [
+          `Playground Version: ${data.API}`,
+          `Cadence Version: ${data.Cadence}`,
+          `Emulator Version: ${data.Emulator}`,
+        ];
+        setInfoShowVersionModal({ ...infoShowVersionModal });
+      })
+      .catch((err) => console.log('Error fetching versions', err.message));
+  }, []);
 
   return (
     <Flex sx={styles.root}>
@@ -128,6 +155,14 @@ const TopNav = () => {
         {!!project && (
           <>
             <Button
+              sx={{ ...styles.button, width: 'unset' }}
+              onClick={() => setShowVersionModal(true)}
+              variant="secondary"
+              size="sm"
+            >
+              <InfoIcon />
+            </Button>
+            <Button
               sx={styles.button}
               onClick={() => onStartButtonClick()}
               variant="secondary"
@@ -155,6 +190,11 @@ const TopNav = () => {
       <Examples
         visible={showExamples}
         triggerClose={() => setShowExamples(false)}
+      />
+      <InformationalPopup
+        onClose={() => setShowVersionModal(false)}
+        visible={showVersionModal}
+        {...infoShowVersionModal}
       />
     </Flex>
   );
