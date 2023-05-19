@@ -115,8 +115,12 @@ const TopNav = () => {
 
   useEffect(() => {
     const versions = `${PLAYGROUND_API_URL}/version`;
-    fetch(versions)
-      .then((response) => response.json())
+    fetch(versions, { mode: 'no-cors' })
+      .then((response) => {
+        return response.ok
+          ? response.json()
+          : { API: 'unknown', Cadence: 'unknown', Emulator: 'unknown' };
+      })
       .then((data) => {
         infoShowVersionModal.messages = [
           `Playground Version: ${data.API}`,
@@ -125,7 +129,7 @@ const TopNav = () => {
         ];
         setInfoShowVersionModal({ ...infoShowVersionModal });
       })
-      .catch((err) => console.log('Error fetching versions', err.message));
+      .catch((err) => console.log('Error fetching versions', err));
   }, []);
 
   return (
