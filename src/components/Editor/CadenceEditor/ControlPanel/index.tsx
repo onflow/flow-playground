@@ -399,11 +399,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
         resultType,
         rawResult,
       },
-    })
-      .then()
-      .finally(() => {
-        console.log('done setting result');
-      });
+    }).then();
   };
 
   // MEMOIZED -----------------------------------------------------------------
