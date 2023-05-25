@@ -172,3 +172,13 @@ export const GET_APPLICATION_ERRORS = gql`
     errorMessage @client
   }
 `;
+
+export const GET_VERSIONS = gql`
+  query GetPlaygroundInfo {
+    playgroundInfo {
+      apiVersion
+      cadenceVersion
+      emulatorVersion
+    }
+  } 
+`;

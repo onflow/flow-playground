@@ -14,14 +14,13 @@ import theme from '../../theme';
 import {
   CADENCE_DOCS_URL,
   PLAYGROUND_GITHUB_ISSUES_URL,
-  PLAYGROUND_API_URL,
 } from 'util/globalConstants';
 import { ExportButton } from './ExportButton';
 import GithubIcon from 'components/Icons/GithubIcon';
 import { NavButtonLink } from './NavButtonLink';
 import { IconCadence } from 'components/Icons/CadenceIcon';
 import InfoIcon from 'components/Icons/InfoIcon';
-import InformationalPopup from 'components/InformationalPopup';
+import VersionInfoPopup from 'components/VersionInfoPopup';
 
 const styles: SXStyles = {
   root: {
@@ -112,25 +111,7 @@ const TopNav = () => {
   useEffect(() => {
     setProjectName(project.title);
   }, [project?.id]);
-
-  useEffect(() => {
-    const versions = `${PLAYGROUND_API_URL}/version`;
-    fetch(versions, { mode: 'no-cors' })
-      .then((response) => {
-        return response.ok
-          ? response.json()
-          : { API: 'unknown', Cadence: 'unknown', Emulator: 'unknown' };
-      })
-      .then((data) => {
-        infoShowVersionModal.messages = [
-          `Playground Version: ${data.API}`,
-          `Cadence Version: ${data.Cadence}`,
-          `Emulator Version: ${data.Emulator}`,
-        ];
-        setInfoShowVersionModal({ ...infoShowVersionModal });
-      })
-      .catch((err) => console.log('Error fetching versions', err));
-  }, []);
+ 
 
   return (
     <Flex sx={styles.root}>
@@ -158,14 +139,7 @@ const TopNav = () => {
       <Flex sx={{ ...styles.topNavSection, ...styles.topNavSectionRight }}>
         {!!project && (
           <>
-            <Button
-              sx={{ ...styles.button, width: 'unset' }}
-              onClick={() => setShowVersionModal(true)}
-              variant="secondary"
-              size="sm"
-            >
-              <InfoIcon />
-            </Button>
+            <VersionInfoPopup />
             <Button
               sx={styles.button}
               onClick={() => onStartButtonClick()}
@@ -194,11 +168,6 @@ const TopNav = () => {
       <Examples
         visible={showExamples}
         triggerClose={() => setShowExamples(false)}
-      />
-      <InformationalPopup
-        onClose={() => setShowVersionModal(false)}
-        visible={showVersionModal}
-        {...infoShowVersionModal}
       />
     </Flex>
   );
