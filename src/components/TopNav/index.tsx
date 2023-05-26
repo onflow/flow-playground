@@ -111,7 +111,6 @@ const TopNav = () => {
   useEffect(() => {
     setProjectName(project.title);
   }, [project?.id]);
- 
 
   return (
     <Flex sx={styles.root}>

@@ -180,5 +180,5 @@ export const GET_VERSIONS = gql`
       cadenceVersion
       emulatorVersion
     }
-  } 
+  }
 `;
