@@ -46,12 +46,12 @@ const VersionInfoPopup = () => {
   });
 
   const { loading, error, data } = useQuery<{
-    versions: PlaygroundInfo;
+    playgroundInfo: PlaygroundInfo;
   }>(GET_VERSIONS, { fetchPolicy: 'cache-and-network' });
 
   useEffect(() => {
-    if (!loading && !error && data?.versions) {
-      const versions = data?.versions;
+    if (!loading && !error && data?.playgroundInfo) {
+      const versions = data?.playgroundInfo;
       infoShowVersionModal.messages = [
         `Playground Version: ${versions?.apiVersion || 'Unknown'}`,
         `Cadence Version: ${versions?.cadenceVersion || 'Unknown'}`,
