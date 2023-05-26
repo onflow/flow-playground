@@ -5,7 +5,7 @@ import theme from '../theme';
 import InfoIcon from 'components/Icons/InfoIcon';
 import InformationalPopup from 'components/InformationalPopup';
 import { useQuery } from '@apollo/react-hooks';
-import { GET_PROJECTS, GET_VERSIONS } from 'api/apollo/queries';
+import { GET_VERSIONS } from 'api/apollo/queries';
 import { PlaygroundInfo } from 'api/apollo/generated/graphql';
 
 const styles: SXStyles = {

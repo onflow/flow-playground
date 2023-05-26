@@ -19,7 +19,6 @@ import { ExportButton } from './ExportButton';
 import GithubIcon from 'components/Icons/GithubIcon';
 import { NavButtonLink } from './NavButtonLink';
 import { IconCadence } from 'components/Icons/CadenceIcon';
-import InfoIcon from 'components/Icons/InfoIcon';
 import VersionInfoPopup from 'components/VersionInfoPopup';
 
 const styles: SXStyles = {
@@ -81,19 +80,10 @@ const styles: SXStyles = {
   },
 };
 
-const infoShowVersionModalProps = {
-  title: `Playground Versions`,
-  messages: ['Versions not supported in local development environment.'],
-};
-
 const TopNav = () => {
   const { project, updateProject, toggleProjectsSidebar } = useProject();
   const [showExamples, setShowExamples] = useState(false);
   const [projectName, setProjectName] = useState(project.title);
-  const [showVersionModal, setShowVersionModal] = useState(false);
-  const [infoShowVersionModal, setInfoShowVersionModal] = useState({
-    ...infoShowVersionModalProps,
-  });
 
   const onStartButtonClick = () => {
     setShowExamples(true);
