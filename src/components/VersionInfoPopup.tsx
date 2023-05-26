@@ -1,5 +1,5 @@
 import Button from 'components/Button';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SXStyles } from 'src/types';
 import theme from '../theme';
 import InfoIcon from 'components/Icons/InfoIcon';
@@ -49,20 +49,17 @@ const VersionInfoPopup = () => {
     versions: PlaygroundInfo;
   }>(GET_VERSIONS, { fetchPolicy: 'cache-and-network' });
 
-
-  if (!loading && data) {
-    const versions = data?.versions;
-    infoShowVersionModal.messages = [
-      `Playground Version: ${versions?.apiVersion || 'Unknown'}`,
-      `Cadence Version: ${versions?.cadenceVersion || 'Unknown'}`,
-      `Emulator Version: ${versions?.emulatorVersion || 'Unknown'}`,
-    ];
-    setInfoShowVersionModal({ ...infoShowVersionModal });
-  }
-
-  if (!loading && error) {
-    console.error('error', error);
-  }
+  useEffect(() => {
+    if (!loading && !error && data?.versions) {
+      const versions = data?.versions;
+      infoShowVersionModal.messages = [
+        `Playground Version: ${versions?.apiVersion || 'Unknown'}`,
+        `Cadence Version: ${versions?.cadenceVersion || 'Unknown'}`,
+        `Emulator Version: ${versions?.emulatorVersion || 'Unknown'}`,
+      ];
+      setInfoShowVersionModal({ ...infoShowVersionModal });
+    }
+  }, [loading]);
 
   return (
     <>
