@@ -97,7 +97,11 @@ const AccountList = ({ isExplorerCollapsed }: AccountListProps) => {
   const accountSelected = active.type === EntityType.AccountStorage;
   const location = useLocation();
   const params = getParams(location.search);
-  const projectPath = isUUUID(project.id) ? project.id : LOCAL_PROJECT_ID;
+  const projectPath = isUUUID(project.parentId)
+    ? project.parentId
+    : project.id
+    ? project.id
+    : LOCAL_PROJECT_ID;
   const [isInserting, setIsInserting] = useState(false);
 
   return (

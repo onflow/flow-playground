@@ -77,6 +77,12 @@ const Input = ({
       document.addEventListener('click', handleClickOutside, true);
       setIsEditing(true);
     }
+
+    if (isEditingParent) {
+      ref.current?.select();
+      ref.current?.focus();
+    }
+
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
       setIsEditing(false);

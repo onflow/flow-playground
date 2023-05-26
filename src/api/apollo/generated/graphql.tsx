@@ -269,6 +269,7 @@ export type PlaygroundInfo = {
   __typename?: 'PlaygroundInfo';
   apiVersion: Scalars['Version'];
   cadenceVersion: Scalars['Version'];
+  emulatorVersion: Scalars['Version'];
 };
 
 export type ProgramError = {

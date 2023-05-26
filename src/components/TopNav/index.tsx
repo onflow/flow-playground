@@ -19,6 +19,7 @@ import { ExportButton } from './ExportButton';
 import GithubIcon from 'components/Icons/GithubIcon';
 import { NavButtonLink } from './NavButtonLink';
 import { IconCadence } from 'components/Icons/CadenceIcon';
+import VersionInfoPopup from 'components/VersionInfoPopup';
 
 const styles: SXStyles = {
   root: {
@@ -127,6 +128,7 @@ const TopNav = () => {
       <Flex sx={{ ...styles.topNavSection, ...styles.topNavSectionRight }}>
         {!!project && (
           <>
+            <VersionInfoPopup />
             <Button
               sx={styles.button}
               onClick={() => onStartButtonClick()}
