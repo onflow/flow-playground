@@ -190,6 +190,7 @@ const MenuList: React.FC<MenuListProps> = ({
   };
 
   useEffect(() => {
+    setIndexHasError(-1);
     setItemNames(itemTitles);
     if (hasDuplicates(itemTitles)) {
       setIndexHasError(findDuplicateIndex(itemTitles));
