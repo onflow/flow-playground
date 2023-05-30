@@ -78,7 +78,18 @@ export const normalizeInteractionResponse = (response: any): Array<Line> => {
     const scoped = response.data.createTransactionExecution;
     const lines = [];
     for (let d of scoped.logs) lines.push(makeLine(Tag.LOG, d));
-    for (let d of scoped.events) lines.push(makeLine(Tag.EVENT, d));
+    for (let d of scoped.events) {
+      const values = d.values.map((v: any) => JSON.parse(v));
+      console.log(values);
+      lines.push(
+        makeLine(
+          Tag.EVENT,
+          `${d.type}\n${values.map(
+            (v: any) => `"value": ${v.value} "type": ${v.type}`,
+          )}`,
+        ),
+      );
+    }
     if (scoped.errors && scoped.errors.length)
       lines.push(
         makeLine(
