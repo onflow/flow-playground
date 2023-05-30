@@ -6,6 +6,8 @@ import { Line as LineType, Tag } from 'util/normalize-interaction-response';
 
 const PS1 = (tag: Tag) => {
   switch (tag) {
+    case Tag.EVENT:
+      return 'Event';
     case Tag.ERROR:
       return 'Error';
     case Tag.VALUE:

@@ -5,6 +5,7 @@ export enum Tag {
   LOG,
   VALUE,
   UNKNOWN,
+  EVENT,
 }
 
 export type Line = {
@@ -77,6 +78,7 @@ export const normalizeInteractionResponse = (response: any): Array<Line> => {
     const scoped = response.data.createTransactionExecution;
     const lines = [];
     for (let d of scoped.logs) lines.push(makeLine(Tag.LOG, d));
+    for (let d of scoped.events) lines.push(makeLine(Tag.EVENT, d));
     if (scoped.errors && scoped.errors.length)
       lines.push(
         makeLine(
