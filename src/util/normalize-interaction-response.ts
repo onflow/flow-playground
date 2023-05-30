@@ -80,7 +80,6 @@ export const normalizeInteractionResponse = (response: any): Array<Line> => {
     for (let d of scoped.logs) lines.push(makeLine(Tag.LOG, d));
     for (let d of scoped.events) {
       const values = d.values.map((v: any) => JSON.parse(v));
-      console.log(values);
       lines.push(
         makeLine(
           Tag.EVENT,
