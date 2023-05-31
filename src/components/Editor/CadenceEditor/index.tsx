@@ -20,7 +20,8 @@ export type CadenceEditorProps = {
 
 const CadenceEditor = (props: CadenceEditorProps) => {
   const project = useProject();
-  const [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const [editor, setEditor] =
+    useState<monaco.editor.IStandaloneCodeEditor | null>(null);
   const editorOnChange = useRef(null);
   // We will specify type as index as non-existent numbers to prevent collision with existing enums
   const lastEdit = useRef({
@@ -32,7 +33,7 @@ const CadenceEditor = (props: CadenceEditorProps) => {
   const { width, height, ref } = useResizeDetector();
 
   const saveEditorState = useCallback(() => {
-    const id = project.getActiveCode()[1]
+    const id = project.getActiveCode()[1];
     setEditorStates({
       ...editorStates,
       [id]: {
@@ -40,7 +41,7 @@ const CadenceEditor = (props: CadenceEditorProps) => {
         viewState: editor.saveViewState(),
       },
     });
-  }, [setEditorStates, editorStates, editor, project])
+  }, [setEditorStates, editorStates, editor, project]);
 
   // This method is used to retrieve previous MonacoEditor state
   const getOrCreateEditorState = (id: string, code: string): EditorState => {
@@ -52,7 +53,10 @@ const CadenceEditor = (props: CadenceEditorProps) => {
 
     const newState: EditorState =
       project.active.type == EntityType.AccountStorage
-        ? { model: monaco.editor.createModel(code, 'json'), viewState: existingState?.viewState }
+        ? {
+            model: monaco.editor.createModel(code, 'json'),
+            viewState: existingState?.viewState,
+          }
         : {
             model: monaco.editor.createModel(code, CADENCE_LANGUAGE_ID),
             viewState: existingState?.viewState,
@@ -64,7 +68,7 @@ const CadenceEditor = (props: CadenceEditorProps) => {
     });
 
     return newState;
-  }
+  };
 
   const setupEditor = () => {
     const projectExist = project && project.project.accounts;
@@ -166,15 +170,15 @@ const CadenceEditor = (props: CadenceEditorProps) => {
   };
 
   useEffect(() => {
-    if(!editor) return
+    if (!editor) return;
     const cursorListener = editor.onDidChangeCursorPosition(saveEditorState);
     const scrollListener = editor.onDidScrollChange(saveEditorState);
 
     return () => {
       cursorListener.dispose();
       scrollListener.dispose();
-    }
-  }, [editor, saveEditorState])
+    };
+  }, [editor, saveEditorState]);
 
   // "destroyEditor" is used to dispose of Monaco Editor instance, when the component is unmounted (for any reasons)
   const destroyEditor = () => {

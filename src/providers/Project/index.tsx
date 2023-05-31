@@ -658,7 +658,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         id = scriptTemplates[index].id;
         break;
     }
-    return [code || '', id || "unknown"];
+    return [code || '', id || 'unknown'];
   };
 
   // End of instantiation and return created context

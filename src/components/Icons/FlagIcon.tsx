@@ -20,11 +20,7 @@ function FlagIcon() {
       </g>
       <defs>
         <clipPath id="clip0_805_15119">
-          <path
-            fill="#fff"
-            d="M0 0H16V16H0z"
-            transform="translate(0 .5)"
-          />
+          <path fill="#fff" d="M0 0H16V16H0z" transform="translate(0 .5)" />
         </clipPath>
       </defs>
     </svg>
