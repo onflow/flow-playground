@@ -1,5 +1,5 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useResizeDetector } from 'react-resize-detector';
 import { useProject } from 'providers/Project/projectHooks';
 import configureCadence, { CADENCE_LANGUAGE_ID } from 'util/cadence';
@@ -10,7 +10,7 @@ import { EntityType } from 'providers/Project';
 
 const MONACO_CONTAINER_ID = 'monaco-container';
 
-type EditorStates = Record<number, EditorState>;
+type EditorStates = Record<string, EditorState>;
 export type CadenceEditorProps = {
   problemsList: any[];
   setProblemsList: Function;
@@ -20,7 +20,7 @@ export type CadenceEditorProps = {
 
 const CadenceEditor = (props: CadenceEditorProps) => {
   const project = useProject();
-  const [editor, setEditor] = useState(null);
+  const [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor | null>(null);
   const editorOnChange = useRef(null);
   // We will specify type as index as non-existent numbers to prevent collision with existing enums
   const lastEdit = useRef({
@@ -30,30 +30,32 @@ const CadenceEditor = (props: CadenceEditorProps) => {
 
   const [editorStates, setEditorStates] = useState<EditorStates>({});
   const { width, height, ref } = useResizeDetector();
-  // TODO: restore view state in next implementation
-  /*
-  const saveEditorState = (id: string, viewState: any) => {
+
+  const saveEditorState = useCallback(() => {
+    const id = project.getActiveCode()[1]
     setEditorStates({
       ...editorStates,
-      [id]: viewState,
+      [id]: {
+        ...editorStates[id],
+        viewState: editor.saveViewState(),
+      },
     });
-  };
-   */
+  }, [setEditorStates, editorStates, editor, project])
 
   // This method is used to retrieve previous MonacoEditor state
-  const getOrCreateEditorState = (id: number, code: string): EditorState => {
+  const getOrCreateEditorState = (id: string, code: string): EditorState => {
     const existingState = editorStates[id];
 
-    if (existingState !== undefined) {
+    if (existingState?.model !== undefined) {
       return existingState;
     }
 
     const newState: EditorState =
       project.active.type == EntityType.AccountStorage
-        ? { model: monaco.editor.createModel(code, 'json'), viewState: null }
+        ? { model: monaco.editor.createModel(code, 'json'), viewState: existingState?.viewState }
         : {
             model: monaco.editor.createModel(code, CADENCE_LANGUAGE_ID),
-            viewState: null,
+            viewState: existingState?.viewState,
           };
 
     setEditorStates({
@@ -62,7 +64,7 @@ const CadenceEditor = (props: CadenceEditorProps) => {
     });
 
     return newState;
-  };
+  }
 
   const setupEditor = () => {
     const projectExist = project && project.project.accounts;
@@ -102,12 +104,13 @@ const CadenceEditor = (props: CadenceEditorProps) => {
 
         // - Mark last edited as type, index, edited = true
         editor.setModel(newState.model);
-        editor.restoreViewState(newState.viewState);
-        editor.focus();
-        editor.layout();
 
         newState.model.setValue(code);
         project.setCurrentEditor(editor);
+
+        editor.restoreViewState(newState.viewState);
+        editor.focus();
+        editor.layout();
       }
       editorOnChange.current = editor.onDidChangeModelContent(() => {
         if (project.project?.accounts) {
@@ -161,6 +164,17 @@ const CadenceEditor = (props: CadenceEditorProps) => {
     setEditor(editor);
     setupEditor();
   };
+
+  useEffect(() => {
+    if(!editor) return
+    const cursorListener = editor.onDidChangeCursorPosition(saveEditorState);
+    const scrollListener = editor.onDidScrollChange(saveEditorState);
+
+    return () => {
+      cursorListener.dispose();
+      scrollListener.dispose();
+    }
+  }, [editor, saveEditorState])
 
   // "destroyEditor" is used to dispose of Monaco Editor instance, when the component is unmounted (for any reasons)
   const destroyEditor = () => {
