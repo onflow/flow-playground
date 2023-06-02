@@ -121,15 +121,21 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
    * Sends request to langugeClient to get entry point parameters.
    * @return Promise which resolved to a list of arguments
    */
-  const getParameters = async (): Promise<[any?]> => {
+  const getParameters = async (
+    isContract: boolean = false,
+  ): Promise<[any?]> => {
     if (!languageClient) {
+      console.error('lauguageClient is not initialized');
       return [];
     }
+    const command = isContract
+      ? 'cadence.server.getContractInitializerParameters'
+      : 'cadence.server.getEntryPointParameters';
     try {
       const args = await languageClient.sendRequest(
         ExecuteCommandRequest.type,
         {
-          command: 'cadence.server.getEntryPointParameters',
+          command,
           arguments: [editor.getModel().uri.toString()],
         },
       );
@@ -191,7 +197,9 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
       CadenceCheckCompleted.methodName,
       async (result: CadenceCheckCompleted.Params) => {
         if (result.valid) {
-          const params = await getParameters();
+          const params = await getParameters(
+            active.type == EntityType.ContractTemplate,
+          );
           const key = getActiveKey();
 
           // Update state
