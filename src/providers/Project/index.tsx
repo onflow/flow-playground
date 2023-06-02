@@ -72,7 +72,7 @@ export interface ProjectContextValue {
   createScriptExecution: (args?: string[]) => Promise<any>;
   active: ActiveEditor;
   setActive: (type: EntityType, index: number) => void;
-  getActiveCode: () => [string, number];
+  getActiveCode: () => [string, string];
   selectedResourceAccount: string;
   setSelectedResourceAccount: (account: string) => void;
   lastSigners: string[];
@@ -628,7 +628,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   };
 
   // "getActiveCode" is used to read Cadence code from active(selected) item
-  const getActiveCode: () => [string, number] = () => {
+  const getActiveCode: () => [string, string] = () => {
     const {
       contractTemplates,
       scriptTemplates,
@@ -638,12 +638,12 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     } = project;
 
     const { type, index } = active;
-    let code: string, id: number;
+    let code: string, id: string;
 
     switch (type) {
       case EntityType.AccountStorage:
         code = getAccountCodeId(accounts, contractDeployments).code;
-        id = getAccountCodeId(accounts, contractDeployments).id;
+        id = String(getAccountCodeId(accounts, contractDeployments).id);
         break;
       case EntityType.ContractTemplate:
         code = contractTemplates[index].script;
@@ -658,7 +658,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         id = scriptTemplates[index].id;
         break;
     }
-    return [code || '', id || 8];
+    return [code || '', id || 'unknown'];
   };
 
   // End of instantiation and return created context
