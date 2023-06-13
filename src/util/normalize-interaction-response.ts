@@ -42,7 +42,25 @@ const respIsCreateScriptExecution = (response: any): boolean => {
   return response?.data?.createScriptExecution != null;
 };
 
-export const normalizeInteractionResponse = (response: any): Array<Line> => {
+const makeEventValues = (events: any[], collection: Line[]): Line[] => {
+  for (let d of (events || []).filter(
+    (event: { type: string }) =>
+      event.type !== FLOW_ACCOUNT_CONTRACT_ADDED_EVENT,
+  )) {
+    const values = d.values.map((v: any) => JSON.parse(v));
+    collection.push(
+      makeLine(
+        Tag.EVENT,
+        `${d.type}\n${values.map(
+          (v: any) => `value: "${v.value}", type: ${v.type}`,
+        )}`,
+      ),
+    );
+  }
+  return collection;
+};
+
+export const normalizeInteractionResponse = (response: any): Line[] => {
   if (response == null) return [];
 
   if (typeof response === 'string') {
@@ -54,7 +72,10 @@ export const normalizeInteractionResponse = (response: any): Array<Line> => {
   }
 
   if (respIsCreateContractDeployment(response)) {
+    const lines = [];
     const scoped = response.data.createContractDeployment;
+    for (let d of scoped.logs) lines.push(makeLine(Tag.LOG, d));
+
     const addresses = scoped.events
       .filter(
         (event: { type: string }) =>
@@ -69,26 +90,23 @@ export const normalizeInteractionResponse = (response: any): Array<Line> => {
       })
       .filter(Boolean);
 
-    return addresses.map((address: string) =>
-      makeLine(Tag.LOG, `Deployed Contract To: 0x${address.slice(-2)}`),
+    makeEventValues(scoped.events, lines);
+
+    // have deployed contract message as last line, which is displayed in the terminal first
+    addresses.forEach((address: string) =>
+      lines.push(
+        makeLine(Tag.LOG, `Deployed Contract To: 0x${address.slice(-2)}`),
+      ),
     );
+
+    return lines;
   }
 
   if (respIsCreateTransactionExecution(response)) {
     const scoped = response.data.createTransactionExecution;
     const lines = [];
     for (let d of scoped.logs) lines.push(makeLine(Tag.LOG, d));
-    for (let d of scoped.events) {
-      const values = d.values.map((v: any) => JSON.parse(v));
-      lines.push(
-        makeLine(
-          Tag.EVENT,
-          `${d.type}\n${values.map(
-            (v: any) => `"value": ${v.value} "type": ${v.type}`,
-          )}`,
-        ),
-      );
-    }
+    makeEventValues(scoped.events, lines);
     if (scoped.errors && scoped.errors.length)
       lines.push(
         makeLine(
