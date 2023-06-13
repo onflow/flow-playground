@@ -42,7 +42,26 @@ const respIsCreateScriptExecution = (response: any): boolean => {
   return response?.data?.createScriptExecution != null;
 };
 
-export const normalizeInteractionResponse = (response: any): Array<Line> => {
+const makeEventValues = (events: any[]): Line[] => {
+  const collection = [];
+  for (let d of (events || []).filter(
+    (event: { type: string }) =>
+      event.type !== FLOW_ACCOUNT_CONTRACT_ADDED_EVENT,
+  )) {
+    const values = d.values.map((v: any) => JSON.parse(v));
+    collection.push(
+      makeLine(
+        Tag.EVENT,
+        `${d.type}\n${values.map(
+          (v: any) => `value: "${v.value}", type: ${v.type}`,
+        )}`,
+      ),
+    );
+  }
+  return collection;
+};
+
+export const normalizeInteractionResponse = (response: any): Line[] => {
   if (response == null) return [];
 
   if (typeof response === 'string') {
@@ -54,7 +73,9 @@ export const normalizeInteractionResponse = (response: any): Array<Line> => {
   }
 
   if (respIsCreateContractDeployment(response)) {
+    const lines = [];
     const scoped = response.data.createContractDeployment;
+
     const addresses = scoped.events
       .filter(
         (event: { type: string }) =>
@@ -69,26 +90,22 @@ export const normalizeInteractionResponse = (response: any): Array<Line> => {
       })
       .filter(Boolean);
 
-    return addresses.map((address: string) =>
-      makeLine(Tag.LOG, `Deployed Contract To: 0x${address.slice(-2)}`),
+    const items = makeEventValues(scoped.events);
+    for (let d of scoped.logs) lines.push(makeLine(Tag.LOG, d));
+    addresses.forEach((address: string) =>
+      lines.push(
+        makeLine(Tag.LOG, `Deployed Contract To: 0x${address.slice(-2)}`),
+      ),
     );
+
+    return [...items, ...lines];
   }
 
   if (respIsCreateTransactionExecution(response)) {
     const scoped = response.data.createTransactionExecution;
     const lines = [];
     for (let d of scoped.logs) lines.push(makeLine(Tag.LOG, d));
-    for (let d of scoped.events) {
-      const values = d.values.map((v: any) => JSON.parse(v));
-      lines.push(
-        makeLine(
-          Tag.EVENT,
-          `${d.type}\n${values.map(
-            (v: any) => `"value": ${v.value} "type": ${v.type}`,
-          )}`,
-        ),
-      );
-    }
+    const items = makeEventValues(scoped.events);
     if (scoped.errors && scoped.errors.length)
       lines.push(
         makeLine(
@@ -96,7 +113,7 @@ export const normalizeInteractionResponse = (response: any): Array<Line> => {
           scoped.errors.map((err: any) => err.message).join('\r\n'),
         ),
       );
-    return lines;
+    return [...lines, ...items];
   }
 
   if (respIsCreateScriptExecution(response)) {
