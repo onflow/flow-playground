@@ -42,7 +42,8 @@ const respIsCreateScriptExecution = (response: any): boolean => {
   return response?.data?.createScriptExecution != null;
 };
 
-const makeEventValues = (events: any[], collection: Line[]): Line[] => {
+const makeEventValues = (events: any[]): Line[] => {
+  const collection = [];
   for (let d of (events || []).filter(
     (event: { type: string }) =>
       event.type !== FLOW_ACCOUNT_CONTRACT_ADDED_EVENT,
@@ -74,7 +75,6 @@ export const normalizeInteractionResponse = (response: any): Line[] => {
   if (respIsCreateContractDeployment(response)) {
     const lines = [];
     const scoped = response.data.createContractDeployment;
-    for (let d of scoped.logs) lines.push(makeLine(Tag.LOG, d));
 
     const addresses = scoped.events
       .filter(
@@ -90,23 +90,22 @@ export const normalizeInteractionResponse = (response: any): Line[] => {
       })
       .filter(Boolean);
 
-    makeEventValues(scoped.events, lines);
-
-    // have deployed contract message as last line, which is displayed in the terminal first
+    const items = makeEventValues(scoped.events);
+    for (let d of scoped.logs) lines.push(makeLine(Tag.LOG, d));
     addresses.forEach((address: string) =>
       lines.push(
         makeLine(Tag.LOG, `Deployed Contract To: 0x${address.slice(-2)}`),
       ),
     );
 
-    return lines;
+    return [...items, ...lines];
   }
 
   if (respIsCreateTransactionExecution(response)) {
     const scoped = response.data.createTransactionExecution;
     const lines = [];
     for (let d of scoped.logs) lines.push(makeLine(Tag.LOG, d));
-    makeEventValues(scoped.events, lines);
+    const items = makeEventValues(scoped.events);
     if (scoped.errors && scoped.errors.length)
       lines.push(
         makeLine(
@@ -114,7 +113,7 @@ export const normalizeInteractionResponse = (response: any): Line[] => {
           scoped.errors.map((err: any) => err.message).join('\r\n'),
         ),
       );
-    return lines;
+    return [...lines, ...items];
   }
 
   if (respIsCreateScriptExecution(response)) {
