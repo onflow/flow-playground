@@ -47,15 +47,16 @@ export const ExportButton = () => {
     if (!isDownload) return;
 
     const zip = new JSZip();
-    const contracts = zip.folder('contracts');
+    const cadence = zip.folder('cadence');
+    const contracts = cadence.folder('contracts');
     project.contractTemplates.map((cdc) =>
       contracts.file(`${cdc.title}.cdc`, cdc.script),
     );
-    const scripts = zip.folder('scripts');
+    const scripts = cadence.folder('scripts');
     project.scriptTemplates.map((script) =>
       scripts.file(`${script.title}.cdc`, script.script),
     );
-    const transactions = zip.folder('transactions');
+    const transactions = cadence.folder('transactions');
     project.transactionTemplates.map((tx) =>
       transactions.file(`${tx.title}.cdc`, tx.script),
     );
