@@ -52,7 +52,7 @@ const getBaseStyles = (
     display: 'grid',
     gridTemplateAreas: "'header header' 'sidebar main'",
     gridTemplateColumns: `${fileExplorerWidth} auto`,
-    gridTemplateRows: '50px auto',
+    gridTemplateRows: ['40px auto', '50px auto'],
     overflow: 'hidden',
     filter: showProjectsSidebar ? 'blur(1px)' : 'none',
   };

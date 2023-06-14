@@ -7,6 +7,7 @@ import { EditorContainer } from './components';
 import ControlPanel from './ControlPanel';
 import { EditorState } from './types';
 import { EntityType } from 'providers/Project';
+import theme from '../../../theme';
 
 const MONACO_CONTAINER_ID = 'monaco-container';
 
@@ -76,7 +77,7 @@ const CadenceEditor = (props: CadenceEditorProps) => {
       if (editorOnChange.current) {
         editorOnChange.current.dispose();
       }
-      if (project.active.type === EntityType.AccountStorage) {
+      if (project.active.type === EntityType.AccountStorage || theme.isMobile) {
         editor.updateOptions({ readOnly: true });
       } else {
         editor.updateOptions({ readOnly: false });
