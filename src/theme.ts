@@ -1,4 +1,5 @@
 export default {
+  isMobile: window.matchMedia('(max-width: 768px)')?.matches,
   colors: {
     white: '#ffffff',
     black: '#000000',
