@@ -138,7 +138,7 @@ const DEFAULT_SCRIPT = `pub fun main(): Int {
 }
 `;
 
-export const SEED_TITLE = 'Cadence Playground';
+export const SEED_TITLE = 'Untitled Project';
 export const SEED_DESCRIPTION = 'Showcase Cadence interactions';
 export const SEED_README = '';
 
