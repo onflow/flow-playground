@@ -2,7 +2,7 @@
   "name": "flow-playground",
   "private": true,
   "engines": {
-    "node": ">=16.0.0 <=18.8.0"
+    "node": "18.x"
   },
   "scripts": {
     "start": "webpack-dev-server -d source-map --config webpack.config.js",
