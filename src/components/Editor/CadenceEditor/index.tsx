@@ -118,7 +118,6 @@ const CadenceEditor = (props: CadenceEditorProps) => {
         editor.focus();
         editor.layout();
         if (project.hightlightedLines.length > 0) {
-          console.log('hightlightLines', project.hightlightedLines);
           hightlightLines(editor, project.hightlightedLines);
         }
       }
