@@ -18,9 +18,9 @@ export const getHashLineNumber = (): number[] => {
   const value = window.location.hash?.substring(1);
   if (!value) return [];
 
-  const lineNumbers = value.substring(1);
+  const lineNumbers = value.toLocaleUpperCase().replace('L', '');
   if (lineNumbers.includes('-')) {
-    const [start, end] = lineNumbers.replace('L', '').split('-');
+    const [start, end] = lineNumbers.split('-');
     return [Number(start), Number(end)];
   }
   return [Number(lineNumbers)];
