@@ -13,6 +13,7 @@ import { userDataKeys, UserLocalStorage } from 'util/localstorage';
 import { LOCAL_PROJECT_ID } from 'util/url';
 import useToggleExplorer from '../../hooks/useToggleExplorer';
 import EditorLayout from './EditorLayout';
+import theme from '../../theme';
 
 export const LEFT_SIDEBAR_WIDTH = 350;
 
@@ -40,7 +41,11 @@ const getBaseStyles = (
   showProjectsSidebar: boolean,
   isExplorerCollapsed: boolean,
 ): ThemeUICSSObject => {
-  const fileExplorerWidth = isExplorerCollapsed ? '65px' : '244px';
+  const fileExplorerWidth = isExplorerCollapsed
+    ? theme.isMobile
+      ? '30px'
+      : '65px'
+    : '244px';
 
   const styles: ThemeUICSSObject = {
     position: 'absolute',
@@ -51,7 +56,7 @@ const getBaseStyles = (
     height: '100vh',
     display: 'grid',
     gridTemplateAreas: "'header header' 'sidebar main'",
-    gridTemplateColumns: `${fileExplorerWidth} auto`,
+    gridTemplateColumns: `[sidebar] ${fileExplorerWidth} [main] auto`,
     gridTemplateRows: ['40px auto', '50px auto'],
     overflow: 'hidden',
     filter: showProjectsSidebar ? 'blur(1px)' : 'none',
