@@ -33,6 +33,16 @@ const styles: SXStyles = {
     paddingLeft: '1em',
     paddingRight: '1em',
   },
+  mobile: {
+    background: 'white',
+    display: 'flex',
+    gridArea: 'header',
+    flex: '1 1 auto',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: '1rem',
+  },
   button: {
     border: '1px solid #DEE2E9',
     borderRadius: '8px',
@@ -102,6 +112,18 @@ const TopNav = () => {
     setProjectName(project.title);
   }, [project?.id]);
 
+  if (theme.isMobile) {
+    return (
+      <Flex sx={styles.mobile}>
+        <NavInput
+          type="text"
+          value={projectName}
+          onChange={() => {}}
+          updateValue={() => {}}
+        />
+      </Flex>
+    );
+  }
   return (
     <Flex sx={styles.root}>
       <Flex sx={styles.topNavSection}>

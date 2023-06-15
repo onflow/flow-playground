@@ -6,6 +6,7 @@ import { Flex } from 'theme-ui';
 import BottomEditorPanelHeader from './BottomEditorPanelHeader';
 import RenderError from './RenderError';
 import { RenderResponse } from './RenderResponse';
+import theme from '../../../theme';
 
 export const BOTTOM_EDITOR_PANEL_HEADER_HEIGHT = 80;
 
@@ -62,6 +63,10 @@ const BottomEditorPanel = ({
     );
   };
   const panelProblems = getProblems();
+
+  if (theme.isMobile) {
+    return null;
+  }
 
   return (
     <Flex sx={styles.root}>

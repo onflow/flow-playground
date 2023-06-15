@@ -7,6 +7,7 @@ import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import Button from '../../Button';
 import LogIcon from '../../Icons/LogIcon';
+import theme from '../../../theme';
 
 type BottomEditorPanelHeaderProps = {
   problems: any;
@@ -104,6 +105,10 @@ const BottomEditorPanelHeader = ({
       ? 's'
       : ''
   }`;
+
+  if (theme.isMobile) {
+    return null;
+  }
 
   return (
     <Flex as={Tab.List} sx={styles.header}>

@@ -57,6 +57,7 @@ import { Template } from 'src/types';
 import DismissiblePopup from 'components/DismissiblePopup';
 import { userModalKeys } from 'util/localstorage';
 import { addressToAccount } from 'util/accounts';
+import theme from '../../../../theme';
 
 const ButtonActionLabels = {
   [String(EntityType.TransactionTemplate)]: 'Send',
@@ -472,7 +473,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     validate(list, values);
   }, [list, values]);
 
-  if (type === EntityType.AccountStorage) {
+  if (type === EntityType.AccountStorage || theme.isMobile) {
     return null;
   }
 
