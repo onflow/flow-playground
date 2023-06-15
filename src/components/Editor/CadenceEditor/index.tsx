@@ -154,6 +154,7 @@ const CadenceEditor = (props: CadenceEditorProps) => {
       readOnly:
         project.active.type === EntityType.AccountStorage || theme.isMobile,
       domReadOnly: theme.isMobile,
+      contextmenu: !theme.isMobile,
     });
 
     const [code] = project.getActiveCode();
