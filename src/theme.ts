@@ -1,4 +1,5 @@
 export default {
+  breakpoints: ['576px', '768px', '992px'],
   isMobile: window.matchMedia('(max-width: 768px)')?.matches,
   colors: {
     white: '#ffffff',

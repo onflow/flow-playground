@@ -6,6 +6,7 @@ import React from 'react';
 import { SXStyles } from 'src/types';
 import { Flex } from 'theme-ui';
 import FilesList from './FilesList';
+import theme from '../../../theme';
 
 type FileExplorerProps = {
   isExplorerCollapsed: boolean;
@@ -42,6 +43,7 @@ const styles: SXStyles = {
     borderRadius: '8px',
   },
   shutterClosed: {
+    left: theme.isMobile ? '10px' : '20px',
     position: 'absolute',
     padding: '0px',
     borderRadius: '8px',
