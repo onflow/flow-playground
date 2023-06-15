@@ -6,7 +6,7 @@ import {
 } from 'api/apollo/generated/graphql';
 import React, { createContext, useEffect, useState } from 'react';
 import { ChildProps, Template } from 'src/types';
-import { getParams, LOCAL_PROJECT_ID } from 'util/url';
+import { getHashLineNumber, getParams, LOCAL_PROJECT_ID } from 'util/url';
 import ProjectMutator from './projectMutator';
 import { storageMapByAddress } from 'util/accounts';
 import { editor as monacoEditor } from 'monaco-editor/esm/vs/editor/editor.api';
@@ -90,6 +90,7 @@ export interface ProjectContextValue {
   clearApplicationErrors: () => void;
   setCurrentEditor: (editor: monacoEditor.ICodeEditor) => void;
   currentEditor: monacoEditor.ICodeEditor | null;
+  hightlightedLines: number[];
 }
 
 export const ProjectContext: React.Context<ProjectContextValue> =
@@ -122,6 +123,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const [applicationErrorMessage, setApplicationErrorMessage] = useState('');
   const [currentEditor, setCurrentEditor] =
     useState<monacoEditor.ICodeEditor | null>(null);
+  const hightlightedLines: number[] = getHashLineNumber();
 
   const checkAppErrors = async () => {
     await mutator.getApplicationErrors().then((res) => {
@@ -848,6 +850,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         clearApplicationErrors,
         setCurrentEditor,
         currentEditor,
+        hightlightedLines,
       }}
     >
       {children}

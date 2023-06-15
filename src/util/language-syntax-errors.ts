@@ -153,3 +153,20 @@ export const hideDecorations = (editor: monacoEditor.ICodeEditor): void => {
 
   model.deltaDecorations(current, []);
 };
+
+export const hightlightLines = (
+  editor: monacoEditor.ICodeEditor,
+  lines: number[],
+): void => {
+  const [startLine, endLine] = lines.length > 1 ? lines : [lines[0], lines[0]];
+  const range = new Range(startLine, 1, endLine, 1);
+  const op = {
+    range,
+    options: {
+      isWholeLine: true,
+      className: 'playground-syntax-hightlight-hover-selection',
+    },
+  };
+
+  editor.getModel().deltaDecorations([], [op]);
+};

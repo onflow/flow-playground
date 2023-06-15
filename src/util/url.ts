@@ -14,6 +14,18 @@ export const getParams = (url: string): any => {
     }, {});
 };
 
+export const getHashLineNumber = (): number[] => {
+  const value = window.location.hash?.substring(1);
+  if (!value) return [];
+
+  const lineNumbers = value.substring(1);
+  if (lineNumbers.includes('-')) {
+    const [start, end] = lineNumbers.replace('L', '').split('-');
+    return [Number(start), Number(end)];
+  }
+  return [Number(lineNumbers)];
+};
+
 export const scriptTypes = ['contract', 'tx', 'script'];
 
 export const LOCAL_PROJECT_ID = 'local-project';
