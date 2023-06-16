@@ -9,6 +9,7 @@ import { EditorState } from './types';
 import { EntityType } from 'providers/Project';
 import theme from '../../../theme';
 import { hightlightLines } from 'util/language-syntax-errors';
+import { addCustomActions } from './EditorCustomActions';
 
 const MONACO_CONTAINER_ID = 'monaco-container';
 
@@ -120,6 +121,7 @@ const CadenceEditor = (props: CadenceEditorProps) => {
         if (project.hightlightedLines.length > 0) {
           hightlightLines(editor, project.hightlightedLines);
         }
+        addCustomActions(editor);
       }
       editorOnChange.current = editor.onDidChangeModelContent(() => {
         if (project.project?.accounts) {
