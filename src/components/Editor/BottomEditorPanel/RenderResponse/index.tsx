@@ -36,17 +36,17 @@ export const RenderResponse = () => {
     ? data.cachedExecutionResults[resultType]
     : [];
 
+  const formattedFilteredResults = filteredResults.slice(0).map((line: LineType, index: number) => ({...line, index})).reverse()
+  
   return (
     <Flex sx={styles.root} data-test="execution-results">
       {filteredResults.length > 0
         ? !loading &&
           !error &&
-          filteredResults
-            .reverse()
-            .map((line: LineType, n: number) => (
-              <Line {...line} key={n} index={n} />
+          formattedFilteredResults
+            .map((formattedLine: LineType & {key: string, index: number}) => (
+              <Line {...formattedLine} key={JSON.stringify(formattedLine)} />
             ))
-            .reverse()
         : 'Welcome to the Playground!'}
     </Flex>
   );
