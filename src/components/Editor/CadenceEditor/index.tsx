@@ -121,7 +121,6 @@ const CadenceEditor = (props: CadenceEditorProps) => {
         if (project.hightlightedLines.length > 0) {
           hightlightLines(editor, project.hightlightedLines);
         }
-        addCustomActions(editor);
       }
       editorOnChange.current = editor.onDidChangeModelContent(() => {
         if (project.project?.accounts) {
@@ -174,6 +173,7 @@ const CadenceEditor = (props: CadenceEditorProps) => {
     editor.restoreViewState(state.viewState);
     editor.focus();
     editor.layout();
+    addCustomActions(editor);
 
     // Save editor in component state
     setEditor(editor);
