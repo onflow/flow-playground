@@ -14,13 +14,20 @@ export const getParams = (url: string): any => {
     }, {});
 };
 
+export const buildHashUrl = (lineNumbers: number[]): string => {
+  const url = window.location.href.split('#')[0];
+  const hash = lineNumbers.map((l) => `L${l}`).join('-');
+  return `${url}#${hash}`;
+};
+
 export const getHashLineNumber = (): number[] => {
   const value = window.location.hash?.substring(1);
   if (!value) return [];
 
-  const lineNumbers = value.toLocaleUpperCase().replace('L', '');
+  const lineNumbers = value.toLocaleUpperCase().replace(/L/g, '');
   if (lineNumbers.includes('-')) {
     const [start, end] = lineNumbers.split('-');
+    if (start === end) return [Number(start)];
     return [Number(start), Number(end)];
   }
   return [Number(lineNumbers)];

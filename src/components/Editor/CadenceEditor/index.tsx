@@ -9,6 +9,7 @@ import { EditorState } from './types';
 import { EntityType } from 'providers/Project';
 import theme from '../../../theme';
 import { hightlightLines } from 'util/language-syntax-errors';
+import { addCustomActions } from './EditorCustomActions';
 
 const MONACO_CONTAINER_ID = 'monaco-container';
 
@@ -172,6 +173,7 @@ const CadenceEditor = (props: CadenceEditorProps) => {
     editor.restoreViewState(state.viewState);
     editor.focus();
     editor.layout();
+    addCustomActions(editor);
 
     // Save editor in component state
     setEditor(editor);
