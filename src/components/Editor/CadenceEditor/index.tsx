@@ -8,6 +8,7 @@ import ControlPanel from './ControlPanel';
 import { EditorState } from './types';
 import { EntityType } from 'providers/Project';
 import theme from '../../../theme';
+import { hightlightLines } from 'util/language-syntax-errors';
 
 const MONACO_CONTAINER_ID = 'monaco-container';
 
@@ -116,6 +117,9 @@ const CadenceEditor = (props: CadenceEditorProps) => {
         editor.restoreViewState(newState.viewState);
         editor.focus();
         editor.layout();
+        if (project.hightlightedLines.length > 0) {
+          hightlightLines(editor, project.hightlightedLines);
+        }
       }
       editorOnChange.current = editor.onDidChangeModelContent(() => {
         if (project.project?.accounts) {
@@ -159,6 +163,7 @@ const CadenceEditor = (props: CadenceEditorProps) => {
 
     const [code] = project.getActiveCode();
     const model = monaco.editor.createModel(code, CADENCE_LANGUAGE_ID);
+
     const state: EditorState = {
       model,
       viewState: null,

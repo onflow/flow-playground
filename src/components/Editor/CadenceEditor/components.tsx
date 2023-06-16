@@ -81,4 +81,9 @@ export const EditorContainer = styled.div<EditorContainerProps>`
     border-radius: 3px;
     animation: ${blink} 1s ease-in-out infinite;
   }
+
+  .playground-syntax-hightlight-hover-selection {
+    background-color: rgb(238, 169, 30, 0.3);
+    border-radius: 3px;
+  }
 `;
