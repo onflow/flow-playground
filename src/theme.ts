@@ -23,6 +23,8 @@ export default {
     borderDark: 'rgb(222, 222, 222)',
     shadowColor: 'rgb(222, 222, 222)',
     warning: '#ffcc00',
+    info: '#55EE1E26',
+    infoBackground: '#55EE1E',
     error: '#f44336',
     errorToast: '#fc4723',
     blue: '#0000ff',
