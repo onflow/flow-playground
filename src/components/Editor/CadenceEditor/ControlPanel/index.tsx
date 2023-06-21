@@ -220,7 +220,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     const errors = list.reduce((acc: any, item: Argument) => {
       const { name, type } = item;
       const value = values[name];
-      console.log('item', item);
       if (item.unsupported) {
         acc[name] = `Type ${type} is not supported in Playground`;
       } else if (value) {

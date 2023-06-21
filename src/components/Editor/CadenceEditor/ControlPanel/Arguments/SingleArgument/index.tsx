@@ -13,7 +13,7 @@ const SingleArgument: React.FC<SingleArgumentProps> = ({
   error,
   onChange,
 }) => {
-  const { name, type, unsupported: unSupported } = argument;
+  const { name, type, unsupported } = argument;
   return (
     <InputBlock>
       <Label>
@@ -22,7 +22,7 @@ const SingleArgument: React.FC<SingleArgumentProps> = ({
       </Label>
       <Input
         name={`${name}-${type}`}
-        disabled={unSupported}
+        disabled={unsupported}
         onChange={(event) => {
           const { value } = event.target;
           onChange(name, value);
