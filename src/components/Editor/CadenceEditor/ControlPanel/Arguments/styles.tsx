@@ -190,15 +190,14 @@ export const SingleError = styled.div`
   border-radius: 8px;
   &:hover {
     background-color: rgba(244, 57, 64, 0.15);
+  }
+  &.hint-warning {
+    //background-color: rgb(238, 169, 30, 0.15);
+    background-color: ${theme.colors.warning};
+  }
 
-    &.hint-warning {
-      //background-color: rgb(238, 169, 30, 0.15);
-      background-color: ${theme.colors.warning};
-    }
-
-    &.hint-info {
-      background-color: ${theme.colors.info};
-    }
+  &.hint-info {
+    background-color: ${theme.colors.info};
   }
 `;
 

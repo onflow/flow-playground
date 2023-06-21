@@ -1,6 +1,7 @@
 import { Account } from 'api/apollo/generated/graphql';
 import { editor as monacoEditor } from 'monaco-editor/esm/vs/editor/editor.api';
 
+export const UNSUPPORTED_TYPES = ['AuthAccount'];
 export interface IValue {
   [key: string]: string;
 }
