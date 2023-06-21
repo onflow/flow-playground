@@ -149,7 +149,7 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
     <Stack>
       <Heading>
         <Title>Warnings and Hints</Title>
-        <Controls onClick={toggle}>
+        <Controls onClick={toggle} style={{ paddingRight: '10px' }}>
           {hintsAmount > 0 && (
             <Badge className="info">
               <span>{hintsAmount}</span>
