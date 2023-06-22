@@ -21,6 +21,7 @@ export type TransactionExecution = (
 export type DeployExecution = (
   fileIndex: number,
   accountId: number,
+  args?: string[],
 ) => Promise<any>;
 
 export type ProcessingArgs = {

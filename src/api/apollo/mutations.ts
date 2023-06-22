@@ -138,9 +138,15 @@ export const CREATE_CONTRACT_DEPLOYMENT = gql`
     $projectId: UUID!
     $script: String!
     $signer: Address!
+    $arguments: [String!]
   ) {
     createContractDeployment(
-      input: { projectId: $projectId, script: $script, address: $signer }
+      input: {
+        projectId: $projectId
+        script: $script
+        address: $signer
+        arguments: $arguments
+      }
     ) {
       id
       script

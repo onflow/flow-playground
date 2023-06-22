@@ -385,6 +385,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             rawResult = await contractDeployment(
               active.index,
               selectedAccountId,
+              args,
             );
             break;
           }

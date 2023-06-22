@@ -745,6 +745,7 @@ export default class ProjectMutator {
     contractTemplate: ContractTemplate,
     account: Account,
     index: number,
+    args: string[],
   ) {
     const hasDeployedCode = !!account.deployedContracts?.length;
 
@@ -761,6 +762,7 @@ export default class ProjectMutator {
         projectId: this.projectId,
         script: contractTemplate.script,
         signer: account.address,
+        arguments: args,
       },
       refetchQueries: [
         { query: GET_PROJECT, variables: { projectId: this.projectId } },

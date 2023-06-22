@@ -39,6 +39,7 @@ export interface ProjectContextValue {
   ) => Promise<any>;
   saveProject: () => Promise<any>;
   deleteProject: (projectId: string) => Promise<any>;
+  resetProject: (projectId: string) => Promise<any>;
   createContractDeployment: (
     fileIndex: number,
     accountId: number,
@@ -248,9 +249,27 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
+  const resetProject = async (dProjectId: string) => {
+    setIsSaving(true);
+    let res;
+    try {
+      // TODO - reset project
+      console.log('reset project');
+      res = null; //await mutator.deleteProject(dProjectId);
+    } catch (e) {
+      console.error(e);
+      checkAppErrors();
+    } finally {
+      setIsSaving(false);
+    }
+
+    return res;
+  };
+
   const createContractDeployment: any = async (
     fileIndex: number,
     accountId: number,
+    args: string[] = [],
   ) => {
     setIsSaving(true);
     setIsExecutingAction(true);
@@ -262,6 +281,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         template,
         deployAccount,
         active.index,
+        args,
       );
 
       const addr = deployAccount.address;
@@ -812,6 +832,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         updateProject,
         saveProject,
         deleteProject,
+        resetProject,
         createContractDeployment,
         updateContractTemplate,
         updateScriptTemplate,
