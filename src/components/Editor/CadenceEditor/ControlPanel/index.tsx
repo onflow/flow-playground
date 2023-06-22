@@ -228,9 +228,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
           acc[name] = error;
         }
       } else {
-        if (type !== 'String') {
-          acc[name] = "Value can't be empty";
-        }
+        acc[name] = "Value can't be empty";
       }
       return acc;
     }, {});
