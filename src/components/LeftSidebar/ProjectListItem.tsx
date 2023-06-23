@@ -16,6 +16,7 @@ import { LOCAL_PROJECT_ID } from 'util/url';
 import CopyIcon from 'components/Icons/CopyIcon';
 import { Project } from 'api/apollo/generated/graphql';
 import { userDataKeys, UserLocalStorage } from 'util/localstorage';
+import ResetIcon from 'components/Icons/ResetIcon';
 
 type Props = {
   project: ProjectType;
@@ -173,12 +174,12 @@ const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
       icon: CopyIcon,
       args: [project],
     },
-    /*    {
+    {
       name: 'Reset Project',
       onClick: () => setShowResetConfirmation(true),
       icon: ResetIcon,
       args: [project],
-    }, */
+    },
   ];
   const timeAgo = formatDistance(new Date(project.updatedAt), new Date(), {
     addSuffix: true,

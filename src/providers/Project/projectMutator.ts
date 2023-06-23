@@ -19,6 +19,7 @@ import {
   DELETE_PROJECT,
   DELETE_SCRIPT_TEMPLATE,
   DELETE_TRANSACTION_TEMPLATE,
+  RESET_PROJECT,
   SAVE_PROJECT,
   SET_ACTIVE_PROJECT,
   UPDATE_CONTRACT_TEMPLATE,
@@ -29,7 +30,6 @@ import {
   GET_APPLICATION_ERRORS,
   GET_LOCAL_PROJECT,
   GET_PROJECT,
-  GET_PROJECT_UPDATE_AT,
 } from 'api/apollo/queries';
 
 import Mixpanel from 'util/mixpanel';
@@ -319,6 +319,20 @@ export default class ProjectMutator {
     return res;
   }
 
+  async resetProject(projectId: string) {
+    const res = await this.client.mutate({
+      mutation: RESET_PROJECT,
+      variables: {
+        projectId,
+      },
+      refetchQueries: [{ query: GET_PROJECT, variables: { projectId } }],
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
+    });
+    return res;
+  }
+
   async updateTransactionTemplate(
     templateId: string,
     script: string,
@@ -349,7 +363,7 @@ export default class ProjectMutator {
       },
       refetchQueries: [
         {
-          query: GET_PROJECT_UPDATE_AT,
+          query: GET_PROJECT,
           variables: { projectId: this.projectId },
         },
       ],
@@ -477,7 +491,7 @@ export default class ProjectMutator {
       },
       refetchQueries: [
         {
-          query: GET_PROJECT_UPDATE_AT,
+          query: GET_PROJECT,
           variables: { projectId: this.projectId },
         },
       ],
@@ -729,7 +743,7 @@ export default class ProjectMutator {
       },
       refetchQueries: [
         {
-          query: GET_PROJECT_UPDATE_AT,
+          query: GET_PROJECT,
           variables: { projectId: this.projectId },
         },
       ],

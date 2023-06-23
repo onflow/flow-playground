@@ -337,6 +337,12 @@ export const DELETE_PROJECT = gql`
   }
 `;
 
+export const RESET_PROJECT = gql`
+  mutation ResetProject($projectId: UUID!) {
+    resetProjectState(projectId: $projectId)
+  }
+`;
+
 export const SET_EXECUTION_RESULT = gql`
   mutation SetExecutionResults(
     $resultType: ResultType!

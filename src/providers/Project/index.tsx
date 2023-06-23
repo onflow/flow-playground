@@ -253,9 +253,8 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     setIsSaving(true);
     let res;
     try {
-      // TODO - reset project
-      console.log('reset project', dProjectId);
-      res = null; //await mutator.deleteProject(dProjectId);
+      res = null;
+      await mutator.resetProject(dProjectId);
     } catch (e) {
       console.error(e);
       checkAppErrors();
