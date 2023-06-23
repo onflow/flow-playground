@@ -1,12 +1,7 @@
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
-/** This file is mostly generated, see package.json for command.
- * Consolidating React Apollo libs into single Apollo object, 
- * The generator expectas all hooks and common methods are in an Apollo object.
- * Doing this will make it easier next time generator is used. 
- * */
-const Apollo = { ...ApolloReactHooks, ...ApolloReactCommon };
+
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -1055,7 +1050,7 @@ export const CreateProjectDocument = gql`
   }
 }
     `;
-export type CreateProjectMutationFn = Apollo.MutationFunction<CreateProjectMutation, CreateProjectMutationVariables>;
+export type CreateProjectMutationFn = ApolloReactCommon.MutationFunction<CreateProjectMutation, CreateProjectMutationVariables>;
 
 /**
  * __useCreateProjectMutation__
@@ -1082,13 +1077,13 @@ export type CreateProjectMutationFn = Apollo.MutationFunction<CreateProjectMutat
  *   },
  * });
  */
-export function useCreateProjectMutation(baseOptions?: Apollo.MutationHookOptions<CreateProjectMutation, CreateProjectMutationVariables>) {
+export function useCreateProjectMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateProjectMutation, CreateProjectMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateProjectMutation, CreateProjectMutationVariables>(CreateProjectDocument, options);
+        return ApolloReactHooks.useMutation<CreateProjectMutation, CreateProjectMutationVariables>(CreateProjectDocument, options);
       }
 export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProjectMutation>;
-export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
-export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
+export type CreateProjectMutationResult = ApolloReactCommon.MutationResult<CreateProjectMutation>;
+export type CreateProjectMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
 export const UpdateProjectDocument = gql`
     mutation UpdateProject($projectId: UUID!, $title: String!, $description: String!, $readme: String!) {
   updateProject(
@@ -1102,7 +1097,7 @@ export const UpdateProjectDocument = gql`
   }
 }
     `;
-export type UpdateProjectMutationFn = Apollo.MutationFunction<UpdateProjectMutation, UpdateProjectMutationVariables>;
+export type UpdateProjectMutationFn = ApolloReactCommon.MutationFunction<UpdateProjectMutation, UpdateProjectMutationVariables>;
 
 /**
  * __useUpdateProjectMutation__
@@ -1124,19 +1119,19 @@ export type UpdateProjectMutationFn = Apollo.MutationFunction<UpdateProjectMutat
  *   },
  * });
  */
-export function useUpdateProjectMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProjectMutation, UpdateProjectMutationVariables>) {
+export function useUpdateProjectMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateProjectMutation, UpdateProjectMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateProjectMutation, UpdateProjectMutationVariables>(UpdateProjectDocument, options);
+        return ApolloReactHooks.useMutation<UpdateProjectMutation, UpdateProjectMutationVariables>(UpdateProjectDocument, options);
       }
 export type UpdateProjectMutationHookResult = ReturnType<typeof useUpdateProjectMutation>;
-export type UpdateProjectMutationResult = Apollo.MutationResult<UpdateProjectMutation>;
-export type UpdateProjectMutationOptions = Apollo.BaseMutationOptions<UpdateProjectMutation, UpdateProjectMutationVariables>;
+export type UpdateProjectMutationResult = ApolloReactCommon.MutationResult<UpdateProjectMutation>;
+export type UpdateProjectMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateProjectMutation, UpdateProjectMutationVariables>;
 export const SetActiveProjectDocument = gql`
     mutation SetActiveProject($id: Int!) {
   setActiveProjectId(id: $id) @client
 }
     `;
-export type SetActiveProjectMutationFn = Apollo.MutationFunction<SetActiveProjectMutation, SetActiveProjectMutationVariables>;
+export type SetActiveProjectMutationFn = ApolloReactCommon.MutationFunction<SetActiveProjectMutation, SetActiveProjectMutationVariables>;
 
 /**
  * __useSetActiveProjectMutation__
@@ -1155,13 +1150,13 @@ export type SetActiveProjectMutationFn = Apollo.MutationFunction<SetActiveProjec
  *   },
  * });
  */
-export function useSetActiveProjectMutation(baseOptions?: Apollo.MutationHookOptions<SetActiveProjectMutation, SetActiveProjectMutationVariables>) {
+export function useSetActiveProjectMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetActiveProjectMutation, SetActiveProjectMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SetActiveProjectMutation, SetActiveProjectMutationVariables>(SetActiveProjectDocument, options);
+        return ApolloReactHooks.useMutation<SetActiveProjectMutation, SetActiveProjectMutationVariables>(SetActiveProjectDocument, options);
       }
 export type SetActiveProjectMutationHookResult = ReturnType<typeof useSetActiveProjectMutation>;
-export type SetActiveProjectMutationResult = Apollo.MutationResult<SetActiveProjectMutation>;
-export type SetActiveProjectMutationOptions = Apollo.BaseMutationOptions<SetActiveProjectMutation, SetActiveProjectMutationVariables>;
+export type SetActiveProjectMutationResult = ApolloReactCommon.MutationResult<SetActiveProjectMutation>;
+export type SetActiveProjectMutationOptions = ApolloReactCommon.BaseMutationOptions<SetActiveProjectMutation, SetActiveProjectMutationVariables>;
 export const CreateContractTemplateDocument = gql`
     mutation CreateContractTemplate($projectId: UUID!, $script: String!, $title: String!) {
   createContractTemplate(
@@ -1173,7 +1168,7 @@ export const CreateContractTemplateDocument = gql`
   }
 }
     `;
-export type CreateContractTemplateMutationFn = Apollo.MutationFunction<CreateContractTemplateMutation, CreateContractTemplateMutationVariables>;
+export type CreateContractTemplateMutationFn = ApolloReactCommon.MutationFunction<CreateContractTemplateMutation, CreateContractTemplateMutationVariables>;
 
 /**
  * __useCreateContractTemplateMutation__
@@ -1194,13 +1189,13 @@ export type CreateContractTemplateMutationFn = Apollo.MutationFunction<CreateCon
  *   },
  * });
  */
-export function useCreateContractTemplateMutation(baseOptions?: Apollo.MutationHookOptions<CreateContractTemplateMutation, CreateContractTemplateMutationVariables>) {
+export function useCreateContractTemplateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateContractTemplateMutation, CreateContractTemplateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateContractTemplateMutation, CreateContractTemplateMutationVariables>(CreateContractTemplateDocument, options);
+        return ApolloReactHooks.useMutation<CreateContractTemplateMutation, CreateContractTemplateMutationVariables>(CreateContractTemplateDocument, options);
       }
 export type CreateContractTemplateMutationHookResult = ReturnType<typeof useCreateContractTemplateMutation>;
-export type CreateContractTemplateMutationResult = Apollo.MutationResult<CreateContractTemplateMutation>;
-export type CreateContractTemplateMutationOptions = Apollo.BaseMutationOptions<CreateContractTemplateMutation, CreateContractTemplateMutationVariables>;
+export type CreateContractTemplateMutationResult = ApolloReactCommon.MutationResult<CreateContractTemplateMutation>;
+export type CreateContractTemplateMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateContractTemplateMutation, CreateContractTemplateMutationVariables>;
 export const UpdateContractTemplateDocument = gql`
     mutation UpdateContractTemplate($projectId: UUID!, $templateId: UUID!, $script: String!, $title: String) {
   updateContractTemplate(
@@ -1213,7 +1208,7 @@ export const UpdateContractTemplateDocument = gql`
   }
 }
     `;
-export type UpdateContractTemplateMutationFn = Apollo.MutationFunction<UpdateContractTemplateMutation, UpdateContractTemplateMutationVariables>;
+export type UpdateContractTemplateMutationFn = ApolloReactCommon.MutationFunction<UpdateContractTemplateMutation, UpdateContractTemplateMutationVariables>;
 
 /**
  * __useUpdateContractTemplateMutation__
@@ -1235,19 +1230,19 @@ export type UpdateContractTemplateMutationFn = Apollo.MutationFunction<UpdateCon
  *   },
  * });
  */
-export function useUpdateContractTemplateMutation(baseOptions?: Apollo.MutationHookOptions<UpdateContractTemplateMutation, UpdateContractTemplateMutationVariables>) {
+export function useUpdateContractTemplateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateContractTemplateMutation, UpdateContractTemplateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateContractTemplateMutation, UpdateContractTemplateMutationVariables>(UpdateContractTemplateDocument, options);
+        return ApolloReactHooks.useMutation<UpdateContractTemplateMutation, UpdateContractTemplateMutationVariables>(UpdateContractTemplateDocument, options);
       }
 export type UpdateContractTemplateMutationHookResult = ReturnType<typeof useUpdateContractTemplateMutation>;
-export type UpdateContractTemplateMutationResult = Apollo.MutationResult<UpdateContractTemplateMutation>;
-export type UpdateContractTemplateMutationOptions = Apollo.BaseMutationOptions<UpdateContractTemplateMutation, UpdateContractTemplateMutationVariables>;
+export type UpdateContractTemplateMutationResult = ApolloReactCommon.MutationResult<UpdateContractTemplateMutation>;
+export type UpdateContractTemplateMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateContractTemplateMutation, UpdateContractTemplateMutationVariables>;
 export const DeleteContractTemplateDocument = gql`
     mutation DeleteContractTemplate($projectId: UUID!, $templateId: UUID!) {
   deleteContractTemplate(id: $templateId, projectId: $projectId)
 }
     `;
-export type DeleteContractTemplateMutationFn = Apollo.MutationFunction<DeleteContractTemplateMutation, DeleteContractTemplateMutationVariables>;
+export type DeleteContractTemplateMutationFn = ApolloReactCommon.MutationFunction<DeleteContractTemplateMutation, DeleteContractTemplateMutationVariables>;
 
 /**
  * __useDeleteContractTemplateMutation__
@@ -1267,13 +1262,13 @@ export type DeleteContractTemplateMutationFn = Apollo.MutationFunction<DeleteCon
  *   },
  * });
  */
-export function useDeleteContractTemplateMutation(baseOptions?: Apollo.MutationHookOptions<DeleteContractTemplateMutation, DeleteContractTemplateMutationVariables>) {
+export function useDeleteContractTemplateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteContractTemplateMutation, DeleteContractTemplateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteContractTemplateMutation, DeleteContractTemplateMutationVariables>(DeleteContractTemplateDocument, options);
+        return ApolloReactHooks.useMutation<DeleteContractTemplateMutation, DeleteContractTemplateMutationVariables>(DeleteContractTemplateDocument, options);
       }
 export type DeleteContractTemplateMutationHookResult = ReturnType<typeof useDeleteContractTemplateMutation>;
-export type DeleteContractTemplateMutationResult = Apollo.MutationResult<DeleteContractTemplateMutation>;
-export type DeleteContractTemplateMutationOptions = Apollo.BaseMutationOptions<DeleteContractTemplateMutation, DeleteContractTemplateMutationVariables>;
+export type DeleteContractTemplateMutationResult = ApolloReactCommon.MutationResult<DeleteContractTemplateMutation>;
+export type DeleteContractTemplateMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteContractTemplateMutation, DeleteContractTemplateMutationVariables>;
 export const CreateContractDeploymentDocument = gql`
     mutation CreateContractDeployment($projectId: UUID!, $script: String!, $signer: Address!, $arguments: [String!]) {
   createContractDeployment(
@@ -1302,7 +1297,7 @@ export const CreateContractDeploymentDocument = gql`
   }
 }
     `;
-export type CreateContractDeploymentMutationFn = Apollo.MutationFunction<CreateContractDeploymentMutation, CreateContractDeploymentMutationVariables>;
+export type CreateContractDeploymentMutationFn = ApolloReactCommon.MutationFunction<CreateContractDeploymentMutation, CreateContractDeploymentMutationVariables>;
 
 /**
  * __useCreateContractDeploymentMutation__
@@ -1324,13 +1319,13 @@ export type CreateContractDeploymentMutationFn = Apollo.MutationFunction<CreateC
  *   },
  * });
  */
-export function useCreateContractDeploymentMutation(baseOptions?: Apollo.MutationHookOptions<CreateContractDeploymentMutation, CreateContractDeploymentMutationVariables>) {
+export function useCreateContractDeploymentMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateContractDeploymentMutation, CreateContractDeploymentMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateContractDeploymentMutation, CreateContractDeploymentMutationVariables>(CreateContractDeploymentDocument, options);
+        return ApolloReactHooks.useMutation<CreateContractDeploymentMutation, CreateContractDeploymentMutationVariables>(CreateContractDeploymentDocument, options);
       }
 export type CreateContractDeploymentMutationHookResult = ReturnType<typeof useCreateContractDeploymentMutation>;
-export type CreateContractDeploymentMutationResult = Apollo.MutationResult<CreateContractDeploymentMutation>;
-export type CreateContractDeploymentMutationOptions = Apollo.BaseMutationOptions<CreateContractDeploymentMutation, CreateContractDeploymentMutationVariables>;
+export type CreateContractDeploymentMutationResult = ApolloReactCommon.MutationResult<CreateContractDeploymentMutation>;
+export type CreateContractDeploymentMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateContractDeploymentMutation, CreateContractDeploymentMutationVariables>;
 export const UpdateTransactionTemplateDocument = gql`
     mutation UpdateTransactionTemplate($projectId: UUID!, $templateId: UUID!, $script: String!, $title: String) {
   updateTransactionTemplate(
@@ -1343,7 +1338,7 @@ export const UpdateTransactionTemplateDocument = gql`
   }
 }
     `;
-export type UpdateTransactionTemplateMutationFn = Apollo.MutationFunction<UpdateTransactionTemplateMutation, UpdateTransactionTemplateMutationVariables>;
+export type UpdateTransactionTemplateMutationFn = ApolloReactCommon.MutationFunction<UpdateTransactionTemplateMutation, UpdateTransactionTemplateMutationVariables>;
 
 /**
  * __useUpdateTransactionTemplateMutation__
@@ -1365,13 +1360,13 @@ export type UpdateTransactionTemplateMutationFn = Apollo.MutationFunction<Update
  *   },
  * });
  */
-export function useUpdateTransactionTemplateMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTransactionTemplateMutation, UpdateTransactionTemplateMutationVariables>) {
+export function useUpdateTransactionTemplateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateTransactionTemplateMutation, UpdateTransactionTemplateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateTransactionTemplateMutation, UpdateTransactionTemplateMutationVariables>(UpdateTransactionTemplateDocument, options);
+        return ApolloReactHooks.useMutation<UpdateTransactionTemplateMutation, UpdateTransactionTemplateMutationVariables>(UpdateTransactionTemplateDocument, options);
       }
 export type UpdateTransactionTemplateMutationHookResult = ReturnType<typeof useUpdateTransactionTemplateMutation>;
-export type UpdateTransactionTemplateMutationResult = Apollo.MutationResult<UpdateTransactionTemplateMutation>;
-export type UpdateTransactionTemplateMutationOptions = Apollo.BaseMutationOptions<UpdateTransactionTemplateMutation, UpdateTransactionTemplateMutationVariables>;
+export type UpdateTransactionTemplateMutationResult = ApolloReactCommon.MutationResult<UpdateTransactionTemplateMutation>;
+export type UpdateTransactionTemplateMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateTransactionTemplateMutation, UpdateTransactionTemplateMutationVariables>;
 export const CreateTransactionTemplateDocument = gql`
     mutation CreateTransactionTemplate($projectId: UUID!, $script: String!, $title: String!) {
   createTransactionTemplate(
@@ -1383,7 +1378,7 @@ export const CreateTransactionTemplateDocument = gql`
   }
 }
     `;
-export type CreateTransactionTemplateMutationFn = Apollo.MutationFunction<CreateTransactionTemplateMutation, CreateTransactionTemplateMutationVariables>;
+export type CreateTransactionTemplateMutationFn = ApolloReactCommon.MutationFunction<CreateTransactionTemplateMutation, CreateTransactionTemplateMutationVariables>;
 
 /**
  * __useCreateTransactionTemplateMutation__
@@ -1404,19 +1399,19 @@ export type CreateTransactionTemplateMutationFn = Apollo.MutationFunction<Create
  *   },
  * });
  */
-export function useCreateTransactionTemplateMutation(baseOptions?: Apollo.MutationHookOptions<CreateTransactionTemplateMutation, CreateTransactionTemplateMutationVariables>) {
+export function useCreateTransactionTemplateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateTransactionTemplateMutation, CreateTransactionTemplateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateTransactionTemplateMutation, CreateTransactionTemplateMutationVariables>(CreateTransactionTemplateDocument, options);
+        return ApolloReactHooks.useMutation<CreateTransactionTemplateMutation, CreateTransactionTemplateMutationVariables>(CreateTransactionTemplateDocument, options);
       }
 export type CreateTransactionTemplateMutationHookResult = ReturnType<typeof useCreateTransactionTemplateMutation>;
-export type CreateTransactionTemplateMutationResult = Apollo.MutationResult<CreateTransactionTemplateMutation>;
-export type CreateTransactionTemplateMutationOptions = Apollo.BaseMutationOptions<CreateTransactionTemplateMutation, CreateTransactionTemplateMutationVariables>;
+export type CreateTransactionTemplateMutationResult = ApolloReactCommon.MutationResult<CreateTransactionTemplateMutation>;
+export type CreateTransactionTemplateMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateTransactionTemplateMutation, CreateTransactionTemplateMutationVariables>;
 export const DeleteTransactionTemplateDocument = gql`
     mutation DeleteTransactionTemplate($projectId: UUID!, $templateId: UUID!) {
   deleteTransactionTemplate(id: $templateId, projectId: $projectId)
 }
     `;
-export type DeleteTransactionTemplateMutationFn = Apollo.MutationFunction<DeleteTransactionTemplateMutation, DeleteTransactionTemplateMutationVariables>;
+export type DeleteTransactionTemplateMutationFn = ApolloReactCommon.MutationFunction<DeleteTransactionTemplateMutation, DeleteTransactionTemplateMutationVariables>;
 
 /**
  * __useDeleteTransactionTemplateMutation__
@@ -1436,13 +1431,13 @@ export type DeleteTransactionTemplateMutationFn = Apollo.MutationFunction<Delete
  *   },
  * });
  */
-export function useDeleteTransactionTemplateMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTransactionTemplateMutation, DeleteTransactionTemplateMutationVariables>) {
+export function useDeleteTransactionTemplateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteTransactionTemplateMutation, DeleteTransactionTemplateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteTransactionTemplateMutation, DeleteTransactionTemplateMutationVariables>(DeleteTransactionTemplateDocument, options);
+        return ApolloReactHooks.useMutation<DeleteTransactionTemplateMutation, DeleteTransactionTemplateMutationVariables>(DeleteTransactionTemplateDocument, options);
       }
 export type DeleteTransactionTemplateMutationHookResult = ReturnType<typeof useDeleteTransactionTemplateMutation>;
-export type DeleteTransactionTemplateMutationResult = Apollo.MutationResult<DeleteTransactionTemplateMutation>;
-export type DeleteTransactionTemplateMutationOptions = Apollo.BaseMutationOptions<DeleteTransactionTemplateMutation, DeleteTransactionTemplateMutationVariables>;
+export type DeleteTransactionTemplateMutationResult = ApolloReactCommon.MutationResult<DeleteTransactionTemplateMutation>;
+export type DeleteTransactionTemplateMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteTransactionTemplateMutation, DeleteTransactionTemplateMutationVariables>;
 export const CreateTransactionExecutionDocument = gql`
     mutation CreateTransactionExecution($projectId: UUID!, $script: String!, $signers: [Address!], $arguments: [String!]) {
   createTransactionExecution(
@@ -1471,7 +1466,7 @@ export const CreateTransactionExecutionDocument = gql`
   }
 }
     `;
-export type CreateTransactionExecutionMutationFn = Apollo.MutationFunction<CreateTransactionExecutionMutation, CreateTransactionExecutionMutationVariables>;
+export type CreateTransactionExecutionMutationFn = ApolloReactCommon.MutationFunction<CreateTransactionExecutionMutation, CreateTransactionExecutionMutationVariables>;
 
 /**
  * __useCreateTransactionExecutionMutation__
@@ -1493,13 +1488,13 @@ export type CreateTransactionExecutionMutationFn = Apollo.MutationFunction<Creat
  *   },
  * });
  */
-export function useCreateTransactionExecutionMutation(baseOptions?: Apollo.MutationHookOptions<CreateTransactionExecutionMutation, CreateTransactionExecutionMutationVariables>) {
+export function useCreateTransactionExecutionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateTransactionExecutionMutation, CreateTransactionExecutionMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateTransactionExecutionMutation, CreateTransactionExecutionMutationVariables>(CreateTransactionExecutionDocument, options);
+        return ApolloReactHooks.useMutation<CreateTransactionExecutionMutation, CreateTransactionExecutionMutationVariables>(CreateTransactionExecutionDocument, options);
       }
 export type CreateTransactionExecutionMutationHookResult = ReturnType<typeof useCreateTransactionExecutionMutation>;
-export type CreateTransactionExecutionMutationResult = Apollo.MutationResult<CreateTransactionExecutionMutation>;
-export type CreateTransactionExecutionMutationOptions = Apollo.BaseMutationOptions<CreateTransactionExecutionMutation, CreateTransactionExecutionMutationVariables>;
+export type CreateTransactionExecutionMutationResult = ApolloReactCommon.MutationResult<CreateTransactionExecutionMutation>;
+export type CreateTransactionExecutionMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateTransactionExecutionMutation, CreateTransactionExecutionMutationVariables>;
 export const UpdateScripTemplateDocument = gql`
     mutation UpdateScripTemplate($projectId: UUID!, $templateId: UUID!, $script: String!, $title: String) {
   updateScriptTemplate(
@@ -1512,7 +1507,7 @@ export const UpdateScripTemplateDocument = gql`
   }
 }
     `;
-export type UpdateScripTemplateMutationFn = Apollo.MutationFunction<UpdateScripTemplateMutation, UpdateScripTemplateMutationVariables>;
+export type UpdateScripTemplateMutationFn = ApolloReactCommon.MutationFunction<UpdateScripTemplateMutation, UpdateScripTemplateMutationVariables>;
 
 /**
  * __useUpdateScripTemplateMutation__
@@ -1534,13 +1529,13 @@ export type UpdateScripTemplateMutationFn = Apollo.MutationFunction<UpdateScripT
  *   },
  * });
  */
-export function useUpdateScripTemplateMutation(baseOptions?: Apollo.MutationHookOptions<UpdateScripTemplateMutation, UpdateScripTemplateMutationVariables>) {
+export function useUpdateScripTemplateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateScripTemplateMutation, UpdateScripTemplateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateScripTemplateMutation, UpdateScripTemplateMutationVariables>(UpdateScripTemplateDocument, options);
+        return ApolloReactHooks.useMutation<UpdateScripTemplateMutation, UpdateScripTemplateMutationVariables>(UpdateScripTemplateDocument, options);
       }
 export type UpdateScripTemplateMutationHookResult = ReturnType<typeof useUpdateScripTemplateMutation>;
-export type UpdateScripTemplateMutationResult = Apollo.MutationResult<UpdateScripTemplateMutation>;
-export type UpdateScripTemplateMutationOptions = Apollo.BaseMutationOptions<UpdateScripTemplateMutation, UpdateScripTemplateMutationVariables>;
+export type UpdateScripTemplateMutationResult = ApolloReactCommon.MutationResult<UpdateScripTemplateMutation>;
+export type UpdateScripTemplateMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateScripTemplateMutation, UpdateScripTemplateMutationVariables>;
 export const CreateScriptTemplateDocument = gql`
     mutation CreateScriptTemplate($projectId: UUID!, $script: String!, $title: String!) {
   createScriptTemplate(
@@ -1552,7 +1547,7 @@ export const CreateScriptTemplateDocument = gql`
   }
 }
     `;
-export type CreateScriptTemplateMutationFn = Apollo.MutationFunction<CreateScriptTemplateMutation, CreateScriptTemplateMutationVariables>;
+export type CreateScriptTemplateMutationFn = ApolloReactCommon.MutationFunction<CreateScriptTemplateMutation, CreateScriptTemplateMutationVariables>;
 
 /**
  * __useCreateScriptTemplateMutation__
@@ -1573,19 +1568,19 @@ export type CreateScriptTemplateMutationFn = Apollo.MutationFunction<CreateScrip
  *   },
  * });
  */
-export function useCreateScriptTemplateMutation(baseOptions?: Apollo.MutationHookOptions<CreateScriptTemplateMutation, CreateScriptTemplateMutationVariables>) {
+export function useCreateScriptTemplateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateScriptTemplateMutation, CreateScriptTemplateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateScriptTemplateMutation, CreateScriptTemplateMutationVariables>(CreateScriptTemplateDocument, options);
+        return ApolloReactHooks.useMutation<CreateScriptTemplateMutation, CreateScriptTemplateMutationVariables>(CreateScriptTemplateDocument, options);
       }
 export type CreateScriptTemplateMutationHookResult = ReturnType<typeof useCreateScriptTemplateMutation>;
-export type CreateScriptTemplateMutationResult = Apollo.MutationResult<CreateScriptTemplateMutation>;
-export type CreateScriptTemplateMutationOptions = Apollo.BaseMutationOptions<CreateScriptTemplateMutation, CreateScriptTemplateMutationVariables>;
+export type CreateScriptTemplateMutationResult = ApolloReactCommon.MutationResult<CreateScriptTemplateMutation>;
+export type CreateScriptTemplateMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateScriptTemplateMutation, CreateScriptTemplateMutationVariables>;
 export const DeleteScriptTemplateDocument = gql`
     mutation DeleteScriptTemplate($projectId: UUID!, $templateId: UUID!) {
   deleteScriptTemplate(id: $templateId, projectId: $projectId)
 }
     `;
-export type DeleteScriptTemplateMutationFn = Apollo.MutationFunction<DeleteScriptTemplateMutation, DeleteScriptTemplateMutationVariables>;
+export type DeleteScriptTemplateMutationFn = ApolloReactCommon.MutationFunction<DeleteScriptTemplateMutation, DeleteScriptTemplateMutationVariables>;
 
 /**
  * __useDeleteScriptTemplateMutation__
@@ -1605,13 +1600,13 @@ export type DeleteScriptTemplateMutationFn = Apollo.MutationFunction<DeleteScrip
  *   },
  * });
  */
-export function useDeleteScriptTemplateMutation(baseOptions?: Apollo.MutationHookOptions<DeleteScriptTemplateMutation, DeleteScriptTemplateMutationVariables>) {
+export function useDeleteScriptTemplateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteScriptTemplateMutation, DeleteScriptTemplateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteScriptTemplateMutation, DeleteScriptTemplateMutationVariables>(DeleteScriptTemplateDocument, options);
+        return ApolloReactHooks.useMutation<DeleteScriptTemplateMutation, DeleteScriptTemplateMutationVariables>(DeleteScriptTemplateDocument, options);
       }
 export type DeleteScriptTemplateMutationHookResult = ReturnType<typeof useDeleteScriptTemplateMutation>;
-export type DeleteScriptTemplateMutationResult = Apollo.MutationResult<DeleteScriptTemplateMutation>;
-export type DeleteScriptTemplateMutationOptions = Apollo.BaseMutationOptions<DeleteScriptTemplateMutation, DeleteScriptTemplateMutationVariables>;
+export type DeleteScriptTemplateMutationResult = ApolloReactCommon.MutationResult<DeleteScriptTemplateMutation>;
+export type DeleteScriptTemplateMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteScriptTemplateMutation, DeleteScriptTemplateMutationVariables>;
 export const CreateScriptExecutionDocument = gql`
     mutation CreateScriptExecution($projectId: UUID!, $script: String!, $arguments: [String!]) {
   createScriptExecution(
@@ -1637,7 +1632,7 @@ export const CreateScriptExecutionDocument = gql`
   }
 }
     `;
-export type CreateScriptExecutionMutationFn = Apollo.MutationFunction<CreateScriptExecutionMutation, CreateScriptExecutionMutationVariables>;
+export type CreateScriptExecutionMutationFn = ApolloReactCommon.MutationFunction<CreateScriptExecutionMutation, CreateScriptExecutionMutationVariables>;
 
 /**
  * __useCreateScriptExecutionMutation__
@@ -1658,19 +1653,19 @@ export type CreateScriptExecutionMutationFn = Apollo.MutationFunction<CreateScri
  *   },
  * });
  */
-export function useCreateScriptExecutionMutation(baseOptions?: Apollo.MutationHookOptions<CreateScriptExecutionMutation, CreateScriptExecutionMutationVariables>) {
+export function useCreateScriptExecutionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateScriptExecutionMutation, CreateScriptExecutionMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateScriptExecutionMutation, CreateScriptExecutionMutationVariables>(CreateScriptExecutionDocument, options);
+        return ApolloReactHooks.useMutation<CreateScriptExecutionMutation, CreateScriptExecutionMutationVariables>(CreateScriptExecutionDocument, options);
       }
 export type CreateScriptExecutionMutationHookResult = ReturnType<typeof useCreateScriptExecutionMutation>;
-export type CreateScriptExecutionMutationResult = Apollo.MutationResult<CreateScriptExecutionMutation>;
-export type CreateScriptExecutionMutationOptions = Apollo.BaseMutationOptions<CreateScriptExecutionMutation, CreateScriptExecutionMutationVariables>;
+export type CreateScriptExecutionMutationResult = ApolloReactCommon.MutationResult<CreateScriptExecutionMutation>;
+export type CreateScriptExecutionMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateScriptExecutionMutation, CreateScriptExecutionMutationVariables>;
 export const DeleteProjectDocument = gql`
     mutation DeleteProject($projectId: UUID!) {
   deleteProject(projectId: $projectId)
 }
     `;
-export type DeleteProjectMutationFn = Apollo.MutationFunction<DeleteProjectMutation, DeleteProjectMutationVariables>;
+export type DeleteProjectMutationFn = ApolloReactCommon.MutationFunction<DeleteProjectMutation, DeleteProjectMutationVariables>;
 
 /**
  * __useDeleteProjectMutation__
@@ -1689,19 +1684,19 @@ export type DeleteProjectMutationFn = Apollo.MutationFunction<DeleteProjectMutat
  *   },
  * });
  */
-export function useDeleteProjectMutation(baseOptions?: Apollo.MutationHookOptions<DeleteProjectMutation, DeleteProjectMutationVariables>) {
+export function useDeleteProjectMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteProjectMutation, DeleteProjectMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteProjectMutation, DeleteProjectMutationVariables>(DeleteProjectDocument, options);
+        return ApolloReactHooks.useMutation<DeleteProjectMutation, DeleteProjectMutationVariables>(DeleteProjectDocument, options);
       }
 export type DeleteProjectMutationHookResult = ReturnType<typeof useDeleteProjectMutation>;
-export type DeleteProjectMutationResult = Apollo.MutationResult<DeleteProjectMutation>;
-export type DeleteProjectMutationOptions = Apollo.BaseMutationOptions<DeleteProjectMutation, DeleteProjectMutationVariables>;
+export type DeleteProjectMutationResult = ApolloReactCommon.MutationResult<DeleteProjectMutation>;
+export type DeleteProjectMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteProjectMutation, DeleteProjectMutationVariables>;
 export const ResetProjectDocument = gql`
     mutation ResetProject($projectId: UUID!) {
   resetProjectState(projectId: $projectId)
 }
     `;
-export type ResetProjectMutationFn = Apollo.MutationFunction<ResetProjectMutation, ResetProjectMutationVariables>;
+export type ResetProjectMutationFn = ApolloReactCommon.MutationFunction<ResetProjectMutation, ResetProjectMutationVariables>;
 
 /**
  * __useResetProjectMutation__
@@ -1720,13 +1715,13 @@ export type ResetProjectMutationFn = Apollo.MutationFunction<ResetProjectMutatio
  *   },
  * });
  */
-export function useResetProjectMutation(baseOptions?: Apollo.MutationHookOptions<ResetProjectMutation, ResetProjectMutationVariables>) {
+export function useResetProjectMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ResetProjectMutation, ResetProjectMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ResetProjectMutation, ResetProjectMutationVariables>(ResetProjectDocument, options);
+        return ApolloReactHooks.useMutation<ResetProjectMutation, ResetProjectMutationVariables>(ResetProjectDocument, options);
       }
 export type ResetProjectMutationHookResult = ReturnType<typeof useResetProjectMutation>;
-export type ResetProjectMutationResult = Apollo.MutationResult<ResetProjectMutation>;
-export type ResetProjectMutationOptions = Apollo.BaseMutationOptions<ResetProjectMutation, ResetProjectMutationVariables>;
+export type ResetProjectMutationResult = ApolloReactCommon.MutationResult<ResetProjectMutation>;
+export type ResetProjectMutationOptions = ApolloReactCommon.BaseMutationOptions<ResetProjectMutation, ResetProjectMutationVariables>;
 export const SetExecutionResultsDocument = gql`
     mutation SetExecutionResults($resultType: ResultType!, $rawResult: RawExecutionResult!, $label: String) {
   updateCachedExecutionResults(
@@ -1736,7 +1731,7 @@ export const SetExecutionResultsDocument = gql`
   ) @client
 }
     `;
-export type SetExecutionResultsMutationFn = Apollo.MutationFunction<SetExecutionResultsMutation, SetExecutionResultsMutationVariables>;
+export type SetExecutionResultsMutationFn = ApolloReactCommon.MutationFunction<SetExecutionResultsMutation, SetExecutionResultsMutationVariables>;
 
 /**
  * __useSetExecutionResultsMutation__
@@ -1757,19 +1752,19 @@ export type SetExecutionResultsMutationFn = Apollo.MutationFunction<SetExecution
  *   },
  * });
  */
-export function useSetExecutionResultsMutation(baseOptions?: Apollo.MutationHookOptions<SetExecutionResultsMutation, SetExecutionResultsMutationVariables>) {
+export function useSetExecutionResultsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetExecutionResultsMutation, SetExecutionResultsMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SetExecutionResultsMutation, SetExecutionResultsMutationVariables>(SetExecutionResultsDocument, options);
+        return ApolloReactHooks.useMutation<SetExecutionResultsMutation, SetExecutionResultsMutationVariables>(SetExecutionResultsDocument, options);
       }
 export type SetExecutionResultsMutationHookResult = ReturnType<typeof useSetExecutionResultsMutation>;
-export type SetExecutionResultsMutationResult = Apollo.MutationResult<SetExecutionResultsMutation>;
-export type SetExecutionResultsMutationOptions = Apollo.BaseMutationOptions<SetExecutionResultsMutation, SetExecutionResultsMutationVariables>;
+export type SetExecutionResultsMutationResult = ApolloReactCommon.MutationResult<SetExecutionResultsMutation>;
+export type SetExecutionResultsMutationOptions = ApolloReactCommon.BaseMutationOptions<SetExecutionResultsMutation, SetExecutionResultsMutationVariables>;
 export const ClearExecutionResultsDocument = gql`
     mutation ClearExecutionResults($resultType: ResultType!) {
   clearCachedExecutionResults(resultType: $resultType) @client
 }
     `;
-export type ClearExecutionResultsMutationFn = Apollo.MutationFunction<ClearExecutionResultsMutation, ClearExecutionResultsMutationVariables>;
+export type ClearExecutionResultsMutationFn = ApolloReactCommon.MutationFunction<ClearExecutionResultsMutation, ClearExecutionResultsMutationVariables>;
 
 /**
  * __useClearExecutionResultsMutation__
@@ -1788,13 +1783,13 @@ export type ClearExecutionResultsMutationFn = Apollo.MutationFunction<ClearExecu
  *   },
  * });
  */
-export function useClearExecutionResultsMutation(baseOptions?: Apollo.MutationHookOptions<ClearExecutionResultsMutation, ClearExecutionResultsMutationVariables>) {
+export function useClearExecutionResultsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ClearExecutionResultsMutation, ClearExecutionResultsMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ClearExecutionResultsMutation, ClearExecutionResultsMutationVariables>(ClearExecutionResultsDocument, options);
+        return ApolloReactHooks.useMutation<ClearExecutionResultsMutation, ClearExecutionResultsMutationVariables>(ClearExecutionResultsDocument, options);
       }
 export type ClearExecutionResultsMutationHookResult = ReturnType<typeof useClearExecutionResultsMutation>;
-export type ClearExecutionResultsMutationResult = Apollo.MutationResult<ClearExecutionResultsMutation>;
-export type ClearExecutionResultsMutationOptions = Apollo.BaseMutationOptions<ClearExecutionResultsMutation, ClearExecutionResultsMutationVariables>;
+export type ClearExecutionResultsMutationResult = ApolloReactCommon.MutationResult<ClearExecutionResultsMutation>;
+export type ClearExecutionResultsMutationOptions = ApolloReactCommon.BaseMutationOptions<ClearExecutionResultsMutation, ClearExecutionResultsMutationVariables>;
 export const GetProjectsDocument = gql`
     query GetProjects {
   projectList {
@@ -1847,17 +1842,17 @@ export const GetProjectsDocument = gql`
  *   },
  * });
  */
-export function useGetProjectsQuery(baseOptions?: Apollo.QueryHookOptions<GetProjectsQuery, GetProjectsQueryVariables>) {
+export function useGetProjectsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetProjectsQuery, GetProjectsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetProjectsQuery, GetProjectsQueryVariables>(GetProjectsDocument, options);
+        return ApolloReactHooks.useQuery<GetProjectsQuery, GetProjectsQueryVariables>(GetProjectsDocument, options);
       }
-export function useGetProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectsQuery, GetProjectsQueryVariables>) {
+export function useGetProjectsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetProjectsQuery, GetProjectsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetProjectsQuery, GetProjectsQueryVariables>(GetProjectsDocument, options);
+          return ApolloReactHooks.useLazyQuery<GetProjectsQuery, GetProjectsQueryVariables>(GetProjectsDocument, options);
         }
 export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
 export type GetProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectsLazyQuery>;
-export type GetProjectsQueryResult = Apollo.QueryResult<GetProjectsQuery, GetProjectsQueryVariables>;
+export type GetProjectsQueryResult = ApolloReactCommon.QueryResult<GetProjectsQuery, GetProjectsQueryVariables>;
 export const GetProjectDocument = gql`
     query GetProject($projectId: UUID!) {
   project(id: $projectId) {
@@ -1927,17 +1922,17 @@ export const GetProjectDocument = gql`
  *   },
  * });
  */
-export function useGetProjectQuery(baseOptions: Apollo.QueryHookOptions<GetProjectQuery, GetProjectQueryVariables>) {
+export function useGetProjectQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetProjectQuery, GetProjectQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, options);
+        return ApolloReactHooks.useQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, options);
       }
-export function useGetProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectQuery, GetProjectQueryVariables>) {
+export function useGetProjectLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetProjectQuery, GetProjectQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, options);
+          return ApolloReactHooks.useLazyQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, options);
         }
 export type GetProjectQueryHookResult = ReturnType<typeof useGetProjectQuery>;
 export type GetProjectLazyQueryHookResult = ReturnType<typeof useGetProjectLazyQuery>;
-export type GetProjectQueryResult = Apollo.QueryResult<GetProjectQuery, GetProjectQueryVariables>;
+export type GetProjectQueryResult = ApolloReactCommon.QueryResult<GetProjectQuery, GetProjectQueryVariables>;
 export const GetLocalProjectDocument = gql`
     query GetLocalProject {
   project: localProject @client {
@@ -1991,17 +1986,17 @@ export const GetLocalProjectDocument = gql`
  *   },
  * });
  */
-export function useGetLocalProjectQuery(baseOptions?: Apollo.QueryHookOptions<GetLocalProjectQuery, GetLocalProjectQueryVariables>) {
+export function useGetLocalProjectQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetLocalProjectQuery, GetLocalProjectQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetLocalProjectQuery, GetLocalProjectQueryVariables>(GetLocalProjectDocument, options);
+        return ApolloReactHooks.useQuery<GetLocalProjectQuery, GetLocalProjectQueryVariables>(GetLocalProjectDocument, options);
       }
-export function useGetLocalProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLocalProjectQuery, GetLocalProjectQueryVariables>) {
+export function useGetLocalProjectLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetLocalProjectQuery, GetLocalProjectQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetLocalProjectQuery, GetLocalProjectQueryVariables>(GetLocalProjectDocument, options);
+          return ApolloReactHooks.useLazyQuery<GetLocalProjectQuery, GetLocalProjectQueryVariables>(GetLocalProjectDocument, options);
         }
 export type GetLocalProjectQueryHookResult = ReturnType<typeof useGetLocalProjectQuery>;
 export type GetLocalProjectLazyQueryHookResult = ReturnType<typeof useGetLocalProjectLazyQuery>;
-export type GetLocalProjectQueryResult = Apollo.QueryResult<GetLocalProjectQuery, GetLocalProjectQueryVariables>;
+export type GetLocalProjectQueryResult = ApolloReactCommon.QueryResult<GetLocalProjectQuery, GetLocalProjectQueryVariables>;
 export const GetActiveProjectDocument = gql`
     query GetActiveProject {
   activeProjectId @client
@@ -2024,17 +2019,17 @@ export const GetActiveProjectDocument = gql`
  *   },
  * });
  */
-export function useGetActiveProjectQuery(baseOptions?: Apollo.QueryHookOptions<GetActiveProjectQuery, GetActiveProjectQueryVariables>) {
+export function useGetActiveProjectQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetActiveProjectQuery, GetActiveProjectQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetActiveProjectQuery, GetActiveProjectQueryVariables>(GetActiveProjectDocument, options);
+        return ApolloReactHooks.useQuery<GetActiveProjectQuery, GetActiveProjectQueryVariables>(GetActiveProjectDocument, options);
       }
-export function useGetActiveProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetActiveProjectQuery, GetActiveProjectQueryVariables>) {
+export function useGetActiveProjectLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetActiveProjectQuery, GetActiveProjectQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetActiveProjectQuery, GetActiveProjectQueryVariables>(GetActiveProjectDocument, options);
+          return ApolloReactHooks.useLazyQuery<GetActiveProjectQuery, GetActiveProjectQueryVariables>(GetActiveProjectDocument, options);
         }
 export type GetActiveProjectQueryHookResult = ReturnType<typeof useGetActiveProjectQuery>;
 export type GetActiveProjectLazyQueryHookResult = ReturnType<typeof useGetActiveProjectLazyQuery>;
-export type GetActiveProjectQueryResult = Apollo.QueryResult<GetActiveProjectQuery, GetActiveProjectQueryVariables>;
+export type GetActiveProjectQueryResult = ApolloReactCommon.QueryResult<GetActiveProjectQuery, GetActiveProjectQueryVariables>;
 export const GetCachedExecutionResultsDocument = gql`
     query GetCachedExecutionResults {
   cachedExecutionResults @client {
@@ -2066,17 +2061,17 @@ export const GetCachedExecutionResultsDocument = gql`
  *   },
  * });
  */
-export function useGetCachedExecutionResultsQuery(baseOptions?: Apollo.QueryHookOptions<GetCachedExecutionResultsQuery, GetCachedExecutionResultsQueryVariables>) {
+export function useGetCachedExecutionResultsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCachedExecutionResultsQuery, GetCachedExecutionResultsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCachedExecutionResultsQuery, GetCachedExecutionResultsQueryVariables>(GetCachedExecutionResultsDocument, options);
+        return ApolloReactHooks.useQuery<GetCachedExecutionResultsQuery, GetCachedExecutionResultsQueryVariables>(GetCachedExecutionResultsDocument, options);
       }
-export function useGetCachedExecutionResultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCachedExecutionResultsQuery, GetCachedExecutionResultsQueryVariables>) {
+export function useGetCachedExecutionResultsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCachedExecutionResultsQuery, GetCachedExecutionResultsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCachedExecutionResultsQuery, GetCachedExecutionResultsQueryVariables>(GetCachedExecutionResultsDocument, options);
+          return ApolloReactHooks.useLazyQuery<GetCachedExecutionResultsQuery, GetCachedExecutionResultsQueryVariables>(GetCachedExecutionResultsDocument, options);
         }
 export type GetCachedExecutionResultsQueryHookResult = ReturnType<typeof useGetCachedExecutionResultsQuery>;
 export type GetCachedExecutionResultsLazyQueryHookResult = ReturnType<typeof useGetCachedExecutionResultsLazyQuery>;
-export type GetCachedExecutionResultsQueryResult = Apollo.QueryResult<GetCachedExecutionResultsQuery, GetCachedExecutionResultsQueryVariables>;
+export type GetCachedExecutionResultsQueryResult = ApolloReactCommon.QueryResult<GetCachedExecutionResultsQuery, GetCachedExecutionResultsQueryVariables>;
 export const GetPlaygroundInfoDocument = gql`
     query GetPlaygroundInfo {
   playgroundInfo {
@@ -2102,17 +2097,17 @@ export const GetPlaygroundInfoDocument = gql`
  *   },
  * });
  */
-export function useGetPlaygroundInfoQuery(baseOptions?: Apollo.QueryHookOptions<GetPlaygroundInfoQuery, GetPlaygroundInfoQueryVariables>) {
+export function useGetPlaygroundInfoQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetPlaygroundInfoQuery, GetPlaygroundInfoQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetPlaygroundInfoQuery, GetPlaygroundInfoQueryVariables>(GetPlaygroundInfoDocument, options);
+        return ApolloReactHooks.useQuery<GetPlaygroundInfoQuery, GetPlaygroundInfoQueryVariables>(GetPlaygroundInfoDocument, options);
       }
-export function useGetPlaygroundInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPlaygroundInfoQuery, GetPlaygroundInfoQueryVariables>) {
+export function useGetPlaygroundInfoLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetPlaygroundInfoQuery, GetPlaygroundInfoQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetPlaygroundInfoQuery, GetPlaygroundInfoQueryVariables>(GetPlaygroundInfoDocument, options);
+          return ApolloReactHooks.useLazyQuery<GetPlaygroundInfoQuery, GetPlaygroundInfoQueryVariables>(GetPlaygroundInfoDocument, options);
         }
 export type GetPlaygroundInfoQueryHookResult = ReturnType<typeof useGetPlaygroundInfoQuery>;
 export type GetPlaygroundInfoLazyQueryHookResult = ReturnType<typeof useGetPlaygroundInfoLazyQuery>;
-export type GetPlaygroundInfoQueryResult = Apollo.QueryResult<GetPlaygroundInfoQuery, GetPlaygroundInfoQueryVariables>;
+export type GetPlaygroundInfoQueryResult = ApolloReactCommon.QueryResult<GetPlaygroundInfoQuery, GetPlaygroundInfoQueryVariables>;
 export const GetExecutionResultsDocument = gql`
     query GetExecutionResults {
   cachedExecutionResults {
@@ -2153,17 +2148,17 @@ export const GetExecutionResultsDocument = gql`
  *   },
  * });
  */
-export function useGetExecutionResultsQuery(baseOptions?: Apollo.QueryHookOptions<GetExecutionResultsQuery, GetExecutionResultsQueryVariables>) {
+export function useGetExecutionResultsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetExecutionResultsQuery, GetExecutionResultsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetExecutionResultsQuery, GetExecutionResultsQueryVariables>(GetExecutionResultsDocument, options);
+        return ApolloReactHooks.useQuery<GetExecutionResultsQuery, GetExecutionResultsQueryVariables>(GetExecutionResultsDocument, options);
       }
-export function useGetExecutionResultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetExecutionResultsQuery, GetExecutionResultsQueryVariables>) {
+export function useGetExecutionResultsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetExecutionResultsQuery, GetExecutionResultsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetExecutionResultsQuery, GetExecutionResultsQueryVariables>(GetExecutionResultsDocument, options);
+          return ApolloReactHooks.useLazyQuery<GetExecutionResultsQuery, GetExecutionResultsQueryVariables>(GetExecutionResultsDocument, options);
         }
 export type GetExecutionResultsQueryHookResult = ReturnType<typeof useGetExecutionResultsQuery>;
 export type GetExecutionResultsLazyQueryHookResult = ReturnType<typeof useGetExecutionResultsLazyQuery>;
-export type GetExecutionResultsQueryResult = Apollo.QueryResult<GetExecutionResultsQuery, GetExecutionResultsQueryVariables>;
+export type GetExecutionResultsQueryResult = ApolloReactCommon.QueryResult<GetExecutionResultsQuery, GetExecutionResultsQueryVariables>;
 export const GetResultsDocument = gql`
     query GetResults {
   cachedExecutionResults {
@@ -2204,17 +2199,17 @@ export const GetResultsDocument = gql`
  *   },
  * });
  */
-export function useGetResultsQuery(baseOptions?: Apollo.QueryHookOptions<GetResultsQuery, GetResultsQueryVariables>) {
+export function useGetResultsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetResultsQuery, GetResultsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetResultsQuery, GetResultsQueryVariables>(GetResultsDocument, options);
+        return ApolloReactHooks.useQuery<GetResultsQuery, GetResultsQueryVariables>(GetResultsDocument, options);
       }
-export function useGetResultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetResultsQuery, GetResultsQueryVariables>) {
+export function useGetResultsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetResultsQuery, GetResultsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetResultsQuery, GetResultsQueryVariables>(GetResultsDocument, options);
+          return ApolloReactHooks.useLazyQuery<GetResultsQuery, GetResultsQueryVariables>(GetResultsDocument, options);
         }
 export type GetResultsQueryHookResult = ReturnType<typeof useGetResultsQuery>;
 export type GetResultsLazyQueryHookResult = ReturnType<typeof useGetResultsLazyQuery>;
-export type GetResultsQueryResult = Apollo.QueryResult<GetResultsQuery, GetResultsQueryVariables>;
+export type GetResultsQueryResult = ApolloReactCommon.QueryResult<GetResultsQuery, GetResultsQueryVariables>;
 
       export interface IntrospectionResultData {
         __schema: {
