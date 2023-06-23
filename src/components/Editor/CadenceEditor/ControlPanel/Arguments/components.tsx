@@ -172,7 +172,7 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
                 onMouseOut={() => hideDecorations()}
               >
                 <ErrorIndex>
-                  <span>{`${i + 1}) `}</span>
+                  <span>{`${i + 1})`}</span>
                 </ErrorIndex>
                 <ErrorMessage>{message}</ErrorMessage>
               </SingleError>
