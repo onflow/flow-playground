@@ -75,7 +75,6 @@ export const normalizeInteractionResponse = (response: any): Line[] => {
   if (respIsCreateContractDeployment(response)) {
     const lines = [];
     const scoped = response.data.createContractDeployment;
-
     const addresses = scoped.events
       .filter(
         (event: { type: string }) =>
@@ -91,7 +90,7 @@ export const normalizeInteractionResponse = (response: any): Line[] => {
       .filter(Boolean);
 
     const items = makeEventValues(scoped.events);
-    for (let d of scoped.logs) lines.push(makeLine(Tag.LOG, d));
+    for (let d of scoped.logs || []) lines.push(makeLine(Tag.LOG, d));
     addresses.forEach((address: string) =>
       lines.push(
         makeLine(Tag.LOG, `Deployed Contract To: 0x${address.slice(-2)}`),
@@ -104,7 +103,7 @@ export const normalizeInteractionResponse = (response: any): Line[] => {
   if (respIsCreateTransactionExecution(response)) {
     const scoped = response.data.createTransactionExecution;
     const lines = [];
-    for (let d of scoped.logs) lines.push(makeLine(Tag.LOG, d));
+    for (let d of scoped.logs || []) lines.push(makeLine(Tag.LOG, d));
     const items = makeEventValues(scoped.events);
     if (scoped.errors && scoped.errors.length)
       lines.push(
@@ -119,7 +118,7 @@ export const normalizeInteractionResponse = (response: any): Line[] => {
   if (respIsCreateScriptExecution(response)) {
     const scoped = response.data.createScriptExecution;
     const lines = [];
-    for (let d of scoped.logs) lines.push(makeLine(Tag.LOG, d));
+    for (let d of scoped.logs || []) lines.push(makeLine(Tag.LOG, d));
     if (scoped.errors && scoped.errors.length)
       lines.push(
         makeLine(

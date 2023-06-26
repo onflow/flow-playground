@@ -81,9 +81,11 @@ export const Badge = styled.div`
   }
 
   background-color: #ee431e;
-  &.green {
-    background-color: ${theme.colors.primary};
-    color: #222;
+  &.warning {
+    background-color: ${theme.colors.warning};
+  }
+  &.info {
+    background-color: ${theme.colors.infoBackground};
   }
 `;
 
@@ -188,14 +190,13 @@ export const SingleError = styled.div`
   border-radius: 8px;
   &:hover {
     background-color: rgba(244, 57, 64, 0.15);
+  }
+  &.hint-warning {
+    background-color: ${theme.colors.warning};
+  }
 
-    &.hint-warning {
-      background-color: rgb(238, 169, 30, 0.15);
-    }
-
-    &.hint-info {
-      background-color: rgb(85, 238, 30, 0.15);
-    }
+  &.hint-info {
+    background-color: ${theme.colors.info};
   }
 `;
 
@@ -203,6 +204,9 @@ export const ErrorIndex = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  span {
+    padding-right: 3px;
+  }
 `;
 
 export const ErrorMessage = styled.p`

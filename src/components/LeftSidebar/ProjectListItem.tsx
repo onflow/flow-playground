@@ -16,6 +16,7 @@ import { LOCAL_PROJECT_ID } from 'util/url';
 import CopyIcon from 'components/Icons/CopyIcon';
 import { Project } from 'api/apollo/generated/graphql';
 import { userDataKeys, UserLocalStorage } from 'util/localstorage';
+import ResetIcon from 'components/Icons/ResetIcon';
 
 type Props = {
   project: ProjectType;
@@ -74,6 +75,12 @@ const confirmDeleteOptions = {
   ],
 };
 
+const confirmResetOptions = {
+  title: `Reset this project?`,
+  messages: [
+    'Are you sure you want to reset all emulator state for this project? This cannot be undone.',
+  ],
+};
 const infoLastProjectOptions = {
   title: `Unable to delete this project!`,
   messages: ['At least one playground project is required.'],
@@ -89,19 +96,23 @@ const willLoseChangesOptions = {
 const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
   const userStorage = new UserLocalStorage();
   const [doingAction, setDoingAction] = useState<boolean>(false);
-  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
+  const [showDelConfirmation, setShowDelConfirmation] =
+    useState<boolean>(false);
+  const [showResetConfirmation, setShowResetConfirmation] =
+    useState<boolean>(false);
   const [showLastProject, setShowLastProject] = useState<boolean>(false);
   const [showWillLoseChanges, setShowWillLoseChanges] =
     useState<boolean>(false);
   const {
     toggleProjectsSidebar,
     deleteProject,
+    resetProject,
     project: activeProject,
     copyProject,
   } = useProject();
 
   const confirmDelete = async (isConfirmed: boolean): Promise<void> => {
-    setShowConfirmation(false);
+    setShowDelConfirmation(false);
     if (isConfirmed) {
       setDoingAction(true);
       try {
@@ -110,6 +121,19 @@ const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
           userStorage.setData(userDataKeys.PROJECT_ID, null);
         }
         await deleteProject(project.id);
+        await refetch();
+      } finally {
+        setDoingAction(false);
+      }
+    }
+  };
+
+  const confirmReset = async (isConfirmed: boolean): Promise<void> => {
+    setShowResetConfirmation(false);
+    if (isConfirmed) {
+      setDoingAction(true);
+      try {
+        await resetProject(project.id);
         await refetch();
       } finally {
         setDoingAction(false);
@@ -139,13 +163,21 @@ const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
     {
       name: 'Delete Project',
       onClick: () =>
-        projectCount > 1 ? setShowConfirmation(true) : setShowLastProject(true),
+        projectCount > 1
+          ? setShowDelConfirmation(true)
+          : setShowLastProject(true),
       icon: DeleteIcon,
     },
     {
       name: 'Copy Project',
       onClick: (project: Project) => copyNewProject(project),
       icon: CopyIcon,
+      args: [project],
+    },
+    {
+      name: 'Reset Project',
+      onClick: () => setShowResetConfirmation(true),
+      icon: ResetIcon,
       args: [project],
     },
   ];
@@ -167,8 +199,13 @@ const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
     <Flex sx={rootStyles}>
       <ConfirmationPopup
         onClose={confirmDelete}
-        visible={showConfirmation}
+        visible={showDelConfirmation}
         {...confirmDeleteOptions}
+      />
+      <ConfirmationPopup
+        onClose={confirmReset}
+        visible={showResetConfirmation}
+        {...confirmResetOptions}
       />
       <InformationalPopup
         onClose={setShowLastProject}

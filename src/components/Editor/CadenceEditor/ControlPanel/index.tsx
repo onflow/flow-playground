@@ -32,7 +32,7 @@ import {
 
 // Component Scoped Files
 import { MotionBox, StatusIcon } from './components';
-import { ControlPanelProps, IValue } from './types';
+import { ControlPanelProps, IValue, UNSUPPORTED_TYPES } from './types';
 import {
   getLabel,
   getResultType,
@@ -58,6 +58,7 @@ import DismissiblePopup from 'components/DismissiblePopup';
 import { userModalKeys } from 'util/localstorage';
 import { addressToAccount } from 'util/accounts';
 import theme from '../../../../theme';
+import { Argument } from './Arguments/types';
 
 const ButtonActionLabels = {
   [String(EntityType.TransactionTemplate)]: 'Send',
@@ -177,7 +178,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
    */
   const getArguments = (): any => {
     const key = getActiveKey();
-    return executionArguments[key] || [];
+    const addSupported = (executionArguments[key] || []).map((arg: any) => ({
+      ...arg,
+      unsupported: UNSUPPORTED_TYPES.includes(arg.type),
+    }));
+    return addSupported;
   };
 
   /**
@@ -212,18 +217,18 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
    * @param values - list of argument values
    */
   const validate = (list: any, values: any) => {
-    const errors = list.reduce((acc: any, item: any) => {
+    const errors = list.reduce((acc: any, item: Argument) => {
       const { name, type } = item;
       const value = values[name];
-      if (value) {
+      if (item.unsupported) {
+        acc[name] = `Type ${type} is not supported in Playground`;
+      } else if (value) {
         const error = validateByType(value, type);
         if (error) {
           acc[name] = error;
         }
       } else {
-        if (type !== 'String') {
-          acc[name] = "Value can't be empty";
-        }
+        acc[name] = "Value can't be empty";
       }
       return acc;
     }, {});
@@ -378,6 +383,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             rawResult = await contractDeployment(
               active.index,
               selectedAccountId,
+              args,
             );
             break;
           }

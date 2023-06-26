@@ -9,6 +9,7 @@ import {
   FaCaretSquareUp,
   FaSpinner,
 } from 'react-icons/fa';
+import CollapseOpenIcon from 'components/Icons/CollapseOpenIcon';
 import { CadenceProblem } from 'util/language-syntax-errors';
 import theme from '../../../../../theme';
 import SingleArgument from './SingleArgument';
@@ -148,17 +149,14 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
     <Stack>
       <Heading>
         <Title>Warnings and Hints</Title>
-        <Controls onClick={toggle}>
+        <Controls onClick={toggle} style={{ paddingRight: '10px' }}>
           {hintsAmount > 0 && (
-            <Badge className="green">
+            <Badge className="info">
               <span>{hintsAmount}</span>
             </Badge>
           )}
-          {expanded ? (
-            <FaCaretSquareUp cursor="pointer" opacity="0.2" />
-          ) : (
-            <FaCaretSquareDown cursor="pointer" opacity="0.2" />
-          )}
+
+          {CollapseOpenIcon()}
         </Controls>
       </Heading>
       {expanded && (
@@ -174,7 +172,7 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
                 onMouseOut={() => hideDecorations()}
               >
                 <ErrorIndex>
-                  <span>{i + 1}</span>
+                  <span>{`${i + 1})`}</span>
                 </ErrorIndex>
                 <ErrorMessage>{message}</ErrorMessage>
               </SingleError>

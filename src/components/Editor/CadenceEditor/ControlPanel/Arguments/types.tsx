@@ -18,6 +18,7 @@ export type InteractionButtonProps = {
 export type Argument = {
   name: string;
   type: string;
+  unsupported: boolean;
 };
 
 export type ArgumentsProps = {
