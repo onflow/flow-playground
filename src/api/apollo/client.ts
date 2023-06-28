@@ -20,15 +20,19 @@ const client = new ApolloClient({
   link: ApolloLink.from([
     new DebounceLink(DEFAULT_DEBOUNCE_TIMEOUT),
     new SerializingLink(),
-    onError(({ graphQLErrors }) => {
+    onError(({ graphQLErrors, networkError }) => {
       let errorMessage: string,
         extensions: GraphQLErrorExtensions = { code: '' },
         gqlError: GraphQLError;
 
+      console.log('graphQLErrors', graphQLErrors, networkError);
       if (graphQLErrors) {
         gqlError = graphQLErrors[0];
         errorMessage = gqlError.message;
         extensions = gqlError.extensions;
+      }
+      if (networkError) {
+        extensions = { code: 'NETWORK_ERROR' };
       }
       const errorCode = extensions?.code;
       const browser = detect();
@@ -55,6 +59,11 @@ const client = new ApolloClient({
         case 'AUTHORIZATION_ERROR':
           console.log('Encountered Authorization Error', gqlError);
           errorMessage = 'User Not Authorized. Please check your cookies.';
+          break;
+        case 'NETWORK_ERROR':
+          console.log('Encountered Network Error', networkError);
+          errorMessage =
+            'Network Error. Please check your internet connection.';
           break;
         default:
           errorMessage = '';

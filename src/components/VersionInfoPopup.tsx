@@ -7,6 +7,7 @@ import InformationalPopup from 'components/InformationalPopup';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_VERSIONS } from 'api/apollo/queries';
 import { PlaygroundInfo } from 'api/apollo/generated/graphql';
+import { useProject } from 'providers/Project/projectHooks';
 
 const styles: SXStyles = {
   root: {
@@ -40,6 +41,7 @@ const infoShowVersionModalProps = {
 };
 
 const VersionInfoPopup = () => {
+  const { setApplicationErrorMessage } = useProject();
   const [showVersionModal, setShowVersionModal] = useState(false);
   const [infoShowVersionModal, setInfoShowVersionModal] = useState({
     ...infoShowVersionModalProps,
@@ -47,7 +49,15 @@ const VersionInfoPopup = () => {
 
   const { loading, error, data } = useQuery<{
     playgroundInfo: PlaygroundInfo;
-  }>(GET_VERSIONS, { fetchPolicy: 'cache-and-network' });
+  }>(GET_VERSIONS, {
+    skip: !showVersionModal,
+    errorPolicy: 'all',
+    fetchPolicy: 'cache-and-network',
+  });
+
+  if (error) {
+    setApplicationErrorMessage(`Could not get playground dependency versions`);
+  }
 
   useEffect(() => {
     if (!loading && !error && data?.playgroundInfo) {
