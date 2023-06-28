@@ -25,7 +25,6 @@ const client = new ApolloClient({
         extensions: GraphQLErrorExtensions = { code: '' },
         gqlError: GraphQLError;
 
-      console.log('graphQLErrors', graphQLErrors, networkError);
       if (graphQLErrors) {
         gqlError = graphQLErrors[0];
         errorMessage = gqlError.message;
