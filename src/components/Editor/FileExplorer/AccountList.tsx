@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import { SXStyles } from 'src/types';
 import { Box, Flex } from 'theme-ui';
 import { getParams, isUUUID, LOCAL_PROJECT_ID } from '../../../util/url';
+import theme from '../../../theme';
 
 type AccountListProps = {
   isExplorerCollapsed: boolean;
@@ -28,7 +29,7 @@ const styles: SXStyles = {
     lineHeight: '14px',
     letterSpacing: '-0.01em',
     textTransform: 'uppercase',
-    color: '#69717E',
+    color: `${theme.colors.leftSidebarHeaderText}`,
     justifyContent: 'space-between',
   },
   headerTitle: {
@@ -58,6 +59,7 @@ const styles: SXStyles = {
     background: '#EAEAFA',
     borderRadius: '8px',
     padding: '0.2rem 0.5rem',
+    color: `${theme.colors.accent}`,
   },
   accountCard: {
     display: 'flex',

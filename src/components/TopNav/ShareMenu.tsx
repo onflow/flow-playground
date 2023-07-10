@@ -15,6 +15,7 @@ const styles: SXStyles = {
   container: {
     margin: '0',
     width: 'unset',
+    background: theme.colors.background,
   },
   menu: {
     display: 'flex',
@@ -26,7 +27,7 @@ const styles: SXStyles = {
     zIndex: '15',
     right: '170px',
     margin: '0',
-    background: theme.colors.white,
+    background: theme.colors.secondaryBackground,
     padding: '1rem',
   },
   copyLink: {
@@ -34,16 +35,16 @@ const styles: SXStyles = {
     paddingBottom: '12px',
   },
   menuButton: {
-    border: '1px solid #DEE2E9',
+    border: `1px solid ${theme.colors.borderColor}`,
     borderRadius: '8px',
-    background: '#F6F7F9',
+    background: `${theme.colors.secondaryBackground}`,
     '&:hover': {
       background: `${theme.colors.menuBg}`,
     },
     '&:disabled': {
-      color: '#DEE2E9',
+      color: `${theme.colors.muted}`,
       '&:hover': {
-        background: '#F6F7F9',
+        background: `${theme.colors.accent}`,
         cursor: 'not-allowed',
       },
     },
@@ -55,8 +56,8 @@ const styles: SXStyles = {
     padding: '12px',
     width: '113px',
     marginLeft: '4px',
-    background: '#F6F7F9',
-    border: '1px solid #DEE2E9',
+    background: `${theme.colors.background}`,
+    border: `1px solid ${theme.colors.borderColor}`,
     borderRadius: '8px',
     height: '48px',
     whiteSpace: 'nowrap',
@@ -71,8 +72,8 @@ const styles: SXStyles = {
     alignItems: 'center',
     padding: '12px',
     width: '363px',
-    background: '#F6F7F9',
-    border: '1px solid #DEE2E9',
+    background: `${theme.colors.background}`,
+    border: `1px solid ${theme.colors.borderColor}`,
     borderRadius: '4px',
   },
   message: {

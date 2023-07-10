@@ -19,7 +19,7 @@ export const ProjectItem = styled.div<ItemProps>`
   margin-top: 1rem;
   padding-bottom: calc(1rem - 3px);
 
-  background: ${theme.colors.white};
+  background: ${theme.colors.secondaryBackground};
   position: relative;
 
   ${(p) =>

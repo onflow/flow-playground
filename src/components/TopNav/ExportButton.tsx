@@ -18,18 +18,19 @@ const styles: SXStyles = {
     width: 'unset',
   },
   button: {
-    border: '1px solid #DEE2E9',
+    background: `${theme.colors.background}`,
+    border: `1px solid ${theme.colors.borderColor}`,
     borderRadius: '8px',
-    background: '#F6F7F9',
     '&:hover': {
       background: `${theme.colors.menuBg}`,
     },
   },
   buttonDisabled: {
-    border: '1px solid #DEE2E9',
     borderRadius: '8px',
-    background: '#F6F7F9',
-    color: '#DEE2E9',
+    color: `${theme.colors.text}`,
+    background: `${theme.colors.background}`,
+    border: `1px solid ${theme.colors.borderColor}`,
+
   },
 };
 

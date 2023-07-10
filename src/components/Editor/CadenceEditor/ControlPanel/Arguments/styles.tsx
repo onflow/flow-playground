@@ -141,7 +141,7 @@ export const ToastContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: ${theme.colors.darkPrimary};
+  color: ${theme.colors.accent};
 `;
 
 export const StatusMessage = styled.div<MessageProps>`

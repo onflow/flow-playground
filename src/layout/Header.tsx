@@ -3,5 +3,5 @@ import theme from '../theme';
 
 export const Header = styled.div`
   grid-area: header;
-  background: ${theme.colors.white};
+  background: ${theme.colors.secondaryBackground};
 `;

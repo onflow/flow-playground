@@ -36,7 +36,7 @@ const styles: SXStyles = {
     margin: '0',
     right: '0',
     bottom: '22px',
-    background: theme.colors.white,
+    background: theme.colors.background,
     padding: '4px 4px',
     whiteSpace: 'nowrap',
   },

@@ -141,7 +141,7 @@ export const ToastContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: ${theme.colors.darkPrimary};
+  color: ${theme.colors.accent};
 `;
 
 export const StatusMessage = styled.div`
@@ -240,16 +240,6 @@ export const Confirm = styled(LegacyButton)`
 
   &:active {
     background-color: #cf3529;
-  }
-`;
-
-export const Cancel = styled(LegacyButton)`
-  background-color: ${theme.colors.background};
-  color: ${theme.colors.text};
-  border: 1px solid ${theme.colors.greyBorder};
-
-  &:active {
-    background-color: #dedede;
   }
 `;
 

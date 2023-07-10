@@ -66,11 +66,11 @@ const PanelHeader = (
 
 const styles: SXStyles = {
   root: {
-    backgroundColor: theme.colors.white,
+    backgroundColor: theme.colors.secondaryBackground,
     width: '3rem',
   },
   carrotDown: {
-    backgroundColor: theme.colors.white,
+    backgroundColor: theme.colors.secondaryBackground,
     transform: 'rotate(180deg)',
     width: '3rem',
   },

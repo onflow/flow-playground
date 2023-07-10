@@ -31,7 +31,7 @@ const styles: SXStyles = {
     fontWeight: 450,
     lineHeight: '100%',
     letterSpacing: '-0.02em',
-    color: '#2F353F',
+    color: `${theme.colors.text}`,
     alignItems: 'start',
     fontFamily: 'IBM Plex Mono',
   },

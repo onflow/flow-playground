@@ -23,7 +23,7 @@ import VersionInfoPopup from 'components/VersionInfoPopup';
 
 const styles: SXStyles = {
   root: {
-    background: 'white',
+    background: `${theme.colors.background}`,
     display: 'flex',
     gridArea: 'header',
     flex: '1 1 auto',
@@ -34,7 +34,7 @@ const styles: SXStyles = {
     paddingRight: '1em',
   },
   mobile: {
-    background: 'white',
+    background: `${theme.colors.secondaryBackground}`,
     display: 'flex',
     gridArea: 'header',
     flex: '1 1 auto',
@@ -46,14 +46,14 @@ const styles: SXStyles = {
   button: {
     border: '1px solid #DEE2E9',
     borderRadius: '8px',
-    background: '#F6F7F9',
+    background: `${theme.colors.background}`,
     '&:hover': {
       background: `${theme.colors.menuBg}`,
     },
   },
   link: {
     border: '1px solid #DEE2E9',
-    background: '#F6F7F9',
+    background: `${theme.colors.background}`,
     fontFamily: 'body',
     color: 'text',
     textDecoration: 'none',
@@ -66,7 +66,7 @@ const styles: SXStyles = {
     fontSize: 4,
     '&:hover': {
       background: `${theme.colors.menuBg}`,
-      borderColor: '#1E1FB9',
+      borderColor: `${theme.colors.accent}`,
     },
   },
   topNavSection: {

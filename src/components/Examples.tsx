@@ -67,6 +67,14 @@ const examples = [
     projectLink: 'https://play.flow.com/d120f0a7-d411-4243-bc59-5125a84f99b3',
     docsLink: 'https://developers.flow.com/cadence/tutorial/09-voting',
   },
+  {
+    title: 'Hybrid Custody Contract',
+    subtitle:
+      'This scaffold was created to make starting and exploring a Hybrid Custody project easier for you, and is a simplified template of the contents in @onflow/hybrid-custody. If building on these contracts, you might consider using Git Submodules to ensure your dependencies remain up to date.',
+    emoji: '🤡',
+    projectLink: 'https://play.flow.com/d120f0a7-d411-4243-bc59-5125a84f99b3',
+    docsLink: 'https://developers.flow.com/concepts/hybrid-custody',
+  },
 ];
 
 const ExamplesContainer = styled(motion.div)`

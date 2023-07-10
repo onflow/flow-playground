@@ -25,12 +25,12 @@ const PanelButton: React.FC<PanelButtonProps> = (props) => {
   const getStyle = ({ disabled, isComplete }: PanelButtonProps) => {
     if (disabled) return theme.colors.grey;
     if (isComplete) return theme.colors.primary;
-    return theme.colors.black;
+    return theme.colors.primary;
   };
 
   const sx = {
     backgroundColor: getStyle(props),
-    color: theme.colors.white,
+    color: theme.colors.primaryText,
     ...props.style,
   };
 

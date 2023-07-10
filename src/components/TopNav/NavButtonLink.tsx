@@ -6,7 +6,7 @@ import { Link } from 'theme-ui';
 const styles: SXStyles = {
   link: {
     border: '1px solid #DEE2E9',
-    background: '#F6F7F9',
+    background: `${theme.colors.background}`,
     fontFamily: 'body',
     color: 'text',
     textDecoration: 'none',

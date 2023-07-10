@@ -23,7 +23,7 @@ export const SidebarItemInput = styled.input<SidebarItemInputProps>`
   font-size: 15px;
   color: #6a6a6a;
   font-weight: 600;
-  background: ${theme.colors.white};
+  background: ${theme.colors.secondaryBackground};
   text-overflow: ellipsis;
   border: ${(p) =>
     p.readonly ? '1px solid transparent' : `1px solid #dedede`};

@@ -24,7 +24,7 @@ const styles: SXStyles = {
   button: {
     border: '1px solid #DEE2E9',
     borderRadius: '8px',
-    background: '#F6F7F9',
+    background: `${theme.colors.secondaryBackground}`,
     '&:hover': {
       background: `${theme.colors.menuBg}`,
     },
