@@ -13,12 +13,7 @@ const IconSVG = styled.svg<IconSVGProps>`
 
 const Cadence = styled(IconSVG)`
   .withGradient {
-    fill: currentColor;
-  }
-  &:hover {
-    .withGradient {
-      fill: url(#cadence-gradient);
-    }
+    fill: url(#cadence-gradient);
   }
 `;
 

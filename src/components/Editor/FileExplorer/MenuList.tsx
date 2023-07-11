@@ -93,10 +93,10 @@ const styles: SXStyles = {
     paddingLeft: '16px',
     fontFamily: 'inherit',
     '&:hover': {
-      background: '#DEE2E9',
+      background: `${theme.colors.background}`,
       borderRadius: '4px',
       cursor: 'pointer',
-      color: '#3031D1',
+      color: `${theme.colors.accent}`,
     },
     '&:hover .menu-icon': {
       filter:
@@ -115,9 +115,9 @@ const styles: SXStyles = {
     margin: '6px 0 6px 6px',
     paddingLeft: '16px',
     paddingRight: '8px',
-    background: '#EAEAFA',
+    background: `${theme.colors.background}`,
     borderRadius: '8px',
-    color: '#3031D1',
+    color: `${theme.colors.accent}`,
   },
   centerAlign: {
     alignItems: 'center',

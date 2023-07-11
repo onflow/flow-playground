@@ -20,10 +20,10 @@ import GithubIcon from 'components/Icons/GithubIcon';
 import { NavButtonLink } from './NavButtonLink';
 import { IconCadence } from 'components/Icons/CadenceIcon';
 import VersionInfoPopup from 'components/VersionInfoPopup';
+import { ThemeToggle } from './ThemeToggle';
 
 const styles: SXStyles = {
   root: {
-    background: `${theme.colors.background}`,
     display: 'flex',
     gridArea: 'header',
     flex: '1 1 auto',
@@ -44,7 +44,7 @@ const styles: SXStyles = {
     marginTop: '1rem',
   },
   button: {
-    border: '1px solid #DEE2E9',
+    border: `1px solid ${theme.colors.border}`,
     borderRadius: '8px',
     background: `${theme.colors.background}`,
     '&:hover': {
@@ -52,7 +52,7 @@ const styles: SXStyles = {
     },
   },
   link: {
-    border: '1px solid #DEE2E9',
+    border: `1px solid ${theme.colors.border}`,
     background: `${theme.colors.background}`,
     fontFamily: 'body',
     color: 'text',
@@ -150,6 +150,7 @@ const TopNav = () => {
       <Flex sx={{ ...styles.topNavSection, ...styles.topNavSectionRight }}>
         {!!project && (
           <>
+            <ThemeToggle />
             <VersionInfoPopup />
             <Button
               sx={styles.button}

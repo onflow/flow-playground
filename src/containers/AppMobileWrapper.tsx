@@ -3,7 +3,6 @@ import InformationalPopup from 'components/InformationalPopup';
 import React from 'react';
 import { ChildProps } from 'src/types';
 import theme from '../theme';
-import { useColorMode } from 'theme-ui'
 
 const isInMaintenanceMode = process.env.IS_IN_MAINTENANCE === 'true';
 const infoInMaintenance = {
@@ -35,10 +34,6 @@ const StyledReadOnly = styled.div`
 `;
 
 const AppMobileWrapper = ({ children }: ChildProps) => {
-  const [mode, setMode] = useColorMode()
-  console.log('mode', mode)
-  setMode('dark')
-  console.log('mode', mode)
   return (
     <>
       <InformationalPopup

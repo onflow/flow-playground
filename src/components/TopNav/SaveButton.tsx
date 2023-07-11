@@ -16,7 +16,7 @@ const styles: SXStyles = {
     width: 'unset',
   },
   button: {
-    border: '1px solid #DEE2E9',
+    border: `1px solid ${theme.colors.border}`,
     borderRadius: '8px',
     background: `${theme.colors.background}`,
     '&:hover': {
@@ -24,10 +24,10 @@ const styles: SXStyles = {
     },
   },
   buttonDisabled: {
-    border: '1px solid #DEE2E9',
+    border: `1px solid ${theme.colors.border}`,
     borderRadius: '8px',
-    background: `${theme.colors.muted}`,
-    color: '#DEE2E9',
+    background: `${theme.colors.secondaryBackground}`,
+    color: `${theme.colors.muted}`,
   },
 };
 

@@ -30,7 +30,6 @@ const styles: SXStyles = {
     color: `${theme.colors.text}`,
     background: `${theme.colors.background}`,
     border: `1px solid ${theme.colors.borderColor}`,
-
   },
 };
 

@@ -174,7 +174,7 @@ export const ErrorsContainer = styled.div`
   grid-gap: 10px;
   grid-template-columns: 100%;
   margin-bottom: 12px;
-  background: #f6f7f9;
+  background: ${theme.colors.background};
   border-radius: 8px 8px 8px 0px;
 `;
 

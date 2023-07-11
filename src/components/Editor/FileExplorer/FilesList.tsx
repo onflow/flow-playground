@@ -16,6 +16,7 @@ import {
 } from 'util/urlRewritter';
 import { hasDuplicates } from '../CadenceEditor/ControlPanel/utils';
 import { ResultType } from 'api/apollo/generated/graphql';
+import theme from '../../../theme';
 
 type FileListProps = {
   isExplorerCollapsed: boolean;
@@ -39,7 +40,7 @@ const styles: SXStyles = {
     lineHeight: '16px',
     letterSpacing: '-0.01em',
     textTransform: 'uppercase',
-    color: '#69717E',
+    color: `${theme.colors.muted}`,
     fontFamily: 'Acumin Pro',
   },
   collapsed: {
