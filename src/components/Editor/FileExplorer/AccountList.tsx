@@ -47,7 +47,7 @@ const styles: SXStyles = {
     justifyContent: 'start',
     padding: '0.2rem 0.5rem',
     '&:hover': {
-      background: '#DEE2E9',
+      background: `${theme.colors.accent}`,
       borderRadius: '8px',
       cursor: 'pointer',
     },
@@ -56,10 +56,10 @@ const styles: SXStyles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'start',
-    background: '#EAEAFA',
+    background: `${theme.colors.background}`,
     borderRadius: '8px',
     padding: '0.2rem 0.5rem',
-    color: `${theme.colors.accent}`,
+    color: `${theme.colors.text}`,
   },
   accountCard: {
     display: 'flex',

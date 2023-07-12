@@ -15,7 +15,6 @@ const styles: SXStyles = {
   container: {
     margin: '0',
     width: 'unset',
-    background: theme.colors.background,
   },
   menu: {
     display: 'flex',
@@ -37,9 +36,9 @@ const styles: SXStyles = {
   menuButton: {
     border: `1px solid ${theme.colors.borderColor}`,
     borderRadius: '8px',
-    background: `${theme.colors.secondaryBackground}`,
+    background: `${theme.colors.background}`,
     '&:hover': {
-      background: `${theme.colors.menuBg}`,
+      background: `${theme.colors.accent}`,
     },
     '&:disabled': {
       color: `${theme.colors.muted}`,
@@ -56,15 +55,11 @@ const styles: SXStyles = {
     padding: '12px',
     width: '113px',
     marginLeft: '4px',
-    background: `${theme.colors.background}`,
     border: `1px solid ${theme.colors.borderColor}`,
     borderRadius: '8px',
     height: '48px',
     whiteSpace: 'nowrap',
     fontSize: '0.75rem',
-    '&:hover': {
-      background: `${theme.colors.menuBg}`,
-    },
   },
   linkInput: {
     display: 'flex',

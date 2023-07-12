@@ -1,4 +1,5 @@
 import React from 'react';
+import theme from '../../../../../../theme';
 import styled from 'styled-components';
 
 interface InpubBlockProps {
@@ -20,12 +21,13 @@ export const Label = styled.p<LabelProps>`
   margin: 0;
   font-size: 14px;
   margin-bottom: 5px;
-  color: ${({ error }) => (error ? '#EE431E' : '#000')};
+  color: ${({ error }) =>
+    error ? `${theme.colors.error}` : `${theme.colors.text}`};
 `;
 
 export const Type = styled.span`
   font-weight: normal;
-  color: #3e98eb;
+  color: ${theme.colors.accent};
   margin-left: 4px;
   &:before {
     content: '(';
@@ -36,10 +38,10 @@ export const Type = styled.span`
 `;
 
 export const Input = styled.input`
-  border: 1px solid #c4c4c4;
+  border: 1px solid ${theme.colors.border};
   border-radius: 5px;
   font-size: 14px;
-  color: #000;
+  color: ${theme.colors.text};
   padding: 8px;
   width: 100%;
   font-weight: bold;
@@ -50,13 +52,13 @@ export const Input = styled.input`
   box-sizing: border-box;
 
   ::placeholder {
-    color: #999;
+    color: ${theme.colors.muted};
   }
 `;
 
 export const Error = styled.p`
   font-size: 12px;
-  color: red;
+  color: ${theme.colors.error};
 `;
 
 export const InputIconContainer = styled.div`
@@ -68,11 +70,11 @@ export const InputIconContainer = styled.div`
   right: 0.75em;
   bottom: 0.9em;
   cursor: pointer;
-  color: #888;
+  color: ${theme.colors.muted};
   user-select: none;
 
   &:hover {
-    color: #333;
+    color: ${theme.colors.text};
   }
 `;
 

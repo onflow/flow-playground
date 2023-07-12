@@ -3,10 +3,9 @@ export default {
   isMobile: window.matchMedia('(max-width: 768px)')?.matches,
   colors: {
     primary: '#000000',
-    primaryText: '#FFFFFF',
     secondaryText: '#000000',
     secondaryBackground: '#ffffff',
-    accent: '#3031D1',
+    accent: '#C7E0FF',
     background: '#F6F7F9',
     text: '#2F353F',
     menuBg: '#3031d11a',
@@ -60,10 +59,9 @@ export default {
         alternateButtonBorder: '#2F353F',
         disabledButtonText: '#2F353F',
         secondaryButtonBorder: '#B795FF',
-        primaryText: '#F6F7F9',
         primary: '#2bb169',
         secondaryText: '#2F353F',
-        secondaryBackground: '#dddddd',
+        secondaryBackground: '#000000',
         accent: '#3031D1',
         background: '#2F353F',
         text: '#FFFFFF',
@@ -86,13 +84,17 @@ export default {
     },
   },
   buttons: {
+    icon: {
+      stroke: 'text',
+      fill: 'text',
+    },
     primary: {
       border: 'none',
       borderRadius: '8px',
       backgroundColor: 'primaryBtnBg',
       fontFamily: 'body',
       fontWeight: 500,
-      color: 'primaryText',
+      color: 'text',
       margin: 0,
       fontSize: 1,
       maxWidth: '350px',
@@ -124,12 +126,12 @@ export default {
         backgroundColor: 'secondaryBtnHover',
       },
       '&:active': {
-        color: 'primaryText',
+        color: 'text',
         borderColor: 'secondaryBtnHover',
         backgroundColor: 'secondaryBtnHover',
       },
       '&:disabled': {
-        color: 'primaryText',
+        color: 'muted',
         backgroundColor: 'secondaryBtnDisabled',
       },
     },
@@ -163,7 +165,7 @@ export default {
     },
     explorer: {
       border: 'none',
-      background: 'none',
+      background: 'unset',
       fontFamily: 'body',
       color: 'text',
       textDecoration: 'none',
@@ -177,7 +179,6 @@ export default {
       padding: '8px 12px',
       '&:hover': {
         backgroundColor: 'unset',
-        color: 'text',
       },
       '&:active': {
         backgroundColor: 'unset',

@@ -31,7 +31,6 @@ const styles: SXStyles = {
     fontWeight: 450,
     lineHeight: '100%',
     letterSpacing: '-0.02em',
-    color: `${theme.colors.text}`,
     alignItems: 'start',
     fontFamily: 'IBM Plex Mono',
   },
@@ -115,9 +114,8 @@ const styles: SXStyles = {
     margin: '6px 0 6px 6px',
     paddingLeft: '16px',
     paddingRight: '8px',
-    background: `${theme.colors.background}`,
+    background: `${theme.colors.accent}`,
     borderRadius: '8px',
-    color: `${theme.colors.accent}`,
   },
   centerAlign: {
     alignItems: 'center',

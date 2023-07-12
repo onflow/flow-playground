@@ -28,6 +28,7 @@ export const ThemeToggle = () => {
     setMode(mode === DARK ? LIGHT : DARK);
   };
 
+  console.log('mode', mode);
   return (
     <>
       <Button

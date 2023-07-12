@@ -1,4 +1,5 @@
 import React from 'react';
+import theme from '../theme';
 import { ChildProps } from 'src/types';
 import { Button as ThemeUiButton, ThemeUICSSObject } from 'theme-ui';
 

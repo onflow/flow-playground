@@ -18,16 +18,6 @@ const styles: SXStyles = {
   button: {
     border: `1px solid ${theme.colors.border}`,
     borderRadius: '8px',
-    background: `${theme.colors.background}`,
-    '&:hover': {
-      background: `${theme.colors.menuBg}`,
-    },
-  },
-  buttonDisabled: {
-    border: `1px solid ${theme.colors.border}`,
-    borderRadius: '8px',
-    background: `${theme.colors.secondaryBackground}`,
-    color: `${theme.colors.muted}`,
   },
 };
 

@@ -36,7 +36,7 @@ const styles: SXStyles = {
     margin: '0',
     right: '0',
     bottom: '22px',
-    background: theme.colors.secondaryBackground,
+    background: theme.colors.background,
     padding: '4px 4px',
     whiteSpace: 'nowrap',
   },
@@ -44,6 +44,7 @@ const styles: SXStyles = {
     alignSelf: 'baseline',
     padding: '0px 8px',
     maxHeight: '10px',
+    background: 'none',
     '&:hover': {
       background: 'none',
     },

@@ -30,7 +30,7 @@ const PanelButton: React.FC<PanelButtonProps> = (props) => {
 
   const sx = {
     backgroundColor: getStyle(props),
-    color: theme.colors.primaryText,
+    color: theme.colors.text,
     ...props.style,
   };
 
