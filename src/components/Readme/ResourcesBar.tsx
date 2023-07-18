@@ -173,7 +173,6 @@ const StateContainer: React.FC<{
   path?: any;
   theme?: any;
 }> = ({ value, path, theme }) => {
-
   return (
     <div
       style={{
@@ -294,7 +293,10 @@ const AccountState: React.FC<{
   return (
     <>
       {selectedResourcesAccount !== 'none' && (
-        <AccountStateContainer height={storageHeight + resultHeight} theme={theme}>
+        <AccountStateContainer
+          height={storageHeight + resultHeight}
+          theme={theme}
+        >
           <IdentifierTypeList
             types={types}
             paths={paths}

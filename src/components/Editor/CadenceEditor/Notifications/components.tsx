@@ -38,7 +38,6 @@ export const ButtonContainer = ({ children }: ChildProps) => {
 };
 
 export const ContentBox = ({ children }: ChildProps) => {
-
   const context = useThemeUI();
   const { theme } = context;
 

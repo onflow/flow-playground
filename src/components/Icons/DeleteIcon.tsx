@@ -2,7 +2,6 @@ import React from 'react';
 import { IconButton, useThemeUI } from 'theme-ui';
 
 function DeleteIcon() {
-
   const context = useThemeUI();
   const { theme } = context;
 

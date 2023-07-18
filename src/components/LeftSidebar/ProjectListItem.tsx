@@ -114,7 +114,6 @@ const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
     };
   };
 
-  
   const confirmDelete = async (isConfirmed: boolean): Promise<void> => {
     setShowDelConfirmation(false);
     if (isConfirmed) {

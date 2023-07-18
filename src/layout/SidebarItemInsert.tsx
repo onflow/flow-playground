@@ -5,7 +5,7 @@ import { ThemedComponentProps } from 'src/types';
 interface SidebarItemInsertProps extends ThemedComponentProps {
   onClick?: (e: React.SyntheticEvent<Element, Event>) => any | void;
   grab?: boolean;
-};
+}
 
 export const SidebarItemInsert = styled.button<SidebarItemInsertProps>`
   border: none;

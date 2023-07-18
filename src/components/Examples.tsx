@@ -8,15 +8,12 @@ import { Text, useThemeUI } from 'theme-ui';
 import OpenProjectButton from 'components/ActionButton';
 import Mixpanel from 'util/mixpanel';
 
-
 const Examples: React.FC<{
   visible: boolean;
   triggerClose?: (e: React.SyntheticEvent) => any;
 }> = ({ visible, triggerClose }) => {
-
   const context = useThemeUI();
   const { theme } = context;
-
 
   const examples = [
     {
@@ -40,7 +37,8 @@ const Examples: React.FC<{
         'Create and sell digital assets of your own in this tutorial! This tutorial will teach you the basics of creating, storing, and moving digital assets and tokens.',
       emoji: '💸',
       projectLink: 'https://play.flow.com/e63bfce9-3324-4385-9542-626845ae0363',
-      docsLink: 'https://developers.flow.com/cadence/tutorial/06-fungible-tokens',
+      docsLink:
+        'https://developers.flow.com/cadence/tutorial/06-fungible-tokens',
     },
     {
       title: 'Create Non-Fungible Tokens',
@@ -86,7 +84,7 @@ const Examples: React.FC<{
       docsLink: 'https://developers.flow.com/concepts/hybrid-custody',
     },
   ];
-  
+
   const ExamplesContainer = styled(motion.div)`
     position: fixed;
     display: flex;
@@ -98,7 +96,7 @@ const Examples: React.FC<{
     bottom: 0;
     justify-content: center;
     align-items: center;
-  
+
     a {
       text-decoration: none;
       color: inherit;
@@ -106,7 +104,7 @@ const Examples: React.FC<{
       -webkit-appearance: none;
     }
   `;
-  
+
   const Stack = styled.div`
     display: flex;
     flex-direction: column;
@@ -115,27 +113,27 @@ const Examples: React.FC<{
     overflow-y: auto;
     width: 100%;
   `;
-  
+
   const StackContent = styled.div`
     max-width: 1330px;
     margin: 0 auto;
   `;
-  
+
   const Header = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 1rem;
-  
+
     & h3 {
       font-size: 1.5rem;
     }
-  
+
     & svg {
       cursor: pointer;
     }
   `;
-  
+
   const ExampleContainer = styled.div`
     display: grid;
     grid-template-columns: repeat(4, minmax(100px, 320px));
@@ -145,20 +143,20 @@ const Examples: React.FC<{
       height: 100%;
     }
   `;
-  
+
   const Buttons = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 10px;
     width: 100%;
-  
+
     align-items: flex-start;
-  
+
     button {
       width: 100%;
     }
   `;
-  
+
   const Example = styled.div`
     display: grid;
     grid-template-rows: 80px auto 1fr auto;
@@ -174,11 +172,11 @@ const Examples: React.FC<{
     color: ${theme.colors.text};
     box-sizing: border-box;
     background-color: ${theme.colors.background};
-  
+
     &:hover {
       box-shadow: 0 0 15px 0 ${theme.colors.accent};
     }
-  
+
     .title {
       font-size: 22px;
       color: ${theme.colors.text};
@@ -187,7 +185,7 @@ const Examples: React.FC<{
       justify-content: center;
       height: 100%;
     }
-  
+
     .subtitle {
       line-height: 22px;
       font-size: 15px;
@@ -196,7 +194,7 @@ const Examples: React.FC<{
       height: 100%;
       padding-bottom: 0.5rem;
     }
-  
+
     .emoji {
       font-size: 3rem;
       align-items: center;
@@ -204,7 +202,7 @@ const Examples: React.FC<{
       height: 100%;
       display: flex;
     }
-  `;  
+  `;
   const ExampleContainers = {
     visible: {
       display: 'flex',

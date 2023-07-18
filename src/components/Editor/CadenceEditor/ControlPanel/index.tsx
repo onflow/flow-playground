@@ -519,14 +519,24 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             />
           )}
           <Hints problems={problems} actions={actions} />
-          <ControlContainer isOk={isOk} progress={progress} showPrompt={false} theme={theme}>
+          <ControlContainer
+            isOk={isOk}
+            progress={progress}
+            showPrompt={false}
+            theme={theme}
+          >
             {statusMessage && (
               <StatusMessage
                 isOk={isOk}
                 data-test="control-panel-status-message"
                 onClick={openErrorPanel}
               >
-                <StatusIcon isOk={isOk} progress={progress} showPrompt={false} theme={theme}>
+                <StatusIcon
+                  isOk={isOk}
+                  progress={progress}
+                  showPrompt={false}
+                  theme={theme}
+                >
                   {statusIcon}
                 </StatusIcon>
                 <p>{statusMessage}</p>

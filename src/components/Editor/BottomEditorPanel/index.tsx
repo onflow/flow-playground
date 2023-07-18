@@ -25,29 +25,28 @@ const BottomEditorPanel = ({
   const context = useThemeUI();
   const { theme } = context;
 
-
-const styles: SXStyles = {
-  root: {
-    flex: 1,
-    flexDirection: 'column',
-    height: '100%',
-    paddingTop: '5px',
-    backgroundColor: theme.colors.primary,
-  },
-  tabPanels: {
-    height: '100%',
-    border: `1px solid ${theme.colors.outline}`,
-    overflow: 'auto',
-    width: '100%',
-  },
-  tabPanel: {
-    flex: 1,
-    height: '100%',
-    padding: 7,
-    margin: '0px 45px',
-    backgroundColor: theme.colors.background,
-  },
-};
+  const styles: SXStyles = {
+    root: {
+      flex: 1,
+      flexDirection: 'column',
+      height: '100%',
+      paddingTop: '5px',
+      backgroundColor: theme.colors.primary,
+    },
+    tabPanels: {
+      height: '100%',
+      border: `1px solid ${theme.colors.outline}`,
+      overflow: 'auto',
+      width: '100%',
+    },
+    tabPanel: {
+      flex: 1,
+      height: '100%',
+      padding: 7,
+      margin: '0px 45px',
+      backgroundColor: theme.colors.background,
+    },
+  };
 
   /**
    * Make active key out of active project item type and index

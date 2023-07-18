@@ -1,7 +1,7 @@
 import React from 'react';
 import { IconButton, useThemeUI } from 'theme-ui';
 
-function PlusIcon({ primary }: { primary?: boolean}) {
+function PlusIcon({ primary }: { primary?: boolean }) {
   const context = useThemeUI();
   const { theme } = context;
   const color = primary ? String(theme.colors.primary) : 'text';

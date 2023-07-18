@@ -175,27 +175,6 @@ export const ErrorsContainer = styled.div`
   margin-bottom: 12px;
 `;
 
-export const SingleError = styled.div<ThemedComponentProps>`
-  cursor: pointer;
-  display: flex;
-  align-items: baseline;
-  box-sizing: border-box;
-  padding: 10px;
-  border-radius: 4px;
-  font-size: 14px;
-  &:hover {
-    background-color: rgba(244, 57, 64, 0.15);
-
-    &.hint-warning {
-      background-color: ${({ theme }) => theme.colors.warning};
-    }
-
-    &.hint-info {
-      background-color: ${({ theme }) => theme.colors.info};
-    }
-  }
-`;
-
 export const ErrorIndex = styled.div`
   width: 20px;
   height: 20px;
@@ -239,7 +218,7 @@ export const PromptActionsContainer = styled.div`
   justify-content: flex-start;
 `;
 
-interface StatusIconProps extends ThemedComponentProps{
+interface StatusIconProps extends ThemedComponentProps {
   isOk: boolean;
   progress: boolean;
   showPrompt: boolean;

@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import { Account, Project } from 'api/apollo/generated/graphql';
 import { motion } from 'framer-motion';
 import { Editor as EditorRoot } from 'layout/Editor';
@@ -10,40 +9,9 @@ import EditorPanels from 'components/Editor/EditorPanels';
 import { ChildProps, SXStyles, ThemedComponentProps } from 'src/types';
 import { decodeText } from 'util/readme';
 
-const styles: SXStyles = {
-  editorContainer: {
-    gridArea: 'main',
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-    flexGrow: 1,
-    margin: '8px 8px 0 8px',
-  },
-};
-
 export interface WithShowProps {
   show: boolean;
 }
-
-const Header = ({ children }: ChildProps) => {
-  return (
-    <motion.div>
-      <Flex
-        py={1}
-        sx={{
-          flex: '1 1 auto',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingLeft: '1em',
-          paddingRight: '1em',
-        }}
-      >
-        {children}
-      </Flex>
-    </motion.div>
-  );
-};
 
 type EditorContainerProps = {
   isLoading: boolean;
@@ -97,7 +65,6 @@ const EditorContainer = ({
 
   const previousProjectState = usePrevious(project);
 
-  
   // This hook will listen for project updates and if one of the contracts has been changed,
   // it will reload language server
   useEffect(() => {
@@ -111,6 +78,21 @@ const EditorContainer = ({
     }
   }, [project]);
 
+  const context = useThemeUI();
+  const { theme } = context;
+
+  const styles: SXStyles = {
+    editorContainer: {
+      gridArea: 'main',
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden',
+      flexGrow: 1,
+      margin: '8px 8px 0 8px',
+      background: theme.colors.primary,
+    },
+  };
+
   return (
     <Flex sx={styles.editorContainer}>
       <EditorRoot>
@@ -120,27 +102,4 @@ const EditorContainer = ({
   );
 };
 
-const AnimatedText = styled.div<ThemedComponentProps>`
-  position: relative;
-  color: ${({ theme }) => theme.colors.text};
-  &:before {
-    content: 'Click here to start a tutorial';
-    animation: animatebg 7s infinite;
-    position: absolute;
-    filter: brightness(80%);
-    background: linear-gradient(
-      120deg,
-      rgb(145, 251, 158),
-      rgb(240, 125, 228),
-      rgb(139, 244, 253)
-    );
-    background-size: 300%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    top: 0;
-    left: 0;
-  }
-`;
-
-export { EditorContainer, Header, AnimatedText };
+export { EditorContainer };

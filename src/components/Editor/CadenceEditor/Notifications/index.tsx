@@ -28,7 +28,7 @@ const Notifications = () => {
 
   const context = useThemeUI();
   const { theme } = context;
-  
+
   // METHODS  -------------------------------------------------------------------
   const removeNotification = (set: any, id: number) => {
     set((prev: any[]) => {
@@ -108,7 +108,10 @@ const Notifications = () => {
             <SingleToast key={id}>
               <ButtonContainer>
                 <RemoveToastButton onClick={onClick} theme={theme}>
-                  <AiFillCloseCircle color={String(theme.colors.border)} size="32" />
+                  <AiFillCloseCircle
+                    color={String(theme.colors.border)}
+                    size="32"
+                  />
                 </RemoveToastButton>
               </ButtonContainer>
               <ContentBox>

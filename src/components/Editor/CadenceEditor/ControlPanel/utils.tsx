@@ -168,4 +168,4 @@ export const findDuplicateIndex = (array: string[]): number => {
 
 export const isMobile = (): boolean => {
   return window.matchMedia('(max-width: 768px)')?.matches;
-}
+};

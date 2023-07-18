@@ -6,7 +6,6 @@ function HistoryIcon() {
   const { theme } = context;
   const color = String(theme?.colors?.text) || '#fff';
 
-
   return (
     <IconButton>
       <svg
@@ -17,7 +16,7 @@ function HistoryIcon() {
         viewBox="0 0 20 20"
       >
         <g
-          stroke='icon'
+          stroke="icon"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"

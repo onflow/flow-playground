@@ -47,7 +47,8 @@ export const Title = styled.div<TitleProps>`
     display: block;
     position: absolute;
     left: 0;
-    background: ${(props: any) => props.lineColor || props.theme.colors.primary};
+    background: ${(props: any) =>
+      props.lineColor || props.theme.colors.primary};
     height: 3px;
     width: 1rem;
     bottom: -6px;
@@ -82,7 +83,7 @@ export const Badge = styled.div<ThemedComponentProps>`
   }
 
   background-color: ${({ theme }) => theme.colors.error};
-  &.warning {    
+  &.warning {
     background-color: ${({ theme }) => theme.colors.warning};
   }
   &.info {
@@ -214,13 +215,14 @@ export const ErrorMessage = styled.p<ThemedComponentProps>`
   line-height: 1.2;
   word-break: break-word;
   span {
-    background-color: ${({ theme }) => theme.colors.secondary};
+    background-color: ${({ theme }) => theme.colors.accent};
+    color: ${({ theme }) => theme.colors.text};
     padding: 2px 6px;
     border-radius: 3px;
     margin: 3px 3px 3px 5px;
     line-height: 20px;
     .suggestion {
-      background-color: ${({ theme }) => theme.colors.primary};
+      background-color: ${({ theme }) => theme.colors.secondary};
     }
   }
 `;

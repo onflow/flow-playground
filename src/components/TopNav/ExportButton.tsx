@@ -12,7 +12,6 @@ import * as GoogleAnalytics from 'util/google-analytics';
 
 const DOWNLOAD_EVENT = 'export project downloaded';
 
-
 export const ExportButton = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const projectId =

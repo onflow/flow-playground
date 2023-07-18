@@ -9,8 +9,9 @@ import { EditorState } from './types';
 import { EntityType } from 'providers/Project';
 import { hightlightLines } from 'util/language-syntax-errors';
 import { addCustomActions } from './EditorCustomActions';
-import { useThemeUI } from 'theme-ui';
+import { useColorMode, useThemeUI } from 'theme-ui';
 import { isMobile } from './ControlPanel/utils';
+import { DARK } from 'util/globalConstants';
 
 const MONACO_CONTAINER_ID = 'monaco-container';
 
@@ -35,8 +36,20 @@ const CadenceEditor = (props: CadenceEditorProps) => {
 
   const [editorStates, setEditorStates] = useState<EditorStates>({});
   const { width, height, ref } = useResizeDetector();
+  const [mode] = useColorMode();
+  const [currentMode, setCurrentMode] = useState(mode);
   const context = useThemeUI();
   const { theme } = context;
+
+  useEffect(() => {
+    if (mode !== currentMode) {
+      setCurrentMode(mode);
+      initEditor().then(); // drop returned Promise as we are not going to use it
+      return () => {
+        if (editor) destroyEditor();
+      };
+    }
+  }, [mode]);
 
   const saveEditorState = useCallback(() => {
     const id = project.getActiveCode()[1];
@@ -155,13 +168,12 @@ const CadenceEditor = (props: CadenceEditorProps) => {
     const container = document.getElementById(MONACO_CONTAINER_ID);
 
     const editor = monaco.editor.create(container, {
-      theme: 'vs-light',
+      theme: mode === DARK ? 'vs-dark' : 'vs-light',
       language: CADENCE_LANGUAGE_ID,
       minimap: {
         enabled: false,
       },
-      readOnly:
-        project.active.type === EntityType.AccountStorage || isMobile(),
+      readOnly: project.active.type === EntityType.AccountStorage || isMobile(),
       domReadOnly: isMobile(),
       contextmenu: !isMobile(),
     });
@@ -213,7 +225,12 @@ const CadenceEditor = (props: CadenceEditorProps) => {
   }, [width, height, editor]);
 
   return (
-    <EditorContainer id={MONACO_CONTAINER_ID} show={props.show} ref={ref} theme={theme}>
+    <EditorContainer
+      id={MONACO_CONTAINER_ID}
+      show={props.show}
+      ref={ref}
+      theme={theme}
+    >
       {!!editor && (
         <ControlPanel
           problemsList={props.problemsList}

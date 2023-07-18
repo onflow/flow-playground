@@ -17,7 +17,7 @@ export const AccountAvatar = ({
 }: AccountAvatarProps) => {
   const context = useThemeUI();
   const { theme } = context;
-  
+
   const styles = {
     root: {
       borderRadius: '0.5rem',

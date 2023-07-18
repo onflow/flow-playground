@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 
-export const Feedback = styled.div<{ height?: number, theme: any }>`
+export const Feedback = styled.div<{ height?: number; theme: any }>`
   height: ${(div) => div.height}px;
-  border-top: ${({theme}) => `1px solid ${theme.colors.border}`};
+  border-top: ${({ theme }) => `1px solid ${theme.colors.border}`};
   position: relative;
   display: flex;
   flex-direction: column;

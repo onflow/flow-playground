@@ -20,7 +20,7 @@ const FileExplorer = ({
   const context = useThemeUI();
   const { theme } = context;
 
-  if (isLoading) return <p>Loading...</p>;  
+  if (isLoading) return <p>Loading...</p>;
 
   const styles: SXStyles = {
     root: {

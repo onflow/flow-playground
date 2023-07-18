@@ -37,58 +37,58 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
   const context = useThemeUI();
   const { theme } = context;
 
-const styles: SXStyles = {
-  root: {
-    '--sash-size': '14px',
-    '--focus-border': 'borderColor',
-    '--separator-border': 'transparent',
-    height: '100%',
-    width: '100%',
-    flexDirection: 'column',
-    borderRadius: '8px',
-  },
-  editor: {
-    height: '100%',
-    backgroundColor: theme.colors.primary,
-  },
-  editorHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: '12px 28px',
-    backgroundColor: theme.colors.primary,
-    border: `solid 1px ${theme.colors.outline}`,
-    borderRadius: '8px',
-  },
-  copyButton: {
-    borderRadius: '8px',
-    width: '32px',
-    height: '32px',
-    padding: '0px',
-  },
-  editorTitle: {
-    display: 'flex',
-    alignItems: 'center',
-    fontFamily: 'IBM Plex Mono',
-    fontSize: '14px',
-    whiteSpace: 'nowrap',
-    justifyContent: 'start',
-    margin: '0',
-    padding: '0px 8px',
-    background: `${theme.colors.accent}`,
-    borderRadius: '8px',
-    color: `${theme.colors.active}`,
-  },
-  titleText: {
-    minWidth: '125px',
-    paddingLeft: '4px',
-  },
-  icon: {
-    paddingRight: '4px',
-    paddingLeft: '8px',
-    filter:
-      'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
-  },
-};
+  const styles: SXStyles = {
+    root: {
+      '--sash-size': '14px',
+      '--focus-border': 'borderColor',
+      '--separator-border': 'transparent',
+      height: '100%',
+      width: '100%',
+      flexDirection: 'column',
+      borderRadius: '8px',
+    },
+    editor: {
+      height: '100%',
+      backgroundColor: theme.colors.primary,
+    },
+    editorHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      padding: '12px 28px',
+      backgroundColor: theme.colors.primary,
+      border: `solid 1px ${theme.colors.outline}`,
+      borderRadius: '8px',
+    },
+    copyButton: {
+      borderRadius: '8px',
+      width: '32px',
+      height: '32px',
+      padding: '0px',
+    },
+    editorTitle: {
+      display: 'flex',
+      alignItems: 'center',
+      fontFamily: 'IBM Plex Mono',
+      fontSize: '14px',
+      whiteSpace: 'nowrap',
+      justifyContent: 'start',
+      margin: '0',
+      padding: '0px 8px',
+      background: `${theme.colors.accent}`,
+      borderRadius: '8px',
+      color: `${theme.colors.active}`,
+    },
+    titleText: {
+      minWidth: '125px',
+      paddingLeft: '4px',
+    },
+    icon: {
+      paddingRight: '4px',
+      paddingLeft: '8px',
+      filter:
+        'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
+    },
+  };
 
   let fileName, script;
   switch (active.type) {

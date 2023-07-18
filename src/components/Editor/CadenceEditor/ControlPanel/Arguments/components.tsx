@@ -176,11 +176,12 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
                 onClick={() => goTo(item.position)}
                 onMouseOver={() => hover(item.highlight)}
                 onMouseOut={() => hideDecorations()}
+                theme={theme}
               >
                 <ErrorIndex>
                   <span>{`${i + 1})`}</span>
                 </ErrorIndex>
-                <ErrorMessage>{message}</ErrorMessage>
+                <ErrorMessage theme={theme}>{message}</ErrorMessage>
               </SingleError>
             );
           })}

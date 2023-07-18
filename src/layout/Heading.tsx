@@ -3,7 +3,7 @@ import { ThemedComponentProps } from 'src/types';
 
 interface HeadingProps extends ThemedComponentProps {
   textTransform?: string;
-};
+}
 
 export const Heading = styled.div<HeadingProps>`
   padding: 1rem;
