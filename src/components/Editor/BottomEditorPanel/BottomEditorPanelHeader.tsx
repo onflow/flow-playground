@@ -19,7 +19,7 @@ const styles: SXStyles = {
   header: {
     borderRadius: '8px 8px 0 0',
     backgroundColor: 'white',
-    border: '1px solid #DEE2E9',
+    border: `1px solid ${theme.colors.border}`,
   },
   tabButton: {
     display: 'inline-flex',
@@ -46,7 +46,7 @@ const styles: SXStyles = {
     backgroundColor: 'transparent',
   },
   tabIndicatorSelected: {
-    backgroundColor: 'actionBlue',
+    backgroundColor: 'accent',
   },
   collapseButton: {
     color: 'text',

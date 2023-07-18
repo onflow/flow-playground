@@ -14,7 +14,7 @@ export const SidebarSection = styled.div`
     position: absolute;
     bottom: 100%;
     margin-bottom: 1rem;
-    border-top: 1px solid ${theme.colors.greyBorder};
+    border-top: 1px solid ${theme.colors.border};
     right: 4rem;
     left: 4rem;
   }

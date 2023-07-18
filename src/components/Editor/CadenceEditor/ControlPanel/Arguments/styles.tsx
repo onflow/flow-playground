@@ -9,8 +9,8 @@ export const HoverPanel = styled.div<HoverPanelProps>`
   min-width: ${({ minWidth }) => minWidth};
   max-width: 362px;
   border-radius: 8px;
-  background-color: #fff;
-  border: 1px solid #abb3bf;
+  background-color: ${theme.colors.secondaryBackground};
+  border: 1px solid ${theme.colors.border};
   box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.08);
 `;
 
@@ -38,7 +38,7 @@ export const Title = styled.div<TitleProps>`
   text-transform: uppercase;
   letter-spacing: 0.1em;
   position: relative;
-  color: #919191;
+  color: ${theme.colors.text};
 
   &:after {
     opacity: 0.5;
@@ -66,7 +66,7 @@ export const Badge = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: ${theme.colors.text};
   font-weight: bold;
   font-size: 12px;
   margin-right: 5px;
@@ -80,7 +80,7 @@ export const Badge = styled.div`
     transform: translateY(1px);
   }
 
-  background-color: #ee431e;
+  background-color: ${theme.colors.error};
   &.warning {
     background-color: ${theme.colors.warning};
   }

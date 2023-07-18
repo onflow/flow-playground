@@ -92,10 +92,10 @@ const styles: SXStyles = {
     paddingLeft: '16px',
     fontFamily: 'inherit',
     '&:hover': {
-      background: `${theme.colors.background}`,
+      background: `${theme.colors.accent}`,
       borderRadius: '4px',
       cursor: 'pointer',
-      color: `${theme.colors.accent}`,
+      color: `${theme.colors.active}`,
     },
     '&:hover .menu-icon': {
       filter:
@@ -115,6 +115,7 @@ const styles: SXStyles = {
     paddingLeft: '16px',
     paddingRight: '8px',
     background: `${theme.colors.accent}`,
+    color: `${theme.colors.active}`,
     borderRadius: '8px',
   },
   centerAlign: {

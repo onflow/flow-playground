@@ -1,5 +1,4 @@
 import React from 'react';
-import theme from '../theme';
 import { ChildProps } from 'src/types';
 import { Button as ThemeUiButton, ThemeUICSSObject } from 'theme-ui';
 
@@ -8,9 +7,7 @@ type ButtonSizes = 'sm' | 'md' | 'lg';
 export type ButtonVariant =
   | 'primary'
   | 'secondary'
-  | 'secondaryLegacy'
   | 'disabled'
-  | 'alternate'
   | 'link'
   | 'explorer'
   | 'unstyled';

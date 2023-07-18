@@ -35,31 +35,24 @@ const styles: SXStyles = {
     height: '100%',
     width: '100%',
     flexDirection: 'column',
+    backgroundColor: theme.colors.background,
+    borderRadius: '8px',
   },
   editor: {
     height: '100%',
-    borderBottom: `solid 1px ${theme.colors.leftSidebarBackground}`,
-    borderRight: `solid 1px ${theme.colors.leftSidebarBackground}`,
-    borderLeft: `solid 1px ${theme.colors.leftSidebarBackground}`,
+    borderBottom: `solid 1px ${theme.colors.border}`,
+    borderRight: `solid 1px ${theme.colors.border}`,
   },
   editorHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: '12px 28px',
-    border: `solid 1px ${theme.colors.leftSidebarBackground}`,
-    borderRadius: '0px',
-    backgroundColor: theme.colors.secondaryBackground,
   },
   copyButton: {
-    border: `1px solid ${theme.colors.leftSidebarBackground}`,
     borderRadius: '8px',
     width: '32px',
     height: '32px',
     padding: '0px',
-    backgroundColor: theme.colors.secondaryBackground,
-    '&:hover': {
-      background: `${theme.colors.menuBg}`,
-    },
   },
   editorTitle: {
     display: 'flex',
@@ -70,9 +63,9 @@ const styles: SXStyles = {
     justifyContent: 'start',
     margin: '0',
     padding: '0px 8px',
-    background: `${theme.colors.background}`,
+    background: `${theme.colors.accent}`,
     borderRadius: '8px',
-    color: `${theme.colors.accent}`,
+    color: `${theme.colors.active}`,
   },
   titleText: {
     minWidth: '125px',
@@ -148,7 +141,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
 
               <Button
                 sx={styles.copyButton}
-                variant="explorer"
+                variant="secondary"
                 onClick={setCopied}
               >
                 {isCopied ? <FaClipboardCheck /> : <CopyIcon />}

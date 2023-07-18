@@ -29,6 +29,7 @@ import { Flex } from 'theme-ui';
 import EditorPanels from 'components/Editor/EditorPanels';
 import { ChildProps, SXStyles } from 'src/types';
 import { decodeText } from 'util/readme';
+import theme from '../../theme';
 
 const styles: SXStyles = {
   editorContainer: {
@@ -151,7 +152,7 @@ const EditorContainer = ({
 
 const AnimatedText = styled.div`
   position: relative;
-  color: #fff;
+  color: ${theme.colors.text};
   &:before {
     content: 'Click here to start a tutorial';
     animation: animatebg 7s infinite;

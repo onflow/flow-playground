@@ -32,6 +32,7 @@ const styles: SXStyles = {
     justifyContent: 'space-between',
     paddingLeft: '1em',
     paddingRight: '1em',
+    background: `${theme.colors.primary}`,
   },
   mobile: {
     background: `${theme.colors.secondaryBackground}`,
@@ -42,14 +43,6 @@ const styles: SXStyles = {
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: '1rem',
-  },
-  button: {
-    border: `1px solid ${theme.colors.border}`,
-    borderRadius: '8px',
-    background: `${theme.colors.background}`,
-    '&:hover': {
-      background: `${theme.colors.menuBg}`,
-    },
   },
   link: {
     border: `1px solid ${theme.colors.border}`,
@@ -65,7 +58,7 @@ const styles: SXStyles = {
     borderRadius: '8px',
     fontSize: 4,
     '&:hover': {
-      background: `${theme.colors.menuBg}`,
+      background: `${theme.colors.active}`,
       borderColor: `${theme.colors.accent}`,
     },
   },
@@ -129,7 +122,7 @@ const TopNav = () => {
       <Flex sx={styles.topNavSection}>
         <Button
           onClick={toggleProjectsSidebar}
-          variant="alternate"
+          variant="secondary"
           size="sm"
           inline={true}
         >
@@ -153,7 +146,6 @@ const TopNav = () => {
             <ThemeToggle />
             <VersionInfoPopup />
             <Button
-              sx={styles.button}
               onClick={() => onStartButtonClick()}
               variant="secondary"
               size="sm"

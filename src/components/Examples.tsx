@@ -7,6 +7,7 @@ import { Text } from 'theme-ui';
 
 import OpenProjectButton from 'components/ActionButton';
 import Mixpanel from 'util/mixpanel';
+import theme from '../theme';
 
 const examples = [
   {
@@ -161,17 +162,17 @@ const Example = styled.div`
   padding: 2rem;
   box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.07);
   transition: all 0.25s ease-in-out;
-  background: white;
+  color: ${theme.colors.text};
   box-sizing: border-box;
+  background-color: ${theme.colors.background};
 
   &:hover {
-    //border: 2px solid rgba(0, 255, 55, 0.32);
-    box-shadow: 0 0 15px 0 rgba(189, 196, 244, 0.6);
+    box-shadow: 0 0 15px 0 ${theme.colors.accent};
   }
 
   .title {
     font-size: 22px;
-    color: #333;
+    color: ${theme.colors.text};
     font-weight: 700;
     text-align: center;
     justify-content: center;
@@ -275,7 +276,7 @@ const Examples: React.FC<{
                           });
                         }}
                       >
-                        <OpenProjectButton className="violet">
+                        <OpenProjectButton variant="secondary">
                           Read More
                         </OpenProjectButton>
                       </a>

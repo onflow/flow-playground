@@ -3,7 +3,7 @@ import theme from '../theme';
 
 export const Feedback = styled.div<{ height?: number }>`
   height: ${(div) => div.height}px;
-  border-top: 1px solid ${theme.colors.greyBorder};
+  border-top: 1px solid ${theme.colors.border};
   position: relative;
   display: flex;
   flex-direction: column;

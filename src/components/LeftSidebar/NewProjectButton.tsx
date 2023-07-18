@@ -15,7 +15,6 @@ type NewProjectButtonProps = {
 const NewProjectButton = ({
   label,
   size,
-  variant,
   inline,
   delayTooltipShow,
 }: NewProjectButtonProps) => {
@@ -31,7 +30,7 @@ const NewProjectButton = ({
       >
         <Button
           onClick={createBlankProject}
-          variant={hasReachedProjectsLimit ? 'disabled' : variant}
+          variant={hasReachedProjectsLimit ? 'disabled' : 'primary'}
           size={size}
           disabled={isSaving || hasReachedProjectsLimit}
           hideDisabledState={isSaving && !hasReachedProjectsLimit}

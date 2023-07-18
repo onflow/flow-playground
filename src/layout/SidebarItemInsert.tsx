@@ -15,7 +15,7 @@ export const SidebarItemInsert = styled.button<SidebarItemInsertProps>`
   right: 0.75rem;
   top: 56%;
   transform: translateY(-50%);
-  color: ${theme.colors.grey};
+  color: ${theme.colors.border};
 
   &:hover {
     color: ${theme.colors.heading};

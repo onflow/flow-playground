@@ -17,14 +17,6 @@ const styles: SXStyles = {
     margin: '0',
     width: 'unset',
   },
-  button: {
-    background: `${theme.colors.background}`,
-    border: `1px solid ${theme.colors.borderColor}`,
-    borderRadius: '8px',
-    '&:hover': {
-      background: `${theme.colors.menuBg}`,
-    },
-  },
   buttonDisabled: {
     borderRadius: '8px',
     color: `${theme.colors.text}`,
@@ -84,7 +76,6 @@ export const ExportButton = () => {
   return (
     <Container sx={styles.container}>
       <Button
-        sx={styles.button}
         onClick={() => setIsOpen(true)}
         variant="secondary"
         size="sm"

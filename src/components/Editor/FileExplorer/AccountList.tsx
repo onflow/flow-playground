@@ -67,6 +67,10 @@ const styles: SXStyles = {
     paddingTop: '0.5rem',
     paddingBottom: '0.5rem',
     width: '100%',
+    '&:hover': {
+      cursor: 'pointer',
+      color: `${theme.colors.active}`,
+    },
   },
   accountTitle: {
     display: 'flex',

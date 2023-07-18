@@ -17,6 +17,7 @@ import CopyIcon from 'components/Icons/CopyIcon';
 import { Project } from 'api/apollo/generated/graphql';
 import { userDataKeys, UserLocalStorage } from 'util/localstorage';
 import ResetIcon from 'components/Icons/ResetIcon';
+import theme from '../../theme';
 
 type Props = {
   project: ProjectType;
@@ -27,7 +28,7 @@ type Props = {
 const styles: SXStyles = {
   root: {
     borderRadius: 16,
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.background,
     padding: 10,
     gap: 7,
     flexDirection: 'column',
@@ -61,8 +62,8 @@ const styles: SXStyles = {
 const getRootStyles = (isCurrentProject: boolean, doingAction: boolean) => {
   return {
     ...styles.root,
-    borderColor: isCurrentProject ? `blueBorder` : 'transparent',
-    backgroundColor: doingAction ? 'lightBlue' : 'white',
+    borderColor: isCurrentProject ? `accent` : 'transparent',
+    backgroundColor: doingAction ? 'accent' : 'text',
     borderWidth: 2,
     borderStyle: 'solid',
   };

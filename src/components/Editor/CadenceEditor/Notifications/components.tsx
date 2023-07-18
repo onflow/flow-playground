@@ -21,7 +21,7 @@ export const RemoveToastButton = styled.button`
   border: none;
   background: transparent;
   transform: translate(25%, 50%);
-  color: ${theme.colors.grey};
+  color: ${theme.colors.border};
   &:hover {
     color: ${theme.colors.heading};
   }
@@ -44,11 +44,11 @@ export const ContentBox = ({ children }: ChildProps) => {
     marginTop: '0.0rem',
     padding: '0.8rem 0.5rem',
     alignItems: 'center',
-    border: `1px solid ${theme.colors.borderDark}`,
+    border: `1px solid ${theme.colors.shadow}`,
     backgroundColor: theme.colors.background,
     borderRadius: '8px',
     maxWidth: '500px',
-    boxShadow: '10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff',
+    boxShadow: `10px 10px 20px ${theme.colors.shadow}, -10px -10px 20px ${theme.colors.primary}`,
   };
   return (
     <Box my={1} sx={sx}>

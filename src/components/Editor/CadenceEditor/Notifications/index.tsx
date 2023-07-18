@@ -10,6 +10,7 @@ import {
   SingleToast,
   ToastContainer,
 } from './components';
+import theme from '../../../../theme';
 
 const Notifications = () => {
   // ===========================================================================
@@ -104,7 +105,7 @@ const Notifications = () => {
             <SingleToast key={id}>
               <ButtonContainer>
                 <RemoveToastButton onClick={onClick}>
-                  <AiFillCloseCircle color="grey" size="32" />
+                  <AiFillCloseCircle color={theme.colors.border} size="32" />
                 </RemoveToastButton>
               </ButtonContainer>
               <ContentBox>

@@ -25,9 +25,9 @@ const TypeListItem = styled.li<{ active: boolean }>`
   font-size: 14px;
   font-weight: 600;
   color: #2f2f2f;
-  ${(li) => (li.active ? 'background: #f5f5f5;' : '')}
+  ${(li) => (li.active ? `background: ${theme.colors.secondary}` : '')}
   &:hover {
-    background: #f5f5f5;
+    background: ${theme.colors.secondary};
   }
 `;
 
@@ -37,8 +37,8 @@ const AccountStateContainer = styled.div<{ height: number }>`
   justify-content: space-even;
   height: 100%;
   width: 100%;
-  background: white;
-  border-top: 1px solid ${theme.colors.greyBorder};
+  background: ${theme.colors.background};
+  border-top: 1px solid ${theme.colors.secondary};
   height: ${(p) => p.height}px;
 `;
 
@@ -46,7 +46,7 @@ const StorageListContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  border-right: 1px solid ${theme.colors.greyBorder};
+  border-right: 1px solid ${theme.colors.secondary};
 `;
 
 interface StorageBadgeProps {
@@ -194,7 +194,7 @@ const StateContainer: React.FC<{
         </Flex>
         <Divider
           sx={{
-            color: theme.colors.grey,
+            color: theme.colors.border,
             opacity: '0.7',
             marginX: '2rem',
             marginY: '0.5rem',

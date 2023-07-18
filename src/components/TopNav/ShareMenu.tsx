@@ -27,26 +27,12 @@ const styles: SXStyles = {
     right: '170px',
     margin: '0',
     background: theme.colors.secondaryBackground,
+    color: theme.colors.text,
     padding: '1rem',
   },
   copyLink: {
     flexDirection: 'row',
     paddingBottom: '12px',
-  },
-  menuButton: {
-    border: `1px solid ${theme.colors.borderColor}`,
-    borderRadius: '8px',
-    background: `${theme.colors.background}`,
-    '&:hover': {
-      background: `${theme.colors.accent}`,
-    },
-    '&:disabled': {
-      color: `${theme.colors.muted}`,
-      '&:hover': {
-        background: `${theme.colors.accent}`,
-        cursor: 'not-allowed',
-      },
-    },
   },
   ctaButton: {
     display: 'flex',
@@ -55,9 +41,7 @@ const styles: SXStyles = {
     padding: '12px',
     width: '113px',
     marginLeft: '4px',
-    border: `1px solid ${theme.colors.borderColor}`,
     borderRadius: '8px',
-    height: '48px',
     whiteSpace: 'nowrap',
     fontSize: '0.75rem',
   },
@@ -108,7 +92,6 @@ export const ShareMenu = () => {
   return (
     <Container sx={styles.container} ref={ref}>
       <Button
-        sx={styles.menuButton}
         onClick={() => {
           setIsOpen(!isOpen);
         }}
