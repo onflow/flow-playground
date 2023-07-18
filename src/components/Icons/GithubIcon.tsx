@@ -5,7 +5,7 @@ import { IconButton } from 'theme-ui';
 function GithubIcon() {
   const context = useThemeUI();
   const { theme } = context;
-  const color = String(theme?.colors?.icons) || '#000';
+  const color = String(theme?.colors?.text) || '#fff';
 
   return (
     <IconButton>

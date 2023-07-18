@@ -1,5 +1,4 @@
-import React from 'react';
-import theme from '../../../../../../theme';
+import { ThemedComponentProps } from 'src/types';
 import styled from 'styled-components';
 
 interface InpubBlockProps {
@@ -13,7 +12,7 @@ export const InputBlock = styled.div<InpubBlockProps>`
   position: relative;
 `;
 
-interface LabelProps {
+interface LabelProps extends ThemedComponentProps {
   error?: boolean;
 }
 
@@ -21,13 +20,13 @@ export const Label = styled.p<LabelProps>`
   margin: 0;
   font-size: 14px;
   margin-bottom: 5px;
-  color: ${({ error }) =>
+  color: ${({ theme, error }) =>
     error ? `${theme.colors.error}` : `${theme.colors.text}`};
 `;
 
-export const Type = styled.span`
+export const Type = styled.span<ThemedComponentProps>`
   font-weight: normal;
-  color: ${theme.colors.accent};
+  color: ${({ theme }) => theme.colors.accent};
   margin-left: 4px;
   &:before {
     content: '(';
@@ -37,11 +36,12 @@ export const Type = styled.span`
   }
 `;
 
-export const Input = styled.input`
-  border: 1px solid ${theme.colors.border};
+export const Input = styled.input<ThemedComponentProps>`
+  background-color: ${({ theme }) => theme.colors.secondaryBackground};
+  border: ${({ theme }) => `1px solid ${theme.colors.active}`};
   border-radius: 5px;
   font-size: 14px;
-  color: ${theme.colors.text};
+  color: ${({ theme }) => theme.colors.text};
   padding: 8px;
   width: 100%;
   font-weight: bold;
@@ -52,38 +52,11 @@ export const Input = styled.input`
   box-sizing: border-box;
 
   ::placeholder {
-    color: ${theme.colors.muted};
+    color: ${({ theme }) => theme.colors.muted};
   }
 `;
 
-export const Error = styled.p`
+export const Error = styled.p<ThemedComponentProps>`
   font-size: 12px;
-  color: ${theme.colors.error};
+  color: ${({ theme }) => theme.colors.error};
 `;
-
-export const InputIconContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  align-self: center;
-  right: 0.75em;
-  bottom: 0.9em;
-  cursor: pointer;
-  color: ${theme.colors.muted};
-  user-select: none;
-
-  &:hover {
-    color: ${theme.colors.text};
-  }
-`;
-
-type InputIconProps = {
-  onClick?: any;
-  icon: JSX.Element;
-};
-
-export const InputIcon = (props: InputIconProps) => {
-  const { onClick, icon } = props;
-  return <InputIconContainer onClick={onClick}>{icon}</InputIconContainer>;
-};

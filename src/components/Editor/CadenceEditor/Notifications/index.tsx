@@ -10,7 +10,7 @@ import {
   SingleToast,
   ToastContainer,
 } from './components';
-import theme from '../../../../theme';
+import { useThemeUI } from 'theme-ui';
 
 const Notifications = () => {
   // ===========================================================================
@@ -26,6 +26,9 @@ const Notifications = () => {
     [identifier: string]: string[];
   }>({});
 
+  const context = useThemeUI();
+  const { theme } = context;
+  
   // METHODS  -------------------------------------------------------------------
   const removeNotification = (set: any, id: number) => {
     set((prev: any[]) => {
@@ -96,7 +99,7 @@ const Notifications = () => {
 
   // RENDER
   return (
-    <ToastContainer>
+    <ToastContainer theme={theme}>
       <ul>
         {toasts.map((toast) => {
           const { id, toastText, onClick } = toast;
@@ -104,8 +107,8 @@ const Notifications = () => {
           return (
             <SingleToast key={id}>
               <ButtonContainer>
-                <RemoveToastButton onClick={onClick}>
-                  <AiFillCloseCircle color={theme.colors.border} size="32" />
+                <RemoveToastButton onClick={onClick} theme={theme}>
+                  <AiFillCloseCircle color={String(theme.colors.border)} size="32" />
                 </RemoveToastButton>
               </ButtonContainer>
               <ContentBox>

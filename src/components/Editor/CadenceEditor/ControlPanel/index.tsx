@@ -36,6 +36,7 @@ import { ControlPanelProps, IValue, UNSUPPORTED_TYPES } from './types';
 import {
   getLabel,
   getResultType,
+  isMobile,
   useTemplateType,
   validateByType,
 } from './utils';
@@ -57,8 +58,8 @@ import { Template } from 'src/types';
 import DismissiblePopup from 'components/DismissiblePopup';
 import { userModalKeys } from 'util/localstorage';
 import { addressToAccount } from 'util/accounts';
-import theme from '../../../../theme';
 import { Argument } from './Arguments/types';
+import { useThemeUI } from 'theme-ui';
 
 const ButtonActionLabels = {
   [String(EntityType.TransactionTemplate)]: 'Send',
@@ -96,6 +97,8 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const constraintsRef = useRef();
   // Holds reference to Disposable callback for languageClient
   const clientOnNotification = useRef(null);
+  const context = useThemeUI();
+  const { theme } = context;
 
   // ===========================================================================
   // METHODS  ------------------------------------------------------------------
@@ -479,7 +482,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     validate(list, values);
   }, [list, values]);
 
-  if (type === EntityType.AccountStorage || theme.isMobile) {
+  if (type === EntityType.AccountStorage || isMobile()) {
     return null;
   }
 
@@ -487,7 +490,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     <>
       <div ref={constraintsRef} className="constraints" />
       <MotionBox dragConstraints={constraintsRef}>
-        <HoverPanel minWidth="362px">
+        <HoverPanel minWidth="362px" theme={theme}>
           {list.length > 0 && (
             <>
               <ArgumentsTitle
@@ -516,14 +519,14 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             />
           )}
           <Hints problems={problems} actions={actions} />
-          <ControlContainer isOk={isOk} progress={progress} showPrompt={false}>
+          <ControlContainer isOk={isOk} progress={progress} showPrompt={false} theme={theme}>
             {statusMessage && (
               <StatusMessage
                 isOk={isOk}
                 data-test="control-panel-status-message"
                 onClick={openErrorPanel}
               >
-                <StatusIcon isOk={isOk} progress={progress} showPrompt={false}>
+                <StatusIcon isOk={isOk} progress={progress} showPrompt={false} theme={theme}>
                   {statusIcon}
                 </StatusIcon>
                 <p>{statusMessage}</p>

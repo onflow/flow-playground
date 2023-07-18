@@ -1,12 +1,10 @@
 import { motion } from 'framer-motion';
 import React from 'react';
-import { ChildProps } from 'src/types';
+import { ChildProps, ThemedComponentProps } from 'src/types';
 import styled from 'styled-components';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 
-import theme from '../../../../theme';
-
-export const ToastContainer = styled.div`
+export const ToastContainer = styled.div<ThemedComponentProps>`
   z-index: 1000;
   position: fixed;
   bottom: 40px;
@@ -14,16 +12,16 @@ export const ToastContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: ${theme.colors.accent};
+  color: ${({ theme }) => theme.colors.accent};
 `;
 
-export const RemoveToastButton = styled.button`
+export const RemoveToastButton = styled.button<ThemedComponentProps>`
   border: none;
   background: transparent;
   transform: translate(25%, 50%);
-  color: ${theme.colors.border};
+  color: ${({ theme }) => theme.colors.border};
   &:hover {
-    color: ${theme.colors.heading};
+    color: ${({ theme }) => theme.colors.accent};
   }
 `;
 
@@ -40,6 +38,10 @@ export const ButtonContainer = ({ children }: ChildProps) => {
 };
 
 export const ContentBox = ({ children }: ChildProps) => {
+
+  const context = useThemeUI();
+  const { theme } = context;
+
   const sx = {
     marginTop: '0.0rem',
     padding: '0.8rem 0.5rem',

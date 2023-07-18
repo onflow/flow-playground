@@ -1,63 +1,65 @@
 import Button from 'components/Button';
 import { useProject } from 'providers/Project/projectHooks';
 import React from 'react';
-import theme from '../../../theme';
 import { SXStyles } from 'src/types';
-import { Box, Flex, Link } from 'theme-ui';
+import { Box, Flex, Link, useThemeUI } from 'theme-ui';
 import ErrorToast from './ErrorToast';
 import { PLAYGROUND_GITHUB_ISSUES_URL } from 'util/globalConstants';
 
-const styles: SXStyles = {
-  root: {
-    zIndex: 1000,
-    position: 'fixed',
-    bottom: '40px',
-    left: '40%',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    color: theme.colors.error,
-  },
-  errorContent: {
-    flexDirection: 'row',
-    maxWidth: '500px',
-    marginTop: '0.0rem',
-    padding: '16px 0px 16px 24px',
-    alignItems: 'center',
-    fontSize: theme.fontSizes[2],
-    border: `1px solid ${theme.colors.errorToast}`,
-    background: theme.colors.errorBackground,
-    borderRadius: '8px',
-    boxShadow: '10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff',
-  },
-  issuesLink: {
-    textDecoration: 'none',
-    fontSize: '12px',
-    color: theme.colors.errorToast,
-    paddingRight: '10px',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    width: '210px',
-  },
-  closeToastButton: {
-    borderLeft: `1px solid ${theme.colors.errorToast}`,
-    background: 'none',
-    color: theme.colors.errorToast,
-    padding: '0px',
-    borderRadius: '0px',
-    width: '40px',
-    '&:hover': {
-      cursor: 'pointer',
-    },
-  },
-  message: {
-    paddingRight: '24px',
-    overflowWrap: 'anywhere',
-    maxWidth: '339px',
-  },
-};
-
 const ErrorToastContainer = () => {
+  const context = useThemeUI();
+  const { theme } = context;
+
+  const styles: SXStyles = {
+    root: {
+      zIndex: 1000,
+      position: 'fixed',
+      bottom: '40px',
+      left: '40%',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      color: theme.colors.error,
+    },
+    errorContent: {
+      flexDirection: 'row',
+      maxWidth: '500px',
+      marginTop: '0.0rem',
+      padding: '16px 0px 16px 24px',
+      alignItems: 'center',
+      fontSize: theme.fontSizes[2],
+      border: `1px solid ${theme.colors.errorToast}`,
+      background: theme.colors.errorBackground,
+      borderRadius: '8px',
+      boxShadow: '10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff',
+    },
+    issuesLink: {
+      textDecoration: 'none',
+      fontSize: '12px',
+      color: theme.colors.errorToast,
+      paddingRight: '10px',
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      width: '210px',
+    },
+    closeToastButton: {
+      borderLeft: `1px solid ${theme.colors.errorToast}`,
+      background: 'none',
+      color: theme.colors.errorToast,
+      padding: '0px',
+      borderRadius: '0px',
+      width: '40px',
+      '&:hover': {
+        cursor: 'pointer',
+      },
+    },
+    message: {
+      paddingRight: '24px',
+      overflowWrap: 'anywhere',
+      maxWidth: '339px',
+    },
+  };
+
   const {
     applicationErrorMessage,
     setApplicationErrorMessage,

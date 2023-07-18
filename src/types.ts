@@ -32,3 +32,7 @@ export type Template = {
   index: number;
   name?: string;
 };
+
+export interface ThemedComponentProps {
+  theme: any;
+}

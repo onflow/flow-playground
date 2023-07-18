@@ -1,6 +1,5 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
-import theme from '../../../theme';
 
 const blink = keyframes`
   50% {
@@ -10,15 +9,19 @@ const blink = keyframes`
 
 interface EditorContainerProps {
   show: boolean;
+  id: string;
+  children: React.ReactNode;
+  ref: any;
+  theme: any;
 }
 
 export const EditorContainer = styled.div<EditorContainerProps>`
   width: 100%;
   height: 100%;
-  border-left: 1px solid ${theme.colors.outline};
-  border-right: 1px solid ${theme.colors.outline};
-  border-bottom: 1px solid ${theme.colors.outline};
-  background: ${theme.colors.background};
+  border-left: ${({ theme }) => `1px solid ${theme.colors.outline}`};
+  border-right: ${({ theme }) => `1px solid ${theme.colors.outline}`};
+  border-bottom: ${({ theme }) => `1px solid ${theme.colors.outline}`};
+  background: ${({ theme }) => theme.colors.background};
 
   display: ${({ show = true }) => (show ? 'block' : 'none')};
 

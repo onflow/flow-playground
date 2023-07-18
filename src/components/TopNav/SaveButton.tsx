@@ -1,25 +1,13 @@
 import Button from 'components/Button';
 import Mixpanel from 'util/mixpanel';
 import React from 'react';
-import theme from '../../theme';
 import { SXStyles } from 'src/types';
-import { Container, Text } from 'theme-ui';
+import { Container, Text, useThemeUI } from 'theme-ui';
 import { useProject } from 'providers/Project/projectHooks';
 import { LOCAL_PROJECT_ID } from 'util/url';
 import { formatDistance } from 'date-fns';
 import useProjects from '../../hooks/useProjects';
 import { MAX_PROJECTS } from 'components/LeftSidebar/NewProjectButton';
-
-const styles: SXStyles = {
-  container: {
-    margin: '0',
-    width: 'unset',
-  },
-  button: {
-    border: `1px solid ${theme.colors.border}`,
-    borderRadius: '8px',
-  },
-};
 
 export const SaveButton = () => {
   const projectId =
@@ -32,6 +20,19 @@ export const SaveButton = () => {
   const hasReachedProjectsLimit = projects.length >= MAX_PROJECTS;
 
   const isSaved = Boolean(project?.updatedAt);
+  const context = useThemeUI();
+  const { theme } = context;
+
+  const styles: SXStyles = {
+    container: {
+      margin: '0',
+      width: 'unset',
+    },
+    button: {
+      border: `1px solid ${theme.colors.border}`,
+      borderRadius: '8px',
+    },
+  };
 
   const saveClicked = () => {
     Mixpanel.track('Save project clicked', { projectId });

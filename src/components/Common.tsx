@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
-import theme from '../theme';
+import { ThemedComponentProps } from 'src/types';
 
 interface FullScreenContainerProps {
   elevation?: number;
@@ -32,7 +32,7 @@ export const WhiteOverlay = styled.div<WhiteOverlayProps>`
   z-index: -1;
 `;
 
-interface PopupContainerProps {
+interface PopupContainerProps extends ThemedComponentProps {
   width?: string;
 }
 
@@ -43,7 +43,7 @@ export const PopupContainer = styled(motion.div)<PopupContainerProps>`
   flex-direction: column;
   padding: 40px;
   border-radius: 6px;
-  background-color: ${theme.colors.background};
+  background-color: ${({ theme }) => theme.colors.background};
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1), 0 0 3px 1px rgba(0, 0, 0, 0.05);
   z-index: 2;
   box-sizing: border-box;
@@ -80,9 +80,9 @@ export const SpaceBetween = styled.div<CommonProps>`
   margin-top: 16px;
 `;
 
-export const Separator = styled.div`
+export const Separator = styled.div<ThemedComponentProps>`
   width: 2px;
   height: 30px;
-  background-color: ${theme.colors.secondary};
+  background-color: ${({ theme }) => theme.colors.secondary};
   margin: 0 16px;
 `;

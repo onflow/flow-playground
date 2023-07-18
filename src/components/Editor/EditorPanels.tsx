@@ -4,9 +4,8 @@ import 'allotment/dist/style.css';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useState } from 'react';
-import theme from '../../theme';
 import { SXStyles } from 'src/types';
-import { Box, Flex } from 'theme-ui';
+import { Box, Flex, useThemeUI } from 'theme-ui';
 import { storageMapByIndex } from 'util/accounts';
 import BottomEditorPanel from './BottomEditorPanel';
 import BottomEditorPanelHeader from './BottomEditorPanel/BottomEditorPanelHeader';
@@ -27,6 +26,17 @@ type EditorPanelsProps = {
   show: boolean;
 };
 
+const EditorPanels = ({ show }: EditorPanelsProps) => {
+  const { project, active, showBottomPanel } = useProject();
+  const [selectedBottomTab, setSelectedBottomTab] = useState(0);
+  const [problemsList, setProblemsList] = useState<any>({});
+  const accountNumber = storageMapByIndex(active.index);
+  // clear problems when new project is loaded
+  useEffect(() => setProblemsList({}), [project?.id]);
+
+  const context = useThemeUI();
+  const { theme } = context;
+
 const styles: SXStyles = {
   root: {
     '--sash-size': '14px',
@@ -35,11 +45,11 @@ const styles: SXStyles = {
     height: '100%',
     width: '100%',
     flexDirection: 'column',
-    backgroundColor: theme.colors.background,
     borderRadius: '8px',
   },
   editor: {
     height: '100%',
+    backgroundColor: theme.colors.primary,
   },
   editorHeader: {
     flexDirection: 'row',
@@ -80,13 +90,6 @@ const styles: SXStyles = {
   },
 };
 
-const EditorPanels = ({ show }: EditorPanelsProps) => {
-  const { project, active, showBottomPanel } = useProject();
-  const [selectedBottomTab, setSelectedBottomTab] = useState(0);
-  const [problemsList, setProblemsList] = useState<any>({});
-  const accountNumber = storageMapByIndex(active.index);
-  // clear problems when new project is loaded
-  useEffect(() => setProblemsList({}), [project?.id]);
   let fileName, script;
   switch (active.type) {
     case EntityType.ContractTemplate:

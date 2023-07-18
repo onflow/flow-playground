@@ -3,204 +3,208 @@ import { WhiteOverlay } from 'components/Common';
 import { motion } from 'framer-motion';
 import React from 'react';
 import { IoMdClose } from 'react-icons/io';
-import { Text } from 'theme-ui';
+import { Text, useThemeUI } from 'theme-ui';
 
 import OpenProjectButton from 'components/ActionButton';
 import Mixpanel from 'util/mixpanel';
-import theme from '../theme';
 
-const examples = [
-  {
-    title: ' First Steps',
-    subtitle:
-      'Learn how to use smart contracts, switch accounts, and view account state.',
-    emoji: '🏃',
-    docsLink: 'https://developers.flow.com/cadence/tutorial/01-first-steps',
-  },
-  {
-    title: 'Hello, World!',
-    subtitle:
-      'Write your first contract on Flow. This is the perfect place to start to get the hang of the fundamentals of Cadence.',
-    emoji: '🌎',
-    projectLink: 'https://play.flow.com/af7aba31-dee9-4477-9e1d-7b46e958468e',
-    docsLink: 'https://developers.flow.com/cadence/tutorial/02-hello-world',
-  },
-  {
-    title: 'Mint Fungible Tokens',
-    subtitle:
-      'Create and sell digital assets of your own in this tutorial! This tutorial will teach you the basics of creating, storing, and moving digital assets and tokens.',
-    emoji: '💸',
-    projectLink: 'https://play.flow.com/e63bfce9-3324-4385-9542-626845ae0363',
-    docsLink: 'https://developers.flow.com/cadence/tutorial/06-fungible-tokens',
-  },
-  {
-    title: 'Create Non-Fungible Tokens',
-    subtitle:
-      'Create and shape your own unique digital objects. Here you’ll learn what really makes blockchains magic - the ability for unique items to be created, shared, and stored forever.',
-    emoji: '😺',
-    projectLink: 'https://play.flow.com/a21087ad-b22c-4981-b49e-17297e916fa6',
-    docsLink:
-      'https://developers.flow.com/cadence/tutorial/05-non-fungible-tokens-1',
-  },
-  {
-    title: 'Build a Marketplace',
-    subtitle:
-      'Put it all together in a marketplace! This tutorial will teach you how to turn all the concepts you’ve learned into a place for people to share their creations with the community.',
-    emoji: '🤝',
-    projectLink: 'https://play.flow.com/49ec2856-1258-4675-bac3-850b4bae1929',
-    docsLink:
-      'https://developers.flow.com/cadence/tutorial/08-marketplace-compose',
-  },
-  {
-    title: 'Expand Non-Fungible Tokens',
-    subtitle:
-      'This tutorial is for the brave and the bold, an opportunity to discover what resources make possible - resources owning other resources. If you can imagine it, you can create it.',
-    emoji: '🤠',
-    projectLink: 'https://play.flow.com/01f812d7-799a-42fd-b9cb-9ffe556e02ad',
-    docsLink:
-      'https://developers.flow.com/cadence/tutorial/10-resources-compose',
-  },
-  {
-    title: 'Voting Contract',
-    subtitle:
-      'With the advent of blockchain technology and smart contracts, it has become popular to try to create decentralized voting mechanisms that allow large groups of users to vote completely on chain',
-    emoji: '🗳️',
-    projectLink: 'https://play.flow.com/d120f0a7-d411-4243-bc59-5125a84f99b3',
-    docsLink: 'https://developers.flow.com/cadence/tutorial/09-voting',
-  },
-  {
-    title: 'Hybrid Custody Contract',
-    subtitle:
-      'This scaffold was created to make starting and exploring a Hybrid Custody project easier for you, and is a simplified template of the contents in @onflow/hybrid-custody. If building on these contracts, you might consider using Git Submodules to ensure your dependencies remain up to date.',
-    emoji: '🤡',
-    projectLink: 'https://play.flow.com/d120f0a7-d411-4243-bc59-5125a84f99b3',
-    docsLink: 'https://developers.flow.com/concepts/hybrid-custody',
-  },
-];
-
-const ExamplesContainer = styled(motion.div)`
-  position: fixed;
-  display: flex;
-  flex-direction: row;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  bottom: 0;
-  justify-content: center;
-  align-items: center;
-
-  a {
-    text-decoration: none;
-    color: inherit;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-  }
-`;
-
-const Stack = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 2rem;
-  max-height: 100%;
-  overflow-y: auto;
-  width: 100%;
-`;
-
-const StackContent = styled.div`
-  max-width: 1330px;
-  margin: 0 auto;
-`;
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-
-  & h3 {
-    font-size: 1.5rem;
-  }
-
-  & svg {
-    cursor: pointer;
-  }
-`;
-
-const ExampleContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, minmax(100px, 320px));
-  grid-gap: 1rem;
-  a,
-  .full-height {
-    height: 100%;
-  }
-`;
-
-const Buttons = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 10px;
-  width: 100%;
-
-  align-items: flex-start;
-
-  button {
-    width: 100%;
-  }
-`;
-
-const Example = styled.div`
-  display: grid;
-  grid-template-rows: 80px auto 1fr auto;
-  grid-gap: 1rem;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  height: 100%;
-  border-radius: 10px;
-  padding: 2rem;
-  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.07);
-  transition: all 0.25s ease-in-out;
-  color: ${theme.colors.text};
-  box-sizing: border-box;
-  background-color: ${theme.colors.background};
-
-  &:hover {
-    box-shadow: 0 0 15px 0 ${theme.colors.accent};
-  }
-
-  .title {
-    font-size: 22px;
-    color: ${theme.colors.text};
-    font-weight: 700;
-    text-align: center;
-    justify-content: center;
-    height: 100%;
-  }
-
-  .subtitle {
-    line-height: 22px;
-    font-size: 15px;
-    text-align: left;
-    align-items: flex-start;
-    height: 100%;
-    padding-bottom: 0.5rem;
-  }
-
-  .emoji {
-    font-size: 3rem;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    display: flex;
-  }
-`;
 
 const Examples: React.FC<{
   visible: boolean;
   triggerClose?: (e: React.SyntheticEvent) => any;
 }> = ({ visible, triggerClose }) => {
+
+  const context = useThemeUI();
+  const { theme } = context;
+
+
+  const examples = [
+    {
+      title: ' First Steps',
+      subtitle:
+        'Learn how to use smart contracts, switch accounts, and view account state.',
+      emoji: '🏃',
+      docsLink: 'https://developers.flow.com/cadence/tutorial/01-first-steps',
+    },
+    {
+      title: 'Hello, World!',
+      subtitle:
+        'Write your first contract on Flow. This is the perfect place to start to get the hang of the fundamentals of Cadence.',
+      emoji: '🌎',
+      projectLink: 'https://play.flow.com/af7aba31-dee9-4477-9e1d-7b46e958468e',
+      docsLink: 'https://developers.flow.com/cadence/tutorial/02-hello-world',
+    },
+    {
+      title: 'Mint Fungible Tokens',
+      subtitle:
+        'Create and sell digital assets of your own in this tutorial! This tutorial will teach you the basics of creating, storing, and moving digital assets and tokens.',
+      emoji: '💸',
+      projectLink: 'https://play.flow.com/e63bfce9-3324-4385-9542-626845ae0363',
+      docsLink: 'https://developers.flow.com/cadence/tutorial/06-fungible-tokens',
+    },
+    {
+      title: 'Create Non-Fungible Tokens',
+      subtitle:
+        'Create and shape your own unique digital objects. Here you’ll learn what really makes blockchains magic - the ability for unique items to be created, shared, and stored forever.',
+      emoji: '😺',
+      projectLink: 'https://play.flow.com/a21087ad-b22c-4981-b49e-17297e916fa6',
+      docsLink:
+        'https://developers.flow.com/cadence/tutorial/05-non-fungible-tokens-1',
+    },
+    {
+      title: 'Build a Marketplace',
+      subtitle:
+        'Put it all together in a marketplace! This tutorial will teach you how to turn all the concepts you’ve learned into a place for people to share their creations with the community.',
+      emoji: '🤝',
+      projectLink: 'https://play.flow.com/49ec2856-1258-4675-bac3-850b4bae1929',
+      docsLink:
+        'https://developers.flow.com/cadence/tutorial/08-marketplace-compose',
+    },
+    {
+      title: 'Expand Non-Fungible Tokens',
+      subtitle:
+        'This tutorial is for the brave and the bold, an opportunity to discover what resources make possible - resources owning other resources. If you can imagine it, you can create it.',
+      emoji: '🤠',
+      projectLink: 'https://play.flow.com/01f812d7-799a-42fd-b9cb-9ffe556e02ad',
+      docsLink:
+        'https://developers.flow.com/cadence/tutorial/10-resources-compose',
+    },
+    {
+      title: 'Voting Contract',
+      subtitle:
+        'With the advent of blockchain technology and smart contracts, it has become popular to try to create decentralized voting mechanisms that allow large groups of users to vote completely on chain',
+      emoji: '🗳️',
+      projectLink: 'https://play.flow.com/d120f0a7-d411-4243-bc59-5125a84f99b3',
+      docsLink: 'https://developers.flow.com/cadence/tutorial/09-voting',
+    },
+    {
+      title: 'Hybrid Custody Contract',
+      subtitle:
+        'This scaffold was created to make starting and exploring a Hybrid Custody project easier for you, and is a simplified template of the contents in @onflow/hybrid-custody. If building on these contracts, you might consider using Git Submodules to ensure your dependencies remain up to date.',
+      emoji: '🤡',
+      projectLink: 'https://play.flow.com/d120f0a7-d411-4243-bc59-5125a84f99b3',
+      docsLink: 'https://developers.flow.com/concepts/hybrid-custody',
+    },
+  ];
+  
+  const ExamplesContainer = styled(motion.div)`
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+  
+    a {
+      text-decoration: none;
+      color: inherit;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+    }
+  `;
+  
+  const Stack = styled.div`
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    max-height: 100%;
+    overflow-y: auto;
+    width: 100%;
+  `;
+  
+  const StackContent = styled.div`
+    max-width: 1330px;
+    margin: 0 auto;
+  `;
+  
+  const Header = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  
+    & h3 {
+      font-size: 1.5rem;
+    }
+  
+    & svg {
+      cursor: pointer;
+    }
+  `;
+  
+  const ExampleContainer = styled.div`
+    display: grid;
+    grid-template-columns: repeat(4, minmax(100px, 320px));
+    grid-gap: 1rem;
+    a,
+    .full-height {
+      height: 100%;
+    }
+  `;
+  
+  const Buttons = styled.div`
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    width: 100%;
+  
+    align-items: flex-start;
+  
+    button {
+      width: 100%;
+    }
+  `;
+  
+  const Example = styled.div`
+    display: grid;
+    grid-template-rows: 80px auto 1fr auto;
+    grid-gap: 1rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.07);
+    transition: all 0.25s ease-in-out;
+    color: ${theme.colors.text};
+    box-sizing: border-box;
+    background-color: ${theme.colors.background};
+  
+    &:hover {
+      box-shadow: 0 0 15px 0 ${theme.colors.accent};
+    }
+  
+    .title {
+      font-size: 22px;
+      color: ${theme.colors.text};
+      font-weight: 700;
+      text-align: center;
+      justify-content: center;
+      height: 100%;
+    }
+  
+    .subtitle {
+      line-height: 22px;
+      font-size: 15px;
+      text-align: left;
+      align-items: flex-start;
+      height: 100%;
+      padding-bottom: 0.5rem;
+    }
+  
+    .emoji {
+      font-size: 3rem;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      display: flex;
+    }
+  `;  
   const ExampleContainers = {
     visible: {
       display: 'flex',

@@ -5,11 +5,10 @@ import { Editor as EditorRoot } from 'layout/Editor';
 import { ActiveEditor } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useRef, useState } from 'react';
-import { Flex } from 'theme-ui';
+import { Flex, useThemeUI } from 'theme-ui';
 import EditorPanels from 'components/Editor/EditorPanels';
-import { ChildProps, SXStyles } from 'src/types';
+import { ChildProps, SXStyles, ThemedComponentProps } from 'src/types';
 import { decodeText } from 'util/readme';
-import theme from '../../theme';
 
 const styles: SXStyles = {
   editorContainer: {
@@ -98,6 +97,7 @@ const EditorContainer = ({
 
   const previousProjectState = usePrevious(project);
 
+  
   // This hook will listen for project updates and if one of the contracts has been changed,
   // it will reload language server
   useEffect(() => {
@@ -120,9 +120,9 @@ const EditorContainer = ({
   );
 };
 
-const AnimatedText = styled.div`
+const AnimatedText = styled.div<ThemedComponentProps>`
   position: relative;
-  color: ${theme.colors.text};
+  color: ${({ theme }) => theme.colors.text};
   &:before {
     content: 'Click here to start a tutorial';
     animation: animatebg 7s infinite;

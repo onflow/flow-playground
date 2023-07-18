@@ -4,16 +4,26 @@ import React, { Fragment } from 'react';
 import { FaRegTimesCircle } from 'react-icons/fa';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { SXStyles } from 'src/types';
-import { Box, Flex } from 'theme-ui';
+import { Box, Flex, useThemeUI } from 'theme-ui';
 import Button from '../../Button';
 import LogIcon from '../../Icons/LogIcon';
-import theme from '../../../theme';
 
 type BottomEditorPanelHeaderProps = {
   problems: any;
   selectedBottomTab: number;
   setSelectedBottomTab: (index: number) => void;
 };
+
+const BottomEditorPanelHeader = ({
+  problems,
+  selectedBottomTab,
+  setSelectedBottomTab,
+}: BottomEditorPanelHeaderProps) => {
+  const { showBottomPanel, setShowBottomPanel, toggleBottomPanel, active } =
+    useProject();
+
+    const context = useThemeUI();
+const { theme } = context;
 
 const styles: SXStyles = {
   header: {
@@ -64,14 +74,6 @@ const TabIndicator = ({ selected }: { selected: boolean }) => {
 
   return <Box sx={sx} />;
 };
-
-const BottomEditorPanelHeader = ({
-  problems,
-  selectedBottomTab,
-  setSelectedBottomTab,
-}: BottomEditorPanelHeaderProps) => {
-  const { showBottomPanel, setShowBottomPanel, toggleBottomPanel, active } =
-    useProject();
 
   /**
    * Make active key out of active project item type and index

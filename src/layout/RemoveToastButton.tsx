@@ -1,12 +1,12 @@
 import styled from '@emotion/styled';
-import theme from '../theme';
+import { ThemedComponentProps } from 'src/types';
 
-export const RemoveToastButton = styled.button`
+export const RemoveToastButton = styled.button<ThemedComponentProps>`
   border: none;
   background: transparent;
   transform: translate(25%, 50%);
-  color: ${theme.colors.border};
+  color: ${({ theme }) => theme.colors.border};
   &:hover {
-    color: ${theme.colors.heading};
+    color: ${({ theme }) => theme.colors.icons};
   }
 `;

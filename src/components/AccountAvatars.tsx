@@ -2,7 +2,6 @@ import Avatar from 'components/Avatar';
 import { motion } from 'framer-motion';
 import React from 'react';
 import { Account, Project } from 'src/api/apollo/generated/graphql';
-import theme from '../theme';
 import { ChildProps } from 'src/types';
 import { Text, Box, Flex, useThemeUI } from 'theme-ui';
 
@@ -11,23 +10,27 @@ interface AccountAvatarProps extends ChildProps {
   isSelected: boolean;
 }
 
-const styles = {
-  root: {
-    borderRadius: '0.5rem',
-    border: '1px solid',
-    padding: '0.25rem 0.5rem 0.75px',
-    margin: '0',
-    borderColor: theme.colors.avatarNotSelectedColor,
-  },
-  selected: {
-    borderColor: theme.colors.avatarSelectedColor,
-  },
-};
 export const AccountAvatar = ({
   children,
   onClick,
   isSelected,
 }: AccountAvatarProps) => {
+  const context = useThemeUI();
+  const { theme } = context;
+  
+  const styles = {
+    root: {
+      borderRadius: '0.5rem',
+      border: '1px solid',
+      padding: '0.25rem 0.5rem 0.75px',
+      margin: '0',
+      borderColor: theme.colors.avatarNotSelectedColor,
+    },
+    selected: {
+      borderColor: theme.colors.avatarSelectedColor,
+    },
+  };
+
   const getStyle = (active: boolean) => {
     return active ? { ...styles.root, ...styles.selected } : styles.root;
   };

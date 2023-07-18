@@ -6,7 +6,7 @@ import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useState } from 'react';
 import { ChildProps, SXStyles, Template } from 'src/types';
-import { Box, Flex } from 'theme-ui';
+import { Box, Flex, useThemeUI } from 'theme-ui';
 import MenuList from './MenuList';
 import InformationalPopup from '../../InformationalPopup';
 import {
@@ -16,7 +16,6 @@ import {
 } from 'util/urlRewritter';
 import { hasDuplicates } from '../CadenceEditor/ControlPanel/utils';
 import { ResultType } from 'api/apollo/generated/graphql';
-import theme from '../../../theme';
 
 type FileListProps = {
   isExplorerCollapsed: boolean;
@@ -25,37 +24,6 @@ type FileListProps = {
 interface DynamicIconProps extends ChildProps {
   isSelected: boolean;
 }
-
-const styles: SXStyles = {
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingBottom: '24px',
-    fontFamily: 'IBM Plex Mono',
-  },
-  header: {
-    fontStyle: 'normal',
-    fontWeight: 600,
-    fontSize: '12px',
-    lineHeight: '16px',
-    letterSpacing: '-0.01em',
-    textTransform: 'uppercase',
-    color: `${theme.colors.muted}`,
-    fontFamily: 'Acumin Pro',
-  },
-  collapsed: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingTop: '12px',
-    justifyContent: 'space-between',
-    height: '100px',
-  },
-  selected: {
-    filter:
-      'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
-  },
-};
-
 const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
   const {
     active,
@@ -71,6 +39,40 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
   } = useProject();
 
   const [showDeleteError, setShowDeleteError] = useState<boolean>(false);
+
+  const context = useThemeUI();
+  const { theme } = context;
+
+  const styles: SXStyles = {
+    root: {
+      display: 'flex',
+      flexDirection: 'column',
+      paddingBottom: '24px',
+      fontFamily: 'IBM Plex Mono',
+    },
+    header: {
+      fontStyle: 'normal',
+      fontWeight: 600,
+      fontSize: '12px',
+      lineHeight: '16px',
+      letterSpacing: '-0.01em',
+      textTransform: 'uppercase',
+      color: `${theme.colors.muted}`,
+      fontFamily: 'Acumin Pro',
+    },
+    collapsed: {
+      display: 'flex',
+      flexDirection: 'column',
+      paddingTop: '12px',
+      justifyContent: 'space-between',
+      height: '100px',
+    },
+    selected: {
+      filter:
+        'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
+    },
+  };
+
   const DynamicIcon = ({ children, isSelected }: DynamicIconProps) => {
     return <Box sx={isSelected ? styles.selected : {}}>{children}</Box>;
   };

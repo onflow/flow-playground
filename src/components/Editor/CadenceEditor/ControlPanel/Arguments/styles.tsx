@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import theme from '../../../../../theme';
+import { ThemedComponentProps } from 'src/types';
 
-interface HoverPanelProps {
+interface HoverPanelProps extends ThemedComponentProps {
   minWidth?: string;
 }
 
@@ -9,9 +9,10 @@ export const HoverPanel = styled.div<HoverPanelProps>`
   min-width: ${({ minWidth }) => minWidth};
   max-width: 362px;
   border-radius: 8px;
-  background-color: ${theme.colors.secondaryBackground};
-  border: 1px solid ${theme.colors.outline};
-  box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.08);
+  background-color: ${({ theme }) => theme.colors.secondaryBackground};
+  border: ${({ theme }) => `1px solid ${theme.colors.outline}`};
+  box-shadow: ${({ theme }) => `0px 0px 10px 0px ${theme.colors.shadow}`};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 interface HidableProps {
@@ -28,7 +29,7 @@ export const Heading = styled.div`
   padding: 0.5rem;
 `;
 
-interface TitleProps {
+interface TitleProps extends ThemedComponentProps {
   lineColor?: string;
 }
 
@@ -38,7 +39,7 @@ export const Title = styled.div<TitleProps>`
   text-transform: uppercase;
   letter-spacing: 0.1em;
   position: relative;
-  color: ${theme.colors.text};
+  color: ${({ theme }) => theme.colors.text};
 
   &:after {
     opacity: 0.5;
@@ -46,7 +47,7 @@ export const Title = styled.div<TitleProps>`
     display: block;
     position: absolute;
     left: 0;
-    background: ${(props: any) => props.lineColor || theme.colors.primary};
+    background: ${(props: any) => props.lineColor || props.theme.colors.primary};
     height: 3px;
     width: 1rem;
     bottom: -6px;
@@ -62,11 +63,11 @@ export const Controls = styled.div`
   cursor: pointer;
 `;
 
-export const Badge = styled.div`
+export const Badge = styled.div<ThemedComponentProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${theme.colors.text};
+  color: ${({ theme }) => theme.colors.text};
   font-weight: bold;
   font-size: 12px;
   margin-right: 5px;
@@ -80,12 +81,12 @@ export const Badge = styled.div`
     transform: translateY(1px);
   }
 
-  background-color: ${theme.colors.error};
-  &.warning {
-    background-color: ${theme.colors.warning};
+  background-color: ${({ theme }) => theme.colors.error};
+  &.warning {    
+    background-color: ${({ theme }) => theme.colors.warning};
   }
   &.info {
-    background-color: ${theme.colors.infoBackground};
+    background-color: ${({ theme }) => theme.colors.infoBackground};
   }
 `;
 
@@ -103,7 +104,7 @@ export const List = styled.div<ListProps>`
 
 export const SignersContainer = styled.div``;
 
-interface ControlContainerProps {
+interface ControlContainerProps extends ThemedComponentProps {
   isOk: boolean;
   progress: boolean;
   showPrompt?: boolean;
@@ -118,8 +119,8 @@ export const ControlContainer = styled.div<ControlContainerProps>`
   justify-content: space-between;
   padding: 8px;
   width: 100%;
-  border-top: 1px solid ${theme.colors.outline};
-  color: ${({ isOk, progress, showPrompt }) => {
+  border-top: ${({ theme }) => `1px solid ${theme.colors.outline}`};
+  color: ${({ theme, isOk, progress, showPrompt }) => {
     switch (true) {
       case progress:
         return '#a2a2a2';
@@ -133,7 +134,7 @@ export const ControlContainer = styled.div<ControlContainerProps>`
   }};
 `;
 
-export const ToastContainer = styled.div`
+export const ToastContainer = styled.div<ThemedComponentProps>`
   z-index: 1000;
   position: fixed;
   bottom: 40px;
@@ -141,7 +142,7 @@ export const ToastContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: ${theme.colors.accent};
+  color: ${({ theme }) => theme.colors.accent};
 `;
 
 export const StatusMessage = styled.div<MessageProps>`
@@ -169,34 +170,34 @@ export const StatusMessage = styled.div<MessageProps>`
   }
 `;
 
-export const ErrorsContainer = styled.div`
+export const ErrorsContainer = styled.div<ThemedComponentProps>`
   display: grid;
   grid-gap: 10px;
   grid-template-columns: 100%;
   margin-bottom: 12px;
-  background: ${theme.colors.background};
+  background: ${({ theme }) => theme.colors.background};
   border-radius: 8px 8px 8px 0px;
 `;
 
-export const SingleError = styled.div`
+export const SingleError = styled.div<ThemedComponentProps>`
   cursor: pointer;
   display: flex;
   align-items: baseline;
   box-sizing: border-box;
   padding: 10px;
   font-size: 14px;
-  background: #ffffff;
+  background: ${({ theme }) => theme.colors.primary};
   box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.08);
   border-radius: 8px;
   &:hover {
     background-color: rgba(244, 57, 64, 0.15);
   }
   &.hint-warning {
-    background-color: ${theme.colors.warning};
+    background-color: ${({ theme }) => theme.colors.warning};
   }
 
   &.hint-info {
-    background-color: ${theme.colors.info};
+    background-color: ${({ theme }) => theme.colors.info};
   }
 `;
 
@@ -209,29 +210,17 @@ export const ErrorIndex = styled.div`
   }
 `;
 
-export const ErrorMessage = styled.p`
+export const ErrorMessage = styled.p<ThemedComponentProps>`
   line-height: 1.2;
   word-break: break-word;
   span {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: ${({ theme }) => theme.colors.secondary};
     padding: 2px 6px;
     border-radius: 3px;
     margin: 3px 3px 3px 5px;
     line-height: 20px;
     .suggestion {
-      background-color: ${theme.colors.primary};
+      background-color: ${({ theme }) => theme.colors.primary};
     }
-  }
-`;
-
-export const SignersError = styled.p`
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  box-sizing: border-box;
-  margin: 10px 0;
-  color: ${theme.colors.error};
-  svg {
-    margin-right: 0.5em;
   }
 `;

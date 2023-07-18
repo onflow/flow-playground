@@ -11,7 +11,7 @@ import {
 
 import { Label } from 'components/Editor/CadenceEditor/ControlPanel/Arguments/SingleArgument/styles';
 import Button, { ButtonVariant } from './Button';
-import { Box } from 'theme-ui';
+import { Box, useThemeUI } from 'theme-ui';
 
 const containerFrames = {
   visible: {
@@ -86,6 +86,8 @@ const ConfirmationPopup = ({
   const closeModal = (isConfirmed: boolean) => {
     onClose(isConfirmed);
   };
+  const context = useThemeUI();
+  const { theme } = context;
 
   const buttons =
     actions !== null
@@ -114,7 +116,7 @@ const ConfirmationPopup = ({
       animate={visible ? 'visible' : 'hidden'}
       variants={containerFrames}
     >
-      <PopupContainer width="50%" variants={popupFrames}>
+      <PopupContainer width="50%" variants={popupFrames} theme={theme}>
         <PopupHeader mb="20px">{title}</PopupHeader>
         <Box>
           {messages.map((message, i) => {

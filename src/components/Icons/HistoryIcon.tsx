@@ -1,7 +1,12 @@
 import React from 'react';
-import { IconButton } from 'theme-ui';
+import { IconButton, useThemeUI } from 'theme-ui';
 
 function HistoryIcon() {
+  const context = useThemeUI();
+  const { theme } = context;
+  const color = String(theme?.colors?.text) || '#fff';
+
+
   return (
     <IconButton>
       <svg
@@ -12,7 +17,7 @@ function HistoryIcon() {
         viewBox="0 0 20 20"
       >
         <g
-          stroke="#2F353F"
+          stroke='icon'
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"
@@ -22,7 +27,7 @@ function HistoryIcon() {
         </g>
         <defs>
           <clipPath id="clip0_549_41682">
-            <path fill="#fff" d="M0 0H20V20H0z" />
+            <path fill={color} d="M0 0H20V20H0z" />
           </clipPath>
         </defs>
       </svg>

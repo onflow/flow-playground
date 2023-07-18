@@ -11,120 +11,15 @@ import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { SXStyles, Template } from 'src/types';
-import { Box, Flex } from 'theme-ui';
+import { Box, Flex, useThemeUI } from 'theme-ui';
 import { getParams } from 'util/url';
 import { ContextMenu } from '../../ContextMenu';
 import PencilIcon from 'components/Icons/PencilIcon';
 import DeleteIcon from 'components/Icons/DeleteIcon';
-import theme from '../../../theme';
 import {
   findDuplicateIndex,
   hasDuplicates,
 } from '../CadenceEditor/ControlPanel/utils';
-
-const styles: SXStyles = {
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    fontSize: '14px',
-    fontStyle: 'normal',
-    fontWeight: 450,
-    lineHeight: '100%',
-    letterSpacing: '-0.02em',
-    alignItems: 'start',
-    fontFamily: 'IBM Plex Mono',
-  },
-  header: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    margin: '4px 0',
-  },
-  headerTitle: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  titleText: {
-    width: '125px',
-    paddingLeft: '8px',
-  },
-  button: {
-    '&:hover': { borderRadius: '8px' },
-    padding: '0px',
-  },
-  fileShutterOpened: {
-    position: 'relative',
-    right: '160px',
-    bottom: '1px',
-    transform: 'none',
-    padding: '0px',
-    '&:hover': {
-      background: 'none',
-    },
-  },
-  fileShutterClosed: {
-    position: 'relative',
-    right: '160px',
-    bottom: '1px',
-    padding: '0px',
-    transform: 'rotate(180deg)',
-    '&:hover': {
-      background: 'none',
-    },
-  },
-  icon: {
-    paddingRight: '4px',
-  },
-  selectedIcon: {
-    paddingRight: '4px',
-    filter:
-      'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
-  },
-  item: {
-    display: 'flex',
-    alignItems: 'center',
-    fontWeight: 'bold',
-    justifyContent: 'start',
-    margin: '6px 0 6px 6px',
-    paddingLeft: '16px',
-    fontFamily: 'inherit',
-    '&:hover': {
-      background: `${theme.colors.accent}`,
-      borderRadius: '4px',
-      cursor: 'pointer',
-      color: `${theme.colors.active}`,
-    },
-    '&:hover .menu-icon': {
-      filter:
-        'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
-    },
-    '&:hover button': {
-      visibility: 'visible',
-    },
-  },
-  selectedItem: {
-    display: 'flex',
-    alignItems: 'center',
-    fontWeight: 'bold',
-    fontFamily: 'inherit',
-    justifyContent: 'start',
-    margin: '6px 0 6px 6px',
-    paddingLeft: '16px',
-    paddingRight: '8px',
-    background: `${theme.colors.accent}`,
-    color: `${theme.colors.active}`,
-    borderRadius: '8px',
-  },
-  centerAlign: {
-    alignItems: 'center',
-  },
-  hasError: {
-    background: theme.colors.errorBackground,
-  },
-};
 
 type MenuListProps = {
   itemType: EntityType;
@@ -159,6 +54,112 @@ const MenuList: React.FC<MenuListProps> = ({
   const [indexHasError, setIndexHasError] = useState(-1);
   const [isInserting, setIsInserting] = useState(false);
   const [isFileShuttered, setIsFileShuttered] = useState(false);
+  const context = useThemeUI();
+  const { theme } = context;
+
+  const styles: SXStyles = {
+    root: {
+      display: 'flex',
+      flexDirection: 'column',
+      fontSize: '14px',
+      fontStyle: 'normal',
+      fontWeight: 450,
+      lineHeight: '100%',
+      letterSpacing: '-0.02em',
+      alignItems: 'start',
+      fontFamily: 'IBM Plex Mono',
+    },
+    header: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      width: '100%',
+      margin: '4px 0',
+    },
+    headerTitle: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    titleText: {
+      width: '125px',
+      paddingLeft: '8px',
+    },
+    button: {
+      '&:hover': { borderRadius: '8px' },
+      padding: '0px',
+    },
+    fileShutterOpened: {
+      position: 'relative',
+      right: '160px',
+      bottom: '1px',
+      transform: 'none',
+      padding: '0px',
+      '&:hover': {
+        background: 'none',
+      },
+    },
+    fileShutterClosed: {
+      position: 'relative',
+      right: '160px',
+      bottom: '1px',
+      padding: '0px',
+      transform: 'rotate(180deg)',
+      '&:hover': {
+        background: 'none',
+      },
+    },
+    icon: {
+      paddingRight: '4px',
+    },
+    selectedIcon: {
+      paddingRight: '4px',
+      filter:
+        'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
+    },
+    item: {
+      display: 'flex',
+      alignItems: 'center',
+      fontWeight: 'bold',
+      justifyContent: 'start',
+      margin: '6px 0 6px 6px',
+      paddingLeft: '16px',
+      fontFamily: 'inherit',
+      '&:hover': {
+        background: `${theme.colors.accent}`,
+        borderRadius: '4px',
+        cursor: 'pointer',
+        color: `${theme.colors.active}`,
+      },
+      '&:hover .menu-icon': {
+        filter:
+          'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
+      },
+      '&:hover button': {
+        visibility: 'visible',
+      },
+    },
+    selectedItem: {
+      display: 'flex',
+      alignItems: 'center',
+      fontWeight: 'bold',
+      fontFamily: 'inherit',
+      justifyContent: 'start',
+      margin: '6px 0 6px 6px',
+      paddingLeft: '16px',
+      paddingRight: '8px',
+      background: `${theme.colors.accent}`,
+      color: `${theme.colors.active}`,
+      borderRadius: '8px',
+    },
+    centerAlign: {
+      alignItems: 'center',
+    },
+    hasError: {
+      background: theme.colors.errorBackground,
+    },
+  };
 
   const toggleFileShutter = () => {
     setIsFileShuttered(!isFileShuttered);

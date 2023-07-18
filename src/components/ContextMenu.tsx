@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ExplorerEllipseIcon from './Icons/ExplorerEllipseIcon';
 import Button from 'components/Button';
-import { Container, Flex, Text } from 'theme-ui';
+import { Container, Flex, Text, useThemeUI } from 'theme-ui';
 import { SXStyles } from 'src/types';
-import theme from '../theme';
 
 type ContextMenuOptionsType = {
   name: string;
@@ -17,45 +16,47 @@ type ContextMenuType = {
   showEllipsis: boolean;
 };
 
-const styles: SXStyles = {
-  container: {
-    margin: '0',
-    width: 'unset',
-  },
-  menuRelative: {
-    position: 'relative',
-  },
-  menuAbsolute: {
-    display: 'flex',
-    flexDirection: 'column',
-    borderRadius: '8px',
-    border: `1px solid ${theme.colors.borderColor}`,
-    boxShadow: `0px 4px 20px rgba(0, 0, 0, 0.08)`,
-    position: 'absolute',
-    zIndex: '100', // todo: create zIndex constant in theme object
-    margin: '0',
-    right: '0',
-    bottom: '22px',
-    background: theme.colors.background,
-    padding: '4px 4px',
-    whiteSpace: 'nowrap',
-  },
-  ctaButton: {
-    alignSelf: 'baseline',
-    padding: '0px 8px',
-    maxHeight: '10px',
-    background: 'none',
-    '&:hover': {
-      background: 'none',
-    },
-  },
-  ctaOption: {
-    padding: '8px 12px',
-  },
-};
-
 export const ContextMenu = ({ options, showEllipsis }: ContextMenuType) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const context = useThemeUI();
+  const { theme } = context;
+
+  const styles: SXStyles = {
+    container: {
+      margin: '0',
+      width: 'unset',
+    },
+    menuRelative: {
+      position: 'relative',
+    },
+    menuAbsolute: {
+      display: 'flex',
+      flexDirection: 'column',
+      borderRadius: '8px',
+      boxShadow: `0px 4px 20px ${theme.colors.shadow}`,
+      position: 'absolute',
+      zIndex: '100', // todo: create zIndex constant in theme object
+      margin: '0',
+      right: '0',
+      bottom: '22px',
+      background: theme.colors.background,
+      padding: '4px 4px',
+      whiteSpace: 'nowrap',
+    },
+    ctaButton: {
+      alignSelf: 'baseline',
+      padding: '0px 8px',
+      maxHeight: '10px',
+      background: 'none',
+      '&:hover': {
+        background: 'none',
+      },
+    },
+    ctaOption: {
+      padding: '8px 12px',
+    },
+  };
 
   const clickOption = (onClick: Function, args: any[] = []) => {
     setIsOpen(false);

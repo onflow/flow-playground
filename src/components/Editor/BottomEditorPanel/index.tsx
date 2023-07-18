@@ -2,11 +2,10 @@ import { Tab } from '@headlessui/react';
 import { useProject } from 'providers/Project/projectHooks';
 import React from 'react';
 import { SXStyles } from 'src/types';
-import { Flex } from 'theme-ui';
+import { Flex, useThemeUI } from 'theme-ui';
 import BottomEditorPanelHeader from './BottomEditorPanelHeader';
 import RenderError from './RenderError';
 import { RenderResponse } from './RenderResponse';
-import theme from '../../../theme';
 
 export const BOTTOM_EDITOR_PANEL_HEADER_HEIGHT = 80;
 
@@ -15,6 +14,17 @@ type BottomEditorPanelProps = {
   selectedBottomTab: number;
   setSelectedBottomTab: (index: number) => void;
 };
+
+const BottomEditorPanel = ({
+  problemsList,
+  selectedBottomTab,
+  setSelectedBottomTab,
+}: BottomEditorPanelProps) => {
+  const { showBottomPanel, active } = useProject();
+
+  const context = useThemeUI();
+  const { theme } = context;
+
 
 const styles: SXStyles = {
   root: {
@@ -38,13 +48,6 @@ const styles: SXStyles = {
     backgroundColor: theme.colors.background,
   },
 };
-
-const BottomEditorPanel = ({
-  problemsList,
-  selectedBottomTab,
-  setSelectedBottomTab,
-}: BottomEditorPanelProps) => {
-  const { showBottomPanel, active } = useProject();
 
   /**
    * Make active key out of active project item type and index

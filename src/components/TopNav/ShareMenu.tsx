@@ -4,63 +4,11 @@ import Mixpanel from 'util/mixpanel';
 import useClipboard from 'react-use-clipboard';
 import React, { useEffect, useRef, useState } from 'react';
 import { SXStyles } from 'src/types';
-import { Container, Flex, Input, Text } from 'theme-ui';
-import theme from '../../theme';
+import { Container, Flex, Input, Text, useThemeUI } from 'theme-ui';
 import ShareIcon from 'components/Icons/ShareIcon';
 import InfoIcon from 'components/Icons/InfoIcon';
 import { useProject } from 'providers/Project/projectHooks';
 import { FaClipboardCheck } from 'react-icons/fa';
-
-const styles: SXStyles = {
-  container: {
-    margin: '0',
-    width: 'unset',
-  },
-  menu: {
-    display: 'flex',
-    flexDirection: 'column',
-    borderRadius: '8px',
-    border: `1px solid ${theme.colors.borderColor}`,
-    boxShadow: `0px 4px 40px rgba(0, 0, 0, 0.08)`,
-    position: 'absolute',
-    zIndex: '15',
-    right: '170px',
-    margin: '0',
-    background: theme.colors.secondaryBackground,
-    color: theme.colors.text,
-    padding: '1rem',
-  },
-  copyLink: {
-    flexDirection: 'row',
-    paddingBottom: '12px',
-  },
-  ctaButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: '12px',
-    width: '113px',
-    marginLeft: '4px',
-    borderRadius: '8px',
-    whiteSpace: 'nowrap',
-    fontSize: '0.75rem',
-  },
-  linkInput: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: '12px',
-    width: '363px',
-    background: `${theme.colors.background}`,
-    border: `1px solid ${theme.colors.borderColor}`,
-    borderRadius: '4px',
-  },
-  message: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-};
 
 export const ShareMenu = () => {
   const url = window.location.href;
@@ -69,6 +17,59 @@ export const ShareMenu = () => {
   const { project } = useProject();
 
   const isSaved = !!project?.updatedAt;
+  const context = useThemeUI();
+  const { theme } = context;
+
+  const styles: SXStyles = {
+    container: {
+      margin: '0',
+      width: 'unset',
+    },
+    menu: {
+      display: 'flex',
+      flexDirection: 'column',
+      borderRadius: '8px',
+      border: `1px solid ${theme.colors.borderColor}`,
+      boxShadow: `0px 4px 40px rgba(0, 0, 0, 0.08)`,
+      position: 'absolute',
+      zIndex: '15',
+      right: '170px',
+      margin: '0',
+      background: theme.colors.secondaryBackground,
+      color: theme.colors.text,
+      padding: '1rem',
+    },
+    copyLink: {
+      flexDirection: 'row',
+      paddingBottom: '12px',
+    },
+    ctaButton: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: '12px',
+      width: '113px',
+      marginLeft: '4px',
+      borderRadius: '8px',
+      whiteSpace: 'nowrap',
+      fontSize: '0.75rem',
+    },
+    linkInput: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: '12px',
+      width: '363px',
+      background: `${theme.colors.background}`,
+      border: `1px solid ${theme.colors.borderColor}`,
+      borderRadius: '4px',
+    },
+    message: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+  };
 
   const copyLink = () => {
     setCopied();

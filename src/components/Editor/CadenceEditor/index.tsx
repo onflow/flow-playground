@@ -7,9 +7,10 @@ import { EditorContainer } from './components';
 import ControlPanel from './ControlPanel';
 import { EditorState } from './types';
 import { EntityType } from 'providers/Project';
-import theme from '../../../theme';
 import { hightlightLines } from 'util/language-syntax-errors';
 import { addCustomActions } from './EditorCustomActions';
+import { useThemeUI } from 'theme-ui';
+import { isMobile } from './ControlPanel/utils';
 
 const MONACO_CONTAINER_ID = 'monaco-container';
 
@@ -34,6 +35,8 @@ const CadenceEditor = (props: CadenceEditorProps) => {
 
   const [editorStates, setEditorStates] = useState<EditorStates>({});
   const { width, height, ref } = useResizeDetector();
+  const context = useThemeUI();
+  const { theme } = context;
 
   const saveEditorState = useCallback(() => {
     const id = project.getActiveCode()[1];
@@ -79,7 +82,8 @@ const CadenceEditor = (props: CadenceEditorProps) => {
       if (editorOnChange.current) {
         editorOnChange.current.dispose();
       }
-      if (project.active.type === EntityType.AccountStorage || theme.isMobile) {
+
+      if (project.active.type === EntityType.AccountStorage || isMobile()) {
         editor.updateOptions({ readOnly: true });
       } else {
         editor.updateOptions({ readOnly: false });
@@ -157,9 +161,9 @@ const CadenceEditor = (props: CadenceEditorProps) => {
         enabled: false,
       },
       readOnly:
-        project.active.type === EntityType.AccountStorage || theme.isMobile,
-      domReadOnly: theme.isMobile,
-      contextmenu: !theme.isMobile,
+        project.active.type === EntityType.AccountStorage || isMobile(),
+      domReadOnly: isMobile(),
+      contextmenu: !isMobile(),
     });
 
     const [code] = project.getActiveCode();
@@ -209,7 +213,7 @@ const CadenceEditor = (props: CadenceEditorProps) => {
   }, [width, height, editor]);
 
   return (
-    <EditorContainer id={MONACO_CONTAINER_ID} show={props.show} ref={ref}>
+    <EditorContainer id={MONACO_CONTAINER_ID} show={props.show} ref={ref} theme={theme}>
       {!!editor && (
         <ControlPanel
           problemsList={props.problemsList}

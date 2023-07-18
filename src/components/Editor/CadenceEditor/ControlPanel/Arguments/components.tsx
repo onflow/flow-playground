@@ -11,7 +11,6 @@ import {
 } from 'react-icons/fa';
 import CollapseOpenIcon from 'components/Icons/CollapseOpenIcon';
 import { CadenceProblem } from 'util/language-syntax-errors';
-import theme from '../../../../../theme';
 import SingleArgument from './SingleArgument';
 import {
   Badge,
@@ -29,25 +28,29 @@ import {
   HintsProps,
   InteractionButtonProps,
 } from './types';
+import { useThemeUI } from 'theme-ui';
 
 export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (
   props: ArgumentsTitleProps,
 ) => {
   const { type, errors, expanded, setExpanded } = props;
 
+  const context = useThemeUI();
+  const { theme } = context;
+
   const hasErrors = errors > 0;
-  const lineColor = hasErrors ? theme.colors.error : null;
+  const lineColor = hasErrors ? String(theme.colors.error) : null;
 
   return (
     <Heading>
-      <Title lineColor={lineColor}>
+      <Title lineColor={lineColor} theme={theme}>
         {type === EntityType.ContractTemplate && 'Contract Arguments'}
         {type === EntityType.TransactionTemplate && 'Transaction Arguments'}
         {type === EntityType.ScriptTemplate && 'Script Arguments'}
       </Title>
       <Controls onClick={() => setExpanded(!expanded)}>
         {hasErrors && (
-          <Badge>
+          <Badge theme={theme}>
             <span>{errors}</span>
           </Badge>
         )}
@@ -136,6 +139,9 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
   const [expanded, setExpanded] = useState(true);
   const { problems, actions } = props;
   const { goTo, hideDecorations, hover } = actions;
+  const context = useThemeUI();
+  const { theme } = context;
+
   const toggle = () => {
     setExpanded(!expanded);
   };
@@ -148,10 +154,10 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
   return (
     <Stack>
       <Heading>
-        <Title>Warnings and Hints</Title>
+        <Title theme={theme}>Warnings and Hints</Title>
         <Controls onClick={toggle} style={{ paddingRight: '10px' }}>
           {hintsAmount > 0 && (
-            <Badge className="info">
+            <Badge className="info" theme={theme}>
               <span>{hintsAmount}</span>
             </Badge>
           )}
