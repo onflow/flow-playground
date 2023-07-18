@@ -92,16 +92,17 @@ export default {
       borderColor: 'outline',
       fontFamily: 'body',
       fontWeight: 500,
-      color: 'text',
       margin: 0,
       fontSize: 1,
       maxWidth: '350px',
       height: '54px',
+      backgroundColor: 'secondary',
+      color: 'primary',
       '&:active': {
-        backgroundColor: 'accent',
+        backgroundColor: 'focus',
       },
       '&:hover': {
-        backgroundColor: 'accent',
+        backgroundColor: 'focus',
         borderColor: 'focus',
       },
       '&:disabled': {

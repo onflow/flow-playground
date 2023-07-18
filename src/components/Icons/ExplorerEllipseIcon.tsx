@@ -1,7 +1,10 @@
 import React from 'react';
-import { IconButton } from 'theme-ui';
+import { IconButton, useThemeUI } from 'theme-ui';
 
 function ExplorerEllipseIcon() {
+  const context = useThemeUI();
+  const { theme } = context;
+  const color = String(theme?.colors?.icons) || '#000';
   return (
     <IconButton>
       <svg
@@ -11,7 +14,7 @@ function ExplorerEllipseIcon() {
         fill="none"
         viewBox="0 0 32 32"
       >
-        <path d="M20 16a2 2 0 114 0 2 2 0 01-4 0zm-6 0a2 2 0 114 0 2 2 0 01-4 0zm-6 0a2 2 0 114 0 2 2 0 01-4 0z" />
+        <path fill={color} d="M20 16a2 2 0 114 0 2 2 0 01-4 0zm-6 0a2 2 0 114 0 2 2 0 01-4 0zm-6 0a2 2 0 114 0 2 2 0 01-4 0z" />
       </svg>
     </IconButton>
   );

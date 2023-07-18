@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import React from 'react';
-import theme from '../theme';
 import { ChildPropsOptional } from 'src/types';
 import { CSSProperties } from 'styled-components';
 import Button from './Button';

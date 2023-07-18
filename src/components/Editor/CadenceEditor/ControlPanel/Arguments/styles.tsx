@@ -10,7 +10,7 @@ export const HoverPanel = styled.div<HoverPanelProps>`
   max-width: 362px;
   border-radius: 8px;
   background-color: ${theme.colors.secondaryBackground};
-  border: 1px solid ${theme.colors.border};
+  border: 1px solid ${theme.colors.outline};
   box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.08);
 `;
 
@@ -118,7 +118,7 @@ export const ControlContainer = styled.div<ControlContainerProps>`
   justify-content: space-between;
   padding: 8px;
   width: 100%;
-  border-top: 1px solid #abb3bf;
+  border-top: 1px solid ${theme.colors.outline};
   color: ${({ isOk, progress, showPrompt }) => {
     switch (true) {
       case progress:

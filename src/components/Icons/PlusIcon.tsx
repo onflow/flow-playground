@@ -1,7 +1,10 @@
 import React from 'react';
-import { IconButton } from 'theme-ui';
+import { IconButton, useThemeUI } from 'theme-ui';
 
-function PlusIcon() {
+function PlusIcon({ primary }: { primary?: boolean}) {
+  const context = useThemeUI();
+  const { theme } = context;
+  const color = primary ? String(theme.colors.primary) : 'text';
   return (
     <IconButton>
       <svg
@@ -10,6 +13,7 @@ function PlusIcon() {
         height="16"
         fill="none"
         viewBox="0 0 16 16"
+        stroke={color}
       >
         <path
           strokeLinecap="round"

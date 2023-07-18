@@ -36,7 +36,7 @@ const NewProjectButton = ({
           hideDisabledState={isSaving && !hasReachedProjectsLimit}
           inline={inline}
         >
-          <PlusIcon />
+          <PlusIcon primary />
           {label}
         </Button>
       </Tooltip>
