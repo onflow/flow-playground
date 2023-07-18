@@ -18,8 +18,8 @@ type BottomEditorPanelHeaderProps = {
 const styles: SXStyles = {
   header: {
     borderRadius: '8px 8px 0 0',
-    backgroundColor: 'white',
-    border: `1px solid ${theme.colors.border}`,
+    backgroundColor: theme.colors.primary,
+    border: `1px solid ${theme.colors.outline}`,
   },
   tabButton: {
     display: 'inline-flex',

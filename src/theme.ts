@@ -11,7 +11,7 @@ export default {
     text: '#2F353F',
     muted: '#6a6a6a',
     grey: '#DDDDDD',
-    icons: '#2F353F',
+    icons: '#69717E',
     purple: '#f694ff',
     border: '#F0F0F0',
     outline: '#DEE2E9',
@@ -88,6 +88,7 @@ export default {
     },
     primary: {
       borderRadius: '8px',
+      borderSize: '1px',
       borderColor: 'outline',
       fontFamily: 'body',
       fontWeight: 500,
@@ -101,7 +102,7 @@ export default {
       },
       '&:hover': {
         backgroundColor: 'accent',
-        borderColor: 'accent',
+        borderColor: 'focus',
       },
       '&:disabled': {
         backgroundColor: 'muted',

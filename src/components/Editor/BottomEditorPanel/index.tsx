@@ -21,13 +21,12 @@ const styles: SXStyles = {
     flex: 1,
     flexDirection: 'column',
     height: '100%',
-    paddingTop: 5,
-    border: `1px solid ${theme.colors.border}`,
+    paddingTop: '5px',
+    backgroundColor: theme.colors.primary,
   },
   tabPanels: {
     height: '100%',
-    border: `1px solid ${theme.colors.border}`,
-    backgroundColor: theme.colors.background,
+    border: `1px solid ${theme.colors.outline}`,
     overflow: 'auto',
     width: '100%',
   },
@@ -36,6 +35,7 @@ const styles: SXStyles = {
     height: '100%',
     padding: 7,
     margin: '0px 45px',
+    backgroundColor: theme.colors.background,
   },
 };
 

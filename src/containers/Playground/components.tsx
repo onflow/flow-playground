@@ -3,29 +3,9 @@ import { Account, Project } from 'api/apollo/generated/graphql';
 import { motion } from 'framer-motion';
 import { Editor as EditorRoot } from 'layout/Editor';
 import { ActiveEditor } from 'providers/Project';
-// import {
-//   PLACEHOLDER_DESCRIPTION,
-//   PLACEHOLDER_TITLE,
-// } from 'providers/Project/projectDefault';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useRef, useState } from 'react';
 import { Flex } from 'theme-ui';
-
-// import CadenceEditor from 'components/CadenceEditor';
-// import {
-//   Input,
-//   InputBlock,
-//   Label,
-// } from 'components/Arguments/SingleArgument/styles';
-// import { Markdown } from 'components/Markdown';
-// import { MdeEditor } from 'components/MdeEditor';
-// import {
-//   ProjectDescription,
-//   ProjectHeading,
-//   ProjectInfoContainer,
-//   ReadmeHtmlContainer,
-// } from './layout-components';
-
 import EditorPanels from 'components/Editor/EditorPanels';
 import { ChildProps, SXStyles } from 'src/types';
 import { decodeText } from 'util/readme';
@@ -90,12 +70,6 @@ const compareContracts = (prev: Account[], current: Account[]) => {
   return true;
 };
 
-// const MAX_DESCRIPTION_SIZE = Math.pow(1024, 2); // 1mb of storage can be saved into readme field
-// const calculateSize = (readme: string) => {
-//   const { size } = new Blob([readme]);
-//   return size >= MAX_DESCRIPTION_SIZE;
-// };
-
 const EditorContainer = ({
   isLoading,
   project,
@@ -110,10 +84,6 @@ const EditorContainer = ({
   const [readme, setReadme] = useState<string | undefined>(project.readme);
 
   const projectAccess = useProject();
-
-  // const [descriptionOverflow, setDescriptionOverflow] = useState(
-  //   calculateSize(project.readme),
-  // );
 
   useEffect(() => {
     if (isLoading) {

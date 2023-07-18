@@ -40,13 +40,14 @@ const styles: SXStyles = {
   },
   editor: {
     height: '100%',
-    borderBottom: `solid 1px ${theme.colors.border}`,
-    borderRight: `solid 1px ${theme.colors.border}`,
   },
   editorHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: '12px 28px',
+    backgroundColor: theme.colors.primary,
+    border: `solid 1px ${theme.colors.outline}`,
+    borderRadius: '8px',
   },
   copyButton: {
     borderRadius: '8px',
@@ -172,7 +173,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
         <Box
           style={{
             height: BOTTOM_EDITOR_PANEL_HEADER_HEIGHT,
-            paddingTop: 10,
+            paddingTop: '10px',
             width: '100%',
           }}
         >
