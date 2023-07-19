@@ -4,7 +4,7 @@ import ExplorerCollapseIcon from 'components/Icons/ExplorerCollapseIcon';
 import { useProject } from 'providers/Project/projectHooks';
 import React from 'react';
 import { SXStyles } from 'src/types';
-import { Flex, useThemeUI } from 'theme-ui';
+import { Flex } from 'theme-ui';
 import FilesList from './FilesList';
 import { isMobile } from '../CadenceEditor/ControlPanel/utils';
 
@@ -18,8 +18,6 @@ const FileExplorer = ({
   toggleExplorer,
 }: FileExplorerProps) => {
   const { isLoading } = useProject();
-  const context = useThemeUI();
-  const { theme } = context;
 
   if (isLoading) return <p>Loading...</p>;
 
