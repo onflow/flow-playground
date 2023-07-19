@@ -215,7 +215,7 @@ const StateContainer: React.FC<{
               marginY: '0.5rem',
             }}
           />
-          <Flex sx={{}}>
+          <Flex>
             <Box
               sx={{
                 padding: '0.25rem',
