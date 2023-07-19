@@ -17,7 +17,7 @@ export const ThemeToggle = () => {
     <>
       <Button
         sx={{ width: 'unset' }}
-        onClick={() => toggle()}
+        onClick={toggle}
         variant="secondary"
         size="sm"
       >
