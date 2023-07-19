@@ -86,8 +86,7 @@ const ConfirmationPopup = ({
   const closeModal = (isConfirmed: boolean) => {
     onClose(isConfirmed);
   };
-  const context = useThemeUI();
-  const { theme } = context;
+  const { theme } = useThemeUI();
 
   const buttons =
     actions !== null
