@@ -186,7 +186,7 @@ const StateContainer: React.FC<{
     >
       {value ? (
         <>
-          <Flex sx={{}}>
+          <Flex>
             <Box
               sx={{
                 padding: '0.25rem',
