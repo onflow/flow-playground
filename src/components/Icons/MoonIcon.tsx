@@ -1,11 +1,6 @@
 import React from 'react';
-import { useThemeUI } from 'theme-ui';
 
 function MoonIcon() {
-  const context = useThemeUI();
-  const { theme } = context;
-  const color = String(theme?.colors?.icons) || '#000';
-
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
