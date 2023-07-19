@@ -116,8 +116,6 @@ const MenuList: React.FC<MenuListProps> = ({
     },
     selectedIcon: {
       paddingRight: '4px',
-      filter:
-        'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
     },
     item: {
       display: 'flex',
@@ -129,14 +127,11 @@ const MenuList: React.FC<MenuListProps> = ({
       fontFamily: 'inherit',
       '&:hover': {
         background: `${theme.colors.accent}`,
-        borderRadius: '4px',
+        borderRadius: '8px',
         cursor: 'pointer',
         color: `${theme.colors.active}`,
       },
-      '&:hover .menu-icon': {
-        filter:
-          'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
-      },
+
       '&:hover button': {
         visibility: 'visible',
       },
