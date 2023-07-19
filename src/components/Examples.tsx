@@ -2,15 +2,16 @@ import styled from '@emotion/styled';
 import { WhiteOverlay } from 'components/Common';
 import { motion } from 'framer-motion';
 import React from 'react';
-import { IoMdClose } from 'react-icons/io';
 import { Text, useThemeUI } from 'theme-ui';
-
+import Button from 'components/Button';
 import OpenProjectButton from 'components/ActionButton';
 import Mixpanel from 'util/mixpanel';
+import ExplorerPlusIcon from './Icons/ExplorerPlusIcon';
+import { SXStyles } from 'src/types';
 
 const Examples: React.FC<{
   visible: boolean;
-  triggerClose?: (e: React.SyntheticEvent) => any;
+  triggerClose?: () => void;
 }> = ({ visible, triggerClose }) => {
   const context = useThemeUI();
   const { theme } = context;
@@ -240,18 +241,34 @@ const Examples: React.FC<{
     },
   };
 
+  const styles: SXStyles = {
+    closed: {
+      padding: '0px',
+      svg: {
+        transform: 'rotate(45deg)',
+      },
+    },
+  };
+
   return (
     <ExamplesContainer
       initial="hidden"
       animate={visible ? 'visible' : 'hidden'}
       variants={ExampleContainers}
     >
-      <WhiteOverlay onClick={triggerClose} />
+      <WhiteOverlay onClick={triggerClose} theme={theme} />
       <Stack>
         <StackContent>
           <Header>
             <h3>Playground Tutorials</h3>
-            <IoMdClose size={34} onClick={triggerClose} />
+            <Button
+              inline={true}
+              sx={styles.closed}
+              variant="explorer"
+              onClick={triggerClose}
+            >
+              <ExplorerPlusIcon />
+            </Button>
           </Header>
           <ExampleContainer>
             {examples.map((_example: any, index: number) => {

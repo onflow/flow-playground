@@ -19,6 +19,7 @@ import DeleteIcon from 'components/Icons/DeleteIcon';
 import {
   findDuplicateIndex,
   hasDuplicates,
+  isMobile,
 } from '../CadenceEditor/ControlPanel/utils';
 
 type MenuListProps = {
@@ -233,7 +234,7 @@ const MenuList: React.FC<MenuListProps> = ({
             <ExplorerFileShutterIcon />
           </Button>
         </Flex>
-        {!!onInsert && !theme.isMobile && (
+        {!!onInsert && !isMobile() && (
           <Button
             inline={true}
             sx={styles.button}

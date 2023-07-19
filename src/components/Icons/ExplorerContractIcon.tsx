@@ -1,7 +1,10 @@
 import React from 'react';
-import { IconButton } from 'theme-ui';
+import { IconButton, useThemeUI } from 'theme-ui';
 
-function Icon() {
+function ExplorerContractIcon() {
+  const context = useThemeUI();
+  const { theme } = context;
+
   return (
     <IconButton>
       <svg
@@ -22,4 +25,4 @@ function Icon() {
   );
 }
 
-export default Icon;
+export default ExplorerContractIcon;

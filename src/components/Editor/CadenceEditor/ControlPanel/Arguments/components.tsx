@@ -28,7 +28,9 @@ import {
   HintsProps,
   InteractionButtonProps,
 } from './types';
+import Button from 'components/Button';
 import { useThemeUI } from 'theme-ui';
+import { SXStyles } from 'src/types';
 
 export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (
   props: ArgumentsTitleProps,
@@ -41,6 +43,17 @@ export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (
   const hasErrors = errors > 0;
   const lineColor = hasErrors ? String(theme.colors.error) : null;
 
+  const styles: SXStyles = {
+    root: {
+      backgroundColor: theme.colors.secondaryBackground,
+      width: '3rem',
+    },
+    carrotDown: {
+      backgroundColor: theme.colors.secondaryBackground,
+      transform: 'rotate(180deg)',
+      width: '3rem',
+    },
+  };
   return (
     <Heading>
       <Title lineColor={lineColor} theme={theme}>
@@ -54,11 +67,14 @@ export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (
             <span>{errors}</span>
           </Badge>
         )}
-        {expanded ? (
-          <FaCaretSquareUp cursor="pointer" opacity="0.2" size="18" />
-        ) : (
-          <FaCaretSquareDown cursor="pointer" opacity="0.2" size="18" />
-        )}
+        <Button
+          variant="explorer"
+          sx={expanded ? styles.carrotDown : styles.root}
+          size="sm"
+          onClick={() => setExpanded(!expanded)}
+        >
+          {CollapseOpenIcon()}
+        </Button>
       </Controls>
     </Heading>
   );
