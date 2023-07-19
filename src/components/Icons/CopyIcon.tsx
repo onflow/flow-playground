@@ -13,6 +13,7 @@ function CopyIcon() {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
+        stroke="currentColor"
       >
         <rect
           fill="transparent"

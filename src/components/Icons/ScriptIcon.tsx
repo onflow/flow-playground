@@ -15,6 +15,7 @@ function ScriptIcon() {
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"
+          stroke="currentColor"
           d="M14.667 8H12l-2 6L6 2 4 8H1.333"
         />
       </svg>

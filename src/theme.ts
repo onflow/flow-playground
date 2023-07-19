@@ -84,7 +84,7 @@ export default {
   buttons: {
     icon: {
       // effects all iconButtons
-      stroke: 'text',
+      color: 'icons',
     },
     primary: {
       borderRadius: '8px',

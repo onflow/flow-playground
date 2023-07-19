@@ -10,6 +10,7 @@ function Icon() {
         height="16"
         fill="none"
         viewBox="0 0 16 16"
+        stroke="currentColor"
       >
         <path
           strokeLinecap="round"

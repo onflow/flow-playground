@@ -1,11 +1,7 @@
 import React from 'react';
-import { IconButton, useThemeUI } from 'theme-ui';
+import { IconButton } from 'theme-ui';
 
 function CollapseOpenIcon() {
-  const context = useThemeUI();
-  const { theme } = context;
-  const color = String(theme?.colors?.text) || '#fff';
-
   return (
     <IconButton>
       <svg
@@ -17,7 +13,7 @@ function CollapseOpenIcon() {
       >
         <path
           d="M9 5L5 1L1 5"
-          stroke={color}
+          stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"

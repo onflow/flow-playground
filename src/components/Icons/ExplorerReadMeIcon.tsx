@@ -12,14 +12,14 @@ function Icon() {
         viewBox="0 0 16 16"
       >
         <path
-          stroke="#69717E"
+          stroke="currentColor"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="1.5"
           d="M2.667 13a1.667 1.667 0 011.666-1.667h9"
         />
         <path
-          stroke="#69717E"
+          stroke="currentColor"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="1.5"

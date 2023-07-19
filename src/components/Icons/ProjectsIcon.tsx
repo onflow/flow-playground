@@ -10,6 +10,7 @@ function ProjectsIcon() {
         height="14"
         fill="none"
         viewBox="0 0 14 14"
+        stroke="currentColor"
       >
         <path
           strokeLinecap="round"

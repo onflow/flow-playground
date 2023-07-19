@@ -10,6 +10,7 @@ function ExplorerFileShutterIcon() {
         height="18"
         fill="none"
         viewBox="0 0 12 12"
+        stroke="currentColor"
       >
         <path
           strokeLinecap="round"

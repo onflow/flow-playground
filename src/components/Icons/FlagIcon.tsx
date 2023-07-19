@@ -1,10 +1,7 @@
 import React from 'react';
-import { IconButton, useThemeUI } from 'theme-ui';
+import { IconButton } from 'theme-ui';
 
 function FlagIcon() {
-  const context = useThemeUI();
-  const { theme } = context;
-
   return (
     <IconButton>
       <svg
@@ -15,7 +12,7 @@ function FlagIcon() {
         viewBox="0 0 16 17"
       >
         <g
-          stroke={String(theme.colors.icons)}
+          stroke="currentColor"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"
@@ -26,7 +23,7 @@ function FlagIcon() {
         <defs>
           <clipPath id="clip0_805_15119">
             <path
-              fill={String(theme.colors.icons)}
+              fill="currentColor"
               d="M0 0H16V16H0z"
               transform="translate(0 .5)"
             />

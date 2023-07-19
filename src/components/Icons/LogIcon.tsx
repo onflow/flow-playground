@@ -12,7 +12,7 @@ function LogIcon() {
         viewBox="0 0 20 20"
       >
         <path
-          stroke="icon"
+          stroke="currentColor"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"

@@ -119,7 +119,11 @@ const ConfirmationPopup = ({
         <PopupHeader mb="20px">{title}</PopupHeader>
         <Box>
           {messages.map((message, i) => {
-            return <Label key={i}>{message}</Label>;
+            return (
+              <Label key={i} theme={theme}>
+                {message}
+              </Label>
+            );
           })}
         </Box>
         <SpaceBetween>
