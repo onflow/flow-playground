@@ -144,7 +144,7 @@ const ConfirmationPopup = ({
           </DontShowFooter>
         )}
       </PopupContainer>
-      <WhiteOverlay onClick={() => closeModal(false)} />
+      <WhiteOverlay onClick={() => closeModal(false)} theme={theme} />
     </FullScreenContainer>
   );
 };

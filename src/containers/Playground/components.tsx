@@ -1,12 +1,11 @@
 import { Account, Project } from 'api/apollo/generated/graphql';
-import { motion } from 'framer-motion';
 import { Editor as EditorRoot } from 'layout/Editor';
 import { ActiveEditor } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useRef, useState } from 'react';
 import { Flex, useThemeUI } from 'theme-ui';
 import EditorPanels from 'components/Editor/EditorPanels';
-import { ChildProps, SXStyles, ThemedComponentProps } from 'src/types';
+import { SXStyles } from 'src/types';
 import { decodeText } from 'util/readme';
 
 export interface WithShowProps {

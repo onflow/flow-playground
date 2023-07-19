@@ -6,6 +6,7 @@ import { Flex, useThemeUI } from 'theme-ui';
 import BottomEditorPanelHeader from './BottomEditorPanelHeader';
 import RenderError from './RenderError';
 import { RenderResponse } from './RenderResponse';
+import { isMobile } from '../CadenceEditor/ControlPanel/utils';
 
 export const BOTTOM_EDITOR_PANEL_HEADER_HEIGHT = 80;
 
@@ -66,7 +67,7 @@ const BottomEditorPanel = ({
   };
   const panelProblems = getProblems();
 
-  if (theme.isMobile) {
+  if (isMobile()) {
     return null;
   }
 

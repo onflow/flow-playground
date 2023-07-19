@@ -7,6 +7,7 @@ import { SXStyles } from 'src/types';
 import { Box, Flex, useThemeUI } from 'theme-ui';
 import Button from '../../Button';
 import LogIcon from '../../Icons/LogIcon';
+import { isMobile } from '../CadenceEditor/ControlPanel/utils';
 
 type BottomEditorPanelHeaderProps = {
   problems: any;
@@ -108,7 +109,7 @@ const BottomEditorPanelHeader = ({
       : ''
   }`;
 
-  if (theme.isMobile) {
+  if (isMobile()) {
     return null;
   }
 

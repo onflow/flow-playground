@@ -1,10 +1,7 @@
 import React from 'react';
-import { IconButton, useThemeUI } from 'theme-ui';
+import { IconButton } from 'theme-ui';
 
 function ExplorerContractIcon() {
-  const context = useThemeUI();
-  const { theme } = context;
-
   return (
     <IconButton>
       <svg

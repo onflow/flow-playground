@@ -3,12 +3,7 @@ import { Stack } from 'layout/Stack';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useState } from 'react';
-import {
-  FaArrowCircleRight,
-  FaCaretSquareDown,
-  FaCaretSquareUp,
-  FaSpinner,
-} from 'react-icons/fa';
+import { FaArrowCircleRight, FaSpinner } from 'react-icons/fa';
 import CollapseOpenIcon from 'components/Icons/CollapseOpenIcon';
 import { CadenceProblem } from 'util/language-syntax-errors';
 import SingleArgument from './SingleArgument';

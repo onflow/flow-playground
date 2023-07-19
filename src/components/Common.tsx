@@ -28,7 +28,6 @@ export const WhiteOverlay = styled.div<WhiteOverlayProps>`
   left: 0;
   bottom: 0;
   right: 0;
-  //  background: rgba(255, 255, 255, ${({ opacity = 0.9 }) => opacity});
   background: ${({ theme }) => theme.colors.primary};
   z-index: -1;
 `;

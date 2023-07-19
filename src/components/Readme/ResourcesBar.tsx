@@ -129,7 +129,7 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
   return (
     <>
       <StorageListContainer theme={theme}>
-        <ResizeHeading onMouseDown={resize} textTransform="none">
+        <ResizeHeading onMouseDown={resize} textTransform="none" theme={theme}>
           ACCOUNT {selectedResourceAccount} STORAGE {controls()}
         </ResizeHeading>
         <div
