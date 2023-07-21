@@ -64,6 +64,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
       width: '32px',
       height: '32px',
       padding: '0px',
+      display: ['none', 'flex', 'flex'], // hide on mobile
     },
     editorTitle: {
       display: 'flex',
@@ -85,8 +86,6 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
     icon: {
       paddingRight: '4px',
       paddingLeft: '8px',
-      filter:
-        'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
     },
   };
 

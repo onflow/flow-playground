@@ -9,21 +9,6 @@ import { SXStyles } from 'src/types';
 import { Flex } from 'theme-ui';
 import { getResultType } from 'components/Editor/CadenceEditor/ControlPanel/utils';
 
-const styles: SXStyles = {
-  root: {
-    flex: 1,
-    gap: 3,
-    flexDirection: 'column',
-    counterReset: 'lines',
-    minHeight: '40px',
-    padding: 6,
-    background: 'background',
-    borderRadius: '8px',
-    overflowY: 'auto',
-    height: '100%',
-  },
-};
-
 export const RenderResponse = () => {
   const { active } = useProject();
   const { data, error, loading } = useQuery(GET_CACHED_EXECUTION_RESULTS, {
@@ -39,6 +24,21 @@ export const RenderResponse = () => {
     .slice(0)
     .map((line: LineType, index: number) => ({ ...line, index }))
     .reverse();
+
+  const styles: SXStyles = {
+    root: {
+      flex: 1,
+      gap: 3,
+      flexDirection: 'column',
+      counterReset: 'lines',
+      minHeight: '40px',
+      padding: 6,
+      background: 'primary',
+      borderRadius: '8px',
+      overflowY: 'auto',
+      // height: '100%',
+    },
+  };
 
   return (
     <Flex sx={styles.root} data-test="execution-results">

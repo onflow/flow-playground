@@ -167,6 +167,7 @@ const CadenceEditor = (props: CadenceEditorProps) => {
     const editor = monaco.editor.create(container, {
       theme: mode === DARK ? 'vs-dark' : 'vs-light',
       language: CADENCE_LANGUAGE_ID,
+      lineNumbers: isMobile() ? 'off' : 'on',
       minimap: {
         enabled: false,
       },

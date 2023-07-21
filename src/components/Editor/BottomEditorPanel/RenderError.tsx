@@ -27,7 +27,7 @@ const RenderError = (props: any) => {
       counterReset: 'lines',
       minHeight: '40px',
       padding: 6,
-      background: 'background',
+      background: 'primary',
       borderRadius: '8px',
       overflowY: 'auto',
       height: '100%',

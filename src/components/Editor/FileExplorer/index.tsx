@@ -40,7 +40,7 @@ const FileExplorer = ({
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-start',
-      padding: '24px',
+      padding: ['12px', '24px'],
       width: '100%',
     },
     shutterOpened: {
@@ -51,7 +51,7 @@ const FileExplorer = ({
       borderRadius: '8px',
     },
     shutterClosed: {
-      left: isMobile() ? '10px' : '20px',
+      left: ['8px', '20px'],
       position: 'absolute',
       padding: '0px',
       borderRadius: '8px',

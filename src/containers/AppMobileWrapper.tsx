@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 import { isMobile } from 'components/Editor/CadenceEditor/ControlPanel/utils';
 import InformationalPopup from 'components/InformationalPopup';
 import React from 'react';

@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 import { WhiteOverlay } from 'components/Common';
 import { motion } from 'framer-motion';
 import React from 'react';

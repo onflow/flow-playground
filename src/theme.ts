@@ -1,5 +1,5 @@
 export default {
-  breakpoints: ['576px', '768px', '992px'],
+  breakpoints: ['640px', '896px', '1024px'],
   isMobile: window.matchMedia('(max-width: 768px)')?.matches,
   colors: {
     primary: '#ffffff',
@@ -84,6 +84,7 @@ export default {
   buttons: {
     icon: {
       // effects all iconButtons
+      width: ['unset', '32px'],
       color: 'icons',
     },
     primary: {

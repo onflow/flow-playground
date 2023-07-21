@@ -57,6 +57,7 @@ const ErrorToastContainer = () => {
       paddingRight: '24px',
       overflowWrap: 'anywhere',
       maxWidth: '339px',
+      color: theme.colors.text,
     },
   };
 
