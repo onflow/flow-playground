@@ -1,6 +1,7 @@
 import React from 'react';
 import { Argument } from 'components/Editor/CadenceEditor/ControlPanel/Arguments/types';
 import { InputBlock, Input, Label, Type, Error } from './styles';
+import { useThemeUI } from 'theme-ui';
 
 type SingleArgumentProps = {
   argument: Argument;
@@ -13,21 +14,26 @@ const SingleArgument: React.FC<SingleArgumentProps> = ({
   error,
   onChange,
 }) => {
-  const { name, type } = argument;
+  const { name, type, unsupported } = argument;
+  const context = useThemeUI();
+  const { theme } = context;
+
   return (
     <InputBlock>
-      <Label>
+      <Label theme={theme}>
         {name}
-        <Type>{type}</Type>
+        <Type theme={theme}>{type}</Type>
       </Label>
       <Input
+        theme={theme}
         name={`${name}-${type}`}
+        disabled={unsupported}
         onChange={(event) => {
           const { value } = event.target;
           onChange(name, value);
         }}
       />
-      {error && <Error>{error}</Error>}
+      {error && <Error theme={theme}>{error}</Error>}
     </InputBlock>
   );
 };

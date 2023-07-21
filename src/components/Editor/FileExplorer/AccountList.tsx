@@ -6,77 +6,11 @@ import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useState } from 'react';
 import { SXStyles } from 'src/types';
-import { Box, Flex } from 'theme-ui';
+import { Box, Flex, useThemeUI } from 'theme-ui';
 import { getParams, isUUUID, LOCAL_PROJECT_ID } from '../../../util/url';
 
 type AccountListProps = {
   isExplorerCollapsed: boolean;
-};
-
-const styles: SXStyles = {
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  hiddenRoot: {
-    visibility: 'hidden',
-  },
-  header: {
-    fontStyle: 'normal',
-    fontWeight: 600,
-    fontSize: '12px',
-    lineHeight: '14px',
-    letterSpacing: '-0.01em',
-    textTransform: 'uppercase',
-    color: '#69717E',
-    justifyContent: 'space-between',
-  },
-  headerTitle: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    fontFamily: 'Acumin Pro',
-  },
-  button: {
-    padding: '0px',
-  },
-  item: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'start',
-    padding: '0.2rem 0.5rem',
-    '&:hover': {
-      background: '#DEE2E9',
-      borderRadius: '8px',
-      cursor: 'pointer',
-    },
-  },
-  selectedItem: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'start',
-    background: '#EAEAFA',
-    borderRadius: '8px',
-    padding: '0.2rem 0.5rem',
-  },
-  accountCard: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingTop: '0.5rem',
-    paddingBottom: '0.5rem',
-    width: '100%',
-  },
-  accountTitle: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: '3px',
-  },
-  avatar: {
-    marginRight: '1rem',
-    width: '35px',
-    height: '35px',
-    borderRadius: '0 0 20px 20px',
-  },
 };
 
 function getDeployedContracts(account: Account): string {
@@ -103,6 +37,79 @@ const AccountList = ({ isExplorerCollapsed }: AccountListProps) => {
     ? project.id
     : LOCAL_PROJECT_ID;
   const [isInserting, setIsInserting] = useState(false);
+  const context = useThemeUI();
+  const { theme } = context;
+
+  const styles: SXStyles = {
+    root: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    hiddenRoot: {
+      visibility: 'hidden',
+    },
+    header: {
+      fontStyle: 'normal',
+      fontWeight: 600,
+      fontSize: '12px',
+      lineHeight: '14px',
+      letterSpacing: '-0.01em',
+      textTransform: 'uppercase',
+      color: `${theme.colors.leftSidebarHeaderText}`,
+      justifyContent: 'space-between',
+    },
+    headerTitle: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      fontFamily: 'Acumin Pro',
+    },
+    button: {
+      padding: '0px',
+    },
+    item: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'start',
+      padding: '0.2rem 0.5rem',
+      '&:hover': {
+        background: `${theme.colors.accent}`,
+        borderRadius: '8px',
+        cursor: 'pointer',
+      },
+    },
+    selectedItem: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'start',
+      background: `${theme.colors.background}`,
+      borderRadius: '8px',
+      padding: '0.2rem 0.5rem',
+      color: `${theme.colors.text}`,
+    },
+    accountCard: {
+      display: 'flex',
+      alignItems: 'center',
+      paddingTop: '0.5rem',
+      paddingBottom: '0.5rem',
+      width: '100%',
+      '&:hover': {
+        cursor: 'pointer',
+        color: `${theme.colors.active}`,
+      },
+    },
+    accountTitle: {
+      display: 'flex',
+      flexDirection: 'column',
+      marginTop: '3px',
+    },
+    avatar: {
+      marginRight: '1rem',
+      width: '35px',
+      height: '35px',
+      borderRadius: '0 0 20px 20px',
+    },
+  };
 
   return (
     <Flex sx={isExplorerCollapsed ? styles.hiddenRoot : styles.root}>

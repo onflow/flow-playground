@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import React from 'react';
-import theme from '../theme';
 import { ChildPropsOptional } from 'src/types';
 import { CSSProperties } from 'styled-components';
 import Button from './Button';
@@ -20,20 +19,6 @@ interface PanelButtonProps extends ChildPropsOptional {
 }
 
 const PanelButton: React.FC<PanelButtonProps> = (props) => {
-  // TODO: what is hideDisabledState used for
-
-  const getStyle = ({ disabled, isComplete }: PanelButtonProps) => {
-    if (disabled) return theme.colors.grey;
-    if (isComplete) return theme.colors.primary;
-    return theme.colors.black;
-  };
-
-  const sx = {
-    backgroundColor: getStyle(props),
-    color: theme.colors.white,
-    ...props.style,
-  };
-
   return (
     <motion.div
       style={{
@@ -46,7 +31,7 @@ const PanelButton: React.FC<PanelButtonProps> = (props) => {
     >
       <Button
         {...props}
-        sx={sx}
+        sx={{ ...props.style }}
         disabled={props.disabled || props.hideDisabledState}
       >
         {props.isComplete && CheckMarkIcon()}

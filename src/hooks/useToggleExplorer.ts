@@ -1,10 +1,8 @@
+import { isMobile } from 'components/Editor/CadenceEditor/ControlPanel/utils';
 import { useState } from 'react';
-import theme from '../theme';
 
 function useToggleExplorer() {
-  const [isExplorerCollapsed, setIsExplorerCollapsed] = useState(
-    theme.isMobile,
-  );
+  const [isExplorerCollapsed, setIsExplorerCollapsed] = useState(isMobile());
 
   const toggleExplorer = () => {
     setIsExplorerCollapsed(!isExplorerCollapsed);

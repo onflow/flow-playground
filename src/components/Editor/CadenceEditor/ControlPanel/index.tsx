@@ -32,10 +32,11 @@ import {
 
 // Component Scoped Files
 import { MotionBox, StatusIcon } from './components';
-import { ControlPanelProps, IValue } from './types';
+import { ControlPanelProps, IValue, UNSUPPORTED_TYPES } from './types';
 import {
   getLabel,
   getResultType,
+  isMobile,
   useTemplateType,
   validateByType,
 } from './utils';
@@ -57,7 +58,8 @@ import { Template } from 'src/types';
 import DismissiblePopup from 'components/DismissiblePopup';
 import { userModalKeys } from 'util/localstorage';
 import { addressToAccount } from 'util/accounts';
-import theme from '../../../../theme';
+import { Argument } from './Arguments/types';
+import { useThemeUI } from 'theme-ui';
 
 const ButtonActionLabels = {
   [String(EntityType.TransactionTemplate)]: 'Send',
@@ -95,6 +97,8 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
   const constraintsRef = useRef();
   // Holds reference to Disposable callback for languageClient
   const clientOnNotification = useRef(null);
+  const context = useThemeUI();
+  const { theme } = context;
 
   // ===========================================================================
   // METHODS  ------------------------------------------------------------------
@@ -177,7 +181,11 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
    */
   const getArguments = (): any => {
     const key = getActiveKey();
-    return executionArguments[key] || [];
+    const addSupported = (executionArguments[key] || []).map((arg: any) => ({
+      ...arg,
+      unsupported: UNSUPPORTED_TYPES.includes(arg.type),
+    }));
+    return addSupported;
   };
 
   /**
@@ -212,18 +220,18 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
    * @param values - list of argument values
    */
   const validate = (list: any, values: any) => {
-    const errors = list.reduce((acc: any, item: any) => {
+    const errors = list.reduce((acc: any, item: Argument) => {
       const { name, type } = item;
       const value = values[name];
-      if (value) {
+      if (item.unsupported) {
+        acc[name] = `Type ${type} is not supported in Playground`;
+      } else if (value) {
         const error = validateByType(value, type);
         if (error) {
           acc[name] = error;
         }
       } else {
-        if (type !== 'String') {
-          acc[name] = "Value can't be empty";
-        }
+        acc[name] = "Value can't be empty";
       }
       return acc;
     }, {});
@@ -378,6 +386,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             rawResult = await contractDeployment(
               active.index,
               selectedAccountId,
+              args,
             );
             break;
           }
@@ -473,7 +482,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     validate(list, values);
   }, [list, values]);
 
-  if (type === EntityType.AccountStorage || theme.isMobile) {
+  if (type === EntityType.AccountStorage || isMobile()) {
     return null;
   }
 
@@ -481,7 +490,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     <>
       <div ref={constraintsRef} className="constraints" />
       <MotionBox dragConstraints={constraintsRef}>
-        <HoverPanel minWidth="362px">
+        <HoverPanel minWidth="362px" theme={theme}>
           {list.length > 0 && (
             <>
               <ArgumentsTitle
@@ -510,14 +519,24 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
             />
           )}
           <Hints problems={problems} actions={actions} />
-          <ControlContainer isOk={isOk} progress={progress} showPrompt={false}>
+          <ControlContainer
+            isOk={isOk}
+            progress={progress}
+            showPrompt={false}
+            theme={theme}
+          >
             {statusMessage && (
               <StatusMessage
                 isOk={isOk}
                 data-test="control-panel-status-message"
                 onClick={openErrorPanel}
               >
-                <StatusIcon isOk={isOk} progress={progress} showPrompt={false}>
+                <StatusIcon
+                  isOk={isOk}
+                  progress={progress}
+                  showPrompt={false}
+                  theme={theme}
+                >
                   {statusIcon}
                 </StatusIcon>
                 <p>{statusMessage}</p>

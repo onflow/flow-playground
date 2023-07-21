@@ -165,3 +165,7 @@ export const findDuplicateIndex = (array: string[]): number => {
   }
   return -1;
 };
+
+export const isMobile = (): boolean => {
+  return window.matchMedia('(max-width: 768px)')?.matches;
+};

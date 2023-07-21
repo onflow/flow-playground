@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
-import theme from '../theme';
+import { ThemedComponentProps } from 'src/types';
 
-type HeadingProps = {
+interface HeadingProps extends ThemedComponentProps {
   textTransform?: string;
-};
+}
 
 export const Heading = styled.div<HeadingProps>`
   padding: 1rem;
@@ -11,7 +11,7 @@ export const Heading = styled.div<HeadingProps>`
   font-weight: bold;
   text-transform: ${({ textTransform = 'uppercase' }) => textTransform};
   letter-spacing: 0.1em;
-  color: ${theme.colors.heading};
+  color: ${({ theme }) => theme.colors.icons};
   padding-bottom: calc(1rem - 3px);
 
   display: flex;
@@ -27,7 +27,7 @@ export const Heading = styled.div<HeadingProps>`
     position: absolute;
     left: 1rem;
     bottom: calc(1rem - 3px - 6px);
-    background: ${theme.colors.primary};
+    background: ${({ theme }) => theme.colors.primary};
     height: 3px;
     width: 1rem;
     border-radius: 3px;

@@ -7,17 +7,16 @@ import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useState } from 'react';
 import { GoChevronDown, GoChevronUp } from 'react-icons/go';
 import { ChildProps } from 'src/types';
-import { Badge, Box, Divider, Flex } from 'theme-ui';
+import { Badge, Box, Divider, Flex, useThemeUI } from 'theme-ui';
 import { storageMapByAddress } from 'util/accounts';
 import { getStorageData } from 'util/storage';
 import useMousePosition from '../../hooks/useMousePosition';
-import theme from '../../theme';
 
 const RESULT_PANEL_MIN_HEIGHT = 80;
 const STORAGE_PANEL_MIN_HEIGHT = 80 + RESULT_PANEL_MIN_HEIGHT;
 const PLAYGROUND_HEADER_HEIGHT = 75;
 
-const TypeListItem = styled.li<{ active: boolean }>`
+const TypeListItem = styled.li<{ active: boolean; theme: any }>`
   align-items: center;
   padding: 14px;
   display: flex;
@@ -25,28 +24,29 @@ const TypeListItem = styled.li<{ active: boolean }>`
   font-size: 14px;
   font-weight: 600;
   color: #2f2f2f;
-  ${(li) => (li.active ? 'background: #f5f5f5;' : '')}
+  ${({ active, theme }) =>
+    active ? `background: ${theme.colors.secondary}` : ''}
   &:hover {
-    background: #f5f5f5;
+    background: ${({ theme }) => theme.colors.secondary};
   }
 `;
 
-const AccountStateContainer = styled.div<{ height: number }>`
+const AccountStateContainer = styled.div<{ height: number; theme: any }>`
   display: flex;
   flex-direction: row;
   justify-content: space-even;
   height: 100%;
   width: 100%;
-  background: white;
-  border-top: 1px solid ${theme.colors.greyBorder};
+  background: ${({ theme }) => theme.colors.background};
+  border-top: ${({ theme }) => `1px solid ${theme.colors.secondary}`};
   height: ${(p) => p.height}px;
 `;
 
-const StorageListContainer = styled.div`
+const StorageListContainer = styled.div<{ theme: any }>`
   display: flex;
   flex-direction: column;
   height: 100%;
-  border-right: 1px solid ${theme.colors.greyBorder};
+  border-right: ${({ theme }) => `1px solid ${theme.colors.secondary}`};
 `;
 
 interface StorageBadgeProps {
@@ -80,17 +80,27 @@ const GeneralBadge = ({ backgroundColor, children }: GeneralBadgeProps) => {
 };
 
 const StorageBadge = ({ type }: StorageBadgeProps) => {
+  const context = useThemeUI();
+  const { theme } = context;
+
   const backgroundColor =
     type === 'Resource'
       ? theme.colors.badgeResource
       : theme.colors.badgeCapability;
 
-  return <GeneralBadge backgroundColor={backgroundColor}>{type}</GeneralBadge>;
+  return (
+    <GeneralBadge backgroundColor={String(backgroundColor)}>
+      {type}
+    </GeneralBadge>
+  );
 };
 
 const DomainBadge = ({ domain }: { domain: string }) => {
+  const context = useThemeUI();
+  const { theme } = context;
+
   return (
-    <GeneralBadge backgroundColor={theme.colors.badgeNull}>
+    <GeneralBadge backgroundColor={String(theme.colors.badgeNull)}>
       {domain}
     </GeneralBadge>
   );
@@ -113,11 +123,13 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
   resize,
 }) => {
   const { selectedResourceAccount } = useProject();
+  const context = useThemeUI();
+  const { theme } = context;
 
   return (
     <>
-      <StorageListContainer>
-        <ResizeHeading onMouseDown={resize} textTransform="none">
+      <StorageListContainer theme={theme}>
+        <ResizeHeading onMouseDown={resize} textTransform="none" theme={theme}>
           ACCOUNT {selectedResourceAccount} STORAGE {controls()}
         </ResizeHeading>
         <div
@@ -135,6 +147,7 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
                   key={key}
                   active={key == selected}
                   onClick={() => onSelect(key)}
+                  theme={theme}
                 >
                   <Flex
                     sx={{
@@ -158,75 +171,78 @@ const IdentifierTypeList: React.FC<IdentifierTypeListProps> = ({
 const StateContainer: React.FC<{
   value?: any;
   path?: any;
-}> = ({ value, path }) => (
-  <div
-    style={{
-      width: '100%',
-      backgroundColor: '#f3f3f3',
-      paddingTop: '1.0em',
-      paddingBottom: STORAGE_PANEL_MIN_HEIGHT - 40,
-      paddingLeft: '1.5em',
-      overflow: 'scroll',
-    }}
-  >
-    {value ? (
-      <>
-        <Flex sx={{}}>
-          <Box
+  theme?: any;
+}> = ({ value, path, theme }) => {
+  return (
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: theme.colors.background,
+        paddingTop: '1.0em',
+        paddingBottom: STORAGE_PANEL_MIN_HEIGHT - 40,
+        paddingLeft: '1.5em',
+        overflow: 'scroll',
+      }}
+    >
+      {value ? (
+        <>
+          <Flex>
+            <Box
+              sx={{
+                padding: '0.25rem',
+                minWidth: '75px',
+                font: theme.fonts?.body,
+                fontSize: theme.fontSizes[4],
+              }}
+            >
+              Path:
+            </Box>
+            <Box
+              sx={{
+                padding: '0.25rem',
+                fontFamily: theme.fonts.monospace,
+                fontSize: theme.fontSizes[4],
+              }}
+            >
+              {path}
+            </Box>
+          </Flex>
+          <Divider
             sx={{
-              padding: '0.25rem',
-              minWidth: '75px',
-              font: theme.fonts.body,
-              fontSize: theme.fontSizes[4],
+              color: theme.colors.border,
+              opacity: '0.7',
+              marginX: '2rem',
+              marginY: '0.5rem',
             }}
-          >
-            Path:
-          </Box>
-          <Box
-            sx={{
-              padding: '0.25rem',
-              fontFamily: theme.fonts.monospace,
-              fontSize: theme.fontSizes[4],
-            }}
-          >
-            {path}
-          </Box>
-        </Flex>
-        <Divider
-          sx={{
-            color: theme.colors.grey,
-            opacity: '0.7',
-            marginX: '2rem',
-            marginY: '0.5rem',
-          }}
-        />
-        <Flex sx={{}}>
-          <Box
-            sx={{
-              padding: '0.25rem',
-              minWidth: '75px',
-              font: theme.fonts.body,
-              fontSize: theme.fontSizes[4],
-            }}
-          >
-            Object:
-          </Box>
-          <Box
-            sx={{
-              padding: '0.25rem',
-              fontFamily: theme.fonts.monospace,
-              fontSize: theme.fontSizes[4],
-            }}
-          >
-            <pre>{JSON.stringify(value, null, 2)}</pre>
-          </Box>
-        </Flex>
-      </>
-    ) : (
-      '(account storage is empty)'
-    )}
-  </div>
-);
+          />
+          <Flex>
+            <Box
+              sx={{
+                padding: '0.25rem',
+                minWidth: '75px',
+                font: theme.fonts.body,
+                fontSize: theme.fontSizes[4],
+              }}
+            >
+              Object:
+            </Box>
+            <Box
+              sx={{
+                padding: '0.25rem',
+                fontFamily: theme.fonts.monospace,
+                fontSize: theme.fontSizes[4],
+              }}
+            >
+              <pre>{JSON.stringify(value, null, 2)}</pre>
+            </Box>
+          </Flex>
+        </>
+      ) : (
+        '(account storage is empty)'
+      )}
+    </div>
+  );
+};
 
 const AccountState: React.FC<{
   state: any;
@@ -235,6 +251,9 @@ const AccountState: React.FC<{
   resultHeight: number;
 }> = ({ state, selectedResourcesAccount, resultHeight }) => {
   const { storage, paths, types } = getStorageData(state);
+
+  const context = useThemeUI();
+  const { theme } = context;
 
   const identifiers = Object.keys(storage);
 
@@ -274,7 +293,10 @@ const AccountState: React.FC<{
   return (
     <>
       {selectedResourcesAccount !== 'none' && (
-        <AccountStateContainer height={storageHeight + resultHeight}>
+        <AccountStateContainer
+          height={storageHeight + resultHeight}
+          theme={theme}
+        >
           <IdentifierTypeList
             types={types}
             paths={paths}
@@ -283,7 +305,7 @@ const AccountState: React.FC<{
             resize={() => toggleResizingStorage(true)}
             controls={() => {
               return (
-                <SidebarItemInsert grab={false}>
+                <SidebarItemInsert grab={false} theme={theme}>
                   {storageHeight > 40 ? (
                     <GoChevronDown
                       size="16px"
@@ -304,6 +326,7 @@ const AccountState: React.FC<{
           <StateContainer
             value={storage[selected] || storage[identifiers[0]]}
             path={paths[selected] || paths[identifiers[0]]}
+            theme={theme}
           />
         </AccountStateContainer>
       )}
@@ -317,10 +340,13 @@ interface ResourcesBarProps {
 
 const ResourcesBar: React.FC<ResourcesBarProps> = ({ resultHeight }) => {
   const { project, selectedResourceAccount } = useProject();
+  const context = useThemeUI();
+  const { theme } = context;
+
   const accountState =
     project?.accounts?.[storageMapByAddress(selectedResourceAccount)]?.state;
   return (
-    <FeedbackRoot>
+    <FeedbackRoot theme={theme}>
       {selectedResourceAccount && !!accountState ? (
         <AccountState
           state={accountState}

@@ -39,6 +39,7 @@ export interface ProjectContextValue {
   ) => Promise<any>;
   saveProject: () => Promise<any>;
   deleteProject: (projectId: string) => Promise<any>;
+  resetProject: (projectId: string) => Promise<any>;
   createContractDeployment: (
     fileIndex: number,
     accountId: number,
@@ -248,9 +249,26 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
+  const resetProject = async (dProjectId: string) => {
+    setIsSaving(true);
+    let res;
+    try {
+      res = null;
+      await mutator.resetProject(dProjectId);
+    } catch (e) {
+      console.error(e);
+      checkAppErrors();
+    } finally {
+      setIsSaving(false);
+    }
+
+    return res;
+  };
+
   const createContractDeployment: any = async (
     fileIndex: number,
     accountId: number,
+    args: string[] = [],
   ) => {
     setIsSaving(true);
     setIsExecutingAction(true);
@@ -262,6 +280,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         template,
         deployAccount,
         active.index,
+        args,
       );
 
       const addr = deployAccount.address;
@@ -609,9 +628,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       parsedAccountState.length < 5 ? '(Empty)' : formattedAcctState;
     const address = accounts[accountId].address;
 
-    //const contracts = JSON.stringify(accounts[accountId]?.deployedContracts);
-    console.log(accounts[accountId]?.deployedContracts);
-    console.log(address, contractDeployments);
     const contracts = JSON.stringify(
       (contractDeployments || [])
         .filter((c) => String(c.address) === String(address))
@@ -812,6 +828,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         updateProject,
         saveProject,
         deleteProject,
+        resetProject,
         createContractDeployment,
         updateContractTemplate,
         updateScriptTemplate,

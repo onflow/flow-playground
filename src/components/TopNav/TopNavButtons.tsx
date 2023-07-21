@@ -9,6 +9,8 @@ const styles: SXStyles = {
     display: 'flex',
     marginLeft: '0.25rem',
     textDecoration: 'none',
+    color: 'text',
+    background: 'background',
   },
   externalNavLinkFlow: {
     textDecoration: 'none',
@@ -24,7 +26,6 @@ const NavButton = ({ href, title, children }: NavButtonProps) => {
   return (
     <Link
       sx={styles.externalNavLink}
-      variant="buttonSecondary"
       href={href}
       title={title}
       target="_blank"
@@ -36,7 +37,7 @@ const NavButton = ({ href, title, children }: NavButtonProps) => {
 };
 
 // Nav links will be moved to the tutorial sidebar in v2
-const ExternalNavLinks = () => {
+const TopNavButtons = () => {
   return (
     <>
       <NavButton href="https://docs.onflow.org">Flow Docs</NavButton>
@@ -59,4 +60,4 @@ const ExternalNavLinks = () => {
   );
 };
 
-export default ExternalNavLinks;
+export default TopNavButtons;

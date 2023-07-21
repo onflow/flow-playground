@@ -1,9 +1,8 @@
 import Button from 'components/Button';
 import Mixpanel from 'util/mixpanel';
 import React, { useState } from 'react';
-import theme from '../../theme';
 import { SXStyles } from 'src/types';
-import { Container } from 'theme-ui';
+import { Container, useThemeUI } from 'theme-ui';
 import { useProject } from 'providers/Project/projectHooks';
 import { LOCAL_PROJECT_ID } from 'util/url';
 import JSZip from 'jszip';
@@ -12,26 +11,6 @@ import ConfirmationPopup from 'components/ConfirmationPopup';
 import * as GoogleAnalytics from 'util/google-analytics';
 
 const DOWNLOAD_EVENT = 'export project downloaded';
-const styles: SXStyles = {
-  container: {
-    margin: '0',
-    width: 'unset',
-  },
-  button: {
-    border: '1px solid #DEE2E9',
-    borderRadius: '8px',
-    background: '#F6F7F9',
-    '&:hover': {
-      background: `${theme.colors.menuBg}`,
-    },
-  },
-  buttonDisabled: {
-    border: '1px solid #DEE2E9',
-    borderRadius: '8px',
-    background: '#F6F7F9',
-    color: '#DEE2E9',
-  },
-};
 
 export const ExportButton = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -41,6 +20,21 @@ export const ExportButton = () => {
       : window.location.pathname.slice(1);
 
   const { project } = useProject();
+  const context = useThemeUI();
+  const { theme } = context;
+
+  const styles: SXStyles = {
+    container: {
+      margin: '0',
+      width: 'unset',
+    },
+    buttonDisabled: {
+      borderRadius: '8px',
+      color: `${theme.colors.text}`,
+      background: `${theme.colors.background}`,
+      border: `1px solid ${theme.colors.borderColor}`,
+    },
+  };
 
   const saveProjectClicked = async (isDownload: boolean) => {
     setIsOpen(false);
@@ -84,7 +78,6 @@ export const ExportButton = () => {
   return (
     <Container sx={styles.container}>
       <Button
-        sx={styles.button}
         onClick={() => setIsOpen(true)}
         variant="secondary"
         size="sm"

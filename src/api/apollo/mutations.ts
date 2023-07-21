@@ -138,9 +138,15 @@ export const CREATE_CONTRACT_DEPLOYMENT = gql`
     $projectId: UUID!
     $script: String!
     $signer: Address!
+    $arguments: [String!]
   ) {
     createContractDeployment(
-      input: { projectId: $projectId, script: $script, address: $signer }
+      input: {
+        projectId: $projectId
+        script: $script
+        address: $signer
+        arguments: $arguments
+      }
     ) {
       id
       script
@@ -328,6 +334,12 @@ export const CREATE_SCRIPT_EXECUTION = gql`
 export const DELETE_PROJECT = gql`
   mutation DeleteProject($projectId: UUID!) {
     deleteProject(projectId: $projectId)
+  }
+`;
+
+export const RESET_PROJECT = gql`
+  mutation ResetProject($projectId: UUID!) {
+    resetProjectState(projectId: $projectId)
   }
 `;
 

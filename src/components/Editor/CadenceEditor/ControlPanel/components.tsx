@@ -2,7 +2,7 @@ import LegacyButton from 'components/LegacyButton';
 import { motion } from 'framer-motion';
 import React from 'react';
 import styled from 'styled-components';
-import theme from '../../../../theme';
+import { ThemedComponentProps } from 'src/types';
 
 export const MotionBox = (props: any) => {
   const { children, dragConstraints } = props;
@@ -20,7 +20,7 @@ export const MotionBox = (props: any) => {
   );
 };
 
-interface HoverPanelProps {
+interface HoverPanelProps extends ThemedComponentProps {
   width?: string;
 }
 
@@ -29,8 +29,9 @@ export const HoverPanel = styled.div<HoverPanelProps>`
   max-width: 500px;
   padding: 20px;
   border-radius: 4px;
-  background-color: #fff;
-  box-shadow: 10px 10px 20px #c9c9c9, -10px -10px 20px #ffffff;
+  background-color: ${(props: any) => props.theme.colors.primary};
+  box-shadow: ${({ theme }) =>
+    `10px 10px 20px #c9c9c9, -10px -10px 20px ${theme.colors.shadow}`};
 `;
 
 export const Heading = styled.div`
@@ -40,7 +41,7 @@ export const Heading = styled.div`
   margin-bottom: 16px;
 `;
 
-interface TitleProps {
+interface TitleProps extends ThemedComponentProps {
   lineColor?: string;
 }
 
@@ -50,7 +51,7 @@ export const Title = styled.div<TitleProps>`
   text-transform: uppercase;
   letter-spacing: 0.1em;
   position: relative;
-  color: #919191;
+  color: ${({ theme }) => theme.colors.text};
 
   &:after {
     opacity: 0.5;
@@ -58,7 +59,8 @@ export const Title = styled.div<TitleProps>`
     display: block;
     position: absolute;
     left: 0;
-    background: ${(props: any) => props.lineColor || theme.colors.primary};
+    background: ${(props: any) =>
+      props.lineColor || props.theme.colors.primary};
     height: 3px;
     width: 1rem;
     bottom: -6px;
@@ -73,11 +75,11 @@ export const Controls = styled.div`
   cursor: pointer;
 `;
 
-export const Badge = styled.div`
+export const Badge = styled.div<ThemedComponentProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: ${({ theme }) => theme.colors.primary};
   font-weight: bold;
   font-size: 12px;
   margin-right: 5px;
@@ -91,10 +93,9 @@ export const Badge = styled.div`
     transform: translateY(1px);
   }
 
-  background-color: #ee431e;
-  &.green {
-    background-color: ${theme.colors.primary};
-    color: #222;
+  background-color: ${({ theme }) => theme.colors.errorBackground};
+  &.warning {
+    background-color: ${({ theme }) => theme.colors.warning};
   }
 `;
 
@@ -134,7 +135,7 @@ export const ControlContainer = styled.div<ControlContainerProps>`
   }};
 `;
 
-export const ToastContainer = styled.div`
+export const ToastContainer = styled.div<ThemedComponentProps>`
   z-index: 1000;
   position: fixed;
   bottom: 40px;
@@ -142,7 +143,7 @@ export const ToastContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: ${theme.colors.darkPrimary};
+  color: ${({ theme }) => theme.colors.accent};
 `;
 
 export const StatusMessage = styled.div`
@@ -174,27 +175,6 @@ export const ErrorsContainer = styled.div`
   margin-bottom: 12px;
 `;
 
-export const SingleError = styled.div`
-  cursor: pointer;
-  display: flex;
-  align-items: baseline;
-  box-sizing: border-box;
-  padding: 10px;
-  border-radius: 4px;
-  font-size: 14px;
-  &:hover {
-    background-color: rgba(244, 57, 64, 0.15);
-
-    &.hint-warning {
-      background-color: rgb(238, 169, 30, 0.15);
-    }
-
-    &.hint-info {
-      background-color: rgb(85, 238, 30, 0.15);
-    }
-  }
-`;
-
 export const ErrorIndex = styled.div`
   width: 20px;
   height: 20px;
@@ -207,7 +187,7 @@ export const ErrorIndex = styled.div`
   flex: 0 0 auto;
 `;
 
-export const ErrorMessage = styled.p`
+export const ErrorMessage = styled.p<ThemedComponentProps>`
   line-height: 1.2;
   word-break: break-word;
   span {
@@ -217,40 +197,19 @@ export const ErrorMessage = styled.p`
     margin: 3px 3px 3px 5px;
     line-height: 20px;
     .suggestion {
-      background-color: ${theme.colors.primary};
+      background-color: ${({ theme }) => theme.colors.primary};
     }
   }
 `;
 
-export const SignersError = styled.p`
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  box-sizing: border-box;
-  margin: 10px 0;
-  color: ${theme.colors.error};
-  svg {
-    margin-right: 0.5em;
-  }
-`;
+export const Confirm = styled(LegacyButton)<ThemedComponentProps>`
+  background-color: ${({ theme }) => theme.colors.error};
+  color: ${({ theme }) => theme.colors.primary};
 
-export const Confirm = styled(LegacyButton)`
-  background-color: ${theme.colors.error};
-  color: #fff;
   margin-right: 0.5rem;
 
   &:active {
-    background-color: #cf3529;
-  }
-`;
-
-export const Cancel = styled(LegacyButton)`
-  background-color: ${theme.colors.background};
-  color: ${theme.colors.text};
-  border: 1px solid ${theme.colors.greyBorder};
-
-  &:active {
-    background-color: #dedede;
+    background-color: ${({ theme }) => theme.colors.errors};
   }
 `;
 
@@ -259,13 +218,13 @@ export const PromptActionsContainer = styled.div`
   justify-content: flex-start;
 `;
 
-interface StatusIconProps {
+interface StatusIconProps extends ThemedComponentProps {
   isOk: boolean;
   progress: boolean;
   showPrompt: boolean;
 }
 export const StatusIcon = styled.div<StatusIconProps>`
-  color: ${({ isOk, progress, showPrompt }) => {
+  color: ${({ theme, isOk, progress, showPrompt }) => {
     switch (true) {
       case progress:
         return '#a2a2a2';
