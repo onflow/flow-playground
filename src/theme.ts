@@ -117,6 +117,7 @@ export default {
       backgroundColor: 'secondaryBackground',
       fontFamily: 'body',
       fontWeight: 500,
+      height: '54px',
       color: 'text',
       margin: 0,
       maxWidth: '350px',
