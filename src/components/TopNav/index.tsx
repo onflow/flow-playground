@@ -3,14 +3,13 @@ import Examples from 'components/Examples';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useState } from 'react';
 import { SXStyles } from 'src/types';
-import { Flex } from 'theme-ui';
+import { Flex, useThemeUI } from 'theme-ui';
 import Mixpanel from 'util/mixpanel';
 import ProjectsIcon from 'components/Icons/ProjectsIcon';
 import LearnCadenceIcon from 'components/Icons/LearnCadenceIcon';
 import NavInput from './NavInput';
 import { ShareMenu } from './ShareMenu';
 import { SaveButton } from './SaveButton';
-import theme from '../../theme';
 import {
   CADENCE_DOCS_URL,
   PLAYGROUND_GITHUB_ISSUES_URL,
@@ -20,80 +19,77 @@ import GithubIcon from 'components/Icons/GithubIcon';
 import { NavButtonLink } from './NavButtonLink';
 import { IconCadence } from 'components/Icons/CadenceIcon';
 import VersionInfoPopup from 'components/VersionInfoPopup';
-
-const styles: SXStyles = {
-  root: {
-    background: 'white',
-    display: 'flex',
-    gridArea: 'header',
-    flex: '1 1 auto',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingLeft: '1em',
-    paddingRight: '1em',
-  },
-  mobile: {
-    background: 'white',
-    display: 'flex',
-    gridArea: 'header',
-    flex: '1 1 auto',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: '1rem',
-  },
-  button: {
-    border: '1px solid #DEE2E9',
-    borderRadius: '8px',
-    background: '#F6F7F9',
-    '&:hover': {
-      background: `${theme.colors.menuBg}`,
-    },
-  },
-  link: {
-    border: '1px solid #DEE2E9',
-    background: '#F6F7F9',
-    fontFamily: 'body',
-    color: 'text',
-    textDecoration: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    margin: 0,
-    fontWeight: 500,
-    padding: '0.25rem ',
-    borderRadius: '8px',
-    fontSize: 4,
-    '&:hover': {
-      background: `${theme.colors.menuBg}`,
-      borderColor: '#1E1FB9',
-    },
-  },
-  topNavSection: {
-    alignItems: 'center',
-    minWidth: 210,
-    gap: 4,
-  },
-  topNavProjectName: {
-    alignItems: 'center',
-  },
-  externalNavLink: {
-    display: 'flex',
-    marginLeft: '0.25rem',
-    textDecoration: 'none',
-  },
-  externalNavLinkFlow: {
-    textDecoration: 'none',
-  },
-  topNavSectionRight: {
-    flexDirection: 'row-reverse',
-  },
-};
+import { ThemeToggle } from './ThemeToggle';
+import { isMobile } from 'components/Editor/CadenceEditor/ControlPanel/utils';
 
 const TopNav = () => {
   const { project, updateProject, toggleProjectsSidebar } = useProject();
   const [showExamples, setShowExamples] = useState(false);
   const [projectName, setProjectName] = useState(project.title);
+
+  const context = useThemeUI();
+  const { theme } = context;
+
+  const styles: SXStyles = {
+    root: {
+      display: 'flex',
+      gridArea: 'header',
+      flex: '1 1 auto',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingLeft: '1em',
+      paddingRight: '1em',
+      background: `${theme.colors.primary}`,
+    },
+    mobile: {
+      background: `${theme.colors.secondaryBackground}`,
+      display: 'flex',
+      gridArea: 'header',
+      flex: '1 1 auto',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginTop: '1rem',
+    },
+    link: {
+      border: `1px solid ${theme.colors.border}`,
+      background: `${theme.colors.background}`,
+      fontFamily: 'body',
+      color: 'text',
+      textDecoration: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      margin: 0,
+      fontWeight: 500,
+      padding: '0.25rem ',
+      borderRadius: '8px',
+      fontSize: 4,
+      '&:hover': {
+        background: `${theme.colors.active}`,
+        borderColor: `${theme.colors.accent}`,
+      },
+    },
+    topNavSection: {
+      alignItems: 'center',
+      minWidth: 210,
+      gap: 4,
+    },
+    topNavProjectName: {
+      alignItems: 'center',
+    },
+    externalNavLink: {
+      display: 'flex',
+      marginLeft: '0.25rem',
+      textDecoration: 'none',
+    },
+    externalNavLinkFlow: {
+      textDecoration: 'none',
+    },
+    topNavSectionRight: {
+      flexDirection: 'row-reverse',
+    },
+  };
 
   const onStartButtonClick = () => {
     setShowExamples(true);
@@ -112,7 +108,7 @@ const TopNav = () => {
     setProjectName(project.title);
   }, [project?.id]);
 
-  if (theme.isMobile) {
+  if (isMobile()) {
     return (
       <Flex sx={styles.mobile}>
         <NavInput
@@ -129,7 +125,7 @@ const TopNav = () => {
       <Flex sx={styles.topNavSection}>
         <Button
           onClick={toggleProjectsSidebar}
-          variant="alternate"
+          variant="secondary"
           size="sm"
           inline={true}
         >
@@ -150,9 +146,9 @@ const TopNav = () => {
       <Flex sx={{ ...styles.topNavSection, ...styles.topNavSectionRight }}>
         {!!project && (
           <>
+            <ThemeToggle />
             <VersionInfoPopup />
             <Button
-              sx={styles.button}
               onClick={() => onStartButtonClick()}
               variant="secondary"
               size="sm"

@@ -4,9 +4,8 @@ import 'allotment/dist/style.css';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useState } from 'react';
-import theme from '../../theme';
 import { SXStyles } from 'src/types';
-import { Box, Flex } from 'theme-ui';
+import { Box, Flex, useThemeUI } from 'theme-ui';
 import { storageMapByIndex } from 'util/accounts';
 import BottomEditorPanel from './BottomEditorPanel';
 import BottomEditorPanelHeader from './BottomEditorPanel/BottomEditorPanelHeader';
@@ -27,65 +26,6 @@ type EditorPanelsProps = {
   show: boolean;
 };
 
-const styles: SXStyles = {
-  root: {
-    '--sash-size': '14px',
-    '--focus-border': 'borderColor',
-    '--separator-border': 'transparent',
-    height: '100%',
-    width: '100%',
-    flexDirection: 'column',
-  },
-  editor: {
-    height: '100%',
-    borderBottom: `solid 1px #DEE2E9`,
-    borderRight: `solid 1px #DEE2E9`,
-    borderLeft: `solid 1px #DEE2E9`,
-  },
-  editorHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: '12px 28px',
-    border: `solid 1px #DEE2E9`,
-    borderRadius: '0px',
-    backgroundColor: theme.colors.white,
-  },
-  copyButton: {
-    border: '1px solid #DEE2E9',
-    borderRadius: '8px',
-    width: '32px',
-    height: '32px',
-    padding: '0px',
-    backgroundColor: theme.colors.white,
-    '&:hover': {
-      background: `${theme.colors.menuBg}`,
-    },
-  },
-  editorTitle: {
-    display: 'flex',
-    alignItems: 'center',
-    fontFamily: 'IBM Plex Mono',
-    fontSize: '14px',
-    whiteSpace: 'nowrap',
-    justifyContent: 'start',
-    margin: '0',
-    padding: '0px 8px',
-    background: '#EAEAFA',
-    borderRadius: '8px',
-    color: '#3031D1',
-  },
-  titleText: {
-    minWidth: '125px',
-    paddingLeft: '4px',
-  },
-  icon: {
-    paddingRight: '4px',
-    paddingLeft: '8px',
-    filter:
-      'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
-  },
-};
-
 const EditorPanels = ({ show }: EditorPanelsProps) => {
   const { project, active, showBottomPanel } = useProject();
   const [selectedBottomTab, setSelectedBottomTab] = useState(0);
@@ -93,6 +33,63 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
   const accountNumber = storageMapByIndex(active.index);
   // clear problems when new project is loaded
   useEffect(() => setProblemsList({}), [project?.id]);
+
+  const context = useThemeUI();
+  const { theme } = context;
+
+  const styles: SXStyles = {
+    root: {
+      '--sash-size': '14px',
+      '--focus-border': 'borderColor',
+      '--separator-border': 'transparent',
+      height: '100%',
+      width: '100%',
+      flexDirection: 'column',
+      borderRadius: '8px',
+    },
+    editor: {
+      height: '100%',
+      backgroundColor: theme.colors.primary,
+    },
+    editorHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      padding: '12px 28px',
+      backgroundColor: theme.colors.primary,
+      border: `solid 1px ${theme.colors.outline}`,
+      borderRadius: '8px',
+    },
+    copyButton: {
+      borderRadius: '8px',
+      width: '32px',
+      height: '32px',
+      padding: '0px',
+    },
+    editorTitle: {
+      display: 'flex',
+      alignItems: 'center',
+      fontFamily: 'IBM Plex Mono',
+      fontSize: '14px',
+      whiteSpace: 'nowrap',
+      justifyContent: 'start',
+      margin: '0',
+      padding: '0px 8px',
+      background: `${theme.colors.accent}`,
+      borderRadius: '8px',
+      color: `${theme.colors.active}`,
+    },
+    titleText: {
+      minWidth: '125px',
+      paddingLeft: '4px',
+    },
+    icon: {
+      paddingRight: '4px',
+      paddingLeft: '8px',
+      filter:
+        'brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(3637%) hue-rotate(242deg) brightness(95%) contrast(100%)',
+    },
+  };
+
   let fileName, script;
   switch (active.type) {
     case EntityType.ContractTemplate:
@@ -148,7 +145,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
 
               <Button
                 sx={styles.copyButton}
-                variant="explorer"
+                variant="secondary"
                 onClick={setCopied}
               >
                 {isCopied ? <FaClipboardCheck /> : <CopyIcon />}
@@ -179,7 +176,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
         <Box
           style={{
             height: BOTTOM_EDITOR_PANEL_HEADER_HEIGHT,
-            paddingTop: 10,
+            paddingTop: '10px',
             width: '100%',
           }}
         >

@@ -628,9 +628,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
       parsedAccountState.length < 5 ? '(Empty)' : formattedAcctState;
     const address = accounts[accountId].address;
 
-    //const contracts = JSON.stringify(accounts[accountId]?.deployedContracts);
-    console.log(accounts[accountId]?.deployedContracts);
-    console.log(address, contractDeployments);
     const contracts = JSON.stringify(
       (contractDeployments || [])
         .filter((c) => String(c.address) === String(address))

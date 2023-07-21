@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
+import { isMobile } from 'components/Editor/CadenceEditor/ControlPanel/utils';
 import InformationalPopup from 'components/InformationalPopup';
 import React from 'react';
-import { ChildProps } from 'src/types';
-import theme from '../theme';
+import { ChildProps, ThemedComponentProps } from 'src/types';
+import { useThemeUI } from 'theme-ui';
 
 const isInMaintenanceMode = process.env.IS_IN_MAINTENANCE === 'true';
 const infoInMaintenance = {
@@ -18,14 +19,14 @@ const AppMobileWrapperDiv = styled.div`
   position: relative;
 `;
 
-const StyledReadOnly = styled.div`
+const StyledReadOnly = styled.div<ThemedComponentProps>`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 16px;
-  background: ${theme.colors.leftSidebarBackground};
-  color: ${theme.colors.text};
+  background: ${({ theme }) => theme.colors.leftSidebarBackground};
+  color: ${({ theme }) => theme.colors.text};
   font-size: 12px;
   font-weight: 500;
   text-align: center;
@@ -34,6 +35,9 @@ const StyledReadOnly = styled.div`
 `;
 
 const AppMobileWrapper = ({ children }: ChildProps) => {
+  const context = useThemeUI();
+  const { theme } = context;
+
   return (
     <>
       <InformationalPopup
@@ -41,7 +45,9 @@ const AppMobileWrapper = ({ children }: ChildProps) => {
         visible={isInMaintenanceMode}
         {...infoInMaintenance}
       />
-      {theme.isMobile && <StyledReadOnly>Read Only Mode</StyledReadOnly>}
+      {isMobile() && (
+        <StyledReadOnly theme={theme}>Read Only Mode</StyledReadOnly>
+      )}
       {!isInMaintenanceMode && (
         <AppMobileWrapperDiv>{children}</AppMobileWrapperDiv>
       )}

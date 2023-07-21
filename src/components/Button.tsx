@@ -7,9 +7,7 @@ type ButtonSizes = 'sm' | 'md' | 'lg';
 export type ButtonVariant =
   | 'primary'
   | 'secondary'
-  | 'secondaryLegacy'
   | 'disabled'
-  | 'alternate'
   | 'link'
   | 'explorer'
   | 'unstyled';

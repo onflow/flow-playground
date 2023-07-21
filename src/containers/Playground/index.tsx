@@ -13,7 +13,7 @@ import { userDataKeys, UserLocalStorage } from 'util/localstorage';
 import { LOCAL_PROJECT_ID } from 'util/url';
 import useToggleExplorer from '../../hooks/useToggleExplorer';
 import EditorLayout from './EditorLayout';
-import theme from '../../theme';
+import { isMobile } from 'components/Editor/CadenceEditor/ControlPanel/utils';
 
 export const LEFT_SIDEBAR_WIDTH = 350;
 
@@ -42,7 +42,7 @@ const getBaseStyles = (
   isExplorerCollapsed: boolean,
 ): ThemeUICSSObject => {
   const fileExplorerWidth = isExplorerCollapsed
-    ? theme.isMobile
+    ? isMobile()
       ? '30px'
       : '65px'
     : '244px';

@@ -52,7 +52,7 @@ const getColor = (tag: Tag) => {
     case Tag.ERROR:
       return 'error';
     case Tag.VALUE:
-      return 'purple';
+      return 'secondary';
     case Tag.UNKNOWN:
       return 'error';
     default:
@@ -76,7 +76,7 @@ export const Line = ({ timestamp, tag, value, label, index }: LineProps) => {
       )}
       <GoChevronRight size="15px" />
       {typeof value === 'string' ? (
-        <Box as="pre" sx={{ color: tag === Tag.ERROR ? 'error' : 'text' }}>
+        <Box as="pre" sx={{ color: tag === Tag.ERROR ? 'error' : 'secondary' }}>
           {value}
         </Box>
       ) : (

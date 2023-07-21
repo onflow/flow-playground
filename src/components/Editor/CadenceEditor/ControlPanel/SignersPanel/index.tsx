@@ -1,8 +1,7 @@
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useState, useMemo, useEffect } from 'react';
-import theme from '../../../../../theme';
 import AccountPicker from './AccountPicker';
-import { Flex, Text } from 'theme-ui';
+import { Flex, Text, useThemeUI } from 'theme-ui';
 import { SXStyles } from 'src/types';
 import { SignersContainer } from '../Arguments/styles';
 import Avatar from 'components/Avatar';
@@ -64,18 +63,6 @@ const PanelHeader = (
   );
 };
 
-const styles: SXStyles = {
-  root: {
-    backgroundColor: theme.colors.white,
-    width: '3rem',
-  },
-  carrotDown: {
-    backgroundColor: theme.colors.white,
-    transform: 'rotate(180deg)',
-    width: '3rem',
-  },
-};
-
 export const SignersPanel: React.FC<SignersProps> = ({
   maxSelection,
   selectedAccounts,
@@ -95,6 +82,21 @@ export const SignersPanel: React.FC<SignersProps> = ({
       updateSelectedAccounts([0]); // select first signer as default
     }
   }, [maxSelection, selectedAccounts, updateSelectedAccounts]);
+
+  const context = useThemeUI();
+  const { theme } = context;
+
+  const styles: SXStyles = {
+    root: {
+      backgroundColor: theme.colors.secondaryBackground,
+      width: '3rem',
+    },
+    carrotDown: {
+      backgroundColor: theme.colors.secondaryBackground,
+      transform: 'rotate(180deg)',
+      width: '3rem',
+    },
+  };
 
   return (
     <SignersContainer>

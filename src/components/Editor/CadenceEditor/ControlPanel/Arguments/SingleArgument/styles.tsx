@@ -1,4 +1,4 @@
-import React from 'react';
+import { ThemedComponentProps } from 'src/types';
 import styled from 'styled-components';
 
 interface InpubBlockProps {
@@ -12,7 +12,7 @@ export const InputBlock = styled.div<InpubBlockProps>`
   position: relative;
 `;
 
-interface LabelProps {
+interface LabelProps extends ThemedComponentProps {
   error?: boolean;
 }
 
@@ -20,12 +20,13 @@ export const Label = styled.p<LabelProps>`
   margin: 0;
   font-size: 14px;
   margin-bottom: 5px;
-  color: ${({ error }) => (error ? '#EE431E' : '#000')};
+  color: ${({ theme, error }) =>
+    error ? `${theme.colors.error}` : `${theme.colors.text}`};
 `;
 
-export const Type = styled.span`
+export const Type = styled.span<ThemedComponentProps>`
   font-weight: normal;
-  color: #3e98eb;
+  color: ${({ theme }) => theme.colors.accent};
   margin-left: 4px;
   &:before {
     content: '(';
@@ -35,11 +36,12 @@ export const Type = styled.span`
   }
 `;
 
-export const Input = styled.input`
-  border: 1px solid #c4c4c4;
+export const Input = styled.input<ThemedComponentProps>`
+  background-color: ${({ theme }) => theme.colors.secondaryBackground};
+  border: ${({ theme }) => `1px solid ${theme.colors.active}`};
   border-radius: 5px;
   font-size: 14px;
-  color: #000;
+  color: ${({ theme }) => theme.colors.text};
   padding: 8px;
   width: 100%;
   font-weight: bold;
@@ -50,38 +52,11 @@ export const Input = styled.input`
   box-sizing: border-box;
 
   ::placeholder {
-    color: #999;
+    color: ${({ theme }) => theme.colors.muted};
   }
 `;
 
-export const Error = styled.p`
+export const Error = styled.p<ThemedComponentProps>`
   font-size: 12px;
-  color: red;
+  color: ${({ theme }) => theme.colors.error};
 `;
-
-export const InputIconContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  align-self: center;
-  right: 0.75em;
-  bottom: 0.9em;
-  cursor: pointer;
-  color: #888;
-  user-select: none;
-
-  &:hover {
-    color: #333;
-  }
-`;
-
-type InputIconProps = {
-  onClick?: any;
-  icon: JSX.Element;
-};
-
-export const InputIcon = (props: InputIconProps) => {
-  const { onClick, icon } = props;
-  return <InputIconContainer onClick={onClick}>{icon}</InputIconContainer>;
-};

@@ -8,7 +8,7 @@ import TransactionIcon from 'components/Icons/TransactionIcon';
 import { formatDistance } from 'date-fns';
 import React, { useState } from 'react';
 import { ProjectType, SXStyles } from 'src/types';
-import { Box, Flex } from 'theme-ui';
+import { Box, Flex, useThemeUI } from 'theme-ui';
 import paths from '../../paths';
 import { useProject } from 'providers/Project/projectHooks';
 import InformationalPopup from 'components/InformationalPopup';
@@ -22,50 +22,6 @@ type Props = {
   project: ProjectType;
   projectCount: number;
   refetch: Function;
-};
-
-const styles: SXStyles = {
-  root: {
-    borderRadius: 16,
-    backgroundColor: 'white',
-    padding: 10,
-    gap: 7,
-    flexDirection: 'column',
-    color: 'black',
-  },
-  title: {
-    fontSize: 3,
-    fontWeight: 600,
-    '&:hover': {
-      opacity: 0.75,
-    },
-    cursor: 'pointer',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  },
-  details: {
-    gap: 8,
-    alignItems: 'center',
-  },
-  detail: {
-    gap: 5,
-    alignItems: 'center',
-    fontSize: 1,
-  },
-  lastSaved: {
-    color: 'muted',
-    fontSize: 1,
-  },
-};
-
-const getRootStyles = (isCurrentProject: boolean, doingAction: boolean) => {
-  return {
-    ...styles.root,
-    borderColor: isCurrentProject ? `blueBorder` : 'transparent',
-    backgroundColor: doingAction ? 'lightBlue' : 'white',
-    borderWidth: 2,
-    borderStyle: 'solid',
-  };
 };
 
 const confirmDeleteOptions = {
@@ -110,6 +66,53 @@ const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
     project: activeProject,
     copyProject,
   } = useProject();
+
+  const context = useThemeUI();
+  const { theme } = context;
+
+  const styles: SXStyles = {
+    root: {
+      borderRadius: 16,
+      backgroundColor: theme.colors.primary,
+      padding: 10,
+      gap: 7,
+      flexDirection: 'column',
+      color: theme.colors.text,
+    },
+    title: {
+      fontSize: 3,
+      fontWeight: 600,
+      '&:hover': {
+        opacity: 0.75,
+      },
+      cursor: 'pointer',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    },
+    details: {
+      gap: 8,
+      alignItems: 'center',
+    },
+    detail: {
+      gap: 5,
+      alignItems: 'center',
+      fontSize: 1,
+    },
+    lastSaved: {
+      color: 'muted',
+      fontSize: 1,
+    },
+  };
+
+  const getRootStyles = (isCurrentProject: boolean, doingAction: boolean) => {
+    return {
+      ...styles.root,
+      borderColor: isCurrentProject ? `accent` : 'transparent',
+      backgroundColor: doingAction ? 'accent' : 'primary',
+      borderWidth: 2,
+      borderStyle: 'solid',
+    };
+  };
 
   const confirmDelete = async (isConfirmed: boolean): Promise<void> => {
     setShowDelConfirmation(false);

@@ -3,15 +3,9 @@ import { Stack } from 'layout/Stack';
 import { EntityType } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useState } from 'react';
-import {
-  FaArrowCircleRight,
-  FaCaretSquareDown,
-  FaCaretSquareUp,
-  FaSpinner,
-} from 'react-icons/fa';
+import { FaArrowCircleRight, FaSpinner } from 'react-icons/fa';
 import CollapseOpenIcon from 'components/Icons/CollapseOpenIcon';
 import { CadenceProblem } from 'util/language-syntax-errors';
-import theme from '../../../../../theme';
 import SingleArgument from './SingleArgument';
 import {
   Badge,
@@ -29,33 +23,53 @@ import {
   HintsProps,
   InteractionButtonProps,
 } from './types';
+import Button from 'components/Button';
+import { useThemeUI } from 'theme-ui';
+import { SXStyles } from 'src/types';
 
 export const ArgumentsTitle: React.FC<ArgumentsTitleProps> = (
   props: ArgumentsTitleProps,
 ) => {
   const { type, errors, expanded, setExpanded } = props;
 
-  const hasErrors = errors > 0;
-  const lineColor = hasErrors ? theme.colors.error : null;
+  const context = useThemeUI();
+  const { theme } = context;
 
+  const hasErrors = errors > 0;
+  const lineColor = hasErrors ? String(theme.colors.error) : null;
+
+  const styles: SXStyles = {
+    root: {
+      backgroundColor: theme.colors.secondaryBackground,
+      width: '3rem',
+    },
+    carrotDown: {
+      backgroundColor: theme.colors.secondaryBackground,
+      transform: 'rotate(180deg)',
+      width: '3rem',
+    },
+  };
   return (
     <Heading>
-      <Title lineColor={lineColor}>
+      <Title lineColor={lineColor} theme={theme}>
         {type === EntityType.ContractTemplate && 'Contract Arguments'}
         {type === EntityType.TransactionTemplate && 'Transaction Arguments'}
         {type === EntityType.ScriptTemplate && 'Script Arguments'}
       </Title>
       <Controls onClick={() => setExpanded(!expanded)}>
         {hasErrors && (
-          <Badge>
+          <Badge theme={theme}>
             <span>{errors}</span>
           </Badge>
         )}
-        {expanded ? (
-          <FaCaretSquareUp cursor="pointer" opacity="0.2" size="18" />
-        ) : (
-          <FaCaretSquareDown cursor="pointer" opacity="0.2" size="18" />
-        )}
+        <Button
+          variant="explorer"
+          sx={expanded ? styles.carrotDown : styles.root}
+          size="sm"
+          onClick={() => setExpanded(!expanded)}
+        >
+          {CollapseOpenIcon()}
+        </Button>
       </Controls>
     </Heading>
   );
@@ -136,6 +150,9 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
   const [expanded, setExpanded] = useState(true);
   const { problems, actions } = props;
   const { goTo, hideDecorations, hover } = actions;
+  const context = useThemeUI();
+  const { theme } = context;
+
   const toggle = () => {
     setExpanded(!expanded);
   };
@@ -148,10 +165,10 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
   return (
     <Stack>
       <Heading>
-        <Title>Warnings and Hints</Title>
+        <Title theme={theme}>Warnings and Hints</Title>
         <Controls onClick={toggle} style={{ paddingRight: '10px' }}>
           {hintsAmount > 0 && (
-            <Badge className="info">
+            <Badge className="info" theme={theme}>
               <span>{hintsAmount}</span>
             </Badge>
           )}
@@ -170,11 +187,12 @@ export const Hints: React.FC<HintsProps> = (props: HintsProps) => {
                 onClick={() => goTo(item.position)}
                 onMouseOver={() => hover(item.highlight)}
                 onMouseOut={() => hideDecorations()}
+                theme={theme}
               >
                 <ErrorIndex>
                   <span>{`${i + 1})`}</span>
                 </ErrorIndex>
-                <ErrorMessage>{message}</ErrorMessage>
+                <ErrorMessage theme={theme}>{message}</ErrorMessage>
               </SingleError>
             );
           })}
