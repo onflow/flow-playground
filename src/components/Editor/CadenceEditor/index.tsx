@@ -44,10 +44,7 @@ const CadenceEditor = (props: CadenceEditorProps) => {
   useEffect(() => {
     if (mode !== currentMode) {
       setCurrentMode(mode);
-      initEditor().then(); // drop returned Promise as we are not going to use it
-      return () => {
-        if (editor) destroyEditor();
-      };
+      monaco.editor.setTheme(mode === DARK ? 'vs-dark' : 'vs-light');
     }
   }, [mode]);
 
