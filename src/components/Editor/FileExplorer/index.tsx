@@ -6,7 +6,6 @@ import React from 'react';
 import { SXStyles } from 'src/types';
 import { Flex } from 'theme-ui';
 import FilesList from './FilesList';
-import { isMobile } from '../CadenceEditor/ControlPanel/utils';
 
 type FileExplorerProps = {
   isExplorerCollapsed: boolean;

@@ -7,7 +7,7 @@ import Button from 'components/Button';
 import OpenProjectButton from 'components/ActionButton';
 import Mixpanel from 'util/mixpanel';
 import ExplorerPlusIcon from './Icons/ExplorerPlusIcon';
-import { SXStyles } from 'src/types';
+import { SXStyles, ThemedComponentProps } from 'src/types';
 
 const Examples: React.FC<{
   visible: boolean;
@@ -159,7 +159,7 @@ const Examples: React.FC<{
     }
   `;
 
-  const Example = styled.div`
+  const Example = styled.div<ThemedComponentProps>`
     display: grid;
     grid-template-rows: 80px auto 1fr auto;
     grid-gap: 1rem;
@@ -171,17 +171,17 @@ const Examples: React.FC<{
     padding: 2rem;
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.07);
     transition: all 0.25s ease-in-out;
-    color: ${theme.colors.text};
+    color: ${({ theme }) => theme.colors.text};
     box-sizing: border-box;
-    background-color: ${theme.colors.background};
+    background-color: ${({ theme }) => theme.colors.background};
 
     &:hover {
-      box-shadow: 0 0 15px 0 ${theme.colors.accent};
+      box-shadow: 0 0 15px 0 ${({ theme }) => theme.colors.accent};
     }
 
     .title {
       font-size: 22px;
-      color: ${theme.colors.text};
+      color: ${({ theme }) => theme.colors.text};
       font-weight: 700;
       text-align: center;
       justify-content: center;
@@ -279,7 +279,7 @@ const Examples: React.FC<{
                   key={index}
                   className="full-height"
                 >
-                  <Example>
+                  <Example theme={theme}>
                     <Text className="emoji">{_example.emoji}</Text>
                     <Text className="title">{_example.title}</Text>
                     <Text className="subtitle">{_example.subtitle}</Text>
