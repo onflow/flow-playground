@@ -20,7 +20,10 @@ import { NavButtonLink } from './NavButtonLink';
 import { IconCadence } from 'components/Icons/CadenceIcon';
 import VersionInfoPopup from 'components/VersionInfoPopup';
 import { ThemeToggle } from './ThemeToggle';
-import { isMobile } from 'components/Editor/CadenceEditor/ControlPanel/utils';
+import {
+  isMobile,
+  isDesktop,
+} from 'components/Editor/CadenceEditor/ControlPanel/utils';
 
 const TopNav = () => {
   const { project, updateProject, toggleProjectsSidebar } = useProject();
@@ -35,7 +38,6 @@ const TopNav = () => {
       display: 'flex',
       gridArea: 'header',
       flex: '1 1 auto',
-      flexWrap: 'wrap',
       alignItems: 'center',
       justifyContent: 'space-between',
       paddingLeft: '1em',
@@ -47,9 +49,8 @@ const TopNav = () => {
       display: 'flex',
       gridArea: 'header',
       flex: '1 1 auto',
-      flexWrap: 'wrap',
       alignItems: 'center',
-      justifyContent: 'space-between',
+      justifyContent: 'center',
       marginTop: '1rem',
     },
     link: {
@@ -111,12 +112,7 @@ const TopNav = () => {
   if (isMobile()) {
     return (
       <Flex sx={styles.mobile}>
-        <NavInput
-          type="text"
-          value={projectName}
-          onChange={() => {}}
-          updateValue={() => {}}
-        />
+        <div>{projectName}</div>
       </Flex>
     );
   }

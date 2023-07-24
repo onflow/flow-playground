@@ -27,6 +27,7 @@ export const SaveButton = () => {
     container: {
       margin: '0',
       width: 'unset',
+      display: ['none', 'none', 'flex'],
     },
     button: {
       border: `1px solid ${theme.colors.border}`,

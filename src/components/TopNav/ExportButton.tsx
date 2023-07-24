@@ -27,6 +27,7 @@ export const ExportButton = () => {
     container: {
       margin: '0',
       width: 'unset',
+      display: ['none', 'none', 'flex'],
     },
     buttonDisabled: {
       borderRadius: '8px',
