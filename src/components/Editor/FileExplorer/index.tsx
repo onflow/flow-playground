@@ -6,7 +6,6 @@ import React from 'react';
 import { SXStyles } from 'src/types';
 import { Flex } from 'theme-ui';
 import FilesList from './FilesList';
-import { isMobile } from '../CadenceEditor/ControlPanel/utils';
 
 type FileExplorerProps = {
   isExplorerCollapsed: boolean;
@@ -40,7 +39,8 @@ const FileExplorer = ({
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-start',
-      padding: '24px',
+      alignItems: 'center',
+      padding: ['12px', '24px'],
       width: '100%',
     },
     shutterOpened: {
@@ -51,7 +51,7 @@ const FileExplorer = ({
       borderRadius: '8px',
     },
     shutterClosed: {
-      left: isMobile() ? '10px' : '20px',
+      left: ['0', '20px'],
       position: 'absolute',
       padding: '0px',
       borderRadius: '8px',

@@ -100,6 +100,7 @@ const MenuList: React.FC<MenuListProps> = ({
       '&:hover': {
         background: 'none',
       },
+      display: ['none', 'flex', 'flex'], // hide on mobile
     },
     fileShutterClosed: {
       position: 'relative',
@@ -110,6 +111,7 @@ const MenuList: React.FC<MenuListProps> = ({
       '&:hover': {
         background: 'none',
       },
+      display: ['none', 'flex', 'flex'], // hide on mobile
     },
     icon: {
       paddingRight: '4px',

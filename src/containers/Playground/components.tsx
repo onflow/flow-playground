@@ -87,7 +87,7 @@ const EditorContainer = ({
       flexDirection: 'column',
       overflow: 'hidden',
       flexGrow: 1,
-      margin: '8px 8px 0 8px',
+      margin: ['0', '8px 8px 0 8px'],
       background: theme.colors.primary,
     },
   };

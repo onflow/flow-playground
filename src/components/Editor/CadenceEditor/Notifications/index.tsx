@@ -104,6 +104,7 @@ const Notifications = () => {
         {toasts.map((toast) => {
           const { id, toastText, onClick } = toast;
 
+          console.log('toastText', toastText);
           return (
             <SingleToast key={id}>
               <ButtonContainer>

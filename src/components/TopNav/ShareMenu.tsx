@@ -24,6 +24,7 @@ export const ShareMenu = () => {
     container: {
       margin: '0',
       width: 'unset',
+      display: ['none', 'none', 'flex'],
     },
     menu: {
       display: 'flex',

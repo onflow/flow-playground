@@ -61,6 +61,7 @@ export const ContentBox = ({ children }: ChildProps) => {
 export const Content = ({ children }: ChildProps) => {
   const sx = {
     padding: '0.75rem',
+    color: 'text',
   };
   return <Text sx={sx}>{children}</Text>;
 };

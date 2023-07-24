@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 import { isMobile } from 'components/Editor/CadenceEditor/ControlPanel/utils';
 import InformationalPopup from 'components/InformationalPopup';
 import React from 'react';
@@ -25,8 +25,8 @@ const StyledReadOnly = styled.div<ThemedComponentProps>`
   left: 0;
   width: 100%;
   height: 16px;
-  background: ${({ theme }) => theme.colors.leftSidebarBackground};
-  color: ${({ theme }) => theme.colors.text};
+  background: ${({ theme }) => theme.colors.secondary};
+  color: ${({ theme }) => theme.colors.accent};
   font-size: 12px;
   font-weight: 500;
   text-align: center;

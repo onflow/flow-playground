@@ -63,7 +63,7 @@ const FilesList = ({ isExplorerCollapsed }: FileListProps) => {
     collapsed: {
       display: 'flex',
       flexDirection: 'column',
-      paddingTop: '12px',
+      paddingTop: ['18px', '12px'],
       justifyContent: 'space-between',
       height: '100px',
     },
