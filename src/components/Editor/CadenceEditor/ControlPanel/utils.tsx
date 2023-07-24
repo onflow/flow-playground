@@ -169,7 +169,3 @@ export const findDuplicateIndex = (array: string[]): number => {
 export const isMobile = (): boolean => {
   return window.matchMedia('(max-width: 768px)')?.matches;
 };
-
-export const isDesktop = (): boolean => {
-  return window.matchMedia('(min-width: 845px)')?.matches;
-};

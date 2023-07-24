@@ -20,10 +20,7 @@ import { NavButtonLink } from './NavButtonLink';
 import { IconCadence } from 'components/Icons/CadenceIcon';
 import VersionInfoPopup from 'components/VersionInfoPopup';
 import { ThemeToggle } from './ThemeToggle';
-import {
-  isMobile,
-  isDesktop,
-} from 'components/Editor/CadenceEditor/ControlPanel/utils';
+import { isMobile } from 'components/Editor/CadenceEditor/ControlPanel/utils';
 
 const TopNav = () => {
   const { project, updateProject, toggleProjectsSidebar } = useProject();

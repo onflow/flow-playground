@@ -30,12 +30,11 @@ const ErrorToastContainer = () => {
       border: `1px solid ${theme.colors.errorToast}`,
       background: theme.colors.errorBackground,
       borderRadius: '8px',
-      boxShadow: `10px 10px 20px #c9c9c9, -10px -10px 20px ${theme.colors.secondary}`,
+      boxShadow: `10px 10px 20px ${theme.colors.secondary}, -10px -10px 20px ${theme.colors.secondary}`,
     },
     issuesLink: {
       textDecoration: 'none',
       fontSize: '12px',
-      color: theme.colors.errorToast,
       paddingRight: '10px',
     },
     buttonContainer: {
@@ -45,7 +44,6 @@ const ErrorToastContainer = () => {
     closeToastButton: {
       borderLeft: `1px solid ${theme.colors.errorToast}`,
       background: 'none',
-      color: theme.colors.errorToast,
       padding: '0px',
       borderRadius: '0px',
       width: '40px',
