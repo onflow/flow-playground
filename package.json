@@ -63,7 +63,7 @@
     "react-use-clipboard": "^1.0.8",
     "reset-css": "^5.0.1",
     "styled-components": "^5.3.5",
-    "theme-ui": "^0.13.1",
+    "theme-ui": "^0.14.7",
     "unique-names-generator": "^4.7.1",
     "unreset-css": "^1.0.1",
     "vscode-jsonrpc": "^6.0.0",
