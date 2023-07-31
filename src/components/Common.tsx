@@ -43,8 +43,9 @@ export const PopupContainer = styled(motion.div)<PopupContainerProps>`
   flex-direction: column;
   padding: 40px;
   border-radius: 6px;
+  border: 1px solid ${({ theme }) => theme.colors.secondary};
   background-color: ${({ theme }) => theme.colors.background};
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1), 0 0 3px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: ${({ theme }) => `0px 0px 10px 0px ${theme.colors.shadow}`};
   z-index: 2;
   box-sizing: border-box;
 `;

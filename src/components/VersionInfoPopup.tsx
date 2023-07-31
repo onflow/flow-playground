@@ -6,6 +6,13 @@ import { useQuery } from '@apollo/react-hooks';
 import { GET_VERSIONS } from 'api/apollo/queries';
 import { PlaygroundInfo } from 'api/apollo/generated/graphql';
 import { useProject } from 'providers/Project/projectHooks';
+import packageJson from '../../package.json';
+
+type PackageJson = {
+  dependencies: {
+    [key: string]: string;
+  };
+};
 
 const infoShowVersionModalProps = {
   title: `Playground Versions`,
@@ -13,6 +20,7 @@ const infoShowVersionModalProps = {
     `Playground Version: Unknown`,
     `Cadence Version: Unknown`,
     `Emulator Version: Unknown`,
+    `Language Server: Unknown`,
   ],
 };
 
@@ -37,11 +45,15 @@ const VersionInfoPopup = () => {
 
   useEffect(() => {
     if (!loading && !error && data?.playgroundInfo) {
+      const langServerVersion = (packageJson as PackageJson)?.dependencies?.[
+        '@onflow/cadence-language-server'
+      ];
       const versions = data?.playgroundInfo;
       infoShowVersionModal.messages = [
         `Playground Version: ${versions?.apiVersion || 'Unknown'}`,
         `Cadence Version: ${versions?.cadenceVersion || 'Unknown'}`,
         `Emulator Version: ${versions?.emulatorVersion || 'Unknown'}`,
+        `Language Server: ${langServerVersion || 'Unknown'}`,
       ];
       setInfoShowVersionModal({ ...infoShowVersionModal });
     }

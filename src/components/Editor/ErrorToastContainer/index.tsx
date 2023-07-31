@@ -30,7 +30,7 @@ const ErrorToastContainer = () => {
       border: `1px solid ${theme.colors.errorToast}`,
       background: theme.colors.errorBackground,
       borderRadius: '8px',
-      boxShadow: `10px 10px 20px ${theme.colors.secondary}, -10px -10px 20px ${theme.colors.secondary}`,
+      boxShadow: `0px 0px 10px 0px ${theme.colors.shadow}`,
     },
     issuesLink: {
       textDecoration: 'none',
