@@ -188,7 +188,7 @@ export const SingleError = styled.div<ThemedComponentProps>`
   padding: 10px;
   font-size: 14px;
   background: ${({ theme }) => theme.colors.primary};
-  box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid ${({ theme }) => theme.colors.outline};
   border-radius: 8px;
   &:hover {
     background-color: rgba(244, 57, 64, 0.15);

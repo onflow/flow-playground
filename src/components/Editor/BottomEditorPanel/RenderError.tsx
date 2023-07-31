@@ -43,7 +43,7 @@ const RenderError = (props: any) => {
       padding: '10px',
       fontSize: '14px',
       margin: '4px 0px',
-      boxShadow: '0px 4px 40px rgba(0, 0, 0, 0.08)',
+      boxShadow: `0px 4px 40px ${theme.colors.shadow}`,
       borderRadius: '8px',
       '&:hover': {
         backgroundColor: 'rgba(244, 57, 64, 0.15)',

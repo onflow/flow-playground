@@ -17,6 +17,7 @@
     "sourceMap": true,
     "skipLibCheck": true,
     "baseUrl": ".",
+    "resolveJsonModule": true,
     "paths": {
       "pages/*": ["src/pages/*"],
       "providers/*": ["src/providers/*"],
