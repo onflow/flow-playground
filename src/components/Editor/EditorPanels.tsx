@@ -108,7 +108,8 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
         accountNumber == '0x01'
           ? `${accountNumber}-Default`
           : `${accountNumber}`;
-      script = active.index !== -1 ? project.accounts[active.index].state : "{}";
+      script =
+        active.index !== -1 ? project.accounts[active.index].state : '{}';
   }
 
   const [isCopied, setCopied] = useClipboard(script, {
