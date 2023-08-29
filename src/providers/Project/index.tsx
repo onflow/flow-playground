@@ -615,7 +615,10 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     contractDeployments: ContractDeployment[],
   ): { code: string; id: number } => {
     const accountId = storageMapByAddress(selectedResourceAccount);
-    const accountState = accounts[accountId || 0]?.state;
+    //
+    // issues getting account storage from API, adding message in the meantime
+    //
+    const accountState = '{"status": "under construction"}'; //accounts[accountId || 0]?.state;
     const parsedAccountState = JSON.stringify(accountState, null, 4);
     // empty account storage = '"{}"' which is a string length 4
     // need to figure out a better way to determine empty storage
