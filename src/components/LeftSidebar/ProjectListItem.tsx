@@ -233,27 +233,6 @@ const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
         <ContextMenu showEllipsis={true} options={contextMenuOptions} />
       </Flex>
 
-      <Flex sx={styles.details}>
-        <Flex sx={styles.detail}>
-          <span title="Contracts">
-            <ContractIcon />
-          </span>
-          {project.contractTemplates.length}
-        </Flex>
-        <Flex sx={styles.detail}>
-          <span title="Transactions">
-            <TransactionIcon />
-          </span>
-          {project.transactionTemplates.length}
-        </Flex>
-        <Flex sx={styles.detail}>
-          <span title="Scripts">
-            <ScriptIcon />
-          </span>
-          {project.scriptTemplates.length}
-        </Flex>
-      </Flex>
-
       <Box
         sx={styles.lastSaved}
         title={new Date(project.updatedAt).toISOString()}

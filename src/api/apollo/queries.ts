@@ -7,32 +7,7 @@ export const GET_PROJECTS = gql`
         id
         updatedAt
         title
-        contractTemplates {
-          id
-          script
-          title
-          index
-        }
-        transactionTemplates {
-          id
-          script
-          title
-          index
-        }
-        scriptTemplates {
-          id
-          script
-          title
-          index
-        }
-        contractDeployments {
-          id
-          script
-          title
-          address
-          blockHeight
-        }
-      }
+      }       
     }
   }
 `;
