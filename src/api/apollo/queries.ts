@@ -7,7 +7,7 @@ export const GET_PROJECTS = gql`
         id
         updatedAt
         title
-      }       
+      }
     }
   }
 `;
