@@ -615,7 +615,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     contractDeployments: ContractDeployment[],
   ): { code: string; id: number } => {
     const accountId = storageMapByAddress(selectedResourceAccount);
-    const accountState = accounts[accountId || 0]?.state;
+    const accountState = accounts[accountId || 0]?.state || '{}';
     const parsedAccountState = JSON.stringify(accountState, null, 4);
     // empty account storage = '"{}"' which is a string length 4
     // need to figure out a better way to determine empty storage
@@ -626,7 +626,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     );
     const state =
       parsedAccountState.length < 5 ? '(Empty)' : formattedAcctState;
-    const address = accounts[accountId].address;
+    const address = accounts[accountId]?.address;
 
     const contracts = JSON.stringify(
       (contractDeployments || [])

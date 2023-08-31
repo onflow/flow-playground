@@ -1,10 +1,7 @@
 import { navigate } from '@reach/router';
 import ConfirmationPopup from 'components/ConfirmationPopup';
 import { ContextMenu } from 'components/ContextMenu';
-import ContractIcon from 'components/Icons/ContractIcon';
 import DeleteIcon from 'components/Icons/DeleteIcon';
-import ScriptIcon from 'components/Icons/ScriptIcon';
-import TransactionIcon from 'components/Icons/TransactionIcon';
 import { formatDistance } from 'date-fns';
 import React, { useState } from 'react';
 import { ProjectType, SXStyles } from 'src/types';
@@ -231,27 +228,6 @@ const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
         </Box>
 
         <ContextMenu showEllipsis={true} options={contextMenuOptions} />
-      </Flex>
-
-      <Flex sx={styles.details}>
-        <Flex sx={styles.detail}>
-          <span title="Contracts">
-            <ContractIcon />
-          </span>
-          {project.contractTemplates.length}
-        </Flex>
-        <Flex sx={styles.detail}>
-          <span title="Transactions">
-            <TransactionIcon />
-          </span>
-          {project.transactionTemplates.length}
-        </Flex>
-        <Flex sx={styles.detail}>
-          <span title="Scripts">
-            <ScriptIcon />
-          </span>
-          {project.scriptTemplates.length}
-        </Flex>
       </Flex>
 
       <Box
