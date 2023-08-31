@@ -1,10 +1,7 @@
 import { navigate } from '@reach/router';
 import ConfirmationPopup from 'components/ConfirmationPopup';
 import { ContextMenu } from 'components/ContextMenu';
-import ContractIcon from 'components/Icons/ContractIcon';
 import DeleteIcon from 'components/Icons/DeleteIcon';
-import ScriptIcon from 'components/Icons/ScriptIcon';
-import TransactionIcon from 'components/Icons/TransactionIcon';
 import { formatDistance } from 'date-fns';
 import React, { useState } from 'react';
 import { ProjectType, SXStyles } from 'src/types';
