@@ -3,7 +3,7 @@ import theme from '../theme';
 
 export const Base = styled.div`
   --gap: 1px;
-  --key: ${theme.colors.greyBorder};
+  --key: ${theme.colors.border};
   --bg: white;
 
   position: absolute;
