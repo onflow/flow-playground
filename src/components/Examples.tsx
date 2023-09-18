@@ -16,7 +16,9 @@ const Examples: React.FC<{
   const context = useThemeUI();
   const { theme } = context;
 
-  const examples = [
+  const examples: any[] = []; // temporarily disable examples
+  //@ts-ignore
+  const examplesOld = [
     {
       title: ' First Steps',
       subtitle:
