@@ -6,7 +6,7 @@ import { SXStyles } from 'src/types';
 import { Flex, useThemeUI } from 'theme-ui';
 import Mixpanel from 'util/mixpanel';
 import ProjectsIcon from 'components/Icons/ProjectsIcon';
-import LearnCadenceIcon from 'components/Icons/LearnCadenceIcon';
+//import LearnCadenceIcon from 'components/Icons/LearnCadenceIcon';
 import NavInput from './NavInput';
 import { ShareMenu } from './ShareMenu';
 import { SaveButton } from './SaveButton';
@@ -88,12 +88,12 @@ const TopNav = () => {
       flexDirection: 'row-reverse',
     },
   };
-
+  /*
   const onStartButtonClick = () => {
     setShowExamples(true);
     Mixpanel.track('Show examples', { meta: 'none' });
   };
-
+*/
   const onNameInputChange = (name: string) => {
     setProjectName(name);
   };
