@@ -121,7 +121,7 @@ const DEFAULT_CONTRACTS = [
   DEFAULT_CONTRACT_5,
 ];
 
-const DEFAULT_TRANSACTION = `import HelloWorld from 0x01
+const DEFAULT_TRANSACTION = `import HelloWorld from 0x05
 
 transaction {
 

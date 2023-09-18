@@ -20,10 +20,10 @@ export const prettify = (code: string): string => {
 
 export const getNameByAddress = (address: string) => {
   const addressBook: any = {
-    '0x01': 'Alice',
-    '0x02': 'Bob',
-    '0x03': 'Charlie',
-    '0x04': 'Dave',
+    '0x05': 'Alice',
+    '0x06': 'Bob',
+    '0x07': 'Charlie',
+    '0x08': 'Dave',
   };
 
   return addressBook[address];
@@ -55,7 +55,7 @@ export const getAccountCalls = (template: string) => {
 };
 
 export const filterExisting = (accounts: string[]): string[] => {
-  return ['0x01', '0x02', '0x03', '0x04'].filter(
+  return ['0x05', '0x06', '0x07', '0x08'].filter(
     (item) => !accounts.includes(item),
   );
 };

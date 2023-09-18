@@ -141,7 +141,7 @@ const TopNav = () => {
           <>
             <ThemeToggle />
             <VersionInfoPopup />
-            <Button
+            {/* <Button
               onClick={() => onStartButtonClick()}
               variant="secondary"
               size="sm"
@@ -149,7 +149,7 @@ const TopNav = () => {
             >
               <LearnCadenceIcon />
               Learn Cadence
-            </Button>
+            </Button>  */}
             <NavButtonLink
               title="Report a Bug"
               href={PLAYGROUND_GITHUB_ISSUES_URL}

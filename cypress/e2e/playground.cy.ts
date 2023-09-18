@@ -18,7 +18,7 @@ describe('Flow-Playground frontend tests', () => {
     cy.get(DEPLOY_BUTTON).should('have.text', 'Redeploy');
     cy.get('[data-test="execution-results"]').should(
       'include.text',
-      'Deployed Contract To: 0x01',
+      'Deployed Contract To: 0x05',
     );
   });
 
@@ -69,7 +69,7 @@ describe('Flow-Playground frontend tests', () => {
     cy.get(DEPLOY_BUTTON).should('have.text', 'Redeploy');
     cy.get('[data-test="execution-results"]').should(
       'include.text',
-      'Deployed Contract To: 0x01',
+      'Deployed Contract To: 0x05',
     );
 
     // open transaction template and successfully send transaction
@@ -110,7 +110,7 @@ describe('Flow-Playground frontend tests', () => {
       .focused()
       .type(selectAllKeys)
       .type(
-        'import HelloWorld from 0x01 transaction { prepare(acct: AuthAccount) {} execute { log(HelloWorld.other_hello())}}',
+        'import HelloWorld from 0x05 transaction { prepare(acct: AuthAccount) {} execute { log(HelloWorld.other_hello())}}',
         { parseSpecialCharSequences: false },
       );
 
