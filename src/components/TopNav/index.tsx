@@ -4,7 +4,7 @@ import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useState } from 'react';
 import { SXStyles } from 'src/types';
 import { Flex, useThemeUI } from 'theme-ui';
-import Mixpanel from 'util/mixpanel';
+//import Mixpanel from 'util/mixpanel';
 import ProjectsIcon from 'components/Icons/ProjectsIcon';
 //import LearnCadenceIcon from 'components/Icons/LearnCadenceIcon';
 import NavInput from './NavInput';
