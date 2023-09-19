@@ -1,9 +1,9 @@
 module.exports = (address) => {
   const addressBook = {
-    '0x01': 'Alice',
-    '0x02': 'Bob',
-    '0x03': 'Charlie',
-    '0x04': 'Dave',
+    '0x05': 'Alice',
+    '0x06': 'Bob',
+    '0x07': 'Charlie',
+    '0x08': 'Dave',
   };
 
   return addressBook[address];

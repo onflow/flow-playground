@@ -105,7 +105,7 @@ const EditorPanels = ({ show }: EditorPanelsProps) => {
       break;
     default:
       fileName =
-        accountNumber == '0x01'
+        accountNumber == '0x05'
           ? `${accountNumber}-Default`
           : `${accountNumber}`;
       script =
