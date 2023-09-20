@@ -8,133 +8,56 @@ import {
 import { strToSeed, uuid } from 'util/rng';
 import { LOCAL_PROJECT_ID } from 'util/url';
 
-const DEFAULT_CONTRACT_1 = `// HelloWorld.cdc
+const HelloWorldContract = `// HelloWorld.cdc
 //
 // Welcome to Cadence! This is one of the simplest programs you can deploy on Flow.
 //
 // The HelloWorld contract contains a single string field and a public getter function.
 //
 // Follow the "Hello, World!" tutorial to learn more: https://docs.onflow.org/cadence/tutorial/02-hello-world/
-
-access(all) contract HelloWorld {
-
-    // Declare a public field of type String.
-    //
-    // All fields must be initialized in the init() function.
-    access(all) let greeting: String
-
-    // The init() function is required if the contract contains any fields.
-    init() {
-        self.greeting = "Hello, World!"
-    }
-
-    // Public function that returns our friendly greeting!
-    access(all) fun hello(): String {
-        return self.greeting
-    }
-}
-`;
-
-const DEFAULT_CONTRACT_2 = `access(all) contract HelloWorld {
-
+pub contract HelloWorld {
   // Declare a public field of type String.
   //
   // All fields must be initialized in the init() function.
-  access(all) let greeting: String
+  pub var greeting: String
 
-  // The init() function is required if the contract contains any fields.
-  init() {
-      self.greeting = "Hello from account 2!"
+  // Public function that returns our friendly greeting!
+  access(all) fun changeGreeting(newGreeting: String) {
+    self.greeting = newGreeting
   }
 
   // Public function that returns our friendly greeting!
   access(all) fun hello(): String {
       return self.greeting
   }
-}
-`;
-
-const DEFAULT_CONTRACT_3 = `access(all) contract HelloWorld {
-
-  // Declare a public field of type String.
-  //
-  // All fields must be initialized in the init() function.
-  access(all) let greeting: String
 
   // The init() function is required if the contract contains any fields.
   init() {
-      self.greeting = "Hello from account 3!"
-  }
-
-  // Public function that returns our friendly greeting!
-  access(all) fun hello(): String {
-      return self.greeting
+    self.greeting = "Hello, World!"
   }
 }
 `;
 
-const DEFAULT_CONTRACT_4 = `access(all) contract HelloWorld {
-
-  // Declare a public field of type String.
-  //
-  // All fields must be initialized in the init() function.
-  access(all) let greeting: String
-
-  // The init() function is required if the contract contains any fields.
-  init() {
-      self.greeting = "Hello from account 4!"
-  }
-
-  // Public function that returns our friendly greeting!
-  access(all) fun hello(): String {
-      return self.greeting
-  }
-}
-`;
-
-const DEFAULT_CONTRACT_5 = `access(all) contract HelloWorld {
-
-  // Declare a public field of type String.
-  //
-  // All fields must be initialized in the init() function.
-  access(all) let greeting: String
-
-  // The init() function is required if the contract contains any fields.
-  init() {
-      self.greeting = "Hello from account 5!"
-  }
-
-  // Public function that returns our friendly greeting!
-  access(all) fun hello(): String {
-      return self.greeting
-  }
-}
-`;
 
 export const DEFAULT_ACCOUNT_STATE = '{}';
 
-const DEFAULT_CONTRACTS = [
-  DEFAULT_CONTRACT_1,
-  DEFAULT_CONTRACT_2,
-  DEFAULT_CONTRACT_3,
-  DEFAULT_CONTRACT_4,
-  DEFAULT_CONTRACT_5,
-];
-
 const DEFAULT_TRANSACTION = `import HelloWorld from 0x05
 
-transaction {
+transaction(greeting: String) {
 
-  prepare(acct: AuthAccount) {}
+  prepare(acct: AuthAccount) {
+    log(acct.address)
+  }
 
   execute {
-    log(HelloWorld.hello())
+    HelloWorld.changeGreeting(newGreeting: greeting)
   }
 }
 `;
 
-const DEFAULT_SCRIPT = `pub fun main(): Int {
-  return 1
+const DEFAULT_SCRIPT = `import HelloWorld from 0x05
+pub fun main() {
+  log(HelloWorld.hello())
 }
 `;
 
@@ -155,13 +78,13 @@ export function createDefaultProject(): Project {
     SEED_TITLE,
     SEED_DESCRIPTION,
     SEED_README,
-    DEFAULT_CONTRACTS.map((contract) => contract),
-    DEFAULT_CONTRACTS.map((contract, i) => ({
-      title: `Contract ${i + 1}`,
-      code: contract,
-    })),
-    [{ title: 'Transaction', code: DEFAULT_TRANSACTION }],
-    [{ title: 'Script', code: DEFAULT_SCRIPT }],
+    [HelloWorldContract],
+    [({
+      title: `HelloWorld`,
+      code: HelloWorldContract,
+    })],
+    [{ title: 'ChangeGreeting', code: DEFAULT_TRANSACTION }],
+    [{ title: 'GetGreeting', code: DEFAULT_SCRIPT }],
   );
 }
 

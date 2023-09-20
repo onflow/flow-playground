@@ -29,6 +29,7 @@ export const ContextMenu = ({ options, showEllipsis }: ContextMenuType) => {
     },
     menuRelative: {
       position: 'relative',
+      visibility: isOpen ? 'visible' : 'hidden',
     },
     menuAbsolute: {
       display: 'flex',
@@ -71,6 +72,7 @@ export const ContextMenu = ({ options, showEllipsis }: ContextMenuType) => {
   };
 
   const ref = useRef(null);
+  const menuRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event: Event) => {
@@ -86,6 +88,14 @@ export const ContextMenu = ({ options, showEllipsis }: ContextMenuType) => {
 
   if (!showEllipsis) return null;
 
+  if (isOpen) {
+    const rect = menuRef?.current?.getBoundingClientRect();
+    const scrollTop = document.documentElement.scrollTop;
+    const top = rect.top + scrollTop;
+    if (top < 0) {
+      menuRef.current.style.bottom = `-${rect.height}px`;
+    }
+  }
   return (
     <Container sx={styles.container} ref={ref}>
       <Button
@@ -96,25 +106,23 @@ export const ContextMenu = ({ options, showEllipsis }: ContextMenuType) => {
       >
         {ExplorerEllipseIcon()}
       </Button>
-      {isOpen && (
-        <Flex sx={styles.menuRelative}>
-          <Flex sx={styles.menuAbsolute}>
-            {options.map(
-              ({ icon, name, onClick, args }: ContextMenuOptionsType) => (
-                <Button
-                  sx={styles.ctaOption}
-                  variant="explorer"
-                  key={name}
-                  onClick={() => clickOption(onClick, args)}
-                >
-                  {getIcon(icon)}
-                  <Text>{name}</Text>
-                </Button>
-              ),
-            )}
-          </Flex>
+      <Flex sx={styles.menuRelative}>
+        <Flex sx={styles.menuAbsolute} ref={menuRef}>
+          {options.map(
+            ({ icon, name, onClick, args }: ContextMenuOptionsType) => (
+              <Button
+                sx={styles.ctaOption}
+                variant="explorer"
+                key={name}
+                onClick={() => clickOption(onClick, args)}
+              >
+                {getIcon(icon)}
+                <Text>{name}</Text>
+              </Button>
+            ),
+          )}
         </Flex>
-      )}
+      </Flex>
     </Container>
   );
 };
