@@ -5,6 +5,7 @@ import {
   ScriptTemplate,
   TransactionTemplate,
 } from 'api/apollo/generated/graphql';
+import { accountIndexes } from 'util/accounts';
 import { strToSeed, uuid } from 'util/rng';
 import { LOCAL_PROJECT_ID } from 'util/url';
 
@@ -78,7 +79,7 @@ export function createDefaultProject(): Project {
     SEED_TITLE,
     SEED_DESCRIPTION,
     SEED_README,
-    [HelloWorldContract],
+    accountIndexes(),
     [({
       title: `HelloWorld`,
       code: HelloWorldContract,
@@ -104,10 +105,10 @@ export function createLocalProject(
   transactionTemplates: Array<ScriptDetails>,
   scriptTemplates: Array<ScriptDetails>,
 ): Project {
-  const accountEntities: Account[] = accounts.map((_account, i) => {
+  const accountEntities: Account[] = accounts.map((_account) => {
     return {
       __typename: 'Account',
-      address: `000000000000000${i + 1}`,
+      address: `000000000000000${_account}`,
       deployedContracts: [],
       state: DEFAULT_ACCOUNT_STATE,
     };
