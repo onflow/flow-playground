@@ -39,7 +39,6 @@ pub contract HelloWorld {
 }
 `;
 
-
 export const DEFAULT_ACCOUNT_STATE = '{}';
 
 const DEFAULT_TRANSACTION = `import HelloWorld from 0x05
@@ -80,10 +79,12 @@ export function createDefaultProject(): Project {
     SEED_DESCRIPTION,
     SEED_README,
     accountIndexes(),
-    [({
-      title: `HelloWorld`,
-      code: HelloWorldContract,
-    })],
+    [
+      {
+        title: `HelloWorld`,
+        code: HelloWorldContract,
+      },
+    ],
     [{ title: 'ChangeGreeting', code: DEFAULT_TRANSACTION }],
     [{ title: 'GetGreeting', code: DEFAULT_SCRIPT }],
   );
