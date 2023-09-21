@@ -8,6 +8,7 @@ import {
   Project,
 } from 'api/apollo/generated/graphql';
 import {
+  CLEAR_EXECUTION_RESULTS,
   CREATE_CONTRACT_DEPLOYMENT,
   CREATE_CONTRACT_TEMPLATE,
   CREATE_PROJECT,
@@ -326,6 +327,19 @@ export default class ProjectMutator {
         projectId,
       },
       refetchQueries: [{ query: GET_PROJECT, variables: { projectId } }],
+      context: {
+        serializationKey: PROJECT_SERIALIZATION_KEY,
+      },
+    });
+    return res;
+  }
+
+  async clearLog(resultType: string) {
+    const res = await this.client.mutate({
+      mutation: CLEAR_EXECUTION_RESULTS,
+      variables: {
+        resultType,
+      },
       context: {
         serializationKey: PROJECT_SERIALIZATION_KEY,
       },

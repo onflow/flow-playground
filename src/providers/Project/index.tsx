@@ -92,6 +92,7 @@ export interface ProjectContextValue {
   setCurrentEditor: (editor: monacoEditor.ICodeEditor) => void;
   currentEditor: monacoEditor.ICodeEditor | null;
   hightlightedLines: number[];
+  clearLogPanel: (resultType: string) => void;
 }
 
 export const ProjectContext: React.Context<ProjectContextValue> =
@@ -391,6 +392,16 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
+  const clearLogPanel = async (resultType: string) => {
+    try {
+      await mutator.clearLog(resultType);
+    } catch (e) {
+      console.error(e);
+      checkAppErrors();
+    } finally {
+      setIsSaving(false);
+    }
+  };
   const updateTransactionTemplate = async (
     templateId: string,
     script: string,
@@ -868,6 +879,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         setCurrentEditor,
         currentEditor,
         hightlightedLines,
+        clearLogPanel,
       }}
     >
       {children}
