@@ -10,8 +10,8 @@ import paths from '../../paths';
 import { useProject } from 'providers/Project/projectHooks';
 import InformationalPopup from 'components/InformationalPopup';
 import { LOCAL_PROJECT_ID } from 'util/url';
-import CopyIcon from 'components/Icons/CopyIcon';
-import { Project } from 'api/apollo/generated/graphql';
+//import CopyIcon from 'components/Icons/CopyIcon';
+//import { Project } from 'api/apollo/generated/graphql';
 import { userDataKeys, UserLocalStorage } from 'util/localstorage';
 import ResetIcon from 'components/Icons/ResetIcon';
 
@@ -61,7 +61,7 @@ const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
     deleteProject,
     resetProject,
     project: activeProject,
-    copyProject,
+    // copyProject,
   } = useProject();
 
   const context = useThemeUI();
@@ -149,15 +149,15 @@ const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
     }
   };
 
-  const copyNewProject = async (project: Project) => {
-    setDoingAction(true);
-    try {
-      await copyProject(project);
-      await refetch();
-    } finally {
-      setDoingAction(false);
-    }
-  };
+  // const copyNewProject = async (project: Project) => {
+  //   setDoingAction(true);
+  //   try {
+  //     await copyProject(project);
+  //     await refetch();
+  //   } finally {
+  //     setDoingAction(false);
+  //   }
+  // };
 
   const contextMenuOptions = [
     {
@@ -168,12 +168,12 @@ const ProjectListItem = ({ project, projectCount, refetch }: Props) => {
           : setShowLastProject(true),
       icon: DeleteIcon,
     },
-    {
-      name: 'Copy Project',
-      onClick: (project: Project) => copyNewProject(project),
-      icon: CopyIcon,
-      args: [project],
-    },
+    // {
+    //   name: 'Copy Project',
+    //   onClick: (project: Project) => copyNewProject(project),
+    //   icon: CopyIcon,
+    //   args: [project],
+    // },
     {
       name: 'Reset Project',
       onClick: () => setShowResetConfirmation(true),
