@@ -15,8 +15,6 @@ tmp
 .env.production
 .env.test
 
-
-
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
