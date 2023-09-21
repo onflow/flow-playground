@@ -7,10 +7,11 @@ import { useProject } from 'providers/Project/projectHooks';
 import { PROJECT_SERIALIZATION_KEY } from 'providers/Project/projectMutator';
 import { SXStyles } from 'src/types';
 import { Flex } from 'theme-ui';
+import Button from 'components/Button';
 import { getResultType } from 'components/Editor/CadenceEditor/ControlPanel/utils';
 
 export const RenderResponse = () => {
-  const { active } = useProject();
+  const { active, clearLogPanel } = useProject();
   const { data, error, loading } = useQuery(GET_CACHED_EXECUTION_RESULTS, {
     context: {
       serializationKey: PROJECT_SERIALIZATION_KEY,
@@ -38,6 +39,10 @@ export const RenderResponse = () => {
       overflowY: 'auto',
       // height: '100%',
     },
+    button: {
+      marginTop: 'auto',
+      padding: '0.5rem',
+    },
   };
 
   return (
@@ -51,6 +56,16 @@ export const RenderResponse = () => {
             ),
           )
         : 'Welcome to the Playground!'}
+      {filteredResults.length > 0 && (
+        <Button
+          sx={styles.button}
+          variant="secondary"
+          size="sm"
+          onClick={() => clearLogPanel(resultType)}
+        >
+          Clear Log Contents
+        </Button>
+      )}
     </Flex>
   );
 };
