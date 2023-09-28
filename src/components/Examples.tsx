@@ -16,9 +16,7 @@ const Examples: React.FC<{
   const context = useThemeUI();
   const { theme } = context;
 
-  const examples: any[] = []; // temporarily disable examples
-  //@ts-ignore
-  const examplesOld = [
+  const examples = [
     {
       title: ' First Steps',
       subtitle:
@@ -31,7 +29,7 @@ const Examples: React.FC<{
       subtitle:
         'Write your first contract on Flow. This is the perfect place to start to get the hang of the fundamentals of Cadence.',
       emoji: '🌎',
-      projectLink: 'https://play.flow.com/af7aba31-dee9-4477-9e1d-7b46e958468e',
+      projectLink: 'https://play.flow.com/1c0f3c76-e70f-4c25-8d45-d6493a652f80',
       docsLink: 'https://developers.flow.com/cadence/tutorial/02-hello-world',
     },
     {
@@ -39,7 +37,7 @@ const Examples: React.FC<{
       subtitle:
         'Create and sell digital assets of your own in this tutorial! This tutorial will teach you the basics of creating, storing, and moving digital assets and tokens.',
       emoji: '💸',
-      projectLink: 'https://play.flow.com/e63bfce9-3324-4385-9542-626845ae0363',
+      projectLink: 'https://play.flow.com/765c14c7-8097-4a0f-9bf3-73472fb6d0bc',
       docsLink:
         'https://developers.flow.com/cadence/tutorial/06-fungible-tokens',
     },
@@ -48,7 +46,7 @@ const Examples: React.FC<{
       subtitle:
         'Create and shape your own unique digital objects. Here you’ll learn what really makes blockchains magic - the ability for unique items to be created, shared, and stored forever.',
       emoji: '😺',
-      projectLink: 'https://play.flow.com/a21087ad-b22c-4981-b49e-17297e916fa6',
+      projectLink: 'https://play.flow.com/768bf0ef-24fe-46a5-b224-c09382eeae97',
       docsLink:
         'https://developers.flow.com/cadence/tutorial/05-non-fungible-tokens-1',
     },
@@ -57,7 +55,7 @@ const Examples: React.FC<{
       subtitle:
         'Put it all together in a marketplace! This tutorial will teach you how to turn all the concepts you’ve learned into a place for people to share their creations with the community.',
       emoji: '🤝',
-      projectLink: 'https://play.flow.com/49ec2856-1258-4675-bac3-850b4bae1929',
+      projectLink: 'https://play.flow.com/6f68e782-b6c9-47d4-9389-f6f58b6c7678',
       docsLink:
         'https://developers.flow.com/cadence/tutorial/08-marketplace-compose',
     },
@@ -66,7 +64,7 @@ const Examples: React.FC<{
       subtitle:
         'This tutorial is for the brave and the bold, an opportunity to discover what resources make possible - resources owning other resources. If you can imagine it, you can create it.',
       emoji: '🤠',
-      projectLink: 'https://play.flow.com/01f812d7-799a-42fd-b9cb-9ffe556e02ad',
+      projectLink: 'https://play.flow.com/8437c2f2-7928-406e-b6ef-c64bc534a30a',
       docsLink:
         'https://developers.flow.com/cadence/tutorial/10-resources-compose',
     },
@@ -75,7 +73,7 @@ const Examples: React.FC<{
       subtitle:
         'With the advent of blockchain technology and smart contracts, it has become popular to try to create decentralized voting mechanisms that allow large groups of users to vote completely on chain',
       emoji: '🗳️',
-      projectLink: 'https://play.flow.com/d120f0a7-d411-4243-bc59-5125a84f99b3',
+      projectLink: 'https://play.flow.com/e7acb2ed-53a3-4363-89fa-feab3cab965e',
       docsLink: 'https://developers.flow.com/cadence/tutorial/09-voting',
     },
     // TODO: add this when contracts can be deployed without failure
