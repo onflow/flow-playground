@@ -1,5 +1,4 @@
 import { Account, Project } from 'api/apollo/generated/graphql';
-import { Editor as EditorRoot } from 'layout/Editor';
 import { ActiveEditor } from 'providers/Project';
 import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useRef, useState } from 'react';
@@ -7,6 +6,12 @@ import { Flex, useThemeUI } from 'theme-ui';
 import EditorPanels from 'components/Editor/EditorPanels';
 import { SXStyles } from 'src/types';
 import { decodeText } from 'util/readme';
+import styled from 'styled-components';
+
+const EditorRoot = styled.div`
+  grid-area: editor;
+  flex: 1;
+`;
 
 export interface WithShowProps {
   show: boolean;

@@ -4,9 +4,9 @@ import { useProject } from 'providers/Project/projectHooks';
 import React, { useEffect, useState } from 'react';
 import { SXStyles } from 'src/types';
 import { Flex, useThemeUI } from 'theme-ui';
-//import Mixpanel from 'util/mixpanel';
+import Mixpanel from 'util/mixpanel';
 import ProjectsIcon from 'components/Icons/ProjectsIcon';
-//import LearnCadenceIcon from 'components/Icons/LearnCadenceIcon';
+import LearnCadenceIcon from 'components/Icons/LearnCadenceIcon';
 import NavInput from './NavInput';
 import { ShareMenu } from './ShareMenu';
 import { SaveButton } from './SaveButton';
@@ -88,12 +88,12 @@ const TopNav = () => {
       flexDirection: 'row-reverse',
     },
   };
-  /*
+
   const onStartButtonClick = () => {
     setShowExamples(true);
     Mixpanel.track('Show examples', { meta: 'none' });
   };
-*/
+
   const onNameInputChange = (name: string) => {
     setProjectName(name);
   };
@@ -125,6 +125,15 @@ const TopNav = () => {
           <ProjectsIcon />
           Projects
         </Button>
+        <Button
+          onClick={() => onStartButtonClick()}
+          variant="primary"
+          size="sm"
+          inline={true}
+        >
+          <LearnCadenceIcon />
+          Learn Cadence
+        </Button>
       </Flex>
       <Flex sx={styles.topNavProjectName}>
         <NavInput
@@ -141,15 +150,6 @@ const TopNav = () => {
           <>
             <ThemeToggle />
             <VersionInfoPopup />
-            {/* <Button
-              onClick={() => onStartButtonClick()}
-              variant="secondary"
-              size="sm"
-              inline={true}
-            >
-              <LearnCadenceIcon />
-              Learn Cadence
-            </Button>  */}
             <NavButtonLink
               title="Report a Bug"
               href={PLAYGROUND_GITHUB_ISSUES_URL}
