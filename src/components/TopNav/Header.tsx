@@ -3,10 +3,10 @@ import AnnouncementBar from './Announcement';
 import TopNav from '.';
 import { isMobile } from '../Editor/CadenceEditor/ControlPanel/utils';
 
-const headerStyle = {
+const headerStyle: React.CSSProperties = {
   display: 'flex',
   gridArea: 'header',
-  flexDirection: 'column',
+  flexDirection: 'column' as 'column',
   alignItems: 'center',
   justifyContent: 'left',
 };
