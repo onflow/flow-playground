@@ -15,7 +15,7 @@ const Announcement = () => {
       justifyContent: 'space-between',
       background: '#F27360',
       width: '100%',
-      padding: '0.5rem',
+      padding: '0.25rem 0 0.5rem',
       height: '60px',
       color: `${theme.colors.secondary}`,
     },
