@@ -1,0 +1,58 @@
+import React from 'react';
+import { SXStyles } from 'src/types';
+import { Box, Flex, Link } from 'theme-ui';
+
+const Announcement = () => {
+
+  const styles: SXStyles = {
+    root: {
+      backgroundColor: 'white',
+      flex: '1 1 auto',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      background: '#F27360',
+      width: '100%',
+      padding: '0.5rem',
+      height: '60px'
+    },
+    message: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      textAlign: 'center',
+      color: '#585F71',
+      fontSize: '14px',
+      padding: '0.15rem',
+    },
+    devLink: {
+        textDecoration: 'underline',
+        color: '#585F71',
+    },
+  };
+
+  return (
+    <Flex sx={styles.root}>
+      <Box sx={styles.message}>⚠ Upgrade to Cadence 1.0</Box>
+      <Box sx={styles.message}>
+        The Crescendo network upgrade, including Cadence 1.0, is coming soon.
+        You most likely need to update all your contracts/transactions/scripts
+        to support this change.
+      </Box>
+      <Box sx={styles.message}>
+        Please visit our migration guide here:&nbsp;&nbsp;
+        <Link
+          sx={styles.devLink}
+          target="_blank"
+          href="https://developers.flow.com/build/cadence-migration-guide"
+          rel="noreferrer"
+          title="Report a Bug"
+        >
+          https://developers.flow.com/build/cadence-migration-guide
+        </Link>
+      </Box>
+    </Flex>
+  );
+};
+
+export default Announcement;

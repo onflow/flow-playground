@@ -37,13 +37,15 @@ const closeLeftSidebarButtonStyle: CSSProperties = {
   zIndex: 10,
 };
 
+const isAnnouncementVisible = true;
+
 const getBaseStyles = (
   showProjectsSidebar: boolean,
   isExplorerCollapsed: boolean,
 ): ThemeUICSSObject => {
   const fileExplorerWidth = isExplorerCollapsed
     ? isMobile()
-      ? '30px'
+      ? '50px'
       : '65px'
     : '244px';
 
@@ -57,7 +59,7 @@ const getBaseStyles = (
     display: 'grid',
     gridTemplateAreas: "'header header' 'sidebar main'",
     gridTemplateColumns: `[sidebar] ${fileExplorerWidth} [main] auto`,
-    gridTemplateRows: ['40px auto', '50px auto'],
+    gridTemplateRows: isAnnouncementVisible ? ['40px auto', '105px auto'] : ['40px auto', '50px auto'],
     overflow: 'hidden',
     filter: showProjectsSidebar ? 'blur(1px)' : 'none',
   };
@@ -115,6 +117,7 @@ const Content = () => {
           <EditorLayout
             isExplorerCollapsed={isExplorerCollapsed}
             toggleExplorer={toggleExplorer}
+            isAnnouncementVisible={isAnnouncementVisible}
           />
         </Box>
       </motion.div>
