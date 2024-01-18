@@ -28,13 +28,12 @@ const Editor = ({
   active,
   isAnnouncementVisible,
 }: EditorContainerProps) => {
-
   return (
     <>
       {browser && browser.name === 'safari' ? (
         <UnsupportedMessage />
       ) : (
-        <Header isAnnouncementVisible={isAnnouncementVisible}/>
+        <Header isAnnouncementVisible={isAnnouncementVisible} />
       )}
       <CookieDetector />
       <FileExplorer

@@ -3,9 +3,9 @@ import { SXStyles } from 'src/types';
 import { Box, Flex, Link, useThemeUI } from 'theme-ui';
 
 const Announcement = () => {
-    const context = useThemeUI();
-    const { theme } = context;
-  
+  const context = useThemeUI();
+  const { theme } = context;
+
   const styles: SXStyles = {
     root: {
       backgroundColor: 'white',
@@ -29,8 +29,8 @@ const Announcement = () => {
       padding: '0.15rem',
     },
     devLink: {
-        textDecoration: 'underline',
-        color: `${theme.colors.secondary}`,
+      textDecoration: 'underline',
+      color: `${theme.colors.secondary}`,
     },
   };
 

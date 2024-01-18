@@ -59,7 +59,9 @@ const getBaseStyles = (
     display: 'grid',
     gridTemplateAreas: "'header header' 'sidebar main'",
     gridTemplateColumns: `[sidebar] ${fileExplorerWidth} [main] auto`,
-    gridTemplateRows: isAnnouncementVisible ? ['40px auto', '105px auto'] : ['40px auto', '50px auto'],
+    gridTemplateRows: isAnnouncementVisible
+      ? ['40px auto', '105px auto']
+      : ['40px auto', '50px auto'],
     overflow: 'hidden',
     filter: showProjectsSidebar ? 'blur(1px)' : 'none',
   };
