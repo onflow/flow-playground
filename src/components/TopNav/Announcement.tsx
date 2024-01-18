@@ -1,9 +1,11 @@
 import React from 'react';
 import { SXStyles } from 'src/types';
-import { Box, Flex, Link } from 'theme-ui';
+import { Box, Flex, Link, useThemeUI } from 'theme-ui';
 
 const Announcement = () => {
-
+    const context = useThemeUI();
+    const { theme } = context;
+  
   const styles: SXStyles = {
     root: {
       backgroundColor: 'white',
@@ -14,20 +16,21 @@ const Announcement = () => {
       background: '#F27360',
       width: '100%',
       padding: '0.5rem',
-      height: '60px'
+      height: '60px',
+      color: `${theme.colors.secondary}`,
     },
     message: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       textAlign: 'center',
-      color: '#585F71',
+      color: `${theme.colors.secondary}`,
       fontSize: '14px',
       padding: '0.15rem',
     },
     devLink: {
         textDecoration: 'underline',
-        color: '#585F71',
+        color: `${theme.colors.secondary}`,
     },
   };
 
