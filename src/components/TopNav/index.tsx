@@ -33,13 +33,13 @@ const TopNav = () => {
   const styles: SXStyles = {
     root: {
       display: 'flex',
-      gridArea: 'header',
       flex: '1 1 auto',
       alignItems: 'center',
       justifyContent: 'space-between',
       paddingLeft: '1em',
       paddingRight: '1em',
       background: `${theme.colors.primary}`,
+      width: '100%',
     },
     mobile: {
       background: `${theme.colors.secondaryBackground}`,
