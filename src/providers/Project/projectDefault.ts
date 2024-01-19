@@ -22,7 +22,8 @@ pub contract HelloWorld {
   // All fields must be initialized in the init() function.
   pub var greeting: String
 
-  // Public function that returns our friendly greeting!
+  // Public function that sets our friendly greeting!
+  // In your own applications you may want to tighten up this access control.
   access(all) fun changeGreeting(newGreeting: String) {
     self.greeting = newGreeting
   }
