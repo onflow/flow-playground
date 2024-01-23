@@ -47,11 +47,11 @@ const Announcement = () => {
         <Link
           sx={styles.devLink}
           target="_blank"
-          href="https://developers.flow.com/build/cadence-migration-guide"
+          href="https://cadence-lang.org/docs/cadence-migration-guide"
           rel="noreferrer"
           title="Report a Bug"
         >
-          https://developers.flow.com/build/cadence-migration-guide
+          https://cadence-lang.org/docs/cadence-migration-guide
         </Link>
       </Box>
     </Flex>
