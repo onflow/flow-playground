@@ -22,7 +22,7 @@ const Examples: React.FC<{
       subtitle:
         'Learn how to use smart contracts, switch accounts, and view account state.',
       emoji: '🏃',
-      docsLink: 'https://developers.flow.com/cadence/tutorial/01-first-steps',
+      docsLink: 'https://developers.flow.com/cadence/tutorial/first-steps',
     },
     {
       title: 'Hello, World!',
@@ -30,7 +30,7 @@ const Examples: React.FC<{
         'Write your first contract on Flow. This is the perfect place to start to get the hang of the fundamentals of Cadence.',
       emoji: '🌎',
       projectLink: 'https://play.flow.com/1c0f3c76-e70f-4c25-8d45-d6493a652f80',
-      docsLink: 'https://developers.flow.com/cadence/tutorial/02-hello-world',
+      docsLink: 'https://developers.flow.com/cadence/tutorial/hello-world',
     },
     {
       title: 'Mint Fungible Tokens',
@@ -39,7 +39,7 @@ const Examples: React.FC<{
       emoji: '💸',
       projectLink: 'https://play.flow.com/765c14c7-8097-4a0f-9bf3-73472fb6d0bc',
       docsLink:
-        'https://developers.flow.com/cadence/tutorial/06-fungible-tokens',
+        'https://developers.flow.com/cadence/tutorial/fungible-tokens',
     },
     {
       title: 'Create Non-Fungible Tokens',
@@ -48,7 +48,7 @@ const Examples: React.FC<{
       emoji: '😺',
       projectLink: 'https://play.flow.com/768bf0ef-24fe-46a5-b224-c09382eeae97',
       docsLink:
-        'https://developers.flow.com/cadence/tutorial/05-non-fungible-tokens-1',
+        'https://developers.flow.com/cadence/tutorial/non-fungible-tokens-1',
     },
     {
       title: 'Build a Marketplace',
@@ -57,7 +57,7 @@ const Examples: React.FC<{
       emoji: '🤝',
       projectLink: 'https://play.flow.com/6f68e782-b6c9-47d4-9389-f6f58b6c7678',
       docsLink:
-        'https://developers.flow.com/cadence/tutorial/08-marketplace-compose',
+        'https://developers.flow.com/cadence/tutorial/marketplace-compose',
     },
     {
       title: 'Expand Non-Fungible Tokens',
@@ -66,7 +66,7 @@ const Examples: React.FC<{
       emoji: '🤠',
       projectLink: 'https://play.flow.com/8437c2f2-7928-406e-b6ef-c64bc534a30a',
       docsLink:
-        'https://developers.flow.com/cadence/tutorial/10-resources-compose',
+        'https://developers.flow.com/cadence/tutorial/resources-compose',
     },
     {
       title: 'Voting Contract',
@@ -74,7 +74,7 @@ const Examples: React.FC<{
         'With the advent of blockchain technology and smart contracts, it has become popular to try to create decentralized voting mechanisms that allow large groups of users to vote completely on chain',
       emoji: '🗳️',
       projectLink: 'https://play.flow.com/e7acb2ed-53a3-4363-89fa-feab3cab965e',
-      docsLink: 'https://developers.flow.com/cadence/tutorial/09-voting',
+      docsLink: 'https://developers.flow.com/cadence/tutorial/voting',
     },
     // TODO: add this when contracts can be deployed without failure
     //  {
