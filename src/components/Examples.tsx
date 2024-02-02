@@ -38,8 +38,7 @@ const Examples: React.FC<{
         'Create and sell digital assets of your own in this tutorial! This tutorial will teach you the basics of creating, storing, and moving digital assets and tokens.',
       emoji: '💸',
       projectLink: 'https://play.flow.com/765c14c7-8097-4a0f-9bf3-73472fb6d0bc',
-      docsLink:
-        'https://cadence-lang.org/docs/tutorial/fungible-tokens',
+      docsLink: 'https://cadence-lang.org/docs/tutorial/fungible-tokens',
     },
     {
       title: 'Create Non-Fungible Tokens',
@@ -47,8 +46,7 @@ const Examples: React.FC<{
         'Create and shape your own unique digital objects. Here you’ll learn what really makes blockchains magic - the ability for unique items to be created, shared, and stored forever.',
       emoji: '😺',
       projectLink: 'https://play.flow.com/768bf0ef-24fe-46a5-b224-c09382eeae97',
-      docsLink:
-        'https://cadence-lang.org/docs/tutorial/non-fungible-tokens-1',
+      docsLink: 'https://cadence-lang.org/docs/tutorial/non-fungible-tokens-1',
     },
     {
       title: 'Build a Marketplace',
@@ -56,8 +54,7 @@ const Examples: React.FC<{
         'Put it all together in a marketplace! This tutorial will teach you how to turn all the concepts you’ve learned into a place for people to share their creations with the community.',
       emoji: '🤝',
       projectLink: 'https://play.flow.com/6f68e782-b6c9-47d4-9389-f6f58b6c7678',
-      docsLink:
-        'https://cadence-lang.org/docs/tutorial/marketplace-compose',
+      docsLink: 'https://cadence-lang.org/docs/tutorial/marketplace-compose',
     },
     {
       title: 'Expand Non-Fungible Tokens',
@@ -65,8 +62,7 @@ const Examples: React.FC<{
         'This tutorial is for the brave and the bold, an opportunity to discover what resources make possible - resources owning other resources. If you can imagine it, you can create it.',
       emoji: '🤠',
       projectLink: 'https://play.flow.com/8437c2f2-7928-406e-b6ef-c64bc534a30a',
-      docsLink:
-        'https://cadence-lang.org/docs/tutorial/resources-compose',
+      docsLink: 'https://cadence-lang.org/docs/tutorial/resources-compose',
     },
     {
       title: 'Voting Contract',
