@@ -7,13 +7,11 @@ import Editor from '../../components/Editor/index';
 type EditorLayoutProps = {
   isExplorerCollapsed: boolean;
   toggleExplorer: () => void;
-  isAnnouncementVisible: boolean;
 };
 
 const EditorLayout = ({
   isExplorerCollapsed,
   toggleExplorer,
-  isAnnouncementVisible,
 }: EditorLayoutProps) => {
   const { project, isLoading, active } = useProject();
 
@@ -56,7 +54,6 @@ const EditorLayout = ({
         isLoading={isLoading}
         project={project}
         active={active}
-        isAnnouncementVisible={isAnnouncementVisible}
       />
     </>
   );

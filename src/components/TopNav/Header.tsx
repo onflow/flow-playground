@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import AnnouncementBar from './Announcement';
 import TopNav from '.';
 import { isMobile } from '../Editor/CadenceEditor/ControlPanel/utils';
+import { AnnouncementContext } from 'providers/Announcement';
 
 const headerStyle: React.CSSProperties = {
   display: 'flex',
@@ -11,11 +12,8 @@ const headerStyle: React.CSSProperties = {
   justifyContent: 'left',
 };
 
-const Header = ({
-  isAnnouncementVisible,
-}: {
-  isAnnouncementVisible: boolean;
-}) => {
+const Header = () => {
+  const { isVisible: isAnnouncementVisible } = useContext(AnnouncementContext);
   return (
     <header style={headerStyle}>
       {!isMobile() && isAnnouncementVisible && <AnnouncementBar />}
