@@ -7,9 +7,10 @@ interface AnnouncementContextValue {
 }
 
 // Create a context
-const AnnouncementContext: React.Context<AnnouncementContextValue> = createContext(null);
+const AnnouncementContext: React.Context<AnnouncementContextValue> =
+  createContext(null);
 
-const COOKIE_NAME = 'stable-cadence-announcement-dismissed'
+const COOKIE_NAME = 'stable-cadence-announcement-dismissed';
 
 // Create a context provider component
 const _AnnounecementProvider: React.FC = ({ children }) => {
@@ -20,7 +21,7 @@ const _AnnounecementProvider: React.FC = ({ children }) => {
   const futureDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
   const toggleAnnouncement = () => {
-    setIsVisible(COOKIE_NAME, !isVisible, {expires: futureDate});
+    setIsVisible(COOKIE_NAME, !isVisible, { expires: futureDate });
   };
 
   return (
@@ -30,12 +31,12 @@ const _AnnounecementProvider: React.FC = ({ children }) => {
   );
 };
 
-const AnnouncementProvider: React.FC = ({children}) => {
+const AnnouncementProvider: React.FC = ({ children }) => {
   return (
     <CookiesProvider>
       <_AnnounecementProvider>{children}</_AnnounecementProvider>
     </CookiesProvider>
-  )
-}
+  );
+};
 
 export { AnnouncementProvider, AnnouncementContext };

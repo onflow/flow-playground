@@ -15,17 +15,17 @@ const Announcement = () => {
       width: '100%',
       backgroundColor: 'white',
       flex: '1 1 auto',
-      flexDirection: "row",
+      flexDirection: 'row',
       background: '#007BFF',
       padding: '0.25rem 0 0.5rem',
       height: '60px',
       color: `${theme.colors.secondary}`,
       justifyContent: 'space-around',
-      alignContent: "center"
+      alignContent: 'center',
     },
     content: {
       flex: '1 1 auto',
-      justifyContent: "space-between",
+      justifyContent: 'space-between',
       flexDirection: 'column',
       alignItems: 'center',
     },
@@ -37,7 +37,7 @@ const Announcement = () => {
       color: `${theme.colors.secondary}`,
       fontSize: '14px',
       padding: '0.15rem',
-      gap: "4px",
+      gap: '4px',
     },
     devLink: {
       textDecoration: 'underline',
@@ -50,7 +50,7 @@ const Announcement = () => {
       <Flex sx={styles.content}>
         <Box sx={styles.message}>🔧 Upgrade to Cadence 1.0 🔧</Box>
         <Box sx={styles.message}>
-          The highly anticipated 
+          The highly anticipated
           <Link
             sx={styles.devLink}
             target="_blank"
@@ -59,8 +59,8 @@ const Announcement = () => {
           >
             Crescendo
           </Link>
-          {' '}network upgrade is coming soon with 20+ new 
-          <Link 
+          network upgrade is coming soon with 20+ new
+          <Link
             sx={styles.devLink}
             target="_blank"
             rel="noreferrer"
@@ -68,7 +68,7 @@ const Announcement = () => {
           >
             Cadence 1.0
           </Link>
-          features and 
+          features and
           <Link
             sx={styles.devLink}
             target="_blank"
@@ -81,7 +81,7 @@ const Announcement = () => {
         </Box>
       </Flex>
       <IconButton size="lg" onClick={toggleAnnouncement}>
-        <TimesIcon primary/>
+        <TimesIcon primary />
       </IconButton>
     </Flex>
   );

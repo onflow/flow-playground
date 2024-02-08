@@ -14,7 +14,10 @@ import { LOCAL_PROJECT_ID } from 'util/url';
 import useToggleExplorer from '../../hooks/useToggleExplorer';
 import EditorLayout from './EditorLayout';
 import { isMobile } from 'components/Editor/CadenceEditor/ControlPanel/utils';
-import { AnnouncementContext, AnnouncementProvider } from 'providers/Announcement';
+import {
+  AnnouncementContext,
+  AnnouncementProvider,
+} from 'providers/Announcement';
 
 export const LEFT_SIDEBAR_WIDTH = 350;
 
@@ -76,7 +79,11 @@ const Content = () => {
   const { isExplorerCollapsed, toggleExplorer } = useToggleExplorer();
   const { isVisible: isAnnouncementVisible } = useContext(AnnouncementContext);
 
-  const baseStyles = getBaseStyles(showProjectsSidebar, isExplorerCollapsed, isAnnouncementVisible);
+  const baseStyles = getBaseStyles(
+    showProjectsSidebar,
+    isExplorerCollapsed,
+    isAnnouncementVisible,
+  );
   return (
     <>
       <AnimatePresence>
