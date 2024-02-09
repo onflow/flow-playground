@@ -17,7 +17,6 @@ type EditorContainerProps = {
   isLoading: boolean;
   project: Project;
   active: ActiveEditor;
-  isAnnouncementVisible: boolean;
 };
 
 const Editor = ({
@@ -26,14 +25,13 @@ const Editor = ({
   isLoading,
   project,
   active,
-  isAnnouncementVisible,
 }: EditorContainerProps) => {
   return (
     <>
       {browser && browser.name === 'safari' ? (
         <UnsupportedMessage />
       ) : (
-        <Header isAnnouncementVisible={isAnnouncementVisible} />
+        <Header />
       )}
       <CookieDetector />
       <FileExplorer
