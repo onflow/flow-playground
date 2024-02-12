@@ -29,7 +29,7 @@ const Examples: React.FC<{
       subtitle:
         'Write your first contract on Flow. This is the perfect place to start to get the hang of the fundamentals of Cadence.',
       emoji: '🌎',
-      projectLink: 'https://play.flow.com/1c0f3c76-e70f-4c25-8d45-d6493a652f80',
+      projectLink: 'https://v1.play.flow.com/b8f44da7-f1c6-4315-8ae0-04de13e4b05c',
       docsLink: 'https://cadence-lang.org/docs/tutorial/hello-world',
     },
     {
