@@ -110,7 +110,7 @@ describe('Flow-Playground frontend tests', () => {
       .focused()
       .type(selectAllKeys)
       .type(
-        'import HelloWorld from 0x05 transaction { prepare(acct: AuthAccount) {} execute { log(HelloWorld.other_hello())}}',
+        'import HelloWorld from 0x05 transaction { prepare(acct: &Account) {} execute { log(HelloWorld.other_hello())}}',
         { parseSpecialCharSequences: false },
       );
 
