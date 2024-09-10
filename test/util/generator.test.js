@@ -36,7 +36,7 @@ describe('Generator Related Unit Tests', () => {
 
   test('should find no imports in a script template', () => {
     const template = `
-      pub fun main(){
+      access(all) fun main(){
         console.log("Hello")
       }
     `;
@@ -48,7 +48,7 @@ describe('Generator Related Unit Tests', () => {
     const template = `
       import First from 0x01
       
-      pub fun main(){
+      access(all) fun main(){
         console.log("Hello")
       }
     `;
@@ -90,7 +90,7 @@ describe('Generator Related Unit Tests', () => {
 
   test('should return list of arguments from script template', () => {
     const template = `
-      pub fun main(a: Int, b: Int, recipient: Address) {
+      access(all) fun main(a: Int, b: Int, recipient: Address) {
           log("hello, Jest")
       }
     `;
@@ -130,7 +130,7 @@ describe('Generator Related Unit Tests', () => {
 
   test('should return empty list of arguments from script with no arguments', () => {
     const template = `
-      pub fun main() {
+      access(all) fun main() {
         log("no args here")
       }
     `;
@@ -232,7 +232,7 @@ describe('Generator Related Unit Tests', () => {
 describe('Generator - Contracts', () => {
   test('should deploy contract', () => {
     const template = `
-      pub contract HelloWorld {
+      access(all) contract HelloWorld {
         init(){
           log("Hello, World")
         }
@@ -248,7 +248,7 @@ describe('Generator - Contracts', () => {
       import First from 0x01
       import Second from 0x02
     
-      pub contract HelloWorld {
+      access(all) contract HelloWorld {
         init(){
           log("Hello, World")
         }
@@ -263,7 +263,7 @@ describe('Generator - Contracts', () => {
 describe('Generator - Scripts', () => {
   test('should create proper code - basic', () => {
     const template = `
-      pub fun main() {
+      access(all) fun main() {
         return "Hello, Jest"
       }
     `;
@@ -274,7 +274,7 @@ describe('Generator - Scripts', () => {
   });
   test('should create proper code - return type and getAccount call', () => {
     const template = `
-      pub fun main(): String {
+      access(all) fun main(): String {
         let Dave = getAccount(0x04)
         return "Hello, Jest"
       }
@@ -290,7 +290,7 @@ describe('Generator - Scripts', () => {
       import Second from 0x02
       import Third from 0x03
       
-      pub fun main(): String {
+      access(all) fun main(): String {
         let Dave = getAccount(0x04)
         return "Hello, Jest"
       }
@@ -306,7 +306,7 @@ describe('Generator - Scripts', () => {
       import Second from 0x02
       import Third from 0x03
       
-      pub fun main(a: Int, b: Int, c: String, d:Address): String {
+      access(all) fun main(a: Int, b: Int, c: String, d:Address): String {
         let Dave = getAccount(0x04)
         return "Hello, Jest"
       }
