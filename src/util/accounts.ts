@@ -1,5 +1,5 @@
-const accountAddressIndexes = ['5', '6', '7', '8', '9'];
-const accountAddresses = ['0x05', '0x06', '0x07', '0x08', '0x09'];
+const accountAddressIndexes = ['6', '7', '8', '9', 'a'];
+const accountAddresses = ['0x06', '0x07', '0x08', '0x09', '0x0a'];
 export const storageMapByIndex = (index: number): string => {
   if (index < 0) return null;
   return accountAddresses[index];

@@ -138,7 +138,7 @@ const AccountList = ({ isExplorerCollapsed }: AccountListProps) => {
           const rawAddress = account.address.slice(-2);
           const accountAddress = `0x${rawAddress}`;
           const finalAddress =
-            accountAddress == '0x05'
+            accountAddress == '0x06'
               ? `${accountAddress}-Default`
               : `${accountAddress}`;
           const contractName = getDeployedContracts(account);
