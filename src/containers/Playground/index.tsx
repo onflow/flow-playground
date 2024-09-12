@@ -7,7 +7,7 @@ import { AnimatePresence, motion, MotionStyle } from 'framer-motion';
 import CadenceChecker from 'providers/CadenceChecker';
 import { ProjectProvider } from 'providers/Project';
 import useGetProject, { useProject } from 'providers/Project/projectHooks';
-import React, { CSSProperties, useContext } from 'react';
+import React, { CSSProperties } from 'react';
 import { Box, Button, Spinner, ThemeUICSSObject } from 'theme-ui';
 import { userDataKeys, UserLocalStorage } from 'util/localstorage';
 import { LOCAL_PROJECT_ID } from 'util/url';
