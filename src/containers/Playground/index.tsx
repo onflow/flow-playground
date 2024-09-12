@@ -71,10 +71,7 @@ const Content = () => {
   const { showProjectsSidebar, toggleProjectsSidebar } = useProject();
   const { isExplorerCollapsed, toggleExplorer } = useToggleExplorer();
 
-  const baseStyles = getBaseStyles(
-    showProjectsSidebar,
-    isExplorerCollapsed,
-  );
+  const baseStyles = getBaseStyles(showProjectsSidebar, isExplorerCollapsed);
   return (
     <>
       <AnimatePresence>
