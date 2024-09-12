@@ -42,7 +42,7 @@ access(all) contract HelloWorld {
 
 export const DEFAULT_ACCOUNT_STATE = '{}';
 
-const DEFAULT_TRANSACTION = `import HelloWorld from 0x05
+const DEFAULT_TRANSACTION = `import HelloWorld from 0x06
 
 transaction(greeting: String) {
 
@@ -56,7 +56,7 @@ transaction(greeting: String) {
 }
 `;
 
-const DEFAULT_SCRIPT = `import HelloWorld from 0x05
+const DEFAULT_SCRIPT = `import HelloWorld from 0x06
 
 access(all) fun main(): String {
   return HelloWorld.hello()
