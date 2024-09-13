@@ -1,8 +1,5 @@
-import React, { useContext } from 'react';
-import AnnouncementBar from './Announcement';
+import React from 'react';
 import TopNav from '.';
-import { isMobile } from '../Editor/CadenceEditor/ControlPanel/utils';
-import { AnnouncementContext } from 'providers/Announcement';
 
 const headerStyle: React.CSSProperties = {
   display: 'flex',
@@ -13,10 +10,8 @@ const headerStyle: React.CSSProperties = {
 };
 
 const Header = () => {
-  const { isVisible: isAnnouncementVisible } = useContext(AnnouncementContext);
   return (
     <header style={headerStyle}>
-      {!isMobile() && isAnnouncementVisible && <AnnouncementBar />}
       <TopNav />
     </header>
   );
