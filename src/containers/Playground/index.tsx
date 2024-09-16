@@ -7,17 +7,13 @@ import { AnimatePresence, motion, MotionStyle } from 'framer-motion';
 import CadenceChecker from 'providers/CadenceChecker';
 import { ProjectProvider } from 'providers/Project';
 import useGetProject, { useProject } from 'providers/Project/projectHooks';
-import React, { CSSProperties, useContext } from 'react';
+import React, { CSSProperties } from 'react';
 import { Box, Button, Spinner, ThemeUICSSObject } from 'theme-ui';
 import { userDataKeys, UserLocalStorage } from 'util/localstorage';
 import { LOCAL_PROJECT_ID } from 'util/url';
 import useToggleExplorer from '../../hooks/useToggleExplorer';
 import EditorLayout from './EditorLayout';
 import { isMobile } from 'components/Editor/CadenceEditor/ControlPanel/utils';
-import {
-  AnnouncementContext,
-  AnnouncementProvider,
-} from 'providers/Announcement';
 
 export const LEFT_SIDEBAR_WIDTH = 350;
 
@@ -44,7 +40,6 @@ const closeLeftSidebarButtonStyle: CSSProperties = {
 const getBaseStyles = (
   showProjectsSidebar: boolean,
   isExplorerCollapsed: boolean,
-  isAnnouncementVisible: boolean,
 ): ThemeUICSSObject => {
   const fileExplorerWidth = isExplorerCollapsed
     ? isMobile()
@@ -62,9 +57,7 @@ const getBaseStyles = (
     display: 'grid',
     gridTemplateAreas: "'header header' 'sidebar main'",
     gridTemplateColumns: `[sidebar] ${fileExplorerWidth} [main] auto`,
-    gridTemplateRows: isAnnouncementVisible
-      ? ['40px auto', '105px auto']
-      : ['40px auto', '50px auto'],
+    gridTemplateRows: ['40px auto', '50px auto'],
     overflow: 'hidden',
     filter: showProjectsSidebar ? 'blur(1px)' : 'none',
   };
@@ -77,13 +70,8 @@ const leftSidebarTransition = { type: 'spring', bounce: 0.2, duration: 0.25 };
 const Content = () => {
   const { showProjectsSidebar, toggleProjectsSidebar } = useProject();
   const { isExplorerCollapsed, toggleExplorer } = useToggleExplorer();
-  const { isVisible: isAnnouncementVisible } = useContext(AnnouncementContext);
 
-  const baseStyles = getBaseStyles(
-    showProjectsSidebar,
-    isExplorerCollapsed,
-    isAnnouncementVisible,
-  );
+  const baseStyles = getBaseStyles(showProjectsSidebar, isExplorerCollapsed);
   return (
     <>
       <AnimatePresence>
@@ -213,9 +201,7 @@ const Playground = ({ projectId }: PlaygroundProps) => {
   return (
     <ProjectProvider project={project} isLocal={isLocal} client={client}>
       <CadenceChecker>
-        <AnnouncementProvider>
-          <Content />
-        </AnnouncementProvider>
+        <Content />
       </CadenceChecker>
     </ProjectProvider>
   );
