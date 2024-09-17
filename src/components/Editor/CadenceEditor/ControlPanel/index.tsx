@@ -54,12 +54,12 @@ import {
   StatusMessage,
 } from './Arguments/styles';
 import { SignersPanel } from 'components/Editor/CadenceEditor/ControlPanel/SignersPanel';
-import { Template } from 'src/types';
 import DismissiblePopup from 'components/DismissiblePopup';
 import { userModalKeys } from 'util/localstorage';
 import { addressToAccount } from 'util/accounts';
 import { Argument } from './Arguments/types';
 import { useThemeUI } from 'theme-ui';
+import { getContractName } from 'util/generator';
 
 const ButtonActionLabels = {
   [String(EntityType.TransactionTemplate)]: 'Send',
@@ -252,7 +252,8 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     const user = selectedAccounts[0];
     const acct = accounts[user];
     const template = project.contractTemplates[activeIndex];
-    const templateContract = (template as Template)?.name;
+    console.log(template)
+    const templateContract = getContractName(template.script);
     return (acct?.deployedContracts || []).includes(templateContract);
   };
 
@@ -283,7 +284,7 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
 
     // determine if other contracts will need to be redeployed and prompt user
     const template = project.contractTemplates[active.index];
-    const contractName = (template as Template)?.name;
+    const contractName = getContractName(template.script);
     if (!contractName) return send(true);
 
     const deployment = project.contractDeployments.find(

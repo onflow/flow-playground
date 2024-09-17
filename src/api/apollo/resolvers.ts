@@ -1,5 +1,4 @@
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import gql from 'graphql-tag';
+import { InMemoryCache, gql } from '@apollo/client';
 import { normalizeInteractionResponse } from 'util/normalize-interaction-response';
 import {
   ClearExecutionResultsMutationVariables,
@@ -152,7 +151,12 @@ const localResolvers = {
       { id }: any,
       { cache }: { cache: InMemoryCache },
     ): any => {
-      cache.writeData({
+      cache.writeQuery({
+        query: gql`
+          query GetActiveProject {
+            activeProjectId
+          }
+        `,
         data: {
           activeProjectId: id,
         },

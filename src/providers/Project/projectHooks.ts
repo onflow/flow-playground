@@ -8,6 +8,7 @@ import { ProjectContext, ProjectContextValue } from './index';
 import { createDefaultProject, createLocalProject } from './projectDefault';
 import { PROJECT_SERIALIZATION_KEY } from './projectMutator';
 import { LOCAL_PROJECT_ID } from 'util/url';
+import { ApolloClient, gql } from '@apollo/client';
 
 function formatProject(project: Project) {
   if (!project) return project;
@@ -18,10 +19,16 @@ function formatProject(project: Project) {
   return project;
 }
 
-function writeDefaultProject(client: any) {
+function writeDefaultProject(client: ApolloClient<object>) {
   const defaultProject = createDefaultProject();
 
-  client.writeData({
+  client.writeQuery({
+    query: gql`
+      query InitValues {
+        activeProject
+        localProject
+      }
+    `,
     data: {
       activeProject: true,
       localProject: defaultProject,
@@ -29,7 +36,7 @@ function writeDefaultProject(client: any) {
   });
 }
 
-function cloneProject(client: any, project: Project) {
+function cloneProject(client: ApolloClient<object>, project: Project) {
   const localProject = createLocalProject(
     project.id,
     project.seed,
@@ -53,7 +60,13 @@ function cloneProject(client: any, project: Project) {
       title: tpl.title,
     })),
   );
-  client.writeData({
+  client.writeQuery({
+    query: gql`
+      query InitValues {
+        activeProject
+        localProject
+      }
+    `,
     data: {
       activeProject: true,
       localProject: localProject,
@@ -62,7 +75,7 @@ function cloneProject(client: any, project: Project) {
 }
 
 export default function useGetProject(
-  client: any,
+  client: ApolloClient<object>,
   projectId: string | null,
   isActiveProject: boolean,
 ): {
@@ -136,7 +149,7 @@ export function useProject(): ProjectContextValue {
   return useContext(ProjectContext);
 }
 
-function readLocalProject(client: any): any {
+function readLocalProject(client: ApolloClient<object>): any {
   const { project } = client.readQuery({ query: GET_LOCAL_PROJECT });
   return project;
 }

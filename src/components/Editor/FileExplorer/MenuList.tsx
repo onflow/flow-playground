@@ -168,7 +168,6 @@ const MenuList: React.FC<MenuListProps> = ({
       let _editing = [...editing];
       _editing.splice(_editing.indexOf(i), 1);
       setEditing(_editing);
-      items[i].title = newTitle;
       onUpdate(items[i].id, items[i].script, newTitle);
       return;
     }

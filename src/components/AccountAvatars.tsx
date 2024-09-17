@@ -55,7 +55,7 @@ export const AvatarList = ({ children }: ChildProps) => {
         flex: '1 1 auto',
         alignItems: 'center',
         justifyContent: 'space-between',
-        overflowX: 'scroll',
+        overflowX: 'auto',
       }}
     >
       {children}

@@ -1,16 +1,13 @@
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { ApolloClient } from 'apollo-client';
-import { ApolloLink } from 'apollo-link';
+import { ApolloClient, InMemoryCache, ApolloLink, HttpLink, gql } from '@apollo/client';
 import DebounceLink from 'apollo-link-debounce';
-import { HttpLink } from 'apollo-link-http';
 import SerializingLink from 'apollo-link-serialize';
 import fetch from 'cross-fetch';
 import { ResultType } from './generated/graphql';
 import localResolvers from './resolvers';
-import { onError } from 'apollo-link-error';
+import { onError } from '@apollo/client/link/error';
 import { GET_APPLICATION_ERRORS } from './queries';
 import * as Sentry from '@sentry/react';
-import { GraphQLError, GraphQLErrorExtensions } from 'graphql';
+import { GraphQLErrorExtensions, GraphQLFormattedError } from 'graphql';
 const PLAYGROUND_API = process.env.PLAYGROUND_API;
 const DEFAULT_DEBOUNCE_TIMEOUT = 1200; // Debounce time in ms
 const { detect } = require('detect-browser');
@@ -23,7 +20,7 @@ const client = new ApolloClient({
     onError(({ graphQLErrors, networkError }) => {
       let errorMessage: string,
         extensions: GraphQLErrorExtensions = { code: '' },
-        gqlError: GraphQLError;
+        gqlError: GraphQLFormattedError;
 
       if (graphQLErrors) {
         gqlError = graphQLErrors[0];
@@ -84,7 +81,21 @@ const client = new ApolloClient({
   resolvers: localResolvers,
 });
 
-cache.writeData({
+cache.writeQuery({
+  query: gql`
+    query InitValues {
+      localProject
+      activeProjectId
+      activeProject
+      errorMessage
+      cachedExecutionResults {
+        id
+        ${ResultType.Transaction}
+        ${ResultType.Script}
+        ${ResultType.Contract}
+      }
+    }
+  `,
   data: {
     localProject: null,
     activeProjectId: null,

@@ -1,4 +1,4 @@
-import ApolloClient from 'apollo-client';
+import { ApolloClient, gql } from '@apollo/client';
 import { navigate } from '@reach/router';
 
 import {
@@ -41,6 +41,7 @@ import {
 import { createDefaultProject, DEFAULT_ACCOUNT_STATE } from './projectDefault';
 import { UrlRewritter, FILE_TYPE_NAME } from 'util/urlRewritter';
 import { Template } from 'src/types';
+import { getContractName } from 'util/generator';
 
 // TODO: Switch to directives for serialization keys after upgrading to the newest Apollo/apollo-link-serialize
 export const PROJECT_SERIALIZATION_KEY = 'PROJECT_SERIALIZATION_KEY';
@@ -222,22 +223,16 @@ export default class ProjectMutator {
     description: string,
     readme: string,
   ) {
-    const project = this.client.readQuery({
-      query: GET_LOCAL_PROJECT,
-    }).project;
-
-    project.title = title || project.title;
-    project.description = description || project.description;
-    project.readme = readme || project.readme;
-    project.updatedAt = null;
-    project.contractDeployments = [];
-
-    this.client.writeQuery({
-      query: GET_PROJECT,
-      variables: {
-        projectId: project.id,
-      },
-      data: { project },
+    this.client.writeFragment({
+      id: `Project:${this.projectId}`,
+      fragment: gql`
+        fragment ProjectFields on Project {
+          title
+          description
+          readme
+        }
+      `,
+      data: { title, description, readme },
     });
   }
 
@@ -250,8 +245,16 @@ export default class ProjectMutator {
 
     const key = ['SAVE_PROJECT', this.projectId];
 
-    this.client.writeData({
+    this.client.writeFragment({
       id: `Project:${this.projectId}`,
+      fragment: gql`
+        fragment ProjectFields on Project {
+          title
+          description
+          readme
+          persist
+        }
+      `,
       data: {
         title,
         description,
@@ -352,8 +355,14 @@ export default class ProjectMutator {
     script: string,
     title: string,
   ) {
-    this.client.writeData({
+    this.client.writeFragment({
       id: `TransactionTemplate:${templateId}`,
+      fragment: gql`
+        fragment TransactionTemplateFields on TransactionTemplate {
+          script
+          title
+        }
+      `,
       data: {
         script,
         title,
@@ -480,8 +489,14 @@ export default class ProjectMutator {
     script: string,
     title: string,
   ) {
-    this.client.writeData({
+    this.client.writeFragment({
       id: `ScriptTemplate:${templateId}`,
+      fragment: gql`
+        fragment ScriptTemplateFields on ScriptTemplate {
+          script
+          title
+        }
+      `,
       data: {
         script: script,
         title: title,
@@ -754,6 +769,7 @@ export default class ProjectMutator {
         script: script,
         index,
         projectId: this.projectId,
+        name: getContractName(script),
       },
       refetchQueries: [
         {

@@ -5,7 +5,7 @@ import {
   Project,
 } from 'api/apollo/generated/graphql';
 import React, { createContext, useEffect, useState } from 'react';
-import { ChildProps, Template } from 'src/types';
+import { ChildProps } from 'src/types';
 import { getHashLineNumber, getParams, LOCAL_PROJECT_ID } from 'util/url';
 import ProjectMutator from './projectMutator';
 import { storageMapByAddress } from 'util/accounts';
@@ -334,9 +334,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         title,
         active.index,
       );
-      template.script = script;
-      template.title = title;
-      (template as Template).name = getContractName(script);
     } catch (e) {
       console.error(e);
       checkAppErrors();
@@ -358,8 +355,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         contractTemplate.title,
         active.index,
       );
-      contractTemplate.script = script;
-      (contractTemplate as Template).name = getContractName(script);
     } catch (e) {
       console.error(e);
       checkAppErrors();
@@ -379,9 +374,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     let res;
     try {
       res = await mutator.updateScriptTemplate(templateId, script, title);
-      const template = project.scriptTemplates.find((t) => t.id === templateId);
-      template.script = script;
-      template.title = title;
     } catch (e) {
       console.error(e);
       checkAppErrors();
@@ -411,11 +403,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     let res;
     try {
       res = await mutator.updateTransactionTemplate(templateId, script, title);
-      const template = project.transactionTemplates.find(
-        (t) => t.id === templateId,
-      );
-      template.script = script;
-      template.title = title;
     } catch (e) {
       console.error(e);
       checkAppErrors();
@@ -429,8 +416,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const updateActiveScriptTemplate = async (script: string) => {
     setIsSaving(true);
     let res;
-    const template = project.scriptTemplates[active.index];
-    template.script = script;
     try {
       res = await mutator.updateScriptTemplate(
         project.scriptTemplates[active.index].id,
@@ -450,8 +435,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
   const updateActiveTransactionTemplate = async (script: string) => {
     setIsSaving(true);
     let res;
-    const template = project.transactionTemplates[active.index];
-    template.script = script;
     try {
       res = await mutator.updateTransactionTemplate(
         project.transactionTemplates[active.index].id,
@@ -815,7 +798,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
         });
         const template = project.contractTemplates[templateIndex];
         const templateId = template.id;
-        (template as Template).name = getContractName(template.script);
         return (
           <Redirect
             noThrow
