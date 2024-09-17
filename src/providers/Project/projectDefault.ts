@@ -16,11 +16,11 @@ const HelloWorldContract = `// HelloWorld.cdc
 // The HelloWorld contract contains a single string field and a public getter function.
 //
 // Follow the "Hello, World!" tutorial to learn more: https://docs.onflow.org/cadence/tutorial/02-hello-world/
-pub contract HelloWorld {
+access(all) contract HelloWorld {
   // Declare a public field of type String.
   //
   // All fields must be initialized in the init() function.
-  pub var greeting: String
+  access(all) var greeting: String
 
   // Public function that sets our friendly greeting!
   // In your own applications you may want to tighten up this access control.
@@ -46,7 +46,7 @@ const DEFAULT_TRANSACTION = `import HelloWorld from 0x06
 
 transaction(greeting: String) {
 
-  prepare(acct: AuthAccount) {
+  prepare(acct: &Account) {
     log(acct.address)
   }
 
@@ -58,8 +58,8 @@ transaction(greeting: String) {
 
 const DEFAULT_SCRIPT = `import HelloWorld from 0x06
 
-pub fun main() {
-  log(HelloWorld.hello())
+access(all) fun main(): String {
+  return HelloWorld.hello()
 }
 `;
 
