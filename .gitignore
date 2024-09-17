@@ -22,4 +22,7 @@ yarn-error.log*
 # ides
 .idea
 .vscode
-.vercel
+
+# tests
+cypress/videos
+cypress/screenshots
