@@ -1,4 +1,10 @@
-import { ApolloClient, InMemoryCache, ApolloLink, HttpLink, gql } from '@apollo/client';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloLink,
+  HttpLink,
+  gql,
+} from '@apollo/client';
 import DebounceLink from 'apollo-link-debounce';
 import SerializingLink from 'apollo-link-serialize';
 import fetch from 'cross-fetch';

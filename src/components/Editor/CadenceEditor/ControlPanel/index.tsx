@@ -252,7 +252,6 @@ const ControlPanel: React.FC<ControlPanelProps> = (props) => {
     const user = selectedAccounts[0];
     const acct = accounts[user];
     const template = project.contractTemplates[activeIndex];
-    console.log(template)
     const templateContract = getContractName(template.script);
     return (acct?.deployedContracts || []).includes(templateContract);
   };
