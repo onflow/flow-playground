@@ -42,3 +42,7 @@ type Mutation {
   ): Boolean
   clearCachedExecutionResults(resultType: ResultType!): Boolean
 }
+
+extend type Query {
+  errorMessage: String
+}

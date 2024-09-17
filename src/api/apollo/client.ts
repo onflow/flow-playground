@@ -4,6 +4,7 @@ import {
   ApolloLink,
   HttpLink,
   gql,
+  makeVar,
 } from '@apollo/client';
 import DebounceLink from 'apollo-link-debounce';
 import SerializingLink from 'apollo-link-serialize';
@@ -17,7 +18,20 @@ import { GraphQLErrorExtensions, GraphQLFormattedError } from 'graphql';
 const PLAYGROUND_API = process.env.PLAYGROUND_API;
 const DEFAULT_DEBOUNCE_TIMEOUT = 1200; // Debounce time in ms
 const { detect } = require('detect-browser');
-const cache = new InMemoryCache();
+export const errorMessageVar = makeVar('');
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        errorMessage: {
+          read() {
+            return errorMessageVar();
+          },
+        },
+      },
+    },
+  },
+});
 const client = new ApolloClient({
   cache: cache,
   link: ApolloLink.from([
@@ -90,30 +104,29 @@ const client = new ApolloClient({
 cache.writeQuery({
   query: gql`
     query InitValues {
-      localProject
       activeProjectId
       activeProject
-      errorMessage
-      cachedExecutionResults {
-        id
-        ${ResultType.Transaction}
-        ${ResultType.Script}
-        ${ResultType.Contract}
-      }
     }
   `,
   data: {
-    localProject: null,
     activeProjectId: null,
     activeProject: false,
-    errorMessage: '',
-    cachedExecutionResults: {
-      id: '0',
-      __typename: 'ExecutionResults',
-      [ResultType.Transaction]: [],
-      [ResultType.Script]: [],
-      [ResultType.Contract]: [],
-    },
+  },
+});
+
+cache.writeFragment({
+  id: 'ExecutionResults:0',
+  fragment: gql`
+    fragment ExecutionResultFields on ExecutionResult {
+      ${ResultType.Transaction}
+      ${ResultType.Script}
+      ${ResultType.Contract}
+    }
+  `,
+  data: {
+    [ResultType.Transaction]: [],
+    [ResultType.Script]: [],
+    [ResultType.Contract]: [],
   },
 });
 

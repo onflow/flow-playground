@@ -301,28 +301,6 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({
     return res;
   };
 
-  const stripComments = (code: string) => {
-    const commentsRegExp = /(\/\*[\s\S]*?\*\/)|(\/\/.*)/g;
-    return code.replace(commentsRegExp, '');
-  };
-
-  const getContractName = (cadenceCode: string): string => {
-    if (cadenceCode === '') return null;
-    const complexMatcher = /(resource|struct)\s+\w+\s*{[\s\S]+?}/g;
-    const noCommentsCode = stripComments(cadenceCode);
-    const noComplex = noCommentsCode.replace(complexMatcher, '');
-    const pattern =
-      /(?:access\(\w+\)|pub)\s+contract\s+(?:interface)*\s*(\w*)[:\s\w]*(\s*{[.\s\S]*init\s*\((.*?)\)[.\s\S]*})?/g;
-    // Search for the pattern in the Cadence code
-    const match = pattern.exec(noComplex);
-    if (!match) {
-      console.log('Could not get contract name');
-      setApplicationErrorMessage('Could not parse contract name');
-    }
-    // Return the contract name if found, otherwise return null
-    return match ? match[1] : null;
-  };
-
   const updateContractTemplate = async (script: string, title: string) => {
     setIsSaving(true);
     let res;

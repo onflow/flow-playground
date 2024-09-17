@@ -153,7 +153,7 @@ const localResolvers = {
     ): any => {
       cache.writeQuery({
         query: gql`
-          query GetActiveProject {
+          query GetActiveProjectId {
             activeProjectId
           }
         `,
