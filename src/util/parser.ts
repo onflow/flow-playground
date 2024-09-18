@@ -4,8 +4,12 @@ export const stripNewLines = (input: string) =>
 
 export const generateSchema = (argsDefinition: string) =>
   argsDefinition
+    .replace(/\(([^()]+)\)/g, (match) => {
+      // Replace commas with placeholder inside the parentheses content
+      return match.replace(/,/g, '<COMMA>');
+    })
     .split(',')
-    .map((item) => item.replace(/\s*/g, ''))
+    .map((item) => item.replace(/\s*/g, '').replace(/<COMMA>/g,','))
     .filter((item) => item !== '');
 
 export const stripComments = (code: string) => {
@@ -32,5 +36,5 @@ export const extract = (code: string, keyWord: string) => {
 };
 
 export const extractSigners = (code: string) => {
-  return extract(code, `(?:prepare\\s*\\(\\s*)([^\\)]*)(?:\\))`);
+  return extract(code, `(?:prepare\\s*\\(\\s*)([^{}]*)(?:\\))`);
 };

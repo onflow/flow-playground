@@ -8,7 +8,7 @@
     "start": "webpack-dev-server -d source-map --config webpack.config.js",
     "build": "webpack --mode=production",
     "graphql:codegen": "npx graphql-codegen --config codegen.yml",
-    "test": "echo Tests command not implemented.",
+    "test": "jest",
     "format:app": "prettier --write 'src'",
     "format:check:app": "prettier --check 'src/**/*.{js,jsx,ts,tsx,css}' ",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
