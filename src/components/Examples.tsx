@@ -33,20 +33,20 @@ const Examples: React.FC<{
       docsLink: 'https://cadence-lang.org/docs/tutorial/hello-world',
     },
     {
-        title: 'Resources!',
-        subtitle:
-          'Learn about Resources, a fundamental part of the Cadence language',
-        emoji: '💪',
-        projectLink: 'https://play.flow.com/ddf0177e-81c8-4512-ac2e-28036b1a3f89',
-        docsLink: 'https://cadence-lang.org/docs/tutorial/resources',
+      title: 'Resources!',
+      subtitle:
+        'Learn about Resources, a fundamental part of the Cadence language',
+      emoji: '💪',
+      projectLink: 'https://play.flow.com/ddf0177e-81c8-4512-ac2e-28036b1a3f89',
+      docsLink: 'https://cadence-lang.org/docs/tutorial/resources',
     },
     {
-        title: 'Capabilities!',
-        subtitle:
-          'Learn how to share access to your private resources in a secure way.',
-        emoji: '🧠',
-        projectLink: 'https://play.flow.com/47d92bae-5234-463c-ae14-3dbd452a004f',
-        docsLink: 'https://cadence-lang.org/docs/tutorial/capabilities',
+      title: 'Capabilities!',
+      subtitle:
+        'Learn how to share access to your private resources in a secure way.',
+      emoji: '🧠',
+      projectLink: 'https://play.flow.com/47d92bae-5234-463c-ae14-3dbd452a004f',
+      docsLink: 'https://cadence-lang.org/docs/tutorial/capabilities',
     },
     {
       title: 'Mint Fungible Tokens',
