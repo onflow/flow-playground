@@ -2,14 +2,18 @@ export const collapseSpaces = (input: string) => input.replace(/\s+/g, ' ');
 export const stripNewLines = (input: string) =>
   input.replace(/\r\n|\n|\r/g, ' ');
 
+const COMMA_PLACEHOLDER = '<COMMA>';
+
 export const generateSchema = (argsDefinition: string) =>
   argsDefinition
     .replace(/\(([^()]+)\)/g, (match) => {
       // Replace commas with placeholder inside the parentheses content
-      return match.replace(/,/g, '<COMMA>');
+      return match.replace(/,/g, COMMA_PLACEHOLDER);
     })
     .split(',')
-    .map((item) => item.replace(/\s*/g, '').replace(/<COMMA>/g, ','))
+    .map((item) =>
+      item.replace(/\s*/g, '').replace(new RegExp(COMMA_PLACEHOLDER, 'g'), ','),
+    )
     .filter((item) => item !== '');
 
 export const stripComments = (code: string) => {
