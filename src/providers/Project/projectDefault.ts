@@ -111,7 +111,7 @@ export function createLocalProject(
   const accountEntities: Account[] = accounts.map((_account) => {
     return {
       __typename: 'Account',
-      address: _account.padStart(16, "0"),
+      address: _account.padStart(16, '0'),
       deployedContracts: [],
       state: DEFAULT_ACCOUNT_STATE,
     };
