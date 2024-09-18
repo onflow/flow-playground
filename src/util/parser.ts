@@ -9,7 +9,7 @@ export const generateSchema = (argsDefinition: string) =>
       return match.replace(/,/g, '<COMMA>');
     })
     .split(',')
-    .map((item) => item.replace(/\s*/g, '').replace(/<COMMA>/g,','))
+    .map((item) => item.replace(/\s*/g, '').replace(/<COMMA>/g, ','))
     .filter((item) => item !== '');
 
 export const stripComments = (code: string) => {
