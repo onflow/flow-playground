@@ -29,15 +29,31 @@ const Examples: React.FC<{
       subtitle:
         'Write your first contract on Flow. This is the perfect place to start to get the hang of the fundamentals of Cadence.',
       emoji: '🌎',
-      projectLink: 'https://play.flow.com/16b39778-cb8d-408c-891d-7dc3579f4365',
+      projectLink: 'https://play.flow.com/483b2f33-9e71-40aa-924a-2c5f0ead77aa',
       docsLink: 'https://cadence-lang.org/docs/tutorial/hello-world',
+    },
+    {
+      title: 'Resources!',
+      subtitle:
+        'Learn about Resources, a fundamental part of the Cadence language',
+      emoji: '💪',
+      projectLink: 'https://play.flow.com/ddf0177e-81c8-4512-ac2e-28036b1a3f89',
+      docsLink: 'https://cadence-lang.org/docs/tutorial/resources',
+    },
+    {
+      title: 'Capabilities!',
+      subtitle:
+        'Learn how to share access to your private resources in a secure way.',
+      emoji: '🧠',
+      projectLink: 'https://play.flow.com/47d92bae-5234-463c-ae14-3dbd452a004f',
+      docsLink: 'https://cadence-lang.org/docs/tutorial/capabilities',
     },
     {
       title: 'Mint Fungible Tokens',
       subtitle:
         'Create and sell digital assets of your own in this tutorial! This tutorial will teach you the basics of creating, storing, and moving digital assets and tokens.',
       emoji: '💸',
-      projectLink: 'https://play.flow.com/765c14c7-8097-4a0f-9bf3-73472fb6d0bc',
+      projectLink: 'https://play.flow.com/65b44962-32c8-49c4-8a69-e96475d5a780',
       docsLink: 'https://cadence-lang.org/docs/tutorial/fungible-tokens',
     },
     {
@@ -45,33 +61,33 @@ const Examples: React.FC<{
       subtitle:
         'Create and shape your own unique digital objects. Here you’ll learn what really makes blockchains magic - the ability for unique items to be created, shared, and stored forever.',
       emoji: '😺',
-      projectLink: 'https://play.flow.com/768bf0ef-24fe-46a5-b224-c09382eeae97',
+      projectLink: 'https://play.flow.com/63d827b3-0b49-48d5-91ba-4b222c23e217',
       docsLink: 'https://cadence-lang.org/docs/tutorial/non-fungible-tokens-1',
     },
-    {
-      title: 'Build a Marketplace',
-      subtitle:
-        'Put it all together in a marketplace! This tutorial will teach you how to turn all the concepts you’ve learned into a place for people to share their creations with the community.',
-      emoji: '🤝',
-      projectLink: 'https://play.flow.com/6f68e782-b6c9-47d4-9389-f6f58b6c7678',
-      docsLink: 'https://cadence-lang.org/docs/tutorial/marketplace-compose',
-    },
-    {
-      title: 'Expand Non-Fungible Tokens',
-      subtitle:
-        'This tutorial is for the brave and the bold, an opportunity to discover what resources make possible - resources owning other resources. If you can imagine it, you can create it.',
-      emoji: '🤠',
-      projectLink: 'https://play.flow.com/8437c2f2-7928-406e-b6ef-c64bc534a30a',
-      docsLink: 'https://cadence-lang.org/docs/tutorial/resources-compose',
-    },
-    {
-      title: 'Voting Contract',
-      subtitle:
-        'With the advent of blockchain technology and smart contracts, it has become popular to try to create decentralized voting mechanisms that allow large groups of users to vote completely on chain',
-      emoji: '🗳️',
-      projectLink: 'https://play.flow.com/e7acb2ed-53a3-4363-89fa-feab3cab965e',
-      docsLink: 'https://cadence-lang.org/docs/tutorial/voting',
-    },
+    // {
+    //   title: 'Build a Marketplace',
+    //   subtitle:
+    //     'Put it all together in a marketplace! This tutorial will teach you how to turn all the concepts you’ve learned into a place for people to share their creations with the community.',
+    //   emoji: '🤝',
+    //   projectLink: 'https://play.flow.com/6f68e782-b6c9-47d4-9389-f6f58b6c7678',
+    //   docsLink: 'https://cadence-lang.org/docs/tutorial/marketplace-compose',
+    // },
+    // {
+    //   title: 'Expand Non-Fungible Tokens',
+    //   subtitle:
+    //     'This tutorial is for the brave and the bold, an opportunity to discover what resources make possible - resources owning other resources. If you can imagine it, you can create it.',
+    //   emoji: '🤠',
+    //   projectLink: 'https://play.flow.com/8437c2f2-7928-406e-b6ef-c64bc534a30a',
+    //   docsLink: 'https://cadence-lang.org/docs/tutorial/resources-compose',
+    // },
+    // {
+    //   title: 'Voting Contract',
+    //   subtitle:
+    //     'With the advent of blockchain technology and smart contracts, it has become popular to try to create decentralized voting mechanisms that allow large groups of users to vote completely on chain',
+    //   emoji: '🗳️',
+    //   projectLink: 'https://play.flow.com/e7acb2ed-53a3-4363-89fa-feab3cab965e',
+    //   docsLink: 'https://cadence-lang.org/docs/tutorial/voting',
+    // },
     // TODO: add this when contracts can be deployed without failure
     //  {
     //     title: 'Hybrid Custody Contract',
