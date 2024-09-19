@@ -95,6 +95,8 @@ The process described here has several goals:
 - Engage the community in working toward the best possible Playground UX
 - Enable a sustainable system for the Playground's maintainers to review contributions
 
+PRs should be created against the `staging` branch, which is currently the default branch of the repo.
+
 Please follow the [styleguides](#styleguides) to have your contribution considered by the maintainers.
 Reviewer(s) may ask you to complete additional design work, tests, or other changes before your pull request can be ultimately accepted.
 
