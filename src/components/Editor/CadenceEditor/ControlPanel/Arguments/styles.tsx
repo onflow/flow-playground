@@ -195,7 +195,7 @@ export const SingleError = styled.div<ThemedComponentProps>`
   }
   &.hint-warning {
     background-color: ${({ theme }) => theme.colors.warning};
-    color: ${({ theme }) => theme.colors.warningText}
+    color: ${({ theme }) => theme.colors.warningText};
   }
 
   &.hint-info {
