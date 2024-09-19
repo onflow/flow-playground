@@ -18,6 +18,7 @@ export default {
     errors: '#FC4723',
     errorBackground: '#ee431e',
     warning: '#ffcc00',
+    warningText: '#2f353f',
     info: '#55EE1E26',
     infoBackground: '#55EE1E',
     error: '#f44336',
