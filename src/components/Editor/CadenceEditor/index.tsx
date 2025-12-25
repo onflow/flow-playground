@@ -174,6 +174,9 @@ const CadenceEditor = (props: CadenceEditorProps) => {
       readOnly: project.active.type === EntityType.AccountStorage || isMobile(),
       domReadOnly: isMobile(),
       contextmenu: !isMobile(),
+      autoClosingBrackets: 'languageDefined',
+      autoClosingQuotes: 'languageDefined',
+      autoSurround: 'languageDefined',
     });
 
     const [code] = project.getActiveCode();
