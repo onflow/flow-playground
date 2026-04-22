@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use flow-playground in your research or reference it, please cite it as below."
+title: "flow-playground: Browser-based IDE for writing, compiling, and testing Cadence smart contracts"
+authors:
+  - name: "Flow Foundation"
+    website: "https://flow.com"
+repository-code: "https://github.com/onflow/flow-playground"
+url: "https://play.flow.com"
+license: Apache-2.0
+type: software
+keywords:
+  - flow
+  - flow-network
+  - cadence
+  - playground
+  - ide
+  - smart-contracts
+  - developer-tools
