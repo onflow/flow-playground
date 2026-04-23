@@ -127,12 +127,6 @@ The [Flow developer portal](https://developers.flow.com) and the [Cadence langua
 **How do I report a bug or request a feature?**
 Open an issue on this repository, or discuss in the [Flow Discord](https://discord.gg/flow) or [Flow Forum](https://forum.flow.com).
 
-## Community
-
-- [Flow Discord](https://discord.gg/flow)
-- [Flow Forum](https://forum.flow.com)
-- [Flow Improvement Proposals (FLIPs)](https://github.com/onflow/flips)
-
 ## About Flow
 
 This repo is part of the [Flow network](https://flow.com), a Layer 1 blockchain built for consumer applications, AI Agents, and DeFi at scale.
