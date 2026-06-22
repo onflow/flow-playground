@@ -47,7 +47,7 @@
     "graphql-tag": "^2.11.0",
     "handlebars-loader": "^1.7.2",
     "jszip": "^3.10.1",
-    "markdown-to-jsx": "^7.1.7",
+    "markdown-to-jsx": "^7.4.0",
     "mixpanel-browser": "^2.45.0",
     "monaco-editor": "^0.34.0",
     "monaco-languageclient": "^0.18.1",
