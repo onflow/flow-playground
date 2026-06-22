@@ -13,6 +13,27 @@ export default function configureCadence() {
     aliases: ['CDC', 'cdc'],
   });
 
+  // Configure brackets and auto-closing pairs for the Cadence language
+  monaco.languages.setLanguageConfiguration(CADENCE_LANGUAGE_ID, {
+    brackets: [
+      ['{', '}'],
+      ['[', ']'],
+      ['(', ')'],
+    ],
+    autoClosingPairs: [
+      { open: '{', close: '}' },
+      { open: '[', close: ']' },
+      { open: '(', close: ')' },
+      { open: '"', close: '"', notIn: ['string'] },
+    ],
+    surroundingPairs: [
+      { open: '{', close: '}' },
+      { open: '[', close: ']' },
+      { open: '(', close: ')' },
+      { open: '"', close: '"' },
+    ],
+  });
+
   const languageDef: IMonarchLanguage & {
     keywords: string[];
     typeKeywords: string[];
